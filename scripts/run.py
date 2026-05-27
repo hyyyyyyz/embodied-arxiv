@@ -1,0 +1,174 @@
+"""Daily pipeline orchestrator: fetch -> score -> figure -> build."""
+from __future__ import annotations
+
+import json
+import logging
+import os
+import sys
+import tempfile
+from datetime import datetime, timezone
+from pathlib import Path
+
+import yaml
+from dotenv import load_dotenv
+
+# Make sibling modules importable when run as `python scripts/run.py`
+sys.path.insert(0, str(Path(__file__).parent))
+
+from fetch import fetch_recent_papers  # noqa: E402
+from score import score_paper, summarize_paper  # noqa: E402
+from figure import get_all_figures, score_figures_heuristic, pick_with_vl  # noqa: E402
+from build import write_daily_page, update_index, ASSETS_DIR  # noqa: E402
+
+load_dotenv()  # local .env for dev; in Actions secrets come via env directly
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s | %(message)s",
+)
+log = logging.getLogger("run")
+
+ROOT = Path(__file__).parent.parent
+CONFIG = yaml.safe_load((ROOT / "config.yaml").read_text(encoding="utf-8"))
+SEEN_PATH = ROOT / "data" / "seen.json"
+
+
+def load_seen() -> set:
+    if SEEN_PATH.exists():
+        try:
+            return set(json.loads(SEEN_PATH.read_text()))
+        except Exception:
+            return set()
+    return set()
+
+
+def save_seen(seen: set):
+    SEEN_PATH.parent.mkdir(parents=True, exist_ok=True)
+    SEEN_PATH.write_text(json.dumps(sorted(seen), ensure_ascii=False, indent=2))
+
+
+def _pick_figure(paper: dict, work_dir: Path, use_vl: bool, vl_model: str, min_kb: int):
+    """Return (chosen_fig_or_None, all_figs)."""
+    all_figs = get_all_figures(paper, work_dir, min_kb=min_kb)
+    if not all_figs:
+        return None, []
+    scored = score_figures_heuristic(all_figs)
+    top_score = scored[0][0]
+    runner = scored[1][0] if len(scored) > 1 else -1e9
+    if top_score - runner >= 5 or not use_vl:
+        chosen = scored[0][1]
+    else:
+        chosen = pick_with_vl([f for _, f in scored[:3]], paper, vl_model)
+    return chosen, [f for _, f in scored]
+
+
+def main():
+    today = datetime.now(timezone.utc).date()
+    date_str = today.isoformat()
+    log.info(f"=== Run for {date_str} ===")
+
+    seen = load_seen()
+    log.info(f"Previously seen: {len(seen)} papers")
+
+    candidates = fetch_recent_papers()
+    new_papers = [p for p in candidates if p["id"] not in seen]
+    log.info(f"Candidates: {len(candidates)} | new: {len(new_papers)}")
+
+    if not new_papers:
+        log.info("Nothing new today, refreshing index only and exiting")
+        update_index(
+            history_days=CONFIG["site"]["history_days_on_index"],
+            site_title=CONFIG["site"]["title"],
+        )
+        return
+
+    score_cfg = CONFIG["scoring"]
+    scored_papers = []
+    for p in new_papers:
+        try:
+            s = score_paper(p, model=score_cfg["model"])
+            p["score"] = s["score"]
+            p["topic"] = s["topic"]
+            p["score_reason"] = s["reason"]
+            scored_papers.append(p)
+            log.info(f"  scored {p['id']} = {p['score']:.1f} ({p['topic']}) — {p['title'][:60]}")
+        except Exception as e:
+            log.warning(f"  score failed for {p['id']}: {e}")
+
+    # Mark every scored paper as seen so failures don't get re-scored next run
+    seen.update(p["id"] for p in scored_papers)
+
+    qualified = [p for p in scored_papers if p["score"] >= score_cfg["min_score"]]
+    qualified.sort(key=lambda x: -x["score"])
+    qualified = qualified[: score_cfg["max_published"]]
+    log.info(f"Qualified (score >= {score_cfg['min_score']}): {len(qualified)}")
+
+    if not qualified:
+        save_seen(seen)
+        update_index(
+            history_days=CONFIG["site"]["history_days_on_index"],
+            site_title=CONFIG["site"]["title"],
+        )
+        return
+
+    fig_cfg = CONFIG["figure"]
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        for p in qualified:
+            # Summary
+            try:
+                p["summary"] = summarize_paper(p, model=score_cfg["model"])
+            except Exception as e:
+                log.warning(f"  summarize failed for {p['id']}: {e}")
+                p["summary"] = {
+                    "tldr": p["title"][:35],
+                    "trick": "（摘要生成失败，请查看原文）",
+                    "summary": p["abstract"][:400],
+                    "tags": [p.get("topic", "other")],
+                    "comment": "",
+                }
+
+            # Figures
+            try:
+                chosen, all_figs = _pick_figure(
+                    p, tmp,
+                    use_vl=fig_cfg["enable_vl_fallback"],
+                    vl_model=fig_cfg["vl_model"],
+                    min_kb=fig_cfg["min_figure_kb"],
+                )
+                if chosen:
+                    fig_dir = ASSETS_DIR / date_str
+                    fig_dir.mkdir(parents=True, exist_ok=True)
+                    main_path = fig_dir / f"{p['id'].replace('/', '_')}.png"
+                    main_path.write_bytes(chosen["bytes"])
+                    # Relative path from docs/papers/<date>.md -> docs/assets/...
+                    p["figure_path"] = f"../assets/figures/{date_str}/{main_path.name}"
+                    p["figure_caption"] = chosen.get("caption") or ""
+
+                    # Save extra figures (skip the chosen one)
+                    extras = []
+                    for i, ef in enumerate(all_figs[:6]):
+                        if ef is chosen:
+                            continue
+                        extra_path = fig_dir / f"{p['id'].replace('/', '_')}_extra{i}.png"
+                        extra_path.write_bytes(ef["bytes"])
+                        extras.append(f"../assets/figures/{date_str}/{extra_path.name}")
+                    p["extra_figures"] = extras
+                else:
+                    p["figure_path"] = None
+            except Exception as e:
+                log.warning(f"  figure failed for {p['id']}: {e}")
+                p["figure_path"] = None
+
+    write_daily_page(date_str, qualified)
+    update_index(
+        history_days=CONFIG["site"]["history_days_on_index"],
+        site_title=CONFIG["site"]["title"],
+    )
+    save_seen(seen)
+
+    log.info(f"=== Done: {len(qualified)} papers published for {date_str} ===")
+
+
+if __name__ == "__main__":
+    main()
