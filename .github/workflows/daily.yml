@@ -5,6 +5,16 @@ on:
     # 02:00 UTC = 10:00 Beijing. arXiv releases new papers ~01:00 UTC.
     - cron: "0 2 * * *"
   workflow_dispatch:        # allow manual trigger from GitHub UI
+  push:
+    branches: [main]
+    # Auto-commits from GITHUB_TOKEN don't re-trigger workflows (GitHub
+    # built-in protection), so no infinite loop. The paths-ignore below
+    # adds a second safety net for any future PAT-based push.
+    paths-ignore:
+      - 'data/seen.json'
+      - 'docs/papers/**'
+      - 'docs/assets/figures/**'
+      - 'docs/index.md'
 
 permissions:
   contents: write           # to push the new digest back to main
@@ -55,6 +65,8 @@ jobs:
           fi
 
       - name: Build site (MkDocs Material)
+        # No --strict: awesome-pages + not_in_nav glob don't always interact
+        # cleanly, and we'd rather ship a slightly noisy build than fail.
         run: mkdocs build -v
 
       - name: Upload Pages artifact
