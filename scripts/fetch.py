@@ -111,6 +111,10 @@ def fetch_recent_papers() -> List[Dict]:
                     "pdf_url": result.pdf_url,
                     "arxiv_url": result.entry_id,
                     "matched_via": category,
+                    # Author-provided comments + journal_ref — often contain
+                    # venue info ("Accepted at ICML 2026", etc.)
+                    "comment": (result.comment or "").replace("\n", " ").strip(),
+                    "journal_ref": (result.journal_ref or "").strip(),
                 }
                 n_kept += 1
             log.info(f"  kept {n_kept} from {category}")

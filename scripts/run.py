@@ -148,16 +148,7 @@ def main():
                     p["figure_path_in_index"] = rel
                     p["figure_path_in_detail"] = rel
                     p["figure_caption"] = chosen.get("caption") or ""
-
-                    # Save extra figures (excluding chosen)
-                    extras = []
-                    for i, ef in enumerate(all_figs[:6]):
-                        if ef is chosen:
-                            continue
-                        extra_path = fig_dir / f"{safe_id}_extra{i}.png"
-                        extra_path.write_bytes(ef["bytes"])
-                        extras.append(f"../../assets/figures/{date_str}/{extra_path.name}")
-                    p["extra_figures_in_detail"] = extras
+                    # User feedback: only the framework figure, no extras
                 else:
                     p["figure_path_in_index"] = None
                     p["figure_path_in_detail"] = None

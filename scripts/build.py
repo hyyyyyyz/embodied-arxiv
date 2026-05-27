@@ -70,6 +70,15 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
     fig = paper.get("figure_path_in_detail")
     topic = paper.get("topic", "other")
     color = _topic_color(topic)
+    venue = s.get("venue")
+
+    # Back-compat: old summaries had `trick` (str), new have `tricks` (list)
+    tricks = s.get("tricks") or []
+    if not tricks and s.get("trick"):
+        tricks = [{"text": s["trick"], "core": True}]
+
+    # Back-compat: old summaries had `summary` for Chinese text
+    abstract_zh = s.get("abstract_zh") or s.get("summary") or ""
 
     lines = [
         "---",
@@ -78,22 +87,32 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
         "  - navigation",
         "---",
         "",
-        f"# {s['tldr']}",
+        # Back button — top-left, prominent
+        f'<a class="back-btn" href="../">← 返回 {date_str}</a>',
         "",
-        f'[← 返回 {date_str} 列表](index.md){{ .back-link }}',
+        f"# {s['tldr']}",
         "",
         f'### {paper["title"]}',
         "",
-        f'<div class="paper-meta-row">',
-        f'  <span class="badge badge-score">⭐ {paper["score"]:.1f}</span>',
-        f'  <span class="badge badge-topic" style="background:{color}22;color:{color}">{topic}</span>',
-        f'  <span class="paper-id">{paper["id"]}</span>',
-        f'</div>',
+        # Metadata row with venue badge (if present)
+        '<div class="paper-meta-row">',
+        f'<span class="badge badge-score">⭐ {paper["score"]:.1f}</span>',
+        f'<span class="badge badge-topic" style="background:{color}22;color:{color}">{topic}</span>',
+    ]
+    if venue:
+        lines.append(f'<span class="badge badge-venue">{venue}</span>')
+    lines += [
+        f'<span class="paper-id">{paper["id"]}</span>',
+        '</div>',
+        "",
+        # arXiv link AT TOP (user request)
+        f'<div class="paper-links">📄 <a href="{paper["arxiv_url"]}">arXiv 摘要页</a> &nbsp;·&nbsp; 📑 <a href="{paper["pdf_url"]}">PDF 全文</a></div>',
         "",
         f"*{_short_authors(paper['authors'])}*",
         "",
     ]
 
+    # Framework figure (one only, no extras)
     if fig:
         lines.append("<figure markdown>")
         lines.append(f"  ![framework]({fig})")
@@ -103,41 +122,59 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
         lines.append("</figure>")
         lines.append("")
 
+    # Tricks list with core marked
+    if tricks:
+        lines += ["## 💡 关键 Tricks", ""]
+        for t in tricks:
+            txt = t.get("text", "").strip()
+            if not txt:
+                continue
+            if t.get("core"):
+                lines.append(f'- <span class="trick-core">⭐ 核心</span> — **{txt}**')
+            else:
+                lines.append(f"- {txt}")
+        lines.append("")
+
+    # Abstracts in EN / ZH tabs
     lines += [
-        '!!! tip "💡 Trick — 关键技术 insight"',
-        f"    {s['trick']}",
+        "## 📝 摘要",
         "",
-        "## 摘要",
+        '=== "中文"',
         "",
-        s["summary"],
+        f"    {abstract_zh}",
+        "",
+        '=== "English"',
+        "",
+        f"    {paper['abstract']}",
         "",
     ]
 
-    if s.get("tags"):
+    # Related work
+    if s.get("related"):
         lines += [
-            "**Tags**: " + " ".join(f"`{t}`" for t in s["tags"]),
+            "## 🔗 与已有工作的关系",
+            "",
+            s["related"],
             "",
         ]
 
+    # My evaluation
     if s.get("comment"):
         lines += [
-            "## 📝 我的评价",
+            "## 📌 我的评价",
             "",
             s["comment"],
             "",
         ]
 
-    if paper.get("extra_figures_in_detail"):
-        lines += ["## 📷 论文中其他图", ""]
-        for i, ef in enumerate(paper["extra_figures_in_detail"], 1):
-            lines += [f"![fig{i}]({ef})", ""]
-
-    lines += [
-        "---",
-        "",
-        f"[📄 arXiv 摘要页]({paper['arxiv_url']}) &nbsp;·&nbsp; [📑 PDF 全文]({paper['pdf_url']})",
-        "",
-    ]
+    # Tags at the very bottom
+    if s.get("tags"):
+        lines += [
+            "---",
+            "",
+            "**Tags**: " + " ".join(f"`{t}`" for t in s["tags"]),
+            "",
+        ]
 
     page.write_text("\n".join(lines), encoding="utf-8")
     return page
@@ -180,12 +217,18 @@ def write_date_index(date_str: str, papers: list) -> Path:
         else:
             img_html = '<div class="paper-card-img no-img"></div>'
 
+        venue = s.get("venue")
+        venue_html = ""
+        if venue:
+            venue_html = f'<span class="paper-card-venue">{venue}</span>'
+
         # Emit as one tight HTML block — no blank lines anywhere inside
         # the .paper-grid container (blank lines re-trigger paragraph mode).
         card = (
             f'<a class="paper-card" href="{_safe_id(p["id"])}/">'
             f'{img_html}'
             f'<div class="paper-card-body">'
+            f'{venue_html}'
             f'<div class="paper-card-title">{title}</div>'
             f'<div class="paper-card-tldr">{s["tldr"]}</div>'
             f'<div class="paper-card-meta">'
