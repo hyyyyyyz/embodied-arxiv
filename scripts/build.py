@@ -238,7 +238,13 @@ def ensure_top_pages_file():
 
 # -------------------- HOMEPAGE --------------------
 
-def update_home(history_days: int = 60, site_title: str = "Embodied arXiv 雷达"):
+def update_home(history_days: int = 60, site_title: str = "embodied-arxiv"):
+    """Home page = meta-refresh redirect to the latest date's card grid.
+
+    This matches the intended UX: user visits the site → immediately lands
+    on the most recent day's papers. The left sidebar always shows the
+    full date list, so they can jump to any day from there.
+    """
     DOCS.mkdir(parents=True, exist_ok=True)
     PAPERS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -248,65 +254,41 @@ def update_home(history_days: int = 60, site_title: str = "Embodied arXiv 雷达
         reverse=True,
     )
 
-    lines = [
-        "---",
-        "hide:",
-        "  - navigation",
-        "  - toc",
-        "---",
-        "",
-        f"# {site_title}",
-        "",
-        '<p class="hero-tagline">每日具身智能 arXiv 论文 · DeepSeek V4 中文摘要 + Trick 提炼 + Framework 图自动抓取</p>',
-        "",
-        "覆盖 **VLA · Manipulation · Navigation · Locomotion · Sim2Real · World Model · Diffusion Policy** 等方向。",
-        "每天北京时间 **10:00** 自动更新（arXiv 美东 20:00 放出新论文）。",
-        "",
-        "---",
-        "",
-        "## 📅 历史归档",
-        "",
-    ]
-
-    if not date_folders:
-        lines += ["_首次构建中，等待第一次 cron 触发……_", ""]
+    if date_folders:
+        latest = date_folders[0].name
+        lines = [
+            "---",
+            f"title: {site_title}",
+            "hide:",
+            "  - toc",
+            "---",
+            "",
+            f'<meta http-equiv="refresh" content="0; url=papers/{latest}/">',
+            "",
+            f"# {site_title}",
+            "",
+            f'正在跳转到最新一天 → **[{latest}](papers/{latest}/)** …',
+            "",
+            '<small>如果没有自动跳转，点击上面链接，或在左侧栏选任意一天。</small>',
+            "",
+        ]
     else:
-        lines += ['<div class="date-archive" markdown>', ""]
-        for d in date_folders[:history_days]:
-            date = d.name
-            try:
-                n = sum(1 for p in d.glob("*.md") if p.stem != "index")
-            except Exception:
-                n = 0
-            lines.append(
-                f'<a class="date-link" href="papers/{date}/">'
-                f'<span class="date-link-date">{date}</span>'
-                f'<span class="date-link-count">{n} 篇</span>'
-                f'</a>'
-            )
-        lines += ['', '</div>', ""]
-
-        if len(date_folders) > history_days:
-            lines += [
-                "",
-                f'<small>另有 {len(date_folders) - history_days} 天更早的归档（见 GitHub 仓库 `docs/papers/`）</small>',
-                "",
-            ]
-
-    lines += [
-        "---",
-        "",
-        "## 🔍 怎么用",
-        "",
-        "- 点上方某一天 → 看那天的卡片网格（标题 + Framework 图 + 评分 + 主题）",
-        "- 点卡片 → 进详情页（Trick / 摘要 / 评价 / 其他图）",
-        "- 顶栏搜索 → 跨日找某个关键词或 tag",
-        "- 想追自己方向？[fork 这个 repo](https://github.com/hyyyyyyz/embodied-arxiv) 改 `config.yaml` 即可",
-        "",
-    ]
+        lines = [
+            "---",
+            f"title: {site_title}",
+            "hide:",
+            "  - toc",
+            "---",
+            "",
+            f"# {site_title}",
+            "",
+            "_首次构建中，等待第一次 cron 触发……_",
+            "",
+        ]
 
     (DOCS / "index.md").write_text("\n".join(lines), encoding="utf-8")
-    log.info(f"Updated home with {len(date_folders)} historic days")
+    log.info(f"Updated home — {len(date_folders)} days, latest = "
+             f"{date_folders[0].name if date_folders else 'none'}")
 
 
 # -------------------- TOP-LEVEL ENTRY --------------------
