@@ -160,8 +160,11 @@ def write_date_index(date_str: str, papers: list) -> Path:
         "",
         f"今日精选 **{len(papers)}** 篇 · 按 DeepSeek 相关性评分降序 · 点击卡片查看详情",
         "",
-        '<div class="paper-grid" markdown>',
-        "",
+        # IMPORTANT: NO `markdown` attribute on this div.
+        # With `markdown`, python-markdown wraps each <a> in <p> and the
+        # nested <div> closes <p> early, destroying the card layout.
+        # Without it (md_in_html default), the inner HTML stays raw.
+        '<div class="paper-grid">',
     ]
 
     for p in papers:
@@ -172,24 +175,26 @@ def write_date_index(date_str: str, papers: list) -> Path:
         title = p["title"].replace("\n", " ").strip()
 
         if fig_path:
-            img_html = f'  <div class="paper-card-img" style="background-image: url({fig_path});"></div>'
+            img_html = f'<div class="paper-card-img" style="background-image: url({fig_path});"></div>'
         else:
-            img_html = '  <div class="paper-card-img no-img">📄</div>'
+            img_html = '<div class="paper-card-img no-img"></div>'
 
-        lines += [
-            f'<a class="paper-card" href="{_safe_id(p["id"])}/">',
-            img_html,
-            '  <div class="paper-card-body">',
-            f'    <div class="paper-card-title">{title}</div>',
-            f'    <div class="paper-card-tldr">{s["tldr"]}</div>',
-            '    <div class="paper-card-meta">',
-            f'      <span class="paper-card-score">⭐ {p["score"]:.1f}</span>',
-            f'      <span class="paper-card-topic" style="background:{color}22;color:{color}">{topic}</span>',
-            '    </div>',
-            '  </div>',
-            '</a>',
-            '',
-        ]
+        # Emit as one tight HTML block — no blank lines anywhere inside
+        # the .paper-grid container (blank lines re-trigger paragraph mode).
+        card = (
+            f'<a class="paper-card" href="{_safe_id(p["id"])}/">'
+            f'{img_html}'
+            f'<div class="paper-card-body">'
+            f'<div class="paper-card-title">{title}</div>'
+            f'<div class="paper-card-tldr">{s["tldr"]}</div>'
+            f'<div class="paper-card-meta">'
+            f'<span class="paper-card-score">⭐ {p["score"]:.1f}</span>'
+            f'<span class="paper-card-topic" style="background:{color}22;color:{color}">{topic}</span>'
+            f'</div>'
+            f'</div>'
+            f'</a>'
+        )
+        lines.append(card)
 
     lines += ['</div>', '']
 
