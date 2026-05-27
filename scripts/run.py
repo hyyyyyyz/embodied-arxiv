@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from fetch import fetch_recent_papers  # noqa: E402
 from score import score_paper, summarize_paper  # noqa: E402
 from figure import get_all_figures, score_figures_heuristic, pick_with_vl  # noqa: E402
-from build import write_daily_page, update_index, ASSETS_DIR  # noqa: E402
+from build import build_daily, update_home, ASSETS_DIR  # noqa: E402
 
 load_dotenv()  # local .env for dev; in Actions secrets come via env directly
 
@@ -48,7 +48,7 @@ def save_seen(seen: set):
 
 
 def _pick_figure(paper: dict, work_dir: Path, use_vl: bool, vl_model: str, min_kb: int):
-    """Return (chosen_fig_or_None, all_figs)."""
+    """Return (chosen_fig_or_None, all_figs_sorted_by_score)."""
     all_figs = get_all_figures(paper, work_dir, min_kb=min_kb)
     if not all_figs:
         return None, []
@@ -74,12 +74,12 @@ def main():
     new_papers = [p for p in candidates if p["id"] not in seen]
     log.info(f"Candidates: {len(candidates)} | new: {len(new_papers)}")
 
+    site_title = CONFIG["site"]["title"]
+    history_days = CONFIG["site"]["history_days_on_index"]
+
     if not new_papers:
-        log.info("Nothing new today, refreshing index only and exiting")
-        update_index(
-            history_days=CONFIG["site"]["history_days_on_index"],
-            site_title=CONFIG["site"]["title"],
-        )
+        log.info("Nothing new today — refreshing home only")
+        update_home(history_days=history_days, site_title=site_title)
         return
 
     score_cfg = CONFIG["scoring"]
@@ -91,11 +91,14 @@ def main():
             p["topic"] = s["topic"]
             p["score_reason"] = s["reason"]
             scored_papers.append(p)
-            log.info(f"  scored {p['id']} = {p['score']:.1f} ({p['topic']}) — {p['title'][:60]}")
+            log.info(
+                f"  scored {p['id']} = {p['score']:.1f} ({p['topic']}) — "
+                f"{p['title'][:60]}"
+            )
         except Exception as e:
             log.warning(f"  score failed for {p['id']}: {e}")
 
-    # Mark every scored paper as seen so failures don't get re-scored next run
+    # Mark every scored paper as seen so failures don't re-process next run
     seen.update(p["id"] for p in scored_papers)
 
     qualified = [p for p in scored_papers if p["score"] >= score_cfg["min_score"]]
@@ -105,10 +108,7 @@ def main():
 
     if not qualified:
         save_seen(seen)
-        update_index(
-            history_days=CONFIG["site"]["history_days_on_index"],
-            site_title=CONFIG["site"]["title"],
-        )
+        update_home(history_days=history_days, site_title=site_title)
         return
 
     fig_cfg = CONFIG["figure"]
@@ -128,7 +128,7 @@ def main():
                     "comment": "",
                 }
 
-            # Figures
+            # Figure
             try:
                 chosen, all_figs = _pick_figure(
                     p, tmp,
@@ -136,35 +136,37 @@ def main():
                     vl_model=fig_cfg["vl_model"],
                     min_kb=fig_cfg["min_figure_kb"],
                 )
+                safe_id = p["id"].replace("/", "_")
                 if chosen:
                     fig_dir = ASSETS_DIR / date_str
                     fig_dir.mkdir(parents=True, exist_ok=True)
-                    main_path = fig_dir / f"{p['id'].replace('/', '_')}.png"
+                    main_path = fig_dir / f"{safe_id}.png"
                     main_path.write_bytes(chosen["bytes"])
-                    # Relative path from docs/papers/<date>.md -> docs/assets/...
-                    p["figure_path"] = f"../assets/figures/{date_str}/{main_path.name}"
+                    # From docs/papers/<date>/index.md OR <id>.md → docs/assets/figures/<date>/<id>.png
+                    # Both are 2 levels up
+                    rel = f"../../assets/figures/{date_str}/{main_path.name}"
+                    p["figure_path_in_index"] = rel
+                    p["figure_path_in_detail"] = rel
                     p["figure_caption"] = chosen.get("caption") or ""
 
-                    # Save extra figures (skip the chosen one)
+                    # Save extra figures (excluding chosen)
                     extras = []
                     for i, ef in enumerate(all_figs[:6]):
                         if ef is chosen:
                             continue
-                        extra_path = fig_dir / f"{p['id'].replace('/', '_')}_extra{i}.png"
+                        extra_path = fig_dir / f"{safe_id}_extra{i}.png"
                         extra_path.write_bytes(ef["bytes"])
-                        extras.append(f"../assets/figures/{date_str}/{extra_path.name}")
-                    p["extra_figures"] = extras
+                        extras.append(f"../../assets/figures/{date_str}/{extra_path.name}")
+                    p["extra_figures_in_detail"] = extras
                 else:
-                    p["figure_path"] = None
+                    p["figure_path_in_index"] = None
+                    p["figure_path_in_detail"] = None
             except Exception as e:
                 log.warning(f"  figure failed for {p['id']}: {e}")
-                p["figure_path"] = None
+                p["figure_path_in_index"] = None
+                p["figure_path_in_detail"] = None
 
-    write_daily_page(date_str, qualified)
-    update_index(
-        history_days=CONFIG["site"]["history_days_on_index"],
-        site_title=CONFIG["site"]["title"],
-    )
+    build_daily(date_str, qualified, history_days=history_days, site_title=site_title)
     save_seen(seen)
 
     log.info(f"=== Done: {len(qualified)} papers published for {date_str} ===")

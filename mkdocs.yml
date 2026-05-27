@@ -11,32 +11,33 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: indigo
-      accent: deep purple
+      primary: white
+      accent: teal
       toggle:
         icon: material/weather-night
         name: 切换深色模式
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: indigo
-      accent: deep purple
+      primary: black
+      accent: cyan
       toggle:
         icon: material/weather-sunny
         name: 切换浅色模式
   features:
     - navigation.instant
+    - navigation.instant.progress
     - navigation.tracking
+    - navigation.tabs
     - navigation.top
     - navigation.expand
+    - navigation.indexes
     - search.suggest
     - search.highlight
     - search.share
     - content.code.copy
-    - content.tabs.link
     - toc.follow
   icon:
     repo: fontawesome/brands/github
-    edit: material/pencil
   font:
     text: Inter
     code: JetBrains Mono
@@ -46,6 +47,9 @@ plugins:
       lang:
         - zh
         - en
+  - awesome-pages:
+      collapse_single_pages: false
+      strict: false
 
 markdown_extensions:
   - admonition
@@ -78,6 +82,7 @@ extra:
 extra_css:
   - assets/stylesheets/extra.css
 
-nav:
-  - 首页: index.md
-  - 关于: about.md
+# Hide per-paper detail pages from nav (only date folders show their index.md).
+# arXiv IDs always start with a digit; index.md does not.
+not_in_nav: |
+  /papers/*/[0-9]*.md
