@@ -1,6 +1,6 @@
 """Daily pipeline orchestrator: fetch -> score -> figure -> build.
 
-(Trigger marker: 2026-05-27 manual regen under new prompt v2)
+(Trigger marker: 2026-05-27 redeploy after filter merge)
 """
 from __future__ import annotations
 
