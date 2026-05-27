@@ -28,18 +28,22 @@ ASSETS_DIR = DOCS / "assets" / "figures"
 
 TOPIC_COLORS = {
     "VLA": "#7c3aed",
+    "world-model": "#9333ea",
+    "3d-foundation": "#06b6d4",
+    "policy-learning": "#dc2626",
     "manipulation": "#ea580c",
     "navigation": "#16a34a",
     "locomotion": "#0d9488",
-    "world-model": "#9333ea",
     "sim2real": "#0891b2",
     "grasping": "#ca8a04",
     "teleoperation": "#db2777",
-    "policy-learning": "#dc2626",
     "tactile": "#be185d",
     "humanoid": "#0369a1",
     "other": "#64748b",
 }
+
+# Verdict emoji set — must match score.py SUMMARY_SYS
+VERDICT_EMOJIS = {"🔥", "👀", "⚠️", "🫠", "💀", "🤡", "💤"}
 
 
 def _topic_color(topic: str) -> str:
@@ -71,6 +75,9 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
     topic = paper.get("topic", "other")
     color = _topic_color(topic)
     venue = s.get("venue")
+    verdict = s.get("verdict", "")
+    if verdict not in VERDICT_EMOJIS:
+        verdict = ""
 
     # Back-compat: old summaries had `trick` (str), new have `tricks` (list)
     tricks = s.get("tricks") or []
@@ -79,6 +86,9 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
 
     # Back-compat: old summaries had `summary` for Chinese text
     abstract_zh = s.get("abstract_zh") or s.get("summary") or ""
+
+    # Back-compat: prefer new `critique`, fall back to old `comment`
+    critique_text = s.get("critique") or s.get("comment") or ""
 
     lines = [
         "---",
@@ -94,8 +104,12 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
         "",
         f'### {paper["title"]}',
         "",
-        # Metadata row with venue badge (if present)
+        # Metadata row with verdict + venue badge (if present)
         '<div class="paper-meta-row">',
+    ]
+    if verdict:
+        lines.append(f'<span class="badge badge-verdict">{verdict}</span>')
+    lines += [
         f'<span class="badge badge-score">⭐ {paper["score"]:.1f}</span>',
         f'<span class="badge badge-topic" style="background:{color}22;color:{color}">{topic}</span>',
     ]
@@ -158,12 +172,14 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
             "",
         ]
 
-    # My evaluation
-    if s.get("comment"):
+    # Sharp critique (new format) — prominent callout with verdict
+    if critique_text:
+        head_emoji = verdict if verdict else "📌"
         lines += [
-            "## 📌 我的评价",
-            "",
-            s["comment"],
+            '<div class="critique-box">',
+            f'<div class="critique-header"><span class="critique-emoji">{head_emoji}</span> 锐评</div>',
+            f'<div class="critique-body">{critique_text}</div>',
+            '</div>',
             "",
         ]
 
@@ -182,7 +198,7 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
 
 # -------------------- DATE INDEX (CARD GRID) --------------------
 
-def write_date_index(date_str: str, papers: list) -> Path:
+def write_date_index(date_str: str, papers: list, briefing: str = "") -> Path:
     from collections import Counter
 
     folder = PAPERS_DIR / date_str
@@ -216,8 +232,21 @@ def write_date_index(date_str: str, papers: list) -> Path:
         "",
         f"# {date_str}",
         "",
-        f"今日精选 **{len(papers)}** 篇 · 按 DeepSeek 相关性评分降序 · 点击卡片查看详情",
+        f"今日精选 **{len(papers)}** 篇 · 按相关性降序 · 优先类（VLA / world-model / 3d-foundation / policy-learning）排在前",
         "",
+    ]
+
+    # AI briefing callout (if provided)
+    if briefing:
+        lines += [
+            '<div class="briefing-box">',
+            '<div class="briefing-header">📰 今日 AI 简报</div>',
+            f'<div class="briefing-body">{briefing}</div>',
+            '</div>',
+            "",
+        ]
+
+    lines += [
         filter_html,
         "",
         # IMPORTANT: NO `markdown` attribute on this div.
@@ -240,9 +269,12 @@ def write_date_index(date_str: str, papers: list) -> Path:
             img_html = '<div class="paper-card-img no-img"></div>'
 
         venue = s.get("venue")
-        venue_html = ""
-        if venue:
-            venue_html = f'<span class="paper-card-venue">{venue}</span>'
+        venue_html = f'<span class="paper-card-venue">{venue}</span>' if venue else ""
+
+        verdict = s.get("verdict", "")
+        if verdict not in VERDICT_EMOJIS:
+            verdict = ""
+        verdict_html = f'<span class="verdict-tag">{verdict}</span> ' if verdict else ""
 
         # Emit as one tight HTML block — no blank lines anywhere inside
         # the .paper-grid container (blank lines re-trigger paragraph mode).
@@ -252,7 +284,7 @@ def write_date_index(date_str: str, papers: list) -> Path:
             f'{img_html}'
             f'<div class="paper-card-body">'
             f'{venue_html}'
-            f'<div class="paper-card-title">{title}</div>'
+            f'<div class="paper-card-title">{verdict_html}{title}</div>'
             f'<div class="paper-card-tldr">{s["tldr"]}</div>'
             f'<div class="paper-card-meta">'
             f'<span class="paper-card-score">⭐ {p["score"]:.1f}</span>'
@@ -365,12 +397,13 @@ def update_home(history_days: int = 60, site_title: str = "embodied-arxiv"):
 
 # -------------------- TOP-LEVEL ENTRY --------------------
 
-def build_daily(date_str: str, papers: list, history_days: int = 60, site_title: str = "Embodied arXiv 雷达"):
+def build_daily(date_str: str, papers: list, history_days: int = 60,
+                site_title: str = "embodied-arxiv", briefing: str = ""):
     """Top-level helper called by run.py for a single date's papers."""
     ensure_top_pages_file()
     ensure_papers_pages_file()
     write_date_pages_file(date_str)
-    write_date_index(date_str, papers)
+    write_date_index(date_str, papers, briefing=briefing)
     for p in papers:
         write_paper_detail(date_str, p)
     update_home(history_days=history_days, site_title=site_title)

@@ -28,6 +28,7 @@ arxiv:
     - sim2real
     - sim-to-real
     - world model
+    - world action model
     - diffusion policy
     - imitation learning
     - behavior cloning
@@ -41,6 +42,13 @@ arxiv:
     - tactile
     - teleoperation
     - mobile manipulation
+    # 3D-foundation track (VGGT-style, scene representation)
+    - 3D foundation
+    - scene representation
+    - visual geometry
+    - feature field
+    - foundation model for robot
+    - 3D Gaussian for robot
 
   # How many days back to look. 2 covers weekend release gaps.
   lookback_days: 2
@@ -55,8 +63,24 @@ arxiv:
 # ============================================================
 scoring:
   model: deepseek-chat            # DeepSeek V4 chat endpoint
-  min_score: 6.0                  # Threshold to publish
   max_published: 25               # Hard cap on papers per day
+
+  # Two-tier quality bar:
+  #  - priority_topics get the lower threshold (we want more of these)
+  #  - everything else needs a higher score to make the cut
+  priority_topics:
+    - VLA
+    - world-model
+    - 3d-foundation
+    - policy-learning
+  priority_min_score: 6.0
+  non_priority_min_score: 7.5
+
+  # Deprecated — kept for backward compat with old code paths
+  min_score: 6.0
+
+  # Generate a daily AI briefing on top of the date page (~1 LLM call)
+  briefing: true
 
 
 # ============================================================

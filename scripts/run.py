@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 sys.path.insert(0, str(Path(__file__).parent))
 
 from fetch import fetch_recent_papers  # noqa: E402
-from score import score_paper, summarize_paper  # noqa: E402
+from score import score_paper, summarize_paper, generate_briefing  # noqa: E402
 from figure import get_all_figures, score_figures_heuristic, pick_with_vl  # noqa: E402
 from build import build_daily, update_home, ASSETS_DIR  # noqa: E402
 
@@ -104,10 +104,28 @@ def main():
     # Mark every scored paper as seen so failures don't re-process next run
     seen.update(p["id"] for p in scored_papers)
 
-    qualified = [p for p in scored_papers if p["score"] >= score_cfg["min_score"]]
-    qualified.sort(key=lambda x: -x["score"])
+    # Two-tier qualification: priority topics get lower threshold
+    priority_topics = set(score_cfg.get("priority_topics", []))
+    pri_min = score_cfg.get("priority_min_score", score_cfg.get("min_score", 6.0))
+    non_pri_min = score_cfg.get("non_priority_min_score", score_cfg.get("min_score", 6.0))
+
+    def is_qualified(p):
+        return (p["score"] >= pri_min if p["topic"] in priority_topics
+                else p["score"] >= non_pri_min)
+
+    qualified = [p for p in scored_papers if is_qualified(p)]
+    # Sort: priority topics first, then by score desc
+    qualified.sort(key=lambda p: (
+        0 if p["topic"] in priority_topics else 1,
+        -p["score"],
+    ))
     qualified = qualified[: score_cfg["max_published"]]
-    log.info(f"Qualified (score >= {score_cfg['min_score']}): {len(qualified)}")
+    n_pri = sum(1 for p in qualified if p["topic"] in priority_topics)
+    log.info(
+        f"Qualified: {len(qualified)} "
+        f"({n_pri} priority topics @ >={pri_min}, "
+        f"{len(qualified) - n_pri} other @ >={non_pri_min})"
+    )
 
     if not qualified:
         save_seen(seen)
@@ -160,7 +178,18 @@ def main():
                 p["figure_path_in_index"] = None
                 p["figure_path_in_detail"] = None
 
-    build_daily(date_str, qualified, history_days=history_days, site_title=site_title)
+    # Daily AI briefing (optional)
+    briefing = ""
+    if CONFIG["scoring"].get("briefing", False) and qualified:
+        try:
+            log.info("Generating daily briefing...")
+            briefing = generate_briefing(qualified, model=score_cfg["model"])
+            log.info(f"  briefing ({len(briefing)} chars): {briefing[:80]}...")
+        except Exception as e:
+            log.warning(f"briefing failed: {e}")
+
+    build_daily(date_str, qualified, history_days=history_days,
+                site_title=site_title, briefing=briefing)
     save_seen(seen)
 
     log.info(f"=== Done: {len(qualified)} papers published for {date_str} ===")
