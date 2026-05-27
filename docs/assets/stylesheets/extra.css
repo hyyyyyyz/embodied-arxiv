@@ -1,103 +1,245 @@
 /* ===========================================================
-   Embodied arXiv Radar — fresh & clean theme tweaks
+   embodied-arxiv — Linear/Vercel-style premium dark theme
    =========================================================== */
 
-:root {
-  --paper-radius: 14px;
-  --paper-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --paper-shadow-hover: 0 10px 28px -8px rgba(0, 0, 0, 0.12), 0 4px 10px -4px rgba(0, 0, 0, 0.08);
-}
+/* --- Color system (dark-first) --- */
 
 [data-md-color-scheme="slate"] {
-  --paper-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
-  --paper-shadow-hover: 0 10px 28px -8px rgba(0, 0, 0, 0.5), 0 4px 10px -4px rgba(0, 0, 0, 0.4);
+  --md-default-bg-color:        #08080a;
+  --md-default-bg-color--light: #131318;
+  --md-default-fg-color:        #ededee;
+  --md-default-fg-color--light: #a1a1aa;
+  --md-default-fg-color--lighter: #71717a;
+  --md-default-fg-color--lightest: rgba(255, 255, 255, 0.08);
+  --md-accent-fg-color:         #a78bfa;
+  --md-accent-fg-color--transparent: rgba(167, 139, 250, 0.1);
+  --md-primary-fg-color:        #08080a;
+  --md-typeset-a-color:         #c4b5fd;
+  --md-code-bg-color:           #131318;
+  --md-code-fg-color:           #e4e4e7;
+
+  --premium-bg:           #08080a;
+  --premium-bg-elevated:  #0f0f12;
+  --premium-bg-card:      #131318;
+  --premium-border:       rgba(255, 255, 255, 0.07);
+  --premium-border-hover: rgba(167, 139, 250, 0.35);
+  --premium-text:         #ededee;
+  --premium-text-muted:   #a1a1aa;
+  --premium-text-dim:     #71717a;
+  --premium-accent:       #a78bfa;
+  --premium-accent-glow:  rgba(167, 139, 250, 0.18);
 }
 
-/* --- Header polish (lighter feel) --- */
+/* Light-mode equivalents (kept available via toggle, but dark is default) */
+[data-md-color-scheme="default"] {
+  --md-accent-fg-color: #7c3aed;
+  --md-typeset-a-color: #6d28d9;
+
+  --premium-bg:           #fafafa;
+  --premium-bg-elevated:  #ffffff;
+  --premium-bg-card:      #ffffff;
+  --premium-border:       rgba(0, 0, 0, 0.08);
+  --premium-border-hover: rgba(124, 58, 237, 0.4);
+  --premium-text:         #18181b;
+  --premium-text-muted:   #52525b;
+  --premium-text-dim:     #a1a1aa;
+  --premium-accent:       #7c3aed;
+  --premium-accent-glow:  rgba(124, 58, 237, 0.12);
+}
+
+/* --- Typography --- */
+
+body, .md-typeset {
+  font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont,
+               'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+               sans-serif;
+  font-feature-settings: 'cv11', 'ss01', 'ss03', 'ss05';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code, kbd, pre, .md-typeset code, .md-typeset kbd, .md-typeset pre {
+  font-family: 'Geist Mono', 'JetBrains Mono', 'SF Mono', Menlo,
+               'Cascadia Code', monospace;
+  font-feature-settings: 'tnum', 'ss01';
+}
+
+.md-typeset h1 {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-size: 2rem;
+  line-height: 1.1;
+  margin-top: 0.5rem;
+}
+
+.md-typeset h2 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-size: 1.35rem;
+  border-top: none;
+  padding-top: 0;
+  margin-top: 2.2em;
+}
+
+.md-typeset h3 {
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  font-size: 1.05rem;
+}
+
+.md-typeset p {
+  line-height: 1.7;
+  color: var(--premium-text-muted);
+}
+
+.md-typeset a {
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.md-typeset a:hover {
+  border-bottom-color: currentColor;
+}
+
+/* --- Page background gradient (subtle premium texture) --- */
+
+.md-main, .md-container {
+  background: var(--premium-bg);
+}
+
+body {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(167, 139, 250, 0.06), transparent 60%),
+    var(--premium-bg);
+}
+
+[data-md-color-scheme="default"] body {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 58, 237, 0.04), transparent 60%),
+    var(--premium-bg);
+}
+
+/* --- Header — glassy, floating --- */
+
 .md-header {
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  background: rgba(8, 8, 10, 0.7) !important;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--premium-border);
+  box-shadow: none !important;
+  color: var(--premium-text);
 }
 
 [data-md-color-scheme="default"] .md-header {
-  background-color: #ffffff;
-  color: #1a1a1a;
+  background: rgba(255, 255, 255, 0.8) !important;
+  color: var(--premium-text);
 }
 
-[data-md-color-scheme="default"] .md-header__title {
-  color: #1a1a1a;
-}
-
-[data-md-color-scheme="default"] .md-tabs {
-  background-color: #ffffff;
-  color: #1a1a1a;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-[data-md-color-scheme="default"] .md-tabs__link {
-  color: #4a4a4a;
-  opacity: 1;
-}
-
-[data-md-color-scheme="default"] .md-tabs__link--active {
-  color: var(--md-accent-fg-color);
-  font-weight: 600;
-}
-
-/* --- Hero on homepage --- */
-.hero-tagline {
-  font-size: 1.15rem;
-  color: var(--md-default-fg-color--light);
-  margin: 0 0 1.2rem;
-  line-height: 1.6;
-}
-
-/* --- Date archive list (homepage) --- */
-.date-archive {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 0.75rem;
-  margin: 1.5rem 0;
-}
-
-.date-link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.7rem 1rem;
-  background: var(--md-default-bg-color);
-  border: 1px solid var(--md-default-fg-color--lightest);
-  border-radius: 10px;
-  text-decoration: none !important;
-  color: inherit !important;
-  transition: all .15s ease;
-}
-
-.date-link:hover {
-  border-color: var(--md-accent-fg-color);
-  background: var(--md-accent-fg-color--transparent);
-  transform: translateY(-1px);
-}
-
-.date-link-date {
+.md-header__title {
+  font-family: 'Geist Mono', monospace;
   font-weight: 600;
   font-size: 0.9rem;
-  font-feature-settings: "tnum";
+  letter-spacing: -0.01em;
+  color: var(--premium-text);
 }
 
-.date-link-count {
-  font-size: 0.75rem;
-  color: var(--md-default-fg-color--light);
+.md-header__button {
+  color: var(--premium-text-muted);
 }
 
-/* ===========================================================
-   PAPER CARDS — the star of the show
-   =========================================================== */
+.md-header__button:hover {
+  color: var(--premium-text);
+}
+
+/* Search */
+.md-search__input {
+  background: var(--premium-bg-elevated);
+  color: var(--premium-text);
+  border: 1px solid var(--premium-border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.md-search__input::placeholder {
+  color: var(--premium-text-dim);
+}
+
+/* --- Left sidebar — clean, low-emphasis --- */
+
+.md-sidebar {
+  background: transparent;
+}
+
+.md-sidebar__scrollwrap {
+  background: transparent;
+}
+
+.md-nav {
+  font-size: 0.85rem;
+}
+
+.md-nav__title {
+  font-family: 'Geist Mono', monospace;
+  color: var(--premium-text-dim) !important;
+  font-size: 0.7rem !important;
+  font-weight: 500 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 1.2rem 0.7rem 0.5rem;
+  background: transparent !important;
+}
+
+.md-nav__list {
+  padding: 0;
+}
+
+.md-nav__item {
+  padding: 0;
+}
+
+.md-nav__link {
+  font-size: 0.85rem;
+  color: var(--premium-text-muted);
+  font-weight: 500;
+  padding: 0.45em 0.75em;
+  margin: 0.05em 0.4em;
+  border-radius: 6px;
+  transition: all 0.12s ease;
+  font-feature-settings: 'tnum';
+}
+
+.md-nav__link:hover {
+  color: var(--premium-text) !important;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+[data-md-color-scheme="default"] .md-nav__link:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.md-nav__link--active,
+.md-nav__link--active:focus,
+.md-nav__link--active:hover {
+  color: var(--premium-accent) !important;
+  background: var(--premium-accent-glow);
+  font-weight: 600;
+}
+
+/* Date entries in monospace for that tabular look */
+.md-nav__link[href*="/papers/"] {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.82rem;
+  letter-spacing: -0.01em;
+}
+
+/* --- PAPER CARD GRID (the star) --- */
 
 .paper-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 1.4rem;
-  margin: 2rem 0 3rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin: 1.8rem 0 3rem;
 }
 
 .paper-card {
@@ -105,55 +247,98 @@
   flex-direction: column;
   text-decoration: none !important;
   color: inherit !important;
-  background: var(--md-default-bg-color);
-  border: 1px solid var(--md-default-fg-color--lightest);
-  border-radius: var(--paper-radius);
+  background: var(--premium-bg-card);
+  border: 1px solid var(--premium-border);
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--paper-shadow);
-  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.2s ease,
+              box-shadow 0.25s ease;
+  position: relative;
+  isolation: isolate;
+}
+
+.paper-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(167, 139, 250, 0.04),
+    transparent 40%,
+    transparent 70%,
+    rgba(167, 139, 250, 0.04));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .paper-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--paper-shadow-hover);
-  border-color: var(--md-accent-fg-color);
+  border-color: var(--premium-border-hover);
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 0 1px rgba(167, 139, 250, 0.1),
+    0 20px 40px -20px rgba(167, 139, 250, 0.25),
+    0 8px 16px -8px rgba(0, 0, 0, 0.4);
+}
+
+[data-md-color-scheme="default"] .paper-card:hover {
+  box-shadow:
+    0 0 0 1px rgba(124, 58, 237, 0.15),
+    0 20px 40px -20px rgba(124, 58, 237, 0.25),
+    0 8px 16px -8px rgba(0, 0, 0, 0.08);
+}
+
+.paper-card:hover::before {
+  opacity: 1;
 }
 
 .paper-card-img {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 10;
+  background-color: var(--premium-bg-elevated);
   background-size: cover;
   background-position: center top;
-  background-color: #f5f7fa;
-  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  border-bottom: 1px solid var(--premium-border);
+  filter: saturate(0.85);
+  transition: filter 0.3s ease, transform 0.3s ease;
 }
 
-[data-md-color-scheme="slate"] .paper-card-img {
-  background-color: #1e2129;
+.paper-card:hover .paper-card-img {
+  filter: saturate(1.05);
 }
 
 .paper-card-img.no-img {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--md-default-fg-color--lighter);
-  font-size: 2.4rem;
-  font-weight: 300;
+  color: var(--premium-text-dim);
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.paper-card-img.no-img::after {
+  content: "no figure";
 }
 
 .paper-card-body {
-  padding: 0.95rem 1.05rem 1.05rem;
+  padding: 1rem 1.1rem 1.05rem;
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
+  position: relative;
+  z-index: 2;
 }
 
 .paper-card-title {
-  font-size: 0.93rem;
+  font-size: 0.92rem;
   font-weight: 600;
   line-height: 1.4;
-  color: var(--md-default-fg-color);
+  letter-spacing: -0.01em;
+  color: var(--premium-text);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -162,9 +347,9 @@
 }
 
 .paper-card-tldr {
-  font-size: 0.81rem;
-  line-height: 1.5;
-  color: var(--md-default-fg-color--light);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--premium-text-muted);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -173,152 +358,258 @@
 
 .paper-card-meta {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.55rem;
   align-items: center;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   margin-top: auto;
-  padding-top: 0.5rem;
-  flex-wrap: wrap;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--premium-border);
 }
 
 .paper-card-score {
-  color: #f59f00;
-  font-weight: 700;
-  font-feature-settings: "tnum";
+  font-family: 'Geist Mono', monospace;
+  font-weight: 600;
+  font-feature-settings: 'tnum';
+  color: #f59e0b;
+  letter-spacing: -0.02em;
 }
 
 .paper-card-topic {
-  padding: 0.12rem 0.55rem;
-  border-radius: 1rem;
-  font-weight: 600;
-  font-size: 0.7rem;
-  letter-spacing: 0.02em;
+  padding: 0.12rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  font-family: 'Geist Mono', monospace;
 }
 
-/* ===========================================================
-   PAPER DETAIL PAGE
-   =========================================================== */
+/* --- Date page heading --- */
+
+.md-typeset h1:first-child {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--premium-text);
+}
+
+/* --- PAPER DETAIL PAGE --- */
 
 .back-link {
-  display: inline-block;
-  font-size: 0.85rem;
-  color: var(--md-default-fg-color--light) !important;
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--premium-text-dim) !important;
   text-decoration: none !important;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--premium-border);
+  background: var(--premium-bg-card);
+  transition: all 0.15s;
 }
 
 .back-link:hover {
-  color: var(--md-accent-fg-color) !important;
+  color: var(--premium-text) !important;
+  border-color: var(--premium-border-hover);
+  border-bottom-color: var(--premium-border-hover) !important;
 }
 
 .paper-meta-row {
   display: flex;
   gap: 0.6rem;
   align-items: center;
-  margin: 0.5rem 0 1rem;
+  margin: 1rem 0 1.5rem;
   flex-wrap: wrap;
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.18rem 0.65rem;
-  border-radius: 1rem;
-  font-size: 0.78rem;
+  padding: 0.22rem 0.7rem;
+  border-radius: 6px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.75rem;
   font-weight: 600;
-  font-feature-settings: "tnum";
+  font-feature-settings: 'tnum';
+  letter-spacing: -0.01em;
 }
 
 .badge-score {
-  background: rgba(245, 159, 0, 0.12);
-  color: #d97706;
-}
-
-.badge-topic {
-  /* Background/color set inline per topic */
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .paper-id {
-  font-family: var(--md-code-font-family, monospace);
-  font-size: 0.78rem;
-  color: var(--md-default-fg-color--light);
-  padding: 0.18rem 0.5rem;
-  background: var(--md-code-bg-color);
-  border-radius: 4px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--premium-text-dim);
+  padding: 0.22rem 0.55rem;
+  background: var(--premium-bg-card);
+  border: 1px solid var(--premium-border);
+  border-radius: 6px;
 }
 
-/* Framework figure prominence on detail page */
+/* Figure on detail page */
 .md-typeset figure {
-  margin: 1.5rem auto;
+  margin: 1.8rem auto;
   max-width: 100%;
 }
 
 .md-typeset figure img {
   border-radius: 10px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  background: white;
+  border: 1px solid var(--premium-border);
+  box-shadow:
+    0 24px 48px -24px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.02);
+  background: var(--premium-bg-elevated);
 }
 
-[data-md-color-scheme="slate"] .md-typeset figure img {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-  background: #2a2a2a;
+[data-md-color-scheme="default"] .md-typeset figure img {
+  background: #ffffff;
+  box-shadow:
+    0 20px 40px -20px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(0, 0, 0, 0.02);
 }
 
 .md-typeset figcaption {
-  font-size: 0.78rem;
-  color: var(--md-default-fg-color--light);
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--premium-text-dim);
   text-align: center;
-  margin-top: 0.6rem;
-  line-height: 1.5;
+  margin-top: 0.8rem;
+  letter-spacing: 0.02em;
 }
 
-/* Trick admonition styling */
-.md-typeset .admonition.tip {
-  border-radius: 10px;
-  border-left-width: 4px;
+/* Trick admonition — re-styled as a refined callout */
+.md-typeset .admonition,
+.md-typeset details {
+  background: var(--premium-bg-card);
+  border: 1px solid var(--premium-border);
+  border-left: 3px solid var(--premium-accent);
+  border-radius: 8px;
+  box-shadow: none;
+  font-size: 0.88rem;
 }
 
-/* Tighter typography */
-.md-typeset h1 {
-  font-weight: 700;
-  letter-spacing: -0.015em;
-}
-
-.md-typeset h2 {
+.md-typeset .admonition-title,
+.md-typeset summary {
+  background: transparent !important;
+  font-family: 'Geist Mono', monospace;
   font-weight: 600;
-  margin-top: 1.8em;
-  letter-spacing: -0.01em;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--premium-accent) !important;
+}
+
+.md-typeset .admonition-title::before,
+.md-typeset summary::before {
+  background-color: var(--premium-accent) !important;
+}
+
+/* Code blocks */
+.md-typeset pre, .md-typeset code {
+  background: var(--premium-bg-card);
+  border: 1px solid var(--premium-border);
+  border-radius: 6px;
+  font-size: 0.83em;
 }
 
 .md-typeset code {
-  font-size: 0.85em;
-  padding: 0.1em 0.45em;
-  border-radius: 0.3em;
+  padding: 0.12em 0.45em;
 }
 
-/* Subtle table polish */
+/* Tables — refined */
 .md-typeset table:not([class]) {
   font-size: 0.85em;
-  border: 1px solid var(--md-default-fg-color--lightest);
+  border: 1px solid var(--premium-border);
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: none;
 }
 
-/* Content max-width on wide screens (more breathing room) */
+.md-typeset table:not([class]) th {
+  background: var(--premium-bg-card);
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--premium-text-muted);
+}
+
+/* Footer */
+.md-footer {
+  background: var(--premium-bg);
+  border-top: 1px solid var(--premium-border);
+}
+
+.md-footer-meta {
+  background: var(--premium-bg);
+}
+
+/* --- Hero / homepage redirect page --- */
+
+.hero-tagline {
+  font-size: 1.1rem;
+  color: var(--premium-text-muted);
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* --- Responsive tweaks --- */
+
 @media screen and (min-width: 76.25em) {
   .md-content {
-    max-width: none;
+    max-width: 60rem;
   }
 }
 
-/* Smaller screens: tighter card grid */
 @media screen and (max-width: 600px) {
   .paper-grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 0.9rem;
   }
 
-  .date-archive {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  .md-typeset h1 {
+    font-size: 1.5rem;
   }
+}
+
+/* --- Scrollbar polish --- */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+[data-md-color-scheme="default"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+[data-md-color-scheme="default"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.24);
+}
+
+/* Selection */
+::selection {
+  background: var(--premium-accent);
+  color: #ffffff;
 }
