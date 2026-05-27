@@ -183,9 +183,29 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
 # -------------------- DATE INDEX (CARD GRID) --------------------
 
 def write_date_index(date_str: str, papers: list) -> Path:
+    from collections import Counter
+
     folder = PAPERS_DIR / date_str
     folder.mkdir(parents=True, exist_ok=True)
     page = folder / "index.md"
+
+    # Count papers per topic for filter buttons
+    topic_counts = Counter(p.get("topic", "other") for p in papers)
+
+    # Build the topic filter row
+    filter_parts = [
+        f'<button class="topic-filter-btn active" data-topic="all">'
+        f'<span class="dot" style="background:#a78bfa"></span>'
+        f'全部 <span class="cnt">{len(papers)}</span></button>'
+    ]
+    for topic, n in topic_counts.most_common():
+        color = _topic_color(topic)
+        filter_parts.append(
+            f'<button class="topic-filter-btn" data-topic="{topic}">'
+            f'<span class="dot" style="background:{color}"></span>'
+            f'{topic} <span class="cnt">{n}</span></button>'
+        )
+    filter_html = '<div class="topic-filter">' + ''.join(filter_parts) + '</div>'
 
     lines = [
         "---",
@@ -197,6 +217,8 @@ def write_date_index(date_str: str, papers: list) -> Path:
         f"# {date_str}",
         "",
         f"今日精选 **{len(papers)}** 篇 · 按 DeepSeek 相关性评分降序 · 点击卡片查看详情",
+        "",
+        filter_html,
         "",
         # IMPORTANT: NO `markdown` attribute on this div.
         # With `markdown`, python-markdown wraps each <a> in <p> and the
@@ -224,8 +246,9 @@ def write_date_index(date_str: str, papers: list) -> Path:
 
         # Emit as one tight HTML block — no blank lines anywhere inside
         # the .paper-grid container (blank lines re-trigger paragraph mode).
+        # data-topic enables client-side filter via assets/javascripts/filter.js
         card = (
-            f'<a class="paper-card" href="{_safe_id(p["id"])}/">'
+            f'<a class="paper-card" data-topic="{topic}" href="{_safe_id(p["id"])}/">'
             f'{img_html}'
             f'<div class="paper-card-body">'
             f'{venue_html}'
