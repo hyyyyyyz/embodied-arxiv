@@ -1,4 +1,7 @@
-"""Daily pipeline orchestrator: fetch -> score -> figure -> build."""
+"""Daily pipeline orchestrator: fetch -> score -> figure -> build.
+
+(Trigger marker: 2026-05-27 manual regen under new prompt v2)
+"""
 from __future__ import annotations
 
 import json
