@@ -15,7 +15,11 @@ hide:
 
 ## 📅 历史归档
 
-_首次构建中，等待第一次 cron 触发……_
+<div class="date-archive" markdown>
+
+<a class="date-link" href="papers/2026-05-27/"><span class="date-link-date">2026-05-27</span><span class="date-link-count">25 篇</span></a>
+
+</div>
 
 ---
 
