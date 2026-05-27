@@ -202,8 +202,10 @@ def write_date_index(date_str: str, papers: list) -> Path:
 def write_date_pages_file(date_str: str):
     folder = PAPERS_DIR / date_str
     folder.mkdir(parents=True, exist_ok=True)
+    # Quote the date — without quotes YAML parses 2026-05-27 as datetime.date,
+    # which breaks mkdocs-awesome-pages plugin (expects string title).
     (folder / ".pages").write_text(
-        f"title: {date_str}\n"
+        f'title: "{date_str}"\n'
         f"nav:\n"
         f"  - 卡片列表: index.md\n",
         encoding="utf-8",

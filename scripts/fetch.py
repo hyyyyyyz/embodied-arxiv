@@ -59,11 +59,13 @@ def fetch_recent_papers() -> List[Dict]:
     cfg = load_config()["arxiv"]
     cutoff = datetime.now(timezone.utc) - timedelta(days=cfg["lookback_days"])
 
-    # arXiv tightened rate limits; 5s + more retries is safer
+    # arXiv tightened rate limits. Fail fast on 429: too many retries means
+    # one bad category eats minutes; we'd rather skip it and let tomorrow's
+    # run pick those papers up (lookback_days=2 covers the gap).
     client = arxiv.Client(
         page_size=100,
         delay_seconds=5,
-        num_retries=5,
+        num_retries=2,
     )
     primary_cats = set(cfg["categories"]["primary"])
     secondary_cats = cfg["categories"]["secondary"]
