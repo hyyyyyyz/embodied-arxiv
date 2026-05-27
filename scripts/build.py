@@ -36,7 +36,8 @@ TOPIC_COLORS = {
     "grasping": "#ca8a04",
     "teleoperation": "#db2777",
     "policy-learning": "#dc2626",
-    "perception": "#1e40af",
+    "tactile": "#be185d",
+    "humanoid": "#0369a1",
     "other": "#64748b",
 }
 

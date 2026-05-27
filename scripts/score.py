@@ -31,8 +31,16 @@ SCORE_SYS = """你是具身智能（Embodied AI）领域的资深审稿人。
 - 3-4: 弱相关，仅边缘提及
 - 0-2: 不相关
 
+**严格红线（必须低分）**：
+- 通用 VLM / MLLM 训练或评测、不专门面向具身任务 → ≤ 4 分
+- 纯 3D 重建 / Gaussian Splatting / NeRF / 视频生成，没有机器人下游 → ≤ 4 分
+- 通用目标检测 / 分割 / 跟踪，即使数据可能用在机器人上 → ≤ 4 分
+- 自动驾驶（除非用机器人本体平台） → ≤ 5 分
+- 医疗影像 / 手术机器人之外的医学 AI → ≤ 3 分
+- 纯仿真物理 / 图形学，不涉及策略学习 → ≤ 5 分
+
 输出严格 JSON：
-{"score": 数字, "topic": "VLA|manipulation|navigation|locomotion|world-model|sim2real|grasping|teleoperation|policy-learning|perception|other", "reason": "≤30字的判定理由"}"""
+{"score": 数字, "topic": "VLA|manipulation|navigation|locomotion|world-model|sim2real|grasping|teleoperation|policy-learning|tactile|humanoid|other", "reason": "≤30字的判定理由"}"""
 
 
 SUMMARY_SYS = """你是具身智能领域的论文阅读助手。读完论文摘要后，输出**结构化中文笔记**。
