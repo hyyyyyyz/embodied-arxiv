@@ -1,30 +1,33 @@
-"""Generate the static-site content tree.
+"""Generate the VitePress content tree from per-paper data.
 
 Layout:
   docs/
-    index.md                              # landing page (regenerated each run)
-    .pages                                # top-level nav order
+    .vitepress/
+      data/stats.json                  # aggregated stats for Dashboard.vue
+      theme/components/*.vue           # custom components
+    index.md                           # home (renders <Dashboard />)
     papers/
-      .pages                              # title='论文归档', order: desc
-      <date>/                             # one folder per day
-        .pages                            # only index.md in nav
-        index.md                          # card grid
-        <arxiv-id>.md                     # per-paper detail page
-
-Per-paper detail pages are excluded from nav via `not_in_nav` glob in mkdocs.yml.
+      <date>/
+        index.md                       # card grid + <TopicFilter />
+        <arxiv-id>.md                  # per-paper detail
 """
 from __future__ import annotations
 
+import json
 import logging
+import re
+from collections import Counter
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 log = logging.getLogger(__name__)
 
 ROOT = Path(__file__).parent.parent
 DOCS = ROOT / "docs"
 PAPERS_DIR = DOCS / "papers"
-ASSETS_DIR = DOCS / "assets" / "figures"
+# VitePress convention: docs/public/<x> is served at base-URL `/<x>`
+ASSETS_DIR = DOCS / "public" / "figures"
+STATS_PATH = DOCS / ".vitepress" / "data" / "stats.json"
 
 TOPIC_COLORS = {
     "VLA": "#7c3aed",
@@ -42,7 +45,6 @@ TOPIC_COLORS = {
     "other": "#64748b",
 }
 
-# Verdict emoji set — must match score.py SUMMARY_SYS
 VERDICT_EMOJIS = {"🔥", "👀", "⚠️", "🫠", "💀", "🤡", "💤"}
 
 
@@ -59,11 +61,12 @@ def _short_authors(authors: List[str], n: int = 4) -> str:
 
 
 def _safe_id(arxiv_id: str) -> str:
-    """File-system-safe arxiv id (old-style IDs may contain '/')."""
     return arxiv_id.replace("/", "_")
 
 
-# -------------------- PER-PAPER DETAIL PAGE --------------------
+# ========================================================
+# PER-PAPER DETAIL PAGE
+# ========================================================
 
 def write_paper_detail(date_str: str, paper: dict) -> Path:
     folder = PAPERS_DIR / date_str
@@ -79,32 +82,29 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
     if verdict not in VERDICT_EMOJIS:
         verdict = ""
 
-    # Back-compat: old summaries had `trick` (str), new have `tricks` (list)
     tricks = s.get("tricks") or []
     if not tricks and s.get("trick"):
         tricks = [{"text": s["trick"], "core": True}]
 
-    # Back-compat: old summaries had `summary` for Chinese text
     abstract_zh = s.get("abstract_zh") or s.get("summary") or ""
-
-    # Back-compat: prefer new `critique`, fall back to old `comment`
+    abstract_en = paper.get("abstract", "")
     critique_text = s.get("critique") or s.get("comment") or ""
 
+    # VitePress frontmatter: hide sidebar/aside for focused reading
     lines = [
         "---",
         f"title: {s['tldr']}",
-        "hide:",
-        "  - navigation",
+        "sidebar: false",
+        "aside: false",
+        "outline: false",
         "---",
         "",
-        # Back button — top-left, prominent
-        f'<a class="back-btn" href="../">← 返回 {date_str}</a>',
+        f'<a class="back-btn" href="./">← 返回 {date_str}</a>',
         "",
         f"# {s['tldr']}",
         "",
         f'### {paper["title"]}',
         "",
-        # Metadata row with verdict + venue badge (if present)
         '<div class="paper-meta-row">',
     ]
     if verdict:
@@ -119,24 +119,21 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
         f'<span class="paper-id">{paper["id"]}</span>',
         '</div>',
         "",
-        # arXiv link AT TOP (user request)
         f'<div class="paper-links">📄 <a href="{paper["arxiv_url"]}">arXiv 摘要页</a> &nbsp;·&nbsp; 📑 <a href="{paper["pdf_url"]}">PDF 全文</a></div>',
         "",
         f"*{_short_authors(paper['authors'])}*",
         "",
     ]
 
-    # Framework figure (one only, no extras)
     if fig:
-        lines.append("<figure markdown>")
-        lines.append(f"  ![framework]({fig})")
+        # Absolute path served from public/; VitePress prefixes base URL
+        lines.append(f"![framework]({fig})")
         if paper.get("figure_caption"):
             cap = paper["figure_caption"].replace("\n", " ").replace("|", "\\|")[:240]
-            lines.append(f"  <figcaption>{cap}</figcaption>")
-        lines.append("</figure>")
+            lines.append("")
+            lines.append(f"<small>{cap}</small>")
         lines.append("")
 
-    # Tricks list with core marked
     if tricks:
         lines += ["## 💡 关键 Tricks", ""]
         for t in tricks:
@@ -149,21 +146,24 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
                 lines.append(f"- {txt}")
         lines.append("")
 
-    # Abstracts in EN / ZH tabs
     lines += [
         "## 📝 摘要",
         "",
-        '=== "中文"',
-        "",
-        f"    {abstract_zh}",
-        "",
-        '=== "English"',
-        "",
-        f"    {paper['abstract']}",
+        abstract_zh,
         "",
     ]
 
-    # Related work
+    if abstract_en:
+        lines += [
+            "<details>",
+            "<summary>English (原文)</summary>",
+            "",
+            abstract_en,
+            "",
+            "</details>",
+            "",
+        ]
+
     if s.get("related"):
         lines += [
             "## 🔗 与已有工作的关系",
@@ -172,7 +172,6 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
             "",
         ]
 
-    # Sharp critique (new format) — prominent callout with verdict
     if critique_text:
         head_emoji = verdict if verdict else "📌"
         lines += [
@@ -183,7 +182,6 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
             "",
         ]
 
-    # Tags at the very bottom
     if s.get("tags"):
         lines += [
             "---",
@@ -196,47 +194,27 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
     return page
 
 
-# -------------------- DATE INDEX (CARD GRID) --------------------
+# ========================================================
+# DATE INDEX (CARD GRID)
+# ========================================================
 
 def write_date_index(date_str: str, papers: list, briefing: str = "") -> Path:
-    from collections import Counter
-
     folder = PAPERS_DIR / date_str
     folder.mkdir(parents=True, exist_ok=True)
     page = folder / "index.md"
 
-    # Count papers per topic for filter buttons
-    topic_counts = Counter(p.get("topic", "other") for p in papers)
-
-    # Build the topic filter row
-    filter_parts = [
-        f'<button class="topic-filter-btn active" data-topic="all">'
-        f'<span class="dot" style="background:#a78bfa"></span>'
-        f'全部 <span class="cnt">{len(papers)}</span></button>'
-    ]
-    for topic, n in topic_counts.most_common():
-        color = _topic_color(topic)
-        filter_parts.append(
-            f'<button class="topic-filter-btn" data-topic="{topic}">'
-            f'<span class="dot" style="background:{color}"></span>'
-            f'{topic} <span class="cnt">{n}</span></button>'
-        )
-    filter_html = '<div class="topic-filter">' + ''.join(filter_parts) + '</div>'
-
     lines = [
         "---",
         f"title: {date_str}",
-        "hide:",
-        "  - toc",
+        "outline: false",
         "---",
         "",
         f"# {date_str}",
         "",
-        f"今日精选 **{len(papers)}** 篇 · 按相关性降序 · 优先类（VLA / world-model / 3d-foundation / policy-learning）排在前",
+        f"今日精选 **{len(papers)}** 篇 · 按相关性降序 · 优先类（VLA / world-model / 3d-foundation / policy-learning）排前",
         "",
     ]
 
-    # AI briefing callout (if provided)
     if briefing:
         lines += [
             '<div class="briefing-box">',
@@ -246,15 +224,11 @@ def write_date_index(date_str: str, papers: list, briefing: str = "") -> Path:
             "",
         ]
 
-    lines += [
-        filter_html,
-        "",
-        # IMPORTANT: NO `markdown` attribute on this div.
-        # With `markdown`, python-markdown wraps each <a> in <p> and the
-        # nested <div> closes <p> early, destroying the card layout.
-        # Without it (md_in_html default), the inner HTML stays raw.
-        '<div class="paper-grid">',
-    ]
+    # TopicFilter Vue component auto-scans the .paper-card data-topic attributes
+    lines.append("<TopicFilter />")
+    lines.append("")
+
+    lines.append('<div class="paper-grid">')
 
     for p in papers:
         s = p["summary"]
@@ -264,7 +238,7 @@ def write_date_index(date_str: str, papers: list, briefing: str = "") -> Path:
         title = p["title"].replace("\n", " ").strip()
 
         if fig_path:
-            img_html = f'<div class="paper-card-img" style="background-image: url({fig_path});"></div>'
+            img_html = f'<img class="paper-card-img" src="{fig_path}" alt="" loading="lazy">'
         else:
             img_html = '<div class="paper-card-img no-img"></div>'
 
@@ -276,11 +250,8 @@ def write_date_index(date_str: str, papers: list, briefing: str = "") -> Path:
             verdict = ""
         verdict_html = f'<span class="verdict-tag">{verdict}</span> ' if verdict else ""
 
-        # Emit as one tight HTML block — no blank lines anywhere inside
-        # the .paper-grid container (blank lines re-trigger paragraph mode).
-        # data-topic enables client-side filter via assets/javascripts/filter.js
         card = (
-            f'<a class="paper-card" data-topic="{topic}" href="{_safe_id(p["id"])}/">'
+            f'<a class="paper-card" data-topic="{topic}" href="./{_safe_id(p["id"])}/">'
             f'{img_html}'
             f'<div class="paper-card-body">'
             f'{venue_html}'
@@ -301,116 +272,308 @@ def write_date_index(date_str: str, papers: list, briefing: str = "") -> Path:
     return page
 
 
-# -------------------- .pages SCAFFOLDING --------------------
+# ========================================================
+# STATS AGGREGATION (for Dashboard.vue)
+# ========================================================
 
-def write_date_pages_file(date_str: str):
-    folder = PAPERS_DIR / date_str
-    folder.mkdir(parents=True, exist_ok=True)
-    # Quote the date — without quotes YAML parses 2026-05-27 as datetime.date,
-    # which breaks mkdocs-awesome-pages plugin (expects string title).
-    (folder / ".pages").write_text(
-        f'title: "{date_str}"\n'
-        f"nav:\n"
-        f"  - 卡片列表: index.md\n",
+CARD_RE = re.compile(
+    r'<a class="paper-card" data-topic="([^"]+)" href="\./([^"/]+)/?">'
+    r'.*?'
+    r'(?:url\(([^)]+)\))?'  # figure URL (optional)
+    r'.*?'
+    r'<div class="paper-card-body">'
+    r'(?:<span class="paper-card-venue">[^<]+</span>)?'
+    r'<div class="paper-card-title">'
+    r'(?:<span class="verdict-tag">([^<]*)</span>\s*)?'
+    r'([^<]+)'
+    r'</div>'
+    r'<div class="paper-card-tldr">([^<]*)</div>'
+    r'.*?'
+    r'<span class="paper-card-score">⭐ ([\d.]+)</span>'
+    r'.*?'
+    r'</a>',
+    re.DOTALL,
+)
+
+
+def aggregate_all_papers() -> List[dict]:
+    """Parse all per-date index.md files and extract per-paper info."""
+    papers = []
+    if not PAPERS_DIR.exists():
+        return papers
+    for date_dir in sorted(PAPERS_DIR.iterdir()):
+        if not date_dir.is_dir():
+            continue
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", date_dir.name):
+            continue
+        index = date_dir / "index.md"
+        if not index.exists():
+            continue
+        try:
+            content = index.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        for m in CARD_RE.finditer(content):
+            topic, paper_id, fig_url, verdict, title, tldr, score = m.groups()
+            papers.append({
+                "date": date_dir.name,
+                "id": paper_id,
+                "topic": topic,
+                "verdict": (verdict or "").strip(),
+                "title": title.strip(),
+                "tldr": tldr.strip(),
+                "score": float(score),
+                "figure_url": (fig_url or "").strip(),
+            })
+    return papers
+
+
+def write_stats_json():
+    """Aggregate all papers into stats.json consumed by Dashboard.vue."""
+    papers = aggregate_all_papers()
+
+    topics = Counter(p["topic"] for p in papers)
+    verdicts = Counter(p["verdict"] for p in papers if p["verdict"])
+
+    # Highlights: 🔥 first (any), then 👀 by date desc
+    verdict_priority = {"🔥": 100, "👀": 50, "⚠️": 10}
+    highlights_pool = [p for p in papers if p["verdict"] in ("🔥", "👀", "⚠️")]
+    highlights = sorted(
+        highlights_pool,
+        key=lambda p: (
+            -verdict_priority.get(p["verdict"], 0),
+            p["date"],
+            -p["score"],
+        ),
+        reverse=False,
+    )
+
+    # But we want 🔥 first, then most recent 👀
+    def sort_key(p):
+        v = verdict_priority.get(p["verdict"], 0)
+        return (-v, -ord(p["date"][0]) * 0)  # placeholder
+
+    highlights.sort(
+        key=lambda p: (
+            -verdict_priority.get(p["verdict"], 0),
+            -float(p["date"].replace("-", "")),
+            -p["score"],
+        )
+    )
+    highlights = highlights[:6]
+
+    by_date = Counter(p["date"] for p in papers)
+    date_counts = sorted(by_date.items(), key=lambda x: x[0], reverse=True)
+
+    stats = {
+        "total_papers": len(papers),
+        "total_days": len(by_date),
+        "topics": dict(topics.most_common()),
+        "verdicts": dict(verdicts),
+        "highlights": highlights,
+        "latest_date": date_counts[0][0] if date_counts else None,
+        "date_counts": date_counts,
+    }
+
+    STATS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    STATS_PATH.write_text(
+        json.dumps(stats, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
-
-
-def ensure_papers_pages_file():
-    PAPERS_DIR.mkdir(parents=True, exist_ok=True)
-    pages = PAPERS_DIR / ".pages"
-    if not pages.exists():
-        pages.write_text(
-            "title: 论文归档\n"
-            "order: desc\n"
-            "sort_type: natural\n",
-            encoding="utf-8",
-        )
-
-
-def ensure_top_pages_file():
-    pages = DOCS / ".pages"
-    if not pages.exists():
-        pages.write_text(
-            "nav:\n"
-            "  - 首页: index.md\n"
-            "  - 论文归档: papers\n"
-            "  - 关于: about.md\n",
-            encoding="utf-8",
-        )
-
-
-# -------------------- HOMEPAGE --------------------
-
-def update_home(history_days: int = 60, site_title: str = "embodied-arxiv"):
-    """Home page = meta-refresh redirect to the latest date's card grid.
-
-    This matches the intended UX: user visits the site → immediately lands
-    on the most recent day's papers. The left sidebar always shows the
-    full date list, so they can jump to any day from there.
-    """
-    DOCS.mkdir(parents=True, exist_ok=True)
-    PAPERS_DIR.mkdir(parents=True, exist_ok=True)
-
-    date_folders = sorted(
-        [d for d in PAPERS_DIR.iterdir() if d.is_dir() and d.name[0].isdigit()],
-        key=lambda d: d.name,
-        reverse=True,
+    log.info(
+        f"stats: {stats['total_papers']} papers across {stats['total_days']} days, "
+        f"{len(stats['topics'])} topics, {len(stats['highlights'])} highlights"
     )
 
-    if date_folders:
-        latest = date_folders[0].name
-        lines = [
-            "---",
-            f"title: {site_title}",
-            "hide:",
-            "  - toc",
-            "---",
-            "",
-            f'<meta http-equiv="refresh" content="0; url=papers/{latest}/">',
-            "",
-            f"# {site_title}",
-            "",
-            f'正在跳转到最新一天 → **[{latest}](papers/{latest}/)** …',
-            "",
-            '<small>如果没有自动跳转，点击上面链接，或在左侧栏选任意一天。</small>',
-            "",
-        ]
-    else:
-        lines = [
-            "---",
-            f"title: {site_title}",
-            "hide:",
-            "  - toc",
-            "---",
-            "",
-            f"# {site_title}",
-            "",
-            "_首次构建中，等待第一次 cron 触发……_",
-            "",
-        ]
 
-    (DOCS / "index.md").write_text("\n".join(lines), encoding="utf-8")
-    log.info(f"Updated home — {len(date_folders)} days, latest = "
-             f"{date_folders[0].name if date_folders else 'none'}")
+# ========================================================
+# LEGACY-FORMAT MIGRATION (one-off, idempotent)
+# ========================================================
+
+def migrate_legacy_format():
+    """Migrate old MkDocs syntax to VitePress-compatible.
+
+    - Detail pages: convert `=== "中文"` / `=== "English"` tabs to plain
+      paragraph + <details>.
+    - Date index pages: strip hardcoded <div class="topic-filter"> and
+      replace with <TopicFilter /> component.
+
+    Idempotent — files already in new format are skipped.
+    """
+    if not PAPERS_DIR.exists():
+        return
+
+    n_detail = 0
+    n_index = 0
+
+    tab_re = re.compile(
+        r'=== "([^"]+)"\s*\n+'
+        r'((?:    [^\n]*\n|[ \t]*\n)+)',
+        re.MULTILINE,
+    )
+
+    def dedent(text: str) -> str:
+        lines = []
+        for ln in text.splitlines():
+            if ln.startswith("    "):
+                lines.append(ln[4:])
+            else:
+                lines.append(ln)
+        return "\n".join(lines).strip()
+
+    for date_dir in PAPERS_DIR.iterdir():
+        if not date_dir.is_dir():
+            continue
+        for md in date_dir.glob("*.md"):
+            try:
+                src = md.read_text(encoding="utf-8")
+            except Exception:
+                continue
+
+            if md.stem == "index":
+                # Strip old topic-filter block
+                new = re.sub(
+                    r'<div class="topic-filter">.*?</div>\s*\n',
+                    "<TopicFilter />\n\n",
+                    src,
+                    flags=re.DOTALL,
+                )
+                # Insert TopicFilter if missing entirely
+                if "<TopicFilter />" not in new and '<div class="paper-grid">' in new:
+                    new = new.replace(
+                        '<div class="paper-grid">',
+                        "<TopicFilter />\n\n<div class=\"paper-grid\">",
+                        1,
+                    )
+                # Fix old href "<paper-id>/" → "./paper-id/"
+                new = re.sub(
+                    r'<a class="paper-card" data-topic="([^"]+)" href="([0-9][^"/]+)/"',
+                    r'<a class="paper-card" data-topic="\1" href="./\2/"',
+                    new,
+                )
+                if new != src:
+                    md.write_text(new, encoding="utf-8")
+                    n_index += 1
+            else:
+                # Detail page: migrate tabs
+                matches = list(tab_re.finditer(src))
+                if not matches:
+                    continue
+                # Build replacement
+                zh, en = None, None
+                for m in matches:
+                    label = m.group(1)
+                    content = dedent(m.group(2))
+                    if "中文" in label or label.lower() == "chinese":
+                        zh = content
+                    elif "English" in label or "英文" in label:
+                        en = content
+                if zh is None and en is None:
+                    continue
+                replacement = ""
+                if zh:
+                    replacement += zh + "\n\n"
+                if en:
+                    replacement += f"<details>\n<summary>English (原文)</summary>\n\n{en}\n\n</details>\n"
+                # Replace from first tab to last
+                start = matches[0].start()
+                end = matches[-1].end()
+                new = src[:start] + replacement + src[end:]
+
+                # Also fix back-button href: old `index.md` → `./`
+                new = re.sub(
+                    r'<a class="back-btn" href="index\.md">',
+                    '<a class="back-btn" href="./">',
+                    new,
+                )
+
+                # Strip old mkdocs frontmatter that VitePress doesn't need
+                new = re.sub(
+                    r'^---\nhide:\n  - navigation\n---\n',
+                    '---\nsidebar: false\naside: false\n---\n',
+                    new,
+                    count=1,
+                )
+
+                if new != src:
+                    md.write_text(new, encoding="utf-8")
+                    n_detail += 1
+
+    if n_detail or n_index:
+        log.info(f"migrate: {n_detail} detail pages + {n_index} indexes converted")
+
+    # --- Migrate asset locations: assets/figures → public/figures ---
+    legacy_figs = DOCS / "assets" / "figures"
+    new_figs = DOCS / "public" / "figures"
+    if legacy_figs.exists():
+        new_figs.parent.mkdir(parents=True, exist_ok=True)
+        new_figs.mkdir(exist_ok=True)
+        for date_dir in list(legacy_figs.iterdir()):
+            if not date_dir.is_dir():
+                continue
+            target = new_figs / date_dir.name
+            target.mkdir(exist_ok=True)
+            for f in list(date_dir.iterdir()):
+                tgt = target / f.name
+                if not tgt.exists():
+                    try:
+                        f.rename(tgt)
+                    except Exception as e:
+                        log.warning(f"  failed move {f}: {e}")
+            try:
+                date_dir.rmdir()
+            except OSError:
+                pass
+        try:
+            legacy_figs.rmdir()
+            (DOCS / "assets").rmdir() if (DOCS / "assets").exists() else None
+        except OSError:
+            pass
+        log.info(f"migrate: assets/figures → public/figures")
+
+    # --- Migrate path refs in all paper markdown ---
+    n_path = 0
+    for md in PAPERS_DIR.glob("**/*.md"):
+        try:
+            src = md.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        new = src
+        # Old relative paths → new absolute
+        new = re.sub(r'\.\./\.\./assets/figures/', '/figures/', new)
+        # Convert background-image cards → <img>
+        new = re.sub(
+            r'<div class="paper-card-img" style="background-image: url\(([^)]+)\)[^"]*"></div>',
+            r'<img class="paper-card-img" src="\1" alt="" loading="lazy">',
+            new,
+        )
+        if new != src:
+            md.write_text(new, encoding="utf-8")
+            n_path += 1
+    if n_path:
+        log.info(f"migrate: {n_path} files had asset paths updated")
 
 
-# -------------------- TOP-LEVEL ENTRY --------------------
+# ========================================================
+# TOP-LEVEL
+# ========================================================
 
 def build_daily(date_str: str, papers: list, history_days: int = 60,
                 site_title: str = "embodied-arxiv", briefing: str = ""):
-    """Top-level helper called by run.py for a single date's papers."""
-    ensure_top_pages_file()
-    ensure_papers_pages_file()
-    write_date_pages_file(date_str)
+    """Called by run.py for one date's qualified papers."""
     write_date_index(date_str, papers, briefing=briefing)
     for p in papers:
         write_paper_detail(date_str, p)
-    update_home(history_days=history_days, site_title=site_title)
+    # Rebuild stats and the home dashboard JSON every run
+    write_stats_json()
+
+
+# Back-compat: run.py / older code may still call this; now it's just stats.
+def update_home(history_days: int = 60, site_title: str = "embodied-arxiv"):
+    write_stats_json()
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    update_home()
-    ensure_top_pages_file()
-    ensure_papers_pages_file()
+    migrate_legacy_format()
+    write_stats_json()

@@ -1,53 +1,89 @@
-# 关于本站
+---
+title: 关于
+outline: false
+---
+
+# 关于 embodied-arxiv
 
 ## 这是什么
 
-**Embodied arXiv 雷达** 每天自动从 arXiv 抓取**具身智能（Embodied AI）**相关的新论文，调用 DeepSeek V4 生成中文摘要、提炼核心 trick、用 PyMuPDF + 启发式自动抽取论文中的 framework 图，发布为静态网站。
+**embodied-arxiv** 每天自动从 arXiv 抓取**具身智能（Embodied AI）**相关的新论文，调用 DeepSeek V4 生成中文摘要、提炼核心 trick、给毒舌锐评，并用 PyMuPDF + 启发式自动抽取论文中的 framework 图，部署为 VitePress 静态站点。
 
 ## 数据流
 
-```mermaid
-flowchart LR
-    A[GitHub Actions<br/>cron 02:00 UTC] --> B[arXiv API<br/>fetch.py]
-    B --> C[DeepSeek V4<br/>score.py]
-    C -->|score >= 6| D[summarize_paper]
-    C -->|score >= 6| E[PyMuPDF<br/>figure.py]
-    D --> F[build.py<br/>生成 markdown]
-    E --> F
-    F --> G[mkdocs build]
-    G --> H[GitHub Pages]
+```
+GitHub Actions（cron 02:00 UTC = 10:00 北京）
+    ↓
+fetch.py      arXiv API → 候选论文（去重 + 关键词过滤）
+    ↓
+score.py      DeepSeek V4 评分（perception/通用 CV 严格红线）
+    ↓
+score.py      DeepSeek V4 中文笔记（多 tricks / 中英文 / 毒舌锐评 / 简报）
+    ↓
+openreview_venue.py    OpenReview 查会议（覆盖 LLM 猜的 venue）
+    ↓
+figure.py     PyMuPDF 抽图 + 启发式选 framework
+    ↓
+build.py      生成 VitePress 内容 + stats.json
+    ↓
+npm run docs:build → GitHub Pages
 ```
 
-1. **抓取**：每天 UTC 02:00（北京 10:00）GitHub Actions 自动触发
-2. **筛选**：覆盖 `cs.RO` 全量 + `cs.AI/CV/LG` 中含具身智能关键词的论文
-3. **打分**：DeepSeek V4 对每篇论文 0-10 分相关性评分
-4. **总结**：对得分 ≥ 6 的论文生成结构化中文摘要
-5. **抽图**：PyMuPDF 抽取所有嵌入图 + 启发式选 framework 图
-6. **发布**：构建 MkDocs 站点并部署到 GitHub Pages
+## 标签体系
 
-## Trick 字段是什么
+**优先类**（评分门槛 ≥6.0，多放一些）：
 
-每篇笔记中的 **Trick** 字段是 DeepSeek 提炼的"核心技术 trick / 关键 insight"，目的是让你**1 分钟决定一篇论文值不值得精读**。
+- 🟣 **VLA**: Vision-Language-Action 模型
+- 🟪 **world-model**: 世界模型 / WAM
+- 🔵 **3d-foundation**: VGGT / DUSt3R / scene representation 类
+- 🔴 **policy-learning**: Diffusion policy / 模仿学习 / RL
 
-## 自己 fork 一份追自己的方向
+**标准类**（评分门槛 ≥7.5，只留高质量）：
+
+- 🟠 manipulation / 🟢 navigation / 🩵 locomotion / 🟡 grasping
+- 🔵 sim2real / 🩷 teleoperation / 💗 tactile / 🔷 humanoid
+- 灰色 other
+
+## Verdict 判决系统
+
+每篇必须给一个 emoji 判决，秒判优劣：
+
+- 🔥 **强推** —— 罕用，留给真正突破
+- 👀 **值得关注** —— 方向对，有学习价值
+- ⚠️ **有硬伤但方向对**
+- 🫠 incremental / 一般般
+- 💀 灌水
+- 🤡 标题党
+- 💤 跟具身智能无关
+
+## 字段说明
+
+每篇笔记包含：
+
+1. **TLDR** —— 一句话讲清"做了什么"
+2. **关键 Tricks** —— 3-6 条，核心那条带 ⭐ 核心 徽章
+3. **中文摘要** —— 忠实翻译
+4. **English original** —— arXiv 原文，可折叠
+5. **与已有工作的关系** —— 思路对比，避免幻觉
+6. **🔪 锐评** —— 毒舌但准的 senior researcher 视角
+
+## Fork 追自己方向
 
 仓库 MIT 开源：[github.com/hyyyyyyz/embodied-arxiv](https://github.com/hyyyyyyz/embodied-arxiv)
 
-Fork 之后只需要：
-1. 改 `config.yaml` 里的 `categories` 和 `keywords`（比如换成 NLP / 理论 / CV）
-2. 改 `scripts/score.py` 里两个 system prompt（领域知识）
-3. 在你 fork 的 repo 里加 `DEEPSEEK_API_KEY` secret
+1. 改 `config.yaml` 里的 `categories` + `keywords` + `priority_topics`
+2. 改 `scripts/score.py` 里两个 system prompt（你领域的知识）
+3. 在 fork 的 repo 加 `DEEPSEEK_API_KEY` secret
 4. 启用 GitHub Pages（Source: GitHub Actions）
 
-就能跑起一份你自己方向的 arXiv 雷达。
-
-## 引用
+## 鸣谢
 
 - 论文数据：[arXiv.org](https://arxiv.org)
-- 摘要/打分：[DeepSeek](https://www.deepseek.com)
-- 站点框架：[MkDocs Material](https://squidfunk.github.io/mkdocs-material/)
-- 部署：GitHub Pages + GitHub Actions
+- 会议数据：[OpenReview](https://openreview.net)
+- LLM：[DeepSeek](https://www.deepseek.com)
+- PDF 解析：[PyMuPDF](https://pymupdf.readthedocs.io)
+- 站点框架：[VitePress](https://vitepress.dev/)
 
 ## 免责声明
 
-本站所有 AI 生成的中文摘要、trick 提炼、评价仅供参考，可能存在误读。研究决策请以原论文为准。论文版权归原作者所有。
+本站所有 AI 生成的中文摘要、trick 提炼、毒舌锐评仅供参考，可能存在误读。研究决策请以原论文为准。

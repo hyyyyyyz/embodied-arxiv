@@ -21,7 +21,10 @@ sys.path.insert(0, str(Path(__file__).parent))
 from fetch import fetch_recent_papers  # noqa: E402
 from score import score_paper, summarize_paper, generate_briefing  # noqa: E402
 from figure import get_all_figures, score_figures_heuristic, pick_with_vl  # noqa: E402
-from build import build_daily, update_home, ASSETS_DIR  # noqa: E402
+from build import (  # noqa: E402
+    build_daily, update_home, write_stats_json,
+    migrate_legacy_format, ASSETS_DIR,
+)
 from openreview_venue import get_venue_map, lookup_venue  # noqa: E402
 
 load_dotenv()  # local .env for dev; in Actions secrets come via env directly
@@ -71,6 +74,9 @@ def main():
     date_str = today.isoformat()
     log.info(f"=== Run for {date_str} ===")
 
+    # Idempotent: migrate any legacy mkdocs-style markdown to VitePress
+    migrate_legacy_format()
+
     seen = load_seen()
     log.info(f"Previously seen: {len(seen)} papers")
 
@@ -82,8 +88,8 @@ def main():
     history_days = CONFIG["site"]["history_days_on_index"]
 
     if not new_papers:
-        log.info("Nothing new today — refreshing home only")
-        update_home(history_days=history_days, site_title=site_title)
+        log.info("Nothing new today — refreshing stats only")
+        write_stats_json()
         return
 
     score_cfg = CONFIG["scoring"]
@@ -180,13 +186,12 @@ def main():
                     fig_dir.mkdir(parents=True, exist_ok=True)
                     main_path = fig_dir / f"{safe_id}.png"
                     main_path.write_bytes(chosen["bytes"])
-                    # From docs/papers/<date>/index.md OR <id>.md → docs/assets/figures/<date>/<id>.png
-                    # Both are 2 levels up
-                    rel = f"../../assets/figures/{date_str}/{main_path.name}"
+                    # Absolute URL — public/ files are served at /<file>
+                    # VitePress prefixes site base automatically
+                    rel = f"/figures/{date_str}/{main_path.name}"
                     p["figure_path_in_index"] = rel
                     p["figure_path_in_detail"] = rel
                     p["figure_caption"] = chosen.get("caption") or ""
-                    # User feedback: only the framework figure, no extras
                 else:
                     p["figure_path_in_index"] = None
                     p["figure_path_in_detail"] = None
