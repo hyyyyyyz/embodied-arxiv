@@ -36,13 +36,22 @@ export default defineConfig({
   ignoreDeadLinks: true,
 
   head: [
+    ['link', { rel: 'icon', type: 'image/png', sizes: '128x128', href: '/embodied-arxiv/favicon.png' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/embodied-arxiv/favicon-32.png' }],
+    ['link', { rel: 'apple-touch-icon', href: '/embodied-arxiv/favicon.png' }],
     ['meta', { name: 'theme-color', content: '#a78bfa' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'embodied-arxiv' }],
     ['meta', { property: 'og:description', content: '每日 arXiv 具身智能论文雷达' }],
+    ['meta', { property: 'og:image', content: '/embodied-arxiv/logo.png' }],
   ],
 
   themeConfig: {
+    // The logo image already contains the wordmark "embodied arxiv";
+    // hiding siteTitle text avoids visual duplication next to it.
+    logo: { src: '/logo.png', width: 32, height: 32, alt: 'embodied-arxiv' },
+    siteTitle: false,
+
     nav: [
       { text: '首页', link: '/' },
       { text: '论文', link: '/papers/' },
