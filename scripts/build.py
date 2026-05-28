@@ -20,6 +20,13 @@ from collections import Counter
 from pathlib import Path
 from typing import Dict, List, Optional
 
+
+def _yaml_str(s: str) -> str:
+    """Safely quote a string for YAML frontmatter.
+    Uses json.dumps which produces YAML-compatible double-quoted strings
+    (handles colons, quotes, newlines, unicode correctly)."""
+    return json.dumps(s, ensure_ascii=False)
+
 log = logging.getLogger(__name__)
 
 ROOT = Path(__file__).parent.parent
@@ -90,10 +97,11 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
     abstract_en = paper.get("abstract", "")
     critique_text = s.get("critique") or s.get("comment") or ""
 
-    # VitePress frontmatter: hide sidebar/aside for focused reading
+    # VitePress frontmatter: hide sidebar/aside for focused reading.
+    # Title quoted via json.dumps to handle colons/quotes safely.
     lines = [
         "---",
-        f"title: {s['tldr']}",
+        f"title: {_yaml_str(s['tldr'])}",
         "sidebar: false",
         "aside: false",
         "outline: false",
@@ -205,7 +213,7 @@ def write_date_index(date_str: str, papers: list, briefing: str = "") -> Path:
 
     lines = [
         "---",
-        f"title: {date_str}",
+        f'title: "{date_str}"',
         "outline: false",
         "---",
         "",
@@ -501,6 +509,37 @@ def migrate_legacy_format():
 
     if n_detail or n_index:
         log.info(f"migrate: {n_detail} detail pages + {n_index} indexes converted")
+
+    # --- Quote frontmatter `title:` lines containing colons/quotes ---
+    # YAML parses `title: A: B` as a nested mapping. Wrap in JSON-quoted.
+    n_title_fix = 0
+    title_re = re.compile(r'^(title:\s*)(?!["\'])([^\n]*)$', re.MULTILINE)
+
+    for md in PAPERS_DIR.glob("**/*.md"):
+        try:
+            src = md.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        # Only the FIRST frontmatter title (within --- ... ---)
+        front_match = re.match(r'^(---\n.*?\n---)\n', src, re.DOTALL)
+        if not front_match:
+            continue
+        front = front_match.group(1)
+        # Find unquoted title with a colon or quote inside the value
+        def fix_title(m):
+            prefix, val = m.group(1), m.group(2).strip()
+            if val.startswith('"') or val.startswith("'"):
+                return m.group(0)
+            if ':' in val or '"' in val or "'" in val:
+                return f'{prefix}{_yaml_str(val)}'
+            return m.group(0)
+        new_front = title_re.sub(fix_title, front)
+        if new_front != front:
+            new = new_front + src[front_match.end(1):]
+            md.write_text(new, encoding="utf-8")
+            n_title_fix += 1
+    if n_title_fix:
+        log.info(f"migrate: {n_title_fix} title frontmatters quoted")
 
     # --- Migrate asset locations: assets/figures → public/figures ---
     legacy_figs = DOCS / "assets" / "figures"
