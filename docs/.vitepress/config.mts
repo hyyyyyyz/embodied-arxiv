@@ -49,7 +49,8 @@ export default defineConfig({
   themeConfig: {
     // The logo image already contains the wordmark "embodied arxiv";
     // hiding siteTitle text avoids visual duplication next to it.
-    logo: { src: '/logo.png', width: 32, height: 32, alt: 'embodied-arxiv' },
+    // (width/height aren't valid ThemeableImage props — size is CSS-driven.)
+    logo: { src: '/logo.png', alt: 'embodied-arxiv' },
     siteTitle: false,
 
     nav: [
