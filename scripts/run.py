@@ -22,6 +22,7 @@ from fetch import fetch_recent_papers  # noqa: E402
 from score import score_paper, summarize_paper, generate_briefing  # noqa: E402
 from figure import get_all_figures, score_figures_heuristic, pick_with_vl  # noqa: E402
 from build import build_daily, update_home, ASSETS_DIR  # noqa: E402
+from openreview_venue import get_venue_map, lookup_venue  # noqa: E402
 
 load_dotenv()  # local .env for dev; in Actions secrets come via env directly
 
@@ -132,6 +133,14 @@ def main():
         update_home(history_days=history_days, site_title=site_title)
         return
 
+    # OpenReview venue lookup (cached, refreshes weekly)
+    try:
+        venue_map = get_venue_map()
+        log.info(f"OpenReview venue map: {len(venue_map)} papers indexed")
+    except Exception as e:
+        log.warning(f"OpenReview lookup failed: {e}")
+        venue_map = {}
+
     fig_cfg = CONFIG["figure"]
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
@@ -148,6 +157,14 @@ def main():
                     "tags": [p.get("topic", "other")],
                     "comment": "",
                 }
+
+            # OpenReview overrides LLM-extracted venue when we have a hit
+            or_venue = lookup_venue(p["title"], venue_map)
+            if or_venue:
+                old = p["summary"].get("venue")
+                p["summary"]["venue"] = or_venue
+                if old != or_venue:
+                    log.info(f"  venue: OpenReview {or_venue} (was LLM={old})")
 
             # Figure
             try:

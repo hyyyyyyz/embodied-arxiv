@@ -22,8 +22,12 @@ permissions:
   id-token: write           # OIDC for deploy-pages
 
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  # Single-flight: if a new run is queued (cron / manual / push), cancel
+  # the one currently in progress. Avoids the redundant-run race where
+  # both a manual trigger and the cron fire within minutes and the
+  # second's git push gets rejected non-fast-forward.
+  group: daily-pipeline
+  cancel-in-progress: true
 
 jobs:
   build:
