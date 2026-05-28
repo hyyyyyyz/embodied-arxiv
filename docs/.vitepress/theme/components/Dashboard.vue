@@ -81,7 +81,15 @@ const fireCount = verdictCounts['🔥'] ?? 0
 </template>
 
 <style scoped>
-.dashboard { padding: 1rem 0 4rem; }
+.dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 4rem;
+}
+
+@media (max-width: 768px) {
+  .dashboard { padding: 1rem 1rem 3rem; }
+}
 
 .hero { padding: 1.5rem 0 2rem; }
 
