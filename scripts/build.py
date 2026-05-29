@@ -35,6 +35,7 @@ PAPERS_DIR = DOCS / "papers"
 # VitePress convention: docs/public/<x> is served at base-URL `/<x>`
 ASSETS_DIR = DOCS / "public" / "figures"
 STATS_PATH = DOCS / ".vitepress" / "data" / "stats.json"
+PICKS_PATH = DOCS / ".vitepress" / "data" / "picks.json"
 
 TOPIC_COLORS = {
     "VLA": "#7c3aed",
@@ -343,28 +344,13 @@ def write_stats_json():
     topics = Counter(p["topic"] for p in papers)
     verdicts = Counter(p["verdict"] for p in papers if p["verdict"])
 
-    # Highlights: 🔥 first (any), then 👀 by date desc
+    # Highlights: 🔥 first, then most-recent 👀/⚠️, then by score; top 6
     verdict_priority = {"🔥": 100, "👀": 50, "⚠️": 10}
-    highlights_pool = [p for p in papers if p["verdict"] in ("🔥", "👀", "⚠️")]
-    highlights = sorted(
-        highlights_pool,
-        key=lambda p: (
-            -verdict_priority.get(p["verdict"], 0),
-            p["date"],
-            -p["score"],
-        ),
-        reverse=False,
-    )
-
-    # But we want 🔥 first, then most recent 👀
-    def sort_key(p):
-        v = verdict_priority.get(p["verdict"], 0)
-        return (-v, -ord(p["date"][0]) * 0)  # placeholder
-
+    highlights = [p for p in papers if p["verdict"] in verdict_priority]
     highlights.sort(
         key=lambda p: (
             -verdict_priority.get(p["verdict"], 0),
-            -float(p["date"].replace("-", "")),
+            -int(p["date"].replace("-", "")),
             -p["score"],
         )
     )
@@ -392,6 +378,38 @@ def write_stats_json():
         f"stats: {stats['total_papers']} papers across {stats['total_days']} days, "
         f"{len(stats['topics'])} topics, {len(stats['highlights'])} highlights"
     )
+
+    # picks.json — full list of high-verdict papers for the /picks/ page.
+    # (Kept separate from stats.json so the home dashboard stays lean;
+    #  this file is only imported by the picks-page component.)
+    verdict_rank = {"🔥": 3, "👀": 2, "⚠️": 1}
+    picks = [
+        {
+            "date": p["date"],
+            "id": p["id"],
+            "topic": p["topic"],
+            "verdict": p["verdict"],
+            "title": p["title"],
+            "tldr": p["tldr"],
+            "score": p["score"],
+            "figure_url": p.get("figure_url", ""),
+        }
+        for p in papers
+        if p["verdict"] in verdict_rank
+    ]
+    picks.sort(
+        key=lambda p: (
+            -verdict_rank.get(p["verdict"], 0),
+            -int(p["date"].replace("-", "")),
+            -p["score"],
+        )
+    )
+    PICKS_PATH.write_text(
+        json.dumps(picks, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    n_fire = sum(1 for p in picks if p["verdict"] == "🔥")
+    log.info(f"picks.json: {len(picks)} papers ({n_fire} 🔥)")
 
 
 # ========================================================

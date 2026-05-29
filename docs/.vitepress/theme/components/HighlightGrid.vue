@@ -40,7 +40,7 @@ function href(p: Paper) {
 }
 
 function fig(p: Paper) {
-  return p.figure_url || withBase(`/figures/${p.date}/${p.id}.png`)
+  return withBase(p.figure_url || `/figures/${p.date}/${p.id}.png`)
 }
 </script>
 

@@ -56,6 +56,7 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: '论文', link: '/papers/' },
+      { text: '🔥 强推', link: '/picks/' },
       { text: '关于', link: '/about' },
     ],
 

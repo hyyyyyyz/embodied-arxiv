@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
+
 defineProps<{
   days: number
   papers: number
@@ -21,10 +23,11 @@ defineProps<{
       <div class="stat-num">{{ topics }}</div>
       <div class="stat-label">topic</div>
     </div>
-    <div class="stat">
+    <a class="stat stat-link" :href="withBase('/picks/')">
       <div class="stat-num">{{ fire }}</div>
       <div class="stat-label">🔥 强推</div>
-    </div>
+      <div class="stat-cta">查看全部 →</div>
+    </a>
   </div>
 </template>
 
@@ -37,6 +40,7 @@ defineProps<{
 }
 
 .stat {
+  position: relative;
   padding: 1rem 1.1rem 0.95rem;
   background: var(--vp-c-bg-soft);
   border: 1px solid var(--vp-c-divider);
@@ -48,6 +52,18 @@ defineProps<{
 .stat:hover {
   border-color: var(--vp-c-brand-1);
   transform: translateY(-1px);
+}
+
+/* The 🔥 card is a link into /picks/ */
+.stat-link {
+  display: block;
+  text-decoration: none !important;
+  color: inherit !important;
+  cursor: pointer;
+}
+
+.stat-link:hover {
+  background: var(--vp-c-brand-soft);
 }
 
 .stat-num {
@@ -67,5 +83,23 @@ defineProps<{
   margin-top: 0.45rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+.stat-cta {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.62rem;
+  color: var(--vp-c-brand-1);
+  margin-top: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.stat-link:hover .stat-cta {
+  opacity: 1;
+}
+
+/* On touch devices (no hover), always show the CTA hint */
+@media (hover: none) {
+  .stat-cta { opacity: 0.8; }
 }
 </style>
