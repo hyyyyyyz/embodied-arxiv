@@ -2,8 +2,13 @@ name: Daily arXiv Digest
 
 on:
   schedule:
-    # 02:00 UTC = 10:00 Beijing. arXiv releases new papers ~01:00 UTC.
+    # GitHub free-tier cron is unreliable (frequently delayed hours or
+    # dropped under load). We fire several times across the morning to
+    # raise the odds at least one lands; seen.json dedups so redundant
+    # runs publish nothing. 02:00 UTC = 10:00 Beijing.
     - cron: "0 2 * * *"
+    - cron: "0 4 * * *"
+    - cron: "0 6 * * *"
   workflow_dispatch:
   push:
     branches: [main]
