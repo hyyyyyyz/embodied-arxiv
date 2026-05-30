@@ -204,13 +204,197 @@ def write_paper_detail(date_str: str, paper: dict) -> Path:
 
 
 # ========================================================
-# DATE INDEX (CARD GRID)
+# DATE INDEX (CARD GRID) — DERIVED FROM DETAIL .md FILES
 # ========================================================
+# Detail .md files are the source of truth. The index.md is regenerated
+# from them every time, so multiple runs on the same day can only ADD
+# papers (via new detail files) — never silently drop earlier ones.
 
-def write_date_index(date_str: str, papers: list, briefing: str = "") -> Path:
+# Parsers for fields inside a single per-paper detail .md file.
+_DETAIL_FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
+_DETAIL_TITLE_LINE_RE = re.compile(r"^title:\s*(.+?)\s*$", re.MULTILINE)
+_DETAIL_H3_RE = re.compile(r"^### (.+)$", re.MULTILINE)
+_DETAIL_BADGE_VERDICT_RE = re.compile(r'<span class="badge badge-verdict">([^<]+)</span>')
+_DETAIL_BADGE_SCORE_RE = re.compile(r'<span class="badge badge-score">⭐ ([\d.]+)</span>')
+_DETAIL_BADGE_TOPIC_RE = re.compile(r'<span class="badge badge-topic"[^>]*>([^<]+)</span>')
+_DETAIL_BADGE_VENUE_RE = re.compile(r'<span class="badge badge-venue">([^<]+)</span>')
+_DETAIL_FIG_RE = re.compile(r'!\[framework\]\(([^)]+)\)')
+
+
+def _parse_title_value(val: str) -> str:
+    val = val.strip()
+    if not val:
+        return ""
+    if val.startswith('"') and val.endswith('"'):
+        try:
+            return json.loads(val)
+        except Exception:
+            return val[1:-1]
+    if val.startswith("'") and val.endswith("'"):
+        return val[1:-1]
+    return val
+
+
+def parse_detail_md(md_path: Path) -> Optional[dict]:
+    """Read a per-paper detail .md and return the card metadata dict.
+
+    Returns None only if the file is unreadable. Missing optional fields
+    fall back to safe defaults so a partially-broken detail still produces
+    a working card (link works even if score/verdict missing).
+    """
+    try:
+        src = md_path.read_text(encoding="utf-8")
+    except Exception:
+        return None
+
+    paper_id = md_path.stem
+
+    # Frontmatter title acts as the tldr (TLDR + linked label)
+    tldr = paper_id
+    fm = _DETAIL_FRONTMATTER_RE.match(src)
+    if fm:
+        m = _DETAIL_TITLE_LINE_RE.search(fm.group(1))
+        if m:
+            tldr = _parse_title_value(m.group(1)) or paper_id
+
+    # ### {paper.title}
+    h3 = _DETAIL_H3_RE.search(src)
+    title = h3.group(1).strip() if h3 else tldr
+
+    # Badges
+    v = _DETAIL_BADGE_VERDICT_RE.search(src)
+    verdict = v.group(1).strip() if v else ""
+    if verdict not in VERDICT_EMOJIS:
+        verdict = ""
+
+    s = _DETAIL_BADGE_SCORE_RE.search(src)
+    score = float(s.group(1)) if s else 0.0
+
+    t = _DETAIL_BADGE_TOPIC_RE.search(src)
+    topic = t.group(1).strip() if t else "other"
+
+    vn = _DETAIL_BADGE_VENUE_RE.search(src)
+    venue = vn.group(1).strip() if vn else ""
+
+    f = _DETAIL_FIG_RE.search(src)
+    figure_url = f.group(1).strip() if f else ""
+
+    return {
+        "id": paper_id,
+        "title": title,
+        "tldr": tldr,
+        "topic": topic,
+        "score": score,
+        "verdict": verdict,
+        "venue": venue,
+        "figure_url": figure_url,
+    }
+
+
+def _build_card_html(c: dict) -> str:
+    topic = c["topic"]
+    color = _topic_color(topic)
+    if c.get("figure_url"):
+        img_html = (
+            f'<img class="paper-card-img" src="{c["figure_url"]}" '
+            f'alt="" loading="lazy">'
+        )
+    else:
+        img_html = '<div class="paper-card-img no-img"></div>'
+    venue_html = (
+        f'<span class="paper-card-venue">{c["venue"]}</span>'
+        if c.get("venue")
+        else ""
+    )
+    verdict_html = (
+        f'<span class="verdict-tag">{c["verdict"]}</span> '
+        if c.get("verdict") in VERDICT_EMOJIS
+        else ""
+    )
+    title = (c["title"] or c["id"]).replace("\n", " ").strip()
+    tldr = (c.get("tldr") or "").replace("\n", " ").strip()
+    return (
+        f'<a class="paper-card" data-topic="{topic}" href="./{c["id"]}/">'
+        f'{img_html}'
+        f'<div class="paper-card-body">'
+        f'{venue_html}'
+        f'<div class="paper-card-title">{verdict_html}{title}</div>'
+        f'<div class="paper-card-tldr">{tldr}</div>'
+        f'<div class="paper-card-meta">'
+        f'<span class="paper-card-score">⭐ {c["score"]:.1f}</span>'
+        f'<span class="paper-card-topic" '
+        f'style="background:{color}22;color:{color}">{topic}</span>'
+        f'</div>'
+        f'</div>'
+        f'</a>'
+    )
+
+
+_BRIEFING_BODY_RE = re.compile(
+    r'<div class="briefing-body">(.*?)</div>', re.DOTALL
+)
+
+PRIORITY_TOPICS = {"VLA", "world-model", "3d-foundation", "policy-learning"}
+
+
+def write_date_index(date_str: str, briefing: str = "") -> Path:
+    """Rebuild the date-index card grid from every detail .md in the folder.
+
+    NEW papers are introduced by write_paper_detail() writing a new detail
+    file BEFORE this function runs (see build_daily); this function then
+    discovers them on disk along with all prior papers, so subsequent runs
+    can only ADD — never silently drop — papers for the same day.
+
+    If `briefing` is empty, we try to reuse the briefing already embedded
+    in the existing index.md so it doesn't get blanked out on rebuild.
+    """
     folder = PAPERS_DIR / date_str
     folder.mkdir(parents=True, exist_ok=True)
     page = folder / "index.md"
+
+    # Collect cards from every per-paper detail file.
+    cards: List[dict] = []
+    for md_path in sorted(folder.glob("*.md")):
+        if md_path.stem == "index":
+            continue
+        c = parse_detail_md(md_path)
+        if c:
+            cards.append(c)
+
+    # Preserve existing briefing if caller didn't pass one.
+    if not briefing and page.exists():
+        try:
+            existing = page.read_text(encoding="utf-8")
+            m = _BRIEFING_BODY_RE.search(existing)
+            if m:
+                briefing = m.group(1).strip()
+        except Exception:
+            pass
+
+    # Sort: priority topics first, then by score desc, then by id desc
+    cards.sort(
+        key=lambda c: (
+            0 if c["topic"] in PRIORITY_TOPICS else 1,
+            -c["score"],
+            -float(re.sub(r"[^0-9.]", "", c["id"]) or 0),
+        )
+    )
+
+    topic_counts = Counter(c["topic"] for c in cards)
+
+    # Build filter chips
+    filter_parts = [
+        f'<button class="topic-filter-btn active" data-topic="all">'
+        f'<span class="dot" style="background:#a78bfa"></span>'
+        f'全部 <span class="cnt">{len(cards)}</span></button>'
+    ]
+    for topic, n in topic_counts.most_common():
+        color = _topic_color(topic)
+        filter_parts.append(
+            f'<button class="topic-filter-btn" data-topic="{topic}">'
+            f'<span class="dot" style="background:{color}"></span>'
+            f'{topic} <span class="cnt">{n}</span></button>'
+        )
 
     lines = [
         "---",
@@ -220,10 +404,9 @@ def write_date_index(date_str: str, papers: list, briefing: str = "") -> Path:
         "",
         f"# {date_str}",
         "",
-        f"今日精选 **{len(papers)}** 篇 · 按相关性降序 · 优先类（VLA / world-model / 3d-foundation / policy-learning）排前",
+        f"今日精选 **{len(cards)}** 篇 · 按相关性降序 · 优先类（VLA / world-model / 3d-foundation / policy-learning）排前",
         "",
     ]
-
     if briefing:
         lines += [
             '<div class="briefing-box">',
@@ -233,52 +416,40 @@ def write_date_index(date_str: str, papers: list, briefing: str = "") -> Path:
             "",
         ]
 
-    # TopicFilter Vue component auto-scans the .paper-card data-topic attributes
     lines.append("<TopicFilter />")
     lines.append("")
-
     lines.append('<div class="paper-grid">')
-
-    for p in papers:
-        s = p["summary"]
-        fig_path = p.get("figure_path_in_index")
-        topic = p.get("topic", "other")
-        color = _topic_color(topic)
-        title = p["title"].replace("\n", " ").strip()
-
-        if fig_path:
-            img_html = f'<img class="paper-card-img" src="{fig_path}" alt="" loading="lazy">'
-        else:
-            img_html = '<div class="paper-card-img no-img"></div>'
-
-        venue = s.get("venue")
-        venue_html = f'<span class="paper-card-venue">{venue}</span>' if venue else ""
-
-        verdict = s.get("verdict", "")
-        if verdict not in VERDICT_EMOJIS:
-            verdict = ""
-        verdict_html = f'<span class="verdict-tag">{verdict}</span> ' if verdict else ""
-
-        card = (
-            f'<a class="paper-card" data-topic="{topic}" href="./{_safe_id(p["id"])}/">'
-            f'{img_html}'
-            f'<div class="paper-card-body">'
-            f'{venue_html}'
-            f'<div class="paper-card-title">{verdict_html}{title}</div>'
-            f'<div class="paper-card-tldr">{s["tldr"]}</div>'
-            f'<div class="paper-card-meta">'
-            f'<span class="paper-card-score">⭐ {p["score"]:.1f}</span>'
-            f'<span class="paper-card-topic" style="background:{color}22;color:{color}">{topic}</span>'
-            f'</div>'
-            f'</div>'
-            f'</a>'
-        )
-        lines.append(card)
-
-    lines += ['</div>', '']
+    for c in cards:
+        lines.append(_build_card_html(c))
+    lines += ["</div>", ""]
 
     page.write_text("\n".join(lines), encoding="utf-8")
     return page
+
+
+def rebuild_all_date_indexes() -> int:
+    """Rebuild every date's index.md from its detail .md files.
+
+    Idempotent recovery step — safe to call on every run. Use this to
+    repair indexes that were truncated by the destructive-overwrite bug
+    that existed prior to deriving index.md from disk.
+    """
+    if not PAPERS_DIR.exists():
+        return 0
+    n = 0
+    for date_dir in sorted(PAPERS_DIR.iterdir()):
+        if not date_dir.is_dir():
+            continue
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", date_dir.name):
+            continue
+        # Skip directories with no detail files.
+        details = [p for p in date_dir.glob("*.md") if p.stem != "index"]
+        if not details:
+            continue
+        write_date_index(date_dir.name)
+        n += 1
+    log.info(f"rebuild_all_date_indexes: {n} date indexes refreshed from disk")
+    return n
 
 
 # ========================================================
@@ -617,10 +788,18 @@ def migrate_legacy_format():
 
 def build_daily(date_str: str, papers: list, history_days: int = 60,
                 site_title: str = "embodied-arxiv", briefing: str = ""):
-    """Called by run.py for one date's qualified papers."""
-    write_date_index(date_str, papers, briefing=briefing)
+    """Called by run.py for one date's qualified papers.
+
+    Order matters: write each per-paper detail file FIRST so that
+    write_date_index() — which derives the card grid from every detail
+    .md on disk — picks up the newly-added papers alongside any
+    previously-published ones from the same day. This is the fix for the
+    destructive-overwrite bug where a second daily run would replace the
+    morning's cards with only the afternoon's batch.
+    """
     for p in papers:
         write_paper_detail(date_str, p)
+    write_date_index(date_str, briefing=briefing)
     # Rebuild stats and the home dashboard JSON every run
     write_stats_json()
 
@@ -633,4 +812,5 @@ def update_home(history_days: int = 60, site_title: str = "embodied-arxiv"):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     migrate_legacy_format()
+    rebuild_all_date_indexes()
     write_stats_json()

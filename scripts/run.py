@@ -23,7 +23,7 @@ from score import score_paper, summarize_paper, generate_briefing  # noqa: E402
 from figure import get_all_figures, score_figures_heuristic, pick_with_vl  # noqa: E402
 from build import (  # noqa: E402
     build_daily, update_home, write_stats_json,
-    migrate_legacy_format, ASSETS_DIR,
+    migrate_legacy_format, rebuild_all_date_indexes, ASSETS_DIR,
 )
 from openreview_venue import get_venue_map, lookup_venue  # noqa: E402
 
@@ -76,6 +76,9 @@ def main():
 
     # Idempotent: migrate any legacy mkdocs-style markdown to VitePress
     migrate_legacy_format()
+    # Idempotent: rebuild every day's index.md from its detail .md files.
+    # Repairs indexes truncated by the pre-fix destructive-overwrite bug.
+    rebuild_all_date_indexes()
 
     seen = load_seen()
     log.info(f"Previously seen: {len(seen)} papers")
