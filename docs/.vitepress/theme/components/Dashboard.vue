@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { withBase } from 'vitepress'
 import HeroStats from './HeroStats.vue'
 import TrendChart from './TrendChart.vue'
@@ -17,6 +18,62 @@ const totalPapers: number = (stats as any).total_papers ?? 0
 const totalDays: number = (stats as any).total_days ?? 0
 const topicCount = Object.keys(topics).length
 const fireCount = verdictCounts['🔥'] ?? 0
+
+// --- arxiv release-cadence note ---
+// arxiv 公告时间：周一-周五美东 20:00 → UTC 次日 01:00 → 北京次日 09:00。
+// 周六公告周五批；周日 / 周一 arxiv 停摆，本站无新内容。
+// 我们 cron 在 UTC 02:00 / 04:00 / 06:00 = 北京 10:00 / 12:00 / 14:00 抓取。
+const WEEKDAY_LABEL = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+const UPDATE_UTC_DAYS = new Set([2, 3, 4, 5, 6])  // Tue–Sat: 当天 02:00 UTC 抓到新内容
+
+const todayUTC = computed(() => {
+  const now = new Date()
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
+})
+const todayUTCStr = computed(() =>
+  todayUTC.value.toISOString().slice(0, 10)
+)
+
+const daysSinceLatest = computed(() => {
+  if (!latestDate) return 0
+  const [y, m, d] = latestDate.split('-').map(Number)
+  const last = Date.UTC(y, m - 1, d)
+  return Math.max(0, Math.round((todayUTC.value.getTime() - last) / 86400000))
+})
+
+// Next UTC date when an update is expected. Skip "quiet" days (Sun/Mon UTC).
+const nextUpdateUTCDate = computed(() => {
+  const now = new Date()
+  const cronAlreadyRan = now.getUTCHours() >= 7  // past 06:00 UTC = past our last cron
+  const startOffset = cronAlreadyRan ? 1 : 0
+  for (let i = startOffset; i <= 8; i++) {
+    const cand = new Date(todayUTC.value)
+    cand.setUTCDate(cand.getUTCDate() + i)
+    if (UPDATE_UTC_DAYS.has(cand.getUTCDay())) {
+      // If today is itself an update day AND we already have today's content, skip
+      if (i === 0) {
+        if (latestDate === todayUTCStr.value) continue
+      }
+      return cand
+    }
+  }
+  return null
+})
+
+const nextUpdateLabel = computed(() => {
+  const d = nextUpdateUTCDate.value
+  if (!d) return ''
+  // UTC midnight + 8h = Beijing 08:00 of same calendar date. Our cron at
+  // UTC 02:00 = Beijing 10:00 of same date — no day-boundary shift.
+  const dow = WEEKDAY_LABEL[d.getUTCDay()]
+  const m = d.getUTCMonth() + 1
+  const day = d.getUTCDate()
+  return `${dow} ${m}/${day} 早上`
+})
+
+const isUpToDate = computed(
+  () => latestDate === todayUTCStr.value
+)
 </script>
 
 <template>
@@ -39,6 +96,30 @@ const fireCount = verdictCounts['🔥'] ?? 0
         &nbsp;·&nbsp; {{ latestCount }} 篇
         &nbsp;·&nbsp;
         <a :href="withBase(`/papers/${latestDate}/`)">看今日精选 →</a>
+      </div>
+
+      <div class="schedule-note" v-if="latestDate">
+        <div class="schedule-status">
+          <span v-if="isUpToDate" class="schedule-fresh">✅ 已是最新</span>
+          <span v-else-if="daysSinceLatest === 1" class="schedule-stale">
+            ⏳ 昨日更新 · arxiv 今天没有新公告
+          </span>
+          <span v-else class="schedule-stale">
+            ⏳ {{ daysSinceLatest }} 天前更新 · arxiv 周末停摆中
+          </span>
+          <span v-if="nextUpdateLabel" class="schedule-next">
+            · 下次预计 <strong>{{ nextUpdateLabel }}</strong>（北京 10:00 前后）
+          </span>
+        </div>
+        <details class="schedule-details">
+          <summary>arxiv 更新节奏</summary>
+          <ul>
+            <li>arxiv 每 <strong>周一–周五美东 20:00</strong>（≈ 北京次日 <strong>09:00</strong>）公告当天接收的新论文</li>
+            <li>本站在 UTC 02:00 / 04:00 / 06:00（北京 <strong>10:00 / 12:00 / 14:00</strong>）拉取并发布</li>
+            <li>对照到周几：周二–周六北京早上有新内容（来自前一天美东公告）</li>
+            <li><strong>周日 / 周一通常 0 篇新论文</strong> —— arxiv 周末不公告，周六周五批是最后一波，下一波要等周一美东 20:00 → 周二北京 10:00</li>
+          </ul>
+        </details>
       </div>
     </header>
 
@@ -130,6 +211,91 @@ const fireCount = verdictCounts['🔥'] ?? 0
 
 .home-cta strong {
   font-family: var(--vp-font-family-mono);
+  font-weight: 600;
+}
+
+/* --- arxiv release-cadence note --- */
+.schedule-note {
+  margin: 0.9rem 0 0;
+  padding: 0.85rem 1.1rem;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+.schedule-status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  color: var(--vp-c-text-2);
+}
+
+.schedule-fresh {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.schedule-stale {
+  color: var(--vp-c-text-2);
+  font-weight: 500;
+}
+
+.schedule-next {
+  color: var(--vp-c-text-2);
+}
+
+.schedule-next strong {
+  color: var(--vp-c-brand-1);
+  font-family: var(--vp-font-family-mono);
+  font-weight: 600;
+}
+
+.schedule-details {
+  margin-top: 0.55rem;
+  font-size: 0.82rem;
+  color: var(--vp-c-text-3);
+}
+
+.schedule-details summary {
+  cursor: pointer;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.74rem;
+  color: var(--vp-c-text-3);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  user-select: none;
+  list-style: none;
+}
+
+.schedule-details summary::before {
+  content: '▸ ';
+  display: inline-block;
+  transition: transform 0.15s;
+}
+
+.schedule-details[open] summary::before {
+  content: '▾ ';
+}
+
+.schedule-details summary:hover {
+  color: var(--vp-c-brand-1);
+}
+
+.schedule-details ul {
+  margin: 0.55rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.schedule-details li {
+  margin: 0.25rem 0;
+  color: var(--vp-c-text-2);
+}
+
+.schedule-details strong {
+  color: var(--vp-c-text-1);
   font-weight: 600;
 }
 
