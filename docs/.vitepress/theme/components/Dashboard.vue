@@ -100,24 +100,37 @@ const isUpToDate = computed(
 
       <div class="schedule-note" v-if="latestDate">
         <div class="schedule-status">
-          <span v-if="isUpToDate" class="schedule-fresh">✅ 已是最新</span>
-          <span v-else-if="daysSinceLatest === 1" class="schedule-stale">
-            ⏳ 昨日更新 · arxiv 今天没有新公告
-          </span>
+          <span v-if="isUpToDate" class="schedule-fresh">✅ 今日已是最新</span>
           <span v-else class="schedule-stale">
-            ⏳ {{ daysSinceLatest }} 天前更新 · arxiv 周末停摆中
+            ⏳ 上次更新 <strong class="mono">{{ latestDate }}</strong>
+            <span class="schedule-ago">（{{ daysSinceLatest }} 天前）</span>
           </span>
           <span v-if="nextUpdateLabel" class="schedule-next">
             · 下次预计 <strong>{{ nextUpdateLabel }}</strong>（北京 10:00 前后）
           </span>
         </div>
+
+        <div v-if="!isUpToDate" class="schedule-why">
+          🌙 <strong>为什么没更新？</strong> arxiv 是美国的预印本平台，
+          <strong>美国周末（周六、周日）不公告新论文</strong>；
+          对应到北京时间 <strong>周日和周一通常也没有新内容</strong>。
+          要等美国周一晚 20:00（北京 <strong>周二早上 09:00</strong>）arxiv 重新开张，
+          我们 10:00 拉取后才会有下一批。
+        </div>
+
         <details class="schedule-details">
-          <summary>arxiv 更新节奏</summary>
+          <summary>arxiv 更新节奏（完整对照）</summary>
           <ul>
-            <li>arxiv 每 <strong>周一–周五美东 20:00</strong>（≈ 北京次日 <strong>09:00</strong>）公告当天接收的新论文</li>
+            <li>arxiv（在美国）每周一–周五 <strong>美东 20:00</strong>（≈ 北京次日 <strong>09:00</strong>）公告当天接收的新论文</li>
+            <li>美国周六、周日是双休日，<strong>arxiv 不公告新论文</strong></li>
             <li>本站在 UTC 02:00 / 04:00 / 06:00（北京 <strong>10:00 / 12:00 / 14:00</strong>）拉取并发布</li>
-            <li>对照到周几：周二–周六北京早上有新内容（来自前一天美东公告）</li>
-            <li><strong>周日 / 周一通常 0 篇新论文</strong> —— arxiv 周末不公告，周六周五批是最后一波，下一波要等周一美东 20:00 → 周二北京 10:00</li>
+            <li>北京周几对照：
+              <ul>
+                <li><strong>周二–周六早上：有新内容</strong>（来自美国前一天工作日晚的公告）</li>
+                <li><strong>周日、周一：通常无新内容</strong>（美国前一天是周末，没公告）</li>
+              </ul>
+            </li>
+            <li>所以连续 2 天没更新（北京周日 + 周一）是 <strong>正常现象</strong>，不是 bug</li>
           </ul>
         </details>
       </div>
@@ -241,6 +254,33 @@ const isUpToDate = computed(
 .schedule-stale {
   color: var(--vp-c-text-2);
   font-weight: 500;
+}
+
+.schedule-stale strong.mono {
+  font-family: var(--vp-font-family-mono);
+  color: var(--vp-c-text-1);
+  font-weight: 600;
+}
+
+.schedule-ago {
+  color: var(--vp-c-text-3);
+  font-size: 0.95em;
+}
+
+.schedule-why {
+  margin-top: 0.55rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(167, 139, 250, 0.06);
+  border-left: 3px solid var(--vp-c-brand-1);
+  border-radius: 6px;
+  font-size: 0.84rem;
+  line-height: 1.65;
+  color: var(--vp-c-text-2);
+}
+
+.schedule-why strong {
+  color: var(--vp-c-text-1);
+  font-weight: 600;
 }
 
 .schedule-next {
