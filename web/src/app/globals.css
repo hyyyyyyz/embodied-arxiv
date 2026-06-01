@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/* embodied-arxiv color palette
+   --accent-blue is the BRAND color used by NavBar active state, the
+   primary CTA, recommendation badges, etc. Keeping the variable name
+   for minimal churn but the value is now a deep purple. */
+:root {
+  --bg-primary: #08080a;
+  --bg-secondary: #131318;
+  --bg-card: #1a1a2e;
+  --border: #2a2a35;
+  --text-primary: #ededee;
+  --text-secondary: #a1a1aa;
+  --accent-blue: #a78bfa;        /* primary purple — was #4fc3f7 */
+  --accent-purple: #c4b5fd;      /* lighter purple variant — was #e040fb */
+  --accent-green: #4ade80;
+  --accent-orange: #fb923c;
+  --accent-red: #ef4444;
+  --accent-cyan: #22d3ee;        /* new — for VGGT-3D domain */
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+  height: 100dvh;
+  /* subtle radial glow for premium feel */
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(167, 139, 250, 0.07), transparent 60%);
+}
+
+/* Card swipe animation */
+.card-enter { transform: translateY(100%); opacity: 0; }
+.card-enter-active {
+  transform: translateY(0); opacity: 1;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+.card-exit { transform: translateY(0); opacity: 1; }
+.card-exit-active {
+  transform: translateY(-100%); opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+/* Feedback button pulse */
+@keyframes pulse-feedback {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.feedback-pulse { animation: pulse-feedback 0.3s ease; }
+
+/* Like bounce (Douyin-style) */
+@keyframes like-bounce {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(0.95); }
+  75% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+.animate-like-bounce { animation: like-bounce 0.4s ease; }
+
+/* Shake for dislike */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+.animate-shake { animation: shake 0.3s ease; }
+
+/* Image lightbox */
+.lightbox-overlay { animation: lightbox-fade-in 0.2s ease; }
+@keyframes lightbox-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(167, 139, 250, 0.4); }
+
+/* Selection */
+::selection { background: var(--accent-blue); color: #fff; }
