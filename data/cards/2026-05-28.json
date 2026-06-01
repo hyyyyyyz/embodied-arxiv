@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2605.30117",
+    "summary": "作者想搞清楚 VLA 模型到底是怎么把视觉-语言知识转成动作的，于是搭了 VLA-Trace 这套诊断工具。它把表征演化（CKA）、注意力 knockout 干预和 rollout 行为探针串成一条证据链，应用在 π0.5 和 OpenVLA 上。结论挺有意思：两个模型 finetune 时的模态适配方式完全不同，而且 VLA 整体擅长视觉轨迹但细粒度语义跟随还很弱。",
+    "highlights": {
+      "contribution": "提出一套从表征→因果→行为的 VLA 诊断框架，把 VLA 黑盒拆开看模态适配和控制路径。",
+      "innovation": "把 cross-modal CKA、attention knockout 和 rollout 行为探针组合成统一证据链，专门用于 VLA 而不是普通 VLM。",
+      "method": "在 π0.5 和 OpenVLA 上跑：用 CKA 追表征漂移、用 attention knockout 切断特定模态看动作变化、用 rollout 探针测 grounding 和 shortcut 依赖。",
+      "results": "发现两个 VLA 的模态适配动力学差异显著、动作解码时模态路由不同、细粒度语义跟随仍是短板。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.30226",
+    "summary": "灵巧手 VLA 想做真机 RL 后训练，但高维探索容易坏硬件、样本效率也差。BORA 走 offline-to-online 路线：离线阶段先训一个吃 VLM 认知 token + 动作 chunk 的 critic，在线阶段冻住 VLA 主干、加一个人在回路的轻量 residual adapter 来纠真实执行误差。5 个真机灵巧任务上平均成功率绝对涨 33%，未见过物体的泛化涨到 43%。",
+    "highlights": {
+      "contribution": "给灵巧手 VLA 提供了一个不会炸硬件、能在真机上做 RL 后训练的 offline-to-online 框架。",
+      "innovation": "Critic 同时吃 VLM 认知 token 和动作 chunk，而且在线只学 chunk-wise residual 而不动 VLA 本体。",
+      "method": "离线阶段从演示里训一个动作条件化的 critic，在线阶段 VLA 冻结、用 human-in-the-loop 介入奖励驱动一个轻量 residual head 来修正动作。",
+      "results": "5 个真实灵巧任务平均成功率 +33%（绝对），未见物体场景 +43%，明显甩开纯模仿和传统解耦 RL。"
+    },
+    "scores": {
+      "relevance": 9.2,
+      "recency": 9,
+      "popularity": 6.5,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.29562",
+    "summary": "VLA 跨任务迁移依旧拉胯，VLA-Pro 走的是检索增强思路：训练时把每个任务训成一个 LoRA 当“程序性记忆”存起来，推理时根据当前场景动态检索并融合相关 LoRA。在 RoboTwin、RLBench 和真机上都能即插即用，仿真上相对提升达 207%，真机成功率从 5.8% 直接拉到 65%。",
+    "highlights": {
+      "contribution": "用任务级 LoRA 做程序性记忆库，让 VLA 在面对新任务时能检索调用旧经验。",
+      "innovation": "把 LoRA 当作可检索可融合的“记忆”而不是单一适配器，对多 backbone 都即插即用。",
+      "method": "训练阶段每个任务训一个 LoRA 入库，推理时用当前多模态上下文检索 top-k LoRA 并动态融合生成动作 chunk。",
+      "results": "RoboTwin/RLBench 仿真上跨任务泛化相对 +207%，真机成功率从 5.8% 提到 65%。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.9
+    },
+    "affiliations": ["Fudan University"]
+  },
+  {
+    "arxiv_id": "2605.29605",
+    "summary": "现有 VLA 置信度估计要么靠 ensemble 反复采样、要么只能用 discrete action token 概率，效率和适用性都不行。VLAConf 干脆冻住 VLA 内部表征，用一个轻量 head 单次前向出 step-wise 异常分数，还做了 step-conditioned 建模来捕捉 rollout 阶段信息。LIBERO 上 calibration 质量明显甩开 baseline，推理效率优势更大，真机也验证有效。",
+    "highlights": {
+      "contribution": "给 VLA（包括连续动作空间的）做了一个单次前向、轻量的任务成功置信度估计器。",
+      "innovation": "用 one-class discriminative head 替代 ensemble/采样，并且只用冻结的 VLA 内部表征，跨架构通用。",
+      "method": "冻 VLA 主干，加 step-conditioned 轻量 head 学异常分数，post-hoc calibration 输出每步成功概率。",
+      "results": "LIBERO 上 calibration 信号质量显著领先，推理速度优势“大幅”，真机进一步验证。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 9,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.29662",
+    "summary": "VLA 推理慢，token pruning 是常见加速方案，但浅层剪枝可能误删深层需要的视觉信息。SAFE-Pruner 观察到 VLA 跨步骤会持续关注同一语义实体（语义注意力一致性），就用这个先验前瞻预测深层 token 显著度，再加自适应子任务切分检测注意力突变。实验拿到 1.89× 加速，成功率掉不到 1.7%，比 SOTA 还要高 1.9 个点。",
+    "highlights": {
+      "contribution": "给 VLA 设计了一个考虑未来层注意力的视觉 token 剪枝器，加速同时基本不掉点。",
+      "innovation": "利用“语义注意力跨步骤一致性”做前瞻预测，避免传统浅层剪枝误删深层关键 token。",
+      "method": "用早期层注意力预测深层 token saliency，加自适应子任务划分检测注意力突变并刷新预测，剪掉非关键视觉 token。",
+      "results": "仿真+真机加速 1.89×，成功率下降 <1.7%，比现有 SOTA 剪枝再高 1.9%。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": ["Tsinghua University"]
+  },
+  {
+    "arxiv_id": "2605.30484",
+    "summary": "大多数 VLA 都是看一眼直接出动作的反应式策略，对分布外扰动很脆。ELAN4D 给 VLA 加了个未来机器人关键点轨迹的预测辅助任务——3D 位移轨迹直接从正运动学算，几乎零预处理成本。一个轻量 track decoder 通过 gradient isolation 注入 4D 监督但不污染 VLM 主干，推理时还能扔掉。LIBERO/LIBERO-Plus/RoboTwin2.0 上都比强 VLA baseline 稳，OOD 扰动下提升尤其大。",
+    "highlights": {
+      "contribution": "用机器人本体关键点的未来轨迹作为 4D 时空辅助监督，让 VLA 对相机、背景、布局扰动更鲁棒。",
+      "innovation": "纯靠 proprioception 的正运动学算出 3D keypoint 轨迹做监督，无需外部 tracker；plug-and-play、推理时 decoder 可丢。",
+      "method": "主分支保持原 VLA，加一个轻量 track decoder 预测未来 joint/end-effector 3D 轨迹；用 gradient isolation 保护预训练 VLM。",
+      "results": "LIBERO、LIBERO-Plus、RoboTwin2.0 和真机任务上都拿到最佳整体成绩，OOD 扰动下提升尤为显著。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 8.1
+    },
+    "affiliations": ["Tsinghua University", "Shanghai Jiao Tong University", "Oxford"]
+  },
+  {
+    "arxiv_id": "2605.30660",
+    "summary": "RoboMonkey 这类 K 样本 VLA 测试时缩放有个隐患：K 个候选全不安全时还是会执行违规动作。BOKBO 是第一个 conformal abstention 层，给 K-sample VLA 推理提供 finite-sample 的违规率保证，分全局和 per-task（Mondrian）两个版本。文中还发现 policy-internal 置信度其实和噪声超参 σ 相关 0.98，跟真违规几乎无关，需要换成基于语义视觉特征的违规预测器。",
+    "highlights": {
+      "contribution": "为 K-sample 测试时缩放的 VLA 提供 distribution-free 的拒绝执行（abstain）层，给出执行违规率上界。",
+      "innovation": "首次把 conformal prediction 应用到 K-sample VLA abstain；揭示 perturbation-K-sampling 下 policy 内部置信度的结构性失败。",
+      "method": "用 conformal risk control 学违规预测器（语义视觉特征 + 任务身份），分全局和 Mondrian 两种 calibration；在 OpenVLA-OFT 和 π0-FAST 上测。",
+      "results": "OpenVLA-OFT on LIBERO ε=0.05 下 86% bootstrap 满足 conditional 边界，coverage 78%、净成功 70%；Mondrian 把最差任务 hold rate 从 0.71 拉到 0.93。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.29564",
+    "summary": "纯视觉 RL 策略容易过拟合训练时的视觉条件。这篇用 human-in-the-loop teacher-student 蒸馏，teacher 看视觉但 student 只用 pose/twist/wrench，全部在真机上训、不靠 domain randomization。NIST 装配板 3 个任务训 50 分钟达到 95% 整体成功，还能泛化到 8 个未见过的变体。",
+    "highlights": {
+      "contribution": "用真机 HiL RL + teacher-student 蒸馏训出一个 vision-free 的接触 rich 装配策略，又快又鲁棒。",
+      "innovation": "完全真机训练、无需 domain randomization 或数据增强；视觉 teacher 直接蒸馏到力觉/位姿 student。",
+      "method": "vision-enabled teacher 通过 HiL RL 学装配，再把策略蒸馏到只看 pose/twist/wrench 的 student；最后再蒸馏 fine-tune。",
+      "results": "NIST 装配板 3 任务 50 分钟训练即达 95% 成功率，泛化到 8 个未见变体；最难任务蒸馏 fine-tune 后全部成功。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.6
+    },
+    "affiliations": ["TU Wien"]
+  },
+  {
+    "arxiv_id": "2605.29661",
+    "summary": "GODeform 想做能跨视角和跨类目的单目 3D 形变恢复。思路是显式把类别级模板形变到目标观测：先把模板拓扑信息注入 foundation feature 拿到 geometry-aware 表征，再和目标观测做关联指导形变；多视角模板特征 + 相机位姿做 view-adaptive 聚合解决任意视角问题。在大型变形和未见类目上拿到 SOTA，下游灵巧抓取也能用。",
+    "highlights": {
+      "contribution": "提出一个能泛化到新类别、新视角的单目 3D 物体形变学习框架，并能直接喂给灵巧抓取。",
+      "innovation": "用模板拓扑去“引导”foundation 特征建模；view-adaptive 多视角模板聚合解决固定模板 vs 任意视角的不一致。",
+      "method": "类别级模板形变成目标观测；模板拓扑增强 foundation feature 得 geometry-aware 表征，再与目标视图关联出形变场。",
+      "results": "在大形变和未见类目上显著超 SOTA，并演示了下游真机灵巧抓取。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 6.9
+    },
+    "affiliations": ["Zhejiang University", "CUHK"]
+  },
+  {
+    "arxiv_id": "2605.29710",
+    "summary": "真机 VLA 评测目前还停留在“N≤25 次 rollout、二元成功率、不给置信区间”的水平，遇到相近模型根本分不清。PhAIL 提出用 time-to-success CDF 当评测原语，配 HRT（相对人类吞吐）做主分数、KS 检验做显著性。在 Franka FR3 上跑 GR00T、ACT、OpenPI 等四个 VLA，N≤30 就能把 GR00T vs ACT 和 OpenPI vs ACT 这两对分开，而二元指标做不到。",
+    "highlights": {
+      "contribution": "推出一个公开的真机 VLA 评测基准 + 分布式评测协议，能在小样本下做严格的统计比较。",
+      "innovation": "以 time-to-success CDF + HRT 为主指标、Macro-averaged KS 检验做显著性，比二元 success rate 更有分辨率。",
+      "method": "Franka FR3 上跑统一 fixture，开源 dataset 和 per-rollout artifact；HRT 用 bootstrap CI，KS 按 object 聚合。",
+      "results": "N≤30 rollout 即可分辨 GR00T vs ACT、OpenPI vs ACT；最强 VLA 比人类参考慢约 7×（RMST 比）。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.29766",
+    "summary": "Diffusion 策略多模态强但训得慢推得也慢，而很多任务阶段其实根本不需要多模态。MARS 的想法很简单：在真正需要多样性的时候才注入合适噪声，其余阶段退化到确定性学习。8 个仿真 + 4 个真机任务里成功率涨 16.67%，真机推理延迟降 83.2%，连近确定性任务的训练速度都更快。",
+    "highlights": {
+      "contribution": "一个能自适应在多模态和确定性之间切换的机器人 imitation 策略，既保留多模态表达又拿回效率。",
+      "innovation": "提出 modality-adaptive sampling：只在需要时注入随机性，单模态阶段直接确定性学习。",
+      "method": "判断任务阶段是单模态还是多模态，多模态阶段用 diffusion-style 噪声 + 去噪，单模态阶段用确定性头预测动作。",
+      "results": "8 仿真 + 4 真机任务平均成功率 +16.67%，真机推理延迟 -83.2%，训练效率在近确定性任务上也优于纯确定性 baseline。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 9,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.30011",
+    "summary": "给 VLA 加 text chain-of-thought 一直有两个问题：无关文本会干扰动作，自回归解码慢得离谱。VisualThink-VLA 改用紧凑的“视觉证据 token”做中间推理，保留空间精度同时省掉文本解码；再加选择性路由提升专化能力。BridgeData V2 上推理延迟从 ECoT 的 8.377s 降到 0.367s，22.8× 加速。",
+    "highlights": {
+      "contribution": "把 VLA 的中间 reasoning 从文本 CoT 换成视觉证据 token，推理质量和延迟双赢。",
+      "innovation": "Visual-evidence interface 替代 text CoT，配合 selective routing 做 token 专化；并放出 754.7k 指令规模的监督集。",
+      "method": "训一个 VisualEvidence-Agent 自动构造视觉证据 + 反事实测试集，VLA 主干用 selective routing 学习何时使用视觉证据 token 而非文本中间步骤。",
+      "results": "多 benchmark 大多刷新成功率；BridgeData V2 上 step latency 从 8.377s 降至 0.367s（22.8× 加速）。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 8.3
+    },
+    "affiliations": ["Zhejiang University"]
+  },
+  {
+    "arxiv_id": "2605.30282",
+    "summary": "语言指令经常不足以表达“到底操作哪个杯子”，Gaze2Act 把人类 gaze 作为动态意图信号塞进 VLA。它先做 ego-exo 跨视图语义匹配，把第一视角的注视点映射到机器人视角生成物体 mask + gaze 点，再以 perception-level prompt 和 action-level condition 双重注入策略。Unitree G1 上 7 类 16 个真机任务都拿到 SOTA，物体歧义消解和动态意图切换提升尤其大。",
+    "highlights": {
+      "contribution": "首次把人类 gaze 作为动态意图模态接入 VLA，做交互式机器人操控。",
+      "innovation": "ego-exo 跨视图 gaze 映射 + 粗到细的 mask/点双信号 + perception/action 两级条件化。",
+      "method": "用跨视图语义匹配把第一视角 gaze 投到机器人视角→输出物体 mask 与 gaze 点→prompt 给 VLM 又 condition action head。",
+      "results": "Unitree G1 上 7 类 16 个真机任务 SOTA，物体歧义消解和动态意图引导上明显领先 baseline。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 9,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": ["NTU"]
+  },
+  {
+    "arxiv_id": "2605.30569",
+    "summary": "与其堆复杂的灵巧手，不如让机器人快速换工具。Any-ttach 做了一套低成本自动末端切换机构 + 手持示教器 + 工具技能任务规划，统一接口下能用日常工具、关节工具（剪刀）、Fin Ray 手指、低成本人形手。两个长程任务（做三明治、备黄瓜）通过 6 个工具子技能切换完成。",
+    "highlights": {
+      "contribution": "提出一个工具中心化的操控框架：用快换末端 + 工具技能组合实现灵巧操作。",
+      "innovation": "开闭式机械接口 + 手持示教设备 + 工具技能调度，把“灵巧”从手设计转移到工具切换上。",
+      "method": "硬件层做低成本快换机构，数据层用 handheld device 收人类示教，软件层用任务规划组合学到的/参数化的/规划的工具技能。",
+      "results": "提升工具切换可靠性、示教效率、降低工具姿态方差；两个 long-horizon 任务串 6 个子技能成功完成。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.4
+    },
+    "affiliations": ["Duke University"]
+  },
+  {
+    "arxiv_id": "2605.30263",
+    "summary": "Video diffusion 在生成上很猛但做实时交互世界模型还差临门一脚。minWM 是个开源全栈方案：从数据构造、相机可控 fine-tune、AR 训练、few-step 蒸馏到流式推理全打通，把双向 T2V/TI2V 模型转成相机可控的少步 AR 世界模型。已经在 Wan2.1-1.3B 和 HY1.5-8B 上跑通，支持 cross-attention 和 MMDiT 两种结构，还能改造 HY-WorldPlay。",
+    "highlights": {
+      "contribution": "提供一个开源、可复现的“双向 video diffusion → 实时交互世界模型”全栈 pipeline。",
+      "innovation": "把 Causal Forcing(++) 训练、causal ODE/consistency 蒸馏、asymmetric DMD 串成单一管道；模块化、跨架构。",
+      "method": "先加相机控制 fine-tune 双向 VDM，再用 AR diffusion 训练 + causal 蒸馏 + asymmetric DMD 蒸到几步 AR 生成器，最后流式推理。",
+      "results": "在 Wan2.1-T2V-1.3B 与 HY1.5-TI2V-8B 上跑通，开放脚本/checkpoint/推理代码，给出相机轨迹质量、可控训练步数、最小 batch 等实践 ablation。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9,
+      "popularity": 7.5,
+      "quality": 8.5,
+      "recommendation": 8.5
+    },
+    "affiliations": ["Tsinghua University", "Shengshu AI", "Renmin University"]
+  },
+  {
+    "arxiv_id": "2605.29585",
+    "summary": "VLM 物理推理评测通常只看最后答案，掩盖了“答对但理由错”的问题。这篇要求模型显式吐出 (s0, Δs, s1, a) 四元组，再用混合 verifier 检查 schema、状态 grounding、转移一致性和答案-trace 兼容性，给出 object/relation/force 等类型化错误标签。结果发现中等模型 35% 的正确答案其实背后是物理错误的 trace，verifier-guided rerank 能再涨 7 个点 trace 有效性。",
+    "highlights": {
+      "contribution": "一个面向 VLM 的物理状态-转移评测协议，把“看上去对”和“真的物理一致”分开打分。",
+      "innovation": "强制 VLM 输出可验证的物理状态 trace 而不只看答案；混合 verifier + 类型化错误标签。",
+      "method": "构造 schema 验证过的合成场景与对照对，VLM 输出 (s0,Δs,s1,a) 后送 verifier 检查多个一致性维度并打标签。",
+      "results": "中等模型 35% 正确答案对应物理无效 trace；rerank 提升 trace 有效率 +7pp；preference tuning 降低隐藏不一致 41%。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": ["Oxford"]
+  },
+  {
+    "arxiv_id": "2605.29930",
+    "summary": "这是一篇偏哲学/认知层面的概念框架文章，提出 Multi-Phase Inference Mechanism (MIM) 来解释为什么不同主体在同一观察下会形成不同的世界模型。作者把 world-model alignment 重新定义为“让异质表征可互相处理”，而不是强行收敛到同一价值系统。没有实验，主要是给 AI alignment 提供新的描述词汇。",
+    "highlights": {
+      "contribution": "提出一个解释异质世界模型如何形成的多阶段推理概念框架 MIM。",
+      "innovation": "把 alignment 问题重定义为“表征互可处理”而不是“收敛到一致”。",
+      "method": "形式化 phase-formation space、foregrounding field、subject profile、representation alignment map 等理论要素。",
+      "results": "无实证结果，主要给出概念词汇，并连接哲学分歧、社会碎片化、AI alignment 等议题。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 9,
+      "popularity": 4.0,
+      "quality": 4.5,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.30100",
+    "summary": "World model 的核心能力是 state tracking。作者用 1000 万真实国际象棋对局造了一个超大 benchmark：给一串合法走法，模型要预测精确的棋盘状态。除了真实对局，还做了 uniformly random 合法走法的 OOD split，专门测模型是不是真的学到了转移规则而非靠人类常见局面投机。对比 Transformer、SLiCE、Mamba-3、Gated DeltaNet，recurrent 模型在 3M/8M 参数下大幅领先 Transformer，真实 split 在 18M 后饱和但 OOD split 40M 依然能分高下。",
+    "highlights": {
+      "contribution": "提出 Chess-World-Model：基于 1000 万真实对局的大规模精确状态追踪基准。",
+      "innovation": "用 uniformly random 合法走法构造 OOD split，把“学规则”和“靠人类先验 shortcut”分开测；推到 40M 仍可分辨。",
+      "method": "统一接口和训练协议下比较 causal Transformer、block-diagonal SLiCE、Mamba-3、Gated DeltaNet 等多种线性 RNN 在精确状态预测上的表现。",
+      "results": "Recurrent 模型在 3M/8M 强于 Transformer；真实 split >18M 饱和但 random split 40M 仍有区分；transition matrix 表达能力降低会损害 OOD 性能。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 9,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.3
+    },
+    "affiliations": ["Oxford"]
+  },
+  {
+    "arxiv_id": "2605.30346",
+    "summary": "Video diffusion 都说自己在做 world model，那它们到底懂因果，还是只是拟合时间统计？YoCausal 借了认知科学的“违反预期”范式：用反向播放真实视频做天然 counterfactual，零成本扩展。Level 1 用 Reverse Surprise Index 测时间箭头感知，Level 2 用 VLM 把数据拆成因果 vs 非因果子集再测 Causality Cognition Index。评了 13 个 SOTA VDM，结论是“知道时间方向 ≠ 懂因果”，离人类水平差距明显。",
+    "highlights": {
+      "contribution": "从因果视角评估视频扩散模型作为世界模型的真实理解能力。",
+      "innovation": "用真实视频时序反转做天然 counterfactual，无 sim-to-real gap；两级指标分别测时间感知和因果认知。",
+      "method": "Level 1 用 denoising loss 差异定义 RSI；Level 2 用 VLM 自动把数据集划分为因果/非因果子集，再算 CCI 看模型能否区别。",
+      "results": "13 个 SOTA VDM 都显示“能感知时间箭头”不等于“懂因果”，与人类因果认知仍有显著 gap。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.7
+    },
+    "affiliations": ["NYCU", "Shanghai AI Lab"]
+  },
+  {
+    "arxiv_id": "2605.30347",
+    "summary": "NeuROK 想把 4D 物体动力学生成从“先指定物理模型再做系统辨识”里解放出来。他们学一个隐空间表示物体所有可能形变状态，再训一个 transformer encoder-decoder：从隐变量直接出形变后的 mesh，相当于学 data-driven 的 kinematic state parameterization。在精心构建的大规模 4D 数据集上训，跨多种动态物体类别都比 prior work 强。",
+    "highlights": {
+      "contribution": "学一个通用的神经物体动力学参数化，无需预设物理模型即可生成可仿真的 4D 形变。",
+      "innovation": "把动力学规约到低维 latent，从 Lagrangian 视角简化生成过程；不依赖类别特化的物理模型。",
+      "method": "构建大规模 4D 数据集，训 transformer encoder-decoder：编码物体可能状态、解码隐变量→形变 mesh。",
+      "results": "在多种动态物体类别上展示出通用形变生成能力，明显领先 category-specific prior work。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.5
+    },
+    "affiliations": ["Stanford", "Tsinghua University"]
+  },
+  {
+    "arxiv_id": "2605.30542",
+    "summary": "这篇 position paper 论点是：embodied AI 的世界模型必须“物理可行”，能回答干预查询，而不是光做未来帧预测。作者用受控基准展示了观测预测型模型如何在视觉相同但物理不同的场景下给出错误甚至危险的预测，并主张世界模型应模块化分解为环境表示、状态/参数估计、动作规约、干预动力学、查询响应等部件，由一个 orchestrator 按 query 动态组合最简单够用的物理抽象。",
+    "highlights": {
+      "contribution": "提出“physically viable world model”的设计原则和评测视角，指出未来 embodied AI 世界模型应面向干预查询而非帧预测。",
+      "innovation": "用“视觉相同但物理不同”的受控基准暴露观测预测型 world model 的结构性失败；提出模块化 + orchestrator 架构。",
+      "method": "构造控制实验：固定可见场景、变更隐藏物理参数，比较模型的 intervention 预测和动作可行性；论证模块化分解。",
+      "results": "展示了多个 query 下现有模型给出物理错误/不安全输出的案例，作为新架构的可行性测试。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 9,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.7
+    },
+    "affiliations": ["UT Austin"]
+  },
+  {
+    "arxiv_id": "2605.29849",
+    "summary": "数据驱动的建筑热力学模型在实际控制策略下常常因为状态空间没被充分激发而泛化不动。BuilDyn 在 BuilDa 基础上加可定制的激励策略，让用户能生成覆盖更广状态空间的训练数据，还能从建筑分布里采样。作者用一个建筑做了对比：用激励数据训出来的 ML 模型在未见工况下确实更稳。这篇严格说更偏建筑能源控制，跟具身 AI 关联弱。",
+    "highlights": {
+      "contribution": "给建筑热动力学建模做了一个可定制激励信号的数据生成包，强调控制相关的状态空间覆盖。",
+      "innovation": "把“控制激励设计”引入数据生成 pipeline，并配建筑分布采样与 Python 接口便于 ML 集成。",
+      "method": "基于 BuilDa 提供多种激励策略，从代表性建筑分布采样，用激励 vs 非激励数据训同一 ML 建筑模型并比较。",
+      "results": "在一个建筑上展示激励数据训练的 ML 模型在未见工况下更鲁棒，但实验规模有限。"
+    },
+    "scores": {
+      "relevance": 2.5,
+      "recency": 9,
+      "popularity": 4.0,
+      "quality": 5.5,
+      "recommendation": 4.2
+    },
+    "affiliations": ["Karlsruhe Institute of Technology"]
+  },
+  {
+    "arxiv_id": "2605.29997",
+    "summary": "多车协同重建一般要求精准外参标定 + per-scene 优化，太死板。FRUC 把它当作一个时空非结构化的 ego-centric 多相机系统：用一个视觉 grounded 几何 Transformer backbone 实现 one-shot、免标定推理；再加 ego-centric causal occlusion field 显式建模遮挡演化，cross-agent 融合用零初始化残差去噪做。V2XReal 和 UrbanIng-V2X 上渲染质量和效率都新 SOTA。",
+    "highlights": {
+      "contribution": "提出一个 feedforward、免标定的协同驾驶动态场景 3DGS 重建框架。",
+      "innovation": "用 causal occlusion field 当先验、用零初始化残差注入实现“非破坏性”跨 agent 几何补全。",
+      "method": "VGGT 风格几何 Transformer 做 one-shot 推理；ego-centric occlusion field 建模时空遮挡演化；零初始化残差去噪做跨 agent fusion。",
+      "results": "V2XReal 和 UrbanIng-V2X 上协同驾驶动态场景重建拿到新 SOTA，渲染质量和效率都明显领先。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 9,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.1
+    },
+    "affiliations": ["CityU HK"]
+  },
+  {
+    "arxiv_id": "2605.30328",
+    "summary": "热成像 3DGS 想完全摆脱可见光，TDg 用单一热模态 + 深度估计来推 radiance field，避免多模态融合的速度和复杂度问题。在 RGBT-Scenes 和 ThermalMix 上对比 MSMG baseline，LPIPS/SSIM/PSNR 都略有提升，最关键是训练时间砍掉 12 分 47 秒（55%）。应用瞄准热源识别、监控、救援、工业检测。",
+    "highlights": {
+      "contribution": "提出一个只用热图像 + 深度估计的 3DGS 渲染方法，省掉对可见光的依赖。",
+      "innovation": "用单一热模态 + 深度估计替代多模态融合，工程上更轻。",
+      "method": "纯热红外输入 + 深度估计，喂给 3DGS 学 radiance field。",
+      "results": "RGBT-Scenes 与 ThermalMix 上 LPIPS/SSIM/PSNR 相对 MSMG 略好（约 1.12%/0.034%/0.01%），训练时间减少 12m47s（55%）。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 9,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.5
+    },
+    "affiliations": ["TU Munich"]
+  },
+  {
+    "arxiv_id": "2605.29549",
+    "summary": "3DGS 主要用来渲染，但作为场景理解 backbone 怎么样？作者拿点云和图网络架构在常规点云数据集和专门的 GS 数据集上跑分类、linear probe、聚类，看不同几何感知架构和不同输入特征配置对学到的 GS 表征质量有什么影响。结论主要是架构家族间存在一致差异，Gaussian-specific 属性会显著影响表征质量。",
+    "highlights": {
+      "contribution": "系统比较点和图几何深度学习架构在 3DGS 场景分类/表征学习上的表现。",
+      "innovation": "针对 3DGS 输入做专门的架构 + 特征配置基准研究，而不是把 3DGS 当渲染器。",
+      "method": "把 3DGS 场景嵌入到 latent，用 end-to-end 分类、linear probing 和聚类三种方式评测多种点/图模型，覆盖点云和 GS 数据集。",
+      "results": "不同架构家族之间存在一致性能差异，Gaussian 特有属性显著影响表征质量；属于基准研究类论文。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 9,
+      "popularity": 4.5,
+      "quality": 6.0,
+      "recommendation": 5.2
+    },
+    "affiliations": ["Wroclaw University of Science and Technology"]
+  }
+]

@@ -152,13 +152,17 @@ def parse_entry(entry: ET.Element) -> dict | None:
     }
 
 
-def in_date_window(paper: dict, start: dt.date, end_exclusive: dt.date) -> bool:
+def paper_pub_date(paper: dict) -> dt.date | None:
     try:
         pub = dt.datetime.fromisoformat(paper["published_date"].replace("Z", "+00:00"))
     except Exception:
-        return False
-    d = pub.date()
-    return start <= d < end_exclusive
+        return None
+    return pub.date()
+
+
+def in_date_window(paper: dict, start: dt.date, end_exclusive: dt.date) -> bool:
+    d = paper_pub_date(paper)
+    return d is not None and start <= d < end_exclusive
 
 
 def default_target_date() -> dt.date:
@@ -228,8 +232,14 @@ def main() -> int:
                 continue
             if paper["arxiv_id"] in seen:
                 continue
-            if not in_date_window(paper, start_date, end_exclusive):
-                # Past the window — we're sorted desc by submittedDate
+            d = paper_pub_date(paper)
+            if d is None:
+                continue
+            if d >= end_exclusive:
+                # Newer than the window — sort is desc, keep paginating without
+                # tripping the older-than-window short-circuit.
+                continue
+            if d < start_date:
                 older_streak += 1
                 continue
             older_streak = 0

@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2605.28083",
+    "summary": "针对 VLA 模型在安全场景下脆弱性的研究：作者发现 VLA 在动作前必须先视觉定位自己的机械臂，于是设计一个对抗补丁，把模型对真实机械臂的注意力转移到补丁上，相当于伪造了一个'幻影身体'。在 OpenVLA、UniVLA、CronusVLA 上做了跨架构黑盒迁移攻击，结果显著优于现有补丁攻击。",
+    "highlights": {
+      "contribution": "提出 VLA-Hijack，第一个针对 VLA 视觉自定位机制的可迁移对抗补丁攻击框架。",
+      "innovation": "把攻击目标从输出动作空间挪到所有 VLA 共享的视觉自定位过程上，从而打破跨架构迁移瓶颈。",
+      "method": "联合优化两个目标：注意力引导地压制真实机械臂特征，多模态投放让补丁取代机械臂的身体嵌入；通过语义概念锚定和视觉原型投影交替优化。",
+      "results": "在 OpenVLA、UniVLA、CronusVLA 上的白盒和跨架构黑盒迁移均达到 SOTA，是第一份系统化的 VLA 补丁攻击迁移性结果。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 8,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.28634",
+    "summary": "作者觉得 VLA 数据效率差、泛化弱的根因是把整条 trajectory 直接背下来，而不是学可复用的运动基元。于是提出 PrimitiveVLA：训练时把演示拆成原语，推理时用 VLM 规划器加 LLM 生成的切换模块把原语拼起来。声称在长程未见任务上零样本泛化更好。",
+    "highlights": {
+      "contribution": "把 VLA 的'指令到控制直映射'范式转成'原语拆解-装配'范式，提升数据效率和泛化。",
+      "innovation": "引入共享的多模态规范化表示 MCR，让自动拆解的原语在不同任务间真正可复用，区别于以往整条轨迹模仿。",
+      "method": "微调阶段用自动管线把演示拆成原语；推理阶段 VLM 做高层规划，LLM 生成切换器闭环执行原语组合。",
+      "results": "在长程和未见任务上零样本泛化和数据效率都优于直接 instruction-to-control 的 baseline（具体数字未给）。"
+    },
+    "scores": {
+      "relevance": 9,
+      "recency": 8,
+      "popularity": 6,
+      "quality": 6.5,
+      "recommendation": 7.4
+    },
+    "affiliations": ["ICT, Chinese Academy of Sciences"]
+  },
+  {
+    "arxiv_id": "2605.27886",
+    "summary": "现有 VLA 模型只看视觉，碰到需要轻拿轻放的任务力度控制不好。Tabero 一边搭了视觉-触觉-语言数据集和评测协议，一边设计了一个解耦力-位置指令的 VTLA 架构，把力指令交给固定的混合控制器执行。结果在保持成功率的同时，按'轻柔'指令把平均抓力降了 70% 以上。",
+    "highlights": {
+      "contribution": "构建 Tabero benchmark 与 Tabero-VTLA 模型，让 VLA 真正闭环利用触觉力反馈做温柔操作。",
+      "innovation": "把开源机器人轨迹改造成视觉-触觉-语言任务的数据管线，加上力-位置解耦指令接口，弥补了 VLA 与混合力位控制之间的断层。",
+      "method": "用现有数据自动生成带触觉信号的任务；模型同时输出力指令和位置指令，由固定混合控制器执行；评测既看成功率也看物理交互质量。",
+      "results": "在 Tabero benchmark 上保持高任务成功率，按温柔指令将平均抓握力降低 70%+，代码已开源。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 8,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": ["HKUST (Guangzhou)"]
+  },
+  {
+    "arxiv_id": "2605.28231",
+    "summary": "面向算力受限场景的紧凑 VLA：ProgVLA 把多模态长序列用两阶段 Perceiver 压成定长 token，并加一组 progress head 显式估计任务剩余进度，再用 flow-matching 模仿学习训练。0.1B 参数在两个 manipulation benchmark 上长程任务能超过大很多的预训练 baseline，还做了真机厨房验证。",
+    "highlights": {
+      "contribution": "提供一个 0.1B 参数即可处理长程多任务 manipulation 的紧凑 VLA。",
+      "innovation": "用 progress head + offline RL critic 把任务进度估计显式塞进 VLA，配合两阶段 Perceiver 压缩长序列。",
+      "method": "多模态编码器 → 两阶段 Perceiver 重采样 → 定长上下文 token；辅助 progress 头用归一化剩余 horizon 做 offline RL critic；策略用 advantage/ success-weighted flow matching 训练。",
+      "results": "0.1B 参数在两个 manipulation benchmark 上与大得多的 baseline 持平，长程和多物体任务更优；真机 toy-kitchen 也能跑。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 8,
+      "popularity": 5.5,
+      "quality": 7,
+      "recommendation": 7.0
+    },
+    "affiliations": ["Naver Labs Europe"]
+  },
+  {
+    "arxiv_id": "2605.28486",
+    "summary": "面向微机器人的 VLA：用两个挂磁铁的机械臂动态构造磁场来操控微机器人。基于 Qwen2.5-VL-7B + LoRA 处理视觉和语言，输出动作；加了 motion-aware 阶段分类器和 phase-conditioned ACT 解码器做多步控制。真机实验抓取成功率 90%，运输按难度 80/70/50%。",
+    "highlights": {
+      "contribution": "首次把 VLA 范式搬到磁场驱动的双臂微机器人操作上，给微创医疗等场景一个实用入口。",
+      "innovation": "在 VLA 中引入 motion-aware phase 分类器和 phase-conditioned ACT 解码器，应对双臂磁场耦合控制问题。",
+      "method": "Qwen2.5-VL-7B 用 LoRA 微调，融合视觉+语言；分类器估计任务阶段；ACT 解码器按阶段生成两个机械臂的协同轨迹；自建遥操作数据集训练。",
+      "results": "三种任务真机抓取均 90% 成功；运输按难度 80%、70%、50%；ablation 表明 ACT 解码器明显胜过其他动作头。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 6.5
+    },
+    "affiliations": ["Imperial College London"]
+  },
+  {
+    "arxiv_id": "2605.28527",
+    "summary": "一个反直觉但很扎实的探针研究：VLA 训练目标里压根没要求估计成功概率，但作者发现 OpenVLA、Pi0.5 这些冻结模型的特征上线性探针就能预测 Monte-Carlo outcome，准确率显著高于 progress/time-to-go 等 baseline。把探针当作 test-time selector 还能把 push-plate 成功率从 26.7% 提到 44.3%。",
+    "highlights": {
+      "contribution": "证明冻结 VLA 已经隐式编码了成功概率信息，可以无需重训直接用线性探针提取并指导动作选择。",
+      "innovation": "在严格的同任务、同时间步配对评测下排除了任务和时间捷径，并把探针真正用作 test-time action selector。",
+      "method": "在 LIBERO-Goal 混合成功/失败轨迹上用 Monte-Carlo outcome 训练线性探针，特征来自 OpenVLA、Pi0.5、DINOv2、CLIP；推理时用探针给采样的动作前缀打分。",
+      "results": "Pi0.5 探针配对排序准确率约 92%，shuffle 控制在随机水平；push-plate 成功率 26.7% → 44.3%，wine-rack 也提升。"
+    },
+    "scores": {
+      "relevance": 9,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 8,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.28803",
+    "summary": "VLA 模型大、又有 DiT 动作头，部署很贵。Omega-QVLA 第一个把语言主干和整个 diffusion 动作头都统一压到 W4A4，不再走混精度。靠 SVD-Hadamard 旋转均衡通道能量、加每步动态 scale 吸收 DiT 去噪阶段的活动范围漂移，在 LIBERO 上 Pi0.5 和 GR00T N1.5 量化后成功率反超 FP16。",
+    "highlights": {
+      "contribution": "提出第一个 training-free 的 W4A4 全量化 VLA 方案，连 DiT 动作头都不放过。",
+      "innovation": "复合 SVD-Hadamard 旋转 + per-step DiT 激活 scale 量化，正面挑战'动作头必须高精度'的固有假设。",
+      "method": "无需微调的 PTQ：先对权重做 SVD-Hadamard 旋转均衡能量并分散激活离群点，再对每个去噪步的 DiT 激活做动态 scale 量化。",
+      "results": "在 LIBERO 上 Pi0.5 和 GR00T N1.5 量化到 W4A4 成功率分别为 98.0% / 87.8%，均超过 FP16 的 97.1% / 87.0%；静态显存减少 71.3%，真机也能稳定操作。"
+    },
+    "scores": {
+      "relevance": 9,
+      "recency": 8,
+      "popularity": 7,
+      "quality": 8.5,
+      "recommendation": 8.3
+    },
+    "affiliations": ["McGill University", "University of Hong Kong"]
+  },
+  {
+    "arxiv_id": "2605.29114",
+    "summary": "针对带推理的自动驾驶 VLA 做第一个系统化黑盒安全评估。作者拿 NVIDIA Alpamayo 当 representative，构造现实文本扰动，发现对推理 ASR 高达 89%、对轨迹 ASR 72%，碰撞率和安全指标显著恶化。还给出了 reasoning-aware 评测框架和攻击/防御 benchmark。",
+    "highlights": {
+      "contribution": "第一份针对 reasoning-enabled VLA 自动驾驶模型的系统化黑盒鲁棒性评测。",
+      "innovation": "把'推理-轨迹耦合'当成新攻击面，提出兼顾语义和结构的 reasoning-aware 评测协议。",
+      "method": "在 NVIDIA Alpamayo 等模型上构造现实文本输入扰动，闭环仿真测推理与驾驶行为，引入安全中心化指标和攻防 benchmark。",
+      "results": "推理任务 ASR 最高 89%，轨迹操控 ASR 72%，闭环碰撞率明显上升。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7,
+      "recommendation": 7.0
+    },
+    "affiliations": ["UMass Amherst", "Qualcomm"]
+  },
+  {
+    "arxiv_id": "2605.27919",
+    "summary": "扩散策略容易把人类示教里的抖动、停顿一起学过来。作者提出 FGO，把扩散去噪过程看作在频谱流形上前进，按子频带逐步扩展，让生成动作天然平滑又保留细节。在 15 个 manipulation 任务、5 个 benchmark 上动作平滑度和成功率都更好。",
+    "highlights": {
+      "contribution": "给 diffusion policy 加一个频率引导算子 FGO，解决去噪过程放大高频噪声的问题。",
+      "innovation": "把动作扩散看成在子频流形上的逐步遍历，逐步展开频谱带宽，而不是单纯做时间平滑后处理。",
+      "method": "在扩散策略采样过程中插入频率引导算子，让噪声样本依次穿过带宽逐步扩张的子频流形，隐式做谱控制。",
+      "results": "在 15 个 manipulation 任务、5 个 benchmark 上动作平滑度和成功率均提升。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 6.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.28202",
+    "summary": "传统轨迹优化的难点是离散化引入很多人工噪声、对碰撞检测不友好。这篇直接在函数空间用自然梯度，定义 Gaussian-smoothed 目标，只要 black-box 评估就能跑。Monte-Carlo 估计自然梯度，在窄通道、杂乱场景生成更平滑可行的轨迹。",
+    "highlights": {
+      "contribution": "提出函数空间自然梯度的轨迹优化框架，独立于时间离散化控制平滑性。",
+      "innovation": "在函数空间内做几何感知更新，并给出仅靠 black-box 评估的 Monte-Carlo 自然梯度估计。",
+      "method": "优化 Gaussian-smoothed 目标，用 Monte-Carlo 估计函数空间自然梯度，仅需 trajectory 评估，不依赖解析梯度。",
+      "results": "在窄通道、杂乱 manipulation 场景里比规划和轨迹优化 baseline 更可行、更平滑。"
+    },
+    "scores": {
+      "relevance": 5,
+      "recency": 8,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 5.8
+    },
+    "affiliations": ["Korea University"]
+  },
+  {
+    "arxiv_id": "2605.28277",
+    "summary": "讨论 LLM 能不能从纯文本里建出空间世界模型。作者搭了 MentalMap：6 级能力层级、8 种语言、100 个 ProcTHOR 户型，39 类任务共 1950 评测格。13 个 LLM 一过 L0 准确率 40%，到 L3 viewpoint 推理就集体崩；人类在相同纯文本协议下也同样翻车，说明瓶颈是文本工作记忆。",
+    "highlights": {
+      "contribution": "提出 MentalMap 多语言空间世界模型诊断 benchmark，并把'L3 推理悬崖'作为普遍现象指出来。",
+      "innovation": "六级能力层级 + 多语言 + 多诊断轴，配合人类 baseline 把瓶颈定位到文本工作记忆而非模型架构。",
+      "method": "基于 ProcTHOR 户型生成多语言场景描述，构造 L0–L5 任务和 4 个诊断维度，对 13 个 LLM 和人类做 1950 项评测。",
+      "results": "所有模型一旦 L0 超 40%，L3 viewpoint 都掉不到一半；语言、规模、prompt 策略都无法跨越这个悬崖。"
+    },
+    "scores": {
+      "relevance": 6,
+      "recency": 8,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.28317",
+    "summary": "用神经网络替代物理求解器常常在激波、接触面这种锐变事件上悄悄翻车。作者做了一个多视野连续条件的神经世界模型，一次前向给任意未来时刻；意外发现网络自己的 per-trajectory 误差图能定位 shock，比 ensemble 等基线还好用。两种部署模式：纯神经 26-72 倍加速；或者用误差图触发回退到参考求解器。",
+    "highlights": {
+      "contribution": "提出 hybrid neural world model 配方：单网络一次前向预测任意 horizon，并自带可定位激波的误差图。",
+      "innovation": "无需任何不连续性监督，激波/接触位置就从前向 pass 中浮现，可用作 label-free 不确定性指标。",
+      "method": "连续 horizon 条件单网络，在物理状态空间直接用经典求解器标签监督；推理时既可单独跑，也可用误差图门控求解器回退。",
+      "results": "在反应扩散、可压缩 Euler、刚体碰撞上 CPU 同硬件加速 26-72 倍；启用回退后误差再砍约一半。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.28368",
+    "summary": "把世界模型搬到工程材料：LEIA 让工程师一步步加边界条件，实时看见三维大网格的变形和应力场。还配套了 MicroPlate benchmark，覆盖显式格架和隐式均匀板两种微结构建模。除了交互探索，模型还能当代理替代有限元做架构材料的快速搜索。",
+    "highlights": {
+      "contribution": "把世界模型范式引入架构材料力学，给出实时交互的大三维网格响应预测器 LEIA。",
+      "innovation": "处理非线性本构、历史相关内部状态、惯性动力学和多尺度结构，配套 MicroPlate 评测两类微结构建模。",
+      "method": "在大型非结构三维网格上自回归生成位移/应力场，支持用户分步施加边界条件；与四个 baseline 在 MicroPlate 两个 regime 上对比。",
+      "results": "在两种微结构 regime 下都优于 baseline；下游用作 surrogate ranking，与有限元 ground truth 一致，能高效搜索新材料设计。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 8,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 6.2
+    },
+    "affiliations": ["MIT"]
+  },
+  {
+    "arxiv_id": "2605.28816",
+    "summary": "现在 video-based world model 基本是单 agent。Gamma-World 走多 agent：每个 agent 都可独立控制、置换对称，又能实时推理。核心是 Simplex Rotary Agent Encoding（3D RoPE 推广到正单形顶点）和 Sparse Hub Attention（线性复杂度）。蒸馏一个 causal student 跑到 24 FPS，从 2 人训练能泛化到 4 人。",
+    "highlights": {
+      "contribution": "搭建可扩展的生成式多 agent 交互世界模型 Gamma-World，超越双玩家场景。",
+      "innovation": "提出 Simplex Rotary Agent Encoding 把 agent 编成正单形顶点旋转角，以及 Sparse Hub Attention 把跨 agent 注意力从二次降到线性。",
+      "method": "扩展 3D RoPE 给 agent 加身份；用 hub token 中介跨 agent 注意力；把 full-context diffusion 教师蒸馏成 causal student，配 KV cache 做实时 rollout。",
+      "results": "在多玩家虚拟环境上视频质量、动作可控性、跨 agent 一致性均优于 slot-based 和 dense baseline；从 2 人训练 zero-shot 泛化到 4 人；推理 24 FPS。"
+    },
+    "scores": {
+      "relevance": 8,
+      "recency": 8,
+      "popularity": 8,
+      "quality": 8,
+      "recommendation": 8.2
+    },
+    "affiliations": ["NVIDIA", "Tsinghua University", "University of Toronto"]
+  },
+  {
+    "arxiv_id": "2605.29032",
+    "summary": "MBRL 老问题：用预测损失训出来的 simulator 总被 RL 优化器钻空子，造成 sim-to-real gap。这篇把 simulator 学习视为模型 vs 对抗 policy 的零和博弈，给出 sublinear regret 保证、critic 简化以及 Error-MDP 对偶，证明找最坏 policy 等价于标准 RL。基于此提出可证明收敛的主动数据选择算法。",
+    "highlights": {
+      "contribution": "把世界模型学习重写为 policy-aware 的极小极大博弈，并给出理论保证 + 收敛算法。",
+      "innovation": "Error-MDP 对偶定理把'找最坏 policy'转成标准 RL 问题，从而能用现成 RL 解最坏情况采样。",
+      "method": "建立 model–policy zero-sum game；用 critic loss 上界 policy-value gap；基于对偶设计主动数据选择算法。",
+      "results": "在连续控制上把战略关键区域的预测误差降低 1.5–2.2 倍；纯模拟训练的 policy 能接近真实最优。"
+    },
+    "scores": {
+      "relevance": 6,
+      "recency": 8,
+      "popularity": 8,
+      "quality": 8.5,
+      "recommendation": 7.5
+    },
+    "affiliations": ["Google Research", "Tel Aviv University", "NYU"]
+  },
+  {
+    "arxiv_id": "2605.28111",
+    "summary": "面向 AI Virtual Cell 的细胞世界模型 Chreode：把扰动响应建成一步条件转移，而不是每个数据集重新解 ODE/Schrödinger bridge。结构上拆成 Waddington 下坡、切向旋转、随机扩散三件套。在 2.4M 细胞鼠胚胎图谱上预训练，再迁移到血细胞、胰岛分化和 Norman Perturb-seq 上都拿到提升。",
+    "highlights": {
+      "contribution": "提出一步式细胞动力学世界模型 Chreode，能在发育和扰动两类任务间迁移。",
+      "innovation": "把分布演化从推理时挪到训练时，并用 Waddington 风格分解（下坡 + 切向旋转 + 随机扩散）做结构归纳。",
+      "method": "共享 scVI 编码器 + DiT 动力学骨干，在 2.4M 鼠胚胎细胞 7 数据集上预训练，下游用作 fine-tune 初始化或 GEARS 的 gene-state embedding。",
+      "results": "Weinreb / Veres 数据集 Sinkhorn 距离优于 PI-SDE、PRESCIENT；Norman Perturb-seq DE20 MSE 0.2121 → 0.1858（-12.4%）；clonal fate 零样本评分对得上强基线。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 8,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 6.0
+    },
+    "affiliations": ["UNC Chapel Hill", "UT Austin", "UPenn"]
+  },
+  {
+    "arxiv_id": "2605.28810",
+    "summary": "情感音乐推荐里没法做线上 AB（特别是临床老年人群）。AMRS 在 LUCID 平台部署：用 causal transformer 当 world model，离线预测 engagement / 评分 / 情绪 valence-arousal，既作模拟器又做压力测试。基于行为克隆初始化，再用 DPO 做多目标偏好优化，预测 valence/arousal 比 BC 更好。",
+    "highlights": {
+      "contribution": "把 rollout-based world model + offline DPO 偏好优化落地到情感音乐推荐，已经部署到健康平台。",
+      "innovation": "在情感目标无法做线上实验的约束下，用 world model 同时做模拟器和上线前压力测试。",
+      "method": "Causal transformer 在日志数据上联合预测多种信号；策略先 BC 初始化，再用 DPO 对多目标效用函数做离线优化。",
+      "results": "cold-start 协议下 world model 在行为和情绪信号上都有可用精度；DPO 在 valence/arousal 上优于 BC，且没像贪心那样塌缩多样性。"
+    },
+    "scores": {
+      "relevance": 3,
+      "recency": 8,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 5.2
+    },
+    "affiliations": ["Mila", "HEC Montréal", "LUCID"]
+  },
+  {
+    "arxiv_id": "2605.27947",
+    "summary": "WAM 用视频未来表示来条件化动作生成，但是把视频去噪到底要做多少步因状态而异。SANTS 是个轻量调度器，读取当前视频状态和噪声水平，预测停步 hazard 和噪声推进比，按下游动作奖励训练。RoboTwin 2.0 整体成功率 94.4%、真机 7 任务平均 73.1%，延迟分别砍 81.7% 和 79.0%。",
+    "highlights": {
+      "contribution": "为视频-动作扩散策略提出状态自适应的噪声轨迹调度器 SANTS，加速 WAM 推理而不掉性能。",
+      "innovation": "把'去噪深度'本身变成被学习的状态相关决策，并用动作链最终奖励反传训练调度器，不再追求中间视频保真。",
+      "method": "每个决策点读视频状态 + 噪声水平，联合预测停步 hazard 和相对噪声推进比；post-training 时按动作链奖励反传，并对冗余视频状态更新加惩罚。",
+      "results": "RoboTwin 2.0 整体成功率 94.4%；7 个真机任务平均 73.1%；相对 full denoising 延迟分别降低 81.7% 和 79.0%。"
+    },
+    "scores": {
+      "relevance": 9,
+      "recency": 8,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 7.7
+    },
+    "affiliations": ["Fudan University"]
+  },
+  {
+    "arxiv_id": "2605.28125",
+    "summary": "面向数字孪生场景的 NeRF 重建：CLEAR-NeRF 在大范围无界场景里同时做兴趣区检测和重建，加上共线性约束的射线采样让平面/曲面更平滑，再用深度局部邻域抑制表面伪影、几何相关颜色聚合应对光照和位姿偏差。在多区 unbounded 场景上比基线 NeRF 和 SfM+MVS 都强。",
+    "highlights": {
+      "contribution": "把 NeRF 从单一兴趣区扩展到多区 unbounded 场景，并提升 metric 精度和鲁棒性。",
+      "innovation": "共线性约束射线采样 + 深度局部邻域提取 + 几何相关颜色聚合的组合，不额外堆子模块。",
+      "method": "自动定位多个兴趣区分别建模；约束共线射线学平面；用深度局部点抑制伪影；颜色按几何邻域聚合稳定光照。",
+      "results": "在 unbounded 多区域场景上比 baseline NeRF 与 SfM-MVS 重建质量更高（具体数字未给）。"
+    },
+    "scores": {
+      "relevance": 4,
+      "recency": 8,
+      "popularity": 5,
+      "quality": 6,
+      "recommendation": 5.4
+    },
+    "affiliations": ["Ericsson Research"]
+  },
+  {
+    "arxiv_id": "2605.28237",
+    "summary": "POI 级 VLN 的'最后几米'问题：现有 benchmark 要么粒度粗，要么仿真和真实差距大。作者用 3DGS 重建 11 个商业区，163 个 POI、12 万平米；提出 Brain-Action 两段式：Brain 做 POI 推理，Action 预测真实可执行航点。还放出 70K 真实招牌-入口对数据。",
+    "highlights": {
+      "contribution": "搭起首个真实世界 POI 级 VLN 闭环 benchmark POINav-Bench，配套 Brain-Action 框架和大规模数据。",
+      "innovation": "用 3DGS 重建商业区做高保真闭环评估，并显式区分 POI 推理与航点执行。",
+      "method": "11 个商业区 3DGS 重建并标注可通行性；Brain 模块做 POI grounding 推理；Action 模块输出连续 waypoint；用 70K 招牌-入口对训练。",
+      "results": "在真实 POI 多任务上提供首个闭环评测，POINav 框架展示出可行性提升（未给具体数字对比）。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 6.8
+    },
+    "affiliations": ["Amap, Alibaba"]
+  },
+  {
+    "arxiv_id": "2605.28296",
+    "summary": "纯核物理应用题：用 ResNet-50/34/18 和 VGG-19 对 MATE-TPC 上 12C+12C 反应事件做弹性散射 vs 聚变分类，仿真上 97%、实验数据 90%；还做了不同聚变 channel 分类和顶点重建。跟具身/VLA 没关系，被关键词命中。",
+    "highlights": {
+      "contribution": "把 ResNet/VGG 应用到 12C+12C 反应的 TPC 事件分类和顶点重建。",
+      "innovation": "比传统物理规则方法更能捕捉模糊事件，并补充 CNN 顶点重建作为替代路线。",
+      "method": "对 TPC 二维投影图用 ResNet-50/34/18、VGG-19 训练事件分类；CNN 回归反应顶点。",
+      "results": "仿真数据分类约 97%、实验数据 90%；多 channel 分类约 95%。"
+    },
+    "scores": {
+      "relevance": 1,
+      "recency": 8,
+      "popularity": 4,
+      "quality": 5.5,
+      "recommendation": 3.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.28587",
+    "summary": "弱监督 occupancy 大都假设刚体，行人这种非刚体形变就抓不住。DeGO 把每个高斯 primitive 拆成刚体 offset 和非刚体形变两条更新路径，并蒸馏 VGGT 的跨相机跨帧特征做时间一致性。Occ3D-NuScenes 上 human-centric 提升 13.5%，整体 10.9%，SOTA。",
+    "highlights": {
+      "contribution": "提出可形变高斯占据 DeGO，把 VGGT 几何基础模型蒸馏进弱监督 occupancy。",
+      "innovation": "刚体与非刚体运动解耦的高斯演化 + 因式分解的 4D VGGT 蒸馏，专门照顾人这种非刚体目标。",
+      "method": "每个高斯 primitive 同时支持形变和 offset 更新；跨相机、跨帧 4D 分解蒸馏 VGGT 特征；端到端弱监督训练。",
+      "results": "Occ3D-NuScenes 弱监督 SOTA：human-centric 实例 +13.5%，整体 +10.9%；代码已开源。"
+    },
+    "scores": {
+      "relevance": 8,
+      "recency": 8,
+      "popularity": 7,
+      "quality": 8,
+      "recommendation": 7.8
+    },
+    "affiliations": ["EPFL"]
+  },
+  {
+    "arxiv_id": "2605.29136",
+    "summary": "3DGS 现有 densification（ADC）靠很多手工启发，本文换思路：把每个 splat 的位置看成从可学习概率密度采样，用 hashed 多尺度概率金字塔做密度表达，加 control variate 降低梯度估计方差。最终在 mip-NeRF 360 上重建质量 SOTA，同时保持 3DGS 的渲染速度。",
+    "highlights": {
+      "contribution": "把 3DGS 的启发式 densification 替换成端到端可微的概率密度优化。",
+      "innovation": "用 hashed 多尺度概率金字塔做高效密度参数化，并推导带控制变量的无偏梯度估计。",
+      "method": "splat 位置当作样本，从持久的可学习密度采样；密度用层级哈希网格表达；带 control variate 的无偏梯度估计稳定优化。",
+      "results": "mip-NeRF 360 重建 SOTA，渲染速度与 3DGS 持平。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 7.5,
+      "quality": 8,
+      "recommendation": 7.0
+    },
+    "affiliations": ["Google", "Harvard"]
+  },
+  {
+    "arxiv_id": "2605.28241",
+    "summary": "做点云质量评估的新 benchmark：不仅给 MOS 分数，还要诊断缺陷类型、可用性，并给出有依据的描述。3083 个点云覆盖真实扫描、模拟失真和 AIGC，标了 MOS、问题标签、专家描述、12k 问答对。在 14 个 VLM 上发现：模型能粗粒度看出问题，但 grounded 诊断和校准很弱。",
+    "highlights": {
+      "contribution": "提出 PointQ-Bench，把点云质量评估从单一打分扩到诊断和可解释报告。",
+      "innovation": "覆盖 3 种来源、8 类问题，加入 SSFRQ-5D 五维评测协议评开放式质量描述。",
+      "method": "3083 个点云标注 MOS、等级、问题标签、专家描述、12332 QA；设三种感知任务和开放式认知任务；对 14 个 VLM 和传统 PCQA baseline 评测。",
+      "results": "发现 perception-diagnosis gap：2D MLLM 普遍强于现有 3D VLM；多视角/点级输入收益不均。"
+    },
+    "scores": {
+      "relevance": 4,
+      "recency": 8,
+      "popularity": 5.5,
+      "quality": 7,
+      "recommendation": 5.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.29074",
+    "summary": "Embodied3DBench 专测 VLM 在 3D 具身环境的'低层'空间智能：grounding、空间关系、多视角对应、affordance、抓点、轨迹预测，6 大类 12 子类、21k QA。评测 13 个 SOTA 后发现高层关系还行，可交互层面（抓点、affordance、轨迹）很脆；作者顺手合了 1.3M QA 微调数据，能显著补齐。",
+    "highlights": {
+      "contribution": "针对 VLM 提出 robot-centric 低层 3D 空间智能 benchmark Embodied3DBench，并给出 1.3M QA 训练集。",
+      "innovation": "把评测拆成'结构理解'和'交互感知'两组，专门暴露 VLM 在 affordance / grasp / trajectory 上的弱点。",
+      "method": "构造 6 类 12 子类共 21k QA；评测 13 个 SOTA VLM；再合成 1.3M QA 训练集，做 fine-tune 验证瓶颈可被弥补。",
+      "results": "现有模型在交互感知任务上明显薄弱；用 1.3M QA 微调后低层空间智能显著提升。"
+    },
+    "scores": {
+      "relevance": 8,
+      "recency": 8,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": ["Peking University"]
+  }
+]
