@@ -253,3 +253,25 @@ export function saveLanguagePref(lang: "zh" | "en"): void {
     window.localStorage.setItem(LS_LANG, lang);
   } catch {}
 }
+
+// ──────────────────────────────────────────────────────────────
+// Theme preference (used by ThemeContext + the FOUC script in layout.tsx)
+// ──────────────────────────────────────────────────────────────
+export type ThemePref = "light" | "dark" | "system";
+export const LS_THEME = "embodied-arxiv/theme/v1";
+
+export function loadThemePref(): ThemePref {
+  if (typeof window === "undefined") return "system";
+  try {
+    const v = window.localStorage.getItem(LS_THEME);
+    if (v === "light" || v === "dark" || v === "system") return v;
+  } catch {}
+  return "system";
+}
+
+export function saveThemePref(theme: ThemePref): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(LS_THEME, theme);
+  } catch {}
+}

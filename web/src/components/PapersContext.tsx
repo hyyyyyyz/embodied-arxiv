@@ -9,7 +9,7 @@ import {
   useEffect,
   useMemo,
 } from "react";
-import type { Paper, PapersResponse } from "@/lib/types";
+import type { Paper, PapersResponse, SiteIndex } from "@/lib/types";
 import { fetchPapers as apiFetchPapers } from "@/lib/api";
 
 interface PapersContextValue {
@@ -21,11 +21,15 @@ interface PapersContextValue {
   date: string;
   dateRange: string;
   setDateRange: (range: string) => void;
+  selectedDate: string;
+  setSelectedDate: (date: string) => void;
+  availableDates: string[];
+  indexLoaded: boolean;
   loading: boolean;
   error: string | null;
   feedbackCount: number;
   setFeedbackCount: React.Dispatch<React.SetStateAction<number>>;
-  loadPapers: (range?: string) => void;
+  loadPapers: (range?: string, date?: string) => void;
   initialized: boolean;
 }
 
@@ -38,27 +42,50 @@ export function usePapersContext() {
   return ctx;
 }
 
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 export function PapersProvider({ children }: { children: React.ReactNode }) {
   const [papers, setPapers] = useState<Paper[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [date, setDate] = useState("");
   const [dateRange, setDateRangeState] = useState("");
+  const [selectedDate, setSelectedDateState] = useState("");
+  const [availableDates, setAvailableDates] = useState<string[]>([]);
+  const [indexLoaded, setIndexLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [feedbackCount, setFeedbackCount] = useState(0);
   const [initialized, setInitialized] = useState(false);
 
-  const abortRef = useRef(false);
+  const reqIdRef = useRef(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${BASE}/data/index.json`, { cache: "no-cache" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j: SiteIndex | null) => {
+        if (cancelled) return;
+        if (j?.dates) setAvailableDates(j.dates);
+        setIndexLoaded(true);
+      })
+      .catch(() => {
+        if (!cancelled) setIndexLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const loadPapers = useCallback(
-    (range?: string) => {
+    (range?: string, date?: string) => {
+      const reqId = ++reqIdRef.current;
       setLoading(true);
       setError(null);
-      abortRef.current = false;
-      const effectiveRange = range ?? dateRange;
-      apiFetchPapers(undefined, effectiveRange || undefined)
+      const effectiveDate = (date !== undefined ? date : selectedDate) || undefined;
+      const effectiveRange = effectiveDate ? undefined : (range ?? dateRange) || undefined;
+      apiFetchPapers(effectiveDate, effectiveRange)
         .then((data: PapersResponse) => {
-          if (abortRef.current) return;
+          if (reqId !== reqIdRef.current) return;
           setPapers(data.papers);
           setDate(data.date);
           setCurrentIndex(0);
@@ -66,21 +93,32 @@ export function PapersProvider({ children }: { children: React.ReactNode }) {
           setInitialized(true);
         })
         .catch((err: Error) => {
-          if (abortRef.current) return;
+          if (reqId !== reqIdRef.current) return;
           setError(err.message);
         })
         .finally(() => {
-          if (!abortRef.current) setLoading(false);
+          if (reqId === reqIdRef.current) setLoading(false);
         });
     },
-    [dateRange]
+    [dateRange, selectedDate]
   );
 
   const setDateRange = useCallback(
     (range: string) => {
       setDateRangeState(range);
+      setSelectedDateState("");
       setInitialized(false);
-      loadPapers(range);
+      loadPapers(range, "");
+    },
+    [loadPapers]
+  );
+
+  const setSelectedDate = useCallback(
+    (d: string) => {
+      setSelectedDateState(d);
+      setDateRangeState("");
+      setInitialized(false);
+      loadPapers("", d);
     },
     [loadPapers]
   );
@@ -100,6 +138,10 @@ export function PapersProvider({ children }: { children: React.ReactNode }) {
       date,
       dateRange,
       setDateRange,
+      selectedDate,
+      setSelectedDate,
+      availableDates,
+      indexLoaded,
       loading,
       error,
       feedbackCount,
@@ -112,11 +154,15 @@ export function PapersProvider({ children }: { children: React.ReactNode }) {
       currentIndex,
       date,
       dateRange,
+      selectedDate,
+      availableDates,
+      indexLoaded,
       loading,
       error,
       feedbackCount,
       initialized,
       setDateRange,
+      setSelectedDate,
       loadPapers,
     ]
   );

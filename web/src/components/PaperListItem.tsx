@@ -49,11 +49,7 @@ export default function PaperListItem({
       }`}
     >
       <div className="flex items-start justify-between gap-2">
-        <h3
-          className={`text-sm font-medium leading-snug line-clamp-2 ${
-            isSelected ? "text-white" : "text-[var(--text-primary)]"
-          }`}
-        >
+        <h3 className="text-sm font-medium leading-snug line-clamp-2 text-[var(--text-primary)]">
           {paper.title}
         </h3>
         <div className="flex-shrink-0 flex items-center gap-1.5">

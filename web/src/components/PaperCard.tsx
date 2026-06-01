@@ -8,11 +8,11 @@ import FeedbackButtons from "./FeedbackButtons";
 // Coverage directions matched to brand-palette accents.
 // Falls back to the primary purple for any unknown matched_domain string.
 const DOMAIN_COLORS: Record<string, string> = {
-  VLA: "bg-purple-900/40 text-[var(--accent-blue)]",
-  "World Model": "bg-cyan-900/40 text-[var(--accent-cyan)]",
-  WAM: "bg-cyan-900/40 text-[var(--accent-cyan)]",
-  VGGT: "bg-green-900/40 text-[var(--accent-green)]",
-  "Multi-modal": "bg-orange-900/40 text-[var(--accent-orange)]",
+  VLA: "bg-[var(--tint-vla)] text-[var(--tint-vla-text)]",
+  "World Model": "bg-[var(--tint-wm)] text-[var(--tint-wm-text)]",
+  WAM: "bg-[var(--tint-wm)] text-[var(--tint-wm-text)]",
+  VGGT: "bg-[var(--tint-vggt)] text-[var(--tint-vggt-text)]",
+  "Multi-modal": "bg-[var(--tint-mm)] text-[var(--tint-mm-text)]",
 };
 
 interface PaperCardProps {
@@ -32,14 +32,14 @@ export default function PaperCard({ paper, onFeedback }: PaperCardProps) {
 
   const domainColor =
     DOMAIN_COLORS[paper.matched_domain] ||
-    "bg-purple-900/40 text-[var(--accent-purple)]";
+    "bg-[var(--tint-vla)] text-[var(--accent-purple)]";
 
   const scoreColor =
     paper.scores.recommendation >= 8
-      ? "bg-green-900/40 text-[var(--accent-green)]"
+      ? "bg-[var(--tint-rec-high)] text-[var(--accent-green)]"
       : paper.scores.recommendation >= 6
-        ? "bg-yellow-900/40 text-[var(--accent-orange)]"
-        : "bg-red-900/40 text-[var(--accent-red)]";
+        ? "bg-[var(--tint-rec-mid)] text-[var(--accent-orange)]"
+        : "bg-[var(--tint-rec-low)] text-[var(--accent-red)]";
 
   return (
     <div className="h-full flex flex-col px-4 pt-2 pb-0 lg:px-8 lg:pt-6 w-full">
@@ -53,7 +53,8 @@ export default function PaperCard({ paper, onFeedback }: PaperCardProps) {
           </span>
           {paper.venue && (
             <span
-              className="px-3 py-1 rounded-full text-xs lg:text-sm font-bold bg-gradient-to-r from-purple-900/40 to-indigo-900/40 text-[var(--accent-purple)] border border-[var(--accent-purple)]/30"
+              className="px-3 py-1 rounded-full text-xs lg:text-sm font-bold text-[var(--accent-purple)] border border-[var(--accent-purple)]/30"
+              style={{ background: 'var(--venue-gradient)' }}
               title={t("paper.venue")}
             >
               {paper.venue}
@@ -62,7 +63,7 @@ export default function PaperCard({ paper, onFeedback }: PaperCardProps) {
           {paper.categories.slice(0, 3).map((cat) => (
             <span
               key={cat}
-              className="px-2 py-1 rounded-full text-[10px] lg:text-xs bg-[#0f3460] text-[var(--text-secondary)]"
+              className="px-2 py-1 rounded-full text-[10px] lg:text-xs bg-[var(--bg-card)] text-[var(--text-secondary)]"
             >
               {cat}
             </span>
@@ -76,7 +77,7 @@ export default function PaperCard({ paper, onFeedback }: PaperCardProps) {
       </div>
 
       {/* Title */}
-      <h1 className="text-xl lg:text-2xl font-bold text-white leading-snug mb-1 lg:mb-2 flex-shrink-0">
+      <h1 className="text-xl lg:text-2xl font-bold text-[var(--text-primary)] leading-snug mb-1 lg:mb-2 flex-shrink-0">
         {paper.title}
       </h1>
 

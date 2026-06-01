@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/components/LanguageContext";
+import { useTheme } from "@/components/ThemeContext";
+import type { ThemePref } from "@/lib/api";
 
 const REPO_URL = "https://github.com/hyyyyyyz/embodied-arxiv";
 const INDEX_PATH = "/data/index.json";
 
 export default function AboutPage() {
   const { t, language, setLanguage } = useLanguage();
+  const { theme, setTheme } = useTheme();
   const [lastUpdate, setLastUpdate] = useState<string | null>(null);
   const [confirming, setConfirming] = useState(false);
 
@@ -42,7 +45,7 @@ export default function AboutPage() {
     <div className="h-full overflow-y-auto px-4 lg:px-6 py-4 lg:py-6 max-w-2xl mx-auto space-y-4 lg:space-y-5">
       {/* Hero */}
       <div className="bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg p-5 lg:p-6">
-        <h1 className="text-xl lg:text-2xl font-bold text-white mb-2">
+        <h1 className="text-xl lg:text-2xl font-bold text-[var(--text-primary)] mb-2">
           {t("about.title")}
         </h1>
         <p className="text-sm lg:text-base text-[var(--text-secondary)] leading-relaxed">
@@ -68,6 +71,30 @@ export default function AboutPage() {
         <p className="text-sm font-mono text-[var(--text-primary)] opacity-90">
           {t("about.directionsList")}
         </p>
+      </Section>
+
+      {/* Appearance */}
+      <Section
+        title={`🎨 ${t("about.appearance")}`}
+        color="var(--accent-purple)"
+      >
+        <div className="flex gap-2">
+          {(
+            [
+              { key: "light", label: t("about.themeLight") },
+              { key: "dark", label: t("about.themeDark") },
+              { key: "system", label: t("about.themeSystem") },
+            ] as { key: ThemePref; label: string }[]
+          ).map((opt) => (
+            <LangButton
+              key={opt.key}
+              active={theme === opt.key}
+              onClick={() => setTheme(opt.key)}
+            >
+              {opt.label}
+            </LangButton>
+          ))}
+        </div>
       </Section>
 
       {/* Language */}

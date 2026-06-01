@@ -25,13 +25,21 @@ export const metadata: Metadata = {
   },
 };
 
+// Runs synchronously before React hydrates so the document already has the
+// correct .dark class on first paint — otherwise users in light mode would
+// briefly see the dark palette flash.
+const THEME_FOUC_SCRIPT = `(function(){try{var t=localStorage.getItem('embodied-arxiv/theme/v1')||'system';var d=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d);}catch(e){}})();`;
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh" className="dark">
+    <html lang="zh" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_FOUC_SCRIPT }} />
+      </head>
       <body className="h-dvh flex flex-col">
         <Providers>
           <main className="flex-1 min-h-0 overflow-hidden">{children}</main>

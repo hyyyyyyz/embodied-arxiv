@@ -26,7 +26,7 @@ function PaperItem({
         className="flex-1 min-w-0 cursor-pointer"
         onClick={() => window.open(paper.arxiv_url || paper.pdf_url, "_blank")}
       >
-        <h3 className="text-sm font-medium text-white group-hover:text-[var(--accent-blue)] transition-colors line-clamp-2">
+        <h3 className="text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--accent-blue)] transition-colors line-clamp-2">
           {paper.title}
         </h3>
         <div className="flex items-center gap-2 mt-1">
@@ -129,10 +129,10 @@ function FolderSection({
               setEditing(false);
             }}
             onClick={(e) => e.stopPropagation()}
-            className="flex-1 bg-transparent text-sm text-white border-b border-[var(--accent-blue)] outline-none"
+            className="flex-1 bg-transparent text-sm text-[var(--text-primary)] border-b border-[var(--accent-blue)] outline-none"
           />
         ) : (
-          <span className="flex-1 text-sm font-medium text-white">{folder.name}</span>
+          <span className="flex-1 text-sm font-medium text-[var(--text-primary)]">{folder.name}</span>
         )}
         <span className="text-xs text-[var(--text-secondary)]">{papers.length}</span>
         <button
@@ -250,7 +250,7 @@ export default function FavoritesPage() {
       <div className="flex-shrink-0 px-4 lg:px-6 py-3 border-b border-[var(--border)]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <h1 className="text-base lg:text-lg font-bold text-white">{t("favorites.title")}</h1>
+            <h1 className="text-base lg:text-lg font-bold text-[var(--text-primary)]">{t("favorites.title")}</h1>
             <span className="text-xs text-[var(--text-secondary)]">{t("favorites.count", { count: papers.length })}</span>
           </div>
           {showNewFolder ? (
@@ -267,7 +267,7 @@ export default function FavoritesPage() {
                   }
                 }}
                 placeholder={t("favorites.folderName")}
-                className="px-2 py-1 rounded bg-[var(--bg-primary)] border border-[var(--border)] text-xs text-white placeholder-[var(--text-secondary)] focus:outline-none focus:border-[var(--accent-blue)] w-28"
+                className="px-2 py-1 rounded bg-[var(--bg-primary)] border border-[var(--border)] text-xs text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none focus:border-[var(--accent-blue)] w-28"
               />
               <button
                 onClick={handleCreateFolder}

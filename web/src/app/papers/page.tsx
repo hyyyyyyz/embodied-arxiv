@@ -15,33 +15,83 @@ const DATE_RANGES = [
   { value: "month", labelKey: "papers.thisMonth" },
 ];
 
+const WEEKDAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+function formatDateOption(date: string): string {
+  // date is YYYY-MM-DD. Build a UTC date to keep the weekday stable across TZs.
+  const [y, m, d] = date.split("-").map(Number);
+  if (!y || !m || !d) return date;
+  const wd = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+  return `${date} · ${WEEKDAY_LABELS[wd]}`;
+}
+
 function DateRangeSelector({
   value,
   onChange,
   compact,
   t,
+  selectedDate,
 }: {
   value: string;
   onChange: (v: string) => void;
   compact?: boolean;
   t: (key: string, params?: Record<string, string | number>) => string;
+  selectedDate: string;
 }) {
   return (
     <div className="flex gap-1.5">
-      {DATE_RANGES.map((r) => (
-        <button
-          key={r.value}
-          onClick={() => onChange(r.value)}
-          className={`rounded-full font-medium transition-colors ${
-            value === r.value
-              ? "bg-[var(--accent-blue)] text-[var(--bg-primary)]"
-              : "bg-[var(--bg-primary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border)]"
-          } ${compact ? "px-2 py-0.5 text-[10px]" : "px-2.5 py-1 text-xs"}`}
-        >
-          {t(r.labelKey)}
-        </button>
-      ))}
+      {DATE_RANGES.map((r) => {
+        const isActive = value === r.value && !selectedDate;
+        return (
+          <button
+            key={r.value}
+            onClick={() => onChange(r.value)}
+            className={`rounded-full font-medium transition-colors ${
+              isActive
+                ? "bg-[var(--accent-blue)] text-[var(--bg-primary)]"
+                : "bg-[var(--bg-primary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border)]"
+            } ${compact ? "px-2 py-0.5 text-[10px]" : "px-2.5 py-1 text-xs"}`}
+          >
+            {t(r.labelKey)}
+          </button>
+        );
+      })}
     </div>
+  );
+}
+
+function DatePickerSelect({
+  value,
+  dates,
+  onChange,
+  compact,
+  t,
+  indexLoaded,
+}: {
+  value: string;
+  dates: string[];
+  onChange: (v: string) => void;
+  compact?: boolean;
+  t: (key: string, params?: Record<string, string | number>) => string;
+  indexLoaded: boolean;
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      disabled={!indexLoaded}
+      aria-label={t("papers.pickDate")}
+      className={`rounded-full bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border)] font-medium hover:text-[var(--text-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--accent-blue)] disabled:opacity-50 disabled:cursor-not-allowed ${
+        compact ? "px-2 py-0.5 text-[10px]" : "px-2.5 py-1 text-xs"
+      }`}
+    >
+      <option value="">{indexLoaded ? t("papers.allDates") : "…"}</option>
+      {dates.map((d) => (
+        <option key={d} value={d}>
+          {formatDateOption(d)}
+        </option>
+      ))}
+    </select>
   );
 }
 
@@ -54,6 +104,10 @@ export default function PapersPage() {
     date,
     dateRange,
     setDateRange,
+    selectedDate,
+    setSelectedDate,
+    availableDates,
+    indexLoaded,
     loading,
     error,
     feedbackCount,
@@ -175,20 +229,43 @@ export default function PapersPage() {
 
   return (
     <div className="h-full flex flex-col lg:flex-row">
-      {/* Mobile: just the date-range chips at the top */}
+      {/* Mobile: date-range chips + per-day picker at the top */}
       <div className="flex-shrink-0 px-4 py-3 border-b border-[var(--border)] bg-[var(--bg-secondary)] lg:hidden">
-        <DateRangeSelector value={dateRange} onChange={setDateRange} t={t} />
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <DateRangeSelector
+            value={dateRange}
+            onChange={setDateRange}
+            selectedDate={selectedDate}
+            t={t}
+          />
+          <DatePickerSelect
+            value={selectedDate}
+            dates={availableDates}
+            onChange={setSelectedDate}
+            indexLoaded={indexLoaded}
+            t={t}
+          />
+        </div>
       </div>
 
       {/* Desktop: left panel with paper list */}
       <div className="hidden lg:flex lg:flex-col lg:w-[340px] xl:w-[380px] border-r border-[var(--border)] bg-[var(--bg-secondary)] flex-shrink-0">
         <div className="flex-shrink-0 px-4 py-3 border-b border-[var(--border)]">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 flex-wrap">
               <span className="text-sm">📅</span>
               <DateRangeSelector
                 value={dateRange}
                 onChange={setDateRange}
+                selectedDate={selectedDate}
+                compact
+                t={t}
+              />
+              <DatePickerSelect
+                value={selectedDate}
+                dates={availableDates}
+                onChange={setSelectedDate}
+                indexLoaded={indexLoaded}
                 compact
                 t={t}
               />
