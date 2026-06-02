@@ -42,8 +42,8 @@ export default function RootLayout({
       </head>
       <body className="h-dvh flex flex-col">
         <Providers>
-          <main className="flex-1 min-h-0 overflow-hidden">{children}</main>
           <NavBar />
+          <main className="flex-1 min-h-0 overflow-hidden">{children}</main>
         </Providers>
       </body>
     </html>
