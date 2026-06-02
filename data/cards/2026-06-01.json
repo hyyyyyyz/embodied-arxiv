@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.01847",
+    "summary": "现在的扩散 VLA 都把 SE(3) 位姿当成 12 维欧氏向量去回归，作者直接点名这是个 \"欧氏谬误\"——会跑出非旋转矩阵、破坏等变性、轨迹也不走测地线。他们把整套扩散过程搬到 SE(3) 流形上：用左不变 SDE 加噪、在切空间预测 score、再用指数映射 retract 回去。CALVIN ABC→D 上平均完成长度从 3.27 涨到 3.51，真机上多数任务也比 baseline 强。",
+    "highlights": {
+      "contribution": "把扩散 VLA 的动作预测严格放到 SE(3) 流形上，从结构上消掉 SO(3) 漂移并保等变性。",
+      "innovation": "不是事后投影，而是 SDE 加噪 / score 预测 / 采样 retract 三步都在切空间里完成；强调测地线最优。",
+      "method": "Lie Diffuser Actor (LDA)：用左不变 SDE 注入噪声，在 SE(3) 切空间预测 score，再通过指数映射拉回流形；其余 backbone 接到扩散策略上。",
+      "results": "CALVIN ABC→D 平均任务长度 3.27 → 3.51 (+7.3%)，真机大多数任务也优于欧氏 baseline。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.01951",
+    "summary": "移动机器人 VLA 数据贵，作者尝试把人类第一视角行走视频转成导航策略的训练数据。从视频里估相机自运动，把它变成地面机器人能执行的动作，再和机器人自采数据一起 co-train。在水果搜索导航任务上比单独训任何一边都更稳。",
+    "highlights": {
+      "contribution": "提出把人类 egocentric 行走视频转成移动机器人导航 VLA 的训练数据的 pipeline。",
+      "innovation": "针对导航视角变化大的痛点，做相机自运动估计 + 动作格式对齐，让人类视频和真机数据能联合训练。",
+      "method": "从人类视频估摄像机轨迹 → 转换为机器人可执行动作 → VLA 在 human + robot 混合数据上联合训练。",
+      "results": "在水果搜索导航任务上，混合训练比单源训练在语言理解和动作鲁棒性上都更强。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 4,
+      "quality": 5.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.02277",
+    "summary": "VLA 看起来很会做语言任务，但是不是真用语义理解去选对象？作者搞了个 benchmark：给机器人一道数学/常识选择题，让它去抓正确答案对应的方块。结果绝大多数 VLA 在控住抓取成功率之后，选对块的概率接近随机——说明它们其实没真的把 backbone 的语义理解传到动作端。",
+    "highlights": {
+      "contribution": "新 benchmark RoboSemanticBench，专门诊断 VLA 在动作预测中是否真的用了语义。",
+      "innovation": "用 \"答题抓块\" 这种把语义和动作强绑定的任务隔离掉视觉/动作 shortcut。",
+      "method": "Episode 内给机器人多选题 + 答案候选块；分四选一/十选一两套；分别评抓取成功率和选对块率。",
+      "results": "多个主流 VLA 抓取成功，但在抓取条件下选对率接近随机或低于随机，揭示 backbone 语义没传到动作层。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.02307",
+    "summary": "现在评 VLA 都靠静态 benchmark 随机采任务，但失败是稀疏且聚类的，这种采法低估了风险。作者把评测改成主动找失败：用多样性驱动的探索 + 从已有 rollout 学的代理模型，把测试推向高风险区域。对 4 个 SOTA VLA 多挖出 +29.7% 的失败，GR00T-N1.6 成功率从 64.4% 直接跌到 34.7%。",
+    "highlights": {
+      "contribution": "把 VLA 评测从静态采样改造成主动找失败的测试生成问题。",
+      "innovation": "结合多样性探索 + 在线代理模型驱动测试场景生成，专门往高风险但又不同质的区域走。",
+      "method": "基于已观察执行学一个 surrogate 风险模型，与多样性目标一起规划新场景；在 4 个 SOTA VLA 上跑。",
+      "results": "比 baseline 多发现 +29.7% 失败；GR00T-N1.6 在新生成的场景下成功率 64.4% → 34.7%。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.02486",
+    "summary": "VLA 抓静态物体没问题，但物体在动就垮——因为它默认观测和执行之间场景不变。作者给冻结的 OpenVLA 套了个 \"先预测再行动\" 的小世界模型 AHEAD：用光流算每个 patch token 的速度/加速度，在 VLA 的特征空间里预测未来 token，再把这些未来 token 喂给原本的动作解码器。给 7B OpenVLA 只加 4.9M 参数，仿真 20 个动态任务从 31-58% 飙到 79-97%，连真机投射物拦截 baseline 0/30 都做到 19/30。",
+    "highlights": {
+      "contribution": "在不动 VLA backbone 的前提下，靠一个轻量 latent 世界模型给它补上动态场景的处理能力。",
+      "innovation": "在 VLA 自己的 patch token 空间里做预测，加上语言+运动显著性掩码、不确定性触发的自适应预测时长。",
+      "method": "AHEAD 在 manipulation 视频上训练一个 patch-token 预测器，条件包含光流速度/加速度；推理时滚动预测未来 token，置信度低就停；解码器直接吃预测 token。",
+      "results": "20 个动态仿真任务成功率 79-97%（baseline 31-58%）；真机传送带/滚球 29-30/30，投射物拦截 19/30（所有 baseline 都是 0/30）。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 10,
+      "popularity": 7,
+      "quality": 8.5,
+      "recommendation": 8.7
+    },
+    "affiliations": ["CMU"]
+  },
+  {
+    "arxiv_id": "2606.01851",
+    "summary": "动作 latent 通常是任务里的附属品，缺结构也跨不动机器人。作者把动作 embedding 空间本身当成一等公民来设计，利用运动的周期性把它分解为一个用 FFT 系数参数化的相位流形 + 一个非周期 pose 分支。再蒸馏运动语义，多种人形机器人锚定到同一个人类预训练流形上，得到可解释、可跨 embodiment 的统一动作空间。",
+    "highlights": {
+      "contribution": "把跨人形机器人共享、可解释的动作 embedding 空间作为可设计的目标。",
+      "innovation": "用 FFT 参数化的相位流形显式建模运动周期性，再用 pose 分支处理非周期部分；多 embodiment 锚定到人类 manifold。",
+      "method": "PHASOR：FFT 系数刻画周期、pose 分支补非周期细节，配合运动语义蒸馏；多个人形机器人共享同一 manifold。",
+      "results": "跨 embodiment 动作检索强、下游任务一致提升（具体数字摘要里没给）。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.01865",
+    "summary": "扩散策略一旦遇到分布漂移就需要人介入纠正，但常规 BC 损失只学人的正动作，忽略了机器人那条 \"错的\" 动作的负信号。作者把人类纠错视为成对的 (错动作, 对动作) chunk，构造一个 \"期望动作 chunk 集合\"，让扩散策略对齐到这个集合。在多个机器人 manipulation 任务上稳定涨点，对噪声数据更鲁棒。",
+    "highlights": {
+      "contribution": "把 human-in-the-loop 纠错里的负样本用起来，改造扩散策略的 BC 训练。",
+      "innovation": "Set-supervised：从正负 chunk 对构造期望动作集合，让扩散策略对齐到集合而不是单条 trajectory。",
+      "method": "SDP：从纠错 pair 收集正/负 action chunks → 构造期望集合 → 设计对齐损失训练 diffusion policy；适配 DAgger 风格聚合。",
+      "results": "多个 manipulation 任务上策略持续提升，对噪声数据尤其鲁棒，并生成更高质量的聚合数据集；代码开源。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 6,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": ["TU Delft"]
+  },
+  {
+    "arxiv_id": "2606.01955",
+    "summary": "WALL-WM 把 video-action 学习从 \"固定长 chunk\" 改造成 \"以语义事件为最小单位\"。作者指出语言是事件级、视觉是连续动态、动作是控制级，硬塞到同一窗口里只能学短时关联。他们用事件级 caption + cluster 平衡采样 + Muon 优化器做大规模 VLA 预训练，提供事件模式（变长 chunk）和统一模式（带 Staircase Decoding 的定长 chunk），在大规模真机泛化评测上拿到 SOTA。",
+    "highlights": {
+      "contribution": "提出事件锚定的 VLA 预训练范式 WALL-WM，统一变长/定长两种推理模式。",
+      "innovation": "把语言/视觉/动作之间的时间粒度不匹配作为核心痛点，用语义事件作为统一原子，并配 Staircase Decoding 兼容传统 chunk 推理。",
+      "method": "事件级 caption + cluster 平衡采样的数据生态 → Muon-optimizer 大规模 VLA 预训练 → 事件模式变长 chunk 推理 / 统一模式 VLM + Staircase Decoding。",
+      "results": "在大规模真机泛化评测上拿到 SOTA，跨语言/场景/任务都泛化得好（具体数字摘要中未列）。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 10,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.02194",
+    "summary": "大型 BC 策略想用 RL 继续 finetune 时，稀疏 reward 不好优。作者用 inverse RL 从 expert demo 学一个稠密 reward，再用 coherent imitation 这种有理论保证的方法 finetune 残差策略。在 6 个稀疏奖励 manipulation 任务上 pi-0.5 至少保持原性能，其中 5 个达到 ≥90% 成功率，且没有 RL 常见的初期掉点。",
+    "highlights": {
+      "contribution": "用 IRL 学稠密 reward 来 finetune 大 BC 策略，规避稀疏奖励 RL 的低样本效率。",
+      "innovation": "Coherent imitation 的特殊 reward 形式 + 初始策略对初始 reward/critic 最优，避免常见的 finetune 起始掉点。",
+      "method": "从专家 demo 学稠密 reward；用 coherent IL 公式 finetune 一个小的残差策略叠加到 pi-0.5 上。",
+      "results": "6 个 manipulation 任务上保持或提升 pi-0.5；其中 5 个达成 ≥90% 成功率，超过稀疏奖励 RL baseline。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": ["Oxford", "TU Darmstadt"]
+  },
+  {
+    "arxiv_id": "2606.02313",
+    "summary": "VLA 飞机导航的 SFT 数据稀少、对人类意图的对齐弱。作者用 GRPO 做 RL finetune，加少量专家数据引导探索，再搭一个并行 sim+infer pipeline 提速。EG-GRPO 在多个复杂意图任务上把成功率提到 SFT 的 2.13 倍，意图对齐分高 60.9%，rollout 时间砍掉 43.5%。",
+    "highlights": {
+      "contribution": "把 VLA 无人机导航的训练从 SFT 推进到 expert-guided 的 GRPO 强化微调。",
+      "innovation": "EG-GRPO 用 few-shot 专家数据增强在线 rollout，缓解大连续动作空间的探索效率问题；并行 sim+infer pipeline。",
+      "method": "EG-GRPO：online rollout 与 few-shot expert 数据混合做 GRPO；异构 pipeline 并行仿真和推理。",
+      "results": "成功率 = 2.13× SFT baseline；意图对齐 +60.9%；rollout 时间减少 43.5%。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 7.0
+    },
+    "affiliations": ["Zhejiang University"]
+  },
+  {
+    "arxiv_id": "2606.01600",
+    "summary": "视频世界模型现在多在 \"正常合法\" 指令上评，但机器人部署得面对违法/反事实/对抗指令。作者基于 DROID 实拍数据搭了个 RoboTrustBench，1207 对人工验证的指令-图像，覆盖 4 类场景 + 6 维 13 项细评。结果 7 个视频世界模型视觉看起来都不错，但在约束推理、反事实 grounding、物理交互和不安全指令抑制上都拉胯。",
+    "highlights": {
+      "contribution": "首个面向 robot manipulation 视频世界模型可信度的 benchmark RoboTrustBench。",
+      "innovation": "明确把 normal / constraint-sensitive / counterfactual / adversarial 四类场景拉到同一框架；六维细评指标。",
+      "method": "基于 DROID 真实片段构 1207 对 expert-validated instruction-image；6 维 13 项标准；human + MLLM 评估 7 个代表性视频世界模型。",
+      "results": "视频画面好看，但约束推理、反事实、物理交互、不安全指令抑制普遍弱，揭示纯视觉质量评估不够。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": ["Princeton", "Fudan"]
+  },
+  {
+    "arxiv_id": "2606.02436",
+    "summary": "视频世界模型长 rollout 的瓶颈是 \"context 窗口外靠什么记忆\"。显式存帧/3D 重建有错误和冗余，隐式压缩又没显式包几何。作者提出 GIM-World：一个 transformer 把历史压成定长 memory tokens，训练时用 frozen 3D foundation model 蒸馏几何到 memory，再加信息引导剪枝控制内存增长，推理时丢掉几何 teacher。MIND 上长时几何和视觉一致性都比显式/隐式 baseline 强。",
+    "highlights": {
+      "contribution": "几何感知的隐式记忆框架，让视频世界模型 long-horizon rollout 更一致。",
+      "innovation": "训练时用 frozen 3D foundation model 通过 camera-queryable head 蒸馏几何到 memory tokens，推理时只留轻量 memory，无需 explicit 3D 重建。",
+      "method": "Transformer 编码变长历史 → 固定大小 memory tokens；蒸馏 frozen 几何 foundation model；信息引导剪枝保证 bounded 编码成本。",
+      "results": "MIND benchmark 上 long-horizon 的几何和视觉一致性均优于显式与隐式 memory baseline。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 7.7
+    },
+    "affiliations": ["Kuaishou"]
+  },
+  {
+    "arxiv_id": "2606.01626",
+    "summary": "大家以为 latent 世界模型 + planner 不行是因为 model 不准。作者做了个反直觉实验：直接用完美 forward dynamics，planner 在有限预算下还是会失败，说明瓶颈在 search 不在 model。于是配一个从 demo 学的 intuition model，三个轻量组件（retrieval 初始化、混合 cost、可靠性 gate）把它和 world model 拼起来。4 个 pixel 任务全面涨点，Two-Room +11.5pp，OGBench-Cube +28.5pp。",
+    "highlights": {
+      "contribution": "指出 \"world model 够好但 planner 仍失败\" 的瓶颈，并用 intuition model 补足搜索效率。",
+      "innovation": "用 idealized rollout 实验把瓶颈定位到 search，再用 retrieval init / hybrid cost / reliability gate 三件套整合 demo 直觉。",
+      "method": "IMWM：world model + 从 demo 训的 intuition model；planner 初始动作从 demo retrieval 来，cost 混合 world rollout 与 intuition score，可靠性 gate 动态调权。",
+      "results": "Two-Room 99.2% (+11.5pp)，OGBench-Cube 94.7% (+28.5pp)；Reacher / Push-T 也涨。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 5,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.01935",
+    "summary": "自动驾驶用的离散视觉 token 多继承自图像生成，只优化像素重建，跟 planning 需要的不一样。作者训了个 representation-guided + geometry-enhanced tokenizer：bottleneck 对齐 frozen DINO 特征，同时保 RGB 重建，再加相邻帧深度和相对位姿监督，多 codebook 量化稳训练。在 NAVSIM 上同一套 token 接到 planning readout 和 GPT 式 next-token 世界模型上都很能打。",
+    "highlights": {
+      "contribution": "为驾驶世界模型 + planning 联合优化的离散视觉 tokenizer。",
+      "innovation": "重建+表示+几何三路监督联合训练 tokenizer，多 codebook 量化；同一套 token 同时支撑 planning 和 next-token 世界模型。",
+      "method": "Bottleneck 对齐 frozen DINO，保 RGB 重建（含感知/对抗损失）；加邻帧深度 + 相对位姿监督；multi-codebook 量化。",
+      "results": "NAVSIM 上重建保真度和表示一致性提升，固定 decoder 下 planning 性能有竞争力，匹配设定下生成质量更好。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 6.4
+    },
+    "affiliations": ["PKU"]
+  },
+  {
+    "arxiv_id": "2606.01950",
+    "summary": "作者把世界模型搬到 object-centric 的 3D Gaussian 表征上，专门做刚体多物体动力学。每个物体用 canonical 帧的 Gaussians 表示，动作-条件的时空 transformer 从历史 Gaussians + 未来动作预测刚体变换。从多视角重建训出来，能处理遮挡造成的部分观测，仿真里也接到 MPC 做非抓取操作。",
+    "highlights": {
+      "contribution": "动作条件、object-centric 的 Gaussian Splatting 世界模型用于多刚体动力学。",
+      "innovation": "Canonical-frame Gaussians + 时空 transformer 让动力学预测自然落到刚体变换上，并能处理多物体遮挡。",
+      "method": "MRO-GWM：物体级 3D Gaussians + 动作 + 历史 → 时空 transformer 预测未来 Gaussians；多视角重建训练，仿真中接 MPC 做非抓取 manipulation。",
+      "results": "在合成家用物体数据集上多物体动力学预测有效，MPC 控制非抓取任务 demo 出来。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 6.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.02372",
+    "summary": "LLM agent 的文本世界模型训完就不变，但 agent 自己在变，预测的分布就漂了。COMAP 把世界模型和 agent 策略闭环共演化：每步世界模型预测候选动作的未来反馈，agent 做未来感知的反思决定信不信，然后用 on-policy trajectory 自蒸馏更新世界模型。具身规划/Web 导航/工具调用全面赢 baseline，Qwen3-4B 上 +16.75%。",
+    "highlights": {
+      "contribution": "提出文本世界模型和 LLM agent 策略闭环共演化的框架。",
+      "innovation": "用 agent 的 on-policy trajectory 自蒸馏更新世界模型；预测可靠性进入 agent 反思流程。",
+      "method": "COMAP：每步世界模型对候选动作预测未来反馈 → agent future-aware reflection → on-policy 轨迹自蒸馏更新 world model；闭环迭代。",
+      "results": "Qwen3-4B 上相对 +16.75%；具身规划/Web 导航/工具使用 benchmark 全面超 baseline；预测准确度随时间提升；代码开源。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 6,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": ["PolyU"]
+  },
+  {
+    "arxiv_id": "2606.02575",
+    "summary": "自回归世界模型一旦走出参考帧外，看到啥全靠 base 模型先验，用户没法指定 \"这里要出现什么\"。SPAWN 利用 image-to-video backbone 的一个结构性质——context memory 第一个 slot 钉住参考帧——在一个短窗口内把这个 anchor 偷偷换成外部 concept latent，再让原 anchor 回归，concept 就被自然传播开。零训练，文本或图像 concept 都行。",
+    "highlights": {
+      "contribution": "训练自由的 \"concept spawning\"：在自回归世界模型里指定地点出现指定视觉概念。",
+      "innovation": "发现 pinned anchor slot 这一结构性 backbone 性质，并通过 windowed swap 实现 concept 传播。",
+      "method": "SPAWN：在 context memory 第一 slot 上做时间窗内的 latent swap → 让模型自身 memory 把概念传播 → 之后恢复原 anchor；接受 concept 图或文字描述。",
+      "results": "光照、尺度、视角、ID 一致性都保持，概念从角色/道具到建筑/地标都能注入，证明无需训练即可控制概念。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 6,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": ["Virginia Tech"]
+  },
+  {
+    "arxiv_id": "2606.02577",
+    "summary": "想用视频扩散合成机器人数据，但要么只做表层视觉增强、要么 \"幻觉手脚\" 物理上跑不通。RoboDream 把机器人运动和环境合成解耦：以渲染出来的机器人运动作锚，再条件化在显式的场景/物体先验上，生成在新物体/新场景/新视角下的真实感 demo。支持 \"轨迹复用\" 和 \"空气遥操\" 两种数据放大模式，下游策略性能稳定提升、实采需求大降。",
+    "highlights": {
+      "contribution": "embodiment-centric 的可组合世界模型，用于规模化合成机器人 manipulation 数据。",
+      "innovation": "用渲染的机器人运动作生成锚 + 显式场景/物体条件，把轨迹执行和环境合成解耦；衍生出 retrieval-and-rebirth 和 prop-free 遥操两种新数据流。",
+      "method": "条件视频扩散世界模型：输入渲染机器人运动 + 场景/物体先验 → 合成真实感 demo；支持把旧轨迹搬进新场景，或在空场地遥操后 \"补出\" 物体。",
+      "results": "真机实验显示合成数据稳定提升下游策略性能，并显著减少真实数据需求（具体数字摘要里没列）。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 8.0
+    },
+    "affiliations": ["TRI", "USC"]
+  },
+  {
+    "arxiv_id": "2606.01894",
+    "summary": "工业 RUL 预测要在不规则采样的传感器流上做，纯数据驱动模型还经常预测出违反 \"损伤不可逆\" 的轨迹。作者搭了个 PC-MambaSDE：mask-aware 连续 Mamba 编码不规则观测，physics-guided latent SDE 加单调漂移强制单调退化，再用 terminal degradation penalty 把 RUL 当边界值问题来求。理论上证 KL 等价和 Lyapunov 稳定，实验在多个 benchmark SOTA。",
+    "highlights": {
+      "contribution": "面向不规则采样工业传感器的物理约束连续时间 RUL 预测框架。",
+      "innovation": "Mask-aware Mamba 编码 + 物理偏置的 latent SDE + terminal degradation penalty 三件套，并给出 KL 等价和 Lyapunov 稳定性分析。",
+      "method": "PC-MambaSDE：mask-aware 连续 Mamba 编码不规则观测 → physics-guided latent SDE 强制单调退化 → terminal penalty 引导轨迹到失效态；同时设计混合不规则模拟方案做评测。",
+      "results": "公开 RUL benchmark 上显著优于 SOTA，尤其在严重观测缺失下表现稳定。"
+    },
+    "scores": {
+      "relevance": 2.0,
+      "recency": 10,
+      "popularity": 4,
+      "quality": 6.5,
+      "recommendation": 4.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.01991",
+    "summary": "LLM agent 接 MCP 工具时动作空间一大就容易 power-seeking，小失误也能爆炸式放大。SafeMCP 在 server 端用一个内部世界模型做前瞻推理：先 proactive 过滤掉危险的工具获取，再用 immediate intervention 兜底，并通过环境动态 grounding + 安全策略初始化 + 双 verifiable reward RL 三阶段训练。在 PowerSeeking Bench/ToolEmu/AgentHarm 上风险降了同时保住 utility。",
+    "highlights": {
+      "contribution": "服务端的 LLM agent 安全防御 SafeMCP，用 look-ahead reasoning 主动控制工具获取。",
+      "innovation": "内部世界模型驱动的两级防御（事前过滤 + 事中兜底），三阶段训练流程含双 verifiable reward。",
+      "method": "三阶段：环境动态 grounding → 安全策略初始化 → 双 verifiable reward RL；推理时世界模型预测未来风险，对工具集做主动过滤。",
+      "results": "在 PowerSeeking Bench/ToolEmu/AgentHarm 上降风险的同时保住 agent 实用性，达到 \"safe equilibrium\"。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 10,
+      "popularity": 5,
+      "quality": 6.0,
+      "recommendation": 5.0
+    },
+    "affiliations": ["PKU", "BIT"]
+  },
+  {
+    "arxiv_id": "2606.02001",
+    "summary": "用 LLM 自合成 agent 训练数据时，数据分布和真实工具世界差很远。GAIS 提出两段 grounding：环境锚定到真实 MCP server 保证功能多样性，任务用 structure-guided planning 强制逻辑依赖和对抗策略生成长链任务。在 BFCL / τ²-Bench / ACEBench 上让 base 模型甚至赶上官方 instruction-tuned 版本。",
+    "highlights": {
+      "contribution": "Grounded Agentic Interaction Synthesis：自动构造高保真、多样、长链的 agent 训练数据。",
+      "innovation": "Protocol-anchored 环境（真实 MCP server）+ structure-guided planning 双重 grounding 解决 LLM 自合成的先验偏置。",
+      "method": "GAIS 两阶段：基于真实 MCP server 构环境 → structure-guided planner 在环境里生成强制依赖且包含对抗策略的任务；用合成数据训 base 模型。",
+      "results": "BFCL / τ²-Bench / ACEBench 全面优于 SOTA baseline，base 模型逼近甚至超过其 instruction-tuned 版本；数据效率高；代码/数据开源。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 10,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 5.2
+    },
+    "affiliations": ["RUC"]
+  },
+  {
+    "arxiv_id": "2606.02027",
+    "summary": "机器人策略到底应该按什么轴去分解？作者论证最根本的一刀是 \"世界因素 vs 任务因素\"。世界因素是 embodiment+环境本身，跟意图无关；任务因素是逻辑层面的目标。他们用 Bayesian model evidence 论证这个不对称是有原则的，工程上把 AICON（可微 estimator 图）和一个紧凑学习策略配对，让梯度同时承载世界结构和任务结构。三类不同问题上都超 end-to-end baseline 并 zero-shot 真机迁移。",
+    "highlights": {
+      "contribution": "把机器人策略的结构化分解明确为 \"世界 vs 任务\" 二元因子，并给出 Bayesian 证据论证。",
+      "innovation": "用 AICON 这种可微递归 estimator 图承载世界结构，再用学到的紧凑策略调节梯度路径作为任务因子。",
+      "method": "World factor 用 AICON 解析+可微图；task factor 用小策略调控梯度路径；端到端梯度同时携带两者结构。",
+      "results": "在 3 类异构机器人/环境/模态任务上全部优于 end-to-end 和 analytical 启发；OOD 配置 zero-shot 泛化；真机无需重训。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": ["Cambridge", "TU Berlin"]
+  },
+  {
+    "arxiv_id": "2606.02280",
+    "summary": "现有 dynamics 自适应 RL 都把物理参数显式塞进 latent context，碰到没建模或复合变化就脆。作者换个思路：与其告诉策略 \"动力学是什么\"，不如让它学 \"动力学如何影响交互结果\"。理论上证明目标域 regret 和轨迹动力学编码器的 Lipschitz 常数单调相关，用对比学习把这个常数压下来。MuJoCo 上对剧烈/复合 dynamics shift 都稳超参数化 baseline。",
+    "highlights": {
+      "contribution": "outcome-centric 的 zero-shot 动力学自适应：用轨迹动力学 encoder 的 Lipschitz 控制 regret。",
+      "innovation": "理论给出 regret 和 encoder Lipschitz 的单调关系，并用对比学习作为 Lipschitz 的可行上界，免去显式物理参数。",
+      "method": "训练 trajectory dynamics encoder（不依赖 privileged 物理参数）；对比学习 upper-bound 其 Lipschitz；策略以该 latent 为 context。",
+      "results": "MuJoCo benchmark 在严重 dynamics shift（包括未建模、时变参数）下显著超参数中心 baseline，同时分布内更稳、latent 更可解释。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 6.4
+    },
+    "affiliations": ["Tongji"]
+  },
+  {
+    "arxiv_id": "2606.02363",
+    "summary": "纯理论：在部分可观测马尔可夫博弈 (POMG) 里学策略对抗自适应对手，标准 regret 不够。作者证明一个 epoch-based 乐观 MLE 算法在固定问题参数下能拿到 √T 的 policy regret，给出对 horizon、对手记忆、置信半径、aggregate Eluder dimension 的显式依赖；还给出匹配的下界，并把结果扩展到 horizon-adaptive 和几何衰减记忆对手。",
+    "highlights": {
+      "contribution": "POMG 下 policy regret 的极小极大最优率 √T 上下界。",
+      "innovation": "Epoch + 累积置信集 + observable-operator 类的 aggregate Eluder dimension，让对手响应比较的代价对 T 仅 log。",
+      "method": "Epoch 基础的乐观 MLE 算法：几何增长 epoch 内累积置信集，每 epoch 选一个策略；分析对应的 regret 与下界。",
+      "results": "$\\tilde{O}(\\sqrt{T})$ policy regret 上界 + 匹配 $\\sqrt{T}$ 与 aggregate-Eluder 依赖的下界；扩展到 horizon-adaptive 和 fading memory 对手。"
+    },
+    "scores": {
+      "relevance": 2.0,
+      "recency": 10,
+      "popularity": 4,
+      "quality": 7.0,
+      "recommendation": 4.2
+    },
+    "affiliations": ["JHU"]
+  },
+  {
+    "arxiv_id": "2606.02384",
+    "summary": "表格 ML 的进展几乎都堆在模型上，feature engineering 基本被现代 benchmark 忽略掉了。TabPrep 设计了一个轻量 preprocessing pipeline，针对三类结构化数据模式做特征生成。结果发现很多主流模型都有可预测的盲点，光靠系统化 FE 就能刷新 peak。在 TabArena 上对树、神经、线性、foundation 模型都有提升，常常超过模型创新。",
+    "highlights": {
+      "contribution": "填补现代表格 benchmark 里 feature engineering 缺失的评估 gap，发布轻量 pipeline TabPrep。",
+      "innovation": "针对三类具体结构模式精心设计 feature generator；揭示主流模型的可预测盲点。",
+      "method": "TabPrep = 一组手工设计的特征生成器，针对三类结构化数据模式；插到训练+调优流程里。",
+      "results": "在 TabArena 上 tree / NN / linear / foundation 模型均涨点，常超过模型层面的创新；优于已有自动 FE 方法。"
+    },
+    "scores": {
+      "relevance": 1.5,
+      "recency": 10,
+      "popularity": 4,
+      "quality": 7.0,
+      "recommendation": 3.8
+    },
+    "affiliations": ["Mannheim", "Amazon"]
+  }
+]

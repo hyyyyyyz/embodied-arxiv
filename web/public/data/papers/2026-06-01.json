@@ -1,0 +1,1091 @@
+{
+  "date": "2026-06-01",
+  "papers": [
+    {
+      "arxiv_id": "2606.02486",
+      "title": "Intercepting the Future: Latent-Space Predictive World Model for Dynamic VLA Manipulation",
+      "authors": [
+        "Shahram Najam Syed",
+        "Arthur Jakobsson",
+        "Haoran Hao",
+        "Jeffrey Ichnowski"
+      ],
+      "affiliations": [
+        "CMU"
+      ],
+      "summary": "VLA 抓静态物体没问题，但物体在动就垮——因为它默认观测和执行之间场景不变。作者给冻结的 OpenVLA 套了个 \"先预测再行动\" 的小世界模型 AHEAD：用光流算每个 patch token 的速度/加速度，在 VLA 的特征空间里预测未来 token，再把这些未来 token 喂给原本的动作解码器。给 7B OpenVLA 只加 4.9M 参数，仿真 20 个动态任务从 31-58% 飙到 79-97%，连真机投射物拦截 baseline 0/30 都做到 19/30。",
+      "original_abstract": "Vision-Language-Action (VLA) models generalize across static manipulation but fail when objects move during task execution. They map the current observation to an action and assume the scene is stationary between observation and execution, so at any non-trivial object speed the resulting latency exceeds the time available to grasp. We close this gap with AHEAD (Anticipatory Horizon Extrapolation with Adaptive Dynamics), a predict-then-act wrapper that augments a frozen VLA with a motion-aware latent world model. A small world model trained on manipulation video forecasts future patch tokens in the VLA's feature space, conditioned on per-token velocity and acceleration from optical flow. A language-and-motion saliency mask concentrates prediction on task-relevant patches, and the model rolls forward for an adaptive horizon, halting when prediction uncertainty crosses a threshold. The frozen action decoder then receives the predicted future tokens in place of the current ones. AHEAD adds 4.9M parameters to a frozen 7B OpenVLA and reaches 79 to 97% success across 20 dynamic simulation scenarios where the strongest baseline reaches 31 to 58%. On a physical UFactory xArm 7, AHEAD succeeds on 29/30 to 30/30 on three conveyor and rolling-ball tasks, 23/30 on paddle interception, and 19/30 on projectile catching where every baseline scores 0/30.",
+      "highlights": {
+        "contribution": "在不动 VLA backbone 的前提下，靠一个轻量 latent 世界模型给它补上动态场景的处理能力。",
+        "innovation": "在 VLA 自己的 patch token 空间里做预测，加上语言+运动显著性掩码、不确定性触发的自适应预测时长。",
+        "method": "AHEAD 在 manipulation 视频上训练一个 patch-token 预测器，条件包含光流速度/加速度；推理时滚动预测未来 token，置信度低就停；解码器直接吃预测 token。",
+        "results": "20 个动态仿真任务成功率 79-97%（baseline 31-58%）；真机传送带/滚球 29-30/30，投射物拦截 19/30（所有 baseline 都是 0/30）。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T16:55:38Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "openvla"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 10.0,
+        "popularity": 7.0,
+        "quality": 8.5,
+        "recommendation": 8.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02486v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02486v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.01955",
+      "title": "WALL-WM: Carving World Action Modeling at the Event Joints",
+      "authors": [
+        "Shalfun Li",
+        "Victor Yao",
+        "Charles Yang",
+        "Truth Qu",
+        "Regis Cheng",
+        "Ryan Yu",
+        "Howard Lu",
+        "Newton Von",
+        "Vincent Chen",
+        "Yohann Tang",
+        "Maeve Zhang",
+        "Ellie Ma",
+        "Gody Li",
+        "Sage Yang",
+        "Lorien Shu",
+        "J. W. Gao",
+        "Ethan Chen",
+        "Colin Ye",
+        "Yu Sun",
+        "Elise Mon",
+        "PS Zhang",
+        "Neo Li",
+        "Lily Li",
+        "James Wang",
+        "Ping Yang",
+        "Chris Pan",
+        "Lucy Liang",
+        "Hang Su",
+        "Roy Gan",
+        "Hao Wang",
+        "Qian Wang"
+      ],
+      "affiliations": [],
+      "summary": "WALL-WM 把 video-action 学习从 \"固定长 chunk\" 改造成 \"以语义事件为最小单位\"。作者指出语言是事件级、视觉是连续动态、动作是控制级，硬塞到同一窗口里只能学短时关联。他们用事件级 caption + cluster 平衡采样 + Muon 优化器做大规模 VLA 预训练，提供事件模式（变长 chunk）和统一模式（带 Staircase Decoding 的定长 chunk），在大规模真机泛化评测上拿到 SOTA。",
+      "original_abstract": "WALL-WM is a World Action Model that shifts video-action learning from chunk-centric optimization to event-grounded Vision-Language-Action pretraining, using semantically coherent action events as the atomic unit of learning. Existing WAMs commonly initialize from multimodal or video foundation models and then optimize fixed-length action chunks conditioned directly on the current observation and instruction. Although convenient, this chunk-centric formulation creates a fundamental granularity mismatch. Language describes semantic goals and events, vision evolves through continuous scene dynamics, and actions operate at control-level timescales; forcing all three into the same fixed-length prediction window turns VLA training into short-horizon correlation fitting. WALL-WM addresses this mismatch by organizing both supervision and data around semantic events. Specifically, it pairs event-grounded VLA pretraining with a data ecosystem built from event-level captions and cluster-balanced sampling, enabling scalable learning over diverse behaviors, scenes, and task structures. From the same event-pretrained backbone, WALL-WM supports two complementary inference modes. The event mode consumes next-event descriptions and enables variable-length execution chunks, while the unified mode uses a VLM with Staircase Decoding to condition conventional fixed-length chunk inference while preserving a gradient-continuous VLA path. Together with Muon-optimizer-based large-scale pretraining infrastructure, WALL-WM provides a practical scale-up recipe for general-purpose WAMs. Experiments show that WALL-WM generalizes broadly across language, scenes, and tasks, achieving state-of-the-art performance in large-scale real-world generalization evaluation.",
+      "highlights": {
+        "contribution": "提出事件锚定的 VLA 预训练范式 WALL-WM，统一变长/定长两种推理模式。",
+        "innovation": "把语言/视觉/动作之间的时间粒度不匹配作为核心痛点，用语义事件作为统一原子，并配 Staircase Decoding 兼容传统 chunk 推理。",
+        "method": "事件级 caption + cluster 平衡采样的数据生态 → Muon-optimizer 大规模 VLA 预训练 → 事件模式变长 chunk 推理 / 统一模式 VLM + Staircase Decoding。",
+        "results": "在大规模真机泛化评测上拿到 SOTA，跨语言/场景/任务都泛化得好（具体数字摘要中未列）。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T09:14:51Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 10.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.01955v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.01955v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02277",
+      "title": "RoboSemanticBench: Diagnosing Semantic Grounding in Action Prediction for VLA Models",
+      "authors": [
+        "Bin Yu",
+        "Yao Zhang",
+        "Haishan Liu",
+        "Shijie Lian",
+        "Yuliang Wei",
+        "Xiaopeng Lin",
+        "Zhaolong Shen",
+        "Changti Wu",
+        "Ruina Hu",
+        "Bailing Wang",
+        "Cong Huang",
+        "Kai Chen"
+      ],
+      "affiliations": [],
+      "summary": "VLA 看起来很会做语言任务，但是不是真用语义理解去选对象？作者搞了个 benchmark：给机器人一道数学/常识选择题，让它去抓正确答案对应的方块。结果绝大多数 VLA 在控住抓取成功率之后，选对块的概率接近随机——说明它们其实没真的把 backbone 的语义理解传到动作端。",
+      "original_abstract": "Vision-language-action (VLA) models are built on the premise that semantic understanding from pretrained language or vision-language backbones should guide robot action prediction. Yet robot fine-tuning is optimized as imitation over task-specific action distributions, and many evaluations can be solved through visual or instruction-action shortcuts. We introduce RoboSemanticBench (RSB), an embodied benchmark for diagnosing semantic grounding in action prediction: whether post-trained VLA models can use complex instruction semantics to select and manipulate the correct physical target. In each episode, a robot receives a multiple-choice math or general-knowledge question, observes candidate answer blocks, and must grasp the block corresponding to the correct answer. RSB covers controlled arithmetic, grade-school mathematical understanding, and commonsense or factual understanding under four-choice and ten-choice suites. Across representative VLA models, we find that many policies learn to grasp candidate blocks but select the semantically correct block at near-random or below-random rates after controlling for grasp success, revealing a persistent gap between backbone-level semantic competence and action prediction.",
+      "highlights": {
+        "contribution": "新 benchmark RoboSemanticBench，专门诊断 VLA 在动作预测中是否真的用了语义。",
+        "innovation": "用 \"答题抓块\" 这种把语义和动作强绑定的任务隔离掉视觉/动作 shortcut。",
+        "method": "Episode 内给机器人多选题 + 答案候选块；分四选一/十选一两套；分别评抓取成功率和选对块率。",
+        "results": "多个主流 VLA 抓取成功，但在抓取条件下选对率接近随机或低于随机，揭示 backbone 语义没传到动作层。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T14:02:37Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 10.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02277v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02277v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.01847",
+      "title": "The Lie We Tell: Correcting the Euclidean Fallacy in Vision Language Action Policies via Score Matching on Tangent Space",
+      "authors": [
+        "Bing-Cheng Chuang",
+        "I-Hsuan Chu",
+        "Bor-Jiun Lin",
+        "YuanFu Yang",
+        "Min Sun",
+        "Chun-Yi Lee"
+      ],
+      "affiliations": [],
+      "summary": "现在的扩散 VLA 都把 SE(3) 位姿当成 12 维欧氏向量去回归，作者直接点名这是个 \"欧氏谬误\"——会跑出非旋转矩阵、破坏等变性、轨迹也不走测地线。他们把整套扩散过程搬到 SE(3) 流形上：用左不变 SDE 加噪、在切空间预测 score、再用指数映射 retract 回去。CALVIN ABC→D 上平均完成长度从 3.27 涨到 3.51，真机上多数任务也比 baseline 强。",
+      "original_abstract": "Diffusion-based Vision-Language-Action policies achieve remarkable success in robotic manipulation, yet commit a fundamental geometric error we term the $\\textbf{Euclidean Fallacy}$: representing SE(3) poses as flat $\\mathbb{R}^{12}$ vectors. This approximation induces (1) manifold drift violating SO(3) constraints, (2) broken equivariance under coordinate transformations, and (3) non-geodesic trajectories with excessive kinematic cost. We introduce $\\textbf{Lie Diffuser Actor (LDA)}$, a diffusion framework operating intrinsically on SE(3). Our method injects noise through left-invariant SDEs, predicts scores in the tangent space, and retracts samples via the exponential map. This formulation eliminates manifold drift by construction while guaranteeing coordinate-frame equivariance and geodesic optimality. On CALVIN ABC$\\rightarrow$D, LDA improves average task length from $3.27$ to $3.51$ ($+7.3\\%$). We further validate our method on real robot and the results show that our methodology outperforms the baseline on majority tasks.",
+      "highlights": {
+        "contribution": "把扩散 VLA 的动作预测严格放到 SE(3) 流形上，从结构上消掉 SO(3) 漂移并保等变性。",
+        "innovation": "不是事后投影，而是 SDE 加噪 / score 预测 / 采样 retract 三步都在切空间里完成；强调测地线最优。",
+        "method": "Lie Diffuser Actor (LDA)：用左不变 SDE 注入噪声，在 SE(3) 切空间预测 score，再通过指数映射拉回流形；其余 backbone 接到扩散策略上。",
+        "results": "CALVIN ABC→D 平均任务长度 3.27 → 3.51 (+7.3%)，真机大多数任务也优于欧氏 baseline。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T07:59:29Z",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vision language action",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 10.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.01847v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.01847v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02194",
+      "title": "Coherent Off-Policy Improvement of Large Behavior Models with Learned Rewards",
+      "authors": [
+        "Christian Scherer",
+        "Joe Watson",
+        "Theo Gruner",
+        "Daniel Palenicek",
+        "Ingmar Posner",
+        "Jan Peters"
+      ],
+      "affiliations": [
+        "Oxford",
+        "TU Darmstadt"
+      ],
+      "summary": "大型 BC 策略想用 RL 继续 finetune 时，稀疏 reward 不好优。作者用 inverse RL 从 expert demo 学一个稠密 reward，再用 coherent imitation 这种有理论保证的方法 finetune 残差策略。在 6 个稀疏奖励 manipulation 任务上 pi-0.5 至少保持原性能，其中 5 个达到 ≥90% 成功率，且没有 RL 常见的初期掉点。",
+      "original_abstract": "Distilling expert demonstration data into large generative models using behavioral cloning is a scalable approach to learning capable policies for robotic control, particularly for dexterous manipulation. Reinforcement learning (RL) can be used as a means to finetune these policies further using additional experience. An open question is whether RL is more sample-efficient than collecting more human demonstrations. Prior work has finetuned large pretrained policies in a scalable fashion by applying RL to a smaller residual policy that corrects the pretrained model. However, for the typical sparse reward tasks, RL algorithms can struggle to optimize the behavior in a sample-efficient manner. We explore inverse reinforcement learning, where a dense reward function is learned from expert demonstrations, potentially reducing the challenge of RL finetuning. We specifically consider coherent imitation learning, an IRL method that facilitates improvement of the BC policy through using a specific reward formulation with theoretical guarantees. We show that our IRL method maintains or improves the performance of pi-0.5 on all six sparse manipulation tasks and achieves a $\\geq 90\\%$ success rate on five out of six complex manipulation tasks, outperforming RL-based baselines using sparse rewards. By ensuring our initial pretrained finetuning policy is optimal for our initial reward and critic, our method circumvents the initial drop commonly seen in RL finetuning and enables faster improvement.",
+      "highlights": {
+        "contribution": "用 IRL 学稠密 reward 来 finetune 大 BC 策略，规避稀疏奖励 RL 的低样本效率。",
+        "innovation": "Coherent imitation 的特殊 reward 形式 + 初始策略对初始 reward/critic 最优，避免常见的 finetune 起始掉点。",
+        "method": "从专家 demo 学稠密 reward；用 coherent IL 公式 finetune 一个小的残差策略叠加到 pi-0.5 上。",
+        "results": "6 个 manipulation 任务上保持或提升 pi-0.5；其中 5 个达成 ≥90% 成功率，超过稀疏奖励 RL baseline。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T12:49:14Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "pi-0"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 10.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02194v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02194v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02307",
+      "title": "FATE-VLA:Failue-aware test generation for vision-language-action models",
+      "authors": [
+        "Arusa Kanwal",
+        "Pablo Valle",
+        "Shaukat Ali",
+        "Aitor Arrieta"
+      ],
+      "affiliations": [],
+      "summary": "现在评 VLA 都靠静态 benchmark 随机采任务，但失败是稀疏且聚类的，这种采法低估了风险。作者把评测改成主动找失败：用多样性驱动的探索 + 从已有 rollout 学的代理模型，把测试推向高风险区域。对 4 个 SOTA VLA 多挖出 +29.7% 的失败，GR00T-N1.6 成功率从 64.4% 直接跌到 34.7%。",
+      "original_abstract": "Vision-Language-Action (VLA) models are increasingly used as generalist robot policies, yet their evaluation still relies largely on static benchmarks that randomly sample task scenes. In high-dimensional embodied spaces, failures are sparse and clustered, so static benchmarking can underestimate robustness risks. We reframe VLA evaluation as an active failure-discovery problem and propose a failure-aware test-generation approach that combines diversity-driven exploration with surrogate models learned from observed executions. The method steers testing toward high-risk yet diverse scene regions. Across four state-of-the-art VLA models, it uncovers substantially more failures (up to +29.7 % over selected baselines) while revealing more diverse failure modes. This mean that, for instance, in the case of GR00T-N1.6, success rate dropped from 64.4% to 34.7%. More broadly, our findings call for a shift in VLA evaluation: from passive measurement on fixed task suites to adaptive, failure-seeking test generation that exposes the structure of model weaknesses before deployment.",
+      "highlights": {
+        "contribution": "把 VLA 评测从静态采样改造成主动找失败的测试生成问题。",
+        "innovation": "结合多样性探索 + 在线代理模型驱动测试场景生成，专门往高风险但又不同质的区域走。",
+        "method": "基于已观察执行学一个 surrogate 风险模型，与多样性目标一起规划新场景；在 4 个 SOTA VLA 上跑。",
+        "results": "比 baseline 多发现 +29.7% 失败；GR00T-N1.6 在新生成的场景下成功率 64.4% → 34.7%。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T14:27:13Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02307v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02307v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.01865",
+      "title": "Set-Supervised Diffusion Policy: Learning Action-Chunking Diffusion through Corrections",
+      "authors": [
+        "Zhaoting Li",
+        "Gang Chen",
+        "Javier Alonso-Mora",
+        "Cosimo Della Santina",
+        "Jens Kober"
+      ],
+      "affiliations": [
+        "TU Delft"
+      ],
+      "summary": "扩散策略一旦遇到分布漂移就需要人介入纠正，但常规 BC 损失只学人的正动作，忽略了机器人那条 \"错的\" 动作的负信号。作者把人类纠错视为成对的 (错动作, 对动作) chunk，构造一个 \"期望动作 chunk 集合\"，让扩散策略对齐到这个集合。在多个机器人 manipulation 任务上稳定涨点，对噪声数据更鲁棒。",
+      "original_abstract": "Diffusion policies have recently emerged as a powerful framework for robotic manipulation. However, like other behavior cloning methods, they remain vulnerable to distributional shift, often requiring human-in-the-loop interventions to correct failures during deployment. These interactions naturally provide paired supervision in the form of the robot's undesired actions and the human teacher's corrective actions. Yet existing data aggregation pipelines and standard behavior cloning losses largely ignore this negative signal from undesired actions, leading to overfitting to teacher's actions and an increasing reliance on costly expert data. To address this limitation, we propose Set-Supervised Diffusion Policy (SDP), a novel learning framework that utilizes contrastive action-chunk data to train diffusion policies from human corrections. From paired positive and negative action-chunks, SDP constructs a set of desired action-chunks and designs a training pipeline that encourages the diffusion policy to align with the set. Through extensive experiments across multiple robotic manipulation tasks, we demonstrate that SDP consistently improves policy performance, with particularly strong gains in robustness to noisy data. Moreover, SDP induces high-quality aggregated datasets, enabling more efficient and reliable policy learning from human-in-the-loop corrections. Our code is available at https://set-supervised-diffusion-policy.github.io/.",
+      "highlights": {
+        "contribution": "把 human-in-the-loop 纠错里的负样本用起来，改造扩散策略的 BC 训练。",
+        "innovation": "Set-supervised：从正负 chunk 对构造期望动作集合，让扩散策略对齐到集合而不是单条 trajectory。",
+        "method": "SDP：从纠错 pair 收集正/负 action chunks → 构造期望集合 → 设计对齐损失训练 diffusion policy；适配 DAgger 风格聚合。",
+        "results": "多个 manipulation 任务上策略持续提升，对噪声数据尤其鲁棒，并生成更高质量的聚合数据集；代码开源。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T08:14:38Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 10.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.01865v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.01865v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02313",
+      "title": "Towards Precise Intent-Aligned VLA Aerial Navigation via Expert-Guided GRPO",
+      "authors": [
+        "Tianyang Chen",
+        "Wenjun Li",
+        "Xin zhou",
+        "Yuze Wu",
+        "Fei Gao"
+      ],
+      "affiliations": [
+        "Zhejiang University"
+      ],
+      "summary": "VLA 飞机导航的 SFT 数据稀少、对人类意图的对齐弱。作者用 GRPO 做 RL finetune，加少量专家数据引导探索，再搭一个并行 sim+infer pipeline 提速。EG-GRPO 在多个复杂意图任务上把成功率提到 SFT 的 2.13 倍，意图对齐分高 60.9%，rollout 时间砍掉 43.5%。",
+      "original_abstract": "Vision-Language-Action (VLA) models offer a promising end-to-end paradigm for unmanned aerial vehicles (UAVs) to accomplish complex tasks specified by fine-grained instructions. However, standard supervised fine-tuning (SFT) suffers from data scarcity, limited generalization, and weak supervision for nuanced and complicated human intents. Reinforcement fine-tuning offers a natural way to mitigate these challenges and align policy behaviors with human intents through designable feedback, but applying it to aerial navigation remains challenging due to inefficient exploration in expansive continuous spaces. To address these challenges, we introduce an efficient reinforcement learning (RL) framework for VLA-based aerial navigation. At its core, we propose EG-GRPO (Expert-Guided Group Relative Policy Optimization) to augment online rollouts with few-shot expert data. Additionally, we design a heterogeneous pipeline enabling parallel simulation and inference, which reduces rollout time by 43.5%. Across multiple tasks specified by complex human intents, EG-GRPO improves the success rate to 2.13x that of the SFT baseline, while improving intent alignment performance by 60.9%. These results demonstrate that our framework can move aerial navigation toward precise intent-aligned flight.",
+      "highlights": {
+        "contribution": "把 VLA 无人机导航的训练从 SFT 推进到 expert-guided 的 GRPO 强化微调。",
+        "innovation": "EG-GRPO 用 few-shot 专家数据增强在线 rollout，缓解大连续动作空间的探索效率问题；并行 sim+infer pipeline。",
+        "method": "EG-GRPO：online rollout 与 few-shot expert 数据混合做 GRPO；异构 pipeline 并行仿真和推理。",
+        "results": "成功率 = 2.13× SFT baseline；意图对齐 +60.9%；rollout 时间减少 43.5%。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T14:31:35Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02313v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02313v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.01851",
+      "title": "PHASOR: Phase-Anchored Universal Action Representations for Humanoid Embodiments",
+      "authors": [
+        "Kihyun Kim",
+        "Chaeyun Kim",
+        "Jongho Shin",
+        "Taeyoun Kwon",
+        "Junghyun Kim",
+        "Mijin Koo",
+        "Haon Park"
+      ],
+      "affiliations": [],
+      "summary": "动作 latent 通常是任务里的附属品，缺结构也跨不动机器人。作者把动作 embedding 空间本身当成一等公民来设计，利用运动的周期性把它分解为一个用 FFT 系数参数化的相位流形 + 一个非周期 pose 分支。再蒸馏运动语义，多种人形机器人锚定到同一个人类预训练流形上，得到可解释、可跨 embodiment 的统一动作空间。",
+      "original_abstract": "Learning a good action embedding space is fundamental to scalable robot policy learning, yet existing methods treat action latents as task-specific intermediates rather than first-class representations. The resulting latents are unstructured, embodiment-specific, and weakly tied to motion semantics, limiting interpretability, controllability, and transferability across robots. We position the action embedding space itself as a first-class design target, with downstream policy quality emerging from representation quality. Exploiting motion's intrinsic periodicity, we factorize it into a phase manifold that captures cyclic structure via FFT-parametric coefficients, together with a pose branch that conditions the manifold on non-periodic configuration detail. Combined with motion-semantic distillation, this factorized structure yields a cross-embodiment motion manifold that is interpretable and embodiment-agnostic by design. Anchoring multiple humanoid robots to a shared human-pretrained manifold then produces a unified action embedding space across diverse platforms, achieving strong cross-embodiment retrieval and consistent gains on downstream robot tasks.",
+      "highlights": {
+        "contribution": "把跨人形机器人共享、可解释的动作 embedding 空间作为可设计的目标。",
+        "innovation": "用 FFT 参数化的相位流形显式建模运动周期性，再用 pose 分支处理非周期部分；多 embodiment 锚定到人类 manifold。",
+        "method": "PHASOR：FFT 系数刻画周期、pose 分支补非周期细节，配合运动语义蒸馏；多个人形机器人共享同一 manifold。",
+        "results": "跨 embodiment 动作检索强、下游任务一致提升（具体数字摘要里没给）。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T08:02:24Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robot policy"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.01851v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.01851v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.01951",
+      "title": "Co-training with Ego-centric Video and Demonstration for Robot Navigation Task",
+      "authors": [
+        "Shoya Kuno",
+        "Yumo Ouchi",
+        "Kanata Suzuki"
+      ],
+      "affiliations": [],
+      "summary": "移动机器人 VLA 数据贵，作者尝试把人类第一视角行走视频转成导航策略的训练数据。从视频里估相机自运动，把它变成地面机器人能执行的动作，再和机器人自采数据一起 co-train。在水果搜索导航任务上比单独训任何一边都更稳。",
+      "original_abstract": "Vision-language-action (VLA) models are promising for diverse robotic tasks, but their performance heavily depends on large-scale high-quality training data, whose collection on real robots is costly and time-consuming. While prior work has explored augmenting manipulation datasets with egocentric human videos, applying such approaches to mobile robot navigation remains challenging due to viewpoint changes during locomotion. In this paper, we propose a framework that converts egocentric walking videos into datasets for mobile robot imitation learning. The proposed method estimates camera motion from human videos and transforms it into action representations compatible with ground mobile robots. By jointly training a VLA model on human-derived and robot-collected datasets, the model achieves improved language understanding and more robust action generation than training with either data source alone. Experiments on a fruit-search navigation task demonstrate that human egocentric videos provide an effective and scalable data source for mobile robot learning.",
+      "highlights": {
+        "contribution": "提出把人类 egocentric 行走视频转成移动机器人导航 VLA 的训练数据的 pipeline。",
+        "innovation": "针对导航视角变化大的痛点，做相机自运动估计 + 动作格式对齐，让人类视频和真机数据能联合训练。",
+        "method": "从人类视频估摄像机轨迹 → 转换为机器人可执行动作 → VLA 在 human + robot 混合数据上联合训练。",
+        "results": "在水果搜索导航任务上，混合训练比单源训练在语言理解和动作鲁棒性上都更强。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T09:12:22Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 10.0,
+        "popularity": 4.0,
+        "quality": 5.5,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.01951v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.01951v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02577",
+      "title": "RoboDream: Compositional World Models for Scalable Robot Data Synthesis",
+      "authors": [
+        "Junjie Ye",
+        "Rong Xue",
+        "Basile Van Hoorick",
+        "Runhao Li",
+        "Harshitha Rajaprakash",
+        "Pavel Tokmakov",
+        "Muhammad Zubair Irshad",
+        "Vitor Guizilini",
+        "Yue Wang"
+      ],
+      "affiliations": [
+        "TRI",
+        "USC"
+      ],
+      "summary": "想用视频扩散合成机器人数据，但要么只做表层视觉增强、要么 \"幻觉手脚\" 物理上跑不通。RoboDream 把机器人运动和环境合成解耦：以渲染出来的机器人运动作锚，再条件化在显式的场景/物体先验上，生成在新物体/新场景/新视角下的真实感 demo。支持 \"轨迹复用\" 和 \"空气遥操\" 两种数据放大模式，下游策略性能稳定提升、实采需求大降。",
+      "original_abstract": "Scaling robot learning requires large-scale, diverse demonstrations, yet real-world data collection via teleoperation remains prohibitively expensive and time-consuming. While video diffusion models offer a promising avenue for data scaling, existing generative approaches are often limited to superficial visual augmentation, or suffer from embodiment hallucinations that yield physically infeasible motions. We present a generalizable embodiment-centric world model that achieves scalable data generation by synthesizing photorealistic demonstrations with novel objects, in novel scenes, and from novel viewpoints. Our approach anchors generation to rendered robot motion while conditioning on explicit scene and object priors, effectively decoupling trajectory execution from environment synthesis. This formulation has the potential to unlock two powerful data scaling capabilities: (1) retrieval and rebirth, which repurposes existing trajectories into entirely new contexts without new motion data; and (2) prop-free teleoperation, where operators manipulate empty air and the model hallucinates the target objects and scene afterwards, eliminating reset time. We demonstrate with real-world experiments that our generated data consistently improves downstream policy performance and significantly reduces real-world data requirements across diverse manipulation tasks.",
+      "highlights": {
+        "contribution": "embodiment-centric 的可组合世界模型，用于规模化合成机器人 manipulation 数据。",
+        "innovation": "用渲染的机器人运动作生成锚 + 显式场景/物体条件，把轨迹执行和环境合成解耦；衍生出 retrieval-and-rebirth 和 prop-free 遥操两种新数据流。",
+        "method": "条件视频扩散世界模型：输入渲染机器人运动 + 场景/物体先验 → 合成真实感 demo；支持把旧轨迹搬进新场景，或在空场地遥操后 \"补出\" 物体。",
+        "results": "真机实验显示合成数据稳定提升下游策略性能，并显著减少真实数据需求（具体数字摘要里没列）。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T17:59:38Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 10.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02577v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02577v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.01600",
+      "title": "RoboTrustBench: Benchmarking the Trustworthiness of Video World Models for Robotic Manipulation",
+      "authors": [
+        "Huiqiong Li",
+        "Jiayu Wang",
+        "Zhiting Mei",
+        "Anirudha Majumdar",
+        "Jingjing Chen",
+        "Bin Zhu"
+      ],
+      "affiliations": [
+        "Princeton",
+        "Fudan"
+      ],
+      "summary": "视频世界模型现在多在 \"正常合法\" 指令上评，但机器人部署得面对违法/反事实/对抗指令。作者基于 DROID 实拍数据搭了个 RoboTrustBench，1207 对人工验证的指令-图像，覆盖 4 类场景 + 6 维 13 项细评。结果 7 个视频世界模型视觉看起来都不错，但在约束推理、反事实 grounding、物理交互和不安全指令抑制上都拉胯。",
+      "original_abstract": "Video world models are increasingly used in robotic manipulation, yet existing benchmarks mostly evaluate them under valid, feasible, and safe instructions. We introduce RoboTrustBench, a benchmark for evaluating the trustworthiness of video world models under four scenarios: Normal, Constraint-Sensitive, Counterfactual, and Adversarial. Built from real-world DROID episodes, RoboTrustBench contains 1,207 expert-validated instruction-image pairs and a six-dimensional evaluation protocol with 13 fine-grained criteria. Evaluating seven representative video world models with human and MLLM assessment, we find that current models often generate visually coherent videos, but struggle with constraint reasoning, counterfactual grounding, physical interaction, and unsafe-instruction suppression. These results show that visual quality and surface-level instruction following are insufficient for trustworthy robotic video world modeling.",
+      "highlights": {
+        "contribution": "首个面向 robot manipulation 视频世界模型可信度的 benchmark RoboTrustBench。",
+        "innovation": "明确把 normal / constraint-sensitive / counterfactual / adversarial 四类场景拉到同一框架；六维细评指标。",
+        "method": "基于 DROID 真实片段构 1207 对 expert-validated instruction-image；6 维 13 项标准；human + MLLM 评估 7 个代表性视频世界模型。",
+        "results": "视频画面好看，但约束推理、反事实、物理交互、不安全指令抑制普遍弱，揭示纯视觉质量评估不够。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T02:56:09Z",
+      "categories": [
+        "cs.CV",
+        "cs.CL",
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "video world model"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 10.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.01600v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.01600v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02436",
+      "title": "Geometry-Aware Implicit Memory for Video World Models",
+      "authors": [
+        "Zhengxuan Wei",
+        "Xu Guo",
+        "Xinghui Li",
+        "Xunzhi Xiang",
+        "Min Wei",
+        "Yiran Zhu",
+        "Qiulin Wang",
+        "Xintao Wang",
+        "Pengfei Wan",
+        "Xiangwang Hou",
+        "Qi Fan"
+      ],
+      "affiliations": [
+        "Kuaishou"
+      ],
+      "summary": "视频世界模型长 rollout 的瓶颈是 \"context 窗口外靠什么记忆\"。显式存帧/3D 重建有错误和冗余，隐式压缩又没显式包几何。作者提出 GIM-World：一个 transformer 把历史压成定长 memory tokens，训练时用 frozen 3D foundation model 蒸馏几何到 memory，再加信息引导剪枝控制内存增长，推理时丢掉几何 teacher。MIND 上长时几何和视觉一致性都比显式/隐式 baseline 强。",
+      "original_abstract": "Video world models aim to simulate controllable visual environments, but long-horizon rollouts depend on what the model remembers after observations leave its native context window. Explicit memories retain frames or online 3D reconstructions, which can suffer from heuristic retrieval errors, redundant appearance storage, or reconstruction artifacts. Implicit memories compress history into a compact state, but existing designs are not explicitly constrained to encode cross-view scene geometry. We propose GIM-World, a geometry-aware implicit memory framework for video world models. A lightweight transformer encoder compresses variable-length history into fixed-size memory tokens, a camera-queryable geometry head distills 3D scene structure from a frozen foundation model into the memory during training, and an information-guided pruning rule keeps encoding cost bounded as history grows. The geometry teacher is discarded at inference, leaving a lightweight memory module. Experiments on MIND show that GIM-World better preserves long-horizon geometric and visual consistency than both explicit- and implicit-memory baselines.",
+      "highlights": {
+        "contribution": "几何感知的隐式记忆框架，让视频世界模型 long-horizon rollout 更一致。",
+        "innovation": "训练时用 frozen 3D foundation model 通过 camera-queryable head 蒸馏几何到 memory tokens，推理时只留轻量 memory，无需 explicit 3D 重建。",
+        "method": "Transformer 编码变长历史 → 固定大小 memory tokens；蒸馏 frozen 几何 foundation model；信息引导剪枝保证 bounded 编码成本。",
+        "results": "MIND benchmark 上 long-horizon 的几何和视觉一致性均优于显式与隐式 memory baseline。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T16:08:43Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "video world model"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 10.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02436v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02436v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.01626",
+      "title": "IMWM: Intuition Models Complement World Models for Latent Planning",
+      "authors": [
+        "Baoqi Gao",
+        "Ruize Han",
+        "Miao Wang",
+        "Song Wang"
+      ],
+      "affiliations": [],
+      "summary": "大家以为 latent 世界模型 + planner 不行是因为 model 不准。作者做了个反直觉实验：直接用完美 forward dynamics，planner 在有限预算下还是会失败，说明瓶颈在 search 不在 model。于是配一个从 demo 学的 intuition model，三个轻量组件（retrieval 初始化、混合 cost、可靠性 gate）把它和 world model 拼起来。4 个 pixel 任务全面涨点，Two-Room +11.5pp，OGBench-Cube +28.5pp。",
+      "original_abstract": "Planning with a learned latent world model is a promising route to control from raw pixels, but a strong world model alone is not enough. We show this experimentally: even with a perfect world model (operationalized by replacing the learned forward predictor with an idealized rollout of the true environment dynamics), a finite-budget sample-based planner still fails on some tasks, indicating that the bottleneck can lie in search rather than in world-model accuracy. Motivated by this gap, we propose IMWM (Intuition Model + World Model), which pairs the world model with an intuition model trained from demonstrations to recognize promising actions. The two models collaborate through three lightweight components: (i) Retrieval Initialization, which initializes the planner's action proposal from a retrieved demonstration; (ii) Hybrid Cost, which combines the intuition score with the world-model rollout cost; and (iii) a Reliability Gate, which adjusts how much the planner trusts intuition in each setting. Across four pixel-based goal-reaching tasks (Two-Room, Reacher, Push-T, and OGBench-Cube), IMWM has higher mean success than the world-model-only planner on all four, with the largest gains on Two-Room (99.2%, +11.5 percentage points) and OGBench-Cube (94.7%, +28.5 percentage points).",
+      "highlights": {
+        "contribution": "指出 \"world model 够好但 planner 仍失败\" 的瓶颈，并用 intuition model 补足搜索效率。",
+        "innovation": "用 idealized rollout 实验把瓶颈定位到 search，再用 retrieval init / hybrid cost / reliability gate 三件套整合 demo 直觉。",
+        "method": "IMWM：world model + 从 demo 训的 intuition model；planner 初始动作从 demo retrieval 来，cost 混合 world rollout 与 intuition score，可靠性 gate 动态调权。",
+        "results": "Two-Room 99.2% (+11.5pp)，OGBench-Cube 94.7% (+28.5pp)；Reacher / Push-T 也涨。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T03:23:25Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 7.5,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.01626v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.01626v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02027",
+      "title": "World-Task Factorization for Robot Learning",
+      "authors": [
+        "Eduardo Sebastián",
+        "Adrian Pfisterer",
+        "Vito Mengers",
+        "Oliver Brock",
+        "Amanda Prorok"
+      ],
+      "affiliations": [
+        "Cambridge",
+        "TU Berlin"
+      ],
+      "summary": "机器人策略到底应该按什么轴去分解？作者论证最根本的一刀是 \"世界因素 vs 任务因素\"。世界因素是 embodiment+环境本身，跟意图无关；任务因素是逻辑层面的目标。他们用 Bayesian model evidence 论证这个不对称是有原则的，工程上把 AICON（可微 estimator 图）和一个紧凑学习策略配对，让梯度同时承载世界结构和任务结构。三类不同问题上都超 end-to-end baseline 并 zero-shot 真机迁移。",
+      "original_abstract": "Robot learning must produce policies that generalize to new combinations of constraints, teammates, and environments. To achieve this, we must structurally factor the policy, which is a choice that dictates what generalizes, what requires retraining, and what remains entangled. Existing methods span a wide spectrum, from expecting structure to emerge from data scaling, to hand-designing it via hierarchies, skill libraries or learned specializations. In this paper, we study what we argue is the most fundamental factorization in robotics: separating the world from the task. We investigate the conditions under which this factorization is principled. World factors are properties of the embodied system and the environment; they exist independently of intent. Task factors are defined by the task's logic over what the world admits. We formalize this asymmetry through Bayesian model evidence: it aligns with the data-generating process, maintains high likelihood through an analytical world model, and reduces the Occam razor's penalty on task parameters. We instantiate this factorization by pairing AICON, a differentiable graph of recursive estimators and interconnections that is compositional, operates without task-specific data, and propagates cost gradients to actuators, with a compact, learned policy that modulates gradient paths. Gradients serve as the interface between the two factors: they carry world structure through the graph and task structure through costs, enabling low-dimensional learning while preserving structural generalization. We test the world/task factorization across three problems that encompass heterogeneous robots, environments, task logic and sensorimotor modalities. Our framework outperforms end-to-end baselines and analytical heuristics in all settings, generalizes zero-shot to out-of-distribution configurations, and transfers to real hardware without retraining.",
+      "highlights": {
+        "contribution": "把机器人策略的结构化分解明确为 \"世界 vs 任务\" 二元因子，并给出 Bayesian 证据论证。",
+        "innovation": "用 AICON 这种可微递归 estimator 图承载世界结构，再用学到的紧凑策略调节梯度路径作为任务因子。",
+        "method": "World factor 用 AICON 解析+可微图；task factor 用小策略调控梯度路径；端到端梯度同时携带两者结构。",
+        "results": "在 3 类异构机器人/环境/模态任务上全部优于 end-to-end 和 analytical 启发；OOD 配置 zero-shot 泛化；真机无需重训。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T10:16:07Z",
+      "categories": [
+        "cs.RO",
+        "cs.LG",
+        "cs.MA"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02027v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02027v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02372",
+      "title": "COMAP: Co-Evolving World Models and Agent Policies for LLM Agents",
+      "authors": [
+        "Youwei Liu",
+        "Jian Wang",
+        "Hanlin Wang",
+        "Wenjie Li"
+      ],
+      "affiliations": [
+        "PolyU"
+      ],
+      "summary": "LLM agent 的文本世界模型训完就不变，但 agent 自己在变，预测的分布就漂了。COMAP 把世界模型和 agent 策略闭环共演化：每步世界模型预测候选动作的未来反馈，agent 做未来感知的反思决定信不信，然后用 on-policy trajectory 自蒸馏更新世界模型。具身规划/Web 导航/工具调用全面赢 baseline，Qwen3-4B 上 +16.75%。",
+      "original_abstract": "Equipping language agents with world models enables them to anticipate environment dynamics and evaluate candidate actions before execution. However, existing textual world models are typically fixed after training, preventing them from adapting to the on-policy state-action distributions induced by an evolving agent. Meanwhile, agent-improvement methods often rely on external rewards or verifiers, limiting their applicability in realistic interactive environments. In this paper, we propose COMAP, a novel framework that co-evolves textual world models and agent policies through closed-loop interaction. At each decision step, the world model predicts future state feedback for candidate actions, and the agent performs future-aware reflection by estimating the reliability of this feedback and refining its action accordingly. The resulting on-policy trajectories are then used to update the world model via self-distillation, allowing it to better match the agent's evolving interaction distribution. Across embodied task planning, Web navigation, and tool-use benchmarks, COMAP consistently outperforms competitive baselines, e.g., +16.75% relative improvement with Qwen3-4B. Further analyses show that the co-evolutionary loop improves the world model's prediction accuracy over time and leads to more effective long-horizon decision-making. Our code is available at: https://github.com/loyiv/CoMAP.",
+      "highlights": {
+        "contribution": "提出文本世界模型和 LLM agent 策略闭环共演化的框架。",
+        "innovation": "用 agent 的 on-policy trajectory 自蒸馏更新世界模型；预测可靠性进入 agent 反思流程。",
+        "method": "COMAP：每步世界模型对候选动作预测未来反馈 → agent future-aware reflection → on-policy 轨迹自蒸馏更新 world model；闭环迭代。",
+        "results": "Qwen3-4B 上相对 +16.75%；具身规划/Web 导航/工具使用 benchmark 全面超 baseline；预测准确度随时间提升；代码开源。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T15:21:17Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 10.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02372v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02372v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.01950",
+      "title": "Learning Action-Conditional and Object-Centric Gaussian Splatting World Models for Rigid Objects",
+      "authors": [
+        "Jens U. Kreber",
+        "Lukas Mack",
+        "Joerg Stueckler"
+      ],
+      "affiliations": [],
+      "summary": "作者把世界模型搬到 object-centric 的 3D Gaussian 表征上，专门做刚体多物体动力学。每个物体用 canonical 帧的 Gaussians 表示，动作-条件的时空 transformer 从历史 Gaussians + 未来动作预测刚体变换。从多视角重建训出来，能处理遮挡造成的部分观测，仿真里也接到 MPC 做非抓取操作。",
+      "original_abstract": "World models enable intelligent agents to predict the consequences of their actions on the environment. In this paper, we propose Multi Rigid Object Gaussian World Model (MRO-GWM), a novel model that learns action-conditional dynamics of rigid objects in 3D. By representing the scene by object-centric Gaussians, we can represent arbitrary object shapes and multi-object scenes. We develop a novel spatio-temporal transformer architecture that predicts future rigid body motion from a history of object Gaussians and future actions. Objects are represented by their Gaussians in a canonical frame, which allows for describing object motion as rigid body transformation. Our model is trained on reconstructions from multiple viewpoints, which requires the model to handle partial observations of objects due to occlusions. We analyze prediction performance of our approach on synthetic datasets composed of typical household objects with multi-object dynamics and interactions by a robot end effector. We also evaluate our model in model-predictive control for non-prehensile manipulation in simulation.",
+      "highlights": {
+        "contribution": "动作条件、object-centric 的 Gaussian Splatting 世界模型用于多刚体动力学。",
+        "innovation": "Canonical-frame Gaussians + 时空 transformer 让动力学预测自然落到刚体变换上，并能处理多物体遮挡。",
+        "method": "MRO-GWM：物体级 3D Gaussians + 动作 + 历史 → 时空 transformer 预测未来 Gaussians；多视角重建训练，仿真中接 MPC 做非抓取 manipulation。",
+        "results": "在合成家用物体数据集上多物体动力学预测有效，MPC 控制非抓取任务 demo 出来。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T09:12:07Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 6.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.01950v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.01950v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02575",
+      "title": "From Zero to Hero: Training-Free Custom Concept Spawning in World Models",
+      "authors": [
+        "Kiymet Akdemir",
+        "Pinar Yanardag"
+      ],
+      "affiliations": [
+        "Virginia Tech"
+      ],
+      "summary": "自回归世界模型一旦走出参考帧外，看到啥全靠 base 模型先验，用户没法指定 \"这里要出现什么\"。SPAWN 利用 image-to-video backbone 的一个结构性质——context memory 第一个 slot 钉住参考帧——在一个短窗口内把这个 anchor 偷偷换成外部 concept latent，再让原 anchor 回归，concept 就被自然传播开。零训练，文本或图像 concept 都行。",
+      "original_abstract": "Autoregressive world models have emerged as a powerful paradigm for interactive video generation, allowing users to navigate dynamically generated environments through actions. These models are typically conditioned on a text prompt and/or a single reference frame, from which the entire world is generated. Yet the moment the user navigates beyond what is visible in that frame, the unseen regions are populated by the base model's priors, with no mechanism for the user to specify what should appear and where. This is a fundamental limitation for applications such as gaming, interactive storytelling, and simulation, where controllable scene composition is essential. We refer to this missing capability as concept spawning; introducing a user-specified visual concept into a world model, analogous to spawning in a game engine. We introduce SPAWN (Swapping Pinned Anchor with Windowed iNjection), a training-free method for concept spawning. SPAWN exploits a structural property of image-to-video backbones: the first slot of the context memory is pinned to the reference frame and acts as a foundational anchor for every generated chunk. By swapping this anchor with an external concept latent over a short injection window and letting the original anchor return, we cause the concept to propagate naturally through the rollout via the model's own memory. SPAWN supports concepts from fine-grained entities such as characters and props to large-scale elements such as buildings and landmarks, and accepts either a concept image or a text description as input. Experiments show that SPAWN integrates concepts with consistent lighting, scale, and perspective while preserving identity and temporal coherence, demonstrating that controllable concept spawning is achievable in existing autoregressive world models without any training.",
+      "highlights": {
+        "contribution": "训练自由的 \"concept spawning\"：在自回归世界模型里指定地点出现指定视觉概念。",
+        "innovation": "发现 pinned anchor slot 这一结构性 backbone 性质，并通过 windowed swap 实现 concept 传播。",
+        "method": "SPAWN：在 context memory 第一 slot 上做时间窗内的 latent swap → 让模型自身 memory 把概念传播 → 之后恢复原 anchor；接受 concept 图或文字描述。",
+        "results": "光照、尺度、视角、ID 一致性都保持，概念从角色/道具到建筑/地标都能注入，证明无需训练即可控制概念。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T17:59:05Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 10.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02575v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02575v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.01935",
+      "title": "Unified Driving Tokens: Representation- and Geometry-Guided Discrete Tokenizer for Driving World Models and Planning",
+      "authors": [
+        "Ziyang Yao",
+        "Zeyu Zhu",
+        "YunCheng Jiang",
+        "Zibin Guo",
+        "Huijing Zhao"
+      ],
+      "affiliations": [
+        "PKU"
+      ],
+      "summary": "自动驾驶用的离散视觉 token 多继承自图像生成，只优化像素重建，跟 planning 需要的不一样。作者训了个 representation-guided + geometry-enhanced tokenizer：bottleneck 对齐 frozen DINO 特征，同时保 RGB 重建，再加相邻帧深度和相对位姿监督，多 codebook 量化稳训练。在 NAVSIM 上同一套 token 接到 planning readout 和 GPT 式 next-token 世界模型上都很能打。",
+      "original_abstract": "Discrete visual tokens should provide a compact representation for both token-based world modeling and planning in autonomous driving. However, most tokenizers are inherited from image generation and are optimized mainly for pixel reconstruction, which may leave a gap between what is easy to generate and what is useful to decode for driving decisions. We present a representation-guided and geometry-enhanced tokenizer that learns discrete tokens under joint supervision. The tokenizer aligns its discrete bottleneck with a frozen DINO feature space through feature decoding, while preserving appearance via RGB reconstruction with perceptual and adversarial losses. To inject geometric state-related cues, we add adjacent-frame depth and relative-pose supervision during training and stabilize joint objectives with multi-codebook quantization. We evaluate the same learned tokens with a lightweight planning readout and a GPT-style next-token world model. Experiments on NAVSIM show improved reconstruction fidelity and representation consistency, competitive planning performance under a fixed decoder, and better generative quality under matched settings.",
+      "highlights": {
+        "contribution": "为驾驶世界模型 + planning 联合优化的离散视觉 tokenizer。",
+        "innovation": "重建+表示+几何三路监督联合训练 tokenizer，多 codebook 量化；同一套 token 同时支撑 planning 和 next-token 世界模型。",
+        "method": "Bottleneck 对齐 frozen DINO，保 RGB 重建（含感知/对抗损失）；加邻帧深度 + 相对位姿监督；multi-codebook 量化。",
+        "results": "NAVSIM 上重建保真度和表示一致性提升，固定 decoder 下 planning 性能有竞争力，匹配设定下生成质量更好。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T09:02:32Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 6.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.01935v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.01935v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02280",
+      "title": "Dynamics Are Learned, Not Told: Semi-Supervised Discovery of Latent Dynamics Geometries For Zero-Shot Policy Adaptation",
+      "authors": [
+        "Zhiming Xu",
+        "Weitao Zhou",
+        "Xianghui Pan",
+        "Nanshan Deng",
+        "Chengju Liu",
+        "Qijun Chen",
+        "Chenpeng Yao"
+      ],
+      "affiliations": [
+        "Tongji"
+      ],
+      "summary": "现有 dynamics 自适应 RL 都把物理参数显式塞进 latent context，碰到没建模或复合变化就脆。作者换个思路：与其告诉策略 \"动力学是什么\"，不如让它学 \"动力学如何影响交互结果\"。理论上证明目标域 regret 和轨迹动力学编码器的 Lipschitz 常数单调相关，用对比学习把这个常数压下来。MuJoCo 上对剧烈/复合 dynamics shift 都稳超参数化 baseline。",
+      "original_abstract": "Real-world dynamics shifts pose a critical challenge for reinforcement learning in robotics, as policies tightly coupled to nominal environments often fail catastrophically when physical conditions change. Most existing methods rely on encoding explicitly identified physical parameters into a latent context, a parameter-centric paradigm that depends on pre-specified axes of variation and becomes brittle under unmodeled or compound dynamics changes. We revisit dynamics adaptation from an outcome-centric perspective: rather than telling policies what the dynamics are, we enable them to learn how dynamics affect interaction outcomes. Theoretically, this is grounded in a monotonic relationship between target-domain regret and the Lipschitz constant of a trajectory dynamics encoder. Practically, this constant can be upper-bounded through contrastive learning, yielding a smooth, task-relevant latent topology without privileged dynamics information. On MuJoCo benchmarks, our method consistently outperforms parameter-centric baselines under severe dynamics shifts, including unmodeled and time-varying parameters, while also improving in-distribution stability and latent interpretability. Overall, these results validate that controlling latent geometry is a principled mechanism for robust adaptation.",
+      "highlights": {
+        "contribution": "outcome-centric 的 zero-shot 动力学自适应：用轨迹动力学 encoder 的 Lipschitz 控制 regret。",
+        "innovation": "理论给出 regret 和 encoder Lipschitz 的单调关系，并用对比学习作为 Lipschitz 的可行上界，免去显式物理参数。",
+        "method": "训练 trajectory dynamics encoder（不依赖 privileged 物理参数）；对比学习 upper-bound 其 Lipschitz；策略以该 latent 为 context。",
+        "results": "MuJoCo benchmark 在严重 dynamics shift（包括未建模、时变参数）下显著超参数中心 baseline，同时分布内更稳、latent 更可解释。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T14:05:23Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 6.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02280v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02280v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02001",
+      "title": "Scaling Agentic Capabilities via Grounded Interaction Synthesis",
+      "authors": [
+        "Wenhang Shi",
+        "Jinhao Dong",
+        "Yiren Chen",
+        "Zhe Zhao",
+        "Shuqing Bian",
+        "Wei Lu",
+        "Xiaoyong Du"
+      ],
+      "affiliations": [
+        "RUC"
+      ],
+      "summary": "用 LLM 自合成 agent 训练数据时，数据分布和真实工具世界差很远。GAIS 提出两段 grounding：环境锚定到真实 MCP server 保证功能多样性，任务用 structure-guided planning 强制逻辑依赖和对抗策略生成长链任务。在 BFCL / τ²-Bench / ACEBench 上让 base 模型甚至赶上官方 instruction-tuned 版本。",
+      "original_abstract": "General agentic intelligence hinges on the ability to interact with diverse real-world tools to complete complex tasks, a capability fundamentally tied to the quality of interaction data. To bypass the prohibitive costs of human annotation, prevailing paradigms depend entirely on Large Language Models (LLMs) to scale the synthesis of agentic environments and tasks. However, such unconstrained generation often degenerates into biased random sampling of LLMs' internal priors, failing to capture the diversity and difficulty of real-world domains or construct high-fidelity, long-horizon tasks. In this work, we introduce Grounded Agentic Interaction Synthesis (GAIS), a framework that automates the scalable construction of diverse environments and complex tasks via a two-phase grounding mechanism. Specifically, we construct protocol-anchored environments derived from real-world Model Context Protocol (MCP) servers to ensure functional diversity and difficulty. Subsequently, we employ structure-guided planning to navigate these environments, actively enforcing logical dependencies and adversarial policies to generate complex tasks. Experiments on BFCL, $τ^2$-Bench, and ACEBench demonstrate that GAIS-synthesized data significantly outperforms state-of-the-art baselines, enabling base models to match or even surpass their official instruction-tuned counterparts. Furthermore, GAIS exhibits superior data efficiency and scalability, achieving exceptional capabilities with significantly less data while maintaining continuous growth where baselines stagnate. Our code and dataset are publicly available at https://github.com/Eric8932/GAIS.",
+      "highlights": {
+        "contribution": "Grounded Agentic Interaction Synthesis：自动构造高保真、多样、长链的 agent 训练数据。",
+        "innovation": "Protocol-anchored 环境（真实 MCP server）+ structure-guided planning 双重 grounding 解决 LLM 自合成的先验偏置。",
+        "method": "GAIS 两阶段：基于真实 MCP server 构环境 → structure-guided planner 在环境里生成强制依赖且包含对抗策略的任务；用合成数据训 base 模型。",
+        "results": "BFCL / τ²-Bench / ACEBench 全面优于 SOTA baseline，base 模型逼近甚至超过其 instruction-tuned 版本；数据效率高；代码/数据开源。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T09:57:52Z",
+      "categories": [
+        "cs.CL"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 3.0,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 5.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02001v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02001v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.01991",
+      "title": "SafeMCP: Proactive Power Regulation for LLM Agent Defense via Environment-Grounded Look-Ahead Reasoning",
+      "authors": [
+        "Lichao Wang",
+        "Zhaoxing Ren",
+        "Tianzhuo Yang",
+        "Jiaming Ji",
+        "Chi Harold Liu",
+        "Yaodong Yang",
+        "Juntao Dai"
+      ],
+      "affiliations": [
+        "PKU",
+        "BIT"
+      ],
+      "summary": "LLM agent 接 MCP 工具时动作空间一大就容易 power-seeking，小失误也能爆炸式放大。SafeMCP 在 server 端用一个内部世界模型做前瞻推理：先 proactive 过滤掉危险的工具获取，再用 immediate intervention 兜底，并通过环境动态 grounding + 安全策略初始化 + 双 verifiable reward RL 三阶段训练。在 PowerSeeking Bench/ToolEmu/AgentHarm 上风险降了同时保住 utility。",
+      "original_abstract": "As Large Language Model (LLM) agents increasingly leverage the Model Context Protocol (MCP) to operate in complex environments, the expansion of their action spaces offers agents unsafe capabilities and underscores the risk of power-seeking. While broad action space and greater environment influence are essential for task fulfillment, they create a fragile risk surface where minor errors or hallucinations are magnified into catastrophic failures. In response, we propose SafeMCP, a {server-side} defense plugin that constrains tool acquisition via predictive reasoning regarding future safety risks. SafeMCP utilizes an internal world model for look-ahead reasoning to implement a two-tier defense: proactive tool filtering to constrain hazardous power expansion and immediate intervention as a fail-safe. To train SafeMCP, we introduce a three-stage pipeline comprising environmental dynamic grounding, safe policy initialization, and reinforcement learning (RL) with dual verifiable rewards. Experiments on PowerSeeking Bench, ToolEmu, and AgentHarm show that SafeMCP achieves a safe equilibrium, effectively mitigating risks while preserving agent utility.",
+      "highlights": {
+        "contribution": "服务端的 LLM agent 安全防御 SafeMCP，用 look-ahead reasoning 主动控制工具获取。",
+        "innovation": "内部世界模型驱动的两级防御（事前过滤 + 事中兜底），三阶段训练流程含双 verifiable reward。",
+        "method": "三阶段：环境动态 grounding → 安全策略初始化 → 双 verifiable reward RL；推理时世界模型预测未来风险，对工具集做主动过滤。",
+        "results": "在 PowerSeeking Bench/ToolEmu/AgentHarm 上降风险的同时保住 agent 实用性，达到 \"safe equilibrium\"。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T09:48:41Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.CY"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 3.5,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 6.0,
+        "recommendation": 5.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.01991v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.01991v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02363",
+      "title": "Minimax-Optimal Policy Regret in Partially Observable Markov Games",
+      "authors": [
+        "Raman Arora"
+      ],
+      "affiliations": [
+        "JHU"
+      ],
+      "summary": "纯理论：在部分可观测马尔可夫博弈 (POMG) 里学策略对抗自适应对手，标准 regret 不够。作者证明一个 epoch-based 乐观 MLE 算法在固定问题参数下能拿到 √T 的 policy regret，给出对 horizon、对手记忆、置信半径、aggregate Eluder dimension 的显式依赖；还给出匹配的下界，并把结果扩展到 horizon-adaptive 和几何衰减记忆对手。",
+      "original_abstract": "We study sequential decision-making in partially observable environments against strategic, adaptive opponents, modeled as partially observable Markov games (POMGs). The central challenge is to learn latent dynamics from partial observations while facing an adversary whose behavior depends on the learner's strategy, making standard regret notions inadequate. We prove that an epoch-based optimistic maximum-likelihood algorithm achieves $\\tilde{O}(\\sqrt{T})$ policy regret for fixed problem parameters, with explicit dependence on the horizon, adversary memory, confidence radius, and the aggregate Eluder dimension of the observable-operator class. The algorithm selects one policy per geometrically growing epoch using confidence sets built cumulatively from past data, which keeps the cost of comparing adversary responses across policies logarithmic in $T$. We also prove a lower bound matching the $\\sqrt{T}$ and aggregate-Eluder-dimension dependence, up to problem-dependent and logarithmic factors. Finally, we extend the framework to horizon-adaptive guarantees and adversaries with geometric fading memory.",
+      "highlights": {
+        "contribution": "POMG 下 policy regret 的极小极大最优率 √T 上下界。",
+        "innovation": "Epoch + 累积置信集 + observable-operator 类的 aggregate Eluder dimension，让对手响应比较的代价对 T 仅 log。",
+        "method": "Epoch 基础的乐观 MLE 算法：几何增长 epoch 内累积置信集，每 epoch 选一个策略；分析对应的 regret 与下界。",
+        "results": "$\\tilde{O}(\\sqrt{T})$ policy regret 上界 + 匹配 $\\sqrt{T}$ 与 aggregate-Eluder 依赖的下界；扩展到 horizon-adaptive 和 fading memory 对手。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T15:11:51Z",
+      "categories": [
+        "cs.LG",
+        "stat.ML"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 2.0,
+        "recency": 10.0,
+        "popularity": 4.0,
+        "quality": 7.0,
+        "recommendation": 4.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02363v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02363v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.01894",
+      "title": "Physically-Constrained Mamba-SDE for Remaining Useful Life Prediction under Irregular Observations",
+      "authors": [
+        "Deyu Zhuang",
+        "Peiliang Gong",
+        "Yang Shao",
+        "Liyuan Shu",
+        "Qi Zhu",
+        "Xiaoli Li",
+        "Daoqiang Zhang"
+      ],
+      "affiliations": [],
+      "summary": "工业 RUL 预测要在不规则采样的传感器流上做，纯数据驱动模型还经常预测出违反 \"损伤不可逆\" 的轨迹。作者搭了个 PC-MambaSDE：mask-aware 连续 Mamba 编码不规则观测，physics-guided latent SDE 加单调漂移强制单调退化，再用 terminal degradation penalty 把 RUL 当边界值问题来求。理论上证 KL 等价和 Lyapunov 稳定，实验在多个 benchmark SOTA。",
+      "original_abstract": "Accurate Remaining Useful Life prediction is critical for industrial predictive maintenance. However, real-world deployment is challenging due to the irregular nature of sensor observations, characterized by asynchronous sampling, burst missingness, and temporal jitter. Compounding this issue, purely data-driven models often generate physically implausible degradation trajectories that violate the irreversible nature of damage accumulation. To address this, we propose PC-MambaSDE, a unified continuous-time framework for robust RUL prediction under irregular observations. Specifically, we design a Mask-Aware Continuous Mamba Encoder that explicitly leverages observation masks to extract context-rich control signals. Furthermore, we introduce a Physics-Guided Latent SDE with parametrically rectified hybrid drift, superimposing a global physical bias to enforce monotonic degradation even amid severe observation gaps. Additionally, we formulate RUL prediction as a boundary value problem via a Terminal Degradation Penalty, which decouples a Health Index dimension and applies a penalty loss to guide trajectories toward the failure state. Theoretically, we prove that our variational objective is mathematically equivalent to minimizing the KL divergence via Girsanov's theorem, and we guarantee the global asymptotic stability of the learned dynamics through Lyapunov analysis. To enable rigorous evaluation, we develop a Hybrid Irregularity Generation Scheme that simulates realistic industrial imperfections. Extensive experiments on public benchmarks demonstrate that PC-MambaSDE significantly outperforms state-of-the-art methods, particularly under extreme observation scarcity, validating the efficacy of embedding physical priors into continuous-time latent dynamics.",
+      "highlights": {
+        "contribution": "面向不规则采样工业传感器的物理约束连续时间 RUL 预测框架。",
+        "innovation": "Mask-aware Mamba 编码 + 物理偏置的 latent SDE + terminal degradation penalty 三件套，并给出 KL 等价和 Lyapunov 稳定性分析。",
+        "method": "PC-MambaSDE：mask-aware 连续 Mamba 编码不规则观测 → physics-guided latent SDE 强制单调退化 → terminal penalty 引导轨迹到失效态；同时设计混合不规则模拟方案做评测。",
+        "results": "公开 RUL benchmark 上显著优于 SOTA，尤其在严重观测缺失下表现稳定。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T08:37:38Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 2.0,
+        "recency": 10.0,
+        "popularity": 4.0,
+        "quality": 6.5,
+        "recommendation": 4.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.01894v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.01894v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02384",
+      "title": "TabPrep: Closing the Feature Engineering Gap in Tabular Benchmarks",
+      "authors": [
+        "Andrej Tschalzev",
+        "Nick Erickson",
+        "Yuyang Wang",
+        "Huzefa Rangwala",
+        "Stefan Lüdtke",
+        "Heiner Stuckenschmidt",
+        "Christian Bartelt"
+      ],
+      "affiliations": [
+        "Mannheim",
+        "Amazon"
+      ],
+      "summary": "表格 ML 的进展几乎都堆在模型上，feature engineering 基本被现代 benchmark 忽略掉了。TabPrep 设计了一个轻量 preprocessing pipeline，针对三类结构化数据模式做特征生成。结果发现很多主流模型都有可预测的盲点，光靠系统化 FE 就能刷新 peak。在 TabArena 上对树、神经、线性、foundation 模型都有提升，常常超过模型创新。",
+      "original_abstract": "Progress in tabular machine learning has largely focused on increasingly sophisticated model architectures. At the same time, feature engineering remains a critical yet underexplored component of real-world modeling pipelines that is entirely absent from modern benchmarks, which creates an unquantified evaluation gap. In this work, we introduce TabPrep, a lightweight preprocessing pipeline composed of feature generators that are carefully designed to target three specific structural data patterns. We show that many widely used model classes exhibit predictable blind spots to these patterns and that systematic feature engineering alone can establish new peak performance. Across the TabArena benchmark, integrating TabPrep into model training and tuning consistently improves performance for tree-based, neural, linear, and foundation models, often surpassing gains achieved by model-centric innovations alone. TabPrep outperforms previous automated feature engineering approaches in performance, efficiency, and applicability across datasets, enabling integration into large-scale benchmarks. By releasing TabPrep (see https://github.com/atschalz/tabprep), we enable researchers to integrate feature engineering into their benchmarking setup, filling a longstanding gap in tabular evaluations.",
+      "highlights": {
+        "contribution": "填补现代表格 benchmark 里 feature engineering 缺失的评估 gap，发布轻量 pipeline TabPrep。",
+        "innovation": "针对三类具体结构模式精心设计 feature generator；揭示主流模型的可预测盲点。",
+        "method": "TabPrep = 一组手工设计的特征生成器，针对三类结构化数据模式；插到训练+调优流程里。",
+        "results": "在 TabArena 上 tree / NN / linear / foundation 模型均涨点，常超过模型层面的创新；优于已有自动 FE 方法。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T15:33:43Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 1.5,
+        "recency": 10.0,
+        "popularity": 4.0,
+        "quality": 7.0,
+        "recommendation": 3.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02384v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02384v1",
+      "venue": null
+    }
+  ],
+  "total": 25
+}
