@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2605.20774",
+    "summary": "做VLA真机评测一直是大问题——仿真不真实，真机又贵又难复现。作者用便宜的现成零件搭了一套VLA-REPLICA，任何实验室都能照着拼一个，跑同一套任务、同一套协议。实验证明几个独立搭建的版本结果一致，能稳定区分各家VLA模型的强弱。",
+    "highlights": {
+      "contribution": "提出一个低成本、可复现的真实世界VLA评测平台，让不同实验室能在同一基准上公平比较VLA策略。",
+      "innovation": "区别于昂贵或集中托管的真机benchmark，整套系统用现成零件搭建，并附带小规模演示数据用于目标域适配，自带ID/OOD评测协议。",
+      "method": "用off-the-shelf硬件搭建标准化操作平台，配套发布演示数据、任务套件和评测协议；用模仿学习和当前SOTA VLA跑对照实验。",
+      "results": "在多个独立搭建的副本上结果一致，复现性得到验证；同时揭示了主流VLA模型在ID/OOD设置下的能力差距。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 7,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.21414",
+    "summary": "现有VLA基本只看2D图像，缺乏精细几何理解。作者把分层3D点云接进action decoder做多尺度交互——action token既能看到局部几何细节又能看到全局结构。在LIBERO和RLBench上都有稳定提升，RLBench-10任务上比SOTA高了10个点，骨干冻结时优势更大。",
+    "highlights": {
+      "contribution": "提出PointACT，把多尺度3D点云表征显式集成进VLA的action decoding，实现3D-aware的机器人策略。",
+      "innovation": "用瓶颈窗口自注意力做多尺度point-action交互，让action token同时attend到几何细节和全局场景，区别于仅用2D特征或浅层点云融合的VLA。",
+      "method": "Dual-system VLA架构：保留预训练2D视觉语言骨干，新增分层3D点云分支，action token通过bottleneck window self-attention从多尺度点特征中聚合信息。",
+      "results": "LIBERO和RLBench全面提升，RLBench-10Tasks比SOTA高10%；骨干冻结只训action expert时提升更显著，ablation确认2D+3D耦合是关键。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 7,
+      "popularity": 7.5,
+      "quality": 8,
+      "recommendation": 8.1
+    },
+    "affiliations": ["Inria", "WILLOW"]
+  },
+  {
+    "arxiv_id": "2605.20752",
+    "summary": "标准VLA缺3D几何和未来预测信号。GaussianDream把一个前馈的3D Gaussian world model当插件塞进编码器：训练时用静态重建头+未来预测头去拟合当前3D高斯场景和未来演化，推理时只保留latent prefix去condition动作生成。LIBERO 98.4%、RoboCasa Human-50 54.8%、真机50%，比基于视频的world model更快。",
+    "highlights": {
+      "contribution": "把3D高斯world model做成可插拔的VLA增强模块，同时提供几何监督和短时未来预测，不增加推理开销。",
+      "innovation": "训练时双头(reconstruction + future prediction)，推理时全丢，只保留学到的GaussianDream queries做action conditioning；比视频world model快很多。",
+      "method": "在encoder里加可学习GaussianDream queries，训练时分别用RGB/深度/伪3D scene flow监督当前帧和未来帧的3D高斯；推理时只保留prefix。",
+      "results": "LIBERO 98.4%、RoboCasa Human-50 54.8%、真机50%，对3D-enhanced VLA达到SOTA，推理速度优于视频world model类方法。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 7,
+      "popularity": 8,
+      "quality": 8.5,
+      "recommendation": 8.6
+    },
+    "affiliations": ["BUAA", "CMU", "HKU"]
+  },
+  {
+    "arxiv_id": "2605.21258",
+    "summary": "现有3D预训练要么纯隐式神经场（缺结构），要么纯显式几何元（分辨率受限）。作者在点云autoencoder的latent里塞了个point-wise VAE，把特征+坐标一起向高斯先验正则化，得到\"结构化latent点\"——粗结构+语义都在，再配一个轻量3DGS渲染头。RLBench、ManiSkill2和真机都涨点。",
+    "highlights": {
+      "contribution": "提出一种混合式3D表征——结构化latent点，兼顾隐式表达力和显式几何先验，用于具身感知和操作的预训练。",
+      "innovation": "在点云AE的latent空间插入point-wise VAE，联合正则化point特征和坐标到高斯先验；前端表征更重，后端渲染pipeline故意做轻。",
+      "method": "点云AE + point-wise VAE的混合架构，前端学结构化latent，后端用轻量3DGS渲染pipeline做监督。",
+      "results": "在RLBench、ManiSkill2和真机上任务成功率、样本效率、视角/场景鲁棒性都比强基线持续提升；ablation确认每个组件都关键。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 7,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 6.9
+    },
+    "affiliations": ["HKUST(GZ)", "CUHK"]
+  },
+  {
+    "arxiv_id": "2605.21273",
+    "summary": "驾驶VLA爱用长链CoT做reasoning，但标注难、小模型搞不定、延迟还高。作者改用单步\"meta-action\"做语言接口：低熵、可从专家轨迹自动派生、便于做轨迹条件。配合一个turn-level RL同时优化meta动作正确性、轨迹质量和一致性。2B模型就在Waymo E2E挑战赛拿到RFS 8.060，4B做到8.079，刷新SOTA。",
+    "highlights": {
+      "contribution": "用单步meta-action替代冗长自然语言推理，作为驾驶VLA的语言接口，同时设计与之匹配的RL训练框架。",
+      "innovation": "meta-action低熵、可自动标注、可对齐轨迹，相对CoT在表达力/可预测性/推理效率上更平衡；turn-level credit assignment联合优化动作和轨迹。",
+      "method": "动作中心的SFT + GRPO风格的turn-level RL，奖励包含meta-action正确性、轨迹质量和两者一致性。",
+      "results": "Waymo E2E Driving Challenge上2B模型RFS 8.060，4B到8.079均为SOTA；NAVSIM上也有竞争力；ablation证明meta-action比CoT和细粒度action序列更优。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 7,
+      "popularity": 7.5,
+      "quality": 8,
+      "recommendation": 7.8
+    },
+    "affiliations": ["Tsinghua University"]
+  },
+  {
+    "arxiv_id": "2605.21398",
+    "summary": "精密操作里用光学方法做模型-场景配准链路长、易遮挡。作者把接触配准重新定义成\"探针扫掠体积与物体的互补形状对接\"，既用接触证据也用非接触证据。先用3D FFT在SO(3)做粗搜索，再用李代数和接触灵敏度做精修。仿真上达到亚0.04mm/亚0.4°，真机牙体预备机器人上0.42mm/3.75°，比光学追踪还好。",
+    "highlights": {
+      "contribution": "提出一种免标定的接触式配准方法，把探针几何也纳入建模，专为高精度机器人操作场景设计。",
+      "innovation": "把配准重定义为\"互补形状对接\"问题，结合接触和非接触证据；用3D FFT做全局搜索+SE(3) Lie代数细化，避开脆弱的对应点。",
+      "method": "全局：低差异SO(3)采样上的3D FFT相关；局部：基于李代数更新和接触灵敏度的SE(3)精修。",
+      "results": "仿真精度<0.04mm/<0.4°；真实牙体预备机器人达到0.42mm/3.75°，优于光学追踪器，且无需外部传感器。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 7,
+      "recommendation": 5.8
+    },
+    "affiliations": ["Tsinghua University"]
+  },
+  {
+    "arxiv_id": "2605.21446",
+    "summary": "驾驶VLA给出文字解释看着挺漂亮，但传感器一加噪声就翻车。作者对Alpamayo R1（10B）跑了将近1.8万次扰动推理，发现\"Chain-of-Causation\"解释一旦在扰动后变了，轨迹偏差会暴增5.3倍。CoC一致性是个非常强的安全代理信号，开CoC平均能让轨迹精度涨11.8%，但常规输入预处理几乎救不回来。",
+    "highlights": {
+      "contribution": "系统性研究驾驶VLA在传感器扰动下的推理脆弱性，提出用CoC一致性作为运行时安全监控的代理指标。",
+      "innovation": "首次量化\"解释一致性\"与\"轨迹可靠性\"的强相关（r=0.99），把推理一致性当作可在线监控的安全proxy。",
+      "method": "对Alpamayo R1在1996个场景上施加8种扰动（高斯噪声、光照、雾），约1.8万次推理，关联CoC一致性与轨迹偏差，并做CoC启用ablation。",
+      "results": "CoC变化使轨迹偏差从4.1m升到21.8m（5.3倍）；启用CoC平均提升11.8%轨迹精度（p<0.0001）；噪声范围内退化近线性R²=0.957。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": ["BMW Group"]
+  },
+  {
+    "arxiv_id": "2605.22882",
+    "summary": "视频world model生成的未来看着真，但同一物理点跟丢就别想拿来执行动作。GEM-4D训练时从一个几何基础模型里蒸馏稠密4D对应监督进去，单流架构推理零额外开销。再配一个inverse dynamics模块把视频rollout翻译成机器人轨迹。视频预测和几何一致性都SOTA，真机操作成功率从61%涨到81%。",
+    "highlights": {
+      "contribution": "提出几何对齐的视频world model，让生成的未来不仅看着对，还能跟踪一致的物理点，从而真正可用于机器人执行。",
+      "innovation": "训练时蒸馏4D对应监督到视频生成主干，保留单流架构无推理开销；配套inverse dynamics把视频转可执行轨迹。",
+      "method": "几何基础模型→蒸馏4D对应→视频生成主干训练；推理时无额外几何模块，再接ID模块输出动作。",
+      "results": "视频预测和几何一致性SOTA；真机操作成功率从61%升到81%；项目页gem-4d.github.io。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 7,
+      "popularity": 7.5,
+      "quality": 8,
+      "recommendation": 8.3
+    },
+    "affiliations": ["MIT", "Harvard", "Oxford"]
+  },
+  {
+    "arxiv_id": "2605.21478",
+    "summary": "驱动姿态的全身avatar碰到松垮衣服就懵——同一姿态在不同历史下衣服动得完全不一样。作者在3D高斯avatar上加了一个transformer解码器和\"动力学残差latent\"，由学到的latent dynamics按姿态历史演化。把更新拆成driving/restoring/dissipative三种力，rollout连续可控，还能调刚度。9段真实捕获数据上画质和时间一致性都比SOTA好。",
+    "highlights": {
+      "contribution": "为姿态驱动的全身高斯avatar加入历史相关的latent动力学，专门补松垮衣物等姿态无法解释的动态变化。",
+      "innovation": "动力学残差latent按姿态历史显式演化，并解耦为driving/restoring/dissipative三种力，既物理可解释又能控制刚度。",
+      "method": "3D高斯avatar + transformer decoder + 学习式latent dynamics，从短历史姿态+前一latent状态预测下一latent；力分解作为归纳偏置。",
+      "results": "9段真实日常动作捕获序列上，定量指标和用户感知评分都超过近期数据驱动baseline，时间一致性和细节都明显更好。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 7,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 6.4
+    },
+    "affiliations": ["Meta Reality Labs"]
+  },
+  {
+    "arxiv_id": "2605.21800",
+    "summary": "World model研究散得不行，代码乱、数据慢、benchmark没标准。作者发布swm平台：Lance数据层支持MP4/HDF5/LeRobot、几套现代world model基线和planner实现、还有可控视觉/几何/物理因素的环境套件，方便做OOD泛化评测。LeCun和Balestriero在作者名单里。",
+    "highlights": {
+      "contribution": "推出开源世界模型研究与评测平台stable-worldmodel(swm)，统一数据层、基线实现和评测协议，加速可复现的world model研究。",
+      "innovation": "Lance数据后端原生支持主流数据格式速度更快；环境提供可控的视觉/几何/物理变体，专门评估动力学理解和OOD泛化。",
+      "method": "整合数据加载、baseline实现、planner求解器，并把任务套件扩展成支持系统化variation control。",
+      "results": "提供完整pipeline与多套环境，定位于成为world model社区的统一研究基础设施；无具体精度数字但工程价值高。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 7,
+      "popularity": 8.5,
+      "quality": 7.5,
+      "recommendation": 8.0
+    },
+    "affiliations": ["Meta FAIR", "Brown University", "Mila"]
+  },
+  {
+    "arxiv_id": "2605.20639",
+    "summary": "PDE约束的优化反复求解贵得离谱。作者用WLaSDI把高维时间相关解压成低维latent，靠弱形系统辨识找参数化latent dynamics，绕开了数值微分对噪声的敏感。在辐射输运、Vlasov-Poisson、Burgers方程上比full-order优化快了五个数量级。跟具身关系小。",
+    "highlights": {
+      "contribution": "提出基于弱形latent空间动力学的reduced-order建模，加速时间相关PDE约束的梯度优化。",
+      "innovation": "用弱形系统辨识替代显式数值微分，对噪声更鲁棒；同时推导了learned latent dynamics的直接与伴随灵敏度。",
+      "method": "WLaSDI压缩高维轨迹+弱形辨识latent动力学+解析adjoint梯度，构建可微的reduced PDE优化问题。",
+      "results": "在三个时间相关PDE基准上达到优秀的最优设计精度，对噪声鲁棒，比full-order优化快5个数量级。"
+    },
+    "scores": {
+      "relevance": 2.5,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 7,
+      "recommendation": 4.5
+    },
+    "affiliations": ["LLNL", "CU Boulder"]
+  },
+  {
+    "arxiv_id": "2605.20811",
+    "summary": "跨形态模仿一直被\"动作空间不同\"卡住。作者把演示重新理解为目标的隐式说明——target agent该推断demonstrator想达到什么状态，而不是怎么动。基于JEPA world model，把源视觉演示翻译成target可用的latent子目标轨迹，再让target用自己的前向动力学去规划实现。RLBench和真机上接近in-domain专门方法，并能泛化到未见任务和未见形态。",
+    "highlights": {
+      "contribution": "提出Demo-JEPA：用JEPA-style world model做跨形态one-shot模仿，把演示意图与执行解耦。",
+      "innovation": "完全绕过动作级对齐：把源演示翻译成target可用的latent未来轨迹，仅需视觉演示+target自身交互经验。",
+      "method": "JEPA world model做共享预测表征；源视频→target latent轨迹作为子目标；target用自己学的前向动力学规划。",
+      "results": "RLBench和真机上接近in-domain planner；在未见任务和不同embodiment配置下泛化能力优于此前方法。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 7,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 8.0
+    },
+    "affiliations": ["Peking University"]
+  },
+  {
+    "arxiv_id": "2605.21072",
+    "summary": "自回归视频扩散model对实时视频生成和world modeling很有前景，但跑起来贵。作者发现两个量化痛点：帧间敏感度指数衰减式不均衡，以及权重outlier异构。Q-ARVD用final-quality aware的帧加权 + outlier-aware双尺度量化解决，在多个ARVD上效果显著优于直接套现成扩散量化方案。",
+    "highlights": {
+      "contribution": "针对自回归视频扩散模型(ARVD)提出专门的训练后量化框架Q-ARVD。",
+      "innovation": "识别ARVD独特的帧间敏感度不均衡和异构outlier；以final-quality aware帧加权+自适应双尺度量化应对，区别于扩散transformer通用方案。",
+      "method": "最终质量加权的量化目标 + outlier-aware的自适应双尺度量化（自动检测outlier通道并隔离）。",
+      "results": "在多个ARVD骨干上显著优于直接迁移的扩散量化baseline，更适合real-time视频生成与world modeling部署。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 6.3
+    },
+    "affiliations": ["National University of Singapore"]
+  },
+  {
+    "arxiv_id": "2605.21109",
+    "summary": "视觉控制器在分布漂移下会变得过度自信。常用的reconstruction error只捕到视觉corruption，捕不到actuation bias/延迟这种dynamics异常。作者从world model里抽出感知和动力学两个互补异常分，融合后做temperature scaling，免重新训练。DonkeyCar真车上把ECE从0.184降到0.116，相对最佳baseline改进37%。",
+    "highlights": {
+      "contribution": "提出anomaly-informed在线置信度校准，用world model同时捕捉感知和动力学异常，提高安全预测在分布漂移下的可靠性。",
+      "innovation": "指出现有异常分数只覆盖视觉而漏掉动力学异常；通过epistemic uncertainty+控制流统计补上dynamics anomaly score，再融合校准。",
+      "method": "world model→感知重构异常+动力学epistemic异常→融合→temperature scaling校准（无需重新训练任何组件）。",
+      "results": "DonkeyCar真车四类未见异常协议下，ECE从0.184降到0.116（相对最佳baseline提升37%），不损害名义性能。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7,
+      "recommendation": 6.2
+    },
+    "affiliations": ["University of Florida"]
+  },
+  {
+    "arxiv_id": "2605.21139",
+    "summary": "端到端自动驾驶受限于行为克隆天花板。CoPhy先把VLM知识蒸馏进BEV编码器，再丢掉VLM保持零推理开销；然后用自回归BEV world model显式预测未来语义图作为可解释\"物理沙盒\"。用GRPO+双reward（物理安全reward来自BEV rollout，认知reward来自语言scorer）联合优化策略。NAVSIM v1/v2达到SOTA。",
+    "highlights": {
+      "contribution": "提出Cognitive-Physical RL框架CoPhy，给端到端自动驾驶补齐\"会理解\"和\"能预见\"两块基础设施。",
+      "innovation": "VLM蒸馏到BEV编码器后丢弃VLM（零推理开销），保留语言可插拔接口；BEV world model做动作条件未来语义图预测当物理沙盒。",
+      "method": "VLM→BEV知识蒸馏；自回归BEV world model；GRPO双奖励（物理安全+认知意图）联合优化驾驶策略。",
+      "results": "NAVSIM v1和v2上达到SOTA，并支持基于语言指令的安全意图控制。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 7,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": ["Nanjing University"]
+  },
+  {
+    "arxiv_id": "2605.21805",
+    "summary": "SSM参数推断难，likelihood不可解析。SNL在SSM上要大量仿真样本，长序列扛不住，还不能amortize。作者提出T-SNL，更准更稳更省样本，对长时序列也扩展性更好，新观测来了还能复用。属于偏统计方法论的工作，跟具身无关。",
+    "highlights": {
+      "contribution": "提出truncated SNL，专门解决state-space模型上序列贝叶斯推断的样本效率与可扩展性问题。",
+      "innovation": "针对SNL在SSM场景下的样本浪费和不能amortize的缺陷，做截断式改造，长序列稳定且支持新观测的amortized推断。",
+      "method": "在SNL基础上引入truncation机制做序列贝叶斯推断；论文给出理论分析和算法实现。",
+      "results": "在多个SSM基准上比SNL等方法更准、训练更稳、对长时序列更可扩展。"
+    },
+    "scores": {
+      "relevance": 1.5,
+      "recency": 7,
+      "popularity": 4,
+      "quality": 6.5,
+      "recommendation": 3.8
+    },
+    "affiliations": ["University of Edinburgh"]
+  },
+  {
+    "arxiv_id": "2605.20820",
+    "summary": "2D Gaussian splatting做图像重建效率不错但要逐图迭代或者靠手工先验分配高斯。AIR用一个前馈网络一次出结果——分阶段残差架构按重建残差再补高斯，加上\"Stage Control\"只在欠重建区激活新元。Predict-Optimize-Distill训练让多阶段预测更稳。Kodak/DIV2K上画质优于Gaussian基线，编码160-300ms。",
+    "highlights": {
+      "contribution": "提出AIR：把2D高斯splatting的迭代优化摊销到单次前馈，自监督，不需要per-image优化。",
+      "innovation": "分阶段残差架构+Stage Control显式只在欠重建区域加新高斯；Predict-Optimize-Distill训练策略稳定多阶段预测。",
+      "method": "前馈预测Gaussian primitives，每阶段预测残差Gaussian，蒸馏短期优化增量回预测器；自适应量化做紧凑存储。",
+      "results": "Kodak和DIV2K上重建质量优于代表性Gaussian基线，编码时间160-300ms；开源代码。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 5.4
+    },
+    "affiliations": ["Zhejiang University", "HUST"]
+  },
+  {
+    "arxiv_id": "2605.20872",
+    "summary": "把3DGS的自适应稠密化搬到生成蒸馏（SDS之类）上会冗余得离谱——生成guidance有噪声，基于幅值累积分不清几何信号和噪声。CAdam改用一阶矩的\"干涉原理\"：噪声相消、几何累加，再加quantile context-aware和SNR门控自动停增稠。在SDS/ISM/VFDS三种目标和多骨干上，把高斯数量砍掉85%-97%，画质基本持平。",
+    "highlights": {
+      "contribution": "把3DGS稠密化在生成蒸馏中重新表述为统计意义的信号验证问题，提出CAdam做信号感知稠密化控制。",
+      "innovation": "用梯度一阶矩的相长/相消干涉分离几何信号和生成噪声；分位数context awareness + 内在SNR门控允许稠密化软终止。",
+      "method": "CAdam在标准3DGS densification基础上把幅值累积换成基于一阶矩干涉原理+SNR门控的判定，外加quantile阈值。",
+      "results": "在SDS/ISM/VFDS三种目标和多种3DGS生成骨干上，高斯数减少85%-97%，感知质量基本保持，显著省显存。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7,
+      "recommendation": 5.6
+    },
+    "affiliations": ["Korea University"]
+  },
+  {
+    "arxiv_id": "2605.21112",
+    "summary": "4D毫米波雷达点云太稀疏，现有融合方法用复杂模块换微小精度。作者反过来——只把雷达特征编码做强，融合反而简化就够用。RCGDet3D基于Ray-centric Point Gaussian Encoder在射线坐标系下预测高斯属性后再统一到BEV，配合Semantic Injection把视觉语义注入雷达特征。VoD和TJ4DRadSet上精度和速度都SOTA。",
+    "highlights": {
+      "contribution": "提出RCGDet3D，证明强化雷达特征编码比复杂多模态融合更有效，建立实时4D雷达-相机3D检测新基线。",
+      "innovation": "Ray-centric Point Gaussian Encoder解耦坐标变换与表征学习；Semantic Injection模块用图像语义增强雷达特征。",
+      "method": "在Ray-aligned坐标系预测高斯属性→统一到BEV；再用SI模块把视觉语义注入雷达；融合策略保持简化。",
+      "results": "在VoD和TJ4DRadSet上精度与推理速度均超SOTA，建立实时部署新基线。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 7,
+      "recommendation": 5.0
+    },
+    "affiliations": ["Beihang University"]
+  },
+  {
+    "arxiv_id": "2605.21788",
+    "summary": "Zero-shot 3D视觉grounding通常依赖VLM的视角推理，难保多视角一致。SceneGraphGrounder把它重新formulate成在重建的3D scene graph上做结构化图匹配：先用visual marker prompting让VLM从2D视图推关系，再lift到持久3D scene graph，最后给query graph做约束匹配。ScanRefer上zero-shot有竞争力，并在移动机器人上跑通。",
+    "highlights": {
+      "contribution": "提出SceneGraphGrounder，把zero-shot 3D视觉grounding重定义为3D场景图上的结构化图匹配，提升一致性和可解释性。",
+      "innovation": "用visual marker prompting让VLM跨视角推断物体关系；把2D关系lift成持久3D scene graph，避免view-dependent推理。",
+      "method": "RGB-D输入→重建3D scene graph(visual marker prompting)→query→constrained graph alignment输出grounding。",
+      "results": "ScanRefer上在zero-shot方法中具有竞争力；在真实移动机器人上完成长horizon空间推理部署。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7,
+      "recommendation": 6.5
+    },
+    "affiliations": ["University of Colorado Boulder"]
+  },
+  {
+    "arxiv_id": "2605.20584",
+    "summary": "应用商店要求开发者标注内容分级，但人为标注不一致。QwenSafe基于Qwen3-VL-8B，做SFT再DPO，让模型在app描述+截图上同时推理出12种Apple内容描述符。配套构造了metadata2CRD数据。在二分类上比Qwen3-VL/LLaVA-1.6/Gemini-2.5-Flash正类召回分别提高111.8%/36.1%/2.1%。和具身关系不大。",
+    "highlights": {
+      "contribution": "提出QwenSafe，用偏好对齐的VLM自动识别移动应用商店的内容分级描述符。",
+      "innovation": "面向Apple定义的CRD构造metadata2CRD数据pipeline，并用SFT+DPO做描述符特定证据对齐。",
+      "method": "Qwen3-VL-8B为底座，metadata2CRD合成描述符对齐的QA对，先SFT后DPO。",
+      "results": "在12个CRD二分类上正类召回比Qwen3-VL/LLaVA-1.6/Gemini-2.5-Flash分别高111.8%/36.1%/2.1%。"
+    },
+    "scores": {
+      "relevance": 2.0,
+      "recency": 7,
+      "popularity": 4.5,
+      "quality": 6.5,
+      "recommendation": 4.0
+    },
+    "affiliations": ["UNSW Sydney", "University of Sydney"]
+  },
+  {
+    "arxiv_id": "2605.22872",
+    "summary": "医疗VLM参数里塞的是静态知识，不会随诊断经验进化。MedExpMem给VLM诊断agent加一个\"经验记忆\"——失败后反思，把可区分的鉴别诊断要点写成pairwise differential notes，新案例来了再调取。在11个放射亚专科上各种模型规模都涨，最高+7.0%准确率。属于医疗VLM agent，跟具身边缘相关。",
+    "highlights": {
+      "contribution": "提出MedExpMem，让医疗VLM诊断agent通过经验记忆持续积累鉴别诊断专长，而非靠参数学习。",
+      "innovation": "记忆来自模型自身诊断失败后的反思，组织成pairwise differential notes（关键鉴别点+决策规则+错误模式），区别于RAG式百科检索。",
+      "method": "两阶段：初次诊断暴露知识缺口→反思重新诊断生成differential notes；新案例时retrieve differential notes引导推理。",
+      "results": "在11个放射亚专科benchmark上最高准确率提升7.0%，跨多种模型与规模均有稳定收益。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 7,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 5.2
+    },
+    "affiliations": ["CUHK", "Shanghai Jiao Tong University"]
+  },
+  {
+    "arxiv_id": "2605.20676",
+    "summary": "MLLM评测要么只看文本答案对错，要么只看像素定位，没有强制\"答案配证据\"。VISTAQA给1157个专家样本要求模型既答对又给精确分割掩码作为证据，还塞了无证据的幻觉用例。配套提出GROVE指标用几何平均强制两边都得做对——一边烂另一边就救不回来。结论是即便最强系统在GROVE下也跌得很厉害。",
+    "highlights": {
+      "contribution": "推出VISTAQA基准，联合评估MLLM的自由文本回答正确性与像素级证据grounding。",
+      "innovation": "用几何平均GROVE指标强制答案和定位都不能补偿对方；并加入无证据/幻觉用例。",
+      "method": "1157条专家样本覆盖6类任务、6种视觉域；模型需输出答案+对应分割mask；用GROVE做联合打分。",
+      "results": "即使最强的grounding-aware MLLM在GROVE下表现也很有限，揭示答案准确度与视觉证据对齐间的大鸿沟。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 7,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 6.2
+    },
+    "affiliations": ["NVIDIA", "University of Waterloo"]
+  },
+  {
+    "arxiv_id": "2605.20682",
+    "summary": "MLLM做开放词汇工业异常检测容易领域错配、结构幻觉。IndusAgent用工具增强的agent框架：先构造Indus-CoT结构化数据做SFT，再让agent动态调用区域裁剪、高频特征增强、先验检索等工具，配gated RL同时优化分类/定位/类型推理/工具使用效率。MVTec-AD、VisA等5个benchmark上zero-shot SOTA。",
+    "highlights": {
+      "contribution": "提出IndusAgent，把工具增强agent范式用于开放词汇工业异常检测，缓解MLLM在工业场景的幻觉与领域错配。",
+      "innovation": "Indus-CoT结构化数据规范化推理轨迹；gated RL确保工具仅在有利时调用，把工具使用效率纳入奖励。",
+      "method": "基于MLLM的agent + 动态裁剪/高频增强/先验检索工具 + Indus-CoT SFT + gated RL联合优化分类、定位、类型推理、工具效率。",
+      "results": "在MVTec-AD/VisA/MPDD/DTD/SDD五个工业异常检测benchmark上达到zero-shot SOTA。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7,
+      "recommendation": 5.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.24019",
+    "summary": "VLM模型大，部署到边缘需要量化。直接套向量量化有两个坑：跨模态权重分布单codebook拟合不好；二阶误差补偿丢了一阶梯度信息。MGVQ用敏感度感知的结构化混合精度+gradient-Hessian融合误差补偿，结合Kronecker和Block-LDL分解保持低开销。2-bit下InternVL2-26B从67.0%涨到71.4%，最高提升4.9个点。",
+    "highlights": {
+      "contribution": "提出MGVQ，针对VLM的超低比特向量量化，专门解决跨模态分布差异和一阶梯度信息缺失两大痛点。",
+      "innovation": "敏感度引导的结构化混合精度（全局+局部敏感度）+ gradient-Hessian融合的二阶误差补偿（Kronecker/Block-LDL保持低成本）。",
+      "method": "通道敏感度分析→动态分配bit-width；一阶梯度嵌入误差补偿；分解技巧降低计算量。",
+      "results": "LLaVA-OneVision/InternVL2/Qwen2-VL 2-bit设置下显著超过现有PTQ，InternVL2-26B从67.0%升到71.4%(+4.9点)。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 7,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 5.6
+    },
+    "affiliations": ["Houmo AI"]
+  }
+]

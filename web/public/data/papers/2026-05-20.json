@@ -1,0 +1,1102 @@
+{
+  "date": "2026-05-20",
+  "papers": [
+    {
+      "arxiv_id": "2605.20752",
+      "title": "GaussianDream: A Feed-Forward 3D Gaussian World Model for Robotic Manipulation",
+      "authors": [
+        "Zijian Zhang",
+        "Yuqing Jiang",
+        "Qian Cheng",
+        "Xiaofan Li",
+        "Si Liu",
+        "Ding Zhao",
+        "Ping Luo",
+        "Weitao Zhou",
+        "Haibao Yu"
+      ],
+      "affiliations": [
+        "BUAA",
+        "CMU",
+        "HKU"
+      ],
+      "summary": "标准VLA缺3D几何和未来预测信号。GaussianDream把一个前馈的3D Gaussian world model当插件塞进编码器：训练时用静态重建头+未来预测头去拟合当前3D高斯场景和未来演化，推理时只保留latent prefix去condition动作生成。LIBERO 98.4%、RoboCasa Human-50 54.8%、真机50%，比基于视频的world model更快。",
+      "original_abstract": "Vision-language-action (VLA) policies have advanced language-conditioned robotic manipulation by transferring semantic priors from pretrained vision-language models to action generation. However, standard action-imitation learning often lacks sufficient modeling of explicit 3D spatial information, dense geometric supervision, and future environment evolution, all critical for precise robotic interaction. To address this, we propose \\textbf{GaussianDream}, a feed-forward 3D Gaussian world-model plug-in. Specifically, we introduce learnable GaussianDream Queries in the encoder, enabling the model to capture current-frame 3D spatial structure and short-horizon future evolution. During training, the latent GaussianDream prefix is processed by a static reconstruction head and a future prediction head to produce current 3D Gaussian scene states and future Gaussian evolution states. The current branch is supervised by RGB rendering and depth, while the future branch uses future RGB, depth, and pseudo 3D scene-flow signals. During inference, GaussianDream discards all auxiliary heads and retains only the learned prefix to condition action generation, without test-time Gaussian reconstruction or future prediction. Experimental results demonstrate that GaussianDream achieves state-of-the-art performance across multiple robotic manipulation benchmarks, reaching \\textbf{98.4\\%} on LIBERO, \\textbf{54.8\\%} on RoboCasa Human-50, and \\textbf{50.0\\%} on real-robot tasks. Compared with existing 3D-enhanced VLA methods, GaussianDream achieves strong accuracy while providing higher inference efficiency than video-based world-model approaches.",
+      "highlights": {
+        "contribution": "把3D高斯world model做成可插拔的VLA增强模块，同时提供几何监督和短时未来预测，不增加推理开销。",
+        "innovation": "训练时双头(reconstruction + future prediction)，推理时全丢，只保留学到的GaussianDream queries做action conditioning；比视频world model快很多。",
+        "method": "在encoder里加可学习GaussianDream queries，训练时分别用RGB/深度/伪3D scene flow监督当前帧和未来帧的3D高斯；推理时只保留prefix。",
+        "results": "LIBERO 98.4%、RoboCasa Human-50 54.8%、真机50%，对3D-enhanced VLA达到SOTA，推理速度优于视频world model类方法。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T05:51:30Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 7.0,
+        "popularity": 8.0,
+        "quality": 8.5,
+        "recommendation": 8.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20752v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.20752v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.21414",
+      "title": "PointACT: Vision-Language-Action Models with Multi-Scale Point-Action Interaction",
+      "authors": [
+        "Shizhe Chen",
+        "Paul Pacaud",
+        "Cordelia Schmid"
+      ],
+      "affiliations": [
+        "Inria",
+        "WILLOW"
+      ],
+      "summary": "现有VLA基本只看2D图像，缺乏精细几何理解。作者把分层3D点云接进action decoder做多尺度交互——action token既能看到局部几何细节又能看到全局结构。在LIBERO和RLBench上都有稳定提升，RLBench-10任务上比SOTA高了10个点，骨干冻结时优势更大。",
+      "original_abstract": "Vision-Language-Action (VLA) models have shown strong potential for general-purpose robotic manipulation by leveraging large pretrained vision-language backbones. However, most existing VLAs rely primarily on 2D visual representations, which limit their ability to reason about fine-grained geometry and spatial grounding - capabilities that are essential for precise and robust manipulation in 3D environments. In this paper, we propose PointACT, a dual-system 3D-aware VLA policy that integrates hierarchical 3D point cloud representations directly into the action decoding process. PointACT employs a multi-scale point-action interaction mechanism with efficient bottleneck window self-attention, enabling evolving action tokens to densely attend to both local geometric detail and global scene structure. We evaluate PointACT on the LIBERO and RLBench benchmarks and systematically compare it against monolithic and dual-system VLA baselines, including variants augmented with point cloud inputs. PointACT achieves consistent improvements across both benchmarks, increasing success rates by 10% on the challenging RLBench-10Tasks suite over state-of-the-art pretrained VLAs, with even larger gains when the vision-language backbone is frozen and the action expert is trained from scratch. Extensive ablation studies demonstrate that tightly coupling hierarchical 3D geometry with pretrained 2D semantic representations is critical for robust and spatially grounded robot control. Our results also highlight the promise of pretrained 3D representations for 3D-aware VLA policies.",
+      "highlights": {
+        "contribution": "提出PointACT，把多尺度3D点云表征显式集成进VLA的action decoding，实现3D-aware的机器人策略。",
+        "innovation": "用瓶颈窗口自注意力做多尺度point-action交互，让action token同时attend到几何细节和全局场景，区别于仅用2D特征或浅层点云融合的VLA。",
+        "method": "Dual-system VLA架构：保留预训练2D视觉语言骨干，新增分层3D点云分支，action token通过bottleneck window self-attention从多尺度点特征中聚合信息。",
+        "results": "LIBERO和RLBench全面提升，RLBench-10Tasks比SOTA高10%；骨干冻结只训action expert时提升更显著，ablation确认2D+3D耦合是关键。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T17:10:31Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla policy",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.0,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 8.1
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.21414v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.21414v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.21273",
+      "title": "DriveMA: Rethinking Language Interfaces in Driving VLAs with One-Step Meta-Actions",
+      "authors": [
+        "Weicheng Zheng",
+        "Yixin Huang",
+        "Qiao Sun",
+        "Derun Li",
+        "Hang zhao"
+      ],
+      "affiliations": [
+        "Tsinghua University"
+      ],
+      "summary": "驾驶VLA爱用长链CoT做reasoning，但标注难、小模型搞不定、延迟还高。作者改用单步\"meta-action\"做语言接口：低熵、可从专家轨迹自动派生、便于做轨迹条件。配合一个turn-level RL同时优化meta动作正确性、轨迹质量和一致性。2B模型就在Waymo E2E挑战赛拿到RFS 8.060，4B做到8.079，刷新SOTA。",
+      "original_abstract": "Driving Vision-Language-Action Models (Driving VLAs) commonly introduce natural-language reasoning as an intermediate interface for end-to-end planning, but reasoning-centric interfaces face three practical bottlenecks: obtaining high-quality reasoning annotations is difficult, generating and understanding long reasoning chains is challenging for compact models, and inference latency is substantially increased. In this paper, we rethink the design of language interfaces in Driving VLAs and show that concise one-step meta-actions are a simple yet effective alternative to verbose reasoning. Meta-actions provide semantic decision grounding while remaining low-entropy, and being automatically derivable from expert trajectories, enabling scalable supervision and reliable trajectory conditioning. Building on this interface, we propose DriveMA, which combines action-centric supervised training with a turn-level credit-assignment reinforcement learning framework that jointly optimizes meta-action correctness, trajectory quality, and trajectory--meta-action consistency. Experiments show that DriveMA already achieves a new state of the art on the Waymo End-to-End Driving Challenge with a 2B model, reaching a Rater Feedback Score (RFS) of 8.060, while its 4B version further improves the state of the art to 8.079; DriveMA also obtains competitive performance on NAVSIM. Ablations demonstrate that one-step meta-actions offer a better practical trade-off between expressiveness, predictability, and inference efficiency than natural-language reasoning or finer-grained action sequences. Code, data, and models will be released to facilitate future research.",
+      "highlights": {
+        "contribution": "用单步meta-action替代冗长自然语言推理，作为驾驶VLA的语言接口，同时设计与之匹配的RL训练框架。",
+        "innovation": "meta-action低熵、可自动标注、可对齐轨迹，相对CoT在表达力/可预测性/推理效率上更平衡；turn-level credit assignment联合优化动作和轨迹。",
+        "method": "动作中心的SFT + GRPO风格的turn-level RL，奖励包含meta-action正确性、轨迹质量和两者一致性。",
+        "results": "Waymo E2E Driving Challenge上2B模型RFS 8.060，4B到8.079均为SOTA；NAVSIM上也有竞争力；ablation证明meta-action比CoT和细粒度action序列更优。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T15:05:36Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.0,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.21273v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.21273v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.20774",
+      "title": "VLA-REPLICA: A Low-Cost, Reproducible Benchmark for Real-World Evaluation of Vision-Language-Action Models",
+      "authors": [
+        "Alex S. Huang",
+        "Jiahui Zhang",
+        "Shiqing Tang",
+        "Yu Xiang"
+      ],
+      "affiliations": [],
+      "summary": "做VLA真机评测一直是大问题——仿真不真实，真机又贵又难复现。作者用便宜的现成零件搭了一套VLA-REPLICA，任何实验室都能照着拼一个，跑同一套任务、同一套协议。实验证明几个独立搭建的版本结果一致，能稳定区分各家VLA模型的强弱。",
+      "original_abstract": "Vision-Language-Action (VLA) models have shown strong promise for general-purpose robotic manipulation, but their real-world evaluation remains limited by a lack of accessible, reproducible, and consistent benchmarks. Simulation benchmarks fail to capture real-world complexity, while existing real-world benchmarks often require expensive hardware, centralized evaluation, or are limited in task diversity. We introduce VLA-REPLICA, a low-cost, easily reproducible real-world benchmark for evaluating VLA models. Built from off-the-shelf components, our system can be quickly assembled and replicated across laboratories, providing a consistent environment for policy evaluation anywhere in the world. VLA-REPLICA includes a diverse suite of manipulation tasks and a small-scale demonstration dataset for target-domain adaptation, with real-world evaluation protocols for both in-distribution and out-of-distribution settings. Experiments with imitation learning and state-of-the-art VLA models reveal model strengths and limitations, while consistent results across independently constructed setups demonstrate the reproducibility of our benchmark.",
+      "highlights": {
+        "contribution": "提出一个低成本、可复现的真实世界VLA评测平台，让不同实验室能在同一基准上公平比较VLA策略。",
+        "innovation": "区别于昂贵或集中托管的真机benchmark，整套系统用现成零件搭建，并附带小规模演示数据用于目标域适配，自带ID/OOD评测协议。",
+        "method": "用off-the-shelf硬件搭建标准化操作平台，配套发布演示数据、任务套件和评测协议；用模仿学习和当前SOTA VLA跑对照实验。",
+        "results": "在多个独立搭建的副本上结果一致，复现性得到验证；同时揭示了主流VLA模型在ID/OOD设置下的能力差距。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T06:15:30Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20774v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.20774v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.21258",
+      "title": "Learning Structural Latent Points for Efficient Visual Representations in Robotic Manipulation",
+      "authors": [
+        "Yicheng Jiang",
+        "Jiaxu Wang",
+        "Junhao He",
+        "Zesen Gan",
+        "Junhao Li",
+        "Qiang Zhang",
+        "Jingkai Sun",
+        "Jiahang Cao",
+        "Mingyuan Sun",
+        "Xiangyu Yue",
+        "Qiming Shao"
+      ],
+      "affiliations": [
+        "HKUST(GZ)",
+        "CUHK"
+      ],
+      "summary": "现有3D预训练要么纯隐式神经场（缺结构），要么纯显式几何元（分辨率受限）。作者在点云autoencoder的latent里塞了个point-wise VAE，把特征+坐标一起向高斯先验正则化，得到\"结构化latent点\"——粗结构+语义都在，再配一个轻量3DGS渲染头。RLBench、ManiSkill2和真机都涨点。",
+      "original_abstract": "Current 3D-aware pretraining methods for embodied perception and manipulation are largely built on differentiable rendering frameworks, producing either fully implicit neural fields or fully explicit geometric primitives. Implicit representations, while expressive, lack explicit structural cues, whereas explicit ones preserve geometry but suffer from resolution limits and weak generalization. To address these limitations, we propose a novel pretraining framework that learns a hybrid representation-structural latent points. Specifically, we insert a point-wise latent variational autoencoder into the latent space of a point-cloud autoencoder, jointly regularizing point-wise features and coordinates toward a Gaussian prior. The resulting compact latent preserves coarse structural tendencies, which do not encode precise geometry but capture richer rough shape and semantic information, effectively combining the expressiveness of implicit representations with the structural priors of explicit ones. In addition, informed by shared design choices in prior work, we develop a streamlined, efficient 3DGS-based rendering pipeline that is deliberately kept lightweight, improving efficiency while leaving greater representational capacity to the front-end latent module. Extensive evaluations on RLBench, ManiSkill2, and a real-robot platform demonstrate consistent gains in task success, sample efficiency, and robustness to viewpoint and scene variations over strong baselines. Ablation studies further confirm that each component of our framework is critical to overall performance.",
+      "highlights": {
+        "contribution": "提出一种混合式3D表征——结构化latent点，兼顾隐式表达力和显式几何先验，用于具身感知和操作的预训练。",
+        "innovation": "在点云AE的latent空间插入point-wise VAE，联合正则化point特征和坐标到高斯先验；前端表征更重，后端渲染pipeline故意做轻。",
+        "method": "点云AE + point-wise VAE的混合架构，前端学结构化latent，后端用轻量3DGS渲染pipeline做监督。",
+        "results": "在RLBench、ManiSkill2和真机上任务成功率、样本效率、视角/场景鲁棒性都比强基线持续提升；ablation确认每个组件都关键。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T14:48:01Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.21258v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.21258v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.21446",
+      "title": "Lost in Fog: Sensor Perturbations Expose Reasoning Fragility in Driving VLAs",
+      "authors": [
+        "Abhinaw Priyadershi",
+        "Jelena Frtunikj"
+      ],
+      "affiliations": [
+        "BMW Group"
+      ],
+      "summary": "驾驶VLA给出文字解释看着挺漂亮，但传感器一加噪声就翻车。作者对Alpamayo R1（10B）跑了将近1.8万次扰动推理，发现\"Chain-of-Causation\"解释一旦在扰动后变了，轨迹偏差会暴增5.3倍。CoC一致性是个非常强的安全代理信号，开CoC平均能让轨迹精度涨11.8%，但常规输入预处理几乎救不回来。",
+      "original_abstract": "Interpretable autonomous driving planners depend not only on generating explanations, but also on those explanations remaining reliable under real-world sensor degradation. In this paper we present a controlled perturbation study of Vision-Language-Action (VLA) robustness in autonomous driving, evaluating Alpamayo R1 (10B parameters) across 1,996 scenarios under eight sensor perturbations (Gaussian noise at four intensities, two lighting extremes, and two fog levels; ${\\sim}18{,}000$ inference trials). We find that reasoning consistency is a high-fidelity indicator of trajectory reliability: when Chain-of-Causation (CoC) explanations change after perturbation, trajectory deviation spikes $5.3{\\times}$ (21.8m vs 4.1m), with $r\\!=\\!0.99$ across attack types and $r_{pb}\\!=\\!0.53$ per-sample (Cohen's $d\\!=\\!1.12$). A controlled ablation provides evidence that enabling CoC generation is associated with improved trajectory accuracy (11.8% on average across conditions; $p < 0.0001$) under matched inference settings. Over the tested noise range ($σ\\in \\{10, 30, 50, 70\\}$), degradation is approximately linear ($R^2\\!=\\!0.957$), while standard input preprocessing defenses provide only marginal relief. Together, these results establish CoC consistency as a quantitative proxy for planning safety and motivate reasoning-based runtime monitoring for safer VLA deployment.",
+      "highlights": {
+        "contribution": "系统性研究驾驶VLA在传感器扰动下的推理脆弱性，提出用CoC一致性作为运行时安全监控的代理指标。",
+        "innovation": "首次量化\"解释一致性\"与\"轨迹可靠性\"的强相关（r=0.99），把推理一致性当作可在线监控的安全proxy。",
+        "method": "对Alpamayo R1在1996个场景上施加8种扰动（高斯噪声、光照、雾），约1.8万次推理，关联CoC一致性与轨迹偏差，并做CoC启用ablation。",
+        "results": "CoC变化使轨迹偏差从4.1m升到21.8m（5.3倍）；启用CoC平均提升11.8%轨迹精度（p<0.0001）；噪声范围内退化近线性R²=0.957。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T17:34:02Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.21446v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.21446v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.21398",
+      "title": "From swept contact to pose: Probe-aware registration via complementary-shape docking",
+      "authors": [
+        "Chen Chen",
+        "Yunwen Li",
+        "Yifan Xu",
+        "Xiangjie Yan",
+        "Chang Shu",
+        "Jianxia Hou",
+        "Shiji Song",
+        "Xiang Li"
+      ],
+      "affiliations": [
+        "Tsinghua University"
+      ],
+      "summary": "精密操作里用光学方法做模型-场景配准链路长、易遮挡。作者把接触配准重新定义成\"探针扫掠体积与物体的互补形状对接\"，既用接触证据也用非接触证据。先用3D FFT在SO(3)做粗搜索，再用李代数和接触灵敏度做精修。仿真上达到亚0.04mm/亚0.4°，真机牙体预备机器人上0.42mm/3.75°，比光学追踪还好。",
+      "original_abstract": "Accurate registration between a prior model and the real scene is essential for high-precision robotic manipulation, yet optical methods suffer from long calibration chains, line-of-sight constraints, and fabrication errors. We propose a calibration-free alternative that reformulates contact registration as complementary-shape docking between the object and the probe's swept volume, explicitly accounting for probe geometry and leveraging both contact and non-contact evidence. Our solver integrates a global-to-local search via 3D FFT correlation over low-discrepancy SO(3) samples, then followed by continuous SE(3) refinement using Lie-algebra updates and analytic contact sensitivities. This pipeline yields efficient exploration and metric-grade convergence without fragile point correspondences. Simulation across free-form meshes achieved sub-0.04 mm and sub-0.4° accuracy and robustness to pose noise and contact loss. On a tooth-preparation robot, our method attained 0.42 mm and 3.75°, outperforming an optical tracker registration while requiring no external sensors. These results demonstrate a practical and precise registration strategy for surgical and industrial robots.",
+      "highlights": {
+        "contribution": "提出一种免标定的接触式配准方法，把探针几何也纳入建模，专为高精度机器人操作场景设计。",
+        "innovation": "把配准重定义为\"互补形状对接\"问题，结合接触和非接触证据；用3D FFT做全局搜索+SE(3) Lie代数细化，避开脆弱的对应点。",
+        "method": "全局：低差异SO(3)采样上的3D FFT相关；局部：基于李代数更新和接触灵敏度的SE(3)精修。",
+        "results": "仿真精度<0.04mm/<0.4°；真实牙体预备机器人达到0.42mm/3.75°，优于光学追踪器，且无需外部传感器。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T16:56:39Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 7.0,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.21398v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.21398v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.22882",
+      "title": "GEM-4D: Geometry-Enhanced Video World Models for Robot Manipulation",
+      "authors": [
+        "Kaichen Zhou",
+        "Yuzhen Chen",
+        "Fangneng Zhan",
+        "Hang Hua",
+        "Grace Chen",
+        "Xinhai Chang",
+        "Ao Qu",
+        "Yilun Du",
+        "Zhuang Liu",
+        "Paul Pu Liang",
+        "Mengyu Wang"
+      ],
+      "affiliations": [
+        "MIT",
+        "Harvard",
+        "Oxford"
+      ],
+      "summary": "视频world model生成的未来看着真，但同一物理点跟丢就别想拿来执行动作。GEM-4D训练时从一个几何基础模型里蒸馏稠密4D对应监督进去，单流架构推理零额外开销。再配一个inverse dynamics模块把视频rollout翻译成机器人轨迹。视频预测和几何一致性都SOTA，真机操作成功率从61%涨到81%。",
+      "original_abstract": "Video world models can generate realistic futures from a single instruction, but they often fail to track the same physical points consistently across time. As a result, the generated videos appear plausible, yet lack the physical grounding required for reliable action execution, such as robot manipulation. We present GEM-4D, a geometry-grounded video world model that resolves this limitation by injecting dense 4D correspondence supervision distilled from a pretrained geometry foundation model into the video generative backbone during training. This supervision enables the model to jointly capture appearance and geometric structure while retaining a single-stream architecture with no additional inference cost. We further introduce an inverse dynamics module that converts correspondence-consistent video rollouts into executable robot trajectories, enabling direct deployment in both real-world and simulated manipulation. GEM-4D achieves state-of-the-art performance on both video prediction and geometric consistency across both simulation and realistic scenarios and improves real-world manipulation success from 61% to 81%. Additional results are available at https://gem-4d.github.io/.",
+      "highlights": {
+        "contribution": "提出几何对齐的视频world model，让生成的未来不仅看着对，还能跟踪一致的物理点，从而真正可用于机器人执行。",
+        "innovation": "训练时蒸馏4D对应监督到视频生成主干，保留单流架构无推理开销；配套inverse dynamics把视频转可执行轨迹。",
+        "method": "几何基础模型→蒸馏4D对应→视频生成主干训练；推理时无额外几何模块，再接ID模块输出动作。",
+        "results": "视频预测和几何一致性SOTA；真机操作成功率从61%升到81%；项目页gem-4d.github.io。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T21:36:44Z",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "video prediction",
+        "video world model"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.0,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 8.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.22882v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.22882v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.21800",
+      "title": "stable-worldmodel: A Platform for Reproducible World Modeling Research and Evaluation",
+      "authors": [
+        "Lucas Maes",
+        "Quentin Le Lidec",
+        "Luiz Facury",
+        "Nassim Massaudi",
+        "Ayush Chaurasia",
+        "Francesco Capuano",
+        "Richard Gao",
+        "Taj Gillin",
+        "Dan Haramati",
+        "Damien Scieur",
+        "Yann LeCun",
+        "Randall Balestriero"
+      ],
+      "affiliations": [
+        "Meta FAIR",
+        "Brown University",
+        "Mila"
+      ],
+      "summary": "World model研究散得不行，代码乱、数据慢、benchmark没标准。作者发布swm平台：Lance数据层支持MP4/HDF5/LeRobot、几套现代world model基线和planner实现、还有可控视觉/几何/物理因素的环境套件，方便做OOD泛化评测。LeCun和Balestriero在作者名单里。",
+      "original_abstract": "World models are central to building agents that can reason, plan, and generalize beyond their training data. However, research on world models is currently fragmented, with disparate codebases, data pipelines, and evaluation protocols hindering reproducibility and fair comparison. Current practice is further limited by three key bottlenecks: fragile one-off codebases, slow video data loading, and the lack of standardized generalization benchmarks. We present stable-worldmodel (swm), an open-source platform for standardized and reproducible world modeling research and evaluation. It delivers (1) a high-performance Lance-based data layer with native support and conversion tools for MP4, HDF5, and LeRobot datasets, (2) clean, well-tested implementations of modern world model baselines and planning solvers, and (3) a broad suite of environments and tasks extended with controllable visual, geometric, and physical factors of variation for systematic in-silico evaluation of dynamics understanding, control performance, representation quality, and out-of-distribution generalization. By unifying the full pipeline under a single, scalable framework, \\texttt{swm} dramatically reduces research overhead and accelerates trustworthy progress toward reliable world models.",
+      "highlights": {
+        "contribution": "推出开源世界模型研究与评测平台stable-worldmodel(swm)，统一数据层、基线实现和评测协议，加速可复现的world model研究。",
+        "innovation": "Lance数据后端原生支持主流数据格式速度更快；环境提供可控的视觉/几何/物理变体，专门评估动力学理解和OOD泛化。",
+        "method": "整合数据加载、baseline实现、planner求解器，并把任务套件扩展成支持系统化variation control。",
+        "results": "提供完整pipeline与多套环境，定位于成为world model社区的统一研究基础设施；无具体精度数字但工程价值高。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T22:58:15Z",
+      "categories": [
+        "cs.LG",
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 7.0,
+        "popularity": 8.5,
+        "quality": 7.5,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.21800v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.21800v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.20811",
+      "title": "Demo-JEPA: Joint-Embedding Predictive Architecture for One-shot Cross-Embodiment Imitation",
+      "authors": [
+        "Jingyang He",
+        "Guangrun Li",
+        "Jieyu Zhang",
+        "Chengkai Hou",
+        "Zhengping Che",
+        "Shanghang Zhang"
+      ],
+      "affiliations": [
+        "Peking University"
+      ],
+      "summary": "跨形态模仿一直被\"动作空间不同\"卡住。作者把演示重新理解为目标的隐式说明——target agent该推断demonstrator想达到什么状态，而不是怎么动。基于JEPA world model，把源视觉演示翻译成target可用的latent子目标轨迹，再让target用自己的前向动力学去规划实现。RLBench和真机上接近in-domain专门方法，并能泛化到未见任务和未见形态。",
+      "original_abstract": "Robotic imitation learning is often treated as reproducing demonstrated actions, but actions are inherently embodiment-specific. When demonstrations come from humans or robots with different morphology, kinematics, or action spaces, this action-centric view requires shared action spaces, heuristic retargeting, or large-scale multi-embodiment co-training. We instead view demonstrations as implicit specifications of future goals: the target agent should infer what state the demonstrator is trying to realize, rather than how the demonstrator executes it. We propose Demo-JEPA, a cross-embodiment imitation framework that decouples demonstration intent from embodiment-specific execution. Built on a JEPA-based world model, Demo-JEPA translates source visual demonstrations into target-compatible future latent trajectories in a shared predictive representation space. The target agent then uses these latent trajectories as subgoals and realizes them through planning under its own learned forward dynamics. Because Demo-JEPA avoids action-level correspondence and requires only visual demonstrations plus the target agent's own interaction experience, it supports flexible imitation across heterogeneous embodiments. Experiments on RLBench and real-world manipulation tasks show that Demo-JEPA matches specialized in-domain planners and generalizes to unseen tasks and embodiment configurations where prior methods fail.",
+      "highlights": {
+        "contribution": "提出Demo-JEPA：用JEPA-style world model做跨形态one-shot模仿，把演示意图与执行解耦。",
+        "innovation": "完全绕过动作级对齐：把源演示翻译成target可用的latent未来轨迹，仅需视觉演示+target自身交互经验。",
+        "method": "JEPA world model做共享预测表征；源视频→target latent轨迹作为子目标；target用自己学的前向动力学规划。",
+        "results": "RLBench和真机上接近in-domain planner；在未见任务和不同embodiment配置下泛化能力优于此前方法。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T07:05:49Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20811v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.20811v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.21139",
+      "title": "Distill to Think, Foresee to Act: Cognitive-Physical Reinforcement Learning for Autonomous Driving",
+      "authors": [
+        "Yang Wu",
+        "Qiang Meng",
+        "Zhaojiang Liu",
+        "Youquan Liu",
+        "Jian Yang",
+        "Jin Xie"
+      ],
+      "affiliations": [
+        "Nanjing University"
+      ],
+      "summary": "端到端自动驾驶受限于行为克隆天花板。CoPhy先把VLM知识蒸馏进BEV编码器，再丢掉VLM保持零推理开销；然后用自回归BEV world model显式预测未来语义图作为可解释\"物理沙盒\"。用GRPO+双reward（物理安全reward来自BEV rollout，认知reward来自语言scorer）联合优化策略。NAVSIM v1/v2达到SOTA。",
+      "original_abstract": "Current end-to-end autonomous driving models are fundamentally constrained by the behavioral cloning ceiling of imitation learning. While reinforcement learning offers a path to smarter autonomy, it demands two missing pieces of infrastructure: (1) a cognitive foundation that understands traffic semantics and driving intent, and (2) a foresighted physical environment that can anticipate the consequences of candidate actions. To this end, we propose CoPhy, a CognitivePhysical reinforcement learning framework for autonomous driving. To distill to think, we distill VLM knowledge into the BEV encoder and then discard the VLM entirely, retaining cognitive ability at zero inference cost while releasing the cognitive channel as a pluggable interface for optional human language commands. To foresee to act, we build an auto-regressive BEV world model that explicitly predicts future semantic maps conditioned on candidate actions, serving as an interpretable physical sandbox from which safety metrics are directly derived. Built upon this dual infrastructure, we optimize the driving policy via GRPO with a novel dual-reward mechanism: a physical reward derived from BEV rollouts enforces hard safety constraints, while a cognitive reward from a language-aligned scorer ensures intent compliance. Extensive experiments demonstrate that CoPhy not only achieves state-of-the-art results on NAVSIM v1 and v2 benchmarks, but also enables safer driving via cognitively informed scene compliance and flexible intent control through user-defined language instructions.",
+      "highlights": {
+        "contribution": "提出Cognitive-Physical RL框架CoPhy，给端到端自动驾驶补齐\"会理解\"和\"能预见\"两块基础设施。",
+        "innovation": "VLM蒸馏到BEV编码器后丢弃VLM（零推理开销），保留语言可插拔接口；BEV world model做动作条件未来语义图预测当物理沙盒。",
+        "method": "VLM→BEV知识蒸馏；自回归BEV world model；GRPO双奖励（物理安全+认知意图）联合优化驾驶策略。",
+        "results": "NAVSIM v1和v2上达到SOTA，并支持基于语言指令的安全意图控制。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T13:14:28Z",
+      "categories": [
+        "cs.CV",
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.21139v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.21139v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.21478",
+      "title": "Latent Dynamics for Full Body Avatar Animation",
+      "authors": [
+        "Shichong Peng",
+        "Chengxiang Yin",
+        "Fei Jiang",
+        "Zhongshi Jiang",
+        "Lingchen Yang",
+        "Qingyang Tan",
+        "Amin Jourabloo",
+        "Jason Saragih",
+        "Ke Li",
+        "Christian Häne"
+      ],
+      "affiliations": [
+        "Meta Reality Labs"
+      ],
+      "summary": "驱动姿态的全身avatar碰到松垮衣服就懵——同一姿态在不同历史下衣服动得完全不一样。作者在3D高斯avatar上加了一个transformer解码器和\"动力学残差latent\"，由学到的latent dynamics按姿态历史演化。把更新拆成driving/restoring/dissipative三种力，rollout连续可控，还能调刚度。9段真实捕获数据上画质和时间一致性都比SOTA好。",
+      "original_abstract": "Pose-driven full-body avatars built on neural rendering produce high-quality novel views of a captured subject. Yet loose clothing and other dynamic elements deform in ways pose alone cannot explain: the same pose can correspond to many different states, because their motion depends on history, inertia, and contact. Explicit simulation and layered-garment methods can model such dynamics, but they require either a dedicated garment template, which raw multi-view capture does not naturally provide, or a test-time physics simulator with non-trivial runtime cost. A parallel line of work learns data-driven clothing avatars that avoid explicit garment layers. These methods add an auxiliary latent for variation beyond pose; at inference, they fix it, regress it from pose, or retrieve it from training data, without explicitly modeling how the latent evolves with its own dynamics. Additionally, even in everyday motion with loose clothing, existing architectures often struggle to capture fine-grained detail, producing blurry renderings and temporal artifacts. We augment a pose-conditioned 3D Gaussian avatar with a transformer-based decoder and a dynamics residual latent that captures temporal appearance and geometry variation beyond the driving signals. At inference, a learned latent dynamics model evolves the residual latent from a short pose history and the previous latent state. The model decomposes each update into driving, restoring, and dissipative forces, producing temporally coherent, history-dependent rollouts with negligible added cost. Different initial conditions yield diverse yet plausible motion trajectories, and the force decomposition exposes controls such as stiffness. Across nine captured sequences of everyday motion with diverse loose garments, quantitative metrics and a perceptual user study show improved animation quality over recent data-driven baselines.",
+      "highlights": {
+        "contribution": "为姿态驱动的全身高斯avatar加入历史相关的latent动力学，专门补松垮衣物等姿态无法解释的动态变化。",
+        "innovation": "动力学残差latent按姿态历史显式演化，并解耦为driving/restoring/dissipative三种力，既物理可解释又能控制刚度。",
+        "method": "3D高斯avatar + transformer decoder + 学习式latent dynamics，从短历史姿态+前一latent状态预测下一latent；力分解作为归纳偏置。",
+        "results": "9段真实日常动作捕获序列上，定量指标和用户感知评分都超过近期数据驱动baseline，时间一致性和细节都明显更好。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T17:58:03Z",
+      "categories": [
+        "cs.CV",
+        "cs.GR"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "latent dynamics",
+        "dynamics model"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 7.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 6.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.21478v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.21478v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.21072",
+      "title": "Q-ARVD: Quantizing Autoregressive Video Diffusion Models",
+      "authors": [
+        "Siao Tang",
+        "Xinyin Ma",
+        "Gongfan Fang",
+        "Xingyi Yang",
+        "Xinchao Wang"
+      ],
+      "affiliations": [
+        "National University of Singapore"
+      ],
+      "summary": "自回归视频扩散model对实时视频生成和world modeling很有前景，但跑起来贵。作者发现两个量化痛点：帧间敏感度指数衰减式不均衡，以及权重outlier异构。Q-ARVD用final-quality aware的帧加权 + outlier-aware双尺度量化解决，在多个ARVD上效果显著优于直接套现成扩散量化方案。",
+      "original_abstract": "Autoregressive video diffusion models (ARVDs) have emerged as a promising architecture for streaming video generation, paving the way for real-time interactive video generation and world modeling. Despite their potential, the substantial inference cost of ARVDs remains a major obstacle to practical deployment, making model quantization a natural direction for improving efficiency. However, quantization for ARVDs remains largely unexplored. Our empirical analysis shows that directly applying existing quantization schemes developed for standard diffusion transformers to ARVDs leads to suboptimal performance, revealing quantization behaviors that differ from those observed in bidirectional diffusion models. In this paper, we identify two critical challenges in quantizing ARVDs: (C1) Highly unbalanced frame-wise quantization sensitivity. Error accumulation during autoregressive generation can induce severely skewed quantization sensitivity across frames, following an exponential-like decay pattern. (C2) Prominent and heterogeneous outlier patterns in weights. Weight distributions exhibit pronounced outlier channels, whose patterns vary substantially across layer types and block depths. To address these issues, we propose Q-ARVD, a novel framework for accurate ARVD quantization. (S1) To tackle the highly unbalanced frame-wise sensitivity, Q-ARVD incorporates a final-quality aware frame-weighting mechanism into the quantization objective. (S2) To prevent heterogeneous outliers from degrading performance, Q-ARVD introduces an outlier-aware adaptive dual-scale quantization, which automatically detects the presence and quantity of outlier channels for an arbitrary layer, and isolates them to protect normal channels. Extensive experiments demonstrate the superiority of Q-ARVD.",
+      "highlights": {
+        "contribution": "针对自回归视频扩散模型(ARVD)提出专门的训练后量化框架Q-ARVD。",
+        "innovation": "识别ARVD独特的帧间敏感度不均衡和异构outlier；以final-quality aware帧加权+自适应双尺度量化应对，区别于扩散transformer通用方案。",
+        "method": "最终质量加权的量化目标 + outlier-aware的自适应双尺度量化（自动检测outlier通道并隔离）。",
+        "results": "在多个ARVD骨干上显著优于直接迁移的扩散量化baseline，更适合real-time视频生成与world modeling部署。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T11:58:30Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.21072v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.21072v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.21109",
+      "title": "Anomaly-Informed Confidence Calibration for Vision-Based Safety Prediction",
+      "authors": [
+        "Zhenjiang Mao",
+        "Jiawen Wu",
+        "Gabriel Wagner",
+        "Zhongzheng Zhang",
+        "Ivan Ruchkin"
+      ],
+      "affiliations": [
+        "University of Florida"
+      ],
+      "summary": "视觉控制器在分布漂移下会变得过度自信。常用的reconstruction error只捕到视觉corruption，捕不到actuation bias/延迟这种dynamics异常。作者从world model里抽出感知和动力学两个互补异常分，融合后做temperature scaling，免重新训练。DonkeyCar真车上把ECE从0.184降到0.116，相对最佳baseline改进37%。",
+      "original_abstract": "Reliable confidence estimates are important for safely deploying vision-based controllers in autonomous racing, where safety predictions must be derived from camera images, yet modern predictors become dangerously overconfident under test-time distribution shifts. We identify a critical perception-dynamics gap in existing anomaly signals: widely used scores, such as autoencoder reconstruction error, capture visual corruptions but miss dynamics anomalies (e.g., actuation bias, latency), where images remain plausible while the trajectory degrades. To address this, we propose an Anomaly-Informed Online Calibration approach that, without retraining any model component, fuses two complementary anomaly scores extracted from a world model: a perceptual score from reconstruction error and a dynamics score from epistemic uncertainty and control-stream statistics. Based on these fused scores, a lightweight temperature-scaling calibrator leverages test-time augmentation to selectively reduce overconfidence under shift while preserving nominal-condition performance. Experiments on a physical DonkeyCar under four real-world anomaly protocols unseen during training (darkness, blur, actuation bias, processing latency) reduce average expected calibration error from 0.184 to 0.116, a 37% improvement over the best baseline, without modifying the base safety predictor.",
+      "highlights": {
+        "contribution": "提出anomaly-informed在线置信度校准，用world model同时捕捉感知和动力学异常，提高安全预测在分布漂移下的可靠性。",
+        "innovation": "指出现有异常分数只覆盖视觉而漏掉动力学异常；通过epistemic uncertainty+控制流统计补上dynamics anomaly score，再融合校准。",
+        "method": "world model→感知重构异常+动力学epistemic异常→融合→temperature scaling校准（无需重新训练任何组件）。",
+        "results": "DonkeyCar真车四类未见异常协议下，ECE从0.184降到0.116（相对最佳baseline提升37%），不损害名义性能。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T12:43:09Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.21109v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.21109v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.20639",
+      "title": "Time-Dependent PDE-Constrained Optimization via Weak-Form Latent Dynamics",
+      "authors": [
+        "April Tran",
+        "Terry Haut",
+        "David Bortz",
+        "Youngsoo Choi"
+      ],
+      "affiliations": [
+        "LLNL",
+        "CU Boulder"
+      ],
+      "summary": "PDE约束的优化反复求解贵得离谱。作者用WLaSDI把高维时间相关解压成低维latent，靠弱形系统辨识找参数化latent dynamics，绕开了数值微分对噪声的敏感。在辐射输运、Vlasov-Poisson、Burgers方程上比full-order优化快了五个数量级。跟具身关系小。",
+      "original_abstract": "Optimization problems constrained by high-dimensional, time-dependent partial differential equations require repeated forward and sensitivity solves, making high-fidelity optimization computationally prohibitive in many-query design and control settings. We present a weak-form latent-space reduced-order modeling framework for accelerating gradient-based PDE-constrained optimization. The proposed approach builds on Weak-form Latent Space Dynamics Identification (WLaSDI), which compresses high-dimensional solution trajectories into a low-dimensional latent representation and identifies parametric latent dynamics using weak-form system identification. By avoiding explicit numerical differentiation of training trajectories, the weak-form improves robustness to noisy data and yields more reliable surrogate dynamics for optimization. We formulate the resulting reduced PDE-constrained optimization problem and derive both direct-sensitivity and adjoint-based gradient expressions for the learned latent dynamics, enabling scalable gradient evaluation with respect to design parameters. The framework is demonstrated on three time-dependent benchmark problems: thermal radiative transfer for optimal hohlraum design, the two-stream instability Vlasov-Poisson system, and the inviscid Burgers equation. Across these examples, WLaSDI produces accurate optimal designs, remains robust under noisy training data, and delivers substantial computational savings, including speedups of up to five orders of magnitude relative to full-order optimization. These results demonstrate that weak-form latent dynamics provide an efficient and noise-robust surrogate foundation for gradient-based optimization of complex time-dependent PDE systems.",
+      "highlights": {
+        "contribution": "提出基于弱形latent空间动力学的reduced-order建模，加速时间相关PDE约束的梯度优化。",
+        "innovation": "用弱形系统辨识替代显式数值微分，对噪声更鲁棒；同时推导了learned latent dynamics的直接与伴随灵敏度。",
+        "method": "WLaSDI压缩高维轨迹+弱形辨识latent动力学+解析adjoint梯度，构建可微的reduced PDE优化问题。",
+        "results": "在三个时间相关PDE基准上达到优秀的最优设计精度，对噪声鲁棒，比full-order优化快5个数量级。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T02:53:51Z",
+      "categories": [
+        "math.OC",
+        "cs.LG",
+        "math.DS"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 2.5,
+        "recency": 7.0,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 4.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20639v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.20639v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.21805",
+      "title": "Truncated Neural Likelihood Estimation for Simulation-Based Inference in State-Space Models",
+      "authors": [
+        "Kostas Tsampourakis",
+        "Víctor Elvira"
+      ],
+      "affiliations": [
+        "University of Edinburgh"
+      ],
+      "summary": "SSM参数推断难，likelihood不可解析。SNL在SSM上要大量仿真样本，长序列扛不住，还不能amortize。作者提出T-SNL，更准更稳更省样本，对长时序列也扩展性更好，新观测来了还能复用。属于偏统计方法论的工作，跟具身无关。",
+      "original_abstract": "State-space models (SSMs) are powerful probabilistic tools for modeling time-varying systems with latent dynamics. Inference in SSMs involves the estimation of latent states and parameters. In this work, we focus on parameter inference, which for SSMs is in general a very challenging problem due to the intractability of the likelihood. Recently, neural estimation methods, such as sequential neural likelihood (SNL), have shown promising results in Bayesian inference problems. In this paper, we show that SNL, when applied to the SSM setting, suffers important limitations, such as requiring a large amount of simulated samples to achieve a moderate performance, scaling poorly with sequence length, while not being amortized. We then introduce a novel inference algorithm called truncated-SNL (T-SNL), which addresses the limitations of SNL. Our algorithm is more accurate, more stable and robust during training, more scalable to longer temporal sequences, and can be amortized when new observations become available. Our experiments show that T-SNL is sample-efficient, robust, and flexible algorithm which outperforms other approaches.",
+      "highlights": {
+        "contribution": "提出truncated SNL，专门解决state-space模型上序列贝叶斯推断的样本效率与可扩展性问题。",
+        "innovation": "针对SNL在SSM场景下的样本浪费和不能amortize的缺陷，做截断式改造，长序列稳定且支持新观测的amortized推断。",
+        "method": "在SNL基础上引入truncation机制做序列贝叶斯推断；论文给出理论分析和算法实现。",
+        "results": "在多个SSM基准上比SNL等方法更准、训练更稳、对长时序列更可扩展。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T23:01:21Z",
+      "categories": [
+        "stat.CO",
+        "cs.LG",
+        "stat.ML"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 1.5,
+        "recency": 7.0,
+        "popularity": 4.0,
+        "quality": 6.5,
+        "recommendation": 3.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.21805v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.21805v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.20872",
+      "title": "CAdam: Context-Adaptive Moment Estimation for 3D Gaussian Densification in Generative Distillation",
+      "authors": [
+        "SeungJeh Chung",
+        "Geonho Park",
+        "Misong Kim",
+        "HyeongYeop Kang"
+      ],
+      "affiliations": [
+        "Korea University"
+      ],
+      "summary": "把3DGS的自适应稠密化搬到生成蒸馏（SDS之类）上会冗余得离谱——生成guidance有噪声，基于幅值累积分不清几何信号和噪声。CAdam改用一阶矩的\"干涉原理\"：噪声相消、几何累加，再加quantile context-aware和SNR门控自动停增稠。在SDS/ISM/VFDS三种目标和多骨干上，把高斯数量砍掉85%-97%，画质基本持平。",
+      "original_abstract": "Adaptive densification is the engine of 3D Gaussian Splatting (3DGS). However, when transposed to the optimization-based Generative Distillation paradigm, this reconstruction-native mechanism reveals fundamental limitations, resulting in inefficient representations cluttered with redundant primitives. We diagnose this failure as a Densification Dilemma stemming from the stochastic nature of generative guidance: the standard magnitude-based accumulation indiscriminately aggregates transient noise alongside geometric signals, making it difficult to strike a balance between over-densification and under-fitting. To resolve this, we introduce Context-Adaptive Moment Estimation (CAdam), a novel framework that reinterprets densification as a statistically grounded signal verification problem. CAdam leverages the first moment of gradients to exploit the interference principle, where stochastic fluctuations cancel out via destructive interference while consistent geometric drifts accumulate via constructive interference, effectively disentangling the underlying signal from the generative noise floor. This is further augmented by a quantile-based context awareness and an intrinsic Signal-to-Noise Ratio (SNR) gating mechanism, which ensure robust adaptation across optimization stages and enable the soft termination of densification. Extensive experiments across diverse objectives (SDS, ISM, VFDS) and strong generative 3DGS backbones show that CAdam reduces Gaussian count by 85%-97% relative to standard densification while preserving overall comparable perceptual quality. These results highlight signal-aware density control as a practical way to improve memory efficiency in optimization-based generative distillation.",
+      "highlights": {
+        "contribution": "把3DGS稠密化在生成蒸馏中重新表述为统计意义的信号验证问题，提出CAdam做信号感知稠密化控制。",
+        "innovation": "用梯度一阶矩的相长/相消干涉分离几何信号和生成噪声；分位数context awareness + 内在SNR门控允许稠密化软终止。",
+        "method": "CAdam在标准3DGS densification基础上把幅值累积换成基于一阶矩干涉原理+SNR门控的判定，外加quantile阈值。",
+        "results": "在SDS/ISM/VFDS三种目标和多种3DGS生成骨干上，高斯数减少85%-97%，感知质量基本保持，显著省显存。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T08:08:39Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.GR"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 5.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20872v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.20872v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.20820",
+      "title": "AIR: Amortized Image Reconstruction Framework for Self-Supervised Feed-Forward 2D Gaussian Splatting",
+      "authors": [
+        "Zhaojie Zeng",
+        "Yuesong Wang",
+        "Yawei Luo",
+        "Tao Guan"
+      ],
+      "affiliations": [
+        "Zhejiang University",
+        "HUST"
+      ],
+      "summary": "2D Gaussian splatting做图像重建效率不错但要逐图迭代或者靠手工先验分配高斯。AIR用一个前馈网络一次出结果——分阶段残差架构按重建残差再补高斯，加上\"Stage Control\"只在欠重建区激活新元。Predict-Optimize-Distill训练让多阶段预测更稳。Kodak/DIV2K上画质优于Gaussian基线，编码160-300ms。",
+      "original_abstract": "2D Gaussian splatting provides an efficient explicit representation for image reconstruction, but existing methods still require costly per-image iterative optimization or rely on handcrafted priors for primitive allocation. We present AIR, a self-supervised feed-forward framework that amortizes iterative Gaussian fitting into a single network pass, eliminating per-image test-time optimization. AIR adopts a stage-wise residual architecture that progressively predicts additional Gaussian primitives from reconstruction residuals, together with an explicit Stage Control mechanism that activates new primitives only in under-reconstructed regions. A Predict--Optimize--Distill training strategy stabilizes multi-stage prediction by distilling short-horizon optimized Gaussian increments back into the predictor. The stabilized predictor is then jointly finetuned across stages and equipped with an image-adaptive quantizer for compact Gaussian storage. Experiments on Kodak and DIV2K show that AIR achieves better reconstruction quality than representative Gaussian-based baselines while reducing encoding time to 160--300\\,ms. Code: https://github.com/whoiszzj/AIR.git",
+      "highlights": {
+        "contribution": "提出AIR：把2D高斯splatting的迭代优化摊销到单次前馈，自监督，不需要per-image优化。",
+        "innovation": "分阶段残差架构+Stage Control显式只在欠重建区域加新高斯；Predict-Optimize-Distill训练策略稳定多阶段预测。",
+        "method": "前馈预测Gaussian primitives，每阶段预测残差Gaussian，蒸馏短期优化增量回预测器；自适应量化做紧凑存储。",
+        "results": "Kodak和DIV2K上重建质量优于代表性Gaussian基线，编码时间160-300ms；开源代码。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T07:17:22Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 7.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 5.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20820v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.20820v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.21112",
+      "title": "RCGDet3D: Rethinking 4D Radar-Camera Fusion-based 3D Object Detection with Enhanced Radar Feature Encoding",
+      "authors": [
+        "Weiyi Xiong",
+        "Bing Zhu"
+      ],
+      "affiliations": [
+        "Beihang University"
+      ],
+      "summary": "4D毫米波雷达点云太稀疏，现有融合方法用复杂模块换微小精度。作者反过来——只把雷达特征编码做强，融合反而简化就够用。RCGDet3D基于Ray-centric Point Gaussian Encoder在射线坐标系下预测高斯属性后再统一到BEV，配合Semantic Injection把视觉语义注入雷达特征。VoD和TJ4DRadSet上精度和速度都SOTA。",
+      "original_abstract": "4D automotive radar is indispensable for autonomous driving due to its low cost and robustness, yet its point cloud sparsity challenges 3D object detection. Existing 4D radar-camera fusion methods focus on complex fusion strategies, trading inference speed for marginal gains. This trade-off hinders real-time deployment due to heavy computation on dense feature maps. In contrast, feature extraction from sparse radar points is less time-consuming but remains under-explored. This work uncovers that simply enhancing radar feature extraction can achieve comparable or even higher performance than elaborate fusion modules, while maintaining real-time performance. Based on this finding, we propose RCGDet3D, which centers on radar feature encoding and simplifies multi-modal fusion. Its encoder inherits from the efficient Gaussian Splatting-based Point Gaussian Encoder (PGE) in RadarGaussianDet3D with two key improvements. First, the Ray-centric PGE (R-PGE) predicts Gaussian attributes in ray-aligned coordinate systems before unifying them to Bird's-Eye View (BEV) space, significantly improving geometric consistency and reducing learning difficulty by decoupling the coordinate transformation from representation learning. Second, a Semantic Injection (SI) module incorporates visual cues from images, producing more geometrically accurate and semantically enriched radar features. Experiments on View-of-Delft (VoD) and TJ4DRadSet show that RCGDet3D outperforms state-of-the-art methods in both accuracy and speed, setting a new benchmark for real-time deployment.",
+      "highlights": {
+        "contribution": "提出RCGDet3D，证明强化雷达特征编码比复杂多模态融合更有效，建立实时4D雷达-相机3D检测新基线。",
+        "innovation": "Ray-centric Point Gaussian Encoder解耦坐标变换与表征学习；Semantic Injection模块用图像语义增强雷达特征。",
+        "method": "在Ray-aligned坐标系预测高斯属性→统一到BEV；再用SI模块把视觉语义注入雷达；融合策略保持简化。",
+        "results": "在VoD和TJ4DRadSet上精度与推理速度均超SOTA，建立实时部署新基线。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T12:45:01Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 3.0,
+        "recency": 7.0,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 5.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.21112v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.21112v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.21788",
+      "title": "SceneGraphGrounder: Zero-Shot 3D Visual Grounding via Structured Scene Graph Matching",
+      "authors": [
+        "Xuefei Sun",
+        "Xujia Zhang",
+        "Brendan Crowe",
+        "Doncey Albin",
+        "Christoffer Heckman"
+      ],
+      "affiliations": [
+        "University of Colorado Boulder"
+      ],
+      "summary": "Zero-shot 3D视觉grounding通常依赖VLM的视角推理，难保多视角一致。SceneGraphGrounder把它重新formulate成在重建的3D scene graph上做结构化图匹配：先用visual marker prompting让VLM从2D视图推关系，再lift到持久3D scene graph，最后给query graph做约束匹配。ScanRefer上zero-shot有竞争力，并在移动机器人上跑通。",
+      "original_abstract": "Zero-shot 3D visual grounding requires localizing objects in unstructured environments from free-form natural language. Recent vision-language model (VLM) approaches achieve promising results but rely on view-dependent reasoning or implicit representations, limiting spatial consistency and interpretability for compositional queries. We propose SceneGraphGrounder, a framework that reformulates 3D grounding as structured graph matching over a reconstructed 3D scene graph. To enable this formulation, we introduce a visual marker prompting strategy that enables a VLM to infer object-object relationships from 2D views, which are subsequently lifted into a persistent 3D scene graph encoding both spatial and semantic relations. Given a query, we construct a query graph and perform constrained alignment with the scene graph, ensuring multi-view consistency and interpretable reasoning. Experiments on the ScanRefer benchmark demonstrate that our method achieves competitive performance among zero-shot approaches, using only RGB-D inputs. We further validate our framework through real-world deployment on a mobile robot, demonstrating robust spatial reasoning in long-horizon physical environments. We will make our code publicly available upon acceptance.",
+      "highlights": {
+        "contribution": "提出SceneGraphGrounder，把zero-shot 3D视觉grounding重定义为3D场景图上的结构化图匹配，提升一致性和可解释性。",
+        "innovation": "用visual marker prompting让VLM跨视角推断物体关系；把2D关系lift成持久3D scene graph，避免view-dependent推理。",
+        "method": "RGB-D输入→重建3D scene graph(visual marker prompting)→query→constrained graph alignment输出grounding。",
+        "results": "ScanRefer上在zero-shot方法中具有竞争力；在真实移动机器人上完成长horizon空间推理部署。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T22:30:51Z",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vlm",
+        "spatial reasoning"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.21788v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.21788v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.20676",
+      "title": "VISTAQA: Benchmarking Joint Visual Question Answering and Pixel-Level Evidence",
+      "authors": [
+        "Mozhgan Nasr Azadani",
+        "Yimu Wang",
+        "Yongpeng Zhu",
+        "Lihong Chen",
+        "Milan Ganai",
+        "Sean Sedwards",
+        "Marco Pavone",
+        "Krzysztof Czarnecki"
+      ],
+      "affiliations": [
+        "NVIDIA",
+        "University of Waterloo"
+      ],
+      "summary": "MLLM评测要么只看文本答案对错，要么只看像素定位，没有强制\"答案配证据\"。VISTAQA给1157个专家样本要求模型既答对又给精确分割掩码作为证据，还塞了无证据的幻觉用例。配套提出GROVE指标用几何平均强制两边都得做对——一边烂另一边就救不回来。结论是即便最强系统在GROVE下也跌得很厉害。",
+      "original_abstract": "Establishing a clear link between model predictions and the visual evidence that supports them is critical for transparency and reliability in multimodal reasoning, yet current multimodal large language model (MLLM) evaluations do not explicitly enforce this alignment. Existing benchmarks assess either textual answer correctness or pixel-level localization in isolation, leaving the coupling of reasoning and grounding an open challenge. We introduce VISTAQA, a comprehensive benchmark for joint evaluation of free-form answer correctness and pixel-level evidence grounding in visual question answering. VISTAQA comprises 1,157 expert-curated samples spanning six task types and six visual domains, ranging from direct perception to compositional and relational reasoning. VISTAQA requires models to not only answer correctly, but to also provide precise segmentation masks that support their answers. It also includes hallucination-aware examples where no valid visual evidence exists. To support this enhanced evaluation, we introduce GROVE, a unified evaluation metric that enforces joint correctness by combining textual accuracy and grounding quality via a per-sample geometric mean, ensuring neither dimension can compensate for deficiencies in the other. Comprehensive experiments across grounding-aware models and hybrid pipelines with general-purpose MLLMs reveal that even the strongest systems achieve limited performance under GROVE, highlighting a substantial gap between answer accuracy and visual evidence alignment.",
+      "highlights": {
+        "contribution": "推出VISTAQA基准，联合评估MLLM的自由文本回答正确性与像素级证据grounding。",
+        "innovation": "用几何平均GROVE指标强制答案和定位都不能补偿对方；并加入无证据/幻觉用例。",
+        "method": "1157条专家样本覆盖6类任务、6种视觉域；模型需输出答案+对应分割mask；用GROVE做联合打分。",
+        "results": "即使最强的grounding-aware MLLM在GROVE下表现也很有限，揭示答案准确度与视觉证据对齐间的大鸿沟。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T03:44:06Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "multimodal large language model",
+        "mllm"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20676v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.20676v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.24019",
+      "title": "MGVQ: Synergizing Multi-dimensional Sensitivity-Aware and Gradient-Hessian Fusion for Vector Quantization",
+      "authors": [
+        "Zhong Wang",
+        "Zukang Xu",
+        "Xing Hu",
+        "Dawei Yang"
+      ],
+      "affiliations": [
+        "Houmo AI"
+      ],
+      "summary": "VLM模型大，部署到边缘需要量化。直接套向量量化有两个坑：跨模态权重分布单codebook拟合不好；二阶误差补偿丢了一阶梯度信息。MGVQ用敏感度感知的结构化混合精度+gradient-Hessian融合误差补偿，结合Kronecker和Block-LDL分解保持低开销。2-bit下InternVL2-26B从67.0%涨到71.4%，最高提升4.9个点。",
+      "original_abstract": "Vision-Language Models (VLMs) achieve outstanding performance, yet their huge model size severely hinders deployment on edge devices with limited resources. As an efficient model compression technique, vector quantization (VQ) excels in ultra-low-bit representation, which maps model weights to discrete codewords in a compact codebook to cut memory consumption and transmission overhead while preserving model capability. Direct VQ application to VLMs still has two core limitations. First, cross-modality weight distribution differences brought by visual and textual inputs cannot be well fitted by a single unified codebook. Second, current second-order error compensation ignores first-order gradient information, causing weight deviation from pre-trained optimal states, gradient drift and biased compensation results. This work proposes MGVQ, a novel vector quantization framework integrating multi-dimensional sensitivity perception and gradient-Hessian fusion. It consists of two core modules: sensitivity-guided structured mixed-precision quantization dynamically assigns different bit-widths according to channel sensitivity via combined global and local sensitivity analysis for refined resource allocation; gradient-aware second-order error compensation embeds first-order gradients into error correction, and adopts Kronecker and Block-LDL decomposition to ensure low computational cost. Extensive experiments on mainstream VLMs including LLaVA-onevision, InternVL2 and Qwen2-VL verify the effectiveness of MGVQ. In 2-bit quantization settings, MGVQ surpasses existing advanced post-training quantization methods significantly, achieving a maximum accuracy improvement of 4.9 points (71.4% vs 67.0% on InternVL2-26B). The proposed method realizes stable and efficient ultra-low-bit VLM quantization, greatly promoting the practical deployment of multimodal large models in resource-limited environments.",
+      "highlights": {
+        "contribution": "提出MGVQ，针对VLM的超低比特向量量化，专门解决跨模态分布差异和一阶梯度信息缺失两大痛点。",
+        "innovation": "敏感度引导的结构化混合精度（全局+局部敏感度）+ gradient-Hessian融合的二阶误差补偿（Kronecker/Block-LDL保持低成本）。",
+        "method": "通道敏感度分析→动态分配bit-width；一阶梯度嵌入误差补偿；分解技巧降低计算量。",
+        "results": "LLaVA-OneVision/InternVL2/Qwen2-VL 2-bit设置下显著超过现有PTQ，InternVL2-26B从67.0%升到71.4%(+4.9点)。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T06:11:25Z",
+      "categories": [
+        "cs.CV",
+        "cs.LG"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vlm"
+      ],
+      "scores": {
+        "relevance": 3.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 5.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.24019v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.24019v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.20682",
+      "title": "IndusAgent: Reinforcing Open-Vocabulary Industrial Anomaly Detection with Agentic Tools",
+      "authors": [
+        "Rongbin Tan",
+        "Fangfang Lin",
+        "Zhenlong Yuan",
+        "Min Qiu",
+        "Kejin Cui",
+        "Mengmeng Wang",
+        "Yi Wang",
+        "Zijian Song",
+        "Zhiyuan Wang",
+        "Jiyuan Wang",
+        "Yue Wang",
+        "Shuhan Song§",
+        "Huawei Cao"
+      ],
+      "affiliations": [],
+      "summary": "MLLM做开放词汇工业异常检测容易领域错配、结构幻觉。IndusAgent用工具增强的agent框架：先构造Indus-CoT结构化数据做SFT，再让agent动态调用区域裁剪、高频特征增强、先验检索等工具，配gated RL同时优化分类/定位/类型推理/工具使用效率。MVTec-AD、VisA等5个benchmark上zero-shot SOTA。",
+      "original_abstract": "Multimodal large language models (MLLMs) have shown remarkable capability in bridging visual perception and textual reasoning, enabling zero-shot understanding across diverse industrial scenarios. However, their performance in open-vocabulary industrial anomaly detection (IAD) is often limited by domain-misaligned reasoning and hallucinated structural inferences. To address these challenges, we propose \\textbf{IndusAgent}, a tool-augmented agentic framework for open-vocabulary IAD. Specifically, we first construct \\textbf{Indus-CoT}, a structured dataset that integrates global visual observations, high-resolution local patches, and expert normalcy priors, providing supervision for fine-tuning the model on rigorous industrial inspection trajectories. Building on this, IndusAgent dynamically orchestrates a set of external tools, including dynamic region cropping, high-frequency feature enhancement, and prior retrieval, thus enabling the agent to actively resolve visual ambiguities and disentangle subtle anomalies. Furthermore, we introduce a gated reinforcement learning objective that jointly optimizes anomaly classification, localization accuracy, anomaly type reasoning, and efficient tool usage, ensuring that tool invocation occurs only when beneficial. Extensive evaluations on five industrial anomaly benchmarks, including MVTec-AD, VisA, MPDD, DTD, and SDD, demonstrate that IndusAgent achieves state-of-the-art zero-shot performance among all existing methods, validating our robustness and generalization capacity.",
+      "highlights": {
+        "contribution": "提出IndusAgent，把工具增强agent范式用于开放词汇工业异常检测，缓解MLLM在工业场景的幻觉与领域错配。",
+        "innovation": "Indus-CoT结构化数据规范化推理轨迹；gated RL确保工具仅在有利时调用，把工具使用效率纳入奖励。",
+        "method": "基于MLLM的agent + 动态裁剪/高频增强/先验检索工具 + Indus-CoT SFT + gated RL联合优化分类、定位、类型推理、工具效率。",
+        "results": "在MVTec-AD/VisA/MPDD/DTD/SDD五个工业异常检测benchmark上达到zero-shot SOTA。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T03:52:21Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "multimodal large language model",
+        "mllm"
+      ],
+      "scores": {
+        "relevance": 3.5,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 5.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20682v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.20682v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.22872",
+      "title": "MedExpMem: Adapting Experience Memory for Differential Diagnosis",
+      "authors": [
+        "Qianhan Feng",
+        "Zhongzhen Huang",
+        "Yakun Zhu",
+        "Yannian Gu",
+        "Winnie Chiu Wing Chu",
+        "Xiaofan Zhang",
+        "Qi Dou"
+      ],
+      "affiliations": [
+        "CUHK",
+        "Shanghai Jiao Tong University"
+      ],
+      "summary": "医疗VLM参数里塞的是静态知识，不会随诊断经验进化。MedExpMem给VLM诊断agent加一个\"经验记忆\"——失败后反思，把可区分的鉴别诊断要点写成pairwise differential notes，新案例来了再调取。在11个放射亚专科上各种模型规模都涨，最高+7.0%准确率。属于医疗VLM agent，跟具身边缘相关。",
+      "original_abstract": "Experienced physicians develop diagnostic expertise through clinical practice, acquiring not only disease knowledge but also the ability to differentiate confusable conditions. Current medical vision-language models (VLMs) lack this capability -- their parameters encode static knowledge that does not evolve across diagnostic encounters. We propose MedExpMem, an experience memory framework enabling VLM-based diagnostic agents to accumulate differential diagnosis expertise. Unlike retrieval-augmented generation, which retrieves encyclopedic disease descriptions, MedExpMem memorizes discriminative experience derived from the agent's own diagnostic failures and organizes them as pairwise differential notes encoding key discriminators, actionable decision rules and reasoning error patterns. The framework adopts a two-phase construction process mirroring physician learning: initial practice exposes knowledge gaps, and reflective re-diagnosis refines understanding. When encountering new cases, the agent retrieves experience memory to guide differential reasoning. We evaluate MedExpMem on a radiology benchmark spanning 11 subspecialties. Results demonstrate consistent accuracy improvements, maximum 7.0%, across diverse models and scales. Analytical experiments validate experience quality and robustness, demonstrating MedExpMem as a competitive method addresses medical adaptation needs beyond the reach of parameteric learning.",
+      "highlights": {
+        "contribution": "提出MedExpMem，让医疗VLM诊断agent通过经验记忆持续积累鉴别诊断专长，而非靠参数学习。",
+        "innovation": "记忆来自模型自身诊断失败后的反思，组织成pairwise differential notes（关键鉴别点+决策规则+错误模式），区别于RAG式百科检索。",
+        "method": "两阶段：初次诊断暴露知识缺口→反思重新诊断生成differential notes；新案例时retrieve differential notes引导推理。",
+        "results": "在11个放射亚专科benchmark上最高准确率提升7.0%，跨多种模型与规模均有稳定收益。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T01:42:53Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vlm"
+      ],
+      "scores": {
+        "relevance": 3.0,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 5.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.22872v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.22872v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.20584",
+      "title": "QwenSafe: Multimodal Content Rating Description Identification via Preference-Aligned VLMs",
+      "authors": [
+        "Dishanika Denipitiyage",
+        "Aruna Seneviratne",
+        "Suranga Seneviratne"
+      ],
+      "affiliations": [
+        "UNSW Sydney",
+        "University of Sydney"
+      ],
+      "summary": "应用商店要求开发者标注内容分级，但人为标注不一致。QwenSafe基于Qwen3-VL-8B，做SFT再DPO，让模型在app描述+截图上同时推理出12种Apple内容描述符。配套构造了metadata2CRD数据。在二分类上比Qwen3-VL/LLaVA-1.6/Gemini-2.5-Flash正类召回分别提高111.8%/36.1%/2.1%。和具身关系不大。",
+      "original_abstract": "Mobile app marketplaces require developers to disclose standardized content rating descriptors (CRDs) to inform users about potentially sensitive or restricted content. Ensuring the accuracy and consistency of these disclosures remains challenging due to the multimodal nature of app content, which spans textual descriptions and visual interfaces. In this paper, we present QwenSafe, a Vision-Language Model (VLM) designed to automatically identify the presence of Apple-defined CRDs by jointly reasoning over app metadata and screenshots. To enable scalable training for this task, we introduce metadata2CRD, a data-construction pipeline that synthesizes descriptor-aligned question-answer pairs by combining app descriptions, screenshots, and formal descriptor definitions. We adapt Qwen3-VL-8B using supervised fine-tuning followed by Direct Preference Optimization (DPO) to align model predictions with descriptor-specific evidence and explanations across visual and textual modalities. We evaluate QwenSafe on 12 Apple-defined content rating descriptors and compare it against state-of-the-art vision-language models, including Qwen3-VL, LLaVA-1.6, and Gemini-2.5-Flash. QwenSafe consistently outperforms all baselines in binary CRD classification, achieving improvements in positive-class recall of 111.8%, 36.1%, and 2.1%, respectively. Our results demonstrate that descriptor-aware multimodal alignment substantially improves automated content classification and highlights the potential of vision-language models to support scalable and consistent content rating in mobile app marketplaces.",
+      "highlights": {
+        "contribution": "提出QwenSafe，用偏好对齐的VLM自动识别移动应用商店的内容分级描述符。",
+        "innovation": "面向Apple定义的CRD构造metadata2CRD数据pipeline，并用SFT+DPO做描述符特定证据对齐。",
+        "method": "Qwen3-VL-8B为底座，metadata2CRD合成描述符对齐的QA对，先SFT后DPO。",
+        "results": "在12个CRD二分类上正类召回比Qwen3-VL/LLaVA-1.6/Gemini-2.5-Flash分别高111.8%/36.1%/2.1%。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T00:41:58Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vlm"
+      ],
+      "scores": {
+        "relevance": 2.0,
+        "recency": 7.0,
+        "popularity": 4.5,
+        "quality": 6.5,
+        "recommendation": 4.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20584v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.20584v1",
+      "venue": null
+    }
+  ],
+  "total": 25
+}

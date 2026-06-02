@@ -1,0 +1,1102 @@
+{
+  "date": "2026-05-06",
+  "papers": [
+    {
+      "arxiv_id": "2605.05126",
+      "title": "ConsisVLA-4D: Advancing Spatiotemporal Consistency in Efficient 3D-Perception and 4D-Reasoning for Robotic Manipulation",
+      "authors": [
+        "Wei Li",
+        "Jizhihui Liu",
+        "Li Yixing",
+        "Junwen Tong",
+        "Rui Shao",
+        "Liqiang Nie"
+      ],
+      "affiliations": [
+        "哈工大(深圳)"
+      ],
+      "summary": "现有 VLA 大多只把 2D 图映射到动作,空间感知靠加传感器、视觉推理只盯下一帧。作者搞了 ConsisVLA-4D,用三个模块把跨视角语义、跨物体几何、跨场景时空动力学都对齐,既轻又准。结果在 LIBERO 和真机上比 OpenVLA 分别涨 21.6% 和 41.5%,推理还快 2 倍多。",
+      "original_abstract": "Current Vision-Language-Action (VLA) models primarily focus on mapping 2D observations to actions, but exhibit notable limitations in spatiotemporal perception and reasoning: 1) spatial representations often rely on additional sensors, introducing substantial computational overhead; 2) visual reasoning is typically limited to future-frame prediction, lacking alignment with the instruction-grounded scene and thus compromising spatiotemporal consistency. To address these challenges, we propose ConsisVLA-4D, a unified and efficient framework that enhances spatiotemporal consistency in 3D perception and 4D reasoning. Specifically, we design: 1) CV-Aligner, which ensures cross-view object semantic consistency by filtering instruction-relevant regions and aligning object identities across multiple viewpoints; 2) CO-Fuser, which guarantees cross-object spatial geometric consistency by eliminating spatial relation ambiguities between objects across views using compact latent representations. Building upon these, we introduce 3) CS-Thinker to achieve cross-scene spatiotemporal consistency as actions unfold. It learns implicit knowledge of local dynamics from object-semantic tokens of CV-Aligner and global depth from geometric tokens of CO-Fuser, thereby enhancing efficient visual reasoning under scene variations. Extensive experiments demonstrate that, benefiting from its efficient spatiotemporal consistency design, ConsisVLA-4D achieves 21.6% and 41.5% performance improvements, along with 2.3-fold and 2.4-fold inference speedups compared to OpenVLA on the LIBERO benchmark and real-world platforms, respectively.ConsisVLA-4D is open-sourced and publicly available at",
+      "highlights": {
+        "contribution": "提出一个统一的 4D 时空一致性 VLA 框架,不靠额外传感器也能做 3D 感知和长程推理。",
+        "innovation": "把时空一致性拆成三层:CV-Aligner 对齐跨视角物体语义,CO-Fuser 解决跨物体几何歧义,CS-Thinker 学习场景动力学,三者互补又轻量。",
+        "method": "多视角 RGB 输入,先抽取与指令相关的物体语义 token 和几何 token,再用 CS-Thinker 融合局部动力学和全局深度信息,端到端预测动作。",
+        "results": "LIBERO 上比 OpenVLA 涨 21.6%,真机平台涨 41.5%,推理速度分别 2.3× 和 2.4×,已开源。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T16:55:44Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "robotic manipulation",
+        "openvla"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 5.5,
+        "popularity": 6.5,
+        "quality": 8.0,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.05126v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.05126v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04678",
+      "title": "From Pixels to Tokens: A Systematic Study of Latent Action Supervision for Vision-Language-Action Models",
+      "authors": [
+        "Yihan Lin",
+        "Haoyang Li",
+        "Yang Li",
+        "Haitao Shen",
+        "Yihan Zhao",
+        "Chao Shao",
+        "Jing Zhang"
+      ],
+      "affiliations": [
+        "中国人民大学"
+      ],
+      "summary": "潜动作能让 VLA 在异构数据集上统一建模,但怎么监督一直没人系统比过。作者把方案拆成图像潜动作正则轨迹 vs 动作潜动作统一目标,实例化四种组合做对比,发现直接给 VLM 加离散潜动作 token 最好。也给了混合数据训练 VLA 的初步线索。",
+      "original_abstract": "Latent actions serve as an intermediate representation that enables consistent modeling of vision-language-action (VLA) models across heterogeneous datasets. However, approaches to supervising VLAs with latent actions are fragmented and lack a systematic comparison. This work structures the study of latent action supervision from two perspectives: (i) regularizing the trajectory via image-based latent actions, and (ii) unifying the target space with action-based latent actions. Under a unified VLA baseline, we instantiate and compare four representative integration strategies. Our results reveal a formulation-task correspondence: image-based latent actions benefit long-horizon reasoning and scene-level generalization, whereas action-based latent actions excel at complex motor coordination. Furthermore, we find that directly supervising the VLM with discrete latent action tokens yields the most effective performance. Finally, our experiments offer initial insights into the benefits of latent action supervision in mixed-data, suggesting a promising direction for VLA training. Code is available at https://github.com/RUCKBReasoning/From_Pixels_to_Tokens.",
+      "highlights": {
+        "contribution": "首个系统对比潜动作监督 VLA 的 study,把四类策略放在同一 baseline 下评测。",
+        "innovation": "把潜动作监督拆成 trajectory 正则 vs target 空间统一两个视角,得出 formulation-task 对应关系。",
+        "method": "统一 VLA baseline,接入图像潜动作 / 动作潜动作各两种监督方式,对比长程推理、运动协调等任务表现。",
+        "results": "图像潜动作擅长长程推理与场景泛化,动作潜动作擅长复杂运动控制;离散潜动作 token 监督 VLM 效果最佳,代码开源。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T09:27:07Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 5.5,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04678v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04678v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.08215",
+      "title": "Test-Time Training for Visual Foresight Vision-Language-Action Models",
+      "authors": [
+        "Sangwu Park",
+        "Wonjoong Kim",
+        "Yeonjun In",
+        "Sein Kim",
+        "Hongseok Kang",
+        "Chanyoung Park"
+      ],
+      "affiliations": [
+        "KAIST"
+      ],
+      "summary": "视觉前瞻 VLA 一旦预测的未来图坏了,动作就跟着崩,OOD 下尤其脆弱。作者发现预测图和真实下一帧天生是监督对,提出 T³VF 在测试时用这对监督做在线更新,并加自适应过滤防止瞎更。改善 OOD 表现而几乎不动架构。",
+      "original_abstract": "Visual Foresight VLA (VF-VLA) has become a prominent architectural choice in the recent VLA due to its impressive performance. Nevertheless, the inherent design of VF-VLA makes it particularly vulnerable to out-of-distribution (OOD) shifts. Because the quality of action directly depends on the accuracy of the predicted future visual information, OOD conditions affect both stages at once. To address this vulnerability, we propose Test-Time Training Visual Foresight VLA ($T^3$VF), a test-time training approach motivated by the observation that the predicted future image and its subsequent observation form a natural supervision pair. To further address the practical challenges that arise from indiscriminate test-time updates, we introduce an adaptive update filtering mechanism. Empirically, $T^3$VF mitigates the OOD vulnerability of VF-VLA at a modest additional inference cost, without requiring any architectural modification or auxiliary modules.",
+      "highlights": {
+        "contribution": "首个针对视觉前瞻 VLA 的测试时训练方案,免改架构就能扛 OOD。",
+        "innovation": "利用预测未来帧与真实下一帧形成的自监督对,加自适应更新过滤防止有害更新。",
+        "method": "推理时小步在线更新视觉前瞻模块,过滤机制判断每步更新是否值得做,免新增模块。",
+        "results": "在多种 VF-VLA 上稳住 OOD 表现,推理开销有限,无需架构改动。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T11:21:25Z",
+      "categories": [
+        "cs.CV",
+        "cs.LG",
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 5.5,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.08215v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.08215v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04470",
+      "title": "CRAFT: Counterfactual-to-Interactive Reinforcement Fine-Tuning for Driving Policies",
+      "authors": [
+        "Keyu Chen",
+        "Nanfei Ye",
+        "Yida Wang",
+        "Wenchao Sun",
+        "Danqi Zhao",
+        "Hao Cheng",
+        "Sifa Zheng"
+      ],
+      "affiliations": [
+        "清华大学"
+      ],
+      "summary": "自动驾驶里开环模仿学习容易在部署时漂移,闭环 RL 又苦于稀疏奖励。CRAFT 把反事实优势当作密集代理信号,再用真实交互事件的残差校正去对齐,理论上证明能降方差又降偏差。在 Bench2Drive 上对分层规划、VLA、词表打分三种架构都拿到最强闭环成绩。",
+      "original_abstract": "Open-loop imitation learning has advanced modern autonomous driving policy architectures, but closed-loop deployment remains vulnerable to policy-induced distribution shift. Existing post-training paradigms exhibit fundamental trade-offs: closed-loop RL fine-tuning provides grounded feedback from executed actions but is constrained by the sparsity of informative events, whereas counterfactual fine-tuning provides dense supervision over candidate futures but inherits bias from imperfect future estimates. We introduce Counterfactual-to-Interactive Reinforcement Fine-Tuning (CRAFT), an on-policy framework that formulates closed-loop post-training as proxy-residual optimization. CRAFT uses group-normalized counterfactual advantages as a dense proxy for real closed-loop advantages and aligns this proxy with the closed-loop world through grounded residual correction from interaction-critical events. To stabilize adaptation, CRAFT regularizes the online policy toward an EMA teacher via asymmetric KL self-distillation. Theoretically, CRAFT decomposes the real closed-loop policy gradient into proxy and residual terms under the same visited-state distribution, reducing residual variance with an aligned proxy while mitigating proxy bias through grounded residual approximation. Empirically, CRAFT achieves the strongest closed-loop gains on Bench2Drive across hierarchical planning, vision-language-action, and vocabulary-scoring architectures. Ablations, scaling behavior, stability analyses, and transfer results further validate the complementary roles of dense counterfactual proxy and grounded residual correction. Project page: https://currychen77.github.io/CRAFT.",
+      "highlights": {
+        "contribution": "把闭环后训练写成代理-残差优化,兼顾反事实的密集性和真实交互的真值。",
+        "innovation": "用 group-normalized 反事实优势当代理,再用关键事件的残差修正补齐偏差,加 EMA 教师 KL 自蒸馏稳住训练。",
+        "method": "On-policy 框架,代理项给所有候选未来打分,残差项只在交互关键事件触发,联合优化策略梯度;附加非对称 KL 自蒸馏。",
+        "results": "Bench2Drive 闭环最强,对分层规划、VLA、词表打分三类架构都涨;有 ablation、scaling、稳定性、迁移分析。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T03:49:01Z",
+      "categories": [
+        "cs.LG",
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 5.5,
+        "popularity": 6.0,
+        "quality": 7.8,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04470v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04470v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04709",
+      "title": "ELVIS: Ensemble-Calibrated Latent Imagination for Long-Horizon Visual MPC",
+      "authors": [
+        "Yurui Du",
+        "Pinhao Song",
+        "Yutong Hu",
+        "Renaud Detry"
+      ],
+      "affiliations": [
+        "KU Leuven"
+      ],
+      "summary": "视觉 MBRL 做长程规划最大的问题是潜动力学分叉、模式平均、误差累积。ELVIS 在 Dreamer 风格 RSSM 里用高斯混合 MPPI 维持多假设,再用 critic 集成的 UCB 自适应调 λ-return 限误差。DMC 14 任务 SOTA 击败 TD-MPC2 / DreamerV3,还能零样本迁到真机喷砂。",
+      "original_abstract": "A central challenge of visual control with model-based reinforcement learning (RL) is reliable long-horizon planning: long rollouts with learned latent dynamics exhibit branching futures and multi-modal action-value distributions. In addition, compounding model errors amplified by visual occlusions make deep imagination brittle. We present ELVIS, a latent model predictive controller (MPC) designed to make long-horizon planning practical. ELVIS plans in a Dreamer-style recurrent state space model (RSSM) and replaces standard unimodal model predictive path integral (MPPI) with a Gaussian-mixture MPPI that maintains multiple coherent hypotheses over long horizons, avoiding mode averaging under branching rollouts. In parallel, ELVIS stabilizes deep imagination with a shared uncertainty-aware lambda-return: an ensemble of latent critics defines an upper-confidence-bound (UCB) score that gates a time-varying lambda, adaptively trading off bootstrapping versus look-ahead to limit compounding error during planning. The same return is used both to train an actor-critic prior from imagined rollouts and to score candidate trajectories inside GMM-MPPI, aligning RL objectives with the planner's long-horizon optimization. On fourteen DeepMind Control Suite visual tasks, ELVIS establishes state-of-the-art performance compared with TD-MPC2 and DreamerV3. Finally, ELVIS transfers zero-shot to a real-world sand-spraying task with severe occlusions, improving surface-quality metrics and demonstrating robustness beyond simulation.",
+      "highlights": {
+        "contribution": "提出潜空间长程 MPC 框架,同时缓解分叉、模式平均和累积误差三个老问题。",
+        "innovation": "GMM-MPPI 维持多模态计划 + UCB 不确定度门控的自适应 λ-return,做到 RL 目标与规划目标一致。",
+        "method": "Dreamer-style RSSM 学世界模型,候选轨迹由高斯混合 MPPI 采样,共享 critic 集成给出 UCB 分数动态调 λ;同一 return 既训 actor-critic 也给规划打分。",
+        "results": "DMC 14 个视觉任务 SOTA(优于 TD-MPC2、DreamerV3),零样本迁到真机喷砂任务表现稳。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T09:59:58Z",
+      "categories": [
+        "cs.LG",
+        "cs.RO",
+        "eess.SY"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "latent dynamics",
+        "dreamerv3"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 5.5,
+        "popularity": 6.0,
+        "quality": 8.0,
+        "recommendation": 7.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04709v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04709v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.05115",
+      "title": "Manifold Steering Reveals the Shared Geometry of Neural Network Representation and Behavior",
+      "authors": [
+        "Daniel Wurgaft",
+        "Can Rager",
+        "Matthew Kowal",
+        "Vasudev Shyam",
+        "Sheridan Feucht",
+        "Usha Bhalla",
+        "Tal Haklay",
+        "Eric Bigelow",
+        "Raphael Sarfati",
+        "Thomas McGrath",
+        "Owen Lewis",
+        "Jack Merullo",
+        "Noah Goodman",
+        "Thomas Fel",
+        "Atticus Geiger",
+        "Ekdeep Singh Lubana"
+      ],
+      "affiliations": [
+        "Stanford",
+        "Harvard"
+      ],
+      "summary": "神经表征的几何结构到底有没有真的影响行为?作者拟合激活流形和行为流形,沿激活流形 steer 出来的轨迹会跟随行为流形,而线性 steer 会跑偏。语言模型(推理任务)和视频世界模型(物理动力学)都验证了这种双向几何对应。",
+      "original_abstract": "Neural representations carry rich geometric structure; but does that structure causally shape behavior? To address this question, we intervene along paths through activation space defined by different geometries, and measure the behavioral trajectories they induce. In particular, we test whether interventions that respect the geometry of activation space will yield behaviors close to those the model exhibits naturally. Concretely, we first fit an activation manifold $M_h$ to representations and a behavior manifold $M_y$ to output probability distributions. We then test the link $M_h \\leftrightarrow M_y$ via interventions: we find that steering along $M_h$, which we term manifold steering, yields behavioral trajectories that follow $M_y$, while linear steering -- which assumes a Euclidean geometry -- cuts through off-manifold regions and hence produces unnatural outputs. Moreover, optimizing interventions in activation space to produce paths along $M_y$ recovers activation trajectories that trace the curvature of $M_h$. We demonstrate this bidirectional relationship between the geometry of representation and behavior across tasks and modalities. In language models, we use reasoning tasks with cyclic and sequential geometries as well as in-context learning tasks with more complex graph geometries. In a video world model, we use a task with geometry corresponding to physical dynamics. Overall, our work shows that geometry in neural representation is not merely incidental, but is in fact the proper object for enabling principled control via intervention on internals. This recasts the core problem of steering from finding the right direction to finding the right geometry.",
+      "highlights": {
+        "contribution": "用流形 steering 实验证明神经表征几何与行为几何之间存在双向因果对应。",
+        "innovation": "提出 manifold steering 概念并构造可控干预,把'找方向'重述为'找几何'。",
+        "method": "拟合激活流形 M_h 与行为流形 M_y,做沿流形 vs 线性 steer 对比;在 LLM 推理、ICL、视频世界模型物理任务上分析。",
+        "results": "manifold steering 产生的行为更自然,跟随 M_y;反向优化也恢复 M_h 几何;跨任务、跨模态一致。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T16:46:03Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "video world model"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 5.5,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.05115v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.05115v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.05187",
+      "title": "LoViF 2026 The First Challenge on Holistic Quality Assessment for 4D World Model (PhyScore)",
+      "authors": [
+        "Wei Luo",
+        "Yiting Lu",
+        "Xin Li",
+        "Haoran Li",
+        "Fengbin Guan",
+        "Chen Gao",
+        "Xin Jin",
+        "Yong Li",
+        "Zhibo Chen",
+        "Sijing Wu",
+        "Kang Fu",
+        "Yunhao Li",
+        "Ziang Xiao",
+        "Huiyu Duan",
+        "Jing Liu",
+        "Qiang Hu",
+        "Xiongkuo Min",
+        "Guangtao Zhai",
+        "Manxi Sun",
+        "Zixuan Guo",
+        "Yun Li",
+        "Ziyang Chen",
+        "Manabu Tsukada",
+        "Zhengyang Li",
+        "Zhenglin Du",
+        "Yi Wen",
+        "Licheng Jiao",
+        "Fang Liu",
+        "Lingling Li",
+        "Yiwen Ren",
+        "Zhilong Song",
+        "Dubing Chen",
+        "Yucheng Zhou",
+        "Tianyi Yan",
+        "Huan Zheng"
+      ],
+      "affiliations": [
+        "中科大",
+        "上海交大"
+      ],
+      "summary": "LoViF 2026 PhyScore 挑战赛报告:面向 2D/4D 世界模型生成视频的整体质量评估。Benchmark 含 1554 个视频,覆盖 7 个生成模型、26 类内容,要求评估 4 个维度并定位物理异常时间戳。提供 text-2D、image/video-to-4D 三个赛道与综合评测协议。",
+      "original_abstract": "This paper reports on the LoViF 2026 PhyScore challenge, a competition on holistic quality assessment of world-model-generated videos across both 2D and 4D generation settings. The challenge is motivated by a central gap in current evaluation practice: perceptual quality alone is insufficient to judge whether generated dynamics are physically plausible, temporally coherent, and consistent with input conditions. Participants are required to build a metric that jointly predicts four dimensions, i.e., Video Quality, Physical Realism, Condition-Video Alignment, and Temporal Consistency. Depart from that, participants also need to localize physical anomaly timestamps for fine-grained diagnosis.   The benchmark dataset contains 1,554 videos generated by seven representative world generative models, organized into three tracks (text-2D, image-to-4D, and video-to-4D) and spanning 26 categories. These categories explicitly cover physics-relevant scenarios, including dynamics, optics, and thermodynamics, together with diverse real-world and creative content. To ensure label reliability, scores and anomaly timestamps are produced through trained human annotation with an additional automated quality-control pass.   Evaluation is based on both score prediction and anomaly localization, with a composite protocol that combines TimeStamp_IOU and SRCC/PLCC. This report summarizes the challenge design and provides method-level insights from submitted solutions.",
+      "highlights": {
+        "contribution": "提出首个面向世界模型生成视频的整体质量评估挑战与 benchmark,联合评估 4 个维度并定位物理异常。",
+        "innovation": "用 PhyScore 评估机制结合 SRCC/PLCC 与 TimeStamp_IOU,覆盖物理动力学、光学、热力学等场景。",
+        "method": "构造 1554 个视频的多赛道数据集,人工标注 + 自动质控;参赛者训练通用度量,既给分数又输出异常时间戳。",
+        "results": "整理并发布完整赛事数据与评估协议,汇总参赛方法的洞见(无统一 leaderboard 数字)。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T17:52:39Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 5.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.05187v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.05187v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.05411",
+      "title": "Creative Robot Tool Use by Counterfactual Reasoning",
+      "authors": [
+        "M. Tuluhan Akbulut",
+        "Varun Satheesh",
+        "Ahmed Jaafar",
+        "Alper Ahmetoglu",
+        "Shane Parr",
+        "Aditya Ganeshan",
+        "Shivam Vats",
+        "George Konidaris"
+      ],
+      "affiliations": [
+        "Brown University"
+      ],
+      "summary": "想让机器人会创意用工具,得明白工具的因果可用属性。作者把因果发现拆成 VLM 推荐特征 + 反事实工具几何/物理扰动,再在动力学模型里仿真验证,新物体按因果特征分类,技能靠 keypoint 匹配迁移。在棒、勺、垫高三个任务上验证。",
+      "original_abstract": "We propose a causal reasoning framework for creative robot tool use where a suitable tool for a task is correctly identified for use beyond its primary objectives. The proposed framework first discovers the causal relationships between the tool and the task by conducting simulated experiments in a dynamics model. We decouple the causal discovery problem into two complementary components: VLM-based feature suggestion and counterfactual tool generation via targeted geometric and physical feature perturbations. Then, novel objects are classified based on identified causal features, and the tool use skill is transferred via keypoint matching conditioned on the identified causal features. By reconstructing the task in a dynamics model, our approach grounds tool use in the physics of the problem. We illustrate our approach in reaching a distant object with different sticks, scooping candies from a bowl using diverse items, and using different boxes or crates as stepping platforms to retrieve an object from a high shelf. Our baseline comparisons show that identifying causal features and grounding them in physical tool properties leads to more reliable tool selection and stronger skill keypoint transfer.",
+      "highlights": {
+        "contribution": "提出一个把工具使用 grounding 到物理因果属性的反事实推理框架。",
+        "innovation": "VLM 提议候选特征 + 反事实几何/物理扰动两条路并行做因果发现,再用 keypoint 转移技能。",
+        "method": "在 dynamics model 里做反事实仿真,识别因果特征后做新物体分类,基于因果条件的 keypoint 匹配迁移技能。",
+        "results": "在 reaching、scooping、stepping platform 三类创意工具任务上比 baseline 更可靠地选工具并迁移技能。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T20:10:28Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "dynamics model"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 5.5,
+        "popularity": 6.5,
+        "quality": 7.0,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.05411v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.05411v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.05092",
+      "title": "Driver-WM: A Driver-Centric Traffic-Conditioned Latent World Model for In-Cabin Dynamics Rollout",
+      "authors": [
+        "Haozhuang Chi",
+        "Daosheng Qiu",
+        "Hao Su",
+        "Haochen Liu",
+        "Zirui Li",
+        "Haoruo Zhang",
+        "Chen Lv"
+      ],
+      "affiliations": [
+        "南洋理工大学"
+      ],
+      "summary": "L2/L3 共驾要预测人和环境同时发生的反应,但驾驶世界模型基本只看外部、座舱内只做识别。Driver-WM 把座舱内动力学和外部交通耦合到一个潜空间世界模型里,双流 + 门控因果注入做长程 rollout。多任务辅助驾驶 benchmark 上长程几何和语义对齐都涨。",
+      "original_abstract": "Safe L2/L3 driving automation requires anticipating human-in-the-loop reactions during shared-control transitions. While most driving world models forecast the external environment, in-cabin intelligence remains strictly recognition-oriented and lacks multi-step rollout capabilities for driver dynamics. We introduce Driver-WM, a driver-centric latent world model that rolls out in-cabin dynamics causally conditioned on out-cabin traffic context. This formulation unifies physical kinematics forecasting with auxiliary behavioral and emotional semantic recognition. Operating in a compact latent space constructed from frozen vision-language features, Driver-WM adopts a dual-stream architecture to separately encode external traffic and internal driver states. These streams are directionally coupled via a gated causal injection mechanism, which uses a learned vector gate to modulate external contextual perturbations while strictly enforcing temporal causality. Evaluations on a multi-task assistive driving benchmark demonstrate that Driver-WM yields robust long-horizon geometric forecasting for reactive high-motion maneuvers and improves semantic alignment for both driver and traffic states. Finally, the explicit external-to-internal conditioning allows for controlled test-time interventions to systematically analyze mechanism responses.",
+      "highlights": {
+        "contribution": "首个针对座舱内驾驶员动力学多步 rollout 的潜世界模型。",
+        "innovation": "双流分别编码外部交通和内部驾驶员状态,通过门控因果注入向量门保证时间因果性。",
+        "method": "在冻结视觉-语言特征上构建紧凑潜空间,双流 Transformer 做 rollout,行为/情感语义为辅助任务;支持测试时干预。",
+        "results": "多任务辅助驾驶 benchmark 上对反应性高动作有更稳的长程几何预测,司机+交通语义对齐更好,可做控制式干预分析。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T16:30:48Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 5.5,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.05092v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.05092v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04568",
+      "title": "Dream-MPC: Gradient-Based Model Predictive Control with Latent Imagination",
+      "authors": [
+        "Jonathan Spieler",
+        "Sven Behnke"
+      ],
+      "affiliations": [
+        "University of Bonn"
+      ],
+      "summary": "MBRL 里 MPC 一般用 gradient-free 方法,贵又慢;直接梯度优化又常常不如人。Dream-MPC 从策略 rollout 出几条轨迹,用学习世界模型做梯度上升,带不确定度正则、时间上摊销迭代。24 个连续控制任务里超过 gradient-free MPC 和 SOTA 基线。",
+      "original_abstract": "State-of-the-art model-based Reinforcement Learning (RL) approaches either use gradient-free, population-based methods for planning, learned policy networks, or a combination of policy networks and planning. Hybrid approaches that combine Model Predictive Control (MPC) with a learned model and a policy prior to leverage the advantages of both paradigms have shown promising results. However, these approaches typically rely on gradient-free optimization methods, which can be computationally expensive for high-dimensional control tasks. While gradient-based methods are a promising alternative, recent works have empirically shown that gradient-based methods often perform worse than their gradient-free counterparts. We propose Dream-MPC, a novel approach that generates few candidate trajectories from a rolled-out policy and optimizes each trajectory by gradient ascent using a learned world model, uncertainty regularization and amortization of optimization iterations over time by reusing previously optimized actions. Our results on 24 continuous control tasks show that Dream-MPC can significantly improve the performance of the underlying policy and can outperform gradient-free MPC and state-of-the-art baselines. Code and videos are available at https://dream-mpc.github.io.",
+      "highlights": {
+        "contribution": "把梯度优化在 MPC 中真正用起来,既比 gradient-free 强又比纯策略涨。",
+        "innovation": "从策略采少量候选轨迹做梯度优化 + 不确定度正则 + 时间摊销复用上一步动作,克服梯度 MPC 易卡问题。",
+        "method": "学习世界模型 + 策略先验,候选轨迹通过梯度上升优化,带不确定度惩罚;复用历史优化结果做 warm start。",
+        "results": "24 个连续控制任务上显著优于 gradient-free MPC 和 SOTA 基线,有 code + video。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T07:13:11Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 5.5,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04568v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.04568v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.05029",
+      "title": "The Predictive-Causal Gap: An Impossibility Theorem and Large-Scale Neural Evidence",
+      "authors": [
+        "Kejun Liu"
+      ],
+      "affiliations": [],
+      "summary": "作者在 2695 个网络配置上跑了大规模实验,发现纯预测目标会让 encoder 学环境而不是真正想建模的系统,叫做预测-因果鸿沟。还从理论上证明这是预测目标的结构性属性,不是优化 bug。对自监督表征和世界模型扩展是个警示。",
+      "original_abstract": "We report a systematic failure mode in predictive representation learning. Across 2695 neural network configurations trained to predict linear-Gaussian dynamics, the optimal encoder tracks the environment rather than the system it is meant to model. The mean causal fidelity -- the fraction of encoder sensitivity allocated to system degrees of freedom -- is 0.49, and only 2.5% of configurations exceed 0.70. The failure intensifies with dimension: at N=100, the optimal encoder becomes causally blind (fidelity ~10^{-8}) while achieving 92% lower prediction error than the causal representation. We prove this is not an optimization artifact but a structural property of the predictive objective: when environment modes are slower or less noisy than system modes, every minimizer of the population risk encodes the former. The set of dynamics exhibiting this predictive-causal gap is open and of positive measure in parameter space. In a nonlinear Duffing-GRU sweep, unconstrained predictors learn environment-dominant representations in 55% of tasks (95% CI 41--68%) versus 24% under operational grounding (p=2.3e-3); the median out-of-distribution MSE inflation under environment shift is 1.82x versus 1.00x. Operational grounding -- restricting the loss to system observables -- partially suppresses the gap, but causal fidelity is never recovered without an explicit system-environment boundary. The results identify the predictive-causal gap as a structural limit of learning, with implications for self-supervised representation learning, world models, and the scaling paradigm.",
+      "highlights": {
+        "contribution": "系统揭示预测目标下表征会偏向环境而非系统,定义并理论证明预测-因果鸿沟。",
+        "innovation": "把鸿沟刻画为预测目标的结构限制并证明此现象在参数空间中是 open positive measure 的。",
+        "method": "在线性高斯动力学上扫 2695 个配置,加非线性 Duffing-GRU 任务,对比无约束 vs 操作锚定的 loss。",
+        "results": "平均因果保真度只有 0.49;N=100 时 encoder 几乎纯环境化但预测误差还低 92%;锚定 loss 可部分缓解但无法完全恢复。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T15:25:37Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 5.5,
+        "popularity": 5.5,
+        "quality": 7.5,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.05029v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.05029v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.05138",
+      "title": "Executable World Models for ARC-AGI-3 in the Era of Coding Agents",
+      "authors": [
+        "Sergey Rodionov"
+      ],
+      "affiliations": [],
+      "summary": "ARC-AGI-3 上跑 coding agent 的尝试。Agent 自己维护一个可执行的 Python 世界模型,对照历史观测验证,再 refactor 到更简洁,作为 MDL 简洁性的实用代理。25 个公开游戏里完整通关 7 个,平均 RHAE 32.6%。可作为 ARC-AGI-3 的通用基线。",
+      "original_abstract": "We evaluate an initial coding-agent system for ARC-AGI-3 in which the agent maintains an executable Python world model, verifies it against previous observations, refactors it toward simpler abstractions as a practical proxy for an MDL-like simplicity bias, and plans through the model before acting. The system is intentionally direct: it uses a scripted controller, predefined world-model interfaces, verifier programs, and a plan executor, but no hand-coded game-specific logic. We report results on the 25 public ARC-AGI-3 games. Each recorded playthrough uses a fresh agent instance with no access to previous playthrough-specific files or conversation state. Most games have a single recorded playthrough; for a few games, we report multiple independent fresh-agent playthroughs to expose run-to-run variability. The agent fully solved 7 games, achieved a Relative Human Action Efficiency greater than 75%, on 6 games, and obtained a mean per-game RHAE of 32.58%. Because the system uses no game-specific code, it can serve as a game-general baseline for ARC-AGI-3. Performance on the private validation set remains to be tested. Overall, the results provide preliminary evidence that verifier-driven executable world models are a promising approach for ARC-AGI-3 agents.",
+      "highlights": {
+        "contribution": "把 coding agent 玩 ARC-AGI-3 的方案做出一个可复现基线,关键点是可执行世界模型 + 验证 + refactor 简化。",
+        "innovation": "用代码作为世界模型表示,通过验证程序 + 简化 refactor 实现 MDL-like 简洁性偏置。",
+        "method": "脚本化 controller + 预定义世界模型接口 + 验证器 + 计划执行器;每次 playthrough 新开 agent 实例无历史记忆。",
+        "results": "25 个公开 ARC-AGI-3 游戏中完整通关 7 个,6 个 RHAE > 75%,平均 RHAE 32.58%;无游戏专属代码,可作通用基线。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T17:12:36Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 5.5,
+        "popularity": 6.5,
+        "quality": 6.5,
+        "recommendation": 6.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.05138v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.05138v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04793",
+      "title": "Bilinear Mamba-Koopman Neural MPC for Varying Dynamics",
+      "authors": [
+        "Matan Pagi",
+        "Zohar Sorek"
+      ],
+      "affiliations": [],
+      "summary": "Koopman 神经 MPC 为了保凸性强制系统算子与当前控制无关,但限制了动力学随条件变化的能力。作者加一个低秩双线性耦合让算子可以随输入调整,参数只多 1%,推导出 Jacobian 用于 SCP。CartPole/RSCP 时变任务里更稳,延迟重规划下降级更平滑。",
+      "original_abstract": "Koopman-based neural MPC models generate time-varying dynamics from historical data, but preserve convexity by enforcing that the system operator is independent of the current control input. This conditional independence constraint limits adaptation to changing dynamics within a single MPC horizon, particularly under time-varying conditions and under stale-plan execution.   We propose Bilinear Mamba-Koopman Neural MPC, a minimal extension that introduces control-dependent coupling in the latent dynamics, allowing the effective operator to adapt to the current input. The resulting model is a strict generalization of the standard linear, conditional-independence formulation, adds less than 1% parameters through a low-rank structure, and admits exact model Jacobians that enable efficient Sequential Convex Programming (SCP) with monotone-descent and KKT convergence results under standard trust-region assumptions.   Across CartPole and RSCP benchmarks in time-invariant and time-varying regimes, the proposed model matches or improves forecasting accuracy on every cell when training noise is averaged out, with strict gains where control-state coupling is structurally present. Its main closed-loop gains appear in the RSCP TV task, where iterative SCP improves adaptation within the horizon and substantially stabilizes training; in CartPole TV, the gains are modest but consistent. In delayed re-planning experiments on the time-varying variants, the bilinear model degrades more gracefully under stale-plan execution, maintaining a consistent advantage on CartPole TV and a substantially larger robustness margin on RSCP TV. These results show that control-dependent latent dynamics provide a simple and effective mechanism for robust MPC under varying conditions.",
+      "highlights": {
+        "contribution": "在 Koopman 神经 MPC 上加最小双线性耦合,保留可解性又允许动力学随控制变化。",
+        "innovation": "低秩 bilinear 耦合 + 精确 Jacobian + SCP 收敛证明,严格泛化标准 Koopman 公式。",
+        "method": "Mamba-Koopman 学潜动力学,bilinear 项让算子随控制变;SCP 信任域内单调下降优化。",
+        "results": "时变任务 CartPole/RSCP 上 SCP 内自适应改善、训练更稳;延迟重规划下降级更优。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T11:44:43Z",
+      "categories": [
+        "cs.LG",
+        "math.OC"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 5.5,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04793v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04793v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04413",
+      "title": "Counterfactual identifiability beyond global monotonicity: non-monotone triangular structural causal models",
+      "authors": [
+        "Pengcheng Tan",
+        "Jiang Chen",
+        "Dehui Du"
+      ],
+      "affiliations": [
+        "华东师范大学"
+      ],
+      "summary": "结构因果模型大多假设全局单调,但具身交互里同一扰动在不同接触上下文可能反着来。作者提出 NM-TM-SCM,用机制级可逆 + 上下文无关逆传输替代全局单调,证明等价于外生同构且可完整识别反事实。MuJoCo Door 上能完美恢复事件级反事实。",
+      "original_abstract": "Structural causal models provide a unified semantics for interventions and counterfactuals, but most identifiability results rely on restrictive assumptions like global monotonicity, which are often violated in embodied interaction, where the same exogenous perturbation can induce opposite responses under different contact contexts. We ask what structure still suffices once global monotonicity is dropped. We introduce non-monotone triangular structural causal models (NM-TM-SCM), which retain triangular recursion but replace global monotonicity with mechanism-wise invertibility and context-independent inverse transport. We prove that these conditions are equivalent to exogenous isomorphism and imply complete counterfactual identifiability, and we give a counterexample showing that local invertibility alone is insufficient. We instantiate the theory in CausalInverter, with triangular invertible layers, orientation gates, and transport-stability regularization. On synthetic non-monotonic mechanisms, the structural bias yields systematic counterfactual gains as non-monotonicity increases. On MuJoCo Door, our model achieves perfect event-level counterfactual recovery, lowers continuous angle error relative to a Transformer baseline, and delivers substantially more stable recovery than Transformer and conditional-flow predictors. On MuJoCo Push, where non-monotonicity is weaker, the same low-data predictors remain competitive or better, consistent with a bias-variance boundary. These results identify a broader identifiable regime between globally monotone triangular models and unconstrained black-box world models.",
+      "highlights": {
+        "contribution": "在丢掉全局单调假设的前提下给出反事实可识别的新结构条件。",
+        "innovation": "用 mechanism-wise invertibility + context-independent inverse transport 替代全局单调,证明可完整识别反事实。",
+        "method": "提出 CausalInverter:三角可逆层 + 方向门 + 传输稳定正则;在合成与 MuJoCo Door/Push 上验证。",
+        "results": "MuJoCo Door 上事件级反事实完美恢复,角度误差和稳定性优于 Transformer 和 conditional-flow 基线。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T02:11:46Z",
+      "categories": [
+        "cs.LG",
+        "stat.ME"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 5.5,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04413v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04413v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04899",
+      "title": "A geometric relation of the error introduced by sampling a language model's output distribution to its internal state",
+      "authors": [
+        "Albert F. Modenbach"
+      ],
+      "affiliations": [],
+      "summary": "GPT 风格 LM 在概率分布散开的位置对单 token 改变极敏感。作者从 token 嵌入几何出发推一个 so(n) 值 1-form,虽然只来自几何,曲率却语义有意义。在 chess 推理任务上曲率耦合到棋盘区域和棋子重要性,提示 token 几何反映内部世界模型。",
+      "original_abstract": "GPT-style language models are sensitive to single-token changes at generation points where the predicted probability distribution is spread across multiple tokens. Viewing this sensitivity as a geometric property, we derive an $\\mathfrak{so}(n)$-valued 1-form that depends only on the geometry of the token embeddings. Despite this purely geometric origin, we show that its curvature is semantically meaningful: On chess reasoning tasks, the curvature couples to the world model of an off-the-shelf instruction-tuned model, with transformations clustering by board region and respecting piece importance. Our findings suggest that token space geometry directly reflects how models internally represent problems.",
+      "highlights": {
+        "contribution": "建立 LM 输出采样误差与内部状态之间的纯几何 1-form 描述,发现其曲率有语义意义。",
+        "innovation": "把 token-level 敏感度建模为李代数值 1-form,只依赖嵌入几何,与 world model 关联。",
+        "method": "从 token 嵌入推 so(n) 值 1-form,计算其曲率,并在 chess 任务上分析模式聚类。",
+        "results": "曲率按棋盘区域聚类、与棋子重要性对应,提示 token 空间几何直接反映内部 world model。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T13:28:16Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 5.5,
+        "popularity": 4.5,
+        "quality": 6.0,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04899v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.04899v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04759",
+      "title": "Gyan: An Explainable Neuro-Symbolic Language Model",
+      "authors": [
+        "Venkat Srinivasan",
+        "Vishaal Jatav",
+        "Anushka Chandrababu",
+        "Geetika Sharma"
+      ],
+      "affiliations": [],
+      "summary": "作者主打非 Transformer 的可解释语言模型 Gyan,基于修辞结构、语义角色等知识表征,把语言模型与知识获取解耦,自称在 3 个常用数据集 SOTA、2 个私有数据集更好。卖点是免幻觉、低算力、可信。听起来更像 manifesto。",
+      "original_abstract": "Transformer based pre-trained large language models have become ubiquitous. There is increasing evidence to suggest that even with large scale pre-training, these models do not capture complete compositional context and certainly not, the full human analogous context. Besides, by the very nature of the architecture, these models hallucinate, are difficult to maintain, are not easily interpretable and require enormous compute resources for training and inference. Here, we describe Gyan, an explainable language model based on a novel non-transformer architecture, without any of these limitations. Gyan achieves SOTA performance on 3 widely cited data sets and superior performance on two proprietary data sets. The novel architecture decouples the language model from knowledge acquisition and representation. The model draws on rhetorical structure theory, semantic role theory and knowledge-based computational linguistics. Gyan's meaning representation structure captures the complete compositional context and attempts to mimic humans by expanding the context to a 'world model'. AI model adoption critically depends on trust and transparency especially in mission critical use cases. Collectively, our results demonstrate that it is possible to create models which are trustable and reliable for mission critical tasks. We believe our work has tremendous potential for guiding the development of transparent and trusted architectures for language models.",
+      "highlights": {
+        "contribution": "提出一个非 Transformer 架构的可解释语言模型,声称把语言能力和知识表示解耦。",
+        "innovation": "结合修辞结构理论、语义角色理论与知识计算语言学构建意义表征,扩展成 'world model'。",
+        "method": "未给出具体网络结构细节;基于符号知识表征与语言学规则结合的混合系统。",
+        "results": "声称在 3 个常用数据集 SOTA、2 个私有数据集更好;缺少标准 benchmark 对比细节。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T11:06:30Z",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.ET",
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 3.0,
+        "recency": 5.5,
+        "popularity": 4.0,
+        "quality": 4.0,
+        "recommendation": 4.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04759v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.04759v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04435",
+      "title": "Ground4D: Spatially-Grounded Feedforward 4D Reconstruction for Unstructured Off-Road Scenes",
+      "authors": [
+        "Shuo Wang",
+        "Jilin Mei",
+        "Fuyang Liu",
+        "Wenfei Guan",
+        "Fanjie Kong",
+        "Zhihua Zhao",
+        "Shuai Wang",
+        "Chen Min",
+        "Yu Hu"
+      ],
+      "affiliations": [
+        "中科院自动化所"
+      ],
+      "summary": "Feedforward GS 用在越野无结构场景容易出现冲突高斯观测,要么糊要么有伪影。Ground4D 把 canonical Gaussian 空间划分到体素里做查询条件下的时间注意力,intra-voxel softmax 让时间选择与空间占用互补;再加表面法线引导。在 ORAD-3D 和 RELLIS-3D 上 SOTA 并零样本泛化。",
+      "original_abstract": "Feedforward Gaussian Splatting has recently emerged as an efficient paradigm for 4D reconstruction in autonomous driving. However, in unstructured off-road scenes, its performance degrades due to high-frequency geometry, ego-motion jitter, and increased non-rigid dynamics. These factors introduce conflicting Gaussian observations across timestamps, leading to either over-smoothed renderings or structural artifacts. To address this issue, we propose Ground4D, a spatially-grounded 4D feedforward framework for pose-free off-road reconstruction. The key idea is to resolve temporal conflicts through spatially localized conditioning. Specifically, we introduce voxel-grounded temporal Gaussian aggregation, which partitions the canonical Gaussian space into spatial voxels and performs query-conditioned temporal attention within each voxel. Intra-voxel softmax normalization ensures that temporal selectivity and spatial occupancy become mutually reinforcing rather than conflicting. We furthermore introduce surface normal cues as auxiliary geometric guidance to regularize the geometry of Gaussian primitives. Extensive experiments on ORAD-3D and RELLIS-3D demonstrate that Ground4D consistently outperforms existing feedforward methods in reconstruction quality and generalizes zero-shot to unseen off-road domains. Project page and code:https://github.com/wsnbws/Ground4D.",
+      "highlights": {
+        "contribution": "提出针对越野无结构场景的 pose-free feedforward 4D 高斯重建框架。",
+        "innovation": "体素 grounded 的时间高斯聚合 + intra-voxel softmax,让时间选择和空间占用相互强化;表面法线辅助几何。",
+        "method": "划分 canonical Gaussian 空间为体素,每个体素内做 query 条件下时间注意力,加表面法线正则。",
+        "results": "在 ORAD-3D 和 RELLIS-3D 上 SOTA,零样本泛化到未见越野域,有 code + project page。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T02:58:47Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 5.5,
+        "popularity": 5.5,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04435v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04435v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04730",
+      "title": "ULF-Loc: Unbiased Landmark Feature for Robust Visual Localization with 3D Gaussian Splatting",
+      "authors": [
+        "Yingdong Gu",
+        "Shaocheng Yan",
+        "Zhenjun Zhao",
+        "Yuan Kou",
+        "Jianxin Luo",
+        "Pengcheng Shi",
+        "Jiayuan Li"
+      ],
+      "affiliations": [
+        "武汉大学"
+      ],
+      "summary": "用 3DGS 做视觉定位时,直接拿 2D query 特征匹配 3D Gaussian 特征会因 α-blending 的偏差而错配。作者从理论上证明这种偏差来源于邻居纠缠,提出 ULF-Loc 用几何加权融合替代偏差优化,再加关键点共识采样与局部几何验证。Cambridge Landmarks 上平移误差降 17%,训练时间和显存只用 STDLoc 的 1/10、1/6。",
+      "original_abstract": "Visual localization is a core technology for augmented reality and autonomous navigation. Recent methods combine the efficient rendering of 3D Gaussian Splatting (3DGS) with feature-based localization. These methods rely on direct matching between 2D query features and the 3D Gaussian feature field, but this often results in mismatches due to an inherent bias in the learned Gaussian feature. We theoretically analyze the feature learning process in 3DGS, revealing that the widely adopted $α$-blending optimization inherently introduces bias into 3D point features. This bias stems from the entanglement between individual Gaussians and their neighboring Gaussians, making the learned features unsuitable for precise matching tasks. Motivated by these findings, we propose ULF-Loc, an unbiased landmark feature framework that replaces biased feature optimization with geometry-weighted feature fusion. We further introduce keypoint-consensus landmark sampling to select reliable Gaussians and local geometric consistency verification to reject mismatches caused by rendering artifacts. On the Cambridge Landmarks dataset, ULF-Loc reduces the mean median translation error by 17\\% compared to the state-of-the-art, while achieving superior efficiency with only 1/10 the training time and 1/6 the GPU memory of STDLoc.",
+      "highlights": {
+        "contribution": "首次系统分析 3DGS 特征匹配中的内在偏差,并给出无偏特征学习框架。",
+        "innovation": "用几何加权融合替代 α-blending 优化得到无偏 landmark 特征 + keypoint consensus 采样 + 局部几何一致性验证。",
+        "method": "理论分析特征偏差来源后,构建无偏特征融合管线,推理时配合关键点共识与几何一致性过滤错配。",
+        "results": "Cambridge Landmarks 上中位平移误差降 17%(SOTA),训练 1/10 时间、1/6 显存。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T10:30:50Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 5.5,
+        "popularity": 5.5,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04730v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04730v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04506",
+      "title": "Ilov3Splat: Instance-Level Open-Vocabulary 3D Scene Understanding in Gaussian Splatting",
+      "authors": [
+        "Binh Long Nguyen",
+        "Kien Nguyen",
+        "Sridha Sridharan",
+        "Clinton Fookes",
+        "Peyman Moghadam"
+      ],
+      "affiliations": [
+        "QUT",
+        "CSIRO Robotics"
+      ],
+      "summary": "把 3DGS 升级到实例级 + 开放词汇场景理解。Ilov3Splat 给 Gaussian splat 附上视图一致特征场,用多分辨率 hash 编码 CLIP,实例特征用 SAM 掩码对比学习。推理时 CLIP 查询 + 两阶段 3D 聚类拿到对应 Gaussian 组,实例分割和物体选择上超过现有 open-vocab 3DGS 方法。",
+      "original_abstract": "We introduce Ilov3Splat, a novel framework for instance-level open-vocabulary 3D scene understanding built on 3D Gaussian Splatting (3D-GS). Most prior work depends on 2D rendering-based matching or point-level semantic association, which undermines cross-view consistency, lacks coherent instance-level reasoning, and limits precision in downstream 3D tasks. To address these limitations, our method jointly optimizes scene geometry and semantic representations by augmenting Gaussian splats with view-consistent feature fields. Specifically, we leverage multi-resolution hash embedding to efficiently encode language-aligned CLIP features, enabling dense and coherent language grounding in 3D space. We further train an instance feature field using contrastive loss over SAM masks, supporting fine-grained object distinction across views. At inference time, CLIP-encoded queries are matched against the learned features, followed by two-stage 3D clustering to retrieve relevant Gaussian groups. This enables our framework to identify arbitrary objects in 3D scenes based on natural language descriptions, without requiring category supervision or manual annotations. Experiments on standard benchmarks demonstrate that Ilov3Splat outperforms prior open-vocabulary 3D-GS methods in both object selection and instance segmentation, offering a flexible and accurate solution for language-driven 3D scene understanding. Project page: https://csiro-robotics.github.io/Ilov3Splat.",
+      "highlights": {
+        "contribution": "面向 3DGS 的实例级开放词汇场景理解框架,联合几何与语义优化。",
+        "innovation": "用 hash embedding 编码 CLIP 特征做语言对齐 + SAM 掩码对比学习实例特征场,加两阶段 3D 聚类。",
+        "method": "增强 Gaussian splat 的特征场,语言特征训练对齐 CLIP,实例特征用 SAM 掩码对比;推理通过 CLIP query 匹配后聚类。",
+        "results": "在标准 benchmark 上 object selection 与实例分割均优于已有 open-vocab 3DGS 方法,有 project page。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T05:23:41Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 5.5,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04506v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.04506v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04844",
+      "title": "QuadBox: Accelerating 3D Gaussian Splatting with Geometry-Aware Boxes",
+      "authors": [
+        "Xinze Li",
+        "Bohan Yang",
+        "Pengxu Chen",
+        "Yiyuan Wang",
+        "Hongcheng Luo",
+        "Wentao Cheng",
+        "Weifeng Su"
+      ],
+      "affiliations": [],
+      "summary": "3DGS 渲染时算 Gaussian 和 tile 的相交是性能大头。QuadBox 用四个轴对齐 bbox 紧裹住投影后的 Gaussian,基于几何感知拉伸因子构造 tile-aligned 包围,再配单次遍历算法,简单区间检测即可判定相交。公开数据集上渲染加速 1.85×。",
+      "original_abstract": "3D Gaussian Splatting (3DGS) has emerged as an advanced technique for real-time novel view synthesis by representing scene geometry and appearance using differentiable Gaussian primitives. However, efficiently computing precise Gaussian-tile intersections remains a critical task in the rasterization pipeline. To this end, we propose QuadBox, a method that leverages four axis-aligned bounding boxes to tightly encapsulate projected Gaussians in a discrete manner. First, we derive a geometry-aware stretching factor that enables the construction of a tile-aligned QuadBox, which covers the elliptical projection and largely excludes irrelevant tiles. Second, we introduce QPass, a single-pass tile traversal algorithm that exhaustively exploits the discrete nature of QuadBox, ensuring that the tile intersection check is performed with simple interval tests. Experiments on public datasets show that our method accelerates the rendering speed of 3DGS by 1.85$\\times$. Code is available at \\href{https://github.com/Powertony102/QuadBox}{https://github.com/Powertony102/QuadBox}.",
+      "highlights": {
+        "contribution": "提出更紧的 4-BBox 包围 + 单 pass 遍历,大幅加速 3DGS 渲染。",
+        "innovation": "用 4 个轴对齐 bbox 离散逼近椭圆投影,得到 tile-aligned QuadBox,显著少做无用 tile 检查。",
+        "method": "推导几何感知的拉伸因子,构造 QuadBox;QPass 单 pass 遍历用简单区间检测做交集判定。",
+        "results": "公开数据集上 3DGS 渲染速度提升 1.85×,代码开源。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T12:42:33Z",
+      "categories": [
+        "cs.CV",
+        "cs.GR"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "novel view synthesis",
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 5.5,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04844v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04844v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.05155",
+      "title": "Aes3D: Aesthetic Assessment in 3D Gaussian Splatting",
+      "authors": [
+        "Chuanzhi Xu",
+        "Boyu Wei",
+        "Haoxian Zhou",
+        "Xuanhua Yin",
+        "Zihan Deng",
+        "Haodong Chen",
+        "Qiang Qu",
+        "Weidong Cai"
+      ],
+      "affiliations": [
+        "University of Sydney"
+      ],
+      "summary": "3DGS 现在评测都看重建质量和真实感,几乎不管'好不好看'。Aes3D 给出首个 3D 场景美学评估框架,带专门标注数据集 Aesthetic3D,并设计 Aes3DGSNet 直接从 3DGS 原语回归美学分数,不用渲染多视角图就能跑。建立新 benchmark。",
+      "original_abstract": "As 3D Gaussian Splatting (3DGS) gains attention in immersive media and digital content creation, assessing the aesthetics of 3D scenes becomes important in helping creators build more visually compelling 3D content. However, existing evaluation methods for 3D scenes primarily emphasize reconstruction fidelity and perceptual realism, largely overlooking higher-level aesthetic attributes such as composition, harmony, and visual appeal. This limitation comes from two key challenges: (1) the absence of general 3DGS datasets with aesthetic annotations, and (2) the intrinsic nature of 3DGS as a low-level primitive representation, which makes it difficult to capture high-level aesthetic features. To address these challenges, we propose Aes3D, the first systematic framework for assessing the aesthetics of 3D neural rendering scenes. Aes3D includes Aesthetic3D, the first dataset dedicated to 3D scene aesthetic assessment, built on our proposed annotation strategy for 3D scene aesthetics. In addition, we present Aes3DGSNet, a lightweight model that directly predicts scene-level aesthetic scores from 3DGS representations. Notably, our model operates solely on 3D Gaussian primitives, eliminating the need for rendering multi-view images and thus reducing computational cost and hardware requirements. Through aesthetics-supervised learning on multi-view 3DGS scene representations, Aes3DGSNet effectively captures high-level aesthetic cues and accurately regresses aesthetic scores. Experimental results demonstrate that our approach achieves strong performance while maintaining a lightweight design, establishing a new benchmark for 3D scene aesthetic assessment. Code and datasets will be made available in a future version.",
+      "highlights": {
+        "contribution": "首个面向 3DGS 的场景美学评估框架,含数据集 + 模型。",
+        "innovation": "直接基于 3D Gaussian 原语预测美学分数,免去多视角渲染,既轻又快。",
+        "method": "构建 Aesthetic3D 数据集与标注协议;Aes3DGSNet 在多视角 3DGS 表示上做美学监督学习。",
+        "results": "在自建 benchmark 上取得强表现且轻量,确立 3D 场景美学评估的新参考。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T17:27:09Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 3.5,
+        "recency": 5.5,
+        "popularity": 5.0,
+        "quality": 6.0,
+        "recommendation": 5.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.05155v3",
+      "arxiv_url": "https://arxiv.org/abs/2605.05155v3",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.05340",
+      "title": "How Far Are VLMs from Privacy Awareness in the Physical World? An Empirical Study",
+      "authors": [
+        "Junran Wang",
+        "Xinjie Shen",
+        "Zehao Jin",
+        "Pan Li"
+      ],
+      "affiliations": [],
+      "summary": "VLM 作为具身助理的核心大脑,在物理环境的隐私意识到底如何?作者搭了 Unity 模拟器 ImmersedPrivacy,设三层任务测识别敏感物、社交语境切换、命令与隐私冲突。测了 12 个 SOTA VLM,场景变复杂就掉、社交语境无一过 65%、Gemini-3.1-pro 在冲突命令下也只赢一半。",
+      "original_abstract": "As Vision-Language Models (VLMs) are increasingly deployed as autonomous cognitive cores for embodied assistants, evaluating their privacy awareness in physical environments becomes critical. Unlike digital chatbots, these agents operate in intimate spaces, such as homes and hospitals, where they possess the physical agency to observe and manipulate privacy-sensitive information and artifacts. However, current benchmarks remain limited to unimodal, text-based representations that cannot capture the demands of real-world settings. To bridge this gap, we present ImmersedPrivacy, an interactive audio-visual evaluation framework that simulates realistic physical environments using a Unity-based simulator. ImmersedPrivacy evaluates physically grounded privacy awareness across three progressive tiers that test a model's ability to identify sensitive items in cluttered scenes, adapt to shifting social contexts, and resolve conflicts between explicit commands and inferred privacy constraints. Our evaluation of 12 state-of-the-art models reveals consistent deficits. In cluttered scenes, all models exhibit monotonic performance decay as scene complexity grows due to perceptual deficit. When social context shifts, no model exceed 65% selection accuracy. Under conflicting commands, the best model gemini-3.1-pro perfectly balances task completion and privacy preservation in only 51% of cases. These findings reveal that current VLMs in the physical world suffer from perceptual fragility and fail to let their knowledge of privacy cues govern their situated behavior. Our code and data is available at https://github.com/immersed-privacy/immersed-privacy .",
+      "highlights": {
+        "contribution": "提出首个具身物理环境下 VLM 隐私意识评估框架与 benchmark。",
+        "innovation": "Unity 沉浸式模拟器 + 三层渐进任务,覆盖感知、社交、冲突三类隐私挑战。",
+        "method": "Unity 模拟室内场景,对 12 个 SOTA VLM 跑识别 / 社交 / 冲突三类任务,有 audio-visual 输入。",
+        "results": "所有模型随场景复杂度单调下降;社交语境无模型超 65%;Gemini-3.1-pro 仅 51% 兼顾任务与隐私;数据代码公开。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T18:10:51Z",
+      "categories": [
+        "cs.CR",
+        "cs.AI"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vlm",
+        "audio-visual"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 5.5,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.05340v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.05340v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04503",
+      "title": "DiffCap-Bench: A Comprehensive, Challenging, Robust Benchmark for Image Difference Captioning",
+      "authors": [
+        "Yuancheng Wei",
+        "Haojie Zhang",
+        "Linli Yao",
+        "Lei Li",
+        "Jiali Chen",
+        "Tao Huang",
+        "Yiting Lu",
+        "Duojun Huang",
+        "Xin Li",
+        "Zhao Zhong"
+      ],
+      "affiliations": [],
+      "summary": "图像差异描述 (IDC) 现在 benchmark 都不够复杂,而 BLEU/METEOR 又抓不住语义和幻觉。DiffCap-Bench 覆盖 10 类差异,搭配 LLM-as-Judge 协议 + Difference List 评估。测了一堆 SOTA MLLM,闭源 vs 开源差距明显,推理能力很关键,模型 scaling 不一定有用。",
+      "original_abstract": "Image Difference Captioning (IDC) generates natural language descriptions that precisely identify differences between two images, serving as a key benchmark for fine-grained change perception, cross-modal reasoning, and image editing data construction. However, existing benchmarks lack diversity and compositional complexity, and standard lexical-overlap metrics (e.g., BLEU, METEOR) fail to capture semantic consistency or penalize hallucinations, which together prevent a comprehensive and robust evaluation of multimodal large language models (MLLMs) on IDC. To address these gaps, we introduce DiffCap-Bench, a comprehensive IDC benchmark covering ten distinct difference categories to ensure diversity and compositional complexity. Furthermore, we propose an LLM-as-a-Judge evaluation protocol grounded in human-validated Difference Lists, enabling a robust assessment of models' ability to both capture and describe visual changes. Through extensive evaluation of state-of-the-art MLLMs, we reveal significant performance gaps between proprietary and open-source models, highlight the critical importance of reasoning capability, and identify clear limitations in model scaling. Our framework also demonstrates strong alignment with human expert judgments and strong correlation with downstream image editing data construction quality. These findings establish DiffCap-Bench as both a reliable IDC evaluation framework and a practical predictor of downstream utility. The benchmark and code will be made publicly available to support further research.",
+      "highlights": {
+        "contribution": "首个面向 IDC 的全面 benchmark + LLM-as-Judge 评估协议,与下游图像编辑数据构建相关。",
+        "innovation": "10 类差异类目 + Difference List 评估,显著改善人对齐和幻觉惩罚。",
+        "method": "构建多样化 IDC 数据集,基于人验证 Difference List 设计 LLM-as-Judge 评分;评估开源/闭源 SOTA MLLM。",
+        "results": "闭源 vs 开源差距明显,推理能力对 IDC 关键,scaling 收益有限;评测与下游图像编辑数据质量强相关。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T05:12:41Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "multimodal large language model",
+        "mllm"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 5.5,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04503v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04503v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04451",
+      "title": "RemoteZero: Geospatial Reasoning with Zero Human Annotations",
+      "authors": [
+        "Liang Yao",
+        "Fan Liu",
+        "Shengxiang Xu",
+        "Chuanyi Zhang",
+        "Rui Min",
+        "Shimin Di",
+        "Yuhui Zheng"
+      ],
+      "affiliations": [
+        "河海大学"
+      ],
+      "summary": "地理空间推理还离不开人工坐标标注。RemoteZero 利用 MLLM 验证一个区域是否匹配查询的能力强于直接生成坐标这一不对称性,用语义验证替代几何监督,跑 GRPO 训练而不要 box。可在无标注遥感图上自演化,效果接近强监督方法。",
+      "original_abstract": "Geospatial reasoning requires models to resolve complex spatial semantics and user intent into precise target locations for Earth observation. Recent progress has liberated the reasoning path from manual curation, allowing models to generate their own inference chains. Yet a final dependency remains: they are still supervised by human-annotated ground-truth coordinates. This leaves the reasoning process autonomous, but not its spatial endpoint, and prevents true self-evolution on abundant unlabeled remote sensing data. To break this bottleneck, we introduce RemoteZero, a box-supervision-free framework for geospatial reasoning. RemoteZero is motivated by a simple asymmetry: an MLLM is typically better at verifying whether a region satisfies a query than at directly generating precise coordinates. Leveraging this stronger discriminative ability, RemoteZero replaces geometric supervision with intrinsic semantic verification and enables GRPO training without box annotations. The resulting framework further supports iterative self-evolution, allowing the model to improve from unlabeled remote sensing imagery through its own verification signal. Experiments show that RemoteZero achieves competitive performance against strong supervised methods, demonstrating the potential of self-verifying training for geospatial reasoning localization.",
+      "highlights": {
+        "contribution": "提出零 box 监督的地理空间推理框架,解锁无标注遥感数据上的自演化训练。",
+        "innovation": "利用 MLLM 验证强、生成弱的不对称性,以内在语义验证作为 GRPO 训练信号。",
+        "method": "MLLM 自我生成推理路径 + 区域验证打分作奖励;GRPO 训练,无需 box 真值;支持迭代自演化。",
+        "results": "和强监督方法相当甚至接近 SOTA,展示了自验证训练在地理空间定位上的潜力。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T03:25:41Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "mllm",
+        "spatial reasoning"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 5.5,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04451v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04451v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04505",
+      "title": "JASTIN: Aligning LLMs for Zero-Shot Audio and Speech Evaluation via Natural Language Instructions",
+      "authors": [
+        "Leying Zhang",
+        "Bowen Shi",
+        "Haibin Wu",
+        "Bach Viet Do",
+        "Yanmin Qian"
+      ],
+      "affiliations": [
+        "上海交大"
+      ],
+      "summary": "现有音频/语音评估指标和通用 MLLM 在跨领域、零样本、指令灵活性上都不够好。JASTIN 把音频评估当成自指令推理任务,冻结音频编码器 + LLM 后端,中间加可训练适配器,加多源多任务多校准多描述的指令数据。在语音、声音、音乐和域外任务上均与人评强相关。",
+      "original_abstract": "The rapid advancement of generative audio models has outpaced the development of robust evaluation methodologies. Existing objective metrics and general multimodal large language models (MLLMs) often struggle with domain generalization, zero-shot capabilities, and instructional flexibility. To address these bottlenecks, we propose JASTIN, a generalizable, instruction-driven audio evaluation framework that formulates audio assessment as a self-instructed reasoning task. JASTIN bridges a frozen high-performance audio encoder with a fine-tuned LLM backbone via a trainable audio adapter. To ensure robust zero-shot generalization, we introduce a comprehensive instruction following data preparation pipeline, incorporating Multi-Source, Multi-Task, Multi-Calibration, and Multi-Description data. Experimental results demonstrate that JASTIN achieves state-of-the-art Pearson and Spearman correlations with human subjective ratings. It consistently outperforms general MLLMs across speech, sound, music, and out-of-domain evaluation tasks without the need for task-specific retraining.",
+      "highlights": {
+        "contribution": "提出指令驱动的通用音频评估框架,SOTA 与人评相关性。",
+        "innovation": "冻结音频 encoder + 可训 adapter + LLM,后端做指令跟随;多源/多任务/多校准/多描述的指令数据。",
+        "method": "音频特征经 adapter 喂给微调 LLM,以自指令推理形式输出评分;无需任务特定再训。",
+        "results": "在语音、声音、音乐和域外评测上均与人主观评分 Pearson/Spearman 相关性 SOTA,优于通用 MLLM。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T05:18:42Z",
+      "categories": [
+        "eess.AS",
+        "cs.AI",
+        "cs.SD"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "multimodal large language model",
+        "mllm"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 5.5,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04505v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04505v1",
+      "venue": null
+    }
+  ],
+  "total": 25
+}

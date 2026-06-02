@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2605.05544",
+    "summary": "Action chunking 一刀切固定长度其实有坑:接触时刻要短 chunk 反应快,自由运动要长 chunk 才好做信用分配。作者搞了个自适应版本,在每个 state 里挑最合适的 chunk 长度,核心是用 per-horizon baseline + 折扣归一化的 advantage 来比较,避免短 chunk 系统性占优。在 OGBench、Robomimic 上拿了 SOTA,还能加到大 VLA 模型上提 RoboCasa-GR1 成功率。",
+    "highlights": {
+      "contribution": "提出 AQC,让 offline-to-online RL 的 action chunking 长度按 state 自适应选择,而不是全程固定。",
+      "innovation": "用 per-horizon advantage 而不是直接比 Q 值,理论上证明了无偏选择性,绕开了不同折扣尺度导致短 chunk 永远赢的老问题。",
+      "method": "训练多个不同 chunk 长度的 critic,每步根据归一化 advantage 信号挑 chunk size 执行;给出 noise immunity 和 value dominance 的理论界。",
+      "results": "OGBench/Robomimic 拿到 SOTA 成功率;接在大 VLA 上对 RoboCasa-GR1 也有显著提升,具体数字未在摘要给出。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.05714",
+    "summary": "现在 VLA 见过的任务做得好,换场景就崩,作者认为问题在视觉表征把外观和场景搅在一起。TriRelVLA 把「物体-手-任务」三元关系显式建出来,做成关系图喂给 LLM 再出动作,降低对外观统计的依赖。配套放了个真机数据集做微调,跨场景、跨物体、跨任务的泛化都比基线强。",
+    "highlights": {
+      "contribution": "把 VLA 的中间表示从语义对象升级为「对象-手-任务」三元关系图,目的是让动作生成更依赖关系而非外观。",
+      "innovation": "区别于此前对象化但仍是语义的中间表征,这里强调关系而非内容,并通过 task-grounded 图 transformer 显式建模交互。",
+      "method": "多模态输入构造三元 primitive → 任务引导 cross-attention 形成节点 → relation-aware graph transformer 建模 → bottleneck 压缩后投入 LLM 出动作;附带真机数据集微调。",
+      "results": "在 fine-tuned 任务和 cross-scene/object/task 三个泛化维度都有「清晰提升」,具体数字摘要里未给。"
+    },
+    "scores": {
+      "relevance": 8.6,
+      "recency": 5.5,
+      "popularity": 6.8,
+      "quality": 7.2,
+      "recommendation": 7.8
+    },
+    "affiliations": ["NUS"]
+  },
+  {
+    "arxiv_id": "2605.05945",
+    "summary": "VLA 想吃大规模 egocentric 数据,但现有数据集每条几分钟,根本撑不起长时任务。作者用手机当采集设备搞了 MobileEgo Anywhere,只靠普通手机传感器就能持续追踪小时级轨迹。开源了视频处理流水线 STERA、一个免费 App,加 200 小时数据集(584 sessions),并验证拿这些数据中训 VLA 能降低留出集动作误差。",
+    "highlights": {
+      "contribution": "提供一套用商用手机收集长达数小时 egocentric 数据的开源框架 + 200 小时数据集,降低 VLA 训练数据采集门槛。",
+      "innovation": "完全跳出实验室级硬件,用手机长程姿态追踪 + 标准化处理流水线,把消费级设备变成 VLA 数据源。",
+      "method": "STERA 视频处理流水线将手机原始捕获转成训练格式;免费 App 让任何用户都能录;数据覆盖 584 sessions、200 小时长形式 egocentric 视频。",
+      "results": "把这部分数据加入 mid-training 一个 VLA,held-out 动作预测误差下降,验证了数据有效性(具体数值摘要未给)。"
+    },
+    "scores": {
+      "relevance": 7.4,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06175",
+    "summary": "把 VLA 整个全量微调容易过拟合还忘掉预训练的视觉语言知识,PEFT 又适应不动机器人控制。VLA-GSE 把冻结骨干做 SVD,leading 奇异分量给共享专家、残余分量给路由专家,在固定参数预算下扩大适配能力。只更新 2.51% 参数就在 LIBERO-Plus 拿到 81.2% 零样本成功率,还保住多模态理解能力。",
+    "highlights": {
+      "contribution": "提出一种基于谱分解 + 共享/路由专家的 VLA 参数高效微调框架,兼顾控制适应与预训练知识保留。",
+      "innovation": "用 SVD 的主成分初始化 generalized 专家、residual 部分初始化 specialized 专家,既比 LoRA 表达力强又能避免 FFT 的遗忘。",
+      "method": "对骨干做谱分解 → 给 shared expert 装主奇异分量、给 routed expert 装互不相交残差分量 → 用 MoE 风格路由,只训 2.51% 参数。",
+      "results": "LIBERO-Plus 零样本平均成功率 81.2%,多模态理解能力与 LoRA 持平,真机分布外操控也有提升;开源代码已放出。"
+    },
+    "scores": {
+      "relevance": 8.4,
+      "recency": 5.5,
+      "popularity": 6.8,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": ["Tsinghua"]
+  },
+  {
+    "arxiv_id": "2605.06747",
+    "summary": "作者放出一个百万小时级人类活动视频语料 HumanNet,目标是把具身基础模型的训练数据从机器人扩展到人类视频。除了视频还提供动作描述、手/身体信号等交互注解。验证显示在 Qwen VLM 上加 1000 小时 HumanNet 第一视角视频比加 100 小时真机数据更有效,说明 egocentric human video 可能能替代真机数据。",
+    "highlights": {
+      "contribution": "提出百万小时级、首/三人称兼有的 human-centric 视频语料 HumanNet,作为具身基础模型训练的可扩展替代数据源。",
+      "innovation": "把人类视频当作 VLA 训练数据的一等公民,提出 human-centric 过滤、视角多样化、注解富集等数据策展原则。",
+      "method": "收集百万小时视频,加 caption、动作描述、手身信号;在 Qwen VLM 上以连续训练方式对比 1000h egocentric video 与 100h 真机数据。",
+      "results": "1000h 来自 HumanNet 的 egocentric video 连续训练效果超过 100h 真机数据(Magic Cobot),验证规模化人类视频可作为 VLA 的廉价替代品。"
+    },
+    "scores": {
+      "relevance": 8.3,
+      "recency": 5.5,
+      "popularity": 7.5,
+      "quality": 7.4,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.05951",
+    "summary": "World model 想象越长越不稳,作者认为问题在 latent 缺少历史完备性和几何结构。HaM-World 把 latent 拆成 (q,p) 的物理子空间 + 语义子空间 c,用 Mamba 做历史记忆,(q,p) 走 Hamiltonian 向量场 + 残差控制项。在 DMC 4 个任务上 AUC 117.9(+9.5%),长 horizon rollout 误差降到强基线的 45%,OOD 12 种扰动下都拿最高 return。",
+    "highlights": {
+      "contribution": "提出 HaM-World,把 world model 的 latent 结构化为符合 Hamiltonian 力学的 (q,p,c) 三段,提高长 horizon 想象稳定性。",
+      "innovation": "结合 Mamba selective state space 的历史记忆与软 Hamiltonian 几何先验,显式区分配置/动量/语义,而非直接堆 latent。",
+      "method": "Mamba 处理历史 → latent 分成 (q,p,c) → (q,p) 走能量导出的 Hamiltonian + 控制残差,c 装语义和耗散因素;同一 latent 同时支持 dynamics、reward、CEM 规划。",
+      "results": "DMC 4 任务 Avg AUC 117.9(+9.5%);长 rollout MSE 降到基线 45%、12/12 OOD 场景拿到最高 return,Finger Spin +10.2%、Reacher Easy +13.6%。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 8.1,
+      "recommendation": 7.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06298",
+    "summary": "传统 world model 用厚重 decoder 把 latent 解回像素既慢又不可解释。NOVA 把状态表示成一个隐式神经表示 (INR) 的权重和偏置,直接解析渲染就能出图,顺带支持零样本超分。还能用 action-matching 蒸馏成可控视频生成器,无需额外损失就能解耦背景/前景/帧间运动,在单卡消费 GPU 上 ~40M 参数跑可控预测。",
+    "highlights": {
+      "contribution": "用 INR 权重作为 world model 的「状态」,通过解析渲染替代 decoder,实现紧凑、可移植、可解释的世界模型。",
+      "innovation": "状态不是 opaque latent,而是 INR 的参数;无任何 auxiliary 或对抗损失即可自发结构化解耦背景/前景/运动。",
+      "method": "把场景状态编码成 coordinate-based INR 的权重,前向解析渲染替代 decoder;用 action-matching 把模型蒸馏成 context-dependent 视频生成器。",
+      "results": "~40M 参数、单卡消费 GPU 即可跑可控预测;支持零样本超分、内容/动力学解耦编辑,在多个挑战性数据集上取得强可控预测能力。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.4,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06192",
+    "summary": "现有 world-action 模型基本把 video 当辅助表征,反过来用动作引导视频生成的能力很弱,导致 rollout 几何漂掉、交互细节崩。EA-WM 直接把 kinematic 状态投影到目标相机视角,形成结构化「动作场」,再用事件感知双向融合块增强物体状态变化的捕捉。在 WorldArena 上拿到 SOTA,显著领先基线。",
+    "highlights": {
+      "contribution": "提出 EA-WM,以结构化 Kinematic-to-Visual 动作场实现「动作引导视频生成」的世界模型。",
+      "innovation": "不再把动作当低维 token 注入,而是几何对齐地投影成视觉化动作场,加事件感知双向 cross-attention 捕捉交互动态。",
+      "method": "在预训练视频扩散基础上,把关节/末端动作和 kinematic 状态投到目标相机视图形成结构化动作场;事件感知双向融合块调制跨分支注意力。",
+      "results": "在综合性的 WorldArena benchmark 拿到 SOTA,以「显著差距」领先现有基线(具体数字摘要未给)。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 5.5,
+      "popularity": 6.2,
+      "quality": 7.4,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06337",
+    "summary": "天气和气候 world model 通常被迫把多源观测插值到固定网格上,效率和精度都受限。Earth-o1 直接学连续三维大气演化,不依赖传统数值求解器或数据同化,把各类传感器拼成一个 grid-free 动力场。在 hindcast 上地表预报技能可与运营级 IFS 持平,展示了「观测原生」地球世界模型的可行性。",
+    "highlights": {
+      "contribution": "提出 grid-free、观测原生的全球大气 world model,绕开传统网格化数值预报。",
+      "innovation": "直接从未网格化的多源传感器观测学连续三维动力场,而不是先同化到网格再推时间。",
+      "method": "把多源观测融合成统一的 grid-free 动力场,模型自动推进大气态在空间和时间上的演化,无需显式数值求解器。",
+      "results": "hindcast 地表预报技能与运营级 IFS 相当,验证观测驱动连续 world model 可在地球系统层面与传统物理框架精度匹敌。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5.5,
+      "popularity": 7.5,
+      "quality": 7.8,
+      "recommendation": 7.1
+    },
+    "affiliations": ["Shanghai AI Lab", "SJTU", "Columbia"]
+  },
+  {
+    "arxiv_id": "2605.06388",
+    "summary": "现在机器人 world model 普遍用 VAE 这种以像素重建为目标的 latent,但语义 latent (V-JEPA/DINO/SigLIP) 究竟是不是更好,没人系统比过。作者在 BridgeV2 上固定协议训练 6 种 encoder,从视觉保真、规划/策略下游表现、latent 质量三个轴评估。结论:像素 SOTA 不等于策略 SOTA,V-JEPA 2.1 在策略下游最强,语义 latent 普遍更适合机器人 world model。",
+    "highlights": {
+      "contribution": "首个系统比较「重建型 vs 语义型 latent space」在机器人 world model 中表现的研究,给出选型建议。",
+      "innovation": "提出策略下游性能、视觉保真、latent 质量三轴评估框架,凸显仅看像素 PSNR 会误导 world model 选择。",
+      "method": "固定 BridgeV2 数据与训练协议,统一对比 6 种编码器 (VAE、Cosmos、V-JEPA 2.1、Web-DINO、SigLIP 2 等),在 action-conditioned LDM 框架内训练并多轴评估。",
+      "results": "重建 encoder 在像素指标上强,但语义 encoder 几乎全面赢策略 + latent 质量;V-JEPA 2.1 综合最强,作者明确推荐语义 latent。"
+    },
+    "scores": {
+      "relevance": 8.3,
+      "recency": 5.5,
+      "popularity": 7.2,
+      "quality": 8.2,
+      "recommendation": 8.2
+    },
+    "affiliations": ["Mila"]
+  },
+  {
+    "arxiv_id": "2605.06487",
+    "summary": "3D MRI 预训练大多把 volume 当静态数据,作者发现可以把 3D 体积变成「沿位置/方向/尺度的连续 2D 切片视频」,于是把它当作 action-conditioned 序列做预训练。tokenizer 编码切片观测,latent dynamics 模型预测特征演化,等于给 MRI 设计了一个 video-action 形式的 world model 类预训练任务。在多个解剖/空间下游任务上比静态 volume baseline 更好。",
+    "highlights": {
+      "contribution": "提出一种把 3D MRI 体积转成可控 2D 切片导航 video-action 序列、再做 action-conditioned 预训练的方法。",
+      "innovation": "把医学影像预训练从掩码重建的静态视角换成「切片导航 = 动作」的动力学学习视角,引入 latent dynamics 类 world model 思想。",
+      "method": "渲染连续位置/方向/尺度切片得到 video + action 轨迹;tokenizer 编码观测,latent dynamics 模型预测潜变量演化;与静态预训练和无动作对齐变体对比。",
+      "results": "在多个解剖与空间下游任务上一致优于静态体积 baseline、tokenizer-only 预训练及无动作对齐的 dynamics 变体。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.4
+    },
+    "affiliations": ["Peking University"]
+  },
+  {
+    "arxiv_id": "2605.06841",
+    "summary": "标准 world model 学的是 state-action → next state 的平稳函数,会把「动作和结果同时出现」当成因果,忽略动作前置条件。AGWM 提出把动作可执行性建成一个 DAG 前置依赖结构,显式跟踪在每一步哪些动作仍可执行。在游戏环境上多步预测误差更低、新配置泛化更好、可解释性也提升。",
+    "highlights": {
+      "contribution": "提出 affordance-grounded world model,显式建模动作前置条件,缓解多步 imagined rollout 中的累积误差。",
+      "innovation": "提出 structure-changing event 概念,用 DAG 表示动作 prerequisite,避免传统 world model 把先决条件忽略当成「幻觉动作」。",
+      "method": "学一个抽象 affordance 结构(DAG of prerequisites),与状态-动作-next state 一起训练,显式追踪每个动作在当前状态是否可执行。",
+      "results": "在游戏式模拟环境中实现更低的多步预测误差、对新配置更好的泛化,以及更高的可解释性(无具体数字)。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 6.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06732",
+    "summary": "LeCun 等人的理论小品:在 imagined rollout 上训练策略,究竟该怎么分配 dynamics 和 reward 模型的样本预算?作者扩展了 Asadi 等人的分析到带 learned reward 的 MDP,推出最小化 return error 上界的最优样本比;还分析了 REINFORCE 在噪声 reward 下仍是无偏的,从而给出「多 rollouts 噪声 reward vs 少 rollouts 精确 reward」的最优选择公式。",
+    "highlights": {
+      "contribution": "对「在想象中训练」的范式给出最优样本分配与噪声 reward 容忍度的理论刻画。",
+      "innovation": "把 Asadi 2018 的分析推到带 learned reward 的 MDP,并把 Lipschitz 表征作为收紧界的 desideratum,与 temporal straightening 思想挂上钩。",
+      "method": "理论推导:基于幂律 scaling 假设给出 dynamics vs reward 样本的最优比;分析 REINFORCE 在零均值奖励噪声下的偏差与方差;构造一维预算优化问题求解最优 trade-off。",
+      "results": "理论结果而非 benchmark;提供了样本分配公式、Lipschitz 表征的紧致性收益、以及预算约束下 rollout 数 vs reward 精度的最优解。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5.5,
+      "popularity": 8.0,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": ["Meta AI", "NYU"]
+  },
+  {
+    "arxiv_id": "2605.06334",
+    "summary": "工具调用 LLM agent 的合规评测很难,因为手册是人类自然语言、行为却是 tool call 轨迹。MANTRA 框架自动把自然语言手册 + 工具 schema 合成机器可校验的 compliance benchmark:独立生成符号 world model 和 trace 级合规检查,用 SMT 求解器保证一致性。最终造了 6 域 285 任务、覆盖 50+ 页手册的基准。",
+    "highlights": {
+      "contribution": "提出 MANTRA 框架,以 SMT 自动合成 LLM agent 程序化合规基准,跳过手工或 LLM-judge 评测的缺陷。",
+      "innovation": "独立生成符号 world model 与 trace 级 compliance 检查,然后用 SMT 求解器验证一致性,再用 repair loop 兜底人工。",
+      "method": "从自然语言手册和工具 schema 中分别抽取(i)符号化 world model 表示程序依赖,(ii)trace 级合规约束;SMT 验证一致性,不一致则结构化修复。",
+      "results": "构造 6 域 285 任务的新基准,覆盖 50+ 页手册;compliance 检查覆盖更丰富、约束更强,可用于 debug agent 失败模式。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 6.2
+    },
+    "affiliations": ["MPI-SWS"]
+  },
+  {
+    "arxiv_id": "2605.06658",
+    "summary": "视频 relighting 现有思路依赖 intrinsic 分解,但分解一不准就掉链子,材质和外观全崩。Relit-LiVE 直接把原始参考图引到渲染过程里,补回 intrinsic 表示丢失的关键 cue,并提出「环境视频预测」:同一扩散过程里同时输出 relit 视频和每帧对应的环境贴图,保证几何-光照对齐。在合成和真实 benchmark 上都超过 SOTA。",
+    "highlights": {
+      "contribution": "提出 Relit-LiVE 视频重光照框架,在无需相机位姿、保持物理一致与时间稳定的前提下生成高质量 relit 视频。",
+      "innovation": "把 raw reference image 显式注入渲染流程绕开 intrinsic decomposition 风险;同步预测 relit 视频 + 每帧 environment map 实现强几何-光照对齐。",
+      "method": "video diffusion 联合预测 relit 视频与对应 environment map,以 raw 参考图增强分解信息,支持动态光与相机运动。",
+      "results": "在合成与真实数据集上一致优于 SOTA video relighting/神经渲染方法;还原生支持材质编辑、对象插入、streaming relighting。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06222",
+    "summary": "WAM 现在都是一次推理执行固定步数,机器人就「瞎跑」到下一次推理,中间不会判断想象是不是还靠谱。作者把「什么时候相信想象」建成一个 future-reality 一致性问题,搞了个 FFDC 轻量验证器,联合考察预测动作、视觉动力学、实际观测、语言指令来决定还能不能继续执行。RoboTwin 上前向推理减少 69.1%、时间减 34%,成功率仍 +2.5%;真机 +35%。",
+    "highlights": {
+      "contribution": "提出 adaptive 执行策略和 FFDC 验证器,让 WAM 在想象可靠时执行更长 chunk、不一致时及时重规划。",
+      "innovation": "把 chunk size 看作 prediction-observation 一致性的副产物,而非固定超参;还配套 Mixture-of-Horizon 训练增强长 horizon 覆盖。",
+      "method": "FFDC 轻量 causal attention 验证器联合处理 predicted action、predicted dynamics、real obs、language;一致就续 chunk,不一致就触发重新推理。",
+      "results": "RoboTwin:WAM 前向次数 -69.10%、执行时间 -34.02%、成功率较 short-chunk baseline +2.54%;真机平均成功率 +35%。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 5.5,
+      "popularity": 7.2,
+      "quality": 8.4,
+      "recommendation": 8.5
+    },
+    "affiliations": ["HKU"]
+  },
+  {
+    "arxiv_id": "2605.06247",
+    "summary": "不同 WAM 想互相借知识很难,因为 latent 接口不一致、蒸馏目标僵硬。CKT-WAM 不做输出/隐状态的直接模仿,而是把 teacher 的中间隐状态压缩成 text embedding 空间里的紧凑 context,贴到 student 的文本条件后边输入,从而注入知识。LIBERO-Plus 拿到 86.1% 总成功率,只训 1.17% 参数;真机 4 个长 horizon 任务平均成功率 83.3%。",
+    "highlights": {
+      "contribution": "提出 CKT-WAM,把异构 WAM 之间的知识迁移做成 text-embedding 空间里的 context 注入,参数高效且接口通用。",
+      "innovation": "用 learnable-query cross attention 压 teacher token + 通用 adapter + 路由+专家化 adapter,把知识压成 student 可读 context,避免硬碰 latent 接口。",
+      "method": "抽 teacher 中间隐状态 → LQCA 压缩 token 数 → generalized adapter + router + specialized adapters 转成 context → 拼到 student textual embedding 上喂入。",
+      "results": "LIBERO-Plus 总成功率 86.1%,只训 1.17% 参数;真机 4 个多步长 horizon 任务平均成功率 83.3%,均为最强基线。"
+    },
+    "scores": {
+      "relevance": 8.6,
+      "recency": 5.5,
+      "popularity": 6.8,
+      "quality": 8.0,
+      "recommendation": 8.1
+    },
+    "affiliations": ["Tsinghua"]
+  },
+  {
+    "arxiv_id": "2605.06481",
+    "summary": "现有 WAM 多把世界预测当整张图/全局 latent,decoder 想响应「对某个物体动作」指令就很难定位。OA-WAM 把每帧分成 N+1 个 slot(机器人 + N 个物体),每个 slot 有一个持久 address 向量 + 时变 content 向量;cross-slot 注意力被路由经过 address-only key,强制「指哪打哪」。LIBERO 97.8%、SimplerEnv 79.3%,swap-binding cosine 0.87 vs 全局基线 0.09。",
+    "highlights": {
+      "contribution": "提出 OA-WAM,用 object-addressable slot 表示让 world-action 模型可以稳定 ground 到具体物体,提升场景扰动下的鲁棒性。",
+      "innovation": "区分 address 与 content,通过 address-only key 路由 cross-slot attention,并在每层重置 address slice,实现「指代」与「内容」的解耦。",
+      "method": "每帧 N+1 slot(机器人+物体),持久 address + 时变 content;block-causal 序列拼上 text/image/proprio/past-action;world head 预测 next slot,flow-matching 出 16 步动作。",
+      "results": "LIBERO 97.8%、SimplerEnv 79.3%,LIBERO-Plus 几何轴上 SOTA;causal slot 干预 swap-binding cosine 0.87 vs holistic 基线 ≤0.09。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 5.5,
+      "popularity": 7.0,
+      "quality": 8.3,
+      "recommendation": 8.3
+    },
+    "affiliations": ["Tsinghua SIGS"]
+  },
+  {
+    "arxiv_id": "2605.06270",
+    "summary": "VGGT 一类 feed-forward 3D 模型扩到上千帧视频时被 global attention 二次复杂度卡死。作者发现 query token 编码视图相关的几何请求很敏感,KV token 表示共享场景上下文则非常耐压缩。Spark3R 给两者用不同压缩率(query 用 token merging、KV 用更激进的 pruning),逐层自适应。免训练即插即用,接进 VGGT/π³/Depth-Anything-3/VGGT-Ω,1000 帧输入最高 28× 提速,质量不掉。",
+    "highlights": {
+      "contribution": "针对 VGGT 等 feed-forward 3D 重建模型提出免训练、非对称 token 压缩加速框架。",
+      "innovation": "首次区分 query 与 KV token 的功能差异,给出非对称压缩率;逐层自适应 KV 压缩进一步优化质量-效率折中。",
+      "method": "query token 用 intra-group token merging,KV token 用轻量剪枝,且 KV 压缩率随层自适应;无需重新训练,直接挂到现有模型。",
+      "results": "在 VGGT、π³、Depth-Anything-3、VGGT-Ω 上即插即用,1000 帧输入最高 28× 加速,重建质量维持有竞争力水平。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 5.5,
+      "popularity": 7.2,
+      "quality": 8.1,
+      "recommendation": 8.2
+    },
+    "affiliations": ["Peking University"]
+  },
+  {
+    "arxiv_id": "2605.05897",
+    "summary": "路侧 LiDAR 数据极度稀缺,标注成本高。VRS 框架用 vehicle-side 数据集 + 新视角合成来生成带标签的路侧 LiDAR 数据,先用点云补全补缺失几何,再用 occupancy 可见性约束处理大视角变化。在 3D 检测下游验证合成数据能补充真实路侧数据并改善对未见路侧视角的泛化。",
+    "highlights": {
+      "contribution": "提出 VRS 数据合成框架,通过新视角合成从车载数据生成带标签的路侧 LiDAR 数据集。",
+      "innovation": "联合用点云补全消除车载缺失几何 + occupancy 可见性约束应对路侧大视角变化,使 LiDAR NVS 在大跨视角下仍可控。",
+      "method": "vehicle 点云补全 → 加入 occupancy-based 可见性约束 → 跨视角渲染生成路侧 LiDAR 点云 + 标签,支持灵活多视角批量生成。",
+      "results": "在路侧 3D 目标检测任务上,合成数据可有效补充真实路侧数据,提升模型对未见路侧视角的泛化(无具体数字)。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": ["SJTU"]
+  },
+  {
+    "arxiv_id": "2605.06088",
+    "summary": "把开放词汇语义放到 3DGS 上,多视角语义不一致是老问题。OpenGaFF 构建 Gaussian Feature Field 让语义成为 Gaussian 几何+外观的连续函数,再引入结构化 codebook 当共享语义 primitive,用 codebook-guided attention 通过相似度匹配检索语言特征。2D/3D 开放词汇基准上一致优于先前方法,语义可解释性也更强。",
+    "highlights": {
+      "contribution": "提出 OpenGaFF,在 3D Gaussian Splatting 上构建几何条件的 Gaussian Feature Field 实现开放词汇 3D 理解。",
+      "innovation": "把语义建成 Gaussian 几何/外观的连续函数,加上 codebook 共享语义原语,缓解多视角分割碎片化和对象内部特征发散。",
+      "method": "3DGS 上学习 Gaussian Feature Field;引入结构化 codebook;codebook-guided attention 用 query embedding 与 codebook 项相似度检索语言特征。",
+      "results": "在 2D/3D 开放词汇标准 benchmark 上一致超过 prior 方法,分割质量更好、3D 语义一致性更强、codebook 提供可解释见解。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5.5,
+      "popularity": 7.0,
+      "quality": 7.4,
+      "recommendation": 6.8
+    },
+    "affiliations": ["Google", "TUM"]
+  },
+  {
+    "arxiv_id": "2605.06876",
+    "summary": "3DGS 的自适应密度控制目前是固定基数随机二分,得迭代很多轮才能长出细节,训练慢。AdpSplit 用 L1 像素误差区域统计来决定每次分裂的子节点数,并初始化子参数,从而减少 densification 轮数。MipNeRF360/DeepBlending/Tanks&Temples 上,作为现有快速 3DGS 流水线的 drop-in 替换,训练时间 -9.2%~22.3%;FastGS + AdpSplit 比 vanilla 3DGS 提速 12.6×。",
+    "highlights": {
+      "contribution": "提出 AdpSplit,一种 error-driven 的自适应分裂算子,加速 3DGS 几何发现过程。",
+      "innovation": "把分裂从固定二分换成由像素误差区域统计驱动的可变孩子数 + 智能初始化,减少 densification 迭代。",
+      "method": "在 densification 阶段以 L1 像素误差统计决定 split 数量并初始化子 Gaussian 参数,可直接替换现有 3DGS 流水线的 split 算子。",
+      "results": "MipNeRF360/DeepBlending/Tanks&Temples 上将多种 3DGS 加速管线训练时间减少 9.2%-22.3%;FastGS+AdpSplit 与 full-schedule PSNR 持平、训练时间 -16.4%,相对 vanilla 3DGS 加速 12.6×。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.4
+    },
+    "affiliations": ["JHU"]
+  },
+  {
+    "arxiv_id": "2605.05997",
+    "summary": "现有 VLM 的动态空间推理要么把一切都口述成文本(冗长不精确),要么外接几何模块(推理变重)。4DThinker 让 VLM 在 latent 里「用 4D 心象思考」:先无标注地从视频生成 4D 推理数据,DIFT 联合监督文本 token 和 4D latent,4DRL 用结果奖励再训。在多个动态空间推理 benchmark 上一致优于强基线。",
+    "highlights": {
+      "contribution": "提出 4DThinker,让 VLM 在内部 latent 空间用「4D 心象」做动态空间推理,而不是口述或外挂几何模块。",
+      "innovation": "首个把 dynamic latent mental imagery 引入 VLM 的工作,DIFT + 4DRL 同时监督文本和 4D latent。",
+      "method": "可扩展、免人工注解的 4D 推理数据生成 pipeline → DIFT 联合监督文本与 4D latent → 4DRL 用 outcome-based reward 进一步训练,梯度只回到文本 token 保稳定。",
+      "results": "在多个动态空间推理 benchmark 上一致优于强基线,代码开源(具体数字摘要未给)。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 5.5,
+      "popularity": 6.8,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": ["Tsinghua"]
+  },
+  {
+    "arxiv_id": "2605.06758",
+    "summary": "用 MLLM 推相对空间关系做 3D 布局生成,问题在多跳推理里参考系变换会累积误差,造成语义和几何漂移。R³L 提出不变空间分解打断耦合的关系链,加上「想象-修订」循环来推动自一致,再做支持性空间优化通过全局到局部坐标重参数化减轻位姿优化。多场景多指令实验显示更物理可行、更语义一致。",
+    "highlights": {
+      "contribution": "提出 R³L 框架,提升 MLLM 在 3D 布局生成中相对空间关系推理的可靠性与多跳一致性。",
+      "innovation": "明确把「参考系变换累积误差」作为多跳空间推理的核心问题,提出不变分解 + imagine-and-revise 自一致循环 + 坐标重参数化优化。",
+      "method": "不变空间分解打断耦合关系链 → 一致空间想象在 imagine-and-revise 循环里推动自一致 → 支持性空间优化用 global-to-local 坐标重参数化辅助位姿优化。",
+      "results": "在多种场景与指令上生成的 3D 布局比基线更物理可行、更语义一致;分析显示解决参考系不一致对多跳相对空间推理至关重要。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": ["PolyU"]
+  },
+  {
+    "arxiv_id": "2605.05546",
+    "summary": "Self-play RL 在数学和代码上很猛,因为问题生成和奖励都能形式化;放到科研文献里就难了,文档间多模态关系没显式写出来。SPARK 先从多文档科学文献自动构建统一知识图,然后用 KG 路径生成关系推理题、用 KG 事实做可验证奖励,小 VLM 在信息不对称下交替扮演 Proposer/Solver。在公开和自建多跳 QA 上一致超过 flat-corpus 自博弈基线,且 hop 越多差距越大。",
+    "highlights": {
+      "contribution": "提出 SPARK,把多文档科研文献组织成统一 KG 作为 self-play 的结构基底,实现可验证的关系多跳推理训练。",
+      "innovation": "用 KG 路径自动生成多模态关系问题,把 KG 事实当作可验证奖励;信息不对称下小 VLM 双角色交替,而非依赖大模型 judge。",
+      "method": "从多文档构建统一 KG → KG 路径生成多跳关系问题 → KG 事实给奖励 → 单个小 VLM 在 Proposer/Solver 角色间切换,与固定 KG 形成信息不对称博弈。",
+      "results": "在公开 benchmark 和自建跨文档多跳 QA 上一致超过 flat-corpus self-play 基线,hop 数越多优势越明显。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  }
+]

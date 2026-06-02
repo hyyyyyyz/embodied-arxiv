@@ -1,0 +1,1088 @@
+{
+  "date": "2026-05-19",
+  "papers": [
+    {
+      "arxiv_id": "2605.24011",
+      "title": "ActQuant: Sub-4-bit Action-Guided Quantization for Vision-Language-Action Models",
+      "authors": [
+        "Arash Akbari",
+        "Arman Akbari",
+        "Masih Eskandar",
+        "Qitao Tan",
+        "Yixiao Chen",
+        "Jingwu Luo",
+        "Bertha Pangaribuan",
+        "Liyun Zhang",
+        "Jennifer Dy",
+        "Geng Yuan",
+        "Xue Lin",
+        "Gaowen Liu",
+        "Stratis Ioannidis",
+        "Yanzhi Wang"
+      ],
+      "affiliations": [
+        "Northeastern University",
+        "Cisco Research"
+      ],
+      "summary": "把 VLA 模型压到 sub-4bit 部署到边缘端的尝试。常规 PTQ 在这种激进比特下崩盘,他们用「动作敏感度」决定每个权重矩阵分多少 bit,再优化每块的 scale,同时配了套 C/C++ 推理 runtime。在 LIBERO 上 3 bit 还能保 95% 性能,2.5 bit 仍有 90.1%,真机 UR3 上 π0.5 量化后成功率几乎不掉。",
+      "original_abstract": "Vision-Language-Action (VLA) models exhibit remarkable action generation for embodied intelligence, but their heavy compute make deployment on edge platforms impractical. Aggressive, sub-4-bit weight quantization is the natural solution, yet existing post-training quantization (PTQ) methods suffer severe performance degradation in this regime. To address this, we introduce ActQuant, an action-guided mixed-precision PTQ framework that operates in two stages: (1) an inter-tensor bit allocator that assigns each weight matrix a single bit-width based on how much it contributes to predicting the agent's actions; (2) an intra-tensor scale optimizer tunes per-block quantization scales using action-aware curvature, so that dynamic range is concentrated on the weights most influential for control. To deliver the on-device benefits of our aggressive quantization, we further introduce OmniModel.cpp, an agentic conversion pipeline that ports architectures into a native C/C++ runtime with efficient low-bit kernels. We evaluate ActQuant both in simulation and on a real-world 6-DoF UR3 arm, with all models deployed through OmniModel.cpp. On the LIBERO benchmark, ActQuant is the only method that operates at or below 3 bits-per-weight, retaining 95.0% on OpenVLA-OFT and 94.8% on $π_{0.5}$. Pushed further, ActQuant reaches 2.5 bpw at 90.1% on OpenVLA-OFT, compressing the backbone from 14.3 GB to 2.7 GB (5.3$\\times$). On the physical UR3 arm, $π_{0.5}$ quantized with ActQuant retains the baseline's success rate while reducing the memory footprint by 2.5$\\times$.",
+      "highlights": {
+        "contribution": "用「对动作预测的贡献度」指导 VLA 混合精度量化,首次把 OpenVLA-OFT 和 π0.5 压到 ≤3 bpw 还能保留 95% 性能。",
+        "innovation": "Action-guided 而非通用 PTQ — bit 分配和 scale 优化都用 action-aware 的曲率,而非任务无关的 Hessian。",
+        "method": "两阶段 PTQ:先给每个 weight matrix 分一个 bit 宽(按其对 action 预测的贡献),再用 action-aware curvature 优化逐块 scale;附带 OmniModel.cpp 把模型转成 native C/C++ 低比特 kernel。",
+        "results": "LIBERO 上 OpenVLA-OFT 在 3 bpw 保 95.0%,π0.5 保 94.8%;2.5 bpw 时 OpenVLA-OFT 90.1%,模型从 14.3GB 压到 2.7GB(5.3×);真机 UR3 上 π0.5 成功率基本持平,内存降 2.5×。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T19:57:26Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "openvla"
+      ],
+      "scores": {
+        "relevance": 8.8,
+        "recency": 7.0,
+        "popularity": 6.5,
+        "quality": 8.0,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.24011v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.24011v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19919",
+      "title": "Beyond Action Residuals: Real-World Robot Policy Steering via Bottleneck Latent Reinforcement Learning",
+      "authors": [
+        "Dongjie Yu",
+        "Kun Lei",
+        "Zhennan Jiang",
+        "Jia Pan",
+        "Huazhe Xu"
+      ],
+      "affiliations": [
+        "HKU",
+        "Tsinghua University"
+      ],
+      "summary": "想用 RL 在线微调预训练的 imitation policy,但在 action space 直接残差修正会噪声大。ZPRL 把残差放到一个低维 latent bottleneck 上,RL 只学这个 latent perturbation,base policy 冻结。8 个 sim 任务 + 4 个真机任务上比 strong baseline 都好,真机平均成功率比 IL 基线 +33.7%。",
+      "original_abstract": "Pretrained imitation policies have become a strong foundation for robot manipulation, but they often require online improvement to overcome execution errors, limited dataset coverage, and deployment mismatch. A central question is therefore how reinforcement learning (RL) should adapt policies after offline pretraining. Existing lightweight methods commonly apply residual corrections directly in action space, but this often leads to noisy and poorly structured exploration. In this work, we propose Z-Perturbation Reinforcement Learning (ZPRL), an approach that steers pretrained policies through a compact bottleneck latent rather than through policy weights or output actions. During offline training, we augment the policy with a plug-and-play variational information bottleneck (VIB) module to extract a task-relevant latent interface from observation embeddings. During online finetuning, the base policy is frozen and RL learns only a residual perturbation on this latent, whose decoded representation conditions the frozen action generator. We instantiate ZPRL on flow-matching policies and evaluate it on eight simulation tasks and four real-world tasks. Across diverse manipulation settings, ZPRL improves both sample efficiency and final performance over strong post-training baselines. In the real world, ZPRL improves the average success rate on four tasks by 33.7% over imitation base policies while producing smoother exploration behaviors than an action residual counterpart. These results suggest that a compact, task-aligned bottleneck latent provides an effective interface for online RL adaptation. More videos can be found at https://manutdmoon.github.io/ZPRL/.",
+      "highlights": {
+        "contribution": "ZPRL — 通过 VIB 中介的 latent bottleneck 做在线 RL 微调,而不是在 action 上加残差。",
+        "innovation": "Latent-space residual 比 action-space residual 探索更平滑、更结构化,且即插即用配 flow-matching 策略。",
+        "method": "离线训练时给策略加 VIB 模块抽取 task-relevant latent;在线时冻结 base policy,RL 学一个 latent 上的 residual perturbation,解码后条件 frozen action generator。",
+        "results": "8 个 sim 任务 + 4 个真机任务一致优于 action residual baseline;真机平均成功率比 IL 基线 +33.7%。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T14:43:26Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robot policy"
+      ],
+      "scores": {
+        "relevance": 7.8,
+        "recency": 7.0,
+        "popularity": 7.0,
+        "quality": 8.0,
+        "recommendation": 7.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19919v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19919v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19294",
+      "title": "DEFLECT: Delay-Robust Execution via Flow-matching Likelihood-Estimated Counterfactual Tuning for VLA Policies",
+      "authors": [
+        "Yixiang Zhu",
+        "Yonghao Chen",
+        "Rui Meng",
+        "Jingyu Guo",
+        "Jiaxiang Zou",
+        "Zijie Yang",
+        "Taowen Wang",
+        "Xinyu Chen"
+      ],
+      "affiliations": [],
+      "summary": "异步推理下 VLA 容易因为延迟而崩 — 模型预测时机器人已经走出去几步了。他们做了个纯离线的 post-training 修正方法,把延迟本身当成偏好信号:用 frozen policy 生成 fresh/stale 动作对,通过 flow-matching 隐式似然比来打分。在 Kinetix 高延迟段成功率涨了 +6.4。",
+      "original_abstract": "Vision-Language-Action (VLA) policies are typically deployed with asynchronous inference: the robot executes a previously predicted action chunk while the model computes the next one. This creates a prediction-execution misalignment: the chunk is conditioned on the observation taken before inference began, but executes in a physical state that has already drifted forward by several control steps; naive asynchronous rollover collapses from 89% to under 1% on Kinetix as the inference cycle covers up to seven control steps. We introduce DEFLECT, a fully offline post-training refinement that applies as a near drop-in upgrade to existing async-VLA stacks by converting latency itself into a label-free preference signal: counterfactual fresh/stale action pairs are constructed from a frozen reference policy and scored under the deployment-time conditioning via an implicit flow-matching likelihood-ratio surrogate, with no human labels, reward models, or online rollouts. DEFLECT substantially extends the usable delay envelope of async VLA control, with +6.4 success-rate gain in the high-latency regime (5-7 control steps), +4.6 when transferred to a real-scale VLA at the longest delay, and consistent improvements on two real-robot tasks (a bimanual conveyor pick-and-place and a reactive whack-a-mole).",
+      "highlights": {
+        "contribution": "DEFLECT,一个针对 async VLA 延迟漂移的离线 post-training 方案,显著扩展可用延迟窗口。",
+        "innovation": "把延迟漂移转成无标签的偏好信号 — 用 fresh vs stale 动作对作 counterfactual,无需 reward model 或在线 rollout。",
+        "method": "Frozen reference policy 同时生成「对应当前观测」和「过期观测」两套动作,用 flow-matching 的隐式似然比作 surrogate 评分,做偏好微调。",
+        "results": "Kinetix 高延迟(5-7 步)+6.4 成功率;真实尺度 VLA 最大延迟下 +4.6;两个真机任务(双臂传送带 pick-and-place、反应式 whack-a-mole)一致提升。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T03:14:11Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 8.7,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.5,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19294v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19294v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19986",
+      "title": "Beyond Binary Success: A Diagnostic Meta-Evaluation Framework for Fine-Grained Manipulation",
+      "authors": [
+        "He-Yang Xu",
+        "Pengyuan Zhang",
+        "Zongyuan Ge",
+        "Xiaoshuai Hao",
+        "Serge Belongie",
+        "Xin Geng",
+        "Yuxin Peng",
+        "Xiu-Shen Wei"
+      ],
+      "affiliations": [
+        "Southeast University",
+        "Peking University",
+        "Monash University"
+      ],
+      "summary": "现有 fine-grained manipulation benchmark 把所有能力压成一个 success rate,把模型真实水平虚高了高达 70%。MetaFine 把能力拆成 understanding/perception/control 三轴,用 compositional task graph 重组现有 benchmark 做诊断式评估,还能用少量真实 rollout 校准 sim 估计。发现 visual encoder 保留局部空间结构是 fine-grained 关键瓶颈。",
+      "original_abstract": "Fine-grained manipulation marks a regime where global scene context no longer suffices, and success hinges on the tight coupling of local attribute grounding, high-fidelity spatial perception, and constraint-respecting motor execution. However, current embodied AI benchmarks collapse these capacities into binary success rates, systematically inflating reported capabilities by up to 70% and masking the architectural bottlenecks that impede real-world deployment. We introduce MetaFine, a diagnostic meta-evaluation framework that disentangles manipulation competency along three axes: understanding, perception, and controlled behavior. Built on a compositional task graph, MetaFine absorbs heterogeneous external benchmarks and reconstructs them into diagnostic scenarios of varying complexity under a unified protocol. Evaluating state-of-the-art vision-language-action (VLA) models through this lens exposes severe dimension-specific failures invisible to conventional metrics. Through targeted causal intervention, we identify the visual encoder's ability to preserve local spatial structure as a key bottleneck for fine-grained precision: improving it directly unlocks previously inaccessible manipulation capabilities without modifying downstream policies. MetaFine further supports hybrid real-sim validation, using limited paired real-world rollouts to calibrate scalable simulation-based estimates for more stable physical benchmarking. By shifting evaluation from ranking to diagnosis, MetaFine turns benchmarking into an actionable compass for repairing the layered capacities underlying genuine physical dexterity. The MetaFine framework, benchmarks, and supporting resources will be publicly released at our project page: https://metafine.github.io/.",
+      "highlights": {
+        "contribution": "MetaFine — 一个把 VLA 细操控能力按 understanding/perception/control 三轴分解的诊断式 meta-benchmark。",
+        "innovation": "从 ranking 转向 diagnosis,定位具体能力瓶颈;支持 real-sim 混合校准,减小仿真偏差。",
+        "method": "用 compositional task graph 吸收异质 benchmark 重组成多复杂度诊断场景;通过 causal intervention 定位 visual encoder 局部空间结构为关键瓶颈;用配对真实 rollout 校准 sim 估计。",
+        "results": "揭示了被 success rate 隐藏的 70% 性能虚高;提升 visual encoder 局部结构编码即可解锁此前不可达的细操控能力。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T15:25:13Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 8.2,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 8.0,
+        "recommendation": 7.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19986v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19986v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19678",
+      "title": "RoVLA: Multi-Consistency Constraints for Robust Vision-Language-Action Models",
+      "authors": [
+        "Jingzhou Luo",
+        "Yifan Wen",
+        "Yongjie Bai",
+        "Xinshuai Song",
+        "Yang Liu",
+        "Liang Lin"
+      ],
+      "affiliations": [
+        "Sun Yat-sen University (HCP Lab)"
+      ],
+      "summary": "VLA 对视觉/语言扰动鲁棒性差。RoVLA 在训练里直接加三种不变性约束:指令重述、轨迹演化、观测扰动,让策略学到更稳定的耦合。在 LIBERO-Plus、RoboTwin 2.0 和真机上都比 baseline 稳。代码会放出。",
+      "original_abstract": "Vision-Language-Action (VLA) models have shown strong performance on embodied manipulation, yet they remain brittle under visual observation changes, paraphrased language instructions, and compounded perturbations. This limitation suggests that existing methods still rely heavily on shallow correlations in the training distribution, rather than learning stable couplings among task semantics, environment states, and action generation. Although recent efforts improve robustness through larger-scale training, post-training adaptation, or enhanced predictive modeling, they rarely enforce invariance-oriented consistency within the end-to-end policy itself. To address this issue, we propose RoVLA, a robust vision-language-action framework with multi-consistency constraints. RoVLA enforces consistency under three complementary transformations: instruction semantics, trajectory evolution, and observation perturbation. Specifically, Instructional Consistency (IC) promotes stable grounding under semantically equivalent instruction rewrites, Evolutionary Consistency (EC) preserves coherent action intent throughout the generation process, and Observational Consistency (OC) improves robustness to visual and proprioceptive perturbations by enforcing consistent predictions before and after targeted disturbances. By explicitly modeling these invariances during training, RoVLA reduces reliance on superficial correlations and improves robustness and generalization. Experiments on LIBERO-Plus, RoboTwin 2.0, and real-world manipulation tasks show that RoVLA consistently outperforms strong baseline methods and exhibits superior robustness under diverse task and observation shifts. These results demonstrate the effectiveness of multi-consistency learning for robust embodied control. Codes will be available at https://github.com/HCPLab-SYSU/RoVLA.",
+      "highlights": {
+        "contribution": "RoVLA — 在 VLA 训练中同时引入指令、轨迹、观测三方面的一致性约束,提升鲁棒性。",
+        "innovation": "把鲁棒性内化为 end-to-end 训练目标,而不是靠更大数据或后处理。",
+        "method": "三个一致性损失:Instructional Consistency(指令同义重写下输出一致)、Evolutionary Consistency(动作生成过程的意图连贯)、Observational Consistency(扰动前后预测一致),共同训练 VLA。",
+        "results": "在 LIBERO-Plus、RoboTwin 2.0、真机任务上一致优于 baseline,具体数值论文未给汇总。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T11:10:20Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19678v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19678v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19580",
+      "title": "PAPO-VLA: Planning-Aware Policy Optimization for Vision-Language-Action Models",
+      "authors": [
+        "Peizheng Guo",
+        "Jingyao Wang",
+        "Changwen Zheng",
+        "Wenwen Qiang"
+      ],
+      "affiliations": [],
+      "summary": "作者觉得 VLA 在闭环操控里既当 planner 又当 executor,但现有 RL/IL 方法把所有 action 一视同仁。于是他们想办法显式找出那些决定走向的「规划性动作」,再在 GRPO 里给这些动作更大的优化权重。在多个 benchmark 上验证了对成功率有帮助。",
+      "original_abstract": "Vision-Language-Action (VLA) models show promising ability in language-guided robotic tasks. However, making VLA policies reliable remains challenging, because a manipulation task is completed through closed-loop interaction, where each action affects subsequent execution. To analyze this problem, we revisit VLA policy during execution and argue that a VLA policy acts both as a planner, which makes task-oriented decisions that change the direction of execution, and as an executor, which realizes these decisions through dense continuous actions. This view suggests that improving VLA reliability requires particular attention to planning actions. Existing optimization methods can imitate actions or improve complete trajectories, but they usually do not explicitly identify planning actions or measure their importance for task success. To address this issue, we propose Planning-Aware Policy Optimization for VLA models (PAPO-VLA). PAPO-VLA first identifies planning actions by jointly considering action variation and trajectory outcome, then estimates their importance through causal sufficiency and causal necessity, and finally incorporates this importance into GRPO advantage estimation. In this way, more important planning actions receive stronger optimization emphasis, while the whole trajectory is still optimized by trajectory-level feedback. Experiments on multiple benchmarks demonstrate the effectiveness of PAPO-VLA.",
+      "highlights": {
+        "contribution": "提出 PAPO-VLA,显式识别 VLA 轨迹中的「规划性动作」并加权优化,提升闭环任务成功率。",
+        "innovation": "把动作分成 planning 和 execution 两类,用因果充分性/必要性度量 planning 动作的重要度,而不是均匀优化整条轨迹。",
+        "method": "先根据动作变化量和最终轨迹结果筛出 planner 动作,再用因果充分/必要性打分,把分数作为权重注入 GRPO 的优势估计,整条轨迹仍按 trajectory-level reward 优化。",
+        "results": "在多个 VLA benchmark 上比常见 GRPO/IL baseline 都有提升,论文未给统一数字但声称一致优于基线。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T09:22:49Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model",
+        "vla policy"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19580v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19580v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19587",
+      "title": "SceneCode: Executable World Programs for Editable Indoor Scenes with Articulated Objects",
+      "authors": [
+        "Puyi Wang",
+        "Yuhao Wang",
+        "Linjie Li",
+        "Zhengyuan Yang",
+        "Kevin Qinghong Lin",
+        "Yangguang Li",
+        "Yu Cheng"
+      ],
+      "affiliations": [
+        "CUHK",
+        "Microsoft",
+        "NUS"
+      ],
+      "summary": "做仿真场景生成时常见问题:网格能渲染但没法交互。SceneCode 让 LLM 当 agent,把自然语言 prompt 编译成可执行的 Blender Python,生成带 articulation 的可交互资产,再导成 SDF 给物理仿真。整个流程有 planner-designer-critic 循环和 execution-guided 修复。",
+      "original_abstract": "Indoor scene synthesis underpins embodied AI, robotic manipulation, and simulation-based policy evaluation, where a useful scene must specify not only what the environment looks like, but also how its objects are structured. Existing pipelines, however, typically represent generated content as static meshes and inherit articulation only from curated asset libraries, which limits object-level controllability and prevents new interactable assets from being produced on demand. We address this gap by formulating physically interactable indoor scene synthesis as programmatic world generation, and present SceneCode, a framework that compiles a natural language prompt into an executable, code-driven indoor world rather than a collection of opaque meshes. A room-level agentic backbone first turns the prompt into a structured house layout and emits per-object AssetRequests through a planner--designer--critic loop. Each request is then routed to one of five code-generation strategies and converted into a synthesized part-wise Blender Python programs that are validated through an execution-guided repair-and-refine loop. The resulting programs are compiled into simulation-ready assets, and exported as SDF for physics simulation. A persistent scene-state registry links object requests, executable programs, rendered geometry, and simulation assets, turning scene assembly into a traceable and locally editable world-building process. We evaluate SceneCode across scene-level synthesis, object-level asset quality, human judgment, and downstream robot interaction. Results show that executable world programs improve prompt-faithful indoor scene generation and produce assets with cleaner mesh structure, and simulator-loadable articulation metadata. Project page: https://scene-code.github.io/.",
+      "highlights": {
+        "contribution": "SceneCode 把室内场景生成形式化为代码生成,直接输出可在物理仿真器加载的、含 articulation 的可交互资产。",
+        "innovation": "不是从 asset library 拼,而是 LLM 写 Blender Python 程序合成 part-wise 资产,可执行、可编辑、可追溯。",
+        "method": "Room-level agent 把 prompt 拆成 house layout 和每物体 AssetRequest;每个 request 走五种代码生成策略之一,合成 part-wise Blender Python,经执行修复循环验证;最终编译成可仿真资产并导出 SDF;持久化 scene-state registry 串联 request/code/geometry/asset。",
+        "results": "在场景级合成、资产质量、人评和下游机器人交互上都有提升;具体数字论文未列。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T09:31:04Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 7.0,
+        "popularity": 6.5,
+        "quality": 7.0,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19587v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19587v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19524",
+      "title": "SafeAlign-VLA: A Negative-Enhanced Safe Alignment Framework for Risk-Aware Autonomous Driving",
+      "authors": [
+        "Kefei Tian",
+        "Yuansheng Lian",
+        "Kai Yang",
+        "Xiangdong Chen",
+        "Shen Li"
+      ],
+      "affiliations": [],
+      "summary": "自动驾驶 VLA 大多只用正样本(专家轨迹),对 long-tail 风险情景理解不足。这篇把 negative 数据系统性纳入 SFT 和 RL:先用反事实推理生成「危险情景的对照正确轨迹」,再做 SFT,再用 anchor-based GRPO 把正负作为对比锚。在 NAVSIM 89.1 PDMS,DeepAccident 碰撞率降到 3.36%。",
+      "original_abstract": "End-to-end autonomous driving systems excel in common scenarios but struggle with safety-critical long-tail cases. Vision-Language-Action (VLA) models are promising due to their strong reasoning capabilities. However, most VLA-based approaches rely on positive expert demonstrations, rarely exploiting negative samples, leading to insufficient understanding of risky behaviors and safety boundaries. To address this limitation, we propose SafeAlign-VLA, a unified negative-enhanced safe alignment framework that incorporates negative data into supervised learning and reinforcement learning. First, we develop a counterfactual safety pairing paradigm to generate structured safety labels and counterfactual positive trajectories from risky scenarios via counterfactual reasoning. Then, a two-stage training strategy is adopted: negative-enhanced supervised fine-tuning for failure feedback and trajectory correction, followed by anchor-based group relative policy optimization that uses positive and negative trajectories as contrastive anchors to steer sampling and penalize high-risk behaviors via group-relative advantages. Experiments on NAVSIM and DeepAccident validate the proposed framework. SafeAlign-VLA achieves 89.1 PDMS on the NAVSIM v1 testset, improving over the baseline without negative data by 1.3%. On DeepAccident, it reduces the collision rate to 3.36%, while achieving 84.2% language accuracy and 85.8% risk prediction accuracy. These results demonstrate the effectiveness of the proposed negative-enhanced safe alignment framework for safe and robust autonomous driving.",
+      "highlights": {
+        "contribution": "SafeAlign-VLA — 把负样本系统性引入自动驾驶 VLA 的对齐流程,提升安全长尾表现。",
+        "innovation": "用反事实推理给危险场景配对正确轨迹,再做 anchor-based 正负 GRPO,而不仅是奖励惩罚。",
+        "method": "两阶段 — negative-enhanced SFT 学习失败反馈和修正轨迹,再 anchor-based GRPO 把正/负轨迹作为对比锚,group-relative advantage 惩罚高风险动作。",
+        "results": "NAVSIM v1 89.1 PDMS(比无负样本基线 +1.3%),DeepAccident 碰撞率 3.36%,语言准确率 84.2%,风险预测准确率 85.8%。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T08:26:43Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19524v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19524v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.20085",
+      "title": "Spatially Prompted Visual Trajectory Prediction for Egocentric Manipulation",
+      "authors": [
+        "Yifan Li",
+        "Xinyu Zhou",
+        "Yunhao Ge",
+        "Yu Kong"
+      ],
+      "affiliations": [
+        "Michigan State University",
+        "NVIDIA"
+      ],
+      "summary": "在杂乱场景下用语言或 task id 指定操作目标不够直观,他们正式定义了 Spatially Prompted Visual Trajectory Prediction(SP-VTP)任务 — 用 bbox/点指定要动什么、放哪里。配套出了 EgoSPT 数据集和 SPOT 模型,task encoder 编码首帧空间 prompt,observation encoder 编码当前+历史,trajectory generator 输出未来末端轨迹。",
+      "original_abstract": "Robotic manipulation is often specified through language instructions or task identifiers, yet cluttered environments with similar objects are better handled by spatially indicating what to move and where to place it. Addressing the vision-centric challenge of object and goal specification, we present, to the best of our knowledge, the first formalization of Spatially Prompted Visual Trajectory Prediction (SP-VTP). This novel setting utilizes initial spatial prompts (like bounding boxes or points) to define task objectives, tasking the model with forecasting future end-effector trajectories from egocentric streams. To study this problem, we collect and annotate EgoSPT, a dataset of egocentric spatially prompted manipulation trajectories with first-frame object and target grounding annotations and recovered 3D end-effector motion. SP-VTP is challenging because the task specification is static, while the scene configuration evolves over time. To solve this problem, we propose SPOT(Spatially Prompted Object-Target Policy), which combines a task encoder for first-frame visual and coordinate spatial prompts, an observation encoder for current visual and history context, and a trajectory generator for future end-effector motion. Experiments under strict scene-level splits show that SPOT improves cross-scene trajectory prediction over non-prompted or single-source prompted baselines. Together, EgoSPT and SPOT establish a new spatial prompting problem SP-VTP, as a simple and scalable task condition for egocentric manipulation.",
+      "highlights": {
+        "contribution": "首次形式化 SP-VTP,并提供 EgoSPT 数据集和 SPOT 基线。",
+        "innovation": "用空间 prompt(bbox/点)指定任务,而不是语言/task id,对杂乱多相似物的 ego 场景更直观;静态 prompt + 动态场景的解耦建模。",
+        "method": "SPOT = task encoder(首帧视觉+坐标 prompt)+ observation encoder(当前视觉+历史)+ trajectory generator(未来末端轨迹);scene-level split 评估。",
+        "results": "在严格 scene-level split 下比 non-prompted 或单源 prompted baseline 都好,具体数字未列。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T16:39:30Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 6.8,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 6.8,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20085v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.20085v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.20392",
+      "title": "VBT-MPC: Vision-Based Tactile MPC for Contour Following",
+      "authors": [
+        "Edison Velasco-Sanchez",
+        "Luis F. Recalde",
+        "Guanrui Li",
+        "Pablo Gil"
+      ],
+      "affiliations": [
+        "University of Alicante"
+      ],
+      "summary": "做触觉轮廓跟踪的工作 — 用 vision-based 触觉传感器装在手末端,直接在触觉特征空间做 MPC,不用做 pose estimation 也不用复杂力控架构。和 visual servoing 在 sim 和真机上比了几何/材质多样的工件。",
+      "original_abstract": "Tactile sensing plays a key role in robotic manipulation, particularly in tasks like surface inspection. Successful execution requires maintaining contact while accurately tracking object contours. In this work, we propose a Vision-Based Tactile Model Predictive Control (VBT-MPC) framework for robotic contour following using a Vision-Based Tactile Sensor (VBTS) mounted in an eye-in-hand configuration. The proposed controller operates directly in contour features space, thereby avoiding the need for separate pose-estimation modules or complex force-control architectures. We further compare our VBT-MPC with visual-servoing strategies adapted to tactile features, and evaluate contour tracking on objects with diverse geometries and materials in both simulation and real-world experiments.",
+      "highlights": {
+        "contribution": "VBT-MPC — 直接在 VBTS 特征空间做 MPC 实现 contour following。",
+        "innovation": "省掉 pose estimation 和显式力控,统一在触觉特征空间闭环。",
+        "method": "Eye-in-hand 装 VBTS,提取 contour 特征作为 MPC 状态空间,直接优化跟踪;和 visual servoing 类方法对比。",
+        "results": "在多种几何/材质工件上 sim 和真机跟踪效果优于 visual servoing 适配,数字未列。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T18:40:45Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 7.0,
+        "popularity": 4.5,
+        "quality": 6.0,
+        "recommendation": 5.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20392v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.20392v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19957",
+      "title": "World-Ego Modeling for Long-Horizon Evolution in Hybrid Embodied Tasks",
+      "authors": [
+        "Zuyao Lin",
+        "Jianhui Zhang",
+        "Peidong Jia",
+        "Xiaoguang Zhao",
+        "Shanghang Zhang",
+        "Xingyu Chen"
+      ],
+      "affiliations": [
+        "Peking University",
+        "Shanghai AI Lab"
+      ],
+      "summary": "现有 embodied world model 把世界变化和机器人自我演化塞在一条流里,长 horizon 任务里就乱。WEM 把未来分解成 world 和 ego 两个组件,提供 motion/semantic/intention 三种边界视角,用 cascade-parallel MoE diffusion 生成。配套出了第一个 long-horizon 混合 navigation+manipulation benchmark HTEWorld(125K 视频、4.5M 帧)。",
+      "original_abstract": "World models are widely explored in embodied intelligence, yet they typically predict distinct evolutions of the world and the ego within a single stream, where the world captures persistent instruction-agnostic scene regularities and the ego captures robot-centric instruction-conditioned dynamics. This world-ego entanglement leads to a degradation in long-horizon embodied scenarios, particularly in hybrid tasks with interleaved navigation and manipulation behaviors. In this paper, we introduce \\emph{World-Ego Modeling}, a new conceptual paradigm that decomposes future evolution into world and ego components. We define the world-ego boundary from three perspectives, i.e., motion-, semantic-, and intention-based views, and analyze three disentanglement strategies with post-, pre-, and full disentanglement. Further, we instantiate this paradigm as the World-Ego Model (WEM), a unified embodied world model that couples an implicit separate world-ego planner with a cascade-parallel mixture-of-experts (CP-MoE) diffusion generator. To enable rigorous evaluation, we further construct HTEWorld, the first benchmark for long-horizon world modeling with hybrid navigation-manipulation tasks, providing 125K video clips (over 4.5M frames) with fine-grained action annotations and 300 multi-turn evaluation trajectories (over 2K instructions). Extensive experiments show that WEM achieves state-of-the-art performance on HTEWorld while remaining competitive on existing manipulation-only benchmarks.",
+      "highlights": {
+        "contribution": "World-Ego Modeling 范式加 WEM 实例加 HTEWorld benchmark,一次性把长 horizon、混合 navigation+manipulation 的 world model 问题立起来。",
+        "innovation": "显式解耦 world(指令无关场景规律)和 ego(指令条件机器人动力学),三种 disentanglement 策略对比;CP-MoE diffusion 生成。",
+        "method": "把未来分解成 world 加 ego 两路;定义 motion/semantic/intention 三种边界;实现 implicit separate world-ego planner 加 CP-MoE diffusion generator;125K clips、300 多回合评测轨迹。",
+        "results": "HTEWorld 上 SOTA,manipulation-only benchmark 保持竞争力。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T15:10:27Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 8.8,
+        "recency": 7.0,
+        "popularity": 6.5,
+        "quality": 8.2,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19957v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19957v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19319",
+      "title": "SWEET: Sparse World Modeling with Image Editing for Embodied Task Execution",
+      "authors": [
+        "Yiren Song",
+        "Yihan Wang",
+        "Xiyao Deng",
+        "Zhuoran Yan",
+        "Mike Zheng Shou"
+      ],
+      "affiliations": [
+        "NUS Show Lab"
+      ],
+      "summary": "Dense video world model 算得太贵,其实 manipulation 的关键就那几帧。SWEET 把 image editing 模型(FLUX-Kontext)当稀疏视觉世界模型用,只生成任务关键 keyframe,再用 goal-conditioned diffusion 把相邻 keyframe 转成 action chunk。对比 Wan2.2 视频生成,image editing 在机器人数据下更可靠、推理更便宜。",
+      "original_abstract": "Visual prediction has emerged as a promising paradigm for embodied control, where future observations are generated and then translated into actions. However, dense video generation is computationally expensive and often unnecessary for many manipulation tasks, whose progress can be summarized by a small number of task-relevant visual states. In this work, we study whether image editing models can serve as sparse visual world models for robot manipulation by predicting task-level future states without dense video rollout. We first conduct a controlled comparison between the video generation model Wan2.2 and the image editing model FLUX-Kontext under the same robotic data setting, and find that image editing produces more reliable task-level keyframes with better visual fidelity and substantially lower inference cost. Motivated by this observation, we propose SWEET, a one-shot sparse visual planning framework that progressively generates a sequence of task-relevant manipulation keyframes through successive image editing, conditioned on language instructions and optional arrow-based spatial guidance. A goal-conditioned diffusion action predictor then converts adjacent imagined keyframes into executable action chunks. To reduce the mismatch between real and edited visual subgoals, we further introduce a mixed-training strategy with filtered edited targets. Experiments on DROID and RoboMimic show that SWEET improves keyframe prediction across seen and unseen scenes and enables a full pipeline from sequential keyframe planning to executable robot actions, suggesting that image editing is a promising and underexplored direction for embodied visual prediction.",
+      "highlights": {
+        "contribution": "SWEET — 一个用 image editing 替代 video generation 做稀疏视觉世界模型的 manipulation 框架。",
+        "innovation": "首次系统对比 image editing vs video generation 当 world model,提出关键 keyframe 加 diffusion action 两段式 sparse planning。",
+        "method": "FLUX-Kontext 按语言加可选箭头 prompt 顺序编辑出 keyframe 序列;goal-conditioned diffusion 把相邻 keyframe 转 action chunk;混合训练用 filtered edited targets 缩小 real 与 edited 的 gap。",
+        "results": "在 DROID 和 RoboMimic 上 keyframe 预测在见过/未见场景都更好,完整 keyframe→action pipeline 可执行;具体数字未列。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T03:54:46Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 7.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19319v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19319v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19631",
+      "title": "HEAT: Heterogeneous End-to-End Autonomous Driving via Trajectory-Guided World Models",
+      "authors": [
+        "Hoonhee Cho",
+        "Giwon Lee",
+        "Jae-Young Kang",
+        "Hyemin Yang",
+        "Heejun Park",
+        "Kuk-Jin Yoon"
+      ],
+      "affiliations": [
+        "KAIST"
+      ],
+      "summary": "现有 end-to-end 自动驾驶在单数据集上很强,跨域联合训练就崩。HEAT 用轨迹驱动的训练范式和一个 world model 预测 ego 动作条件下的 future latent,提升跨域不变性。nuScenes、NAVSIM、Waymo 三个 benchmark 都大幅提升。",
+      "original_abstract": "End-to-end autonomous driving has emerged as a compelling alternative to traditional modular pipelines by directly mapping raw sensor data to driving actions. While recent approaches achieve strong performance on single-domain datasets, their performance degrades significantly when trained jointly across multiple heterogeneous domains. In practice, however, autonomous systems must operate across diverse environments with heterogeneous distributions, including different cities, sensor configurations, and traffic patterns, without domain-specific retraining. This gap highlights a key challenge in multi-domain learning: domain-specific variations across heterogeneous domains introduce conflicting learning signals, driving models toward compromised solutions that are suboptimal across domains. To address this, we propose a trajectory-driven learning paradigm that organizes training around planning trajectories, enabling the model to capture domain-invariant representations of driving intent. Furthermore, we incorporate a world model that predicts future latent features conditioned on ego actions, improving feature consistency and mitigating domain-induced biases. We evaluate our approach on three benchmarks, nuScenes, NAVSIM, and the Waymo end-to-end dataset, and show substantial improvements over existing methods across all domains. Our results demonstrate that a single unified model can be trained on heterogeneous datasets while maintaining strong performance within each domain, highlighting a step toward scalable real-world deployment. We will make our code publicly available.",
+      "highlights": {
+        "contribution": "HEAT — 用 trajectory-guided 训练加 world model 让 end-to-end 自驾在多个异质数据集联合训练而不掉点。",
+        "innovation": "围绕 planning trajectory 组织训练学到 domain-invariant 表征;同时 world model 强约束 ego-conditioned future latent 一致性。",
+        "method": "Trajectory-driven 学习范式让训练目标对齐 driving intent;附加 world model 预测 ego action 条件下未来 latent feature;在 nuScenes/NAVSIM/Waymo 三 benchmark 联合训练评测。",
+        "results": "单个模型联合训练后在三个 benchmark 都显著优于现有方法,具体数字未列;声称将开源。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T10:12:01Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19631v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19631v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.24004",
+      "title": "Reason--Imagine--Act: Closed-Loop LLM Decision Making with World Models for Autonomous Driving",
+      "authors": [
+        "Zhengqi Sun",
+        "Yiwen Sun",
+        "Boxuan Liu",
+        "Tailai Chen",
+        "Tianxu Guo",
+        "Jiabin Liu"
+      ],
+      "affiliations": [
+        "Peking University"
+      ],
+      "summary": "LLM 当自动驾驶 planner 容易语义对但物理不安全。RIA 把 LLM reasoner 和 action-conditioned world model 拼成闭环:LLM 出动作模板和候选,world model 做短时 rollout,再由 safety scorer 选最安全的执行,反馈进下一轮。CARLA 1000 个 episode 下 80.05% route completion、51.10% arrival、0.20% collision rate。",
+      "original_abstract": "Large language models (LLMs) are promising for autonomous driving, but semantics-only decision policies can yield physically unsafe behavior in dynamic traffic. Existing methods either perform online language reasoning without explicit dynamics verification or use world models mainly in offline pipelines, leaving a gap between semantic intent and physical feasibility at decision time. We propose Reason--Imagine--Act (RIA), a closed-loop framework that couples an LLM reasoner with an action-conditioned world model for online safety verification. At each step, the LLM proposes an action template and candidate sub-actions, the world model performs short-horizon rollouts, and a safety scorer selects the safest executable action with feedback to the next reasoning step. Under a unified CARLA point-goal protocol (1000 episodes), RIA achieves 80.05% route completion, 51.10% arrival rate, and 0.20% collision rate. Under the same closed-loop interface, RIA consistently outperforms training-free baselines, including CARLA TM and MADA, on core closed-loop metrics. For reproducibility, code is available at https://github.com/pku-smart-city/source_code/tree/main/RIA.",
+      "highlights": {
+        "contribution": "RIA — 把 LLM 推理和 world model 物理 rollout 在线耦合做安全决策,而不是事后验证或离线训练。",
+        "innovation": "每一步都用 world model 做短时 rollout 给 LLM 候选打分,实现语义意图加物理可行的在线对齐。",
+        "method": "Reason(LLM 出动作模板和候选)→ Imagine(action-conditioned world model 短时 rollout)→ Act(safety scorer 选最安全候选 + 反馈给下一步 reasoning);CARLA point-goal 协议下 1000 episode 评测。",
+        "results": "RC 80.05%,arrival 51.10%,collision 0.20%;在同一闭环接口下一致优于 CARLA TM、MADA 等 training-free baseline。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T06:23:14Z",
+      "categories": [
+        "cs.AI",
+        "cs.CV",
+        "cs.LG",
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.2,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.24004v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.24004v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19600",
+      "title": "FlyMirage: A Fully Automated Generation Pipeline for Diverse and Scalable UAV Flight Data via Generative World Model",
+      "authors": [
+        "Jinhan Li",
+        "Xijie Huang",
+        "Zhaoqi Wang",
+        "Yijin Wang",
+        "Weiqi Ge",
+        "Qiyi He",
+        "Mo Zhu",
+        "Fei Gao",
+        "Yuze Wu",
+        "Xin Zhou"
+      ],
+      "affiliations": [],
+      "summary": "无人机 VLN 数据集要么真但贵,要么虚拟但视觉太假。FlyMirage 让 LLM 当环境设计师,生成多样场景后用生成式世界模型实例化成 3DGS,再用动力学可行 planner 给无人机做轨迹,最终自动产出大规模真实感的 aerial VLN 数据。",
+      "original_abstract": "In the field of Vision-Language Navigation (VLN), aerial datasets remain limited in their ability to combine scale, diversity, and realism, often relying on either costly real-world scenes or visually limited simulations. To address these challenges, we introduce FlyMirage, a highly scalable and fully automated data generation pipeline for aerial VLN. Our approach leverages large language models (LLM) as an environment designer to promote scene diversity, paired with a generative world model that instantiates these designs into high-fidelity 3D Gaussian Splatting (3DGS) scenes. To substantially reduce human labor and ensure the feasibility of flight data, FlyMirage automates scene exploration and semantic information acquisition, and further integrates a dynamically feasible planner for uncrewed aerial vehicle (UAV) trajectory generation. Utilizing this toolchain, we generate a large-scale, diverse, and photorealistic aerial VLN dataset, with dynamically feasible flying trajectories, designed to support the development of next-generation embodied navigation models.",
+      "highlights": {
+        "contribution": "FlyMirage — 一个全自动 aerial VLN 数据生成 pipeline,生成大规模、多样、photorealistic 且动力学可行的飞行数据。",
+        "innovation": "LLM 当 environment designer 加生成式 world model 实例化 3DGS 场景加 UAV-feasible planner 一体的数据生成 toolchain。",
+        "method": "LLM 设计场景多样性 → 生成式世界模型实例化为 3DGS 场景 → 自动 scene exploration 与语义采集 → 动力学可行 planner 生成 UAV 轨迹;批量产 VLN 数据。",
+        "results": "产出大规模、多样、真实感的 aerial VLN 数据集用于下一代 embodied navigation,具体训练效果数字未列。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T09:41:04Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 6.8,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19600v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19600v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19950",
+      "title": "AffectVerse: Emotional World Models for Multimodal Affective Computing",
+      "authors": [
+        "Bo Zhao",
+        "Fanghua Ye",
+        "Yixin Ji",
+        "Sicheng Zhao",
+        "Xiaojiang Peng",
+        "Zitong YU"
+      ],
+      "affiliations": [
+        "Tsinghua University",
+        "Great Bay University"
+      ],
+      "summary": "情感识别多数把多模态融合当静态分类。AffectVerse 给 Qwen2.5-Omni 加了个 Emotion World Module:用过去 token 预测短时未来的视频/音频 latent,聚合成 belief token 再注入 LLM。9 个 benchmark 上比其他模型至少 +2.57%。",
+      "original_abstract": "Humans infer emotions by integrating observed multimodal cues with expectations about how affective states may unfold. Existing multimodal large language models (MLLMs), however, often treat emotion recognition as static fusion over complete audiovisual-text inputs, leaving affective dynamics implicit. We propose AffectVerse, a Qwen2.5-Omni-based model equipped with an Emotion World Module (EWM), an action-free representation-level module for short-horizon latent affective prediction. \\rev{EWM contains three modules: 1) Cross-Modal Temporal Imagination predicts future video/audio representations from past tokens with multi-step rollout. 2) MAMA(Modality-Aware Multi-step Attention) Belief Aggregation compresses imagined tokens into modality-aware belief tokens. 3) Belief Injection inserts these belief tokens into the LLM for affective reasoning.} AffectVerse uses future prediction as a past-conditioned self-supervised signal: it does not replace modeling observed history or require unseen signals at inference, but forces the current belief state to encode transition cues that are predictive of subsequent affective change. Across nine benchmarks, AffectVerse improves at least 2.57\\% over other models, while controlled ablations show additive gains from temporal imagination, cross-modal rollout, and belief aggregation. These results suggest predictive belief-state modeling is a practical alternative for affective computing.",
+      "highlights": {
+        "contribution": "AffectVerse — 在 MLLM 上加 Emotion World Module 做 short-horizon affective rollout,提升情感识别。",
+        "innovation": "把未来预测当 past-conditioned self-supervised 信号,让 belief state 编码 affective transition,而不需要 inference 时真的看到未来。",
+        "method": "三模块 EWM:Cross-Modal Temporal Imagination 预测未来视频/音频 representation;MAMA Belief Aggregation 用 modality-aware attention 压成 belief token;Belief Injection 把 belief 注入 LLM 做情感推理。",
+        "results": "9 个情感 benchmark 上比同类模型至少 +2.57%;ablation 显示 temporal imagination、cross-modal rollout、belief aggregation 都有独立贡献。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T15:05:00Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19950v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19950v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19341",
+      "title": "HalluWorld: A Controlled Benchmark for Hallucination via Reference World Models",
+      "authors": [
+        "Emmy Liu",
+        "Varun Gangal",
+        "Michael Yu",
+        "Zhuofu Tao",
+        "Karan Singh",
+        "Sachin Kumar",
+        "Steven Y. Feng"
+      ],
+      "affiliations": [
+        "CMU",
+        "Ohio State University",
+        "Stanford"
+      ],
+      "summary": "LLM 幻觉评测各家口径不一致,这篇造了个能完全控制 reference world 的 benchmark HalluWorld:在 gridworld、chess 和真实 terminal 任务里完全知道真实世界长什么样、模型能看到什么,因此可以自动标 hallucination 标签。结论是 frontier model 直接观测的事实几乎解决了,但多步状态跟踪和 forward simulation 仍然是硬伤。",
+      "original_abstract": "Hallucination remains a central failure mode of large language models, but existing benchmarks operationalize it inconsistently across summarization, question answering, retrieval-augmented generation, and agentic interaction. This fragmentation makes it unclear whether a mitigation that works in one setting reduces hallucinations across contexts. Current benchmarks either require human annotation and fixed references that may be memorized, or rely on observations in settings that are difficult to reproduce. To study root causes, we introduce HalluWorld, an extensible benchmark grounded in an explicit reference-world formulation: a model hallucinates when it produces an observable claim that is false with respect to this world. Building on this view, we construct synthetic and semi-synthetic environments in which the reference world is fully specified, the model's view is controlled, and hallucination labels are generated automatically. HalluWorld spans gridworlds, chess, and realistic terminal tasks, enabling controlled variation of world complexity, observability, temporal change, and source-conflict policy, and disentangling hallucinations into fine-grained error categories. We evaluate frontier and open-weight language models across these settings and find consistent patterns: perceptual hallucination on directly observed information is near-solved for frontier models, while multi-step state tracking and causal forward simulation remain difficult and are not generally solved by extended thinking. In the terminal setting, models also struggle with when to abstain. The uneven profile of failures across probe types and domains suggests that hallucinations arise from distinct failure modes rather than a single capability. Our results suggest that controlled reference worlds offer a scalable and reproducible path toward measuring and reducing hallucinations in modern language models.",
+      "highlights": {
+        "contribution": "HalluWorld — 一个用显式 reference world 自动标注 hallucination 的可扩展 benchmark。",
+        "innovation": "把 hallucination 定义为对显式 reference world 可观测的错误声明,从而合成或半合成场景下完全可控、可复现。",
+        "method": "构造 gridworld/chess/terminal 三类合成与半合成环境,控制 world 复杂度、可观测性、时变性、source 冲突;细粒度分类 hallucination 类型,自动生成标签;在多 frontier/open 模型上评测。",
+        "results": "直接观测信息上的感知幻觉对 frontier model 接近 solved;但多步状态跟踪、因果前向仿真、何时 abstain 仍很难,extended thinking 也救不了。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T04:29:03Z",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG",
+        "stat.ML"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 7.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19341v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19341v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19539",
+      "title": "Trust It or Not: Evidential Uncertainty for Feed-Forward 3D Reconstruction with Trust3R",
+      "authors": [
+        "Zihao Zhu",
+        "Wenyuan Zhao",
+        "Nuo Chen",
+        "Chao Tian",
+        "Zhiwen Fan"
+      ],
+      "affiliations": [
+        "UT Austin"
+      ],
+      "summary": "Feed-forward 3D 重建(MASt3R 这类)的 confidence map 都是启发式的,没法当真概率信号。Trust3R 给 pointmap 加了一个 evidential 头,输出 Normal-Inverse-Wishart,从而得到 closed-form multivariate Student-t 每点不确定度。在 ScanNet++ 上 AURC -25%、AUSE -41%。",
+      "original_abstract": "Geometric foundation models hold promise for unconstrained dense geometry prediction from uncalibrated images. However, in current feed-forward designs, their predicted confidence scores are heuristic, lack probabilistic interpretation, and often fail to indicate where and how much the predicted geometry can be trusted. To address this gap, we present Trust3R, a lightweight evidential uncertainty framework for feed-forward 3D reconstruction. Trust3R combines gated residual mean refinement with a Normal-Inverse-Wishart evidential head, yielding a closed-form multivariate Student-t distribution for per-point geometric uncertainty. This design provides probabilistically grounded pointmap uncertainty estimates while adding moderate inference overhead. We evaluate on diverse indoor and outdoor benchmarks and compare against MASt3R's built-in confidence map as well as common uncertainty-aware baselines spanning single-pass heteroscedastic regression and sampling-based methods such as MC dropout and deep ensembles. Experimental results show that Trust3R consistently improves risk-coverage and sparsification, and generally improves geometric accuracy. These gains are reflected in stronger uncertainty ranking across benchmarks, with 25% lower AURC and 41% lower AUSE on ScanNet++, providing a practical reliability signal for uncertainty-aware weighting in downstream geometry pipelines. The project page and code are available at https://trust3r-z.github.io/.",
+      "highlights": {
+        "contribution": "Trust3R — 把 feed-forward 3D reconstruction 的 confidence 换成概率严谨的 evidential uncertainty。",
+        "innovation": "Normal-Inverse-Wishart evidential 头加 gated residual mean refinement,给 pointmap 出 closed-form Student-t 不确定度。",
+        "method": "在 MASt3R 风格 pipeline 上加 evidential head 和 gated residual 优化 mean;推断时输出 multivariate Student-t,实现每点不确定度;与 MASt3R confidence、MC dropout、deep ensembles 对比。",
+        "results": "ScanNet++ AURC -25%、AUSE -41%;risk-coverage 和 sparsification 一致更好,几何精度也总体提升。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T08:39:48Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "mast3r",
+        "feed-forward 3d"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 8.0,
+        "recommendation": 7.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19539v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19539v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.20150",
+      "title": "TideGS: Scalable Training of Over One Billion 3D Gaussian Splatting Primitives via Out-of-Core Optimization",
+      "authors": [
+        "Chonghao Zhong",
+        "Linfeng Shi",
+        "Hua Chen",
+        "Tiecheng Sun",
+        "Hao Zhao",
+        "Binhang Yuan",
+        "Chaojian Li"
+      ],
+      "affiliations": [
+        "HKUST"
+      ],
+      "summary": "3DGS 训到十亿级 primitive 是 memory-bound 的,单 GPU 撑不住。TideGS 观察到训练每次只激活当前相机能看到的少量 Gaussian,把 GPU 显存当 working-set cache 而不是全量参数表;用 SSD-CPU-GPU 三级 out-of-core 加异步 pipeline 加轨迹自适应差分流。在 24GB GPU 上训 10 亿 Gaussian。",
+      "original_abstract": "Training 3D Gaussian Splatting (3DGS) at billion-primitive scale is fundamentally memory-bound: each Gaussian primitive carries a large attribute vector, and the aggregate parameter table quickly exceeds GPU capacity, limiting prior systems to tens of millions of Gaussians on commodity single-GPU hardware. We observe that 3DGS training is inherently sparse and trajectory-conditioned: each iteration activates only the Gaussians visible from the current camera batch, so GPU memory can serve as a working-set cache rather than a persistent parameter store. Building on this insight, we introduce TideGS, an out-of-core training framework that manages parameters across an SSD-CPU-GPU hierarchy via three synergistic techniques: block-virtualized geometry for SSD-aligned spatial locality, a hierarchical asynchronous pipeline to overlap I/O with computation, and trajectory-adaptive differential streaming that transfers only incremental working-set deltas between iterations. Experiments show that TideGS enables training with over one billion Gaussians on a single 24 GB GPU while achieving the best reconstruction quality among evaluated single-GPU baselines on large-scale scenes, scaling beyond prior out-of-core baselines (e.g., approximately 100M Gaussians) and standard in-memory training (e.g., approximately 11M Gaussians).",
+      "highlights": {
+        "contribution": "TideGS — 把 3DGS 训练做成 SSD-CPU-GPU 三级 out-of-core,单卡 24GB 训 10 亿 primitive。",
+        "innovation": "看到 3DGS 训练 visibility 稀疏加 trajectory-conditioned,把 GPU 当 working-set cache 而非参数 store。",
+        "method": "Block-virtualized geometry 做 SSD 对齐的空间局部性,hierarchical asynchronous pipeline 重叠 I/O 和计算,trajectory-adaptive differential streaming 只传 working-set 增量。",
+        "results": "单 24GB GPU 训 10 亿以上 Gaussian,大场景下重建质量最好;相比 out-of-core baseline(~100M)、in-memory baseline(~11M)scale 大幅提升。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T17:40:59Z",
+      "categories": [
+        "cs.CV",
+        "cs.PF"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 7.0,
+        "quality": 8.0,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20150v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.20150v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19949",
+      "title": "Feed-Forward Gaussian Splatting from Sparse Aerial Views",
+      "authors": [
+        "Dongli Wu",
+        "Zhuoxiao Li",
+        "Tongyan Hua",
+        "Yinrui Ren",
+        "Xiaobao Wei",
+        "Rongjun Qin",
+        "Wufan Zhao"
+      ],
+      "affiliations": [],
+      "summary": "用稀疏俯视 aerial view 重建城市场景时,直接回归 3DGS 容易出现墙融、楼立面糊。AnyCity 先预测 observation-supported 几何 latent 作锚,再用 scaffold-conditioned 完成 token 出 gated residual,弥补未被多视图覆盖的部分;dense→sparse 蒸馏加 aerial 视频 diffusion prior 做 appearance。",
+      "original_abstract": "Reconstructing large-scale urban scenes from sparse aerial views is a crucial yet challenging task. Due to biased top-down and shallow-oblique camera poses, sparse aerial captures exhibit strong evidence imbalance: roofs and open regions are repeatedly observed, while facades, distant buildings, and occluded structures receive little multi-view support. Existing feed-forward 3D Gaussian Splatting methods directly regress a deterministic representation from sparse inputs, but this often leads to ghosting, melted facades, and stretched textures. Recent pseudo-view and video-based generative reconstruction methods use additional supervision or generative priors. However, they often lack a clear separation between observed geometry and prior-driven content, which can lead to plausible but inconsistent structures. We propose AnyCity, an observation-grounded generative reconstruction framework for sparse aerial urban scenes. AnyCity first predicts an observation-supported geometry latent to anchor reliable structures, and then uses scaffold-conditioned aerial completion tokens to predict a gated residual update for weakly constrained content before Gaussian decoding. During training, dense-to-sparse distillation transfers structural cues from dense-view reconstruction, while an aerial-adapted video diffusion prior provides fine-grained urban appearance cues through gated token conditioning. Observation-preserving objectives keep the refined representation consistent with input-supported geometry. At inference time, AnyCity reconstructs the final 3D Gaussian scene from sparse aerial views in a single feed-forward pass, achieving coherent urban novel-view synthesis with second-level inference. Experiments on synthetic, aerial-domain, UAV-textured, and real-world scenes show consistent improvements over feed-forward baselines.",
+      "highlights": {
+        "contribution": "AnyCity — observation-grounded 的生成式稀疏 aerial 重建,首次清晰区分观测支持几何和先验生成内容。",
+        "innovation": "用 observation latent 做锚加 scaffold-conditioned 残差更新避免 hallucinate 与观测冲突的结构;aerial-adapted video diffusion 当外观 prior。",
+        "method": "先预测 observation-supported geometry latent → scaffold-conditioned aerial completion token 做 gated residual → Gaussian decode;dense→sparse distillation 注入结构线索,video diffusion prior 给外观;observation-preserving loss 约束。",
+        "results": "在合成、aerial-domain、UAV-textured、真实场景上一致优于 feed-forward baseline,具体数字未列;支持秒级单次 feed-forward。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T15:04:34Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "feed-forward 3d",
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.5,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19949v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19949v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19304",
+      "title": "MMGS: 10$\\times$ Compressed 3DGS through Optimal Transport Aggregation based on Multi-view Ranking",
+      "authors": [
+        "Beizhen Zhao",
+        "Sicheng Yu",
+        "Ziran Yin",
+        "Dongxu Shen",
+        "Hao Wang"
+      ],
+      "affiliations": [],
+      "summary": "3DGS primitive 太冗余,压缩方法要么局部采样要么固定剪枝阈值,常常牺牲质量。MMGS 用 multi-view 几何一致性给 primitive 排名,再用 Optimal Transport 全局聚合冗余 Gaussian,还设计了 OT-based densification。只用 10% primitive 就能达到 SOTA,训练快 10×。",
+      "original_abstract": "While 3D Gaussian Splatting (3DGS) has revolutionized 3D reconstruction, it suffers from significant overhead due to massive redundant primitives. Existing compression methods typically rely on local sampling or fixed pruning thresholds, which often struggle to balance redundancy reduction with high-fidelity rendering. To address this, we propose a novel framework that formulates Gaussian optimization as a global geometric distribution matching problem. Specifically, our approach integrates three components: (1) we introduce a multi-view 3D Gaussian contribution ranking mechanism that filters primitives using geometric consistency instead of local heuristics; (2) we propose a global Optimal Transport (OT)-based aggregation algorithm that merges redundant primitives while preserving the underlying geometry; and (3) we design an OT-based densification operator that maintains the Gaussian's distributional properties for stable optimization. Our approach achieves state-of-the-art rendering quality with only \\textbf{10$\\%$} primitives and \\textbf{10$\\times$} accelerated training speeds compared to vanilla 3DGS.",
+      "highlights": {
+        "contribution": "MMGS — 把 3DGS 压缩重新形式化为全局几何分布匹配,10× 压缩仍保 SOTA 渲染质量。",
+        "innovation": "用 multi-view 几何一致 ranking 替代局部启发式;Optimal Transport 全局聚合加 densification 保持分布性质。",
+        "method": "(1)Multi-view 3D Gaussian contribution ranking 按几何一致性筛 primitive;(2)OT-based aggregation 全局合并冗余;(3)OT-based densification operator 保 distributional properties。",
+        "results": "只用 10% primitive 达到 SOTA 渲染质量,训练加速 10×。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T03:33:02Z",
+      "categories": [
+        "cs.CV",
+        "cs.GR"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19304v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19304v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19727",
+      "title": "Tango3D: Towards Alignment for Global and Local 2D-3D Correspondence",
+      "authors": [
+        "Zebin He",
+        "Mingxin Yang",
+        "Shuhui Yang",
+        "Hanxiao Sun",
+        "Xintong Han",
+        "Chunchao Guo",
+        "Wenhan Luo"
+      ],
+      "affiliations": [
+        "Tencent Hunyuan",
+        "HKUST"
+      ],
+      "summary": "3D 基础模型常把点云对齐到 CLIP 的全局向量空间,做检索 OK,但没法做 pixel-to-point 对应。Tango3D 用 geometry-aware 2D backbone 加预训练 3D VAE 把图像 patch 和点云 token 都映到同一空间,既做局部稠密对齐也做全局检索;三阶段渐进训练稳住联合目标。",
+      "original_abstract": "Existing 3D foundation models typically align point clouds to frozen vision-language spaces like CLIP, which achieve strong cross-modal retrieval by compressing 3D shape into a global vector. However, this global-only alignment cannot establish fine-grained pixel-to-point correspondence. To solve this, we present Tango3D, a foundation model that unifies dense correspondence and global retrieval. We use a geometry-aware 2D visual backbone and a pretrained 3D VAE to encode images into 2D patches and point clouds into 3D tokens. These are mapped into a single shared space to achieve both local pixel-to-point alignment and global semantic alignment. To stabilize the joint learning of dense and global objectives, we introduce a three-stage progressive training strategy. Experiments show our model successfully achieves object-level pixel-to-point alignment while maintaining competitive global retrieval, a joint capability not offered by existing 3D foundation models. By establishing a fine-grained alignment feature space, Tango3D injects rich semantics into purely geometric 3D tokens, paving the way for a wide range of dense 3D downstream tasks.",
+      "highlights": {
+        "contribution": "Tango3D — 一个同时支持 pixel-to-point dense correspondence 和全局检索的 3D 基础模型。",
+        "innovation": "在共享空间里联合学局部加全局对齐,而不是只塞进 CLIP 全局向量;三阶段渐进训练稳定联合目标。",
+        "method": "Geometry-aware 2D backbone 编图像 patch,预训练 3D VAE 编点云 token,映入共享空间;三阶段渐进训练联合稠密加全局目标。",
+        "results": "实现了对象级 pixel-to-point 对齐(现有 3D 基础模型没的能力)且全局检索保持竞争力,具体数字未列。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T12:01:23Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "3d foundation model"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19727v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.19727v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.20044",
+      "title": "OP2GS: Object-Aware 3D Gaussian Splatting with Dual-Opacity Primitives",
+      "authors": [
+        "Guiyu Liu",
+        "Niklas Vaara",
+        "Janne Mustaniemi",
+        "Juho Kannala",
+        "Janne Heikkilä"
+      ],
+      "affiliations": [
+        "University of Oulu",
+        "Aalto University"
+      ],
+      "summary": "3DGS 没自带物体 id,做 open-vocab 理解时要么蒸高维 feature(贵),要么把 2D mask 提升上去(易污染外观重建用的 Gaussian)。OP2GS 给每个 primitive 加 instance id 和一个额外的 instance opacity σ*,实现视觉存在和实例占据解耦,误标 Gaussian 在 mask branch 透明但仍可用于渲染。",
+      "original_abstract": "3D Gaussian Splatting (3DGS) provides an explicit and efficient scene representation, but its primitives lack inherent object-level identity, hindering downstream tasks such as open-vocabulary scene understanding. Existing methods typically address this by either distilling high-dimensional feature embeddings into Gaussians or by lifting 2D mask labels into 3D via heuristic refinement. However, feature-based approaches incur heavy storage and decoding overhead, while lifting-based pipelines remain vulnerable to label contamination: Gaussians necessary for appearance reconstruction often receive incorrect object labels during 2D-to-3D projection. We propose OP2GS, an object-aware Gaussian representation that augments each primitive with an explicit instance identity and a dedicated instance opacity $σ^{*}$ for object-mask rendering. The original opacity $σ$ remains responsible for visual reconstruction, while $σ^{*}$ models whether a Gaussian should contribute to a particular object mask. This dual-opacity formulation decouples visual existence from instance occupancy: mislabeled Gaussians can remain available for image rendering while becoming transparent in the object-mask branch. To learn this representation, we introduce a random object loss that optimizes the 1D instance occupancy field using the standard transmittance-based visibility of 3DGS. Semantic descriptors are then attached at the object level through multi-view aggregation, eliminating per-Gaussian feature storage. Compared with feature-training approaches, OP2GS achieves competitive open-vocabulary performance while significantly reducing computational overhead. Compared with training-free pipelines, it leverages physically consistent occupancy learning to resolve visibility ambiguities.",
+      "highlights": {
+        "contribution": "OP2GS — 通过 dual-opacity 把 3DGS 的视觉重建和实例占据解耦,实现物体感知 3DGS 而不污染渲染。",
+        "innovation": "σ* 单独建模 mask 占据,σ 仍管渲染;random object loss 用 3DGS transmittance 学 1D occupancy。",
+        "method": "每个 Gaussian 加 instance identity 和 instance opacity σ*;random object loss 优化 occupancy field;语义描述通过多视图聚合在 object 级,不在每个 Gaussian 上存 feature。",
+        "results": "比 feature-training 方法开放词汇性能相当但显著降存储/解码开销;比 training-free pipeline 用物理一致 occupancy 解决可见性歧义。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T16:05:48Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20044v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.20044v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.20566",
+      "title": "Conflict-Aware Active Perception and Control in 3D Gaussian Splatting Fields via Control Barrier Functions",
+      "authors": [
+        "Amirhossein Mollaei Khass",
+        "Athanasios Cosse",
+        "Vivek Pandey",
+        "Nader Motee"
+      ],
+      "affiliations": [
+        "Lehigh University"
+      ],
+      "summary": "在 3DGS 场景里做 active perception 时安全和信息收益常打架 — 信息量大的视角往往离不确定区域很近。这篇用 CBF 强制安全(基于 AV@R 风险),用 risk-aware EIG 选下个最佳视角,再把所有约束统成一个 QP,安全是硬约束、感知用松弛变量。",
+      "original_abstract": "Active perception in uncertain environments requires robots to navigate safely while acquiring informative observations to reduce map uncertainty. These objectives inherently conflict, as informative viewpoints often lie near uncertain regions with higher collision risk. To address this challenge, we develop a conflict-aware active perception and control framework for robotic systems operating in environments represented by 3D Gaussian Splatting (3DGS). Safety is enforced using a Control Barrier Function (CBF) derived from an Average Value-at-Risk AV@R collision-risk metric that accounts for geometric uncertainty and guarantees forward invariance of a safe set. To improve perception, we propose a risk-aware Expected Information Gain (EIG) formulation for selecting the next-best-view and introduce perception barrier functions that align the camera orientation with the local information-ascent direction. To obtain a tractable formulation for these conflicting safety and perception objectives, we propose a unified safety-critical, perception-aware quadratic program that enforces safety as a hard constraint while relaxing perception constraints through slack variables. Simulation results demonstrate that the proposed method improves both safety and information acquisition compared to existing 3DGS-based approaches.",
+      "highlights": {
+        "contribution": "在 3DGS 场景中统一 CBF 安全加 risk-aware EIG 感知,做出 conflict-aware 主动感知-控制框架。",
+        "innovation": "用 AV@R 衍生的 CBF 把 3DGS 几何不确定性吃进硬安全约束,perception barrier 把信息上升方向显式注入相机朝向。",
+        "method": "AV@R-based CBF 保 forward invariance of safe set;risk-aware EIG 选 NBV;perception barrier function 对齐相机和局部信息上升方向;统一 safety-critical QP,perception 用 slack 变量软化。",
+        "results": "仿真显示比现有 3DGS active perception 方法在安全和信息获取两面都更好,具体数字未列。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T23:51:23Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.0,
+        "popularity": 4.5,
+        "quality": 6.5,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.20566v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.20566v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.19649",
+      "title": "CAD-Free Learning of Spacecraft Pose Estimators via NeRF-Based Augmentations",
+      "authors": [
+        "Antoine Legrand",
+        "Renaud Detry",
+        "Christophe De Vleeschouwer"
+      ],
+      "affiliations": [
+        "UCLouvain"
+      ],
+      "summary": "训航天器位姿估计网络通常要几万张 CAD 渲染图,可不少航天器根本拿不到 CAD。这篇用 NeRF 学目标外观,再做几何一致的视角/光照增强,只需 25-400 张真实图就能训出准的 pose estimator,且在轨条件下泛化更好。",
+      "original_abstract": "Spacecraft pose estimation networks require tens of thousands of CAD-rendered images to be trained. This reliance on synthetic CAD data (i) limits applicability to targets with reliable geometry prior, excluding uncooperative or poorly documented spacecraft, and (ii) causes poor generalization to real on-orbit conditions due to unrealistic illumination and material appearance. This paper introduces a NeRF-based image augmentation method that enables the learning of spacecraft pose estimators from only a few tens to a few hundreds of images. The method learns a Neural Radiance Field of the target and generates a large, diverse dataset through geometrically-consistent viewpoint and appearance augmentation. This augmented dataset enables the training of accurate target-specific pose estimators without requiring a CAD model or large synthetic datasets. Experiments show that our approach supports the training of accurate pose estimators from only 25 to 400 realistic images, even under severe illumination variations. When applied on large CAD-based synthetic datasets, the NeRF-based augmentation also enhances out-of-domain generalization, yielding improved robustness to real on-orbit conditions.",
+      "highlights": {
+        "contribution": "用 NeRF-based 增强让航天器 pose estimator 在无 CAD 模型、少量真实图下也能训得动。",
+        "innovation": "几何一致的 NeRF 视角加外观增强可在 25-400 张图上替代上万张 CAD 渲染,且改善 sim2real。",
+        "method": "学目标的 NeRF → 生成多视角/多光照一致的增强数据集 → 训练 target-specific pose estimator;同时也可作为 CAD 合成数据集的 out-of-domain 增强。",
+        "results": "25-400 张真实图即可训出准 pose estimator,严重光照变化下仍稳;用在 CAD 合成数据增强时显著改进真实在轨泛化。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T10:37:59Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "neural radiance"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 7.0,
+        "popularity": 4.5,
+        "quality": 6.5,
+        "recommendation": 5.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.19649v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.19649v2",
+      "venue": null
+    }
+  ],
+  "total": 25
+}

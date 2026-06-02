@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2605.23128",
+    "summary": "作者在 π0 这套 VLA 上把 flow matching 的动作专家换成了 Equilibrium Matching (EqM) 解码器，其他不动。同样 300 步预算下，RoboTwin 19 个任务平均成功率从 40.4% 直接拉到 50.2%，LIBERO-10 也到了 87%。还顺带分析了一个叫 stationarity-executability gap 的现象，把推理深度当成策略设计的一部分来看。",
+    "highlights": {
+      "contribution": "把 π0 的 flow matching 动作头替换为 Equilibrium Matching，让闭环 VLA 控制能按状态自适应消耗计算。",
+      "innovation": "首次把能量基/EqM 视角引入 VLA，动作生成被看作向均衡点收敛而非固定步数采样。",
+      "method": "保留 π0 上游 VLM 不变，仅替换动作解码器为 EqM；通过残差阈值决定推理深度，分析了 stationarity-executability gap。",
+      "results": "RoboTwin 19 任务平均 40.4% → 50.2%；LIBERO-10 87.0%；在匹配 300 步预算下显著优于 flow-matching 版本。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 7,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.3
+    },
+    "affiliations": ["USTC", "HKU"]
+  },
+  {
+    "arxiv_id": "2605.24203",
+    "summary": "想解决 VLA 不知道「该在哪里下手」的问题。作者在 VLA 里塞了几个可学习的 <AFF> token 来主动查询任务相关的交互区域，再把 affordance mask 转成 embedding 直接条件化动作生成。在 LIBERO、LIBERO-Plus 和 SimplerEnv 上拿了 SOTA，真机也能用。",
+    "highlights": {
+      "contribution": "把 task-conditioned affordance 内化为 VLA 的显式视觉规划接口，让 affordance 既生成又使用，闭环服务于动作。",
+      "innovation": "区别于外部 affordance 信号或符号中间表示，<AFF> token 让规划是局部、视觉接地、内部生成且直接对齐动作。",
+      "method": "在 VLA 里加可学习 <AFF> token 查询交互区域 → 解码出 affordance mask → 压成 embedding 条件化 action head，affordance 通路与动作预测联合训练。",
+      "results": "LIBERO、LIBERO-Plus、SimplerEnv 上一致 SOTA，并展示真机表现。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 7,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.4
+    },
+    "affiliations": ["Fudan", "KAUST", "SJTU"]
+  },
+  {
+    "arxiv_id": "2605.23163",
+    "summary": "端到端自动驾驶里 AR 慢、全序列 diffusion 又会「逻辑泄漏」。Fast-dDrive 用 block-diffusion VLM：段内双向 refine、段间严格因果序，把 JSON 结构 token 冻成 scaffold 重点训规划。配合 SGLang，比 AR 基线快 12 倍，WOD-E2E 的 ADE@3s/5s 拿 SOTA，nuScenes L2 降到 0.32m。",
+    "highlights": {
+      "contribution": "提出 block-diffusion VLA 驾驶模型，兼顾 KV cache 复用、因果性和高吞吐。",
+      "innovation": "段内双向、段间因果的混合 diffusion 结构 + Scaffold Speculative Decoding，针对驾驶 JSON 输出特性设计。",
+      "method": "冻结结构 token 形成 scaffold；section-aware 训练重权 safety-critical 规划；从共享 prefix KV 采样 N 条 rollouts 并平均作 test-time scaling。",
+      "results": "WOD-E2E ADE@3s/5s SOTA；nuScenes L2 降到 0.32m（-22%）；接入 SGLang 后吞吐 12× AR 基线。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 7,
+      "popularity": 8.0,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": ["NVIDIA", "MIT", "Stanford"]
+  },
+  {
+    "arxiv_id": "2605.23203",
+    "summary": "这篇做的是视觉网络在相机 3D 运动扰动下的正式鲁棒性验证。从相机位姿到像素值建立闭式映射，再用 Lipschitz 优化得到紧的线性边界，第一次能形式化验证 projective 几何变换的鲁棒性。在 VNN-COMP 上比已有方法快 89%、边界紧 7%，还跑了一个跑道分类器的真实安全案例。",
+    "highlights": {
+      "contribution": "对相机 3D 运动引发的 homography 扰动做形式化鲁棒性验证。",
+      "innovation": "通过 Lipschitz 优化 + piecewise 连续性把 projective 变换转化为可被验证器处理的紧线性边界，无需替代网络或显式图像形成模型。",
+      "method": "从相机 pose 到像素值的闭式映射 → 分析 homography 的 Lipschitz 与分段连续性 → 在 VNN-COMP 验证器上跑。",
+      "results": "比已有方法快 89%、边界紧 7%；揭示 VNN-COMP 模型对 projective 扰动的系统弱点；真实跑道分类器案例发现安全漏洞。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 5.5
+    },
+    "affiliations": ["Imperial College London"]
+  },
+  {
+    "arxiv_id": "2605.23568",
+    "summary": "做的是抓装水的薄壁纸杯这种「力窗口超窄」的任务。靠传感器自身噪声统计就把所有阈值算出来，省了外部力标定。三通道反射控制器（剪切、法向接触、压力中心）以 12 Hz 闭环跑，倒水任务能 9/10 成功，对比固定力基线 0/10。",
+    "highlights": {
+      "contribution": "提出基于噪声统计标定的视触觉反射控制范式，专门解决易碎可形变容器的力敏感操作。",
+      "innovation": "用静态 hold-and-unload 协议从传感器内在噪声直接推出阈值，免外部力标定、免材料模型。",
+      "method": "从双视触觉传感器提取剪切强度 Sy、接触强度 Fn、压力中心 C 三个图像级 proxy；三通道优先级闭环以噪声阈值驱动，频率约 12 Hz。",
+      "results": "防止不可逆形变 5/5 成功（部分配置最多 1/5）；动态倒水任务 9/10 成功，固定力基线 0/10。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": ["HKUST(GZ)", "CUHK"]
+  },
+  {
+    "arxiv_id": "2605.23847",
+    "summary": "讨论的是 imitation learning 里到底需不需要给物体本身装传感器。用 180 条遥操作示范训 diffusion policy，挂衣架任务上加了仪器信号的版本比纯视觉好 14-25 个点。更妙的是用仪器化专家做 rollout 增广再训纯视觉学生，能追平仪器化专家。",
+    "highlights": {
+      "contribution": "证明在物体里加传感器（instrumentation）能显著提升模仿学习样本效率。",
+      "innovation": "把「物体仪器化」作为一种数据增强而非控制依赖：训练时用，部署时不必用。",
+      "method": "180 条挂衣架遥操作示范训 diffusion policy，对比有无仪器信号；再用仪器化专家 rollout 扩充数据训纯视觉学生策略。",
+      "results": "仪器化策略比纯视觉好 14-25 个百分点；扩充后纯视觉学生策略可追平仪器化专家。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.3
+    },
+    "affiliations": ["Ghent University"]
+  },
+  {
+    "arxiv_id": "2605.23856",
+    "summary": "想让世界-动作模型不要被光照纹理带偏。JOPAT 在一个 denoising diffusion transformer 里联合预测潜在视觉、2D 点轨迹（带可见性）和动作。点轨迹作为显式运动表示在遮挡和出框时更稳。LIBERO 和真机 LeRobot 任务上比纯像素基线强，长时序遮挡场景提升最大。",
+    "highlights": {
+      "contribution": "JOPAT 联合预测像素 + 2D 点轨迹 + 动作，作为更鲁棒的世界-动作模型。",
+      "innovation": "用 point tracking 作为额外的运动监督，把长时序动力学从光照/纹理 nuisance 中分离出来。",
+      "method": "单个 denoising diffusion transformer 同时去噪潜在视觉观测、带可见性的 2D 轨迹、以及动作。",
+      "results": "LIBERO 和真机 LeRobot 上优于纯像素基线，长时序、遮挡、出框场景增益最大。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 7,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 8.0
+    },
+    "affiliations": ["Aalto University"]
+  },
+  {
+    "arxiv_id": "2605.23220",
+    "summary": "想正经评估世界模型 agent 的对抗鲁棒性，但手调攻击不准，遍历搜索又太贵。WMAttack 把它变成有限预算下的攻击配置搜索：用 SCAS 根据 reward 退化反馈优化提议分布，用 RGAR 从相似表示任务里检索好用的旧配置 warm start。DreamerV3 Atari 的归一化 reward 下降从 0.497 拉到 1.034，DMC 从 0.319 到 0.682。",
+    "highlights": {
+      "contribution": "提出针对世界模型 agent 的自动化对抗攻击搜索框架。",
+      "innovation": "SCAS 自纠正攻击搜索 + RGAR 表示引导检索，给闭环 latent 动力学攻击提供高效搜索。",
+      "method": "把鲁棒性评估建成有限预算的攻击配置搜索（攻击族、扰动预算、步数、重启、分配）；SCAS 用 reward 退化/动作不稳定/方差反馈更新分布；RGAR 从历史相似任务检索 warm start。",
+      "results": "DreamerV3 Atari 归一化 reward drop 0.497 → 1.034；DMC 0.319 → 0.682；消融显示 SCAS/RGAR 各自有效。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": ["NTU", "USTC"]
+  },
+  {
+    "arxiv_id": "2605.23699",
+    "summary": "视频生成被吹成通往世界模型的路，但模型到底学了因果还是只学了表面关联？CRONOS 在 Unreal Engine 里搭了个反事实物理一致性 benchmark：固定物理事件类型（碰撞、遮挡、坠落），系统地干预视角、场景、物体类别、物体外观。结果发现现有开源视频生成器在视角变化下尤其不一致。",
+    "highlights": {
+      "contribution": "首个针对视频世界模型反事实物理一致性的可控 benchmark。",
+      "innovation": "用 Unreal Engine 做高保真合成，对四个因素做正交干预，而把物理事件类型严格固定。",
+      "method": "在 Unreal Engine 中生成视频，干预视角/场景/物体类别/外观，评估同一物理事件下的预测质量一致性。",
+      "results": "评估多个开源视频生成器，发现视角变化对预测一致性影响最大，外观和场景次之；提供可复现 testbed。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": ["Max Planck Institute"]
+  },
+  {
+    "arxiv_id": "2605.23845",
+    "summary": "粒子动力学模型以前只能在仿真里训，因为真实数据拿不到完整点云和对应关系。作者把粒子模型嫁接到 Gaussian splatting，用渲染监督直接从真实视频里学，不需要粒子级标注。还放了一个 500 段真实物体交互视频的数据集。",
+    "highlights": {
+      "contribution": "无需粒子级标签，直接从真实视频学习粒子动力学世界模型。",
+      "innovation": "把粒子动力学和 Gaussian splatting 表征绑定，让 dense Gaussian 粒子的位置/旋转预测通过渲染损失反传。",
+      "method": "在 Gaussian splatting 框架上预测每个 Gaussian 粒子的位置和旋转变化，用渲染监督训练；放出 ~500 真实交互视频数据集。",
+      "results": "展示了从真实视频学到的动力学模型，无需启发式 anchor 子采样；定性/定量优于仅靠合成训练的基线。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": ["Oregon State University"]
+  },
+  {
+    "arxiv_id": "2605.28865",
+    "summary": "一个挺有意思的实验：让 VAE 世界模型只做随机具身探索、不接触任何语言监督，问它的潜空间会不会自发出现「语义」。结果方向准确率 0.677 vs 随机编码器 0.547，位置 RSA 提升 6.6×。KL 调大潜空间几何结构就崩，语义对齐也同步崩，作者把这归到一个 shared-driver 假设。",
+    "highlights": {
+      "contribution": "在无语言监督下，验证物理几何是世界模型潜表示的组织原则。",
+      "innovation": "用「双重击倒」实验（KL 调高）证明几何结构和语义对齐是共驱动现象，而非 CNN 归纳偏置。",
+      "method": "VAE 世界模型在随机具身探索数据上训练；在 20 个 checkpoint 上跟踪预测性能与语义对齐；变更 β 做敏感性分析。",
+      "results": "方向准确率 0.677±0.029 vs 随机 0.547；位置 RSA 0.192 vs 0.029（6.6×）；预测与语义相关 Spearman r=-0.61, p=0.004。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.23345",
+    "summary": "想做 FPS 游戏世界模型，但 FPS 的开火、换弹这种动作只影响枪口局部，全图注入控制信号就糊掉。SCOPE 在视频 diffusion 的每个 transformer block 里塞一个 conditioning 模块，把特征按像素时间序列做局部动作响应，把「作用域内」和「作用域外」自然分开。还开了 CrossFPS 多游戏数据集，7 款游戏、69K 段、10-DoF。",
+    "highlights": {
+      "contribution": "提出按空间局部性处理 FPS 控制信号的视频世界模型 SCOPE，并配套多游戏数据集 CrossFPS。",
+      "innovation": "观察到 FPS 动作的空间选择性，按 per-pixel 时间序列做条件注入而非全局注入；无需 segmentation 标签。",
+      "method": "在预训练视频 diffusion 模型每个 transformer block 插入 conditioning 模块，把特征 reshape 成 per-pixel temporal 序列做动作响应；用 CrossFPS 多游戏数据训练。",
+      "results": "动作响应强、作用域分离精准，可零样本迁移到未见场景；CrossFPS 含 7 款游戏 69K 段、10-DoF 信号。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.7
+    },
+    "affiliations": ["PKU"]
+  },
+  {
+    "arxiv_id": "2605.23470",
+    "summary": "想从横截面快照（不是时间序列）里恢复个体的连续轨迹。CADENCE 用 score-based 编码器消除 diffeomorphic 不可识别性，再用 Soft MoE 路由器把动力学锚到个体级静态上下文。理论上给出了单时点轨迹推断的可识别性保证，跨多个 benchmark 和真实生物数据上能匹配甚至超过用密集轨迹训出来的 SOTA。",
+    "highlights": {
+      "contribution": "在极稀疏甚至纯横截面数据下，从单时点快照恢复个体连续动力学轨迹。",
+      "innovation": "score-based bijective Probability Flow ODE 编码器 + SMoE 路由，给出新的单时点可识别性证明。",
+      "method": "对单时点快照学习潜空间动力学；用静态上下文锚定个体；Probability Flow ODE 编码 + SMoE 动力学路由联合训练。",
+      "results": "在物理系统到真实生物数据多个 benchmark 上，仅用稀疏快照训练即可匹配或超过用密集轨迹训的 SOTA 序列模型。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 6.2
+    },
+    "affiliations": ["DZNE", "University of Washington"]
+  },
+  {
+    "arxiv_id": "2605.23510",
+    "summary": "处理只能看到部分状态变量的动力系统。NHODE 把 Hamiltonian NN 和 neural ODE 拼起来：能量守恒结构来自前者，灵活训练（只在观测变量上算 loss）来自后者，还加了对称感知的坐标变换和可分能量公式。在 spring 系统到三体问题上比纯数据驱动稳得多。",
+    "highlights": {
+      "contribution": "在部分观测设置下保留 Hamiltonian 结构的神经动力学框架 NHODE。",
+      "innovation": "把 HNN 的能量守恒和 neural ODE 的部分观测训练能力结合，并叠加对称感知坐标变换。",
+      "method": "用 HNN 表达 Hamiltonian 动力学，neural ODE 解算并只在观测变量上计算损失；加入分离能量结构和对称变换。",
+      "results": "在线性/非线性 mass-spring 到三体问题上，长时序稳定性显著优于纯数据驱动基线，能恢复观测和潜在动力学。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 7,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 5.5
+    },
+    "affiliations": ["SINTEF"]
+  },
+  {
+    "arxiv_id": "2606.00085",
+    "summary": "MPC 跑高保真模型准但慢，低保真快但有时会让车翻。ADO 维护一个动力学模型库，根据 terrain-conditioned 性能估计在线挑模型，估计用 counterfactual rollout 的残差不断 refine。野外机器人实验上接近最高保真模型的精度，却没付出它的算力代价。",
+    "highlights": {
+      "contribution": "动态选择动力学模型的 MPC 框架 ADO，平衡精度和实时性。",
+      "innovation": "用 counterfactual rollouts 在线估计每个模型在当前地形下的预测误差，地形条件化选择。",
+      "method": "维护多保真动力学模型库；执行后将动作 replay 到每个模型估计残差；以此实时挑模型供 MPC 滚动用。",
+      "results": "野外地面机器人实验：建模误差显著低于固定低延迟基线，接近最高保真模型精度，且不付高算力代价。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": ["George Mason University"]
+  },
+  {
+    "arxiv_id": "2605.23287",
+    "summary": "LangFlash 一发前向就从稀疏无位姿的多视图重建 3D 场景，并且每个 Gaussian 都带语言对齐的语义特征。靠 global semantic dictionary + per-primitive 局部权重做稀疏语义编码降低复杂度。还在 RealEstate10k 上加了 dense 语义监督。",
+    "highlights": {
+      "contribution": "feed-forward 框架同时输出 Gaussian 几何和语言对齐语义，支持稀疏无位姿输入。",
+      "innovation": "全局语义字典 + 局部 per-primitive 权重的稀疏语义编码方案，兼顾语义保真和表示紧凑。",
+      "method": "Gaussian primitive 同时携带几何和语义特征；用增强后的 RealEstate10k 训练；前向一次出几何和语义。",
+      "results": "新视图合成和语义一致性优于已有方法；建立 pose-free 语言接地 3D 重建的新范式。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 7,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": ["Harvard"]
+  },
+  {
+    "arxiv_id": "2605.23672",
+    "summary": "单目视频重建 4D 场景时长时平滑变换和短时复杂形变都得抓。RiGS 引入三类 Gaussian：静态、刚性、瞬态，并用 object-wise dynamic mask 聚合长程时空运动来划分动静区。刚性 Gaussian 还能根据时长转化成瞬态 Gaussian，scene flow 提供 dense 3D 监督。在新视图合成上拿 SOTA。",
+    "highlights": {
+      "contribution": "从单目视频出发的 Rigid-aware 4D Gaussian splatting 框架。",
+      "innovation": "用 static/rigid/transient 三类 Gaussian 同时建模多时间尺度运动，并允许刚性向瞬态转化。",
+      "method": "object-wise dynamic mask 聚合长程时空运动指导动静分解；rigid/transient 在 scene flow 监督下联合优化。",
+      "results": "novel view synthesis benchmark 上 SOTA，代码开源。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": ["Harvard"]
+  },
+  {
+    "arxiv_id": "2605.23602",
+    "summary": "夜景里 glow 区域没纹理没边缘，3DGS 重建就崩。GlowGS 用 diffusion 模型生成新视图，再用 VFM 评估质量挑高质量样本，从这些样本里抽稳健语义特征建一个 feature bank。渲染时把当前 GS novel view 的语义和 bank 里最近邻拉近，作为隐式结构约束。",
+    "highlights": {
+      "contribution": "针对夜景 glow 区域的 3DGS 增强方法，靠 diffusion + VFM 补齐缺失结构线索。",
+      "innovation": "用 VFM 质量筛选 diffusion 生成的新视图，构建可检索的语义 feature bank 作为隐式结构正则。",
+      "method": "1) diffusion 合成未知位姿新视图，VFM 评质量并提取语义；2) 渲染 GS novel view 的语义检索 feature bank 最近邻最小化距离。",
+      "results": "在夜景 glow 数据集上语义准确度和渲染质量均显著优于已有 3DGS 方法。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.3
+    },
+    "affiliations": ["NUS"]
+  },
+  {
+    "arxiv_id": "2605.23888",
+    "summary": "把多视图场景重建当成条件 3D 生成，每块 chunk 独立生成再拼成大场景。借用 Trellis.2 作物体级生成先验，并设计了与 view 顺序无关、空间锚定的 projection-based 条件机制，把多视图特征 lift 到生成模型的 3D 表示。最终拿到可编辑 PBR mesh，比 SOTA 重建强 16%。",
+    "highlights": {
+      "contribution": "把物体级生成先验 Trellis.2 提升到场景级多视图重建。",
+      "innovation": "projection-based 条件机制让 view 顺序无关且空间锚定，使 chunk-wise 生成在拼接时仍多视图一致。",
+      "method": "把场景切成 spatially overlapping chunks，每块视为条件 3D 生成；多视图特征投影到与生成器对齐的 3D 表示；逐块生成再拼接成 PBR mesh。",
+      "results": "室内场景高保真可编辑 PBR mesh 重建，相比 SOTA 重建方法提升 16%。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": ["TUM"]
+  },
+  {
+    "arxiv_id": "2605.23892",
+    "summary": "Visual geometry transformer 全局注意力随序列长度平方增长。这篇提出两阶段 token 选择：先 inter-frame 用多样性策略选保留的帧，再 intra-frame 用 attention entropy 引导逐层稀疏化丢冗余 token。500 张图的场景上加速超 85%，性能保持甚至变好。",
+    "highlights": {
+      "contribution": "通用的 token 选择策略大幅加速 visual geometry transformer 推理。",
+      "innovation": "inter-frame 多样性帧选择 + intra-frame layer-aware、attention-entropy 引导的 token 稀疏化。",
+      "method": "两阶段：先在帧级用多样性策略保留代表帧；再在帧内根据 global attention pattern 的 entropy 逐层丢冗余 key/value token。",
+      "results": "500 张图的场景上加速 >85%，性能持平甚至提升；速度-精度 Pareto 优于已有方法。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 7,
+      "popularity": 7.5,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": ["Google", "Toronto"]
+  },
+  {
+    "arxiv_id": "2605.24111",
+    "summary": "MASt3R-Nav 用一种「像素相对连通」的地图：不要求全局几何一致，但每张图对之间的像素对应是几何准确的。然后在像素级图上做全局路径规划，得到 WayPixel Costmap 喂给控制器预测轨迹 rollout。仿真四类导航任务都比 image/object 级条件更准，真机也跑了。",
+    "highlights": {
+      "contribution": "提出像素相对连通的新型地图表示，几何精确但无需全局一致。",
+      "innovation": "用 MASt3R 风格的相对 3D 匹配建图像素级图；据此得到 WayPixel Costmap 作为控制条件。",
+      "method": "从图像序列建立 inter-image 像素连通图 → 稀疏化得到 intra-image 像素连通做全局规划 → 用 WayPixel Costmap 条件化控制器预测 trajectory rollout。",
+      "results": "在仿真四类导航任务上均胜过 image-/object-level 条件方案；真实世界 demo 验证通过。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": ["IIIT Hyderabad", "MBZUAI"]
+  },
+  {
+    "arxiv_id": "2605.24114",
+    "summary": "想编辑 3DGS 生成的人头特定语义属性（发色、眼镜），原来直接改 latent 容易牵连身份外观。COSY 让 hair/skin/glasses/torso 各自由独立 generator 生成，只通过少量 context token 共享形状和光照信息。不用 mask 不用几何先验也能解耦。",
+    "highlights": {
+      "contribution": "组合式 3DGS 头部生成器，原生支持区域级语义解耦编辑。",
+      "innovation": "完全独立的 per-region generator + 仅共享形状/光照的 context token，避免后训练 disentanglement 估计的不完全性。",
+      "method": "为头发、皮肤、眼镜、躯干分别训独立 3DGS generator；用稀疏属性（如发色/肤色）训练；context token 在生成器间最少量共享形状和光照。",
+      "results": "比 GAN 编辑基线解耦更彻底、编辑控制更精准，视觉质量有竞争力。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 5.5
+    },
+    "affiliations": ["Fraunhofer HHI", "NVIDIA"]
+  },
+  {
+    "arxiv_id": "2605.23165",
+    "summary": "把 VLM 拿来做自主探索的高层决策。机器人在 frontier 决策点把当前地图 + 各个 frontier 的图像组成多模态 prompt 喂给 VLM，让它替换掉传统的几何启发式来挑下一个前沿。在 6 个室内仿真场景里 map coverage 比已有方法提升最多 24%，免训练、可迁移。",
+    "highlights": {
+      "contribution": "VLM 引导的 frontier-based 自主探索 pipeline。",
+      "innovation": "把 frontier 选择从几何启发式换成 VLM 的上下文空间推理，无需训练。",
+      "method": "在决策点合成 map + 每个 frontier 的图像作为多模态 prompt 给 VLM；VLM 输出选择，下层走经典控制栈。",
+      "results": "6 个室内仿真场景平均 map coverage 提升最多 24%；轻量、训练-free。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": ["UC Berkeley"]
+  },
+  {
+    "arxiv_id": "2605.23271",
+    "summary": "做电影级视频生成的评测。EvalVerse 不再问「对不对」（prompt-following），而是想问「好不好」（电影质量/演技/美学）。按 pre/production/post 拆分类、收专家标注、用 expert-calibrated finetuning 教 VLM 做显式 CoT 评分。还涵盖多镜头剪辑和音画整合。",
+    "highlights": {
+      "contribution": "面向专业电影级视频生成的 pipeline-aware、专家校准评测框架 EvalVerse。",
+      "innovation": "把电影专业知识系统数字化：评测分类法对齐影片工作流，用专家校准的 CoT VLM 替代传统打分。",
+      "method": "1) 按 pre/production/post 构造评测分类法；2) 收集大规模专家标注；3) 用 expert-calibrated finetuning 训 VLM 做显式 CoT 评分。",
+      "results": "在保留兼容传统「对不对」指标的同时显著扩展「好不好」评估，覆盖复杂多镜头剪辑和音画整合。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 7,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 6.2
+    },
+    "affiliations": ["Stanford", "HKUST(GZ)"]
+  },
+  {
+    "arxiv_id": "2605.23883",
+    "summary": "MLLM 细粒度理解差。PGT 在图像上叠加无歧义的几何 primitives 当作额外稠密监督，把视觉接地能力从语义先验里解耦出来，顺带还能用来定位感知失败的来源。LLaVA-v1.5-Instruct 加 PGT 数据微调，在 What'sUp 上 +20%、CV-Bench-2D 上 +13.3%。",
+    "highlights": {
+      "contribution": "提出 Procedurally Generated Tasks，用程序生成的几何 primitive 监督显著提升 MLLM 细粒度视觉接地。",
+      "innovation": "把视觉接地从语义先验解耦的程序化数据增强 + 同时可作诊断工具定位感知失败来源。",
+      "method": "在图像上叠加几何 primitive 作为 dense 监督；用 LLaVA-v1.5-Instruct 等做 instruction tuning；在多种关系/数量/3D/depth benchmark 评估。",
+      "results": "LLaVA-v1.5-Instruct 上 What'sUp +20%、CV-Bench-2D +13.3%；SOTA MLLM 也能 +5.5%/+8.3%，且不掉一般感知能力。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.5
+    },
+    "affiliations": ["Meta FAIR", "Mila"]
+  }
+]

@@ -80,30 +80,53 @@ def match_directions(text: str) -> tuple[str | None, list[str]]:
     return scores[0][0], scores[0][1]
 
 
-def arxiv_query(start: int = 0, batch: int = 200) -> str:
-    cat_query = "+OR+".join(f"cat:{c}" for c in ARXIV_CATEGORIES)
-    params = {
-        "search_query": cat_query,
-        "start": str(start),
-        "max_results": str(batch),
-        "sortBy": "submittedDate",
-        "sortOrder": "descending",
-    }
-    # Note: arxiv wants `search_query` with + literals; don't urlencode it.
+def arxiv_query(
+    start: int = 0,
+    batch: int = 200,
+    date_from: dt.date | None = None,
+    date_to: dt.date | None = None,
+) -> str:
+    """Build an arxiv API query. If both date_from / date_to are given we add
+    a server-side `submittedDate:[...]` clause so a single page covers the
+    whole window — critical for backfill, where the default sort-desc-then-
+    paginate strategy would need dozens of pages to reach old dates."""
+    cat_clause = "+OR+".join(f"cat:{c}" for c in ARXIV_CATEGORIES)
+    parts = [f"({cat_clause})"]
+    if date_from is not None and date_to is not None:
+        # arxiv wants YYYYMMDDHHMM, range is inclusive on both ends
+        a = date_from.strftime("%Y%m%d") + "0000"
+        b = date_to.strftime("%Y%m%d") + "2359"
+        parts.append(f"submittedDate:[{a}+TO+{b}]")
+    search = "+AND+".join(parts)
     qs = (
-        f"search_query={params['search_query']}"
-        f"&start={params['start']}"
-        f"&max_results={params['max_results']}"
-        f"&sortBy={params['sortBy']}"
-        f"&sortOrder={params['sortOrder']}"
+        f"search_query={search}"
+        f"&start={start}"
+        f"&max_results={batch}"
+        f"&sortBy=submittedDate"
+        f"&sortOrder=descending"
     )
     return f"{ARXIV_API}?{qs}"
 
 
-def http_get(url: str, timeout: float = 30.0) -> bytes:
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        return r.read()
+def http_get(url: str, timeout: float = 30.0, max_retries: int = 4) -> bytes:
+    """GET with exponential backoff on 429 / 5xx — arxiv rate-limits hard
+    when you hit it from a backfill loop."""
+    last_err: Exception | None = None
+    for attempt in range(max_retries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.read()
+        except urllib.error.HTTPError as e:
+            last_err = e
+            if e.code not in (429, 500, 502, 503, 504):
+                raise
+        except Exception as e:
+            last_err = e
+        wait = 30 * (attempt + 1)
+        print(f"  http retry {attempt + 1}/{max_retries} in {wait}s ({last_err})", file=sys.stderr)
+        time.sleep(wait)
+    raise last_err if last_err else RuntimeError("http_get exhausted retries")
 
 
 def parse_entry(entry: ET.Element) -> dict | None:
@@ -214,13 +237,24 @@ def main() -> int:
     older_streak = 0
     PAGE = 200
 
+    consecutive_http_fails = 0
     for page in range(args.pages):
-        url = arxiv_query(start=page * PAGE, batch=PAGE)
+        url = arxiv_query(
+            start=page * PAGE,
+            batch=PAGE,
+            date_from=start_date,
+            date_to=end_date,
+        )
         try:
             xml = http_get(url)
+            consecutive_http_fails = 0
         except Exception as e:
+            consecutive_http_fails += 1
             print(f"[fetch_arxiv] page {page} request failed: {e}", file=sys.stderr)
-            break
+            if consecutive_http_fails >= 2:
+                print(f"[fetch_arxiv] {consecutive_http_fails} consecutive failures, giving up", file=sys.stderr)
+                break
+            continue
         root = ET.fromstring(xml)
         entries = root.findall("atom:entry", NS)
         if not entries:

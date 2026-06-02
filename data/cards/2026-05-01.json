@@ -1,0 +1,489 @@
+[
+  {
+    "arxiv_id": "2605.00416",
+    "summary": "做的是 VLA 部署后还能继续学习的问题。预训练好的 generalist policy 一旦放到真实机器人车队里就要面对分布漂移和长尾失败,他们搭了个 LWD 框架,让 16 台双臂机器人在跑 8 个真实任务时一边自主 rollout、一边接受人工干预,数据汇总后用 DIVL+QAM 做离线到在线 RL,最终单一策略平均成功率冲到 95%,长 horizon 任务收益最大。",
+    "highlights": {
+      "contribution": "把 VLA 策略从一次性预训练拓展成可随车队部署而持续改进的 offline-to-online RL 闭环。",
+      "innovation": "用 Distributional Implicit Value Learning 稳定异质稀疏奖励的值估计,并配合 Q-learning via Adjoint Matching 来给 flow-based 动作生成器做策略抽取。",
+      "method": "起点是预训练 VLA;车队 rollout + 人工纠错收集数据,DIVL 估值,QAM 提取策略,反复部署再训练;评测 8 个真实操作任务包括 3-5 分钟长 horizon。",
+      "results": "16 台双臂机器人 8 个真实任务平均成功率 95%,长 horizon 任务提升幅度最大。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 5,
+      "popularity": 7.5,
+      "quality": 8.5,
+      "recommendation": 8.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.00438",
+    "summary": "针对长 horizon 操控做了个 IVLR 框架:让模型先把任务分解成「文字子目标 + 视觉关键帧」交替排开的全局 trace,然后再据此条件化地走 action decoder。trace 用 VLM 给 demo 分段配字幕半监督出来。LIBERO-Long 92.4%、整体 LIBERO 95.5%、SimplerEnv-WidowX 59.4%,去掉 trace 直接掉到 37.7%。",
+    "highlights": {
+      "contribution": "把 chain-of-thought 显式扩展为图文交错的全局规划 trace,让 VLA 同时获得因果顺序和几何约束。",
+      "innovation": "trace 由原生多模态 transformer 自己一次性预生成并缓存,再驱动闭环动作 decoder,而不是把规划埋进 latent。",
+      "method": "用 VLM 对 demo 做时序分段并生成 caption,合成图文交错伪标签;一个多模态 transformer 学预测 trace,推理时基于 trace + 指令 + 当前观测出动作。",
+      "results": "LIBERO 平均 95.5%、LIBERO-Long 92.4%、SimplerEnv-WidowX 59.4%;消融下文本-only 62.0%、视觉-only 68.4%、无 trace 37.7%。"
+    },
+    "scores": {
+      "relevance": 9.3,
+      "recency": 5,
+      "popularity": 6.5,
+      "quality": 8.3,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.00321",
+    "summary": "想搞清楚 VLA 泛化失败是不是因为看了「虚假视觉相关」。他们把视觉到动作的归因当成 interventional 估计问题,提出 ISS 来打分每个视觉区域的因果影响,再用 NMR 量化策略对任务无关特征的依赖。结果显示 NMR 能预测泛化好坏,ISS 比已有解释器更忠实。",
+    "highlights": {
+      "contribution": "给 VLA 提供了一个基于因果干预的可解释性诊断工具,用以预判策略会不会泛化失败。",
+      "innovation": "把「看 mask 后动作差异」形式化为无偏的 interventional 估计,并提出 NMR 这种衡量「看错重点」程度的标量指标。",
+      "method": "对视觉区域做 interventional masking 计算 ISS;NMR 汇总落在任务无关区域的归因质量;在多种操控任务里验证统计性质与有效性。",
+      "results": "NMR 与泛化表现相关,ISS 在归因忠实度上优于现有可解释方法。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 5,
+      "popularity": 5.5,
+      "quality": 7,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.08133",
+    "summary": "把 RAG 思路塞进自动驾驶 VLA。视觉先抽成时空语义图过滤噪声,再用 Graph-DTW 对齐做拓扑感知的检索,把找出来的历史先验喂进 query-based VLA backbone 生成轨迹。在 Bench2Drive 上拿到 89.12 Driving Score 的新 SOTA。",
+    "highlights": {
+      "contribution": "首次把结构化检索增强生成融进端到端自动驾驶 VLA,显式利用历史场景图先验。",
+      "innovation": "视觉到场景图的抽象 + Graph-DTW 对齐检索,避开纯视觉相似度噪声,聚焦拓扑一致性。",
+      "method": "Visual-to-Scenario 抽语义图;Scenario-Aligned Embedding 用 Graph-DTW 检索相似历史;query-based VLA 解码出轨迹。",
+      "results": "Bench2Drive Driving Score 89.12,建立新 SOTA。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 5,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.00471",
+    "summary": "为移动机械臂在视角不停变化、目标尺度变化大的场景做实时控制。立体相机抽出多阶段空间注意力点,跟机器人状态一起喂进 hierarchical RNN 做闭环动作预测。四个真机任务上比模仿学习和 VLA baseline 在随机初始位姿和视觉干扰下都更稳。",
+    "highlights": {
+      "contribution": "给移动机械臂提出一种立体多阶段空间注意力的预测式控制方案,缓解视角漂移带来的失败。",
+      "innovation": "把立体视觉先抽成多阶段空间注意力点再喂进 hierarchical recurrent 闭环,既保留几何先验又能实时。",
+      "method": "stereo 输入抽 task-relevant 注意力点;层级 RNN 融合机器人状态预测动作;真机 4 任务跑随机初始位置 + 视觉干扰。",
+      "results": "在刚体放置、铰链物体、形变物体等 4 个真机任务上成功率优于模仿学习和 VLA baseline。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 5,
+      "popularity": 5,
+      "quality": 6.8,
+      "recommendation": 6.6
+    },
+    "affiliations": [
+      "Waseda University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00475",
+    "summary": "ACT 在精细双臂操作上数据少、延迟低很好用,但对视觉漂移敏感。他们在 ACT 基础上加了多阶段空间注意力模块,既预测 2D 注意力点,又用未来帧特征做自监督对齐,抑制 keypoint 漂移。ALOHA 双臂真机上 success、latency、稳定性都更好。",
+    "highlights": {
+      "contribution": "用更稳的多阶段空间注意力 + 时序对齐损失,让低延迟的 ACT 在精细双臂任务里不再漂移。",
+      "innovation": "无需 keypoint 标注的自监督未来帧对齐,让 attention 在长时间任务里保持一致跟踪。",
+      "method": "ACT + 预训练 ResNet;多阶段 attention 抽 2D 注意力点;时序对齐损失把当前注意力预测和未来帧特征对齐;ALOHA 双臂上做仿真+真机评测。",
+      "results": "比 ACT 等基线在 attention 漂移、视觉扰动鲁棒性、任务成功率上有改善,同时保持低延迟。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 5,
+      "popularity": 5,
+      "quality": 6.8,
+      "recommendation": 6.4
+    },
+    "affiliations": [
+      "Waseda University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.01069",
+    "summary": "对流体、布料这种形变物体的安全操控,reward shaping 没法保证约束。他们做了个在线安全过滤器:用 horizon-agnostic 神经算子学 PDE 边界输入输出映射,再用边界控制屏障函数做一个轻量 QP 实时把策略动作改最小代价投影。FluidLab 上安全轨迹率提升最多 22%。",
+    "highlights": {
+      "contribution": "给形变物体操控提出在线、实时的安全过滤器,保证任务级约束被显式满足。",
+      "innovation": "把 horizon-agnostic neural operator 学到的 PDE 边界映射与 boundary CBF 串成可用 QP 实时求解的安全约束。",
+      "method": "学 PDE 边界 input-output 映射;boundary CBF 在输出层证伪;约束 affine 于边界输入速率,QP 在线最小修改基础策略。",
+      "results": "FluidLab 流体操控任务安全轨迹率最多 +22%,且达到安全集所需步数更少。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5,
+      "popularity": 5.5,
+      "quality": 7.2,
+      "recommendation": 6.5
+    },
+    "affiliations": [
+      "CMU"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00412",
+    "summary": "一篇 position paper,主张当前 world model 三条路线(视频生成 / 3D 场景 / JEPA 潜空间)都没法同时给出物理可靠、可控、长 horizon 稳定的预测。他们提出 Hamiltonian World Model 这种把观测编码到结构化相空间、用 Hamilton 动力学加控制/耗散/残差项演化的视角。还讨论了在接触、形变这些非保守场景下的实际困难。",
+    "highlights": {
+      "contribution": "提出 world model 应转向「物理上有意义」而不仅仅是「视觉上真实」的观点,给出 Hamiltonian 视角的统一框架。",
+      "innovation": "把 Hamilton 力学结构作为 world model 的归纳偏置,引入控制、耗散、残差三块来兼容真实机器人非保守场景。",
+      "method": "潜空间编码到相空间;Hamiltonian 演化加 control/dissipation/residual 三项;解码出未来观测做 planning;主要是框架论述。",
+      "results": "无大规模实验,主要给出框架性论证、可解释性与长 horizon 稳定性讨论。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 5,
+      "popularity": 5.5,
+      "quality": 6,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.00932",
+    "summary": "Meta 给自家 Code World Model 出的安全 preparedness 报告,主要是在 Frontier AI Framework 划定的高风险域内做发布前测试,结论是 CWM 不引入额外的 frontier 风险,所以以 open-weight 发布。",
+    "highlights": {
+      "contribution": "给 Code World Model 的开放发布做了 preparedness 评估,提供官方安全声明。",
+      "innovation": "更多是 release report,而非新算法。",
+      "method": "按 Frontier AI Framework 在各高风险域跑评测 + misalignment propensity 评估。",
+      "results": "结论是 CWM 没有超出现有生态的额外风险,可作 open-weight 发布。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5,
+      "popularity": 7,
+      "quality": 6,
+      "recommendation": 5.5
+    },
+    "affiliations": [
+      "Meta"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00943",
+    "summary": "社交机器人 ARIS:在 Pepper 上把多模态推理 + 一个图结构的 Social World Model + RAG 串成 agent。Social World Model 用知识图谱跟踪用户关系,RAG 让对话历史扩展到几千轮还能保延迟。N=23 用户研究里在感知智能、拟人、亲和度都显著高于 LLM baseline。",
+    "highlights": {
+      "contribution": "给社交机器人提出一个把社交关系图、RAG 和多模态推理统一起来的 agentic 架构,并在真机做了用户研究。",
+      "innovation": "Social World Model 用知识图谱显式表示和更新用户间的社交关系,支持跨会话再识别和社交推理。",
+      "method": "Pepper 平台 + 模块化 agent 框架;RAG 管理长对话;graph-based social world model 更新关系;multimodal reasoning 协调语音视觉动作。",
+      "results": "N=23 用户研究在 perceived intelligence/animacy/anthropomorphism/likeability 上显著优于 LLM baseline。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 5.8
+    },
+    "affiliations": [
+      "Monash University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00498",
+    "summary": "做 3DGS 场景里删物体的事情:已有方法忽略全局光照、且对非朗伯表面处理糟糕。GOR-IS 把场景拆成 intrinsic 分量,显式建模光传输,直接在材质和光照域里做 inpainting,跨视角更一致。LPIPS 提升 13%,PSNR +2dB。",
+    "highlights": {
+      "contribution": "为 3D Gaussian Splatting 删物体提出物理一致 + 视图一致的 inpainting 框架。",
+      "innovation": "把删除任务搬到 intrinsic 分解空间里完成,显式建模全局光照与非朗伯表面。",
+      "method": "对 3DGS 场景做 intrinsic 分解 + 显式光传输;intrinsic-space 内的 inpainting 模块在材质和光照域做填补;合成 + 真实数据集评测。",
+      "results": "LPIPS +13%、PSNR +2dB,代码已开源。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5,
+      "popularity": 5.5,
+      "quality": 7.2,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.00569",
+    "summary": "2DGS 对 SfM 初始化敏感,他们用单目深度和法向先验改造:深度引导初始化,再 cluster-based 剪枝退化高斯。DTU 上达到 mesh 重建 SOTA,同时保持高质量 NVS。",
+    "highlights": {
+      "contribution": "通过引入单目几何先验,显著提升 2D Gaussian Splatting 的鲁棒性与 mesh 重建质量。",
+      "innovation": "用 monocular depth/normal 引导 2DGS 的初始化与高斯剪枝,绕开对 SfM 质量的强依赖。",
+      "method": "深度先验初始化高斯;法向引导优化;基于聚类剪掉退化 primitive;DTU 数据集对比 mesh 重建。",
+      "results": "DTU 上 mesh 重建达到 SOTA,同时保持高质量新视角合成。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 6.8
+    },
+    "affiliations": [
+      "TU Darmstadt"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00345",
+    "summary": "PAD 做 pose-aware 3D 生成,跳过「先规范化再旋转」两步走的范式,直接在观测空间端到端 diffusion,把单目深度反投影成 partial 点云作为 3D anchor 注入。跟 SOTA 比几何对齐和图像-3D 对应都更好,还能简单 union 出场景级合成。",
+    "highlights": {
+      "contribution": "提出 end-to-end 的 pose-aware 3D 扩散框架,解决「先规范化再旋转」带来的空间不匹配。",
+      "innovation": "把单目深度反投影出的 partial 点云作为显式几何 anchor 注入 diffusion,实现 native 观测空间生成。",
+      "method": "单目深度反投影出 partial point cloud;在观测空间端到端 diffusion 生成几何;单物体联合可拼成场景。",
+      "results": "在几何对齐和 image-to-3D correspondence 上优于 SOTA,且自然扩展到组合场景重建。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 6.7
+    },
+    "affiliations": [
+      "Renmin University of China"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00408",
+    "summary": "3DGS 现在的密度控制还停留在手写规则。LeGS 把它换成 RL 策略网络,核心是基于敏感度分析的 reward,精确度量每个高斯对重建质量的边际贡献,并推导出闭式解把复杂度从 O(N²) 降到 O(N)。Mip-NeRF 360、Tanks & Temples、Deep Blending 上质量效率俱优,有代码。",
+    "highlights": {
+      "contribution": "把 3DGS 的密度控制从启发式规则升级为可学习 RL 策略。",
+      "innovation": "用敏感度分析推出 O(N) 闭式 reward,让 RL 训练大规模 Gaussian 场景在算力上可行。",
+      "method": "密度控制建模成 policy 网络,RL 优化;reward 是边际重建贡献,做闭式简化;三大数据集对比。",
+      "results": "Mip-NeRF 360 / Tanks & Temples / Deep Blending 上质量与效率均优于 SOTA。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": [
+      "HIT Shenzhen",
+      "Pengcheng Lab"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00323",
+    "summary": "现在治 LVLM 幻觉一般靠从 GPT 蒸偏好,学生模型被强行对齐到自己看不到的细节。OSCAR 利用 LVLM 自身「判别强于生成」的 gap 做在线自校准:MCTS 搜索 + 双粒度 reward 自动构造偏好,再 DPO 反复打磨。在幻觉 benchmark 上拿到 SOTA。",
+    "highlights": {
+      "contribution": "给 LVLM 提出一个不靠外部强模型的在线自校准抗幻觉框架。",
+      "innovation": "利用模型在判别任务上比生成更准的 Generative-Discriminative Gap,自己给自己造可靠偏好信号。",
+      "method": "MCTS + dual-granularity reward 自动产偏好对;DPO 迭代精化;在多个幻觉与通用多模态 benchmark 上验证。",
+      "results": "幻觉 benchmark 上 SOTA,同时通用多模态能力没掉。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.00326",
+    "summary": "讨论一个被忽视的问题:零样本 VLM 安全分类器靠单 prompt 的 first-token 概率打分,语义等价 prompt 一换分数就飞,跨 prompt 方差还能预测错误。做了 training-free 的 mean ensemble,14 对数据-模型上 NLL 全胜,ECE 12/14 胜,排名也比单 prompt 强。",
+    "highlights": {
+      "contribution": "指出零样本 VLM 安全打分对 prompt 高度脆弱,并给出 label-free 的可靠性诊断与基线。",
+      "innovation": "提出用 prompt 家族评估 + 均值聚合作为标准的 label-free 校准基线,把跨 prompt 方差当 fragility 信号。",
+      "method": "构造语义等价 prompt 集合;mean ensemble first-token 概率;跨 14 个数据-模型对评测 NLL/ECE/AUROC/AUPRC;对照温度/Platt/isotonic。",
+      "results": "NLL 14/14 胜 train-selected 单 prompt 基线,ECE 12/14 胜;AUPRC 全面提升,AUROC 多数提升。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5,
+      "popularity": 5,
+      "quality": 7,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.00347",
+    "summary": "Odysseus 在 Super Mario Land 这种 100+ 轮交互的视觉游戏里训练 VLM。提出带 turn-level critic 的 PPO 变体,显著比 GRPO/Reinforce++ 稳;预训练 VLM 提供强 action prior,样本效率胜过从零 deep RL。开源框架在多个关卡 3× 优于前沿模型,还能跨关卡泛化。",
+    "highlights": {
+      "contribution": "把 VLM agent 的 RL 训练推到 100+ 长 horizon 视觉决策场景,并系统对比关键算法成分。",
+      "innovation": "提出 turn-level critic 的 PPO 变体,把 VLM 当强 action prior,既稳定又省样本。",
+      "method": "在 Super Mario Land 用 PPO + lightweight turn-level critic;对比 GRPO、Reinforce++ 等;基于预训练 VLM 起步,无需手工 action engineering。",
+      "results": "多关卡平均进度比前沿模型高 3 倍以上;跨关卡、跨游戏泛化稳定;通用能力未损。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": [
+      "Princeton"
+    ]
+  },
+  {
+    "arxiv_id": "2605.04098",
+    "summary": "评估 MLLM 在真实皮肤科决策里的表现,跑了 4 个开源 + GPT-4.1,3 个公开数据集 + 一个 5811 病例真实多医院 cohort。结论很直接:公开 benchmark 上 GPT-4.1 top-3 42.25%,真实图像 only 跌到 24.65%,开源模型 1.5-13.35%;加临床上下文有提升但对错误描述非常敏感。",
+    "highlights": {
+      "contribution": "量化 MLLM 在真实临床皮肤科里的 benchmark-to-bedside 落差。",
+      "innovation": "把公开 benchmark 表现和 5811 例真实多中心咨询数据直接对比,加入 severity-based triage 评估。",
+      "method": "评测 InternVL/LLaVA-Med/SkinGPT4/MedGemma + GPT-4.1;两类任务:鉴别诊断和分诊;评估有无临床上下文的差异。",
+      "results": "真实场景下开源模型 top-3 仅 1.5-13.35%,GPT-4.1 24.65%;加临床上下文至 38.93%,但对错描述高敏感;triage 灵敏度 >60% 仅可用于筛查。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5,
+      "popularity": 6,
+      "quality": 8,
+      "recommendation": 6.5
+    },
+    "affiliations": [
+      "Yale"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00392",
+    "summary": "针对 DeepSeek-OCR 的 visual token 冗余做剪枝。观察到模型解码呈「先高 norm token 后剩余」的两阶段轨迹,RTPrune 第一阶段保留高 norm token,第二阶段用最优传输配对合并剩余 token,还按 token 相似度和文本密度动态调整剪枝比。OmniDocBench 上 99.47% 精度、prefill 加速 1.23×、保留 84.25% token。",
+    "highlights": {
+      "contribution": "给 DeepSeek-OCR 设计了 OCR-aware 的两阶段 visual token 剪枝。",
+      "innovation": "依据「两次阅读」轨迹分阶段:先 norm-based 剪枝,再 OT 合并,动态比例适配文本密度。",
+      "method": "第一阶段保留高 norm 视觉 token;第二阶段用 optimal transport 配对合并剩余 token;按相似度与文本密度动态调剪枝率。",
+      "results": "OmniDocBench 上准确率 99.47%、prefill 加速 1.23×、token 保留 84.25%,在 DeepSeek-OCR-Large 上 SOTA。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 5,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.00444",
+    "summary": "做长视频理解,但每个 agent 的感知预算解耦于全局视频复杂度。MACF 把视频切段,每个 agent 在本地预算下编码出紧凑 token,通过 latent 协议给中央 coordinator 沟通,而不是绕文本中介。配合课程学习训对齐、证据汇总、跨 agent 协同。在多个视频理解 benchmark 上同预算下优于 SOTA MLLM 和多 agent。",
+    "highlights": {
+      "contribution": "提出端到端的多 agent latent 协作框架,使长视频理解的感知预算可扩展。",
+      "innovation": "用 agent-native latent communication 替代文本中介,信息保真且高效。",
+      "method": "视频按段分配 agent,各自编码紧凑 token;coordinator 在共享 embedding 空间汇总;课程学习推进对齐、汇总、协同。",
+      "results": "多个视频理解 benchmark 在相同预算下持续超过 SOTA MLLM 和已有多 agent 系统。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 6.5
+    },
+    "affiliations": [
+      "Microsoft Research",
+      "Zhejiang University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.02937",
+    "summary": "把蛋白质设计变成「理解 + 生成」两专家分工。MLLM 做 understanding expert,从序列结构文本里挑出关键残基,把这些 residue-level 约束作为硬约束传给 diffusion 生成专家做几何 co-design。这种「先理解再下笔」的因式分解让 LLM reasoning 与 SOTA 几何生成模块稳定模块化结合。",
+    "highlights": {
+      "contribution": "给 de novo 蛋白质设计提供一个可解释、可控的双专家 reasoning 框架。",
+      "innovation": "把 reasoning 操作化为显式 residue 级 commitment,而不是隐式文本提示,从而稳定串联 MLLM 与 diffusion。",
+      "method": "MLLM 做多模态理解决定关键残基;diffusion 生成专家在固定 anchor 下做条件 co-design;开放代码、数据、demo。",
+      "results": "强调框架稳定性与可解释性,具体数字未在摘要披露。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 5,
+      "popularity": 7,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": [
+      "Stanford",
+      "Tokyo",
+      "RIKEN"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00480",
+    "summary": "VLM 在细粒度识别上的标注质量随粒度大降,但粗粒度上仍可靠。作者在 active learning 里把 VLM 当 weak annotator:精标用人,粗标交给 VLM,再用一小组可信全标签建模 VLM 噪声。CUB200 和 FGVC-Aircraft 上同预算下持续优于现有 AL 方法。",
+    "highlights": {
+      "contribution": "在 active learning 里把 VLM 用作粗粒度弱标注源,显著降低人力成本。",
+      "innovation": "实例级混合 fine-grained 人标和 coarse-grained VLM 标签,并用少量 trusted full label 建模 VLM 的系统噪声。",
+      "method": "AL 框架:每次同时为部分样本求人精标、其余用 VLM 给粗标;trusted label 集合估计噪声参数;在 CUB200 / FGVC-Aircraft 评测。",
+      "results": "同标注预算下,CUB200 和 FGVC-Aircraft 上一致优于现有 AL 方法。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 5.8
+    },
+    "affiliations": [
+      "Kyushu University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00583",
+    "summary": "VLM 的视觉模态作为攻击面被严重低估。作者提出四类视觉 jailbreak:视觉符号编码 + 解码图、危险词换成无害替代、图里把危险文字替换成无害词、视觉类比 puzzle。六款前沿 VLM 都被攻破,例如 Claude-Haiku-4.5 视觉 cipher 成功率 40.9%,而等价文本只有 10.7%,说明文本安全训练没自动迁移到视觉。",
+    "highlights": {
+      "contribution": "系统揭示 VLM 视觉模态作为安全攻击面,提出四类有效 jailbreak。",
+      "innovation": "把「视觉编码」「无害替代物 + 视觉上下文」「视觉文字替换」和「视觉类比 puzzle」四种攻击形式化并大规模评测。",
+      "method": "构造四类视觉攻击 prompt;在 6 个前沿 VLM 上测攻击成功率;给出初步可解释性与缓解结果。",
+      "results": "Claude-Haiku-4.5 视觉 cipher 攻击成功 40.9% vs 文本 cipher 10.7%,六款前沿 VLM 都存在跨模态对齐 gap。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5,
+      "popularity": 7,
+      "quality": 7.2,
+      "recommendation": 7.0
+    },
+    "affiliations": [
+      "UC Berkeley"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00789",
+    "summary": "LVLM prefill 阶段视觉 token 巨多,KV cache 把显存吃满。LightKV 用文本 prompt 引导做跨模态 message passing,把 vision token 嵌入里的冗余压缩掉,prefill 阶段渐进缩减。八个开源 LVLM、八个 benchmark 下,只留 55% vision token 就能把 KV cache 减半、算力降 40%,通用性能保住且优于已有压缩方法。",
+    "highlights": {
+      "contribution": "针对 LVLM 提出 prompt-aware 的 KV cache 压缩方案,显著降低显存与算力。",
+      "innovation": "用文本 prompt 引导的跨模态 message passing 来挑选/聚合 vision token,而不是纯视觉冗余度。",
+      "method": "prefill 时跨模态 message passing 聚合 vision token,渐进压缩;在 8 个 LVLM、8 个 benchmark(含 MME、SeedBench)评测。",
+      "results": "保留 55% vision token 时 KV cache 减半、计算降至多 40%,通用任务性能保留且优于已有基线。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 6.3
+    },
+    "affiliations": [
+      "National University of Singapore"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00809",
+    "summary": "GenLIP 把 ViT 预训练直接换成「用 visual token 自回归预测语言 token」,不用对比学习、也不接额外文本 decoder。8B Recap-DataComp-1B 数据训出来就能打平甚至超过强 baseline;再续训多分辨率原生宽高比后,OCR、chart 这种细节任务还能涨。",
+    "highlights": {
+      "contribution": "给 MLLM 的视觉 encoder 提出极简的生成式语言-图像预训练范式。",
+      "innovation": "单 transformer 同时建模 vision 和 text token,完全去掉对比学习与额外 text decoder。",
+      "method": "ViT 把视觉 token 喂进 LLM 直接预测语言 token;标准语言建模 loss;用 Recap-DataComp-1B 的 8B 样本训练,再多分辨率续训。",
+      "results": "数据更少时与强 baseline 持平或更好;多分辨率续训后在 OCR、chart understanding 等细节任务上进一步提升,作为 MLLM vision encoder 表现强。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": [
+      "Beijing Jiaotong University",
+      "ByteDance"
+    ]
+  }
+]

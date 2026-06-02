@@ -1,0 +1,502 @@
+[
+  {
+    "arxiv_id": "2605.03269",
+    "summary": "现在的 VLA 虽然在场景理解和指令泛化上挺强，但碰到需要运动感知、长程记忆、物理感知的复杂任务还是吃力。作者搞了个 RLDX-1，用一种多流动作 Transformer（MSAT）把各种模态融在一起，再配上数据合成和推理优化，号称在 ALLEX 人形机器人任务上 86.8% 成功率，把 π_0.5 和 GR00T N1.6 那种 40% 左右的水平甩开一大截。",
+    "highlights": {
+      "contribution": "提出 RLDX-1 通用灵巧操作策略，用 MSAT 架构把异构模态统一进 VLA，让人形机器人也能稳定执行接触密集任务。",
+      "innovation": "用模态特定 stream + 跨模态联合自注意力代替简单 token 拼接，并在系统层补齐数据合成、人类化训练流程和实时推理。",
+      "method": "多流动作 Transformer 接收视觉/语言/本体感觉等异构输入，每个模态走专属 stream，再用跨模态联合自注意力融合；训练上加了稀有操作场景的数据合成；部署做了实时推理优化。",
+      "results": "在 ALLEX 人形任务上成功率 86.8%，对比 π_0.5 和 GR00T N1.6 的约 40% 大幅领先；模拟和真机多任务上均超过前沿 VLA。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.6
+    },
+    "affiliations": [
+      "KAIST",
+      "RLWRLD"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03637",
+    "summary": "从人类视频学机器人操作有个老大难：人和机器人形态不一样，表征容易把任务信息和人类运动学绑死。这篇用生成式视频编辑思路把任务表征和具身表征解耦，用对比学习强约束独立性，再用 adapter 注入冻结的视频扩散模型，就能从一段人类示范直接合成机器人执行视频，不用配对数据。",
+    "highlights": {
+      "contribution": "提出跨具身视频编辑框架，把人类示范视频显式分解成任务空间和具身空间两个独立潜变量，再生成机器人执行视频。",
+      "innovation": "用对偶对比目标同时最小化两空间互信息、最大化空间内一致性；adapter 注入冻结扩散模型，避免配对跨具身数据。",
+      "method": "把视频拆成正交的 task latent 和 embodiment latent，对比学习实现解耦；参数高效 adapter 把潜码注入冻结的视频扩散主干，单段人类视频即可合成机器人视频。",
+      "results": "生成结果在时序一致性和形态准确性上优于 baseline，提供了用互联网级人类视频驱动机器人学习的路径（具体数字未给）。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 5,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 7.0
+    },
+    "affiliations": [
+      "Aalto University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03821",
+    "summary": "现在的机器人视频世界模型大多用重建/感知相似度训，跟决策真正关心的指令跟随、操作成功、物理合理性脱节，长程展开还会漂。RoboAlign-R1 用一个大模型 judge 给六维评分蒸馏出轻量奖励模型做 RL 后训练，再加滑窗重编码稳定长程预测，六维总分提了 10.1%。",
+    "highlights": {
+      "contribution": "构建 RobotWorldBench 与 RoboAlign-Judge，把奖励对齐式后训练和长程稳定推理结合，让视频世界模型对齐机器人决策需求。",
+      "innovation": "首次把多模态 judge 蒸馏成轻量学生奖励模型用于 RL 后训练；提出 Sliding Window Re-encoding 训练-free 推理稳定策略。",
+      "method": "标注 1 万条视频-指令对训练六维 judge，再蒸馏成学生 reward；用 RL 后训练视频世界模型；推理时周期性刷新上下文（SWR）抑制长程漂移。",
+      "results": "六维总分较最强基线 +10.1%（操作准确 +7.5%，指令跟随 +4.6%）；SWR 多 1% 延迟换 SSIM +2.8%、LPIPS -9.8%。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 5,
+      "popularity": 6.5,
+      "quality": 7.8,
+      "recommendation": 8.2
+    },
+    "affiliations": [
+      "Tsinghua University",
+      "Tencent"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03413",
+    "summary": "作者觉得现在的世界模型大都把「理解」等同于在 latent 里预测未来，但发展心理学说人是先构建解释性理论才理解世界。NEO 把「理论」显式做成可执行的潜程序，从原始观测里推断出来，再用共享的转移模型执行，能用学到的原语组合解释新现象。",
+    "highlights": {
+      "contribution": "提出 Learning-to-Theorize 范式和 Neural Theorizer (NEO)，从非文本观测中归纳出显式可执行的世界理论。",
+      "innovation": "把世界模型从「潜空间预测」换成「潜程序归纳」，引入可组合的 Language of Thought，让原语能在共享转移模型里重组。",
+      "method": "概率神经模型 NEO 从原始观测推断出可执行程序，把它当作 Language of Thought，再用一个共享转移模型执行程序得到预测。",
+      "results": "在多个观测预测/解释任务上展示出解释驱动的组合泛化能力，能用学到的原语解释新现象（无具体 benchmark 数字）。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 5,
+      "popularity": 6.5,
+      "quality": 6.8,
+      "recommendation": 7.2
+    },
+    "affiliations": [
+      "KAIST"
+    ]
+  },
+  {
+    "arxiv_id": "2605.04128",
+    "summary": "JoyAI-Image 把 MLLM 和多模态扩散 Transformer 接到一起，做一个统一的视觉理解 + T2I + 编辑模型，重点是空间智能。靠空间标注数据和编辑信号做训练，理解和编辑能形成正反馈，作者声称在多个基准上 SOTA 或接近 SOTA，并强调对 VLA 和世界模型有应用价值。",
+    "highlights": {
+      "contribution": "提出 JoyAI-Image，一个统一的多模态基础模型，同时做视觉理解、文生图、指令编辑，并在空间智能上做了显式强化。",
+      "innovation": "把空间增强的 MLLM 和 MMDiT 用共享多模态接口耦合；引入空间编辑信号 + 长文渲染监督把理解-生成-编辑形成 bidirectional loop。",
+      "method": "MLLM 提供空间感知和指令理解，MMDiT 负责图像合成与编辑；训练上做统一指令微调、长文渲染监督、空间标注数据和一般+空间编辑数据混训。",
+      "results": "在理解/生成/长文渲染/编辑多 benchmark 上达到 SOTA 或具有竞争力（具体数字未列）；强调空间智能可外溢到 VLA 和世界模型。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5,
+      "popularity": 7.0,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": [
+      "ByteDance"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03941",
+    "summary": "交互式世界模型缺一个统一 benchmark。iWorld-Bench 收 33 万视频片段挑出 2.1k 高质量样本，再统一设计 Action Generation Framework 让不同模态的世界模型在六类任务（视觉生成 / 轨迹跟踪 / 记忆）上同台测，评了 14 个代表性世界模型并指出短板。",
+    "highlights": {
+      "contribution": "推出 iWorld-Bench，一个面向交互式世界模型的统一训练与评测基准，覆盖距离感知、记忆等核心交互能力。",
+      "innovation": "用 Action Generation Framework 统一不同动作接口的世界模型评测；任务覆盖视觉生成 + 轨迹跟随 + 记忆三个维度。",
+      "method": "采集 330k 视频片段，筛选 2.1k 高质量样本覆盖视角/天气/场景；设计六类任务生成 4.9k 测试样本；评测 14 个代表性世界模型并发布在线 leaderboard。",
+      "results": "在 14 个代表世界模型上做了横向对比，指出现有模型在交互能力上的关键局限；leaderboard 在 iWorld-Bench.com 公开。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 5,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 7.8
+    },
+    "affiliations": [
+      "Tsinghua University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03782",
+    "summary": "VLM agent 现在靠 CoT 内化世界模型在脑子里推未来，但只在已访问状态上推不够，稀疏奖励任务还得主动找「已知的未知」。GLANCE 把语言世界模型对齐到一个慢更新的目标视觉网络，用语言预测和视觉现实的差当好奇心信号驱动 RL，让 agent 主动去探不确定区域。",
+    "highlights": {
+      "contribution": "提出 GLANCE，把 VLM 的语言世界模型和视觉表征通过差异驱动的好奇心 RL 显式对齐，让 agent 主动探索。",
+      "innovation": "用语言预测 vs 视觉现实的不一致作为内在好奇心奖励；引入慢更新目标视觉网络稳定 grounding。",
+      "method": "VLM agent 在 RL 中以语言预测对未来状态做 CoT，目标网络提供稳定视觉表征，二者差异作为 intrinsic reward 驱动探索。",
+      "results": "在多个 agentic 任务（特别是稀疏奖励/部分观测）上效果优于现有探索方法，验证「想」和「看」对齐能提升复杂任务表现（具体数字未列）。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 5,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 6.8
+    },
+    "affiliations": [
+      "HKUST"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03678",
+    "summary": "无人机在 GPS 失效、视觉退化环境下定位是刚需。这篇横评 ORB-SLAM3 / DPVO / DROID-SLAM / DUSt3R / MASt3R 五个 SLAM，覆盖经典到 ViT 范式，在四个公开 benchmark + 自采数据集 + 五种退化条件下打分。结论是学习类方法更鲁棒，MASt3R 误差最低，DPVO 嵌入式部署性价比最好。",
+    "highlights": {
+      "contribution": "在 GPS 失效 + 视觉退化场景下系统横评五类 V-SLAM，给出 UAV 上 SLAM 选型与 Jetson 部署的实操指南。",
+      "innovation": "把 DUSt3R / MASt3R 这类 ViT/3D 基础模型纳入统一退化-鲁棒性评测，并配 Vicon 真值。",
+      "method": "在 TUM RGB-D / EuRoC / UMA-VI / SubT-MRS + 自采数据集上设五种退化（正常/弱光/雾尘/运动模糊/混合），统一指标对比五系统并在 Jetson 平台测部署。",
+      "results": "ORB-SLAM3 在严重退化下崩 (TSR 62.4%，雾天 0%)；MASt3R ATE 最低 0.027m；DUSt3R 跟踪成功率 96.5%；DPVO 18.6 FPS、3.1GB、TSR 86.1%。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": [
+      "NIT Patna"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03337",
+    "summary": "4DGS 动态场景重建现在效果挺猛，但背后到底什么因素在起作用不清楚。作者复现 SOTA FreeTimeGS 当 baseline，沿基础轴拆解，发现高斯持续时间会自发做时间分区、光度逼真和时空一致性有矛盾，并由此提出 FreeTimeGS++ 用门控边缘化 + 神经速度场拿到更稳的动态表示。",
+    "highlights": {
+      "contribution": "系统分析 4DGS 关键因素并提出原则化方法 FreeTimeGS++，做出方差更低、动态表示更稳的重建。",
+      "innovation": "揭示由高斯持续时间驱动的时间分区现象、光度逼真度与时空一致性之间的张力；用门控边缘化 + 神经速度场治理。",
+      "method": "先复现 FreeTimeGS 做受控 baseline，再分别消融各基础维度；最终方法用门控 marginalization 和神经速度场代替原始启发式时序参数化。",
+      "results": "在动态场景上取得更优稳定性、跑批方差更低；将开源实现作为 4DGS 后续工作的基线（无统一 benchmark 数字）。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": [
+      "Seoul National University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.08175",
+    "summary": "MV 的视觉怎么影响音乐结构，这种因果跨模态问题之前没人系统研究。作者爬 2682 个 YouTube MV，用 LLM 自动出 37737 道多选 QA，提出「因果知识图谱」做 VLM 检索增强，结果对小模型尤其有效，给 SOTA VLM/LLM 上音视频因果推理立了个新 benchmark。",
+    "highlights": {
+      "contribution": "推出 KARMA-MV，首个测试 VLM 跨模态因果推理（视觉→音乐影响）的大规模 MCQ benchmark，并提出 CKG 检索方案。",
+      "innovation": "用 LLM 自动生成可验证的反事实/预测/推理三类 QA；以显式因果知识图谱替代纯相关性建模。",
+      "method": "2682 个 MV → LLM 生成与校验 → 37737 道 MCQ；CKG 把跨模态依赖结构化存储，作为 VLM 推理时的检索增强。",
+      "results": "CKG 接入后各 SOTA VLM/LLM 一致提升，对小模型增益尤其明显（具体数字未列），建立了新评测基准。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": [
+      "SUTD"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03547",
+    "summary": "LVLM 容易记住版权角色和 logo 然后再吐出来，但具体怎么评 unlearning 效果之前都不够细致。CoVUBench 用程序合成、法律安全的数据，做组合性变换和多领域变体来测忘得干不干净，同时关注通用能力会不会被砍。",
+    "highlights": {
+      "contribution": "首个专为 LVLM 版权内容 unlearning 设计的评测框架 CoVUBench。",
+      "innovation": "用程序合成的法律安全数据 + 系统化视觉变体（组合 + 多领域）评估 unlearning 泛化；同时测遗忘有效性与模型保留效用。",
+      "method": "构造合成的「虚构 IP」图像数据集，做组合性变换和多领域呈现；用统一多模态协议对版权方角度的遗忘性和部署方角度的通用效用做权衡评估。",
+      "results": "为 LVLM unlearning 提供标准化评测工具，揭示现有方法在版权内容遗忘和通用能力保留之间的权衡（具体方法对比数字未给）。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 5,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.0
+    },
+    "affiliations": [
+      "Chung-Ang University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03259",
+    "summary": "高通量植物表型识别又费人又有偏，常规闭集视觉模型还得物种级标注。CropVLM 用 5.3w 张田间图文做农业语义对齐，再配 HOS-Net 开放集检测，靠自然语言就能找新作物，零样本分类 72.51%、多个检测基准明显超越基线。",
+    "highlights": {
+      "contribution": "提出农业领域专用 VLM CropVLM 与开放集检测网络 HOS-Net，用自然语言描述检测未见过的作物。",
+      "innovation": "Domain-Specific Semantic Alignment 把农艺术语映射到细粒度视觉特征；不依赖物种级训练数据即可零样本开集识别。",
+      "method": "5.2987 万张田间图文对 + 37 物种监督训练 CropVLM；HOS-Net 把 CropVLM 接入检测管线，用文本描述触发开放集定位。",
+      "results": "零样本分类 72.51%（超过 7 个 CLIP 系基线）；CVTCropDet AP50 49.17，热带水果 AP50 50.73，均显著超过次优。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 5,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 5.0
+    },
+    "affiliations": [
+      "Khalifa University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03351",
+    "summary": "视频 VLM 每帧都把已经稳定的视觉状态重算一次，纯浪费。这篇研究在不重训练前提下做「反重算」：场景/查询/缓存还在就复用 state，否则才刷新。最大收益在同视频后续问答上，Qwen2.5-VL-7B 4bit 上后续 query 延迟降 14.9-35.9 倍。",
+    "highlights": {
+      "contribution": "提出训练-free 的视频 VLM 反重算框架，从工程角度把视觉状态复用做到位，大幅降低后续 query 延迟。",
+      "innovation": "把「同视频后续 query 复用」作为最大杠杆点，并提出 Stage-share 上限 (C-CEILING) 作为加速会计护栏，避免组件加速被夸大成端到端。",
+      "method": "区分 ingest 后复用、fresh-video 预算（C-VISION 跳过定时视觉塔）等几个杠杆点；在 Qwen2.5-VL / Gemma 4 上做控制实验验证策略和漂移上界。",
+      "results": "VideoMME 93 query 子集上后续 query 延迟降 14.9-35.9 倍，准确率与配对选项保持；Gemma 4-E4B-4bit 首 query 1.316 倍提速无漂移。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 5,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.03352",
+    "summary": "癫痫语义学 (seizure semiology) 临床上很重要但很依赖专家。作者拿 SOTA MLLM 零样本评 90 段癫痫视频的 20 个 ILAE 特征，发现 18 个里 13 个超过 CNN/ViT 微调基线，再用人脸裁剪、姿态估计、音频降噪等定向预处理又能再提一截，专家评价 94.3% 解释能达到 60% 以上 faithfulness。",
+    "highlights": {
+      "contribution": "首次系统评估 MLLM 在癫痫视频病理动作识别上的可行性，并给出特征定向预处理的提升路径。",
+      "innovation": "把通用 MLLM 当临床视频分析器零样本测，并以专家评分给解释的可靠性打 faithfulness 标签。",
+      "method": "90 段癫痫视频 × 20 个 ILAE 语义特征，零样本 prompt 评 SOTA MLLM；对每个特征做人脸裁剪/姿态估计/音频降噪定向增强；专家做解释 faithfulness 评分。",
+      "results": "13/18 特征上 MLLM 零样本超过 CNN/ViT 微调基线；定向增强在 10/20 特征上再提升；94.3% 解释 faithfulness ≥ 60%。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 5,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": [
+      "UCLA"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03403",
+    "summary": "GRPO 现在做 LLM/VLM 后训练效果挺好，作者把它搬到 VLM 测试时自适应。GRPO-TTA 从 CLIP 相似度 top-K 类候选构造 group，做概率驱动的优化，不要 ground-truth；加上对齐奖励和分散奖励调视觉编码器，自然分布偏移上明显赢。",
+    "highlights": {
+      "contribution": "把 GRPO 引入 VLM 测试时自适应，提出 GRPO-TTA 框架在无标签条件下调视觉编码器。",
+      "innovation": "把类别预测重构成 group-wise 策略优化，用 CLIP 相似度 top-K 构造 group；设计对齐和分散两类奖励驱动 TTA。",
+      "method": "从 CLIP 相似度 top-K 类构造候选 group，按组做 policy optimization；通过对齐奖励和分散奖励反传到视觉编码器，无需 ground-truth label。",
+      "results": "多个 benchmark 上一致优于现有 TTA 方法，自然分布偏移下增益尤其明显（具体绝对数字未列）。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": [
+      "NPU"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03426",
+    "summary": "VLM 想在医疗、金融这种数据敏感场景用，又不能把数据集中起来。MoR 在联邦学习里把参数聚合换成偏好协作：每个客户端本地训自己的 reward，再用 Mixture-of-Rewards 路由把这些异构监督融合给中心 VLM，用 GRPO + KL 优化，不要求架构一致。",
+    "highlights": {
+      "contribution": "提出 MoR，一个面向异构 VLM 的联邦偏好对齐框架，参数/架构都不需要共享。",
+      "innovation": "用偏好协作替代参数聚合；Mixture-of-Rewards 带可学习路由动态融合客户端 reward。",
+      "method": "客户端本地训 reward model 编码偏好；中心 VLM 用 GRPO + KL 约束 + MoR 路由聚合各 reward 做联邦对齐。",
+      "results": "在多个公开 VLM benchmark 上跨客户端泛化与适应性优于联邦对齐基线（具体数字未列）。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 5,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.5
+    },
+    "affiliations": [
+      "Beihang University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03485",
+    "summary": "现在的 LVLM benchmark 大多是单任务，缺细粒度以人为中心的评测。MHPR 覆盖个体 / 多人 / 人-物交互三类维度，配 C-RD/SFT-D/RL-D/T-D 四级数据，并设计 ACVG 自动标注流水线。结果发现格式对齐 SFT 提稳定性，针对难例的 RL 数据继续涨分，Qwen2.5-VL-7B 用 MHPR 训完逼近大模型。",
+    "highlights": {
+      "contribution": "推出 MHPR，一个针对人-人-物交互的多维细粒度感知-推理 LVLM 基准与配套数据-训练流程。",
+      "innovation": "ACVG 自动标注流水线做属性级分解 + 多模型投票；提出 C-RD/SFT-D/RL-D/T-D 多层数据设计。",
+      "method": "三大维度（个体/多人/HOI）覆盖外观、衣着、姿态、部位、社交关系、动作语义、空间关系、意图功能；ACVG 自动生成 caption/VQA；用 SFT + 难例 RL 训 Qwen2.5-VL-7B。",
+      "results": "格式对齐 SFT 显著提升指令遵循；RL 难例数据进一步提升难例；Qwen2.5-VL-7B 经 MHPR 训练接近更大模型的水平。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.03642",
+    "summary": "开放词汇检测把检测器和 VLM 拼一起跑零样本，但 VLM 是在整图上学的，做区域检测就吃亏。DAT 用闭集检测器构造 region-aware 伪标签，再以解耦方式只精调 VLM 视觉主干，权重插值保留全局知识，参数才 0.8M，COCO/LVIS 新类老类都涨。",
+    "highlights": {
+      "contribution": "提出 DAT，一个面向协作式开放词汇检测的自监督 VLM 微调方案，新类/老类都涨且推理零开销。",
+      "innovation": "用闭集检测器自造 region-aware 伪标签让 VLM 学局部对齐；权重插值实现「局部增强 + 全局保留」。",
+      "method": "闭集检测器输出 region proposal 作为伪标签数据；解耦微调 VLM 视觉主干以增强局部对齐；通过权重插值保留预训练全局语义。",
+      "results": "微调参数 < 0.8M、推理零开销；COCO/LVIS 上新类和已知类的协作 OVD 性能均创新 SOTA。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 5,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 6.2
+    },
+    "affiliations": [
+      "Queen Mary University of London"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03677",
+    "summary": "On-policy distillation 用得很多但稳定不稳定不清楚。作者发现两个瓶颈：探索不足和教师监督不可靠，提出 Uni-OPD：从学生端做数据均衡促进探索，从教师端用 outcome-guided margin calibration 让 token 级监督和结果奖励保持顺序一致，跨 LLM/MLLM 16 个 benchmark 都验证。",
+    "highlights": {
+      "contribution": "提出统一 OPD 框架 Uni-OPD，揭示 OPD 失败的两大瓶颈并给出双视角解决方案，覆盖 LLM 与 MLLM 蒸馏。",
+      "innovation": "学生端：两种数据均衡促进信息状态探索；教师端：outcome-guided margin calibration 保证 token 级监督与结果奖励顺序一致。",
+      "method": "学生 rollout 上对训练数据做两种 balancing 提升 informative state 比例；教师端用 outcome reward 校准 token 级 margin；在 LLM/MLLM 单/多教师、强弱、跨模态等设置下统一训。",
+      "results": "5 个域 × 16 个 benchmark 上一致验证 Uni-OPD 的有效性和通用性（无单点 SOTA 数字汇总）。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 5,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": [
+      "Zhejiang University",
+      "Huawei"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03759",
+    "summary": "LVLM unlearning benchmark 经常忽略「模型根本没记住目标信息」这一步，评测就不可靠。ReMem 通过有原则的数据扩展、推理感知 QA 和多样视觉上下文先确保 Stage-1 记得住，再用一个新的 Exposure metric 量化遗忘深度，给 LVLM 学习/遗忘行为做严肃诊断。",
+    "highlights": {
+      "contribution": "诊断 LVLM unlearning benchmark 的 Stage-1 记忆失败问题，提出 ReMem 基准和 Exposure 指标。",
+      "innovation": "首次把「是否真的记住」作为 unlearning 评测的前置条件；提出从模型内部概率分布度量信息抹除深度的 Exposure metric。",
+      "method": "ReMem 用规模化扩展、推理感知 QA 对和多样视觉上下文构造可靠记忆的虚构身份；Exposure 从 softmax/概率分布角度量化信息暴露深度。",
+      "results": "实验展示当前 unlearning 评测在多跳和多图设置下普遍不可靠，ReMem 提供更严谨的学习-遗忘行为诊断框架。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 5,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.2
+    },
+    "affiliations": [
+      "Chung-Ang University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03790",
+    "summary": "开放域 VQA 经常需要外部知识，作者搞了 CoVQD 提示策略，把 CoT 和视觉问题分解结合，指导检索更准更相关的知识，再把它接到 RAG 给 MLLM 用。E-VQA / InfoSeek / OKVQA 三个 benchmark 上效果都不错。",
+    "highlights": {
+      "contribution": "提出 CoVQD 提示策略和 CgRAG 框架，让 MLLM 在 VQA 中通过结构化推理获得更准的外部知识。",
+      "innovation": "把 Chain-of-Thought 和 Visual Question Decomposition 融合成 CoVQD 来引导检索；再以此为枢纽搭 RAG。",
+      "method": "CoVQD 把视觉问题分解 + CoT 串成检索 query；CgRAG 把检索回来的知识 + 结构化视觉-文本推理喂给 MLLM 做最终回答。",
+      "results": "在 E-VQA、InfoSeek、OKVQA 上一致优于基线（具体绝对数字未列）。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 5,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.0
+    },
+    "affiliations": [
+      "Wuhan University of Technology"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03863",
+    "summary": "视觉环境对心理健康影响很大但很难定量。作者用 VLM 处理 2674 张参与者拍的照片，估「绿地」等语义特征，证明能稳定预测瞬时情绪和长期压力；再用 LLM 把 700 万篇文献挖出近 1000 个环境特征，应用到真实图像后多达 33% 的语境评分能显著关联到情绪和压力。",
+    "highlights": {
+      "contribution": "把 VLM 应用到视觉 exposome，建立一个可扩展、客观的视觉环境与心理健康关联范式。",
+      "innovation": "用 LLM 大规模挖文献获得近千个心理健康相关视觉特征，再用 VLM 在第一视角图像上自动量化。",
+      "method": "ecological momentary assessment 收第一视角图像，用 VLM 提语义特征预测情绪/压力；用半自主 LLM 流水线从 700 万篇论文里挖出环境特征，再用 VLM 在真实图像上打分。",
+      "results": "2674 张图像上 VLM 估的绿地稳定预测情绪和慢性压力；33% 的 VLM 上下文评分与情绪/压力显著相关。"
+    },
+    "scores": {
+      "relevance": 2.5,
+      "recency": 5,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 4.8
+    },
+    "affiliations": [
+      "TU Dresden"
+    ]
+  },
+  {
+    "arxiv_id": "2605.03927",
+    "summary": "VLM 在数值推理（特别是物体位置和状态精确定位）上一直拉胯。StateVLM 在微调时加 Auxiliary Regression Loss 直接监督 box decoder 输出做回归，推理时还是普通 token 预测。配合自建 OSAR affordance benchmark，RefCOCO 系列平均 +1.6%、OSAR 上 +5.2%。",
+    "highlights": {
+      "contribution": "提出 StateVLM 与 OSAR benchmark，把数值回归显式接进 VLM 微调用于物体-状态定位和可抓握区域推理。",
+      "innovation": "Auxiliary Regression Loss 训练时显式监督 box 数值回归，推理时仍保留 sequence prediction；公开 OSAR 物体-状态 affordance benchmark。",
+      "method": "在 VLM 微调里同时输出序列和 box decoder，ARL 监督 box 回归；推理时仅用序列预测；OSAR 含 1172 场景 7746 物体的状态/affordance 标注。",
+      "results": "RefCOCO/RefCOCO+/RefCOCOg 平均 +1.6%；OSAR 上 +5.2%；在 affordance 推理一致性上也更稳。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 6.5
+    },
+    "affiliations": [
+      "University of Hamburg"
+    ]
+  },
+  {
+    "arxiv_id": "2605.04045",
+    "summary": "Audio-Visual Intelligence 这块儿现在文献碎，任务分类不一致。作者做了第一篇基础模型视角下的 AVI 综述，建统一分类（理解/生成/交互），整理 modality tokenization、跨模态融合、AR/diffusion 生成、大规模预训练、指令对齐等方法学要点，并梳理数据/benchmark/评测。",
+    "highlights": {
+      "contribution": "首篇面向大型基础模型的 Audio-Visual Intelligence 综述，建立统一分类与方法学骨架。",
+      "innovation": "把理解、生成、交互三类 AVI 任务在统一分类下整理，并系统比较多任务族；指出同步、空间推理、可控性、安全等开放问题。",
+      "method": "回顾 modality tokenization、跨模态融合、autoregressive 与 diffusion 生成、大规模预训练、指令对齐、偏好优化等方法学；整理代表性数据集、benchmark 和评测指标。",
+      "results": "作为综述无实验，但提供 AVI 任务-方法-数据三层统一参考；适合做这块儿的入门或参考书。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 6.8
+    },
+    "affiliations": [
+      "NUS"
+    ]
+  },
+  {
+    "arxiv_id": "2605.04227",
+    "summary": "现在的多模态 AR 助手多半是被动响应，要么只支持短期事件。Pro²Assist 用 AR 眼镜的多模态数据持续跟踪步骤级进度，结合多尺度时序动态和领域专家知识做连续推理，主动决定什么时候、给什么帮助，公开数据集 + 自采数据下行动理解 +21%、主动时机 2.29 倍，用户研究 90% 觉得有用。",
+    "highlights": {
+      "contribution": "提出 Pro²Assist，一个面向长程程序性任务的步骤感知主动多模态 AR 助手。",
+      "innovation": "把「主动时机预测」和「步骤感知 procedural context」做成显式模块，跨多尺度时间窗持续跟踪用户状态。",
+      "method": "AR 眼镜采集多模态以做运动感知；从多尺度时序动态和任务专家知识里抽 step-oriented procedural context；MLLM 持续推理用户需求并触发 AR 提示。",
+      "results": "行动理解准确率超最强基线 +21%；主动时机准确率达基线 2.29 倍；20 人用户研究中 90% 觉得有用。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 6.3
+    },
+    "affiliations": [
+      "CUHK",
+      "Columbia University"
+    ]
+  }
+]

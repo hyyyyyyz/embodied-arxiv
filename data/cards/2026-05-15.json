@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2605.16241",
+    "summary": "想把 7B 的 OpenVLA 蒸到能实时跑的小模型，作者发现光让学生模仿动作不够，还得给它一些语义层面的提示。于是训练时再让一个 VLM 当离线老师，提供任务阶段锚点和多帧操作方向描述。最后做出了 158M 的学生模型，体积缩到 1/44，LIBERO 上跟老师只差 0.27%，RTX 4090 上能跑 12.5 Hz。",
+    "highlights": {
+      "contribution": "提出 VLA-AD，用 VLM 离线语义监督把大 VLA 蒸馏成轻量学生，部署时不再需要老师。",
+      "innovation": "在动作模仿之外加入任务阶段锚点和多帧操作方向语义信号，让蒸馏对老师噪声更鲁棒。",
+      "method": "VLM 给出阶段标签和方向描述，与 7-DoF 动作一起监督 158M 学生；测试时只跑学生。以 OpenVLA-7B 和 π0.5-4B 为老师分别训练。",
+      "results": "LIBERO 三个 suite 上和 OpenVLA-7B 平均差 0.27%，体积减 44 倍、推理快 3.28 倍；π0.5-4B 老师下学生在两个 suite 上反超老师。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 6,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.16056",
+    "summary": "现实里机器人关节会老化、力矩衰减，但绝大多数 VLA 不会感知自身硬件状态。作者给 VLA-Adapter 加了一个 Health Projector，把关节角度和力矩能力打成 health 向量输入，让模型在部件退化时也能完成任务。LIBERO-Spatial 上自己采了 128 条遥操作轨迹做训练，原始模型在故障配置下做不了的任务，加了 health 输入后能做出来。",
+    "highlights": {
+      "contribution": "提出 health-conditioned VLA，让机器人能根据自身关节健康状态调整动作。",
+      "innovation": "首次把硬件 malfunction 当成 VLA 的显式条件输入，区别于以往只关注任务失败恢复的工作。",
+      "method": "在 VLA-Adapter 上加一个 Health Projector 模块，输入关节工作角和力矩能力向量；用 LIBERO-Spatial 上 128 条遥操作 episode（含模拟故障）训练。",
+      "results": "在多种关节退化配置下成功完成任务，而原始 Libero-Spatial-Pro 在同样故障下失败；代码数据将开源。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 6,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.15548",
+    "summary": "传统机器手指标都是静态的（工作空间、可操控性），但 dexterous 的本质是在保持接触下连续改变物体姿态。作者提出 KaRMA，一个纯运动学指标，量化两指精密夹捏中球状物体能通过滚动达到的平移和旋转范围。在 16 款机器手上跑出三种 score，能区分静态指标分不开的手。",
+    "highlights": {
+      "contribution": "提出 KaRMA，一个针对滚动式 in-hand manipulation 的纯运动学 dexterity 指标。",
+      "innovation": "用 BFS 搜索可达 in-hand 位姿，强制关节限位、碰撞、滚动接触和对偶力可行性，把动态灵巧性变成一个可计算的指标。",
+      "method": "对球形测试物在两指精密夹捏下做平移和旋转的 BFS，输出三个分数：平移覆盖 KaRMA-T、旋转覆盖 KaRMA-R、初始姿态敏感度 KaRMA-S。",
+      "results": "在 16 款主流机器手上对比静态基线，能区分静态指标相同的手，并揭示 Jacobian 指标看不出的平移-旋转权衡。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 6,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.4
+    },
+    "affiliations": ["MIT"]
+  },
+  {
+    "arxiv_id": "2605.15753",
+    "summary": "现有功能型 3D 场景图主要关注大件家具，缺层级结构，小物体也搞不定。作者扩展了 benchmark 加入桌面密集小物体和多级功能关系，然后用 2D 视觉 grounding 锚定细粒度功能边、再做 3D 图优化。整套 pipeline 在真实场景里能稳定推断层级化功能场景图。",
+    "highlights": {
+      "contribution": "扩展 open-vocab 功能 3D 场景图任务到桌面密集小物体和多级功能关系，并给出对应的推断 pipeline。",
+      "innovation": "用 2D 视觉证据锚定功能边，多线索做跨帧 3D 节点关联，并把边关联建模成带证据累积/熵正则/时序平滑的图优化。",
+      "method": "2D visual grounding 给细粒度功能边证据，跨帧多 cue 关联 3D 节点，时序图优化决定功能连接，最后全局层级整形恢复层级结构。",
+      "results": "在真实复杂场景上能可靠推断功能 3D 场景图，相对前作在密集小物体场景下显著提升（具体数字未在摘要中给出）。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 6,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 6.6
+    },
+    "affiliations": ["Tsinghua", "ETH Zurich"]
+  },
+  {
+    "arxiv_id": "2605.15836",
+    "summary": "少样本 visuomotor 学习里，VFM 冻结后所有任务适配都压在小 pooling 模块上，很容易抓到 task-irrelevant shortcut。作者提出 GAP，一个 action-free 的几何 warm-up：用模拟数据先把 pooling 教会输出落在物体上、覆盖物体范围、时间上重复的 keypoint。然后再正常做 imitation。在 RoboMimic 和 ManiSkill 上 15-50 个示例就能比 attention pooler 和全 fine-tune 都强。",
+    "highlights": {
+      "contribution": "提出 GAP，一种 action-free 的几何锚预训练阶段，用来正则化 visuomotor 策略中的 spatial adapter。",
+      "innovation": "把 'pooling 容易抓 shortcut' 当成 inductive bias 问题，用模拟 proxy + 物体 mask 监督关键点的物体附着性、覆盖性和时间一致性。",
+      "method": "冻结 VFM，在轻量仿真 proxy 任务上训练空间 pooling，要求其输出 keypoint 落在物体上、空间覆盖好、时间稳定；之后再对下游做模仿学习。",
+      "results": "15 示例 RoboMimic Can 62% 成功（+16% vs AFA），50 示例 Tool Hang 63%，30 示例 ManiSkill StackCube 61%（+11% vs 全 fine-tune）。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 6,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": ["Politecnico di Torino"]
+  },
+  {
+    "arxiv_id": "2605.16514",
+    "summary": "把机器人控制里的 AICON（reactive 梯度下降框架）拿来做认知科学：让它在 Tower of London 任务上模拟人类计划能力。结果不用 lookahead 它就重现了 24 道题的人类难度排序，而且在帕金森等 planning 能力下降的患者群体上表现得比 planning baseline 更像人。",
+    "highlights": {
+      "contribution": "展示一个为机器人 manipulation 设计的 reactive 框架 AICON 能预测人类计划任务的难度排序，并模拟 planning 能力下降人群的失败模式。",
+      "innovation": "用机器人 control 模型反向解释人类认知，发现 reactive 模式与 Parkinson 患者行为的 dissociation。",
+      "method": "把 AICON 当作 baseline 套用到 Tower of London 临床任务的 24 个题目，做 leave-two-out 验证，对比 planning baseline 在不同人群上的表现。",
+      "results": "在 24 道题上比结构参数更好地重现人类难度排序，并在 planning 受损人群上超过 planning baseline；健康人群里 planning baseline 更准。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 6,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": ["TU Berlin"]
+  },
+  {
+    "arxiv_id": "2605.15618",
+    "summary": "现在大家爱把自监督视频模型当 world model 用，但评测全靠 top-1 准确率。作者系统性比较了 V-JEPA 2.1/V-JEPA 2/VideoPrism/VideoMAEv2 四个同 capacity 模型，沿 5 个 robustness 轴看它们的差异。结论很清楚：latent prediction 类（V-JEPA）在腐蚀、遮挡、细粒度物理接触、时间方向感知上都明显占优。",
+    "highlights": {
+      "contribution": "首次系统性地从 world model 角度评估视频自监督模型的鲁棒性。",
+      "innovation": "提出 5 个针对 world model 部署的 robustness 轴（特征可分性、腐蚀、细粒度区分、遮挡、时间方向），并对比 latent-prediction 与 reconstruction 路线。",
+      "method": "选 V-JEPA 2.1/V-JEPA 2/VideoPrism/VideoMAEv2 四个 matched-capacity 模型，沿 5 个轴评测；额外做 frozen V-JEPA 2 + 轻量 attentive probe 与全 fine-tune 对比。",
+      "results": "latent prediction 路线在全部 5 轴上形成一致优势画像；frozen V-JEPA 2 + 轻 probe 在腐蚀和遮挡鲁棒性上超过 fully fine-tuned VideoMAE 和监督 TimeSformer。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 6,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": ["University of Melbourne"]
+  },
+  {
+    "arxiv_id": "2605.16713",
+    "summary": "VLM 在 left of / behind 这种基础空间关系上很脆弱，根因是视觉通路在 feature 提取阶段就把 3D 结构丢了。作者用一个冻结的 camera-conditioned 视频 world model 当老师，对 VLM 的 image encoder 和投影层做几何蒸馏，主干 LLM 不动。在 What'sUp 和 VSR 上两个 backbone 都涨 ~4%。",
+    "highlights": {
+      "contribution": "提出 GeoWorld-VLM，把视频 world model 的几何结构蒸馏到 VLM 的视觉通路，提升空间推理。",
+      "innovation": "用 world model teacher 在采样相机轨迹下把静态图变多视角空间信号，只动 image encoder 和投影层，LLM 保持冻结。",
+      "method": "输入图+prompt+采样相机轨迹给老师生成几何特征；学生的 post-projector 特征与老师中间表征对齐；loss 含答案监督、特征对齐和保留锚。",
+      "results": "在两种 VLM backbone 上都涨，What'sUp 和 VSR 上约 +4%。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 6,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 7.6
+    },
+    "affiliations": ["Harvard"]
+  },
+  {
+    "arxiv_id": "2605.16457",
+    "summary": "token-based transformer world model 在长 rollout 时经常物体复制、消失或变形，原因是逐 token 生成根本没考虑物体跨帧的持续性。作者加了 ITC 解码层，把下一帧预测建模成结构化分配：每个 token 要么从前帧复制、要么新生。架构不变，直接套上去。Craftax-classic 上 return 72.5、score 35.6，远超之前 67.4/27.9。",
+    "highlights": {
+      "contribution": "提出 ITC，一个可插拔的 token-correspondence 解码步骤，提升 token-based world model 的长时时序一致性。",
+      "innovation": "把 next-frame token 预测建模为结构化分配问题，引入显式的 'copy or generate' 潜变量，区别于纯生成式预测。",
+      "method": "在已有 token transformer world model 上加一层 ITC 解码：每个新 token 通过 latent assignment 决定是从前帧 token 复制还是新生成；架构和训练流程都不改。",
+      "results": "Craftax-classic 上 return 72.5%、score 35.6%，比之前最好 67.4% / 27.9% 大幅提升；4 个 benchmark 上达 SOTA。已开源。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 6,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 8.1
+    },
+    "affiliations": ["Seoul National University"]
+  },
+  {
+    "arxiv_id": "2605.15705",
+    "summary": "World model 一遇 OOD 状态就预测崩盘，但其实每一步执行后真实 next state 都送回来了，作者觉得这个信号没人用很可惜。于是搞了 feedback world model：在线维护一个轻量 feedback state，实时根据真实观测纠正未来预测，不用额外训练。在 LIBERO-Plus、Robomimic 和真机上预测误差降 76.4%、OOD 成功率涨 30%。",
+    "highlights": {
+      "contribution": "提出 feedback world model 范式，把推理时真实观测当反馈信号在线校正 world model 预测。",
+      "innovation": "把 world model 从 static open-loop predictor 变成 closed-loop 形式，用轻量 feedback state 在线修正，无需重训；加 action-aware guidance 突出可控分量。",
+      "method": "每次 action 后用观测更新 feedback state，迭代修正未来预测；可解释为潜空间观测器并给出收敛保证；用 action-aware guidance 翻译为控制。",
+      "results": "LIBERO-Plus / Robomimic / 真机上 world model 预测误差降 76.4%，OOD 成功率涨 30%。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 6,
+      "popularity": 6.5,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.15725",
+    "summary": "LAM 学动作抽象时永远卡在抽象 vs 生成质量之间。作者提出 DiLA：观察到 latent action 的预测瓶颈本身就在逼模型把空间结构和视觉细节分开，于是把 content（细节）和 structure（结构）做显式 disentanglement。结果在视频生成、动作迁移、视觉规划等任务上都更好，并且 latent action 空间是连续可解释的。",
+    "highlights": {
+      "contribution": "提出 DiLA，一个 content-structure 解耦的 latent action world model，缓解 LAM 的抽象-生成 trade-off。",
+      "innovation": "发现 disentanglement 和 latent action 学习可以共进化：latent action 的瓶颈天然推动 structure/content 解耦，不用两阶段或 optical-flow trick。",
+      "method": "单阶段训练两条路径——structure 路径承载空间布局供 latent action 抽取，content 路径承载视觉细节用于生成；不依赖预训练 world model 或 OF。",
+      "results": "在视频生成质量、动作迁移、visual planning、manifold 可解释性上均超过现有 LAM 方法（摘要未列具体数字）。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 6,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.15733",
+    "summary": "海马-内嗅皮层既能表征空间也能表征概念，但怎么从连续高维动态里抽出抽象结构还不太清楚。作者提出一个 brain-inspired 模型：用 inverse model 抽结构，再用 HPC-MEC 耦合模型分别表征关系结构（MEC）和整合的 episodic 场景（HPC）。在 primitive transformation 动力学 benchmark 上展示了抽象和泛化。",
+    "highlights": {
+      "contribution": "提出一个 HPC-MEC 灵感的层级世界模型，同时学 latent 转移和视觉预测。",
+      "innovation": "把 inverse model 抽结构与 HPC-MEC 关系/场景解耦结合，并用 velocity 驱动的 path integration 做结构复用。",
+      "method": "Inverse model 提取结构性表征供 MEC 模块，HPC 模块承担 episodic 场景整合；用 primitive transformation 动力学做训练 benchmark。",
+      "results": "展示了结构抽象能力，能在不同上下文中做鲁棒预测和结构复用，验证结构泛化（无标准 benchmark 数字）。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 6,
+      "popularity": 5.0,
+      "quality": 5.5,
+      "recommendation": 5.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.15843",
+    "summary": "Marble 之类的 3D 场景生成系统能造可探索世界，但产出是 monolithic 静态资产，没法编辑也没法物理交互。WorldAct 用一个多模态 agent 引导场景分解，识别可动物体、重建几何对齐的物体级 mesh，再用 3D inpainting 补回背景。结果可以做物体级编辑、碰撞感知操作和具身任务执行。",
+    "highlights": {
+      "contribution": "提出 WorldAct，把生成式 3D 世界从静态 mesh 变成可交互、可编辑的 object-centric 场景。",
+      "innovation": "用 MLLM 引导显式场景分解，重建物体级 mesh，再用 3D inpainting 还原背景，实现 embodiment-ready 场景。",
+      "method": "MLLM agent 分解场景、识别可操作物体，几何对齐重建 object-level mesh，残余背景用 3D inpainting 补；保持全局一致性。",
+      "results": "相比原始生成场景支持更丰富的交互（物体级编辑、碰撞感知操作、具身任务），定性/定量改进（摘要未列具体数字）。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 6,
+      "popularity": 6.0,
+      "quality": 6.0,
+      "recommendation": 6.8
+    },
+    "affiliations": ["Shanghai Jiao Tong University"]
+  },
+  {
+    "arxiv_id": "2605.15960",
+    "summary": "一个理论文。作者给 'world model exploitable' 下定义：world model 暗示 A 优于 B，但真实环境其实反过来。证明在大型策略集上 exploitation 基本不可避免，且和 reward hacking 一脉相承；有限策略集里的 unhackability 条件并不阻止 exploitation。最后给出一个 safe horizon 概念。",
+    "highlights": {
+      "contribution": "形式化定义 model exploitation，并建立其与 reward hacking 的理论桥梁。",
+      "innovation": "证明 exploitation 在大策略集上不可避免，区分于 reward hacking 的可避免条件；引入 safe horizon 概念给安全规划划界。",
+      "method": "纯理论，给出 exploitation 的形式化定义，推导其与 reward hacking 的对偶，证明不可避免性及 safe horizon 上界。",
+      "results": "形式化结果：unhackability 条件不蕴含 unexploitability；给出可避免 exploitation 的安全规划 horizon 边界。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 6,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": ["Stanford", "University of Edinburgh"]
+  },
+  {
+    "arxiv_id": "2605.15964",
+    "summary": "空中 VLN 想从语言指令做闭环飞行动作。作者把它建模成 world-action 问题：先 autoregressive 地预测短时未来视觉状态，直接解码出 waypoint 动作；执行后再把新观测塞回去做闭环。还做了 Action-aware GRPO 来 RL 优化。室内外 benchmark 上比 VLA baseline 涨 12%+，能 zero-shot 部署到真无人机。",
+    "highlights": {
+      "contribution": "提出 WorldVLN，首个面向空中 VLN 的 autoregressive world-action 模型。",
+      "innovation": "不像全序列视频生成那样建模 long video，而是用 latent autoregressive 视频骨干做短时世界状态转移并直接解 waypoint；提出 Action-aware GRPO 这一首个针对 autoregressive WAM 的 RL 方法。",
+      "method": "两阶段训练：第一阶段把视频先验 ground 到指令条件下导航动力学；第二阶段 Action-aware GRPO 根据下游 rollout 后果优化 waypoint；执行后把观测反馈回上下文。",
+      "results": "公共室内外 benchmark 上比 VLA baseline 成功率 +12%+，难例增益更大；zero-shot 迁移到真无人机部署。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 6,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 8.0
+    },
+    "affiliations": ["Tsinghua"]
+  },
+  {
+    "arxiv_id": "2605.15967",
+    "summary": "另一种 world model 思路：把 agent 状态当成 append-only 的 RDF triple log，counterfactual query 就是 fork log 加结构化干预。完全 deterministic、可解释，不带学习成分。在 CLEVRER 全量验证集上四类问题中三类超 NS-DR；在自建的 500-spec 小镇 benchmark 上比带全 context 的 Llama-3.1-8B 联合精度高 18.8 分。",
+    "highlights": {
+      "contribution": "提出 deterministic event-graph substrate 这一类可检视、可精确做反事实的 world model。",
+      "innovation": "用 typed RDF triple log + 干预词汇代替学习式 world model，证明解释性和反事实查询可归约到同一 causal-ancestor 遍历。",
+      "method": "实现 1400 行 CLEVRER-DSL interpreter 跑在领域无关 substrate runtime 上，全量 75,618 条 CLEVRER；并构 twin-EventLog 500-spec Smallville benchmark。",
+      "results": "CLEVRER 四类问题里三类超 NS-DR oracle（+9.89/+20.26/+17.65/+0.80 pp），描述/解释类超 ALOE；twin-EventLog 比满 context Llama-3.1-8B 高 18.8 联合精度。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 6,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.15975",
+    "summary": "想用模仿学习做长程任务还是吃亏，作者把高层符号规划和低层模仿学习拼起来：低层学动作，高层用从示例里抽出来的符号抽象+归纳泛化做计划。系统叫 BISON，在 MetaWorld 拓展任务上比 VLA 和端到端方法泛化得更远、训练推理都更省，HL 策略甚至能在 1 分钟内解 10000 个物体的大问题。",
+    "highlights": {
+      "contribution": "提出 BISON，把低层模仿策略和高层符号策略组成 bilevel 结构，让具身 agent 能解长程问题。",
+      "innovation": "高层符号策略由示例里的符号抽象+归纳泛化构建，低层用模仿学习，区别于纯端到端 VLA。",
+      "method": "训练 LL 神经策略学动作；从示例抽象 HL 符号策略；二者联合执行；在 MetaWorld 扩展 benchmark 评测。",
+      "results": "比 VLA 和端到端方法在长程和大物体数量任务上泛化更好；HL 策略能在 1 分钟内解 10000 物体的 HL 问题；训练/推理更省时省内存。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 6,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": ["University of Toronto"]
+  },
+  {
+    "arxiv_id": "2605.16030",
+    "summary": "Dreamer 类方法的 latent imagination 永远从观测状态起步，导致 world model 学得快但策略学得慢。Mind Dreamer 主动用对抗 generator 采初始状态，让 imagination 跳到 epistemic 盲区。再用 relay value/uncertainty function 解决跨断裂的信用分配，理论上证明 uncertainty 传播需要二次折扣 γ²。DMC 上比 DreamerV3 平均快 1.67×，稀疏奖励下 8.8×。",
+    "highlights": {
+      "contribution": "提出 Mind Dreamer (MD)，通过对抗式初始状态采样让 model-based RL 跳出历史 tethering，加速 manifold discovery。",
+      "innovation": "首次把 active causal intervention 引入 latent imagination，并推出 Relay Value/Uncertainty Function 处理跨断裂信用分配；证明 uncertainty 传播的二次折扣。",
+      "method": "用 adversarial generator 采样 imagination 初始状态；在 Relay Expected Free Energy 框架下推 Relay Value/Uncertainty Function 做 Bellman-style backup；理论上等价于 variance-minimizing importance sampler。",
+      "results": "DMC suite 上比 DreamerV3 平均 1.67× 提速，稀疏奖励任务上 8.8×。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 6,
+      "popularity": 6.5,
+      "quality": 8.0,
+      "recommendation": 7.4
+    },
+    "affiliations": ["Tsinghua"]
+  },
+  {
+    "arxiv_id": "2605.16054",
+    "summary": "把决策当序列建模，但忽略潜在因子的演化动力学就吃亏。Ada-Diffuser 把 latent 动力学推断显式塞进 diffusion 决策框架里，理论上证明从小时间块的观测就能识别 latent。模块化设计让它同时支持 planning 和 policy learning，并能适应动力学/奖励/latent action 的变化。仿真控制和机器人 benchmark 上验证。",
+    "highlights": {
+      "contribution": "提出 Ada-Diffuser，一个把 latent 动力学识别和扩散模型决策统一起来的因果框架。",
+      "innovation": "理论上证明 latent 过程可从小时间块观测里识别，并把识别嵌入 diffusion，同时支持 planning 和 policy learning，能适应 latent 变化。",
+      "method": "用因果 diffusion 同时学时序结构和 latent 动力学；模块化设计兼容 planning 与 policy 学习；用于仿真控制和机器人任务。",
+      "results": "在仿真控制和机器人 benchmark 上 latent 推断准确且策略能自适应（摘要未列具体数字）。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 6,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 6.6
+    },
+    "affiliations": ["MBZUAI", "CMU"]
+  },
+  {
+    "arxiv_id": "2605.16154",
+    "summary": "做 VLA 的 GRPO RL 大家都想优化 rollout 速度，作者发现真正吃时间的是 gradient（78%），而 GRPO 把同样的 advantage 复制到每个 chunk 上，导致 gradient 算在没信息量的 phase 上。PCM 用 success-failure action variance 给 phase 打分，只挑一小部分 chunk 反传。LIBERO 上和标准 GRPO 持平，但快 2.38×，gradient 更新快 4.8×，激活内存降 60%。",
+    "highlights": {
+      "contribution": "提出 PCM，一种针对 VLA GRPO 训练的概率 chunk masking，把 gradient 算力集中到有学习信号的 phase。",
+      "innovation": "指出 GRPO VLA 中 gradient 才是瓶颈而不是 rollout；理论刻画 per-phase gradient variance，并用 success-failure action variance 作为可计算代理。",
+      "method": "用 success-failure action variance 给 semantic phase 打分，在线更新 keep 概率，按固定 budget 采样 chunk 反传；不需 reward model 或 critic。",
+      "results": "LIBERO 三个 benchmark 上成功率与 GRPO 持平，wall-clock 快 2.38×，gradient 更新快 4.8×，激活内存降 60%，反传 chunk 不到 20%。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 6,
+      "popularity": 6.5,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.16530",
+    "summary": "白内障手术模拟需要又像又物理对、还能 OOD 泛化，纯 diffusion world model 搞不定。SWoMo 把运动建模和视觉真实性解耦：符号端用规则模拟器和场景图管 tool-tissue 交互，diffusion 端补纹理和组织形变。靠 inverse pairing 反向在 simulator 里重建真实手术视频得到配对训练数据，做 sim-to-real。结果在未见交互几何上能泛化，下游 phase detection 也涨。",
+    "highlights": {
+      "contribution": "提出 SWoMo，一个神经-符号 world model 用于白内障手术模拟，把运动和视觉真实性解耦。",
+      "innovation": "符号侧 rule-based simulator + 场景图管动力学和 tool-tissue 交互，diffusion 侧管视觉；用 inverse pairing 在 simulator 里重建真视频得到 sim-real 配对数据。",
+      "method": "符号引擎模拟运动并给场景图；视频 diffusion 学 sim-to-real 翻译；inverse pairing 提供训练对。",
+      "results": "比已有手术 world model 在视觉质量和物理合理性上都好；对未见交互几何能泛化，下游手术 phase detection 提升，并支持无监督风格迁移。代码权重开源。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 6,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.7
+    },
+    "affiliations": ["TU Darmstadt"]
+  },
+  {
+    "arxiv_id": "2605.15507",
+    "summary": "这其实是信息论里 Gaussian mixture 源的 rate-distortion 经典问题的新解。作者证明 mixture 结构只多付一个 component label 代价，bit allocation 由一个全局 reverse-waterfilling level 决定。基于此提出 PrismQuant：无损传 label，残差走匹配的 KLT + 标量量化。CSI 数据上比 transformer-based codec 小一个数量级还能打。",
+    "highlights": {
+      "contribution": "建立 Gaussian mixture 源的构造性 RD 理论，并给出实用 PrismQuant 编解码。",
+      "innovation": "证明全局 reverse-waterfilling level 跨 mixture 分量共享，把 mixture RD 还原成可控形式。",
+      "method": "EM 学 mixture，分量自适应 KLT，熵约束标量量化（ECSQ）；无损传 component label。",
+      "results": "合成 GMM 上接近理论 RD 下界；真实 CSI 数据上接近或优于 transformer-based learned codec，模型尺寸小一个量级以上。"
+    },
+    "scores": {
+      "relevance": 2.0,
+      "recency": 6,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 4.5
+    },
+    "affiliations": ["POSTECH"]
+  },
+  {
+    "arxiv_id": "2605.16547",
+    "summary": "物理 AI 系统里语义通信不仅要传得准，还得让远期控制能行。作者把它写成长期 return-per-bit 最大化问题，引入 CIV 度量每个语义 token 的因果价值，再用 world model + 因果数字孪生 (WM-CDT) 做反事实想象 rollout 训 actor-critic。AirSim-Sionna 上做无人机导航，比 RL 基线 return-per-kbit 和成功率都明显高。",
+    "highlights": {
+      "contribution": "提出 world-model-enabled 因果数字孪生 (WM-CDT) 框架，用于物理 AI 闭环系统的目标导向语义通信。",
+      "innovation": "引入 Causal Information Value (CIV) 度量 token 对长期 return 的边际贡献；用 world model 做反事实想象训语义 token selector 和控制策略。",
+      "method": "在 WM-CDT 框架下学 closed-loop 动力学，imagined rollout 训 actor-critic；token selector 按 CIV-per-bit 训练；问题为长期 return-per-bit 最大化。",
+      "results": "AirSim-Sionna 无人机导航 simulator 上 return-per-kbit 和成功率显著高于现有 RL 解法。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 6,
+      "popularity": 6.0,
+      "quality": 6.0,
+      "recommendation": 5.8
+    },
+    "affiliations": ["Virginia Tech"]
+  },
+  {
+    "arxiv_id": "2605.16682",
+    "summary": "从部分观测里识别 latent 动力学，最好是物理可解释的。作者搞了两阶段 identify-then-project：第一阶段对比学习从部分观测里学 latent 连续动力学；第二阶段学生用 affine chart 把它投影到 port-Hamiltonian 子流形上，得到物理一致表征。理论解释 affine 投影是 contrastive gauge 到 PHS 的自然桥梁，实证比联合训练更稳。",
+    "highlights": {
+      "contribution": "提出 identify-then-project 两阶段框架，从部分观测里学物理一致的 port-Hamiltonian latent 动力学。",
+      "innovation": "理论上把对比学习的 affine gauge 与 PHS 自然衔接，证明 affine projection 是合适桥梁；说明单阶段联合学不可靠。",
+      "method": "第一阶段 contrastive teacher 学连续 latent 动力学；第二阶段 student 学 affine chart 投影到 PHS submanifold；理论与高维视觉实验对比。",
+      "results": "比单阶段联合学习更可靠，尤其在耗散和高维视觉设置下，且保留 teacher 的动力学还强加物理结构。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 6,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 5.7
+    },
+    "affiliations": ["Vanderbilt"]
+  },
+  {
+    "arxiv_id": "2605.16692",
+    "summary": "TD-MPC 系列规划器同时受 model 误差和 value 误差拖累，作者做了 ensemble 动力学模型，并跨模型和跨 rollout 深度对 return 平均；还可选 uncertainty penalty 让 planner 躲开不确定动作。再加几个 practical 改进（buffer 新鲜度、降计算）和高 UTD 比，组成 EfficientTDMPC，在 HumanoidBench-Hard 和 DMC hard 上 low-data SOTA。",
+    "highlights": {
+      "contribution": "提出 EfficientTDMPC，sample-efficient model-based RL，在 TD-MPC 上改 planner 目标降低误差。",
+      "innovation": "对 ensemble dynamics 模型和不同 rollout 深度同时做 return 平均，并加可选 uncertainty penalty；配合更新鲜的 buffer 和更高的 UTD ratio。",
+      "method": "ensemble dynamics + 跨深度跨模型 return 平均的 planner 目标，可选 uncertainty penalty 罚不确定动作；改进 buffer 数据新鲜度并降计算，提高 UTD ratio。",
+      "results": "low-data 区间 HumanoidBench-Hard 和 DMC hard 上 sample efficiency SOTA，DMC easy 上 match SOTA。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 6,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 6.9
+    },
+    "affiliations": ["TU Delft"]
+  }
+]

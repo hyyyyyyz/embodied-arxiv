@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2605.05126",
+    "summary": "现有 VLA 大多只把 2D 图映射到动作,空间感知靠加传感器、视觉推理只盯下一帧。作者搞了 ConsisVLA-4D,用三个模块把跨视角语义、跨物体几何、跨场景时空动力学都对齐,既轻又准。结果在 LIBERO 和真机上比 OpenVLA 分别涨 21.6% 和 41.5%,推理还快 2 倍多。",
+    "highlights": {
+      "contribution": "提出一个统一的 4D 时空一致性 VLA 框架,不靠额外传感器也能做 3D 感知和长程推理。",
+      "innovation": "把时空一致性拆成三层:CV-Aligner 对齐跨视角物体语义,CO-Fuser 解决跨物体几何歧义,CS-Thinker 学习场景动力学,三者互补又轻量。",
+      "method": "多视角 RGB 输入,先抽取与指令相关的物体语义 token 和几何 token,再用 CS-Thinker 融合局部动力学和全局深度信息,端到端预测动作。",
+      "results": "LIBERO 上比 OpenVLA 涨 21.6%,真机平台涨 41.5%,推理速度分别 2.3× 和 2.4×,已开源。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": ["哈工大(深圳)"]
+  },
+  {
+    "arxiv_id": "2605.04470",
+    "summary": "自动驾驶里开环模仿学习容易在部署时漂移,闭环 RL 又苦于稀疏奖励。CRAFT 把反事实优势当作密集代理信号,再用真实交互事件的残差校正去对齐,理论上证明能降方差又降偏差。在 Bench2Drive 上对分层规划、VLA、词表打分三种架构都拿到最强闭环成绩。",
+    "highlights": {
+      "contribution": "把闭环后训练写成代理-残差优化,兼顾反事实的密集性和真实交互的真值。",
+      "innovation": "用 group-normalized 反事实优势当代理,再用关键事件的残差修正补齐偏差,加 EMA 教师 KL 自蒸馏稳住训练。",
+      "method": "On-policy 框架,代理项给所有候选未来打分,残差项只在交互关键事件触发,联合优化策略梯度;附加非对称 KL 自蒸馏。",
+      "results": "Bench2Drive 闭环最强,对分层规划、VLA、词表打分三类架构都涨;有 ablation、scaling、稳定性、迁移分析。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.8,
+      "recommendation": 7.3
+    },
+    "affiliations": ["清华大学"]
+  },
+  {
+    "arxiv_id": "2605.04678",
+    "summary": "潜动作能让 VLA 在异构数据集上统一建模,但怎么监督一直没人系统比过。作者把方案拆成图像潜动作正则轨迹 vs 动作潜动作统一目标,实例化四种组合做对比,发现直接给 VLM 加离散潜动作 token 最好。也给了混合数据训练 VLA 的初步线索。",
+    "highlights": {
+      "contribution": "首个系统对比潜动作监督 VLA 的 study,把四类策略放在同一 baseline 下评测。",
+      "innovation": "把潜动作监督拆成 trajectory 正则 vs target 空间统一两个视角,得出 formulation-task 对应关系。",
+      "method": "统一 VLA baseline,接入图像潜动作 / 动作潜动作各两种监督方式,对比长程推理、运动协调等任务表现。",
+      "results": "图像潜动作擅长长程推理与场景泛化,动作潜动作擅长复杂运动控制;离散潜动作 token 监督 VLM 效果最佳,代码开源。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": ["中国人民大学"]
+  },
+  {
+    "arxiv_id": "2605.08215",
+    "summary": "视觉前瞻 VLA 一旦预测的未来图坏了,动作就跟着崩,OOD 下尤其脆弱。作者发现预测图和真实下一帧天生是监督对,提出 T³VF 在测试时用这对监督做在线更新,并加自适应过滤防止瞎更。改善 OOD 表现而几乎不动架构。",
+    "highlights": {
+      "contribution": "首个针对视觉前瞻 VLA 的测试时训练方案,免改架构就能扛 OOD。",
+      "innovation": "利用预测未来帧与真实下一帧形成的自监督对,加自适应更新过滤防止有害更新。",
+      "method": "推理时小步在线更新视觉前瞻模块,过滤机制判断每步更新是否值得做,免新增模块。",
+      "results": "在多种 VF-VLA 上稳住 OOD 表现,推理开销有限,无需架构改动。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 7.4
+    },
+    "affiliations": ["KAIST"]
+  },
+  {
+    "arxiv_id": "2605.04413",
+    "summary": "结构因果模型大多假设全局单调,但具身交互里同一扰动在不同接触上下文可能反着来。作者提出 NM-TM-SCM,用机制级可逆 + 上下文无关逆传输替代全局单调,证明等价于外生同构且可完整识别反事实。MuJoCo Door 上能完美恢复事件级反事实。",
+    "highlights": {
+      "contribution": "在丢掉全局单调假设的前提下给出反事实可识别的新结构条件。",
+      "innovation": "用 mechanism-wise invertibility + context-independent inverse transport 替代全局单调,证明可完整识别反事实。",
+      "method": "提出 CausalInverter:三角可逆层 + 方向门 + 传输稳定正则;在合成与 MuJoCo Door/Push 上验证。",
+      "results": "MuJoCo Door 上事件级反事实完美恢复,角度误差和稳定性优于 Transformer 和 conditional-flow 基线。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5.5,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 6.2
+    },
+    "affiliations": ["华东师范大学"]
+  },
+  {
+    "arxiv_id": "2605.04709",
+    "summary": "视觉 MBRL 做长程规划最大的问题是潜动力学分叉、模式平均、误差累积。ELVIS 在 Dreamer 风格 RSSM 里用高斯混合 MPPI 维持多假设,再用 critic 集成的 UCB 自适应调 λ-return 限误差。DMC 14 任务 SOTA 击败 TD-MPC2 / DreamerV3,还能零样本迁到真机喷砂。",
+    "highlights": {
+      "contribution": "提出潜空间长程 MPC 框架,同时缓解分叉、模式平均和累积误差三个老问题。",
+      "innovation": "GMM-MPPI 维持多模态计划 + UCB 不确定度门控的自适应 λ-return,做到 RL 目标与规划目标一致。",
+      "method": "Dreamer-style RSSM 学世界模型,候选轨迹由高斯混合 MPPI 采样,共享 critic 集成给出 UCB 分数动态调 λ;同一 return 既训 actor-critic 也给规划打分。",
+      "results": "DMC 14 个视觉任务 SOTA(优于 TD-MPC2、DreamerV3),零样本迁到真机喷砂任务表现稳。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 8.0,
+      "recommendation": 7.7
+    },
+    "affiliations": ["KU Leuven"]
+  },
+  {
+    "arxiv_id": "2605.05029",
+    "summary": "作者在 2695 个网络配置上跑了大规模实验,发现纯预测目标会让 encoder 学环境而不是真正想建模的系统,叫做预测-因果鸿沟。还从理论上证明这是预测目标的结构性属性,不是优化 bug。对自监督表征和世界模型扩展是个警示。",
+    "highlights": {
+      "contribution": "系统揭示预测目标下表征会偏向环境而非系统,定义并理论证明预测-因果鸿沟。",
+      "innovation": "把鸿沟刻画为预测目标的结构限制并证明此现象在参数空间中是 open positive measure 的。",
+      "method": "在线性高斯动力学上扫 2695 个配置,加非线性 Duffing-GRU 任务,对比无约束 vs 操作锚定的 loss。",
+      "results": "平均因果保真度只有 0.49;N=100 时 encoder 几乎纯环境化但预测误差还低 92%;锚定 loss 可部分缓解但无法完全恢复。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.05092",
+    "summary": "L2/L3 共驾要预测人和环境同时发生的反应,但驾驶世界模型基本只看外部、座舱内只做识别。Driver-WM 把座舱内动力学和外部交通耦合到一个潜空间世界模型里,双流 + 门控因果注入做长程 rollout。多任务辅助驾驶 benchmark 上长程几何和语义对齐都涨。",
+    "highlights": {
+      "contribution": "首个针对座舱内驾驶员动力学多步 rollout 的潜世界模型。",
+      "innovation": "双流分别编码外部交通和内部驾驶员状态,通过门控因果注入向量门保证时间因果性。",
+      "method": "在冻结视觉-语言特征上构建紧凑潜空间,双流 Transformer 做 rollout,行为/情感语义为辅助任务;支持测试时干预。",
+      "results": "多任务辅助驾驶 benchmark 上对反应性高动作有更稳的长程几何预测,司机+交通语义对齐更好,可做控制式干预分析。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": ["南洋理工大学"]
+  },
+  {
+    "arxiv_id": "2605.05115",
+    "summary": "神经表征的几何结构到底有没有真的影响行为?作者拟合激活流形和行为流形,沿激活流形 steer 出来的轨迹会跟随行为流形,而线性 steer 会跑偏。语言模型(推理任务)和视频世界模型(物理动力学)都验证了这种双向几何对应。",
+    "highlights": {
+      "contribution": "用流形 steering 实验证明神经表征几何与行为几何之间存在双向因果对应。",
+      "innovation": "提出 manifold steering 概念并构造可控干预,把'找方向'重述为'找几何'。",
+      "method": "拟合激活流形 M_h 与行为流形 M_y,做沿流形 vs 线性 steer 对比;在 LLM 推理、ICL、视频世界模型物理任务上分析。",
+      "results": "manifold steering 产生的行为更自然,跟随 M_y;反向优化也恢复 M_h 几何;跨任务、跨模态一致。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.5
+    },
+    "affiliations": ["Stanford", "Harvard"]
+  },
+  {
+    "arxiv_id": "2605.05138",
+    "summary": "ARC-AGI-3 上跑 coding agent 的尝试。Agent 自己维护一个可执行的 Python 世界模型,对照历史观测验证,再 refactor 到更简洁,作为 MDL 简洁性的实用代理。25 个公开游戏里完整通关 7 个,平均 RHAE 32.6%。可作为 ARC-AGI-3 的通用基线。",
+    "highlights": {
+      "contribution": "把 coding agent 玩 ARC-AGI-3 的方案做出一个可复现基线,关键点是可执行世界模型 + 验证 + refactor 简化。",
+      "innovation": "用代码作为世界模型表示,通过验证程序 + 简化 refactor 实现 MDL-like 简洁性偏置。",
+      "method": "脚本化 controller + 预定义世界模型接口 + 验证器 + 计划执行器;每次 playthrough 新开 agent 实例无历史记忆。",
+      "results": "25 个公开 ARC-AGI-3 游戏中完整通关 7 个,6 个 RHAE > 75%,平均 RHAE 32.58%;无游戏专属代码,可作通用基线。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 6.5,
+      "recommendation": 6.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.04568",
+    "summary": "MBRL 里 MPC 一般用 gradient-free 方法,贵又慢;直接梯度优化又常常不如人。Dream-MPC 从策略 rollout 出几条轨迹,用学习世界模型做梯度上升,带不确定度正则、时间上摊销迭代。24 个连续控制任务里超过 gradient-free MPC 和 SOTA 基线。",
+    "highlights": {
+      "contribution": "把梯度优化在 MPC 中真正用起来,既比 gradient-free 强又比纯策略涨。",
+      "innovation": "从策略采少量候选轨迹做梯度优化 + 不确定度正则 + 时间摊销复用上一步动作,克服梯度 MPC 易卡问题。",
+      "method": "学习世界模型 + 策略先验,候选轨迹通过梯度上升优化,带不确定度惩罚;复用历史优化结果做 warm start。",
+      "results": "24 个连续控制任务上显著优于 gradient-free MPC 和 SOTA 基线,有 code + video。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": ["University of Bonn"]
+  },
+  {
+    "arxiv_id": "2605.04759",
+    "summary": "作者主打非 Transformer 的可解释语言模型 Gyan,基于修辞结构、语义角色等知识表征,把语言模型与知识获取解耦,自称在 3 个常用数据集 SOTA、2 个私有数据集更好。卖点是免幻觉、低算力、可信。听起来更像 manifesto。",
+    "highlights": {
+      "contribution": "提出一个非 Transformer 架构的可解释语言模型,声称把语言能力和知识表示解耦。",
+      "innovation": "结合修辞结构理论、语义角色理论与知识计算语言学构建意义表征,扩展成 'world model'。",
+      "method": "未给出具体网络结构细节;基于符号知识表征与语言学规则结合的混合系统。",
+      "results": "声称在 3 个常用数据集 SOTA、2 个私有数据集更好;缺少标准 benchmark 对比细节。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 5.5,
+      "popularity": 4.0,
+      "quality": 4.0,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.04793",
+    "summary": "Koopman 神经 MPC 为了保凸性强制系统算子与当前控制无关,但限制了动力学随条件变化的能力。作者加一个低秩双线性耦合让算子可以随输入调整,参数只多 1%,推导出 Jacobian 用于 SCP。CartPole/RSCP 时变任务里更稳,延迟重规划下降级更平滑。",
+    "highlights": {
+      "contribution": "在 Koopman 神经 MPC 上加最小双线性耦合,保留可解性又允许动力学随控制变化。",
+      "innovation": "低秩 bilinear 耦合 + 精确 Jacobian + SCP 收敛证明,严格泛化标准 Koopman 公式。",
+      "method": "Mamba-Koopman 学潜动力学,bilinear 项让算子随控制变;SCP 信任域内单调下降优化。",
+      "results": "时变任务 CartPole/RSCP 上 SCP 内自适应改善、训练更稳;延迟重规划下降级更优。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5.5,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 6.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.04899",
+    "summary": "GPT 风格 LM 在概率分布散开的位置对单 token 改变极敏感。作者从 token 嵌入几何出发推一个 so(n) 值 1-form,虽然只来自几何,曲率却语义有意义。在 chess 推理任务上曲率耦合到棋盘区域和棋子重要性,提示 token 几何反映内部世界模型。",
+    "highlights": {
+      "contribution": "建立 LM 输出采样误差与内部状态之间的纯几何 1-form 描述,发现其曲率有语义意义。",
+      "innovation": "把 token-level 敏感度建模为李代数值 1-form,只依赖嵌入几何,与 world model 关联。",
+      "method": "从 token 嵌入推 so(n) 值 1-form,计算其曲率,并在 chess 任务上分析模式聚类。",
+      "results": "曲率按棋盘区域聚类、与棋子重要性对应,提示 token 空间几何直接反映内部 world model。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 5.5,
+      "popularity": 4.5,
+      "quality": 6.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.05187",
+    "summary": "LoViF 2026 PhyScore 挑战赛报告:面向 2D/4D 世界模型生成视频的整体质量评估。Benchmark 含 1554 个视频,覆盖 7 个生成模型、26 类内容,要求评估 4 个维度并定位物理异常时间戳。提供 text-2D、image/video-to-4D 三个赛道与综合评测协议。",
+    "highlights": {
+      "contribution": "提出首个面向世界模型生成视频的整体质量评估挑战与 benchmark,联合评估 4 个维度并定位物理异常。",
+      "innovation": "用 PhyScore 评估机制结合 SRCC/PLCC 与 TimeStamp_IOU,覆盖物理动力学、光学、热力学等场景。",
+      "method": "构造 1554 个视频的多赛道数据集,人工标注 + 自动质控;参赛者训练通用度量,既给分数又输出异常时间戳。",
+      "results": "整理并发布完整赛事数据与评估协议,汇总参赛方法的洞见(无统一 leaderboard 数字)。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": ["中科大", "上海交大"]
+  },
+  {
+    "arxiv_id": "2605.05411",
+    "summary": "想让机器人会创意用工具,得明白工具的因果可用属性。作者把因果发现拆成 VLM 推荐特征 + 反事实工具几何/物理扰动,再在动力学模型里仿真验证,新物体按因果特征分类,技能靠 keypoint 匹配迁移。在棒、勺、垫高三个任务上验证。",
+    "highlights": {
+      "contribution": "提出一个把工具使用 grounding 到物理因果属性的反事实推理框架。",
+      "innovation": "VLM 提议候选特征 + 反事实几何/物理扰动两条路并行做因果发现,再用 keypoint 转移技能。",
+      "method": "在 dynamics model 里做反事实仿真,识别因果特征后做新物体分类,基于因果条件的 keypoint 匹配迁移技能。",
+      "results": "在 reaching、scooping、stepping platform 三类创意工具任务上比 baseline 更可靠地选工具并迁移技能。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 7.2
+    },
+    "affiliations": ["Brown University"]
+  },
+  {
+    "arxiv_id": "2605.04844",
+    "summary": "3DGS 渲染时算 Gaussian 和 tile 的相交是性能大头。QuadBox 用四个轴对齐 bbox 紧裹住投影后的 Gaussian,基于几何感知拉伸因子构造 tile-aligned 包围,再配单次遍历算法,简单区间检测即可判定相交。公开数据集上渲染加速 1.85×。",
+    "highlights": {
+      "contribution": "提出更紧的 4-BBox 包围 + 单 pass 遍历,大幅加速 3DGS 渲染。",
+      "innovation": "用 4 个轴对齐 bbox 离散逼近椭圆投影,得到 tile-aligned QuadBox,显著少做无用 tile 检查。",
+      "method": "推导几何感知的拉伸因子,构造 QuadBox;QPass 单 pass 遍历用简单区间检测做交集判定。",
+      "results": "公开数据集上 3DGS 渲染速度提升 1.85×,代码开源。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.04435",
+    "summary": "Feedforward GS 用在越野无结构场景容易出现冲突高斯观测,要么糊要么有伪影。Ground4D 把 canonical Gaussian 空间划分到体素里做查询条件下的时间注意力,intra-voxel softmax 让时间选择与空间占用互补;再加表面法线引导。在 ORAD-3D 和 RELLIS-3D 上 SOTA 并零样本泛化。",
+    "highlights": {
+      "contribution": "提出针对越野无结构场景的 pose-free feedforward 4D 高斯重建框架。",
+      "innovation": "体素 grounded 的时间高斯聚合 + intra-voxel softmax,让时间选择和空间占用相互强化;表面法线辅助几何。",
+      "method": "划分 canonical Gaussian 空间为体素,每个体素内做 query 条件下时间注意力,加表面法线正则。",
+      "results": "在 ORAD-3D 和 RELLIS-3D 上 SOTA,零样本泛化到未见越野域,有 code + project page。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": ["中科院自动化所"]
+  },
+  {
+    "arxiv_id": "2605.04506",
+    "summary": "把 3DGS 升级到实例级 + 开放词汇场景理解。Ilov3Splat 给 Gaussian splat 附上视图一致特征场,用多分辨率 hash 编码 CLIP,实例特征用 SAM 掩码对比学习。推理时 CLIP 查询 + 两阶段 3D 聚类拿到对应 Gaussian 组,实例分割和物体选择上超过现有 open-vocab 3DGS 方法。",
+    "highlights": {
+      "contribution": "面向 3DGS 的实例级开放词汇场景理解框架,联合几何与语义优化。",
+      "innovation": "用 hash embedding 编码 CLIP 特征做语言对齐 + SAM 掩码对比学习实例特征场,加两阶段 3D 聚类。",
+      "method": "增强 Gaussian splat 的特征场,语言特征训练对齐 CLIP,实例特征用 SAM 掩码对比;推理通过 CLIP query 匹配后聚类。",
+      "results": "在标准 benchmark 上 object selection 与实例分割均优于已有 open-vocab 3DGS 方法,有 project page。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": ["QUT", "CSIRO Robotics"]
+  },
+  {
+    "arxiv_id": "2605.04730",
+    "summary": "用 3DGS 做视觉定位时,直接拿 2D query 特征匹配 3D Gaussian 特征会因 α-blending 的偏差而错配。作者从理论上证明这种偏差来源于邻居纠缠,提出 ULF-Loc 用几何加权融合替代偏差优化,再加关键点共识采样与局部几何验证。Cambridge Landmarks 上平移误差降 17%,训练时间和显存只用 STDLoc 的 1/10、1/6。",
+    "highlights": {
+      "contribution": "首次系统分析 3DGS 特征匹配中的内在偏差,并给出无偏特征学习框架。",
+      "innovation": "用几何加权融合替代 α-blending 优化得到无偏 landmark 特征 + keypoint consensus 采样 + 局部几何一致性验证。",
+      "method": "理论分析特征偏差来源后,构建无偏特征融合管线,推理时配合关键点共识与几何一致性过滤错配。",
+      "results": "Cambridge Landmarks 上中位平移误差降 17%(SOTA),训练 1/10 时间、1/6 显存。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": ["武汉大学"]
+  },
+  {
+    "arxiv_id": "2605.05155",
+    "summary": "3DGS 现在评测都看重建质量和真实感,几乎不管'好不好看'。Aes3D 给出首个 3D 场景美学评估框架,带专门标注数据集 Aesthetic3D,并设计 Aes3DGSNet 直接从 3DGS 原语回归美学分数,不用渲染多视角图就能跑。建立新 benchmark。",
+    "highlights": {
+      "contribution": "首个面向 3DGS 的场景美学评估框架,含数据集 + 模型。",
+      "innovation": "直接基于 3D Gaussian 原语预测美学分数,免去多视角渲染,既轻又快。",
+      "method": "构建 Aesthetic3D 数据集与标注协议;Aes3DGSNet 在多视角 3DGS 表示上做美学监督学习。",
+      "results": "在自建 benchmark 上取得强表现且轻量,确立 3D 场景美学评估的新参考。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 5.5,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.3
+    },
+    "affiliations": ["University of Sydney"]
+  },
+  {
+    "arxiv_id": "2605.05340",
+    "summary": "VLM 作为具身助理的核心大脑,在物理环境的隐私意识到底如何?作者搭了 Unity 模拟器 ImmersedPrivacy,设三层任务测识别敏感物、社交语境切换、命令与隐私冲突。测了 12 个 SOTA VLM,场景变复杂就掉、社交语境无一过 65%、Gemini-3.1-pro 在冲突命令下也只赢一半。",
+    "highlights": {
+      "contribution": "提出首个具身物理环境下 VLM 隐私意识评估框架与 benchmark。",
+      "innovation": "Unity 沉浸式模拟器 + 三层渐进任务,覆盖感知、社交、冲突三类隐私挑战。",
+      "method": "Unity 模拟室内场景,对 12 个 SOTA VLM 跑识别 / 社交 / 冲突三类任务,有 audio-visual 输入。",
+      "results": "所有模型随场景复杂度单调下降;社交语境无模型超 65%;Gemini-3.1-pro 仅 51% 兼顾任务与隐私;数据代码公开。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.04451",
+    "summary": "地理空间推理还离不开人工坐标标注。RemoteZero 利用 MLLM 验证一个区域是否匹配查询的能力强于直接生成坐标这一不对称性,用语义验证替代几何监督,跑 GRPO 训练而不要 box。可在无标注遥感图上自演化,效果接近强监督方法。",
+    "highlights": {
+      "contribution": "提出零 box 监督的地理空间推理框架,解锁无标注遥感数据上的自演化训练。",
+      "innovation": "利用 MLLM 验证强、生成弱的不对称性,以内在语义验证作为 GRPO 训练信号。",
+      "method": "MLLM 自我生成推理路径 + 区域验证打分作奖励;GRPO 训练,无需 box 真值;支持迭代自演化。",
+      "results": "和强监督方法相当甚至接近 SOTA,展示了自验证训练在地理空间定位上的潜力。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.3
+    },
+    "affiliations": ["河海大学"]
+  },
+  {
+    "arxiv_id": "2605.04503",
+    "summary": "图像差异描述 (IDC) 现在 benchmark 都不够复杂,而 BLEU/METEOR 又抓不住语义和幻觉。DiffCap-Bench 覆盖 10 类差异,搭配 LLM-as-Judge 协议 + Difference List 评估。测了一堆 SOTA MLLM,闭源 vs 开源差距明显,推理能力很关键,模型 scaling 不一定有用。",
+    "highlights": {
+      "contribution": "首个面向 IDC 的全面 benchmark + LLM-as-Judge 评估协议,与下游图像编辑数据构建相关。",
+      "innovation": "10 类差异类目 + Difference List 评估,显著改善人对齐和幻觉惩罚。",
+      "method": "构建多样化 IDC 数据集,基于人验证 Difference List 设计 LLM-as-Judge 评分;评估开源/闭源 SOTA MLLM。",
+      "results": "闭源 vs 开源差距明显,推理能力对 IDC 关键,scaling 收益有限;评测与下游图像编辑数据质量强相关。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.04505",
+    "summary": "现有音频/语音评估指标和通用 MLLM 在跨领域、零样本、指令灵活性上都不够好。JASTIN 把音频评估当成自指令推理任务,冻结音频编码器 + LLM 后端,中间加可训练适配器,加多源多任务多校准多描述的指令数据。在语音、声音、音乐和域外任务上均与人评强相关。",
+    "highlights": {
+      "contribution": "提出指令驱动的通用音频评估框架,SOTA 与人评相关性。",
+      "innovation": "冻结音频 encoder + 可训 adapter + LLM,后端做指令跟随;多源/多任务/多校准/多描述的指令数据。",
+      "method": "音频特征经 adapter 喂给微调 LLM,以自指令推理形式输出评分;无需任务特定再训。",
+      "results": "在语音、声音、音乐和域外评测上均与人主观评分 Pearson/Spearman 相关性 SOTA,优于通用 MLLM。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": ["上海交大"]
+  }
+]

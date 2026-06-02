@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2605.07288",
+    "summary": "把世界模型当模拟器训 VLA 时,LIBERO 上一旦光照颜色变了模型就崩——会出现连锁幻觉、模糊过曝。作者搞了个 Sword 框架,通过结构引导的风格增强把视觉纹理和任务动力学拆开,再用动态潜在 bootstrapping 缓解训练-推理不一致和长程误差累积,泛化、保真和 RL 后训练成功率都比 WoVR baseline 高一截。",
+    "highlights": {
+      "contribution": "提出 Sword 世界模型框架,让 World-Model-as-Simulator 在 LIBERO 上做 VLA 策略后训练时不再被视觉扰动整崩。",
+      "innovation": "用 Structure-Guided Style Augmentation 把纹理跟动力学解耦,加上 Dynamic Latent Bootstrapping 在低显存下保持训练-推理一致性。",
+      "method": "在 WoVR 类世界模型上,训练时做结构引导的风格扰动,推理时用 latent bootstrap 滚动预测,最后用世界模型作为 simulator 做 VLA 的 RL 后训练。",
+      "results": "LIBERO 上在泛化、生成质量、鲁棒性、保真度和 RL 后训练 VLA 成功率全面优于 baseline WoVR。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.8,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.07381",
+    "summary": "在真机上把 VLA 适配到具体硬件时,数据预算很紧。作者发现一个反直觉现象:盲目铺多样化的单次演示反而会让估计噪声不消,效果不如想象。他们形式化了一个 Coverage-Density Trade-off,然后提出 ACA:先在核心 anchor 点反复演示稳住策略骨架,再用 teacher-forced 错误挖掘有针对性地拓展高风险边界,真机实验比标准多样采样在同预算下成功率高不少。",
+    "highlights": {
+      "contribution": "指出 VLA 真机适配中的 diversity trap,并给出 anchor-centric 的两阶段数据采集与微调策略。",
+      "innovation": "把策略误差拆成 density 和 coverage 两项,推出有内部最优的 anchor-centric 分配,而不是单纯追求多样性。",
+      "method": "ACA 两阶段:第一阶段在 anchor 上重复演示形成 skeleton,第二阶段用 teacher forcing 找高误差区域,再做受限残差更新扩展覆盖。",
+      "results": "真机实验验证了 trade-off 框架,固定预算下任务可靠性和成功率显著优于标准多样采样。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": ["NUS Show Lab"]
+  },
+  {
+    "arxiv_id": "2605.07474",
+    "summary": "现实里很多机器人能采到大量视觉-动作对,但拿不到统一的语言标注,而且数据分散在不同主体上。ForgeVLA 用联邦学习把 VLA 训起来:每个客户端先用一个 embodied 指令分类器把视觉-动作补成 V-L-A 三元组,再用 client 端的对比规划损失 + server 端自适应聚合,解决了大家忽视的视觉-语言特征坍缩问题,多 benchmark 显著优于 baseline。",
+    "highlights": {
+      "contribution": "提出 ForgeVLA,首个无语言标注的联邦 VLA 训练框架。",
+      "innovation": "把缺失的语言模态在客户端自动补全,并显式攻击 federated VLA 中没人讨论过的视觉-语言特征坍缩。",
+      "method": "客户端用 embodied 指令分类器把 vision-action 映射到预定义指令集形成三元组,加 contrastive planning loss;server 端自适应聚合参数。",
+      "results": "多个 benchmark 上明显超过其他联邦/集中 baseline,消融验证各组件贡献。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.07931",
+    "summary": "现有的 world-model-augmented VLA 往往把每帧高带宽视觉都塞给世界模块,设计很冗余。OneWM-VLA 直接把每帧压成一个语义 token 喂进去,然后用一个 flow matching 目标同时生成 latent 流和动作轨迹。结果挺漂亮:在 π0 (2B) backbone 上只加 14.71M LoRA 参数,MetaWorld MT50 从 47.9% 升到 61.3%、LIBERO-Long 95.6%、真机 Fold Cloth 从 20% 升到 60%。",
+    "highlights": {
+      "contribution": "把世界模块的视觉带宽压到 1 token/frame,并用单一 flow matching 同时输出 latent 流和动作。",
+      "innovation": "证明长程任务上不需要每帧高带宽视觉,Adaptive Attention Pooling + 联合 flow matching 替代分离 decoder。",
+      "method": "在冻结 π0 上加 14.71M LoRA,Adaptive Attention Pooling 把每帧压成 1 token,latent 流和 action 轨迹由同一 flow matching 目标联合训练。",
+      "results": "MetaWorld MT50 47.9→61.3%,LIBERO-Long 95.6% (π0 85.2%),真机 Fold Cloth 20→60%。"
+    },
+    "scores": {
+      "relevance": 9.8,
+      "recency": 5.5,
+      "popularity": 7.0,
+      "quality": 8.5,
+      "recommendation": 8.7
+    },
+    "affiliations": ["Zhejiang University"]
+  },
+  {
+    "arxiv_id": "2605.08434",
+    "summary": "纯 success-only 的 BC 训出来的 VLA 很脆,小错误一点点滚雪球就 OOD 失败。AFIL 直接拿失败轨迹当负引导用:在线让预训练 VLA 自己生成失败 rollout,然后联训成功/失败两个 Dual Action Generator 共享 vision-language backbone,采样时让 failure 生成器把动作往可靠模式推,而 guidance 强度由每步的成功-失败分布距离自适应决定。",
+    "highlights": {
+      "contribution": "把 failure trajectories 用作 diffusion/flow VLA 的 adaptive negative guidance,而不是丢掉或人工设计。",
+      "innovation": "Dual Action Generators 共享 backbone,采样时按 success/failure 分布距离自适应调 guidance 强度,无需人工失败模式或人在回路。",
+      "method": "用预训练 VLA 在线 rollout 失败轨迹,联合训练成功和失败的两个 diffusion/flow action generator;推理时根据 per-step 距离动态调整 negative guidance。",
+      "results": "在 in/out-of-domain、短/长程 manipulation 任务上稳定提升成功率和鲁棒性。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": ["United Imaging Intelligence"]
+  },
+  {
+    "arxiv_id": "2605.07306",
+    "summary": "做湿实验室自动化最头疼的是 protocol 自由文本 + 透明反光器皿 + 多步执行。BioProVLA-Agent 把整个流程拆成三个 agent:LLM 解析 protocol 出子任务、VLM-RAG 做就绪/完成验证、VLA 执行;再做了个 AugSmolVLA 专门对透明器皿和过曝做在线增强。在 15 原子 + 6 复合 + 3 双臂任务上比 ACT、X-VLA、原版 SmolVLA 更稳。",
+    "highlights": {
+      "contribution": "搭了一个低成本、protocol 驱动的具身多 agent 系统,把 VLA 接进生物实验室操作。",
+      "innovation": "把闭环 wet-lab 执行拆成 protocol parsing + 视觉验证 + VLA 执行三个 agent,加上专攻透明器皿和光照扰动的 AugSmolVLA。",
+      "method": "LLM Protocol Agent 拆 protocol;VLM-RAG Verification Agent 用观察+robot state+知识库判断是否就绪/完成;VLA Embodied Agent 执行;AugSmolVLA 做在线视觉增强。",
+      "results": "在涵盖加管/分拣/丢废/拧盖/倒液的多任务 benchmark 上,normal 和 high-exposure 设置下均显著优于 ACT/X-VLA/SmolVLA。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.07308",
+    "summary": "想给 VLA 加触觉但又不想破坏预训练能力。AT-VLA 提了个 Adaptive Tactile Injection:动态决定什么时候、在哪儿注入触觉信号,只在真正有用时才注入。再加一条 Tactile Reaction Dual-Stream,慢的视觉语言流做低频推理,快的触觉控制流跑高频物理交互,闭环响应 0.04 s,真机接触富集任务效果挺好。",
+    "highlights": {
+      "contribution": "提出在不破坏预训练 VLA 的前提下把触觉以自适应方式注入。",
+      "innovation": "Adaptive Tactile Injection 动态决定注入位置/时机,加上 Dual-Stream 拆开慢的 VL 推理和快的触觉控制。",
+      "method": "在预训练 VLA 上加一个轻量 tactile gating;视觉语言流跑低频感知推理,触觉流跑高频物理控制,闭环周期 0.04s。",
+      "results": "真机接触富集 manipulation 实验验证有效,具体提升数字在论文里给出。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.7
+    },
+    "affiliations": ["Peking University"]
+  },
+  {
+    "arxiv_id": "2605.07642",
+    "summary": "从第一视角视频里预测未来 3D 手部姿态,得搞清意图、抗 ego-motion、还要灵巧。EggHand 用了一个 VLA 风格的 action decoder 捕手部动力学,再配一个 egocentric video-text encoder 给视角感知上下文,不用 body pose 也能在 EgoExo4D 上拿到 SOTA,而且支持语言 prompt 控制预测。",
+    "highlights": {
+      "contribution": "做了 egocentric 手部姿态预测的多模态基础模型 EggHand。",
+      "innovation": "把 VLA 的 action decoder 借过来当手部时序动力学建模器,和 egocentric video-text encoder 一起做意图+视角感知。",
+      "method": "用 VLA 的 action decoder + egocentric video-text encoder,联合做 3D hand pose 预测,不依赖 body pose 或外部 tracking,可用语言 prompt 控制。",
+      "results": "EgoExo4D 上 SOTA,严重 ego-motion 下依然稳健,并支持 prompt 控制。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.07687",
+    "summary": "物理数字孪生通常照搬视觉重建的高分辨率拓扑,结果 spring-mass 系统冗余得离谱,rollout 一次很贵。PhySPRING 用 GNN 端到端学一层层粗化的拓扑+力学参数,同分辨率下还能保持是显式 spring-mass 系统。在 PhysTwin 上重建预测都更准,速度还快 2.30 倍;往 ACT 和 π0 的 Real2Sim 评测里 zero-shot 一塞,操控成功率不掉。",
+    "highlights": {
+      "contribution": "做了可微的 GNN 数字孪生降阶方法,在保持显式 spring-mass 结构的同时减少拓扑冗余。",
+      "innovation": "联合学习层级粗化拓扑和机械参数,每层都还是显式物理系统,而不是变成黑盒。",
+      "method": "用可微 GNN,在每一层把动力学响应相似的节点合并,联合学习拓扑和 spring-mass 参数。",
+      "results": "PhysTwin 上重建/预测优于 PhysTwin,速度提升 2.30 倍;zero-shot 接进 ACT 和 π0 的 Real2Sim 评测,成功率与原版相当。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.08268",
+    "summary": "多 agent LLM 共识系统通常假设大家都对齐,但万一藏了个内鬼怎么办?作者把这事建模成顺序决策,然后用一个学到的 latent world model 学好心 agent 的潜行为动力学,在这个 surrogate 模型上用 RL 训攻击者。初步结果显示这种攻击者比直接 prompt 注入更能拖延或破坏共识。",
+    "highlights": {
+      "contribution": "首次系统研究多 agent LLM 共识系统中的内鬼攻击,并给出 world-model + RL 的攻击者训练范式。",
+      "innovation": "用 latent world model 替代直接和真实 agent 交互,显著降低 RL 训练成本并支持自适应攻击。",
+      "method": "学习 benign agents 的 latent 行为状态的 surrogate 动力学模型,在上面用 RL 训攻击者,目标是拖延或破坏共识。",
+      "results": "训出的攻击者比 direct malicious-prompt baseline 更能降低 benign 共识率、延长分歧时间。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5.5,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.07195",
+    "summary": "端到端自动驾驶规划器都是被动反应式的——看历史和现在预测动作。ForeSight 反过来:先用预训练世界模型脑补未来视觉场景,再基于想象的未来去规划动作,从 'what should I do' 转到 'what will happen, then what should I do'。在 NAVSIM 和 nuScenes 上显著优于现有 SOTA。",
+    "highlights": {
+      "contribution": "提出 foresight-driven 端到端驾驶规划,世界模型作为主导而不是辅助。",
+      "innovation": "把规划范式从反应式翻成 anticipatory:先想象未来视觉再决策。",
+      "method": "两阶段:1) 用预训练世界模型生成可能的未来视觉场景;2) 在想象的未来上条件 planning,输出动作。",
+      "results": "NAVSIM 和 nuScenes 上显著超过之前 SOTA。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 7.8,
+      "recommendation": 7.5
+    },
+    "affiliations": ["Fudan University", "Imperial College London", "University of Surrey"]
+  },
+  {
+    "arxiv_id": "2605.07278",
+    "summary": "latent world model 短程预测准不代表规划好用——训练用的是局部预测,部署却要在 latent 里做长程目标导向搜索,Euclidean 距离不等于 reachability。RC-aux 是个轻量辅助目标,沿时间轴加多步开环预测,沿空间轴用 budget-conditioned reachability 监督 + temporal hard negatives,让 latent 空间区分'最终可达'和'预算内可达'。LIBERO-Goal 等任务上 planning 效果有改善。",
+    "highlights": {
+      "contribution": "指出 latent world model 在 planning 上的时空不对齐问题,并给出轻量 RC-aux 辅助目标修。",
+      "innovation": "提出 budget-conditioned reachability 监督 + temporal hard negatives,显式区分时间和空间可达性。",
+      "method": "在 reconstruction-free LWM 上加辅助目标:多 horizon 开环预测 + budget reachability supervision;部署时支持 reachability-aware planner。",
+      "results": "在 LeWorldModel 上做 continuation 和 from-scratch 训练,goal-conditioned pixel-control 和 LIBERO-Goal 上 planning 改善,代码已放出。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": ["Hokkaido University"]
+  },
+  {
+    "arxiv_id": "2605.07326",
+    "summary": "LiDAR 世界模型一直没相机/occupancy 那么红,主要卡在点云乱序和动静难分。GEM 把 LiDAR sweep tokenize 成紧凑表示,用动静分离器无监督拆,再用三路 deformable Mamba 做选择性扫描和自适应门控融合;可选加 planner 和 BEV 布局控制器跑 what-if 场景。多 benchmark SOTA。",
+    "highlights": {
+      "contribution": "做出第一个把 deformable Mamba 用进 LiDAR 世界模型的工作 GEM。",
+      "innovation": "利用 Mamba 的序列扫描和 LiDAR 的激光时序对齐,加上动静无监督解耦的 tri-path 设计。",
+      "method": "LiDAR scene tokenizer + 动静分离器 + 三路 deformable Mamba 自适应门控;可选加 planner 与 BEV 布局 controller。",
+      "results": "多个 LiDAR 世界模型 benchmark 上 SOTA,代码会放出。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.08279",
+    "summary": "现有 latent world model 用无约束神经转移函数,长 rollout 容易能量漂、违物理。LaWM 把最小作用量原理塞进 latent 空间:学一个离散 Lagrangian,用 latent variational integrator 推进预测,不是事后正则,而是直接让转移规则本身遵守变分原理。在合成物理和具身 robot 交互 benchmark 上 long-horizon 物理一致性、运动平滑度都更好。",
+    "highlights": {
+      "contribution": "把最小作用量原理作为 latent world model 的转移规则本身,而非外加损失。",
+      "innovation": "latent variational integrator:学 latent 离散 Lagrangian + 离散作用量泛函,转移由变分条件求解。",
+      "method": "encoder 把 obs 编进 latent generalized coordinate,学 discrete Lagrangian,通过离散变分积分推进未来状态。",
+      "results": "在物理合成数据和具身机器人交互上,物理不变性、背景一致性、运动平滑度、外观/几何预测均优于 video gen 和 WM baseline。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": ["University of Michigan"]
+  },
+  {
+    "arxiv_id": "2605.07199",
+    "summary": "营销决策同时涉及潜在消费者异质性、时变内部状态和干预,作者用 DBM 学一个冻结的 belief representation,然后挂三个轻量 adapter:能量一致性、结果预测、反事实推理。模拟实验里它在 visit/purchase AUC 上不输 MLP,但在异质处理效应上比 S-/T-/X-/DR-learner 和 Causal Forest 都好,尤其在混杂的 price-promotion 干预上差距最大。",
+    "highlights": {
+      "contribution": "提出 Three-in-One world model 框架,DBM belief + adapter 同时支持一致性、预测和反事实推理。",
+      "innovation": "用 Deep Boltzmann Machine 的 free energy 同时做一致性评估和反事实约束,而非传统因果推断方法。",
+      "method": "DBM 从 demographic/time/lagged actions 学冻结 belief,挂上预测 adapter;反事实时固定 belief,只改 action 输入。",
+      "results": "visit/purchase AUC 与 MLP baseline 持平,异质处理效应估计显著优于 meta-learner 与 Causal Forest。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 5.5,
+      "popularity": 4.5,
+      "quality": 6.5,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.07390",
+    "summary": "4D 生成现有方法只盯全局表观一致,忽略局部动力学拓扑。ST-Gen4D 把多模态编成时空表征,再拆出全局 appearance graph + 局部 dynamic graph,用语义桥融合成 4D cognition graph,然后世界模型在 cognition 上推未来,再作为条件 guide latent diffusion 出 4D Gaussian。3D/4D 生成任务都更好,顺便发了 ST-4D 数据集。",
+    "highlights": {
+      "contribution": "把 4D 时空认知嵌进世界模型来做 4D 生成,而不是只加 macro 约束。",
+      "innovation": "明确区分全局 appearance graph 和局部 dynamic graph,并用语义桥融合,再用世界模型做时空推理。",
+      "method": "多模态编码 → 全局/局部图融合得 4D cognition → world model 推未来状态 → latent diffusion 生成 4D Gaussian。",
+      "results": "3D 和 4D 生成任务上优于现有方法,新数据集 ST-4D 发布。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.07393",
+    "summary": "Model-based offline RL 老在'用 OOD 样本扩泛化'和'防被模型利用'之间挣扎。PSPO 把动力学建模看成贝叶斯推断,后验显式给出模型可信度;再把策略优化拆成一串约束子问题,理论上保证 Q 收敛和单调改进。标准 benchmark 上比 SOTA baseline 表现更好。",
+    "highlights": {
+      "contribution": "用 posterior sampling 解决 model-based offline RL 中泛化 vs 鲁棒的两难。",
+      "innovation": "把 dynamics 当贝叶斯推断,显式量化模型可信度,而非用 pessimism 强行压制。",
+      "method": "posterior sampling 得到动力学后验 + 受约束策略优化,Q 值估计建模成 stochastic approximation,有收敛证明。",
+      "results": "标准 offline RL benchmark 上优于 SOTA baseline。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5.5,
+      "popularity": 5.0,
+      "quality": 6.8,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.08007",
+    "summary": "Susceptibilities 是研究模型对扰动的响应的一种可解释性技术。作者把它推广到深 RL 的 regret 上,在一个简单 gridworld 里观察 stagewise 发展。发现 susceptibility 能揭示参数空间里仅看 policy 看不到的内部变化,再用 activation steering 做了验证,顺带聊了在 RLHF 后训练里的潜力。",
+    "highlights": {
+      "contribution": "把 susceptibility 这种可解释性工具推广到 deep RL 的 regret 上。",
+      "innovation": "用 susceptibility 揭示训练阶段在参数空间的内部变化,而不是只看 policy 输出。",
+      "method": "在 gridworld 里训 RL agent,计算 regret 对扰动的响应,再用 activation steering 验证。",
+      "results": "实验显示 susceptibility 能捕获 stagewise development 中 policy 不可见的特征。"
+    },
+    "scores": {
+      "relevance": 2.5,
+      "recency": 5.5,
+      "popularity": 4.5,
+      "quality": 6.0,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.08450",
+    "summary": "long-horizon goal-conditioned 任务很难做 zero-shot 适配,因为小错误会沿基础动作轨迹滚雪球。ZALT 找 latent hub state——多条轨迹会汇聚/分叉的点——在 hub 之间学 policy 和 dynamics model,然后在 hub topology 上 plan 长程任务。3D 迷宫里 unseen 任务 zero-shot 成功率 55%,最强 baseline 才 6%。",
+    "highlights": {
+      "contribution": "提出 ZALT,通过 latent hub topology 把长程任务压缩成短抽象 transition 序列。",
+      "innovation": "识别 latent hub 作为可组合的中间状态,把 demonstration 显式拼接而不是端到端模仿。",
+      "method": "在 demonstration 数据上找 hub state,学 hub-to-hub policy 和 dynamics,然后在 hub topology 上规划新任务。",
+      "results": "复杂 3D 迷宫上 unseen 任务 zero-shot 55%,最强 baseline 仅 6%。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5.5,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 6.3
+    },
+    "affiliations": ["Purdue University"]
+  },
+  {
+    "arxiv_id": "2605.07514",
+    "summary": "World Action Model 的生成未来到底可不可信?作者提出'action-state consistency'这个维度——预测动作和被它诱导的状态转移是否对得上。在多种 joint-prediction 和 inverse-dynamics 模型上,这个一致性能稳定地把成功和失败 rollout 分开,趋势跟 value 估计差不多;还发现 background collapse 会让低动力学失败误判为高一致性。基于这个,提了个 value-free consensus 选 rollout 的策略,RoboCasa 和 RoboTwin 2.0 上无需额外训练就涨成功率。",
+    "highlights": {
+      "contribution": "为 WAM 引入 action-state consistency 这个新可靠性轴,既能诊断也能直接 test-time 选 rollout。",
+      "innovation": "证明 consistency 能脱离 value 模型做 test-time planning,并指出 background collapse 是关键陷阱。",
+      "method": "在 joint-prediction 和 inverse-dynamics WAM 上测量动作-状态一致性,提出 value-free consensus:rollout 按彼此 agreement 排序。",
+      "results": "RoboCasa 和 RoboTwin 2.0 上无额外训练/奖励就提升成功率。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.8,
+      "recommendation": 7.9
+    },
+    "affiliations": ["NYCU"]
+  },
+  {
+    "arxiv_id": "2605.07794",
+    "summary": "联合视频-动作的 WAM 一般用 MoT 共享 self-attention,每帧理论上可以有自己的 timestep,但现实都用一个共享标量,等于假设每个 latent 帧同样可信。NoiseGate 把 per-latent timestep 当成可学的 information gating policy:训练时独立采,推理时一个 Gating Policy Network 决定每帧的 time 增量,再用任务 reward 优化。RoboTwin 多任务上稳定涨点。",
+    "highlights": {
+      "contribution": "把 WAM 的 per-latent timestep schedule 从硬编码变成可学的 information gating policy。",
+      "innovation": "用 Diffusion Forcing 的 noise-as-masking 视角解释 per-latent schedule,并用任务 reward 直接训这个 schedule。",
+      "method": "训练时每个 latent 独立采 timestep;推理时 Gating Policy Net 输出 time 增量;再用 task reward 微调 schedule。",
+      "results": "RoboTwin 随机场景 manipulation 多任务上稳定优于 baseline。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.8,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.07192",
+    "summary": "用 RGB 手持拍 3DGS 时如果有运动模糊就直接崩。AsyncEvGS 搞了一套高分辨率异步 RGB-Event 双相机系统,先用 event 数据重建 sharp 图,再用 VGGT 做 cross-domain pose 估计给 3DGS 初始化,优化时用结构驱动的 event loss 和视图一致正则。还发了个新数据集 AsyncEv-Deblur,严重运动模糊下重建效果 SOTA。",
+    "highlights": {
+      "contribution": "做了 asynchronous RGB-Event 双相机 + 3DGS 重建框架,能处理严重运动模糊。",
+      "innovation": "异步、高分辨率的 RGB-Event 设置不要求严格同步,并用 VGGT 给跨域 pose 初始化提供鲁棒性。",
+      "method": "Event 数据先重建 sharp 帧 → VGGT 做 cross-domain pose 初始化 → 3DGS 优化时加结构驱动 event loss + 视图一致正则。",
+      "results": "在新发布的 AsyncEv-Deblur 数据集和现有 benchmark 上达到 SOTA,严重运动模糊下重建鲁棒。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": ["CUHK", "Shanghai AI Lab"]
+  },
+  {
+    "arxiv_id": "2605.07254",
+    "summary": "多视图 mesh 重建里,3DGS / NeRF 出 mesh 是后处理,几何和外观联合优化不了。这工作走 IMLS 路线让点云直接生 SDF 和纹理场,但原 IMLS 用指数核难抓高频。作者换成有局部支持的紧凑多项式核,加上 Laplacian 的 stochastic 正则,在表面重建和渲染上 SOTA。",
+    "highlights": {
+      "contribution": "在 IMLS 多视图重建里换核函数 + 加正则,把高频细节拉回来。",
+      "innovation": "紧凑局部支持的多项式核替代指数核,加 Laplacian stochastic 正则稳优化。",
+      "method": "用 IMLS 直接把点云转 SDF + 纹理场,核换成局部多项式,加 Laplacian 滤波正则,端到端联合优化几何和外观。",
+      "results": "表面重建和渲染都 SOTA,几何更准、视觉更锐。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5.5,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.07287",
+    "summary": "feed-forward 3DGS 一般每个 pixel/voxel 给固定数量的 Gaussian,导致光滑区浪费、复杂区不够。SplatWeaver 训了一堆 cardinality 专家,每个专家专门产 0 到 M 个 primitive,再用 pixel 级 routing 决定每位置给谁;并加高频先验引导和 routing 正则,让纹理区多分基元、光滑区少分。在多种场景下用更少 Gaussian 就比 SOTA 好。",
+    "highlights": {
+      "contribution": "首个用 cardinality experts + pixel routing 在 feed-forward 3DGS 中做区域自适应 primitive 分配的工作。",
+      "innovation": "把 'how many Gaussians per location' 变成由 MoE 路由的可学决策,而不是固定预算。",
+      "method": "训练若干 cardinality Gaussian experts(各产 0-M 个 primitive)+ pixel 级 routing + 高频先验引导和 routing 正则。",
+      "results": "多种场景下用更少 primitive 优于 SOTA 的可泛化 NVS 方法。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.07781",
+    "summary": "3DGS 优化的是 alpha 合成的光学外观,而 RF 数字孪生需要确定的可相交几何来跑多次反射路径。这工作把 Gaussian primitive 嵌进硬件加速的 ray tracing 结构,让差分 RF 传播仿真直接在视觉重建场景里跑,既能算任意 3D 位置间的信道冲激响应,又能保持高质量视觉渲染。给出了从纯视觉重建提取物理意义信道响应的跨模态证据。",
+    "highlights": {
+      "contribution": "做了一个统一差分 RF 传播仿真 + 光学渲染的框架,直接在 3DGS 重建场景里跑。",
+      "innovation": "把 Gaussian primitive 嵌进硬件加速 ray tracing,作为统一的 RF 与光学空间表征,不再依赖手工 mesh。",
+      "method": "Gaussian primitive 注入 hardware ray tracing 加速结构 → 差分多次反射 RF 路径计算 → 提取信道冲激响应,同时保持 3DGS 渲染。",
+      "results": "从纯视觉重建场景里提出物理有意义的信道响应,验证 neural reconstruction 可作 RF + 视觉的统一空间表征。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 5.5,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": ["University of Oulu"]
+  }
+]

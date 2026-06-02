@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2605.14950",
+    "summary": "VLA 模型在精细空间任务上栽跟头，要么塞个深度传感器、要么挂一个大几何基础模型。Evo-Depth 想走中间路线：只用多视角 RGB，挤出一组轻量的隐式深度特征，再通过 depth-aware modulation 注入到视觉-语言表征里。0.9B 参数就在四个仿真 benchmark 上拿到第一，真机平均成功率最高、显存最小、推理最快。",
+    "highlights": {
+      "contribution": "提出 Evo-Depth，一个无需深度传感器、不依赖大几何基础模型的轻量 VLA，把隐式深度信息融进操作策略。",
+      "innovation": "用 Implicit Depth Encoding Module + Spatial Enhancement Module 的 depth-aware modulation 取代显式深度输入或大几何模型，并配套渐进式对齐训练。",
+      "method": "多视角 RGB 进编码器抽紧凑的深度特征，模块化融入 VLM 表征；动作头按 Progressive Alignment 策略逐步对齐到下游操作；总参数 0.9B。",
+      "results": "四个仿真 benchmark 上超越对手，真机平均成功率最高，同时模型最小、显存最低、推理频率最高。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 6,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.14211",
+    "summary": "长时具身任务最大的痛点：奖励要人写、动作要人标。ASH 干脆从未标注的网络视频里学：先跑 IDM、再用 IDM 反过来从网络视频抽监督，无监督找关键瞬间当长期记忆。在 8 小时 Pokemon Emerald 和 Zelda 评估里跑赢 BC、检索增强和 zero-shot foundation model 基线。",
+    "highlights": {
+      "contribution": "把自改进 agent 做成可扩展的 long-horizon embodied 学习范式，全程不用 reward shaping 也不用专家标注。",
+      "innovation": "Self-honing 循环：卡住时从自己轨迹学 IDM，再用 IDM 给网络视频伪标动作；无监督挑关键时刻塞进长期记忆。",
+      "method": "ASH = IDM + 检索 + 关键帧记忆 + 自改进循环；用网络视频作为唯一外部数据；测试场景是回合制和实时游戏。",
+      "results": "Pokemon Emerald 11.2/12，Zelda 9.9/12 milestones；最强基线只有 6.5/12 和 6.0/12。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 6,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.14526",
+    "summary": "可微软体仿真在 sim2real、轨迹优化里很关键，但 DiffPD 这类方法遇到极端刚度差、超弹性、富接触场景就崩。DiffPhD 把异质性、超弹梯度稳定、接触一起塞进一个 GPU 流水线，重用同一个稀疏因子做前向反向接触。和老 PD 比快一个数量级，100x 刚度差还稳。",
+    "highlights": {
+      "contribution": "做出一个统一的可微 Projective Dynamics 求解器，同时支持异质材料、超弹、富接触并 GPU 加速。",
+      "innovation": "刚度感知投影权重 + trust-region 特征值滤波 + 类型-II Anderson 加速 + 单稀疏因子复用，把多个棘手问题合并求解。",
+      "method": "在 PD 框架里嵌刚度权重；反向传播加特征值滤波保数值稳；GPU 上一份稀疏因子供前向反向接触共用；Rayleigh damping 也融进去。",
+      "results": "异质/超弹/接触 benchmark 上比前作快 10x，能稳到 100x 刚度差；演示了软-硬复合生物、软爪机器人抓取等场景。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 6,
+      "popularity": 5,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.15157",
+    "summary": "灵巧操作里 VLA 容易复合错误，DAgger 式人工纠错最大的坑是 teleop 命令和策略当前手势对不上，人一接管就 \"手势跳变\"。HandITL 做了一个无缝交接：把人的纠正意图和当前策略动作 blend 起来，避免抽搐。jitter 降 99.8%，抓取失败降 87.5%，时间降 19.1%。",
+    "highlights": {
+      "contribution": "提出 HandITL，让人接管双手灵巧操作时不发生 gesture jump，并把纠错数据回灌训练得到更好的策略。",
+      "innovation": "在 intervention 时刻把 teleop 指令和策略输出 blend 在一起，而不是硬切换；针对高 DoF 手专门解决命令对齐问题。",
+      "method": "Human-in-the-loop 框架：人和策略共控，按融合权重生成手臂-手指动作；纠错数据用来 refine VLA 策略；多任务双手协调评测。",
+      "results": "Jitter -99.8%，grasp 失败 -87.5%，完成时间 -19.1%；refine 后的策略比纯 teleop 数据训练高 19%。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 6,
+      "popularity": 6,
+      "quality": 8.0,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.15195",
+    "summary": "Meta + 牛津的 VGGT 续作。VGGT-Ω 重写了架构（单头、register attention 取代部分全局注意），GPU 显存只用前作 30%，因此能堆 15x 监督数据并吃大量未标视频。Sintel 相机精度比之前 SOTA 提升 77%，并且学到的 register 还能反哺 VLA 和语言对齐。",
+    "highlights": {
+      "contribution": "推出 VGGT-Ω，证明 feed-forward 重建模型的质量随模型/数据规模可预测地 scale，并把重建当成 spatial understanding 的代理任务反哺 VLA。",
+      "innovation": "单 dense head 多任务监督 + register attention 限制跨帧信息 + 自监督协议，使训练显存降到 30%，能用 15x 数据。",
+      "method": "Transformer + registers 聚合场景；多任务密集头同时输出几何；自监督 + 大规模监督混训；动态高质量标注 pipeline 支持动态场景。",
+      "results": "多个静/动态重建 benchmark 强结果，Sintel 相机估计精度 +77%；register 用于 VLA 和语言对齐均有正效果。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 6,
+      "popularity": 9,
+      "quality": 9.0,
+      "recommendation": 9.0
+    },
+    "affiliations": ["Meta AI", "University of Oxford"]
+  },
+  {
+    "arxiv_id": "2605.15298",
+    "summary": "光靠机器人轨迹学 VLA 数据覆盖太窄，PhysBrain 1.0 提出一条新路线：从大规模第一人称视频里抽场景、空间动态、动作执行、深度关系，做成结构化 QA 监督训出 PhysBrain VLM，再以 capability-preserving 方式迁到 VLA。在 ERQA、PhysBench、SimplerEnv、LIBERO、RoboCasa 上拿 SOTA，SimplerEnv OOD 提升尤为明显。",
+    "highlights": {
+      "contribution": "用人类 egocentric video 大规模合成物理常识 QA，作为 VLA 的预训练补充信号。",
+      "innovation": "数据引擎抽场景/动力学/动作/深度关系生成 QA；capability-preserving 的 VLA 适配策略，强调语言敏感性。",
+      "method": "两阶段：先把 egocentric video 转 QA 训 PhysBrain VLM；再用 capability-preserving adaptation 把物理先验迁到 VLA；在多个仿真/QA benchmark 上测。",
+      "results": "ERQA、PhysBench、SimplerEnv-WidowX、LIBERO、RoboCasa 全 SOTA；SimplerEnv 上 OOD 提升尤为突出。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 6,
+      "popularity": 7,
+      "quality": 8.0,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.14937",
+    "summary": "Object-centric world model 多用来训 reactive 策略，没法在线规划。Slot-MPC 把 slot-based 表示当作可微动力学模型，在推理时跑 gradient-based MPC 做动作规划。在仿真操作任务上比非 object-centric world model 基线更准也更快；离线、状态-动作覆盖有限时 gradient-based 比 sampling-based MPC 表现更好。",
+    "highlights": {
+      "contribution": "Slot-MPC 把 object-centric world model 和可微 MPC 拼到一起，做目标条件操作规划。",
+      "innovation": "用 slot 表征驱动可微动力学，使 gradient-based MPC 能直接优化连续动作，明确比 sampling-based 更高效。",
+      "method": "视觉编码器学 slot 表示 → action-conditioned object-centric dynamics → 推理时 gradient-based MPC 沿可微动力学反传更新动作。",
+      "results": "仿真操作任务上任务性能和规划效率均超过非 object-centric world model；离线场景下 gradient-based MPC 优于 sampling-based。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 6,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": ["University of Bonn"]
+  },
+  {
+    "arxiv_id": "2605.15185",
+    "summary": "现在大家把视频生成模型当 world model，但怎么衡量几何一致性还很主观。PDI-Bench 给了一个量化方案：SAM2/MegaSaM/CoTracker3 抽 object-centric 观测，提升到 3D 世界坐标，用三类投影几何残差（尺度-深度对齐、3D 运动一致、3D 结构刚性）打分。这套指标能揭示视频生成器的几何失败模式，是感知指标抓不到的。",
+    "highlights": {
+      "contribution": "提出 PDI-Bench，一个量化视频 world model 几何一致性的诊断框架。",
+      "innovation": "用分割 + point tracking + 单目重建抽 3D 观测，定义 scale-depth、3D motion、structural rigidity 三类投影残差。",
+      "method": "在生成视频上跑 SAM2/MegaSaM/CoTracker3 → 3D 坐标 → 计算几何残差；附配套 PDI-Dataset 覆盖压力测试场景。",
+      "results": "横扫 SOTA 视频生成器，揭示一致性几何失败模式，常规感知指标抓不到这些信号。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 6,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.15465",
+    "summary": "生理时序信号大部分研究是短期预测和分类，没人把它当连续动态系统学。NormWear-2 把多变量生理信号和临床干预编进共享 latent 空间，做长程联合预测。预训练里用混沌理论平衡 dynamical regime，发现平衡过的小数据集比 2x 的非平衡更稳。在 8026 个被试、最长 2.3 年的真实数据集上比时序基础模型更好。",
+    "highlights": {
+      "contribution": "提出生理信号专用的 world model NormWear-2，做干预条件下的多尺度联合预测。",
+      "innovation": "在预训练时用混沌理论平衡 dynamical regime 多样性；推理时把 prior 知识（intuition）与非参 latent state 转移（insight）结合。",
+      "method": "共享 latent 空间编码生理多变量 + 干预；动态系统视角的 latent transition；预训练阶段 regime 平衡数据采样。",
+      "results": "8026 被试，覆盖日常/护理/临床；时频和 latent 三类指标均超过 SOTA TS foundation models；下游表征也具竞争力。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 6,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.15466",
+    "summary": "JEPA 在分类上很强但物理常识弱，作者怀疑根源是 patch-based masking 只盯纹理不盯动力学。IA-JEPA 改成 motion-centric masking，专门掩掉碰撞/动量交换的实体，让模型必须重建潜轨迹。CLEVRER 因果推理任务 14.26% vs 3.22%，latent space 还能线性化物理能量。",
+    "highlights": {
+      "contribution": "提出 Interaction-Aware JEPA，用交互/动力学事件作为 mask 目标，让世界模型抓住因果而非纹理。",
+      "innovation": "Motion-centric masking 替代 patch-based，使 JEPA 偏向 kinematic events，破除 \"static bias\"。",
+      "method": "对碰撞/动量转移实体做 mask，目标是重建潜在轨迹；自监督训练，没有标签；在 CLEVRER、SSv2、PHYRE-Lite 上评估。",
+      "results": "CLEVRER 因果 14.26%（基线 3.22%），latent entropy +10%，物理能量回归 R²=0.43；在真实动作和零样本物理拼图上也泛化。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 6,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.14398",
+    "summary": "视频 world model 物理上不靠谱，作者干脆让 agent 写代码：planning agent 出场景计划、code agent 生成可执行仿真代码、视觉与物理 agent 评审，循环修代码直到符合 prompt 和物理约束。在驾驶仿真和具身机器人任务上物理精度、指令对齐、视觉质量都比视频 world model 强。",
+    "highlights": {
+      "contribution": "把 world model 从 \"视频生成\" 改成 \"代码生成\"，用多 agent 把物理约束硬塞进生成流程。",
+      "innovation": "Planning/Coding/Visual review/Physics analysis 四 agent 协同；输出是可执行 simulation code 而非视频。",
+      "method": "自然语言 prompt → 场景计划 → 仿真代码 → 视觉+物理检查 → 反馈式迭代修代码，直到通过；输出可用于驾驶/机器人任务。",
+      "results": "在物理一致性、指令保真、视觉质量上超过基于视频的 world model；适用驾驶和具身机器人场景。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 6,
+      "popularity": 6,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.14696",
+    "summary": "目前 perception-free driving world model 只学下一帧像素，规划质量不行。EponaV2 让 world model 学更全面的未来表征，可以再解码出未来几何和语义图。再借鉴 LLM 训练，加了 flow-matching GRPO 提升 planning 精度。三个 NAVSIM benchmark 上对 perception-free 模型刷 SOTA：+1.3 PDMS, +5.5 EPDMS。",
+    "highlights": {
+      "contribution": "为自动驾驶 world model 加入几何+语义的未来预测，提升 trajectory planning。",
+      "innovation": "未来表征可解码出 3D 几何/语义图；并用 flow-matching 的 GRPO 进一步 RL 优化规划。",
+      "method": "在 driving world model 上 forecasting 多模态未来表征 + 解码头；GRPO+flow matching 做策略优化；NAVSIM 评测。",
+      "results": "NAVSIM 三 benchmark perception-free SOTA：+1.3 PDMS, +5.5 EPDMS。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 6,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.15141",
+    "summary": "实时交互视频生成里，4 步 chunk-wise AR 蒸馏已是 SOTA，但本文要更激进：frame-wise + 1–2 步。瓶颈在 AR student 初始化，作者提出 Causal Forcing++，用 causal consistency distillation 拿在线 teacher 做单步监督，省下完整 PF-ODE 轨迹。2 步 frame-wise 反而超过原 4 步 SOTA，且 first-frame 延迟降一半，Stage 2 训练 4x 更便宜。",
+    "highlights": {
+      "contribution": "在 frame-wise 1–2 步设置下做出强 AR 视频扩散，并扩展到 action-conditioned world model（Genie3 风格）。",
+      "innovation": "Causal CD：单步 online teacher ODE 监督代替预算 PF-ODE 整轨，初始化更便宜也更易优化。",
+      "method": "Causal consistency distillation 给 AR student 初始化 → 蒸馏框架内 1-2 步 frame-wise 生成；进一步扩展到 action-conditioned 世界模型。",
+      "results": "frame-wise 2 步设置上 VBench Total +0.1、Quality +0.3、VisionReward +0.335 超过 4 步 SOTA；延迟 -50%，Stage 2 训练成本 ~4×。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 6,
+      "popularity": 7,
+      "quality": 8.0,
+      "recommendation": 7.7
+    },
+    "affiliations": ["Tsinghua University", "Shengshu AI"]
+  },
+  {
+    "arxiv_id": "2605.15256",
+    "summary": "现在游戏 world model 都把 NPC 当背景像素，玩家和 NPC 没有交互。ReactiveGWM 显式解耦：玩家动作以轻量 additive bias 注入 diffusion，NPC 高层行为（Offense/Control/Defense）走 cross-attention，且模块是 game-agnostic 的，能零样本搬到别的没标注 world model。在两款街霸游戏上玩家可控、NPC 策略跟随都不错。",
+    "highlights": {
+      "contribution": "提出可交互的游戏 world model，让 NPC 真正按高层策略对玩家动作做出反应。",
+      "innovation": "玩家控制和 NPC 行为彻底解耦：control 走 additive bias、NPC 走 cross-attention，且这些模块跨游戏可迁。",
+      "method": "Diffusion backbone + 玩家动作 bias + NPC 行为 cross-attention；NPC 模块设计为 game-agnostic 表示，便于 zero-shot 迁移。",
+      "results": "在两款街霸游戏上保持细粒度玩家可控，同时 NPC 策略遵守 prompt；模块可插入未标注 world model 实现零样本迁移。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 6,
+      "popularity": 6,
+      "quality": 7.0,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.15391",
+    "summary": "全景视频生成看着好看但 3D 几何对不上。PanoWorld 不再把它当纯视觉合成，而当 latent state 的几何+动力学一致问题。两个 lightweight 正则：深度一致 loss（对伪真值全景深度）+ 轨迹一致 loss（监督跟踪点在世界系的 3D 位置）。还做了 PanoGeo 数据集做统一标注。几何一致性显著提升，视觉质量也保住。",
+    "highlights": {
+      "contribution": "把全景视频生成重塑为几何与动力学一致的 latent state modeling 问题，并面向具身 AI 空间理解。",
+      "innovation": "Depth + trajectory 双一致性正则 + spherical-geometry-aware 条件/位置编码；构建 PanoGeo 统一标注数据集。",
+      "method": "在预训练 perspective video world model 上加深度一致和轨迹一致约束；用 PanoGeo 数据集做训练/分层评估。",
+      "results": "几何一致性优于现有全景生成方法，视觉质量保持竞争力，更适合具身空间任务。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 6,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": ["Northeastern University", "UT Austin"]
+  },
+  {
+    "arxiv_id": "2605.15477",
+    "summary": "Ego world model 训练数据稀，又看不到身体；exo 视频很多但不是第一视角。Grauman 组提出把 exo 视频抽 body pose 当动作，再用 human kinematics 先验把 exo 转 ego，整成 whole-body action-conditioned 训练数据。这样可以把野外 exo 视频喂进 ego world model，预测和下游规划都明显提升。",
+    "highlights": {
+      "contribution": "提出 EgoExo-WM，用 exo 视频里的 body pose 当动作信号训练 ego world model，扩大 ego 数据来源。",
+      "innovation": "把 exo→ego 视频转换 + 结构化 body pose 提取作为新的动作表征，让野外 exo 视频也能服务 ego 训练。",
+      "method": "从 exo 视频里抽 body pose，按 kinematics 先验把视角转 ego；用合成 ego-action 对训练 whole-body action-conditioned ego world model；下游做 visual goal 规划。",
+      "results": "预测质量和下游规划性能均显著提升，可用任意野外视频扩 ego world model 数据。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 6,
+      "popularity": 8,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": ["UT Austin", "FAIR"]
+  },
+  {
+    "arxiv_id": "2605.14382",
+    "summary": "交互式 AR 视频生成的核心矛盾：响应要快、轨迹要稳。作者发现现有 streaming long tuning 会有 \"conditional bias\"：teacher 提供的是局部对的、全局不对的方向。Delta Forcing 借 TRPO 思路，用 teacher-student latent delta 估转移一致性，把 teacher 监督约束在 trust region 内，与单调连续目标加权，平衡反应性和连贯。",
+    "highlights": {
+      "contribution": "提出 Delta Forcing，给交互 AR 视频生成加 trust region 约束，缓解事件切换后的漂移。",
+      "innovation": "用 teacher-student latent delta 估转移一致度，自适应缩放 teacher 监督；类比 TRPO 的 trust region 思想。",
+      "method": "在 distilled AR 视频模型基础上做 streaming long tuning，监督被 trust region 与 monotonic continuity 共同约束。",
+      "results": "在长时一致性和事件响应间取得更好平衡，明显减少 condition 变化后的漂移现象。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 6,
+      "popularity": 6,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.14405",
+    "summary": "混沌系统数据驱动建模的难点：误差指数放大，没法长程精确预测。本文把目标从 \"复制轨迹\" 改成同时复制 Jacobian 和长期统计行为。方法是在 attractor 上构造局部 covering，比较 covering 在真模型/代理模型下的 pushforward 分布的 MMD。结果 Jacobian 精度大涨，还保持 SOTA 统计精度。",
+    "highlights": {
+      "contribution": "提出新混沌动力学代理模型框架，兼顾 Jacobian 精度和长期统计行为。",
+      "innovation": "用局部 phase space covering 的 pushforward 分布 MMD 作为训练目标，桥接局部展开和长期统计两条路径。",
+      "method": "在 attractor 上做局部 covering，分别计算真模型和代理模型 covering 的 pushforward 分布，最小化 MMD。",
+      "results": "Jacobian 精度显著提升，同时与 SOTA 统计代理模型相当；代码开源。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 6,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.14723",
+    "summary": "脓毒症 ICU 治疗需要序列化决策，LLM 有医学知识但不懂动作条件下患者会怎么演化。SepsisAgent 在 LLM 上接一个 Clinical World Model，让 agent 在执行处方前 propose-simulate-refine 一遍。再用三阶段课程（SFT + behavior cloning + world-model based agentic RL）训。MIMIC-IV 上 off-policy value 和安全指标都最好。",
+    "highlights": {
+      "contribution": "把 world model 接到 LLM agent 上，让 LLM 在做治疗决策前模拟患者反应，并以三阶段课程训练。",
+      "innovation": "Propose-simulate-refine 工作流 + 三阶段训练（动力学 SFT、行为克隆、world model agentic RL）。",
+      "method": "训一个 Clinical World Model 模拟患者对 fluid/vasopressor 的响应；LLM agent 三阶段课程训练；用 MIMIC-IV 评测。",
+      "results": "MIMIC-IV 上 off-policy value 和安全指标双 SOTA；即使关闭模拟器，agent 仍保留患者演化规律。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 6,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.14805",
+    "summary": "空中操作（四旋翼带机械臂载货）耦合复杂、空气动力学滞后、随载荷/构型变化非平稳。作者提了一个 encoder-decoder：非线性 encoder 抓时序耦合，线性 decoder 在线 Bayesian 自适应，配 consistency-driven 协方差膨胀。MPC 上残差预测更准、适应更快、跟踪更稳。",
+    "highlights": {
+      "contribution": "为空中机械臂提出结构化 encoder-decoder 残差动力学模型，支持在线自适应与实时 MPC。",
+      "innovation": "非线性 encoder + 线性 decoder 结构允许闭式 Bayesian adaptation；consistency-driven 协方差膨胀提速收敛。",
+      "method": "Encoder 从 state-input 历史学耦合潜变量；线性 decoder 在线最小二乘适配；与 MPC 串联做轨迹跟踪。",
+      "results": "真实空中操作平台上残差预测精度、适应速度、MPC 跟踪都改善。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 6,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.14851",
+    "summary": "战术作战计划生成-验证的多 agent 框架。生成端 MPHA 把指挥意图分解成多平台动作序列，验证端 ACSE 给对手装一个定制 world model 来预测关键平台演化并动态反制候选方案。在 ACTS 仿真里任务成功率 +19.4%，成本 -41.7%，比规则验证器更狠地暴露漏洞。",
+    "highlights": {
+      "contribution": "提出 IFPV：作战计划生成 + world model 驱动的对抗验证一体化框架。",
+      "innovation": "ACSE 给对手装可定制 world model 主动反制候选方案，比传统规则验证更鉴别力。",
+      "method": "MPHA：Pathfinder/Analyst/Planner 三 agent 分解指挥意图；ACSE：对手 world model 预测演化 + 反制；在 ACTS 仿真测。",
+      "results": "比单步 LLM 规划 baseline 任务成功 +19.4%、成本 -41.7%；比规则验证器抑制率 +31.8%。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 6,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 5.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.15178",
+    "summary": "2.6B 开源 world model，原生训练一分钟 720p 视频且支持精确相机控制。四件套：hybrid 线性注意（Gated DeltaNet + softmax）、6-DoF 双分支相机控制、两阶段长视频精修、6-DoF metric pose 标注 pipeline。视觉质量对标 LingBot-World/HY-WorldPlay，但训练只用 213K 公开视频，15 天 64 卡 H100，推理单卡 60s/clip，量化版 RTX 5090 上 34s。",
+    "highlights": {
+      "contribution": "提供一个 2.6B 高效开源世界模型，能生成 720p 一分钟视频并精确控制相机轨迹。",
+      "innovation": "Hybrid Linear Attention + 双分支相机控制 + 两阶段 refiner + metric-scale 6-DoF 标注 pipeline。",
+      "method": "Hybrid linear DiT 长上下文；6-DoF camera control 分支；stage-1 生成后跑长视频 refiner；自建 213K 视频带 metric pose 监督。",
+      "results": "Action-following 比开源基线更强，可视质量持平，吞吐 36×；NVFP4 量化后单卡 5090 跑 60s 720p 仅 34s。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 6,
+      "popularity": 8,
+      "quality": 8.5,
+      "recommendation": 8.4
+    },
+    "affiliations": ["NVIDIA", "MIT"]
+  },
+  {
+    "arxiv_id": "2605.14315",
+    "summary": "VGGT 类 feed-forward 3D 重建质量好但贵。TurboVGGT 把 alternating attention 改成自适应：全局注意里学一组代表 token 做稀疏跨帧聚合，配合 frame attention 抓局部。各层/各帧稀疏率不同，由模型自己学。多 benchmark 上重建质量竞争力，但速度显著快。",
+    "highlights": {
+      "contribution": "提出 TurboVGGT，把 VGGT 风格 3D 重建做得既快又保质量。",
+      "innovation": "自适应稀疏全局注意：不同层/帧学不同稀疏率、各自挑代表 token，相比固定稀疏率方案更精细。",
+      "method": "Adaptive sparsity 选 representative tokens 做全局注意 + frame attention 抓局部细节；端到端可训。",
+      "results": "多个 3D 重建 benchmark 上重建质量与 SOTA 相当但显著更快。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 6,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": ["Huawei Noah's Ark Lab"]
+  },
+  {
+    "arxiv_id": "2605.14629",
+    "summary": "3DGS 初始化依赖 COLMAP，慢且在弱纹理区稀疏。作者发现 AV1 视频编码本身就有 motion vectors，可以拿来跳过 exhaustive matching 还能产出 8x 稠密的 SfM 点云。再喂给 3DGS，VMAF +9 分，达到基线质量的训练时间平均减 63%。",
+    "highlights": {
+      "contribution": "用 AV1 motion vectors 替代部分 SfM 特征匹配，给 3DGS 更稠密初始化。",
+      "innovation": "把视频编码器内已有的 motion vectors 当作几何先验，绕开昂贵的 exhaustive matching。",
+      "method": "AV1 编码抽 motion vectors → 替代/补充 SfM 匹配 → 得到稠密点云 → 喂给 3DGS。",
+      "results": "点数 8×，VMAF +9，训练到 baseline 质量时间平均 -63%。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 6,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 5.6
+    },
+    "affiliations": ["Trinity College Dublin"]
+  },
+  {
+    "arxiv_id": "2605.14880",
+    "summary": "3DGS 在优化里会自然冒出一堆噪声 Gaussian primitives。Denoising-GS 干脆把整套优化当 primitive denoising：保留空间优化流的优化器、按空间梯度一致更新、用不确定性剪冗余、稀疏区主动 split 保结构完整。三个 benchmark NVS 上 SOTA，且表征更紧凑。",
+    "highlights": {
+      "contribution": "把 3DGS 优化重新表述为 spatial-aware 的 primitive denoising 过程。",
+      "innovation": "Spatial Gradient-based Denoising + Uncertainty-based Denoising + Spatial Coherence Refinement，把位置和空间结构一起考虑。",
+      "method": "新优化器保空间流；联合空间支撑做梯度一致更新；按 primitive 不确定性剪枝；稀疏区选择性 split。",
+      "results": "三个标准 NVS benchmark 全 SOTA，表征更紧凑；将开源。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 6,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 5.4
+    },
+    "affiliations": []
+  }
+]

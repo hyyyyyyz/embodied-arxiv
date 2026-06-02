@@ -1,0 +1,1110 @@
+{
+  "date": "2026-05-22",
+  "papers": [
+    {
+      "arxiv_id": "2605.24203",
+      "title": "Afford-VLA: Action-Aligned Visual Planning via Internalized Affordance",
+      "authors": [
+        "Runze Wang",
+        "Yuqian Fu",
+        "Yu Li",
+        "Tao Lin",
+        "Tianwen Qian",
+        "Mohamed Elhoseiny",
+        "Bo Zhao",
+        "Yanwei Fu",
+        "Yu-Gang Jiang",
+        "Xiangyang Xue"
+      ],
+      "affiliations": [
+        "Fudan",
+        "KAUST",
+        "SJTU"
+      ],
+      "summary": "想解决 VLA 不知道「该在哪里下手」的问题。作者在 VLA 里塞了几个可学习的 <AFF> token 来主动查询任务相关的交互区域，再把 affordance mask 转成 embedding 直接条件化动作生成。在 LIBERO、LIBERO-Plus 和 SimplerEnv 上拿了 SOTA，真机也能用。",
+      "original_abstract": "Vision-language-action (VLA) models have shown strong potential for generalist robot manipulation, yet they remain limited by insufficient spatial reasoning, particularly in determining where to interact in complex visual scenes. While recent efforts introduce various forms of visual planning to address this issue, existing approaches either rely on global geometric cues, symbolic intermediate representations, or externally generated visual signals, which are often weakly coupled with downstream action prediction. In this work, we revisit visual planning in VLA systems and argue that effective planning should be local, visually grounded, internally generated, and directly aligned with action. Based on this insight, we propose Afford-VLA, a unified framework that internalizes task-conditioned affordance as an explicit visual planning interface within VLA models. Concretely, we introduce learnable <AFF> tokens to query task-relevant interaction regions, decode affordance masks from multimodal features, and convert them into compact embeddings that directly condition action generation. This design enables affordance to be both generated and utilized within the VLA, forming a tightly coupled perception-action pathway. To further support this integration, we adopt a training strategy that allows the affordance pathway to be jointly optimized with action prediction, improving its effectiveness for downstream control. We evaluate our method on multiple simulation benchmarks, including LIBERO, LIBERO-Plus, and SimplerEnv, achieving consistent state-of-the-art performance, along with strong real-world results. These findings demonstrate that internalizing affordance as action-aligned visual planning provides a powerful paradigm for improving VLA systems.",
+      "highlights": {
+        "contribution": "把 task-conditioned affordance 内化为 VLA 的显式视觉规划接口，让 affordance 既生成又使用，闭环服务于动作。",
+        "innovation": "区别于外部 affordance 信号或符号中间表示，<AFF> token 让规划是局部、视觉接地、内部生成且直接对齐动作。",
+        "method": "在 VLA 里加可学习 <AFF> token 查询交互区域 → 解码出 affordance mask → 压成 embedding 条件化 action head，affordance 通路与动作预测联合训练。",
+        "results": "LIBERO、LIBERO-Plus、SimplerEnv 上一致 SOTA，并展示真机表现。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T20:43:47Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 7.0,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 8.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.24203v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.24203v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23128",
+      "title": "$π_0$-EqM: Equilibrium Matching for Closed-Loop Vision-Language-Action Control",
+      "authors": [
+        "Huanming Liu",
+        "Congsheng Xu",
+        "Jianmin Ji",
+        "Yao Mu"
+      ],
+      "affiliations": [
+        "USTC",
+        "HKU"
+      ],
+      "summary": "作者在 π0 这套 VLA 上把 flow matching 的动作专家换成了 Equilibrium Matching (EqM) 解码器，其他不动。同样 300 步预算下，RoboTwin 19 个任务平均成功率从 40.4% 直接拉到 50.2%，LIBERO-10 也到了 87%。还顺带分析了一个叫 stationarity-executability gap 的现象，把推理深度当成策略设计的一部分来看。",
+      "original_abstract": "Currently, Vision-Language-Action (VLA) models have become the most adopted paradigm for robotic manipulation for its great potential for task generalization. While most generative flow-matching action decoders for VLA control are often deployed with fixed sampling horizons, limiting state-dependent compute and temporal reuse across control cycles. We present $π_0$-EqM, which replaces the flow-matching expert in $π_0$ with an Equilibrium Matching (EqM) decoder while leaving the upstream VLA stack unchanged. Under a matched 300-step budget, $π_0$-EqM improves RoboTwin average success from 40.4% to 50.2% across 19 tasks and remains competitive on LIBERO, with its clearest gain on LIBERO-10 (87.0%). Two threshold scans reveal a task-dependent non-monotonic relation between residual and success, which we term the stationarity--executability gap. The results suggest that inference depth in iterative VLA control is part of policy design and introduce an energy-based VLA perspective that may inform future work on composable action generation across tasks and embodiments.",
+      "highlights": {
+        "contribution": "把 π0 的 flow matching 动作头替换为 Equilibrium Matching，让闭环 VLA 控制能按状态自适应消耗计算。",
+        "innovation": "首次把能量基/EqM 视角引入 VLA，动作生成被看作向均衡点收敛而非固定步数采样。",
+        "method": "保留 π0 上游 VLM 不变，仅替换动作解码器为 EqM；通过残差阈值决定推理深度，分析了 stationarity-executability gap。",
+        "results": "RoboTwin 19 任务平均 40.4% → 50.2%；LIBERO-10 87.0%；在匹配 300 步预算下显著优于 flow-matching 版本。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T01:07:07Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 7.0,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 8.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23128v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23128v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23163",
+      "title": "Fast-dDrive: Efficient Block-Diffusion VLM for Autonomous Driving",
+      "authors": [
+        "Kewei Zhang",
+        "Jin Wang",
+        "Sensen Gao",
+        "Chengyue Wu",
+        "Yulong Cao",
+        "Songyang Han",
+        "Boris Ivanovic",
+        "Langechuan Liu",
+        "Marco Pavone",
+        "Song Han",
+        "Daquan Zhou",
+        "Enze Xie"
+      ],
+      "affiliations": [
+        "NVIDIA",
+        "MIT",
+        "Stanford"
+      ],
+      "summary": "端到端自动驾驶里 AR 慢、全序列 diffusion 又会「逻辑泄漏」。Fast-dDrive 用 block-diffusion VLM：段内双向 refine、段间严格因果序，把 JSON 结构 token 冻成 scaffold 重点训规划。配合 SGLang，比 AR 基线快 12 倍，WOD-E2E 的 ADE@3s/5s 拿 SOTA，nuScenes L2 降到 0.32m。",
+      "original_abstract": "End-to-end autonomous driving via Vision-Language-Action (VLA) models demands a precarious balance between high-fidelity trajectory planning and efficient inference. Existing paradigms typically fall short: autoregressive (AR) VLAs are memory-bandwidth-bound on edge hardware and prone to exposure-bias drift, while full-sequence diffusion models preclude KV-cache reuse and suffer from \"logical leakage\" that violates the fundamental perceive-then-plan causality. We present Fast-dDrive, a block-diffusion VLA that performs bidirectional refinement within semantic units while enforcing strict causal ordering across them. Leveraging the observation that driving VLAs often emit structured JSON-like outputs, Fast-dDrive freezes structural tokens into a section scaffold and employs a section-aware training recipe that prioritizes safety-critical planning. We further introduce Scaffold Speculative Decoding to achieve AR-equivalent quality at significantly higher throughput. Finally, we propose a low-overhead test-time scaling scheme: by forking $N$ stochastic trajectory rollouts from a single shared-prefix KV cache and averaging them, we effectively suppress prediction variance at a fractional computational cost. Empirical results demonstrate that Fast-dDrive redefines the speed-accuracy frontier for driving agents. On the WOD-E2E test set, Fast-dDrive achieves SOTA ADE@3s and ADE@5s, alongside the highest RFS among diffusion-based VLAs; on nuScenes, it reduces average L2 error to $0.32$m (a $22\\%$ improvement). When integrated with SGLang, our framework delivers $12\\times$ throughput speedup over the AR baseline, narrowing the gap between high-capacity VLAs and the efficiency demands of real-time on-vehicle deployment.",
+      "highlights": {
+        "contribution": "提出 block-diffusion VLA 驾驶模型，兼顾 KV cache 复用、因果性和高吞吐。",
+        "innovation": "段内双向、段间因果的混合 diffusion 结构 + Scaffold Speculative Decoding，针对驾驶 JSON 输出特性设计。",
+        "method": "冻结结构 token 形成 scaffold；section-aware 训练重权 safety-critical 规划；从共享 prefix KV 采样 N 条 rollouts 并平均作 test-time scaling。",
+        "results": "WOD-E2E ADE@3s/5s SOTA；nuScenes L2 降到 0.32m（-22%）；接入 SGLang 后吞吐 12× AR 基线。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T02:31:32Z",
+      "categories": [
+        "cs.CL"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 7.0,
+        "popularity": 8.0,
+        "quality": 8.0,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23163v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.23163v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23856",
+      "title": "Point Tracking Improves World Action Models",
+      "authors": [
+        "Jiarui Guan",
+        "Wenshuai Zhao",
+        "Yue Pei",
+        "Ziliang Chen",
+        "Arno Solin",
+        "Juho Kannala"
+      ],
+      "affiliations": [
+        "Aalto University"
+      ],
+      "summary": "想让世界-动作模型不要被光照纹理带偏。JOPAT 在一个 denoising diffusion transformer 里联合预测潜在视觉、2D 点轨迹（带可见性）和动作。点轨迹作为显式运动表示在遮挡和出框时更稳。LIBERO 和真机 LeRobot 任务上比纯像素基线强，长时序遮挡场景提升最大。",
+      "original_abstract": "Robot policy learning benefits from world-action models that capture environment dynamics, but pixel-level prediction entangles dynamics with nuisance factors such as lighting and texture, making learned representations vulnerable to task-irrelevant visual variation. We propose JOPAT, a JOint Pixel-And-Track World-Action Model that predicts latent visual observations, 2D point tracks with visibility, and actions in a single denoising diffusion transformer. The key insight is that tracks provide an explicit representation of motion that captures long-horizon dynamics and remains robust under occlusion or partial out-of-frame motion, offering greater utility than modeling pixel appearance alone. On LIBERO and real-world LeRobot tasks, JOPAT improves over pixel-based baselines, with the largest gains on long-horizon tasks involving occlusion, object interaction, and off-screen motion.",
+      "highlights": {
+        "contribution": "JOPAT 联合预测像素 + 2D 点轨迹 + 动作，作为更鲁棒的世界-动作模型。",
+        "innovation": "用 point tracking 作为额外的运动监督，把长时序动力学从光照/纹理 nuisance 中分离出来。",
+        "method": "单个 denoising diffusion transformer 同时去噪潜在视觉观测、带可见性的 2D 轨迹、以及动作。",
+        "results": "LIBERO 和真机 LeRobot 上优于纯像素基线，长时序、遮挡、出框场景增益最大。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T17:08:37Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robot policy"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23856v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23856v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23568",
+      "title": "TactileReflex: Noise-Statistics-Driven Vision-Tactile Reflex Control for Force-Sensitive Manipulation",
+      "authors": [
+        "Ziyan Feng",
+        "Yulong Fu",
+        "Zheng Li",
+        "Yuxin He",
+        "Jieji Ren",
+        "Lujia Wang",
+        "Jinni Zhou",
+        "Yudong Zhong",
+        "Qiang Nie"
+      ],
+      "affiliations": [
+        "HKUST(GZ)",
+        "CUHK"
+      ],
+      "summary": "做的是抓装水的薄壁纸杯这种「力窗口超窄」的任务。靠传感器自身噪声统计就把所有阈值算出来，省了外部力标定。三通道反射控制器（剪切、法向接触、压力中心）以 12 Hz 闭环跑，倒水任务能 9/10 成功，对比固定力基线 0/10。",
+      "original_abstract": "Manipulating fragile deformable containers, such as disposable plastic cups filled with liquid, demands real-time grip-force adaptation within an extremely narrow force margin: insufficient force causes slip, while excessive force irreversibly deforms the thin wall. Existing approaches struggle to achieve such force-sensitive manipulation tasks. We propose a noise-statistics-based calibration-driven reflex control paradigm with vision-based tactile sensing: by analyzing the sensor's intrinsic noise characteristics (via a brief static-hold-and-unload protocol), we directly derive all controller thresholds, eliminating external force calibration, trial-and-error manual tuning, or material-specific physical models. Instantiating this paradigm, we present TactileReflex, a three-channel closed-loop controller that extracts three image-level proxies, shear intensity ($S_y$), contact intensity ($F_n$), and center of pressure ($C$), from dual visuo-tactile sensors and drives prioritized reflex channels at ~12 Hz for slip suppression, weight-adaptive release, and force protection. Each channel closes the loop directly on its proxy via noise-derived thresholds. Ablation demonstrates that only the full three-channel system is able to prevent irreversible container deformation (5/5 success vs. at most 1/5 for partial configurations). In a dynamic pouring task, fixed-effort baselines fail in all 10 attempts due to pose drift, while TactileReflex achieves 9/10 success across two water volumes. As a self-contained and interpretable controller, TactileReflex can serve as a plug-and-play safety layer beneath high-level manipulation pipelines, including haptic-free VR teleoperation and vision-language-action (VLA) policies.",
+      "highlights": {
+        "contribution": "提出基于噪声统计标定的视触觉反射控制范式，专门解决易碎可形变容器的力敏感操作。",
+        "innovation": "用静态 hold-and-unload 协议从传感器内在噪声直接推出阈值，免外部力标定、免材料模型。",
+        "method": "从双视触觉传感器提取剪切强度 Sy、接触强度 Fn、压力中心 C 三个图像级 proxy；三通道优先级闭环以噪声阈值驱动，频率约 12 Hz。",
+        "results": "防止不可逆形变 5/5 成功（部分配置最多 1/5）；动态倒水任务 9/10 成功，固定力基线 0/10。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T12:35:28Z",
+      "categories": [
+        "cs.RO",
+        "eess.SY"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.5,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23568v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23568v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23847",
+      "title": "Instrumentation for Imitation Learning: Enhancing Training Datasets for Clothes Hanger Insertion",
+      "authors": [
+        "Remko Proesmans",
+        "Thomas Lips",
+        "Francis wyffels"
+      ],
+      "affiliations": [
+        "Ghent University"
+      ],
+      "summary": "讨论的是 imitation learning 里到底需不需要给物体本身装传感器。用 180 条遥操作示范训 diffusion policy，挂衣架任务上加了仪器信号的版本比纯视觉好 14-25 个点。更妙的是用仪器化专家做 rollout 增广再训纯视觉学生，能追平仪器化专家。",
+      "original_abstract": "Large behaviour models have transformed the field of robotic manipulation, but prohibitive data requirements have thus far prevented a revolution similar to vision language models. We believe that instrumentation, i.e. sensor integration in objects, can provide invaluable state information and enable efficient learning for robotic manipulation. In this paper, we present instrumented imitation learning of clothes hanger insertion. Using 180 teleoperated demonstrations, we train diffusion policies with and without access to instrumentation data. Results show that policies leveraging instrumentation outperform vision-only counterparts by 14-25 %pt and exhibit greater task awareness. Crucially, a black-box imitation learning policy learns to prioritise instrumentation signals without explicit guidance. In addition, enhancing the teleoperation dataset with rollouts from an instrumented expert policy, enables a vision-only student policy to achieve performance comparable to the instrumented expert, thereby surpassing the original vision-only policy. These findings establish instrumentation as a promising strategy to enhance imitation learning for robotic manipulation. Datasets are available on Zenodo.",
+      "highlights": {
+        "contribution": "证明在物体里加传感器（instrumentation）能显著提升模仿学习样本效率。",
+        "innovation": "把「物体仪器化」作为一种数据增强而非控制依赖：训练时用，部署时不必用。",
+        "method": "180 条挂衣架遥操作示范训 diffusion policy，对比有无仪器信号；再用仪器化专家 rollout 扩充数据训纯视觉学生策略。",
+        "results": "仪器化策略比纯视觉好 14-25 个百分点；扩充后纯视觉学生策略可追平仪器化专家。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T16:59:55Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23847v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23847v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23203",
+      "title": "Lipschitz Optimization for Formal Verification of Homographies",
+      "authors": [
+        "Jean-Guillaume Durand",
+        "Panagiotis Kouvaros",
+        "Maxime Gariel",
+        "Alessio Lomuscio"
+      ],
+      "affiliations": [
+        "Imperial College London"
+      ],
+      "summary": "这篇做的是视觉网络在相机 3D 运动扰动下的正式鲁棒性验证。从相机位姿到像素值建立闭式映射，再用 Lipschitz 优化得到紧的线性边界，第一次能形式化验证 projective 几何变换的鲁棒性。在 VNN-COMP 上比已有方法快 89%、边界紧 7%，还跑了一个跑道分类器的真实安全案例。",
+      "original_abstract": "The adoption of vision neural networks in regulated industries requires formal robustness guarantees, especially in safety-critical domains such as healthcare, autonomous vehicles, and aerospace. However, current approaches are confined to incomplete statistical verification or robustness to $\\ell_p$-norm and affine transforms, which cover only a narrow subset of perturbations to the image formation process. In particular, robustness to camera motion remains an open problem despite being key to deploy many vision applications. We present a formal verification approach that targets robustness against 3D motion perturbations of the capturing camera. We first establish a closed-form mapping from camera pose to pixel values. By analyzing the continuity properties of the resulting homographies, we show that recent work on Lipschitz optimization and piecewise continuity can be extended to derive tight linear bounds on perturbed pixel values. Our approach applies to scenes with predominantly planar structure, such as ground planes in augmented reality, road markings and traffic signs in autonomous driving, or planar workspaces in robotic manipulation. This enables the first formal verification of projective geometry transforms, without complex simulation, surrogate networks, or explicit image-formation models. We validate our implementation and show up to 89% speedup and 7% tighter bounds over prior work. We then evaluate our method on the VNN-COMP benchmark and reveal systematic weaknesses to projective perturbations. Finally, we demonstrate a real-world case study on a safety-critical runway classifier, highlighting practical vulnerabilities to camera motion, and addressing a key challenge in the certification of learned models. Data and code are publicly available at https://github.com/jeangud/homography-verification .",
+      "highlights": {
+        "contribution": "对相机 3D 运动引发的 homography 扰动做形式化鲁棒性验证。",
+        "innovation": "通过 Lipschitz 优化 + piecewise 连续性把 projective 变换转化为可被验证器处理的紧线性边界，无需替代网络或显式图像形成模型。",
+        "method": "从相机 pose 到像素值的闭式映射 → 分析 homography 的 Lipschitz 与分段连续性 → 在 VNN-COMP 验证器上跑。",
+        "results": "比已有方法快 89%、边界紧 7%；揭示 VNN-COMP 模型对 projective 扰动的系统弱点；真实跑道分类器案例发现安全漏洞。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T03:37:34Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.LG",
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.5,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23203v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23203v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23699",
+      "title": "CRONOS: Benchmarking Counterfactual Physical Consistency in Video Models",
+      "authors": [
+        "León Begiristain",
+        "Olaf Dünkel",
+        "Adam Kortylewski"
+      ],
+      "affiliations": [
+        "Max Planck Institute"
+      ],
+      "summary": "视频生成被吹成通往世界模型的路，但模型到底学了因果还是只学了表面关联？CRONOS 在 Unreal Engine 里搭了个反事实物理一致性 benchmark：固定物理事件类型（碰撞、遮挡、坠落），系统地干预视角、场景、物体类别、物体外观。结果发现现有开源视频生成器在视角变化下尤其不一致。",
+      "original_abstract": "Video prediction is increasingly viewed as a path toward generalizable world models, yet it remains unclear whether these systems learn underlying causal structure or merely exploit superficial visual correlations for future prediction. We introduce CRONOS, an intervention-based benchmark designed to evaluate counterfactual physical consistency: whether a model's predictions of physical events respond appropriately to controlled changes in the visual input, such as variations of scene context, viewpoint, object appearance, and object category. Built in a photorealistic Unreal Engine environment, CRONOS enables controlled, high-fidelity generation of videos across diverse scenes and dynamics. In contrast to previous benchmarks, CRONOS systematically intervenes on four key factors - viewpoint, scene, object category, and object appearance - while keeping the underlying physical event type, such as a collision, occlusion, or fall, fixed. Our evaluation of recent open-source video generators reveals substantial failures in counterfactual physical consistency: prediction quality for the same physical event type is affected by appearance, environment, and, particularly by viewpoint changes. CRONOS provides a controlled and reproducible testbed for diagnosing how the quality of generated videos changes for different interventions, establishing a concrete target for developing models that perform consistently across changes of multiple conditions. The dataset and code are available at our project page.",
+      "highlights": {
+        "contribution": "首个针对视频世界模型反事实物理一致性的可控 benchmark。",
+        "innovation": "用 Unreal Engine 做高保真合成，对四个因素做正交干预，而把物理事件类型严格固定。",
+        "method": "在 Unreal Engine 中生成视频，干预视角/场景/物体类别/外观，评估同一物理事件下的预测质量一致性。",
+        "results": "评估多个开源视频生成器，发现视角变化对预测一致性影响最大，外观和场景次之；提供可复现 testbed。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T14:51:22Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "video prediction"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23699v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23699v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23845",
+      "title": "Learning a Particle Dynamics Model with Real-world Videos",
+      "authors": [
+        "Chanho Kim",
+        "Suhas V. Sumukh",
+        "Li Fuxin"
+      ],
+      "affiliations": [
+        "Oregon State University"
+      ],
+      "summary": "粒子动力学模型以前只能在仿真里训，因为真实数据拿不到完整点云和对应关系。作者把粒子模型嫁接到 Gaussian splatting，用渲染监督直接从真实视频里学，不需要粒子级标注。还放了一个 500 段真实物体交互视频的数据集。",
+      "original_abstract": "Data-driven learning approaches for physics simulation, sometimes referred to as world models, have emerged as promising alternatives to traditional physics simulators due to their differentiable nature. Prior work has demonstrated impressive results in predicting the motions of rigid and non-rigid objects in complex scenes involving multiple interacting bodies. However, these models are typically trained in simulated environments because obtaining perfect state information such as complete scene point clouds and point correspondences over time is challenging in real-world settings. This reliance on synthetic data can limit their applicability when the sim-to-real gap is large. In this work, we aim to overcome these limitations by introducing a novel framework for training neural object dynamics models directly from unlabeled real-world videos. Specifically, we propose to learn a particle-based dynamics model compatible with a Gaussian splatting framework, which operates on dense particles derived from Gaussians (i.e., particles with scales and rotations) and predicts their position and rotation changes over time. The model is trained via rendering supervision, enabling learning from real-world videos without requiring particle-level labeled states. Our model operates directly on dense Gaussians without relying on heuristic subsampling anchor points. To enable this study, we also present a real-world dataset consisting of about 500 videos capturing diverse object interactions.",
+      "highlights": {
+        "contribution": "无需粒子级标签，直接从真实视频学习粒子动力学世界模型。",
+        "innovation": "把粒子动力学和 Gaussian splatting 表征绑定，让 dense Gaussian 粒子的位置/旋转预测通过渲染损失反传。",
+        "method": "在 Gaussian splatting 框架上预测每个 Gaussian 粒子的位置和旋转变化，用渲染监督训练；放出 ~500 真实交互视频数据集。",
+        "results": "展示了从真实视频学到的动力学模型，无需启发式 anchor 子采样；定性/定量优于仅靠合成训练的基线。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T16:56:27Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "dynamics model"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23845v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23845v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23220",
+      "title": "WMAttack: Automated Attack Search for Adversarial Evaluation of World-Model Agents",
+      "authors": [
+        "Zhixiang Guo",
+        "Siyuan Liang",
+        "Shi Fu",
+        "Cheng Guo",
+        "Andras Balogh",
+        "Mark Jelasity",
+        "Dacheng Tao"
+      ],
+      "affiliations": [
+        "NTU",
+        "USTC"
+      ],
+      "summary": "想正经评估世界模型 agent 的对抗鲁棒性，但手调攻击不准，遍历搜索又太贵。WMAttack 把它变成有限预算下的攻击配置搜索：用 SCAS 根据 reward 退化反馈优化提议分布，用 RGAR 从相似表示任务里检索好用的旧配置 warm start。DreamerV3 Atari 的归一化 reward 下降从 0.497 拉到 1.034，DMC 从 0.319 到 0.682。",
+      "original_abstract": "Despite the growing use of world models as decision-making agents, their adversarial robustness remains underexplored due to the lack of dedicated automated evaluation methods. A key obstacle is that attack evaluation must be both accurate and efficient: weak manually tuned attacks can overestimate robustness, while exhaustive hyperparameter search is prohibitively expensive because each candidate requires closed-loop rollouts through learned latent dynamics. We introduce WMAttack, an automated attack-search framework for adversarial evaluation of world-model agents. WMAttack formulates robustness evaluation as a finite-budget search over attack configurations, including attack families, perturbation budgets, optimization steps, restarts, and allocation rules. To improve search accuracy, Self-Correcting Attack Search (SCAS) refines the attack proposal distribution using feedback from reward degradation, action instability, runtime cost, and rollout variability. To improve search efficiency, Representation-Guided Attack Retrieval (RGAR) retrieves effective historical configurations from representation-similar tasks, providing a warm start for unseen environments. We provide a theoretical explanation showing that proposal refinement improves finite-budget search when it shifts probability mass toward high-utility attacks. Across Atari and DeepMind Control tasks, WMAttack consistently discovers stronger attacks than the evaluated baselines, improving normalized reward drop from 0.497 to 1.034 on DreamerV3 Atari and from 0.319 to 0.682 on DMC. Ablations further show that RGAR improves initial candidate quality and SCAS improves final attack utility under fixed evaluation budgets.",
+      "highlights": {
+        "contribution": "提出针对世界模型 agent 的自动化对抗攻击搜索框架。",
+        "innovation": "SCAS 自纠正攻击搜索 + RGAR 表示引导检索，给闭环 latent 动力学攻击提供高效搜索。",
+        "method": "把鲁棒性评估建成有限预算的攻击配置搜索（攻击族、扰动预算、步数、重启、分配）；SCAS 用 reward 退化/动作不稳定/方差反馈更新分布；RGAR 从历史相似任务检索 warm start。",
+        "results": "DreamerV3 Atari 归一化 reward drop 0.497 → 1.034；DMC 0.319 → 0.682；消融显示 SCAS/RGAR 各自有效。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T04:31:09Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "latent dynamics",
+        "dreamerv3"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23220v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23220v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23345",
+      "title": "SCOPE: Simulating Cross-game Operations in Playable Environments for FPS World Models",
+      "authors": [
+        "Zizhao Tong",
+        "Yeying Jin",
+        "Hongfeng Lai",
+        "Zeqing Wang",
+        "Zhaohu Xing",
+        "Kexu Cheng",
+        "Haoran Xu",
+        "Zhao Pu",
+        "Shangwen Zhu",
+        "Ruili Feng",
+        "Jian Zhao",
+        "Yan Zhang",
+        "Hao Tang",
+        "Ling Shao"
+      ],
+      "affiliations": [
+        "PKU"
+      ],
+      "summary": "想做 FPS 游戏世界模型，但 FPS 的开火、换弹这种动作只影响枪口局部，全图注入控制信号就糊掉。SCOPE 在视频 diffusion 的每个 transformer block 里塞一个 conditioning 模块，把特征按像素时间序列做局部动作响应，把「作用域内」和「作用域外」自然分开。还开了 CrossFPS 多游戏数据集，7 款游戏、69K 段、10-DoF。",
+      "original_abstract": "Interactive world models for first-person shooter (FPS) games must resolve high-frequency overlapping control signals at every frame without disrupting unaffected regions. Existing methods inject actions globally and train on single titles, failing under dense FPS inputs. We observe that FPS actions are spatially selective: discrete events such as firing or reloading affect only a localized region around the weapon (the scope), while continuous camera and movement signals govern stable surroundings. We propose SCOPE, which inserts a conditioning module into each transformer block of a pretrained video diffusion model. It reshapes features into per-pixel temporal sequences so that each position computes its action response from local visual content. This separates in-scope effects from out-of-scope generation without segmentation labels. We also introduce CrossFPS, the first multi-game FPS dataset with frame-aligned action telemetry. It comprises 69K clips from 7 titles with 10-DoF controller signals, curated to remove gameplay bias. The model learns general visual-to-action mappings rather than game-specific patterns, enabling zero-shot transfer to unseen scenes. Experiments confirm strong action responsiveness, precise scope separation, and effective cross-game generalization.",
+      "highlights": {
+        "contribution": "提出按空间局部性处理 FPS 控制信号的视频世界模型 SCOPE，并配套多游戏数据集 CrossFPS。",
+        "innovation": "观察到 FPS 动作的空间选择性，按 per-pixel 时间序列做条件注入而非全局注入；无需 segmentation 标签。",
+        "method": "在预训练视频 diffusion 模型每个 transformer block 插入 conditioning 模块，把特征 reshape 成 per-pixel temporal 序列做动作响应；用 CrossFPS 多游戏数据训练。",
+        "results": "动作响应强、作用域分离精准，可零样本迁移到未见场景；CrossFPS 含 7 款游戏 69K 段、10-DoF 信号。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T08:06:37Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23345v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.23345v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.28865",
+      "title": "Emergent Semantic Representations in World Models through Physical Interaction without Linguistic Supervision",
+      "authors": [
+        "Jiayi Fang"
+      ],
+      "affiliations": [],
+      "summary": "一个挺有意思的实验：让 VAE 世界模型只做随机具身探索、不接触任何语言监督，问它的潜空间会不会自发出现「语义」。结果方向准确率 0.677 vs 随机编码器 0.547，位置 RSA 提升 6.6×。KL 调大潜空间几何结构就崩，语义对齐也同步崩，作者把这归到一个 shared-driver 假设。",
+      "original_abstract": "What does a world model learn from physical exploration, without any linguistic supervision? We argue the answer is organized by a single principle: the geometric structure of the physical world. Training a VAE-based world model on random embodied exploration, we find that its latent space develops spatial semantic structure that mirrors physical geometry -- direction accuracy 0.677+-0.029 versus 0.547 for a randomly initialized encoder, and position RSA 0.192+-0.047 versus 0.029 for random encoders (6.6x improvement), showing that training induces genuine structural organization beyond CNN inductive bias. Across 20 temporal checkpoints, prediction performance and semantic alignment co-improve (Spearman r=-0.61, p=0.004), consistent with the shared-driver account. We confirm this through a double knockout: standard KL regularization (beta=0.1) forces the encoder away from geometric structure, and both prediction performance and semantic alignment collapse simultaneously to near-chance by step 50,000 -- exactly as the shared-driver account predicts. Reducing beta to 0.001 restores geometric access and recovers both capabilities together. These findings establish physical world geometry as the organizing principle of world model representations, with direct implications for the design of semantically grounded embodied agents.",
+      "highlights": {
+        "contribution": "在无语言监督下，验证物理几何是世界模型潜表示的组织原则。",
+        "innovation": "用「双重击倒」实验（KL 调高）证明几何结构和语义对齐是共驱动现象，而非 CNN 归纳偏置。",
+        "method": "VAE 世界模型在随机具身探索数据上训练；在 20 个 checkpoint 上跟踪预测性能与语义对齐；变更 β 做敏感性分析。",
+        "results": "方向准确率 0.677±0.029 vs 随机 0.547；位置 RSA 0.192 vs 0.029（6.6×）；预测与语义相关 Spearman r=-0.61, p=0.004。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T03:31:47Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 6.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.28865v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.28865v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23470",
+      "title": "Learning Individual Dynamics from Sparse Cross-Sectional Snapshots",
+      "authors": [
+        "Christian Lagemann",
+        "Kai Lagemann",
+        "Steven L. Brunton",
+        "Sach Mukherjee"
+      ],
+      "affiliations": [
+        "DZNE",
+        "University of Washington"
+      ],
+      "summary": "想从横截面快照（不是时间序列）里恢复个体的连续轨迹。CADENCE 用 score-based 编码器消除 diffeomorphic 不可识别性，再用 Soft MoE 路由器把动力学锚到个体级静态上下文。理论上给出了单时点轨迹推断的可识别性保证，跨多个 benchmark 和真实生物数据上能匹配甚至超过用密集轨迹训出来的 SOTA。",
+      "original_abstract": "Predicting how a dynamical unit evolves over time - how an individual ages, an epidemic spreads, or a physical system degrades - typically requires dense longitudinal tracking. When only extremely sparse or entirely cross-sectional data is available, inferring individualized, continuous-time trajectories is fundamentally ill-posed. Existing methods force a strict compromise: sequence models (e.g. latent ODEs) require dense longitudinal data, while cross-sectional methods (e.g. optimal transport, flow matching-based) map aggregate populations, losing individual dynamics. In this paper, we demonstrate that this dichotomy can be broken. We introduce CADENCE, a principled probabilistic framework that recovers continuous individual trajectories from isolated snapshots by anchoring latent dynamics to static, individual-level contexts. We provide novel identifiability guarantees for single-timepoint trajectory inference. By combining a score-based spatial encoder (bijective Probability Flow ODE) to eliminate diffeomorphic ambiguities with a Soft Mixture-of-Experts (SMoE) router, we show that individual dynamical parameters and routing function are jointly identifiable. Across a suite of benchmarks spanning physical systems to real-world biological data, CADENCE, trained strictly on extremely sparse snapshots with context structure, matches or exceeds the performance of state-of-the-art sequential models trained on dense, full-trajectory data.",
+      "highlights": {
+        "contribution": "在极稀疏甚至纯横截面数据下，从单时点快照恢复个体连续动力学轨迹。",
+        "innovation": "score-based bijective Probability Flow ODE 编码器 + SMoE 路由，给出新的单时点可识别性证明。",
+        "method": "对单时点快照学习潜空间动力学；用静态上下文锚定个体；Probability Flow ODE 编码 + SMoE 动力学路由联合训练。",
+        "results": "在物理系统到真实生物数据多个 benchmark 上，仅用稀疏快照训练即可匹配或超过用密集轨迹训的 SOTA 序列模型。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T10:29:47Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CE"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.5,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23470v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23470v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.00085",
+      "title": "Balancing Accuracy and Efficiency: Adaptive Dynamics Orchestration for Model Predictive Control",
+      "authors": [
+        "Francesco Cancelliere",
+        "Aniket Datar",
+        "Giovanni Muscato",
+        "Xuesu Xiao"
+      ],
+      "affiliations": [
+        "George Mason University"
+      ],
+      "summary": "MPC 跑高保真模型准但慢，低保真快但有时会让车翻。ADO 维护一个动力学模型库，根据 terrain-conditioned 性能估计在线挑模型，估计用 counterfactual rollout 的残差不断 refine。野外机器人实验上接近最高保真模型的精度，却没付出它的算力代价。",
+      "original_abstract": "Model Predictive Control (MPC) for autonomous navigation faces a fundamental trade-off between model accuracy and real-time efficiency. High-fidelity dynamics models can accurately predict complex vehicle-terrain interactions during trajectory rollouts, but incur significant computational cost, increasing inference latency and reducing control frequency. Conversely, lightweight models enable fast updates and dense sampling, yet may produce erroneous predictions under safety-critical conditions, potentially leading to catastrophic failures such as vehicle rollover. To address this trade-off, we propose Adaptive Dynamics Orchestration (ADO), a framework that dynamically selects the most appropriate dynamics model for the current navigation context. ADO maintains a library of models spanning diverse accuracy-efficiency profiles and continuously refines terrain-conditioned performance estimates using residual errors from online counterfactual rollouts, where executed control actions are replayed across the model library to assess predictive discrepancy. These estimates guide model selection in real time, balancing computational efficiency and predictive accuracy. Real-world experiments on an off-road ground robot demonstrate that ADO significantly reduces modeling error compared to a fixed low-latency baseline, while approaching the accuracy of the highest-fidelity model without incurring its computational cost, resulting in more reliable and effective navigation in challenging terrain.",
+      "highlights": {
+        "contribution": "动态选择动力学模型的 MPC 框架 ADO，平衡精度和实时性。",
+        "innovation": "用 counterfactual rollouts 在线估计每个模型在当前地形下的预测误差，地形条件化选择。",
+        "method": "维护多保真动力学模型库；执行后将动作 replay 到每个模型估计残差；以此实时挑模型供 MPC 滚动用。",
+        "results": "野外地面机器人实验：建模误差显著低于固定低延迟基线，接近最高保真模型精度，且不付高算力代价。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T19:05:25Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "dynamics model"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.00085v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.00085v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23510",
+      "title": "Learning partially observed systems with neural Hamiltonian ordinary differential equations",
+      "authors": [
+        "Sunniva Meltzer",
+        "Sølve Eidnes",
+        "Alexander Johannes Stasik"
+      ],
+      "affiliations": [
+        "SINTEF"
+      ],
+      "summary": "处理只能看到部分状态变量的动力系统。NHODE 把 Hamiltonian NN 和 neural ODE 拼起来：能量守恒结构来自前者，灵活训练（只在观测变量上算 loss）来自后者，还加了对称感知的坐标变换和可分能量公式。在 spring 系统到三体问题上比纯数据驱动稳得多。",
+      "original_abstract": "When learning dynamical systems from data, embedding physical structure can constrain the solution space and improve generalization, but many physics-informed models assume access to the full system state. This limits their use in partially observed settings, where some state variables are completely unobserved and must be inferred without direct supervision. Here, we present neural Hamiltonian ordinary differential equations (NHODE), a framework that combines Hamiltonian neural networks (HNNs) with neural ordinary differential equations (neural ODEs) to learn partially observed dynamical systems from data. The Hamiltonian structure enforces energy conservation by construction, while the neural ODE framework enables a flexible training procedure that allows the loss to be defined only on observed variables. We also incorporate additional physical constraints through symmetry-aware coordinate transformations and separable energy formulations. The framework is evaluated on systems of increasing complexity, from linear and nonlinear mass-spring systems to the chaotic three-body problem. Across all examples, increasing the amount of embedded physical structure improves the accuracy and long-horizon stability of the predictions. Even in the most challenging regimes, the NHODE framework captures both observed and latent dynamics, whereas purely data-driven baselines become unstable.",
+      "highlights": {
+        "contribution": "在部分观测设置下保留 Hamiltonian 结构的神经动力学框架 NHODE。",
+        "innovation": "把 HNN 的能量守恒和 neural ODE 的部分观测训练能力结合，并叠加对称感知坐标变换。",
+        "method": "用 HNN 表达 Hamiltonian 动力学，neural ODE 解算并只在观测变量上计算损失；加入分离能量结构和对称变换。",
+        "results": "在线性/非线性 mass-spring 到三体问题上，长时序稳定性显著优于纯数据驱动基线，能恢复观测和潜在动力学。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T11:18:39Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 7.0,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23510v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23510v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23892",
+      "title": "Good Token Hunting: A Hitchhiker's Guide to Token Selection for Visual Geometry Transformers",
+      "authors": [
+        "Shuhong Zheng",
+        "Michael Oechsle",
+        "Erik Sandström",
+        "Marie-Julie Rakotosaona",
+        "Federico Tombari",
+        "Igor Gilitschenski"
+      ],
+      "affiliations": [
+        "Google",
+        "Toronto"
+      ],
+      "summary": "Visual geometry transformer 全局注意力随序列长度平方增长。这篇提出两阶段 token 选择：先 inter-frame 用多样性策略选保留的帧，再 intra-frame 用 attention entropy 引导逐层稀疏化丢冗余 token。500 张图的场景上加速超 85%，性能保持甚至变好。",
+      "original_abstract": "Visual geometry transformers have become powerful architectures for multi-view 3D reconstruction, enabling joint prediction of multiple 3D attributes in a feed-forward manner. However, their computational cost grows quadratically with the input sequence length due to the global attention layers inside these models. This limits both their scalability and efficiency. In this work, we address this challenge with a simple yet general strategy: restricting the number of key/value tokens that each query interacts with during global attention. To achieve effective token selection, we introduce a two-stage framework. First, an inter-frame selection step operates at the frame level to identify frames that should be preserved. Second, an intra-frame selection step further discards more redundant tokens within the selected frames. Our analysis highlights the advantage of a diversity-based strategy for inter-frame selection, which ensures broad coverage of the scene. For intra-frame selection, we show that layer-aware sparsification is necessary, with the selection process guided by the entropy of the global attention pattern. Our approach offers a superior speed-accuracy trade-off compared to existing solutions. Extensive experiments show that it accelerates visual geometry transformers by over 85% for scenes with 500 images while maintaining, or even improving, baseline performance, which hints that how our token selection strategy can play a crucial role in future applications of visual geometry transformers. Our project website is available at https://zsh2000.github.io/good-token-hunting.github.io.",
+      "highlights": {
+        "contribution": "通用的 token 选择策略大幅加速 visual geometry transformer 推理。",
+        "innovation": "inter-frame 多样性帧选择 + intra-frame layer-aware、attention-entropy 引导的 token 稀疏化。",
+        "method": "两阶段：先在帧级用多样性策略保留代表帧；再在帧内根据 global attention pattern 的 entropy 逐层丢冗余 key/value token。",
+        "results": "500 张图的场景上加速 >85%，性能持平甚至提升；速度-精度 Pareto 优于已有方法。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T17:55:13Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.GR",
+        "cs.LG",
+        "cs.RO"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "visual geometry"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.0,
+        "popularity": 7.5,
+        "quality": 7.5,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23892v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23892v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.24111",
+      "title": "MASt3R-Nav: WayPixel Navigation in Relative 3D Maps",
+      "authors": [
+        "Vansh Garg",
+        "Rohit Jayanti",
+        "Krish Pandya",
+        "Sarthak Chittawar",
+        "Siddharth Tourani",
+        "Muhammad Haris Khan",
+        "Sourav Garg",
+        "Madhava Krishna"
+      ],
+      "affiliations": [
+        "IIIT Hyderabad",
+        "MBZUAI"
+      ],
+      "summary": "MASt3R-Nav 用一种「像素相对连通」的地图：不要求全局几何一致，但每张图对之间的像素对应是几何准确的。然后在像素级图上做全局路径规划，得到 WayPixel Costmap 喂给控制器预测轨迹 rollout。仿真四类导航任务都比 image/object 级条件更准，真机也跑了。",
+      "original_abstract": "Visual navigation ability is strongly tied to its underlying representation of the world. Unlike classical 3D maps that require globally-consistent geometry, image- or object-relative topological graphs almost entirely do away with geometric understanding. But, this comes at the cost of navigation capability, often limiting it to merely teach-and-repeat. In this work, we propose a novel map representation in the form of pixel-relative connectivity, which is geometrically accurate but does not require global geometric consistency. Inspired by recent progress in 3D grounded image matching, we construct a map from an image sequence through inter-image connectivity based on pixel correspondences in the relative 3D coordinate systems of individual image pairs. We then use this pixel-level graph to perform global path planning by approximating and sparsifying intra-image pixel connectivity. Through this, we derive a ''WayPixel Costmap'' representation and train a controller conditioned on it to predict a trajectory rollout. We show that this dense pixel-level costmap based on relative geometry is a more accurate conditioning variable for control prediction than its image- and object-level counterparts. This enables a highly capable navigation system, as validated on four types of navigation tasks in the simulator and through real world demonstrations.",
+      "highlights": {
+        "contribution": "提出像素相对连通的新型地图表示，几何精确但无需全局一致。",
+        "innovation": "用 MASt3R 风格的相对 3D 匹配建图像素级图；据此得到 WayPixel Costmap 作为控制条件。",
+        "method": "从图像序列建立 inter-image 像素连通图 → 稀疏化得到 intra-image 像素连通做全局规划 → 用 WayPixel Costmap 条件化控制器预测 trajectory rollout。",
+        "results": "在仿真四类导航任务上均胜过 image-/object-level 条件方案；真实世界 demo 验证通过。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T18:18:07Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "mast3r"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.24111v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.24111v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23287",
+      "title": "LangFlash: Feed-forward 3D Language Gaussian Splatting from Sparse Unposed Images",
+      "authors": [
+        "Yilong Liu",
+        "Wanhua Li",
+        "Chen Zhu-Tian",
+        "Hanspeter Pfister"
+      ],
+      "affiliations": [
+        "Harvard"
+      ],
+      "summary": "LangFlash 一发前向就从稀疏无位姿的多视图重建 3D 场景，并且每个 Gaussian 都带语言对齐的语义特征。靠 global semantic dictionary + per-primitive 局部权重做稀疏语义编码降低复杂度。还在 RealEstate10k 上加了 dense 语义监督。",
+      "original_abstract": "We present LangFlash, a feed-forward framework for 3D Language Gaussian Splatting that reconstructs 3D scenes parameterized by Gaussian primitives enriched with language-aligned semantic features from sparse unposed multi-view images. Unlike optimization-based 3D methods, LangFlash directly predicts the geometry and semantics in a single forward pass, enabling low-latency 3D reconstruction and language-consistent scene understanding. To support large-scale training, we enriched the RealEstate10k dataset with coherent and dense semantic information for 3D semantic supervision. Furthermore, we propose a sparse semantic encoding scheme that combines a global semantic dictionary with locally varying per-primitive weights, preserving high-level linguistic information, while reducing representation complexity. Experimental results show that LangFlash achieves superior novel view synthesis and semantic consistency compared with previous methods. This study establishes a new paradigm for pose-free, language-grounded 3D scene reconstruction, advancing generalizable 3D vision and multimodal scene understanding. Demo is available at https://liylo.github.io/langflash.github.io/.",
+      "highlights": {
+        "contribution": "feed-forward 框架同时输出 Gaussian 几何和语言对齐语义，支持稀疏无位姿输入。",
+        "innovation": "全局语义字典 + 局部 per-primitive 权重的稀疏语义编码方案，兼顾语义保真和表示紧凑。",
+        "method": "Gaussian primitive 同时携带几何和语义特征；用增强后的 RealEstate10k 训练；前向一次出几何和语义。",
+        "results": "新视图合成和语义一致性优于已有方法；建立 pose-free 语言接地 3D 重建的新范式。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T06:59:00Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "feed-forward 3d",
+        "novel view synthesis",
+        "gaussian splatting",
+        "3d scene reconstruction"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 7.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23287v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23287v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23888",
+      "title": "GenRecon: Bridging Generative Priors for Multi-View 3D Scene Reconstruction",
+      "authors": [
+        "Katharina Schmid",
+        "Nicolas von Lützow",
+        "Jozef Hladký",
+        "Angela Dai",
+        "Matthias Nießner"
+      ],
+      "affiliations": [
+        "TUM"
+      ],
+      "summary": "把多视图场景重建当成条件 3D 生成，每块 chunk 独立生成再拼成大场景。借用 Trellis.2 作物体级生成先验，并设计了与 view 顺序无关、空间锚定的 projection-based 条件机制，把多视图特征 lift 到生成模型的 3D 表示。最终拿到可编辑 PBR mesh，比 SOTA 重建强 16%。",
+      "original_abstract": "We introduce a new approach to high-fidelity 3D scene reconstruction from multi-view RGB images that tightly couples reconstruction with a strong generative 3D prior. We cast scene reconstruction as conditional 3D generation over a set of spatially-localized, overlapping chunks that together tile the scene, scaling generation to large scene extents. Crucially, we inherit the fidelity and completeness of state-of-the-art generative shape models -- we use Trellis.2 as an example -- which we generalize to the scene level. To this end, we propose a projection-based conditioning mechanism that lifts posed multi-view image features into a coherent 3D representation aligned with the generative model, independent of view ordering and spatially anchored to the scene, yielding high-fidelity, multi-view consistent generated geometry. This enables lifting the strong object-level prior of Trellis.2 to multi-view, scene-scale generation, producing faithful, editable PBR mesh reconstructions of indoor environments. As a result, we obtain high-fidelity results that outperform cutting-edge reconstruction methods by 16%.",
+      "highlights": {
+        "contribution": "把物体级生成先验 Trellis.2 提升到场景级多视图重建。",
+        "innovation": "projection-based 条件机制让 view 顺序无关且空间锚定，使 chunk-wise 生成在拼接时仍多视图一致。",
+        "method": "把场景切成 spatially overlapping chunks，每块视为条件 3D 生成；多视图特征投影到与生成器对齐的 3D 表示；逐块生成再拼接成 PBR mesh。",
+        "results": "室内场景高保真可编辑 PBR mesh 重建，相比 SOTA 重建方法提升 16%。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T17:49:59Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "3d scene reconstruction"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23888v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23888v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23672",
+      "title": "RiGS: Rigid-aware 4D Gaussian Splatting from a Single Monocular Video",
+      "authors": [
+        "Chenyu Wu",
+        "Wanhua Li",
+        "Zhu-Tian Chen",
+        "Hanspeter Pfister"
+      ],
+      "affiliations": [
+        "Harvard"
+      ],
+      "summary": "单目视频重建 4D 场景时长时平滑变换和短时复杂形变都得抓。RiGS 引入三类 Gaussian：静态、刚性、瞬态，并用 object-wise dynamic mask 聚合长程时空运动来划分动静区。刚性 Gaussian 还能根据时长转化成瞬态 Gaussian，scene flow 提供 dense 3D 监督。在新视图合成上拿 SOTA。",
+      "original_abstract": "Reconstructing dynamic 3D scenes from monocular videos is a fundamental yet highly challenging task, as real-world motions often involve both long-term smooth transformations and short-term complex deformations. Existing methods either struggle to maintain temporal consistency or fail to capture high-frequency dynamics due to limited motion modeling capacity. In this work, we present Rigid-aware 4D Gaussian Splatting (RiGS), which simultaneously captures motions across multiple temporal scales. Specifically, RiGS introduces three types of Gaussian primitives: static, rigid, and transient, which represent static backgrounds, long-term low-frequency motions, and short-term high-frequency dynamics, respectively. An object-wise dynamic mask is proposed to aggregate long-range spatiotemporal motion information and guide the decomposition of static and dynamic regions. To jointly model motion across scales, rigid Gaussians are allowed to transition into transient Gaussians based on their temporal duration, and both are optimized under scene flow guidance, providing dense 3D motion supervision. Extensive experiments demonstrate that RiGS achieves state-of-the-art performance on novel view synthesis benchmarks. Code is available at \\hyperlink{https://github.com/ladvu/RiGS}{https://github.com/ladvu/RiGS}.",
+      "highlights": {
+        "contribution": "从单目视频出发的 Rigid-aware 4D Gaussian splatting 框架。",
+        "innovation": "用 static/rigid/transient 三类 Gaussian 同时建模多时间尺度运动，并允许刚性向瞬态转化。",
+        "method": "object-wise dynamic mask 聚合长程时空运动指导动静分解；rigid/transient 在 scene flow 监督下联合优化。",
+        "results": "novel view synthesis benchmark 上 SOTA，代码开源。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T14:20:39Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "novel view synthesis",
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23672v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23672v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23602",
+      "title": "GlowGS: Generative Semantic Feature Learning for 3D Gaussian Splatting in Nighttime Glow Scenes",
+      "authors": [
+        "Beibei Lin",
+        "Xiao Cao",
+        "Jingyuan Guo",
+        "Robby T. Tan"
+      ],
+      "affiliations": [
+        "NUS"
+      ],
+      "summary": "夜景里 glow 区域没纹理没边缘，3DGS 重建就崩。GlowGS 用 diffusion 模型生成新视图，再用 VFM 评估质量挑高质量样本，从这些样本里抽稳健语义特征建一个 feature bank。渲染时把当前 GS novel view 的语义和 bank 里最近邻拉近，作为隐式结构约束。",
+      "original_abstract": "Existing 3DGS methods effectively render high-quality novel views in clear-day scenes. However, they struggle with night scenes, particularly in glow regions, due to the lack of structural features such as textures and edges, which are key cues for splatting-based reconstruction. To address this problem, we leverage a diffusion model and a Vision Foundation Model (VFM) to compensate for missing structural cues. Our method consists of two key novel ideas: semantic feature generation and novel-view semantic learning. First, semantic feature generation produces high-quality semantic features as implicit structural cues for novel views. Specifically, a diffusion model synthesizes novel views with unknown camera poses from training views, while a VFM evaluates their quality. Once high-quality novel views are identified, the VFM extracts robust features to construct the semantic feature bank. Second, novel-view semantic learning enables 3DGS to optimize rendered novel views without requiring ground truth. It achieves this by extracting semantic features from a rendered novel view, searching the feature bank for the most similar features, and minimizing their distance. This process enforces implicit structural constraints, ensuring semantically coherent, artifact-free rendered views. Extensive experiments demonstrate the effectiveness of our GlowGS in generating semantically accurate 3D views, showing significant improvements over existing methods.",
+      "highlights": {
+        "contribution": "针对夜景 glow 区域的 3DGS 增强方法，靠 diffusion + VFM 补齐缺失结构线索。",
+        "innovation": "用 VFM 质量筛选 diffusion 生成的新视图，构建可检索的语义 feature bank 作为隐式结构正则。",
+        "method": "1) diffusion 合成未知位姿新视图，VFM 评质量并提取语义；2) 渲染 GS novel view 的语义检索 feature bank 最近邻最小化距离。",
+        "results": "在夜景 glow 数据集上语义准确度和渲染质量均显著优于已有 3DGS 方法。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T13:11:23Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23602v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23602v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.24114",
+      "title": "COSY: Compositional 3DGS Synthesis for Disentangled Human Head Editing",
+      "authors": [
+        "Florian Barthel",
+        "Shalini De Mello",
+        "Koki Nagano",
+        "Wieland Morgenstern",
+        "Anna Hilsmann",
+        "Peter Eisert"
+      ],
+      "affiliations": [
+        "Fraunhofer HHI",
+        "NVIDIA"
+      ],
+      "summary": "想编辑 3DGS 生成的人头特定语义属性（发色、眼镜），原来直接改 latent 容易牵连身份外观。COSY 让 hair/skin/glasses/torso 各自由独立 generator 生成，只通过少量 context token 共享形状和光照信息。不用 mask 不用几何先验也能解耦。",
+      "original_abstract": "Recent 3D Gaussian Splatting (3DGS) GANs for human heads synthesize and render photorealistic 3D models in real-time and offer a vast variety in identity and appearance. However, controlling specific semantic attributes such as hair color or glasses remains challenging, as edits in the entangled latent space often induce unintended changes in identity or appearance. Although there are several methods that aim to disentangle the latent space post training by estimating directions that only modify certain features, these methods cannot guarantee complete disentanglement and often require pre-trained classifiers. In our approach, we propose a new generator architecture that synthesizes components, such as hair, skin, glasses, and torso, completely independently. This allows for changing the latent vector for one region while keeping the remaining parts fixed. Further, we achieve this separation using only sparse information such as the hair or skin color, eliminating the requirement of segmentation masks or geometric priors, often seen in prior work. To ensure matching shape and lighting conditions during editing, we allow minimal shared information via context tokens between the independent generators. These tokens even allow us to control the shape and light, without any prior annotation. Compared to existing works on GAN-based generation and editing, our method shows better disentanglement, more precise editing control, and competitive visual quality.",
+      "highlights": {
+        "contribution": "组合式 3DGS 头部生成器，原生支持区域级语义解耦编辑。",
+        "innovation": "完全独立的 per-region generator + 仅共享形状/光照的 context token，避免后训练 disentanglement 估计的不完全性。",
+        "method": "为头发、皮肤、眼镜、躯干分别训独立 3DGS generator；用稀疏属性（如发色/肤色）训练；context token 在生成器间最少量共享形状和光照。",
+        "results": "比 GAN 编辑基线解耦更彻底、编辑控制更精准，视觉质量有竞争力。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T18:22:04Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.24114v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.24114v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23883",
+      "title": "PGT: Procedurally Generated Tasks for improving visual grounding in MLLMs",
+      "authors": [
+        "Rim Assouel",
+        "Amir Bar",
+        "Michal Drozdzal",
+        "Adriana Romero-Soriano"
+      ],
+      "affiliations": [
+        "Meta FAIR",
+        "Mila"
+      ],
+      "summary": "MLLM 细粒度理解差。PGT 在图像上叠加无歧义的几何 primitives 当作额外稠密监督，把视觉接地能力从语义先验里解耦出来，顺带还能用来定位感知失败的来源。LLaVA-v1.5-Instruct 加 PGT 数据微调，在 What'sUp 上 +20%、CV-Bench-2D 上 +13.3%。",
+      "original_abstract": "Despite remarkable progress in Multimodal Large Language Models (MLLMs), these models still struggle with fine-grained understanding tasks. In this work, we propose Procedurally Generated Tasks (PGT), a simple data-driven framework that serves a dual purpose: inducing fine-grained visual understanding and acting as a low-cost diagnostic tool to identify the source of perception failures. By overlaying unambiguous geometric primitives on images, PGT generate additional dense supervision that disentangles visual grounding capability from semantic priors. Extensive experiments on relational, quantitative, and 3D/depth understanding benchmarks show that PGT yields remarkable gains across diverse architectures. Instruction tuning MLLMs on LLaVA-v1.5-Instruct augmented with PGT data results in improvements of up to +20% on the What'sUp benchmark and +13.3% on CV-Bench-2D, while maintaining general perception capabilities. Moreover, finetuning state-of-the-art MLLMs on PGT data leads to boosts of up to +5.5% on What'sUp and +8.3% on CV-Bench-2D. These findings demonstrate that PGT effectively address the bottleneck of fine-grained perception, revealing that many spatial reasoning deficits stem from inadequate supervision signals rather than inherent architectural or resolution limitations.",
+      "highlights": {
+        "contribution": "提出 Procedurally Generated Tasks，用程序生成的几何 primitive 监督显著提升 MLLM 细粒度视觉接地。",
+        "innovation": "把视觉接地从语义先验解耦的程序化数据增强 + 同时可作诊断工具定位感知失败来源。",
+        "method": "在图像上叠加几何 primitive 作为 dense 监督；用 LLaVA-v1.5-Instruct 等做 instruction tuning；在多种关系/数量/3D/depth benchmark 评估。",
+        "results": "LLaVA-v1.5-Instruct 上 What'sUp +20%、CV-Bench-2D +13.3%；SOTA MLLM 也能 +5.5%/+8.3%，且不掉一般感知能力。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T17:45:01Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "multimodal large language model",
+        "mllm",
+        "spatial reasoning"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23883v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23883v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23271",
+      "title": "EvalVerse: Pipeline-Aware and Expert-Calibrated Benchmarking for Professional Cinematic Video Generation",
+      "authors": [
+        "Songlin Yang",
+        "Haobin Zhong",
+        "Ruilin Zhang",
+        "Xiaotong Zhao",
+        "Shuai Li",
+        "Kai Zheng",
+        "Xuyi Yang",
+        "Zhe Wang",
+        "Zhenchen Tang",
+        "Yang Li",
+        "Bohai Gu",
+        "Zhengwei Peng",
+        "Yidan Huang",
+        "Mengzhou Luo",
+        "Yihang Bo",
+        "Dalu Feng",
+        "Yujia Zhang",
+        "Juntao Ma",
+        "Ruiqi Wang",
+        "Lvmin Zhang",
+        "Yuwei Guo",
+        "Frank Guan",
+        "Maneesh Agrawala",
+        "Hongbo Fu",
+        "Alan Zhao",
+        "Anyi Rao"
+      ],
+      "affiliations": [
+        "Stanford",
+        "HKUST(GZ)"
+      ],
+      "summary": "做电影级视频生成的评测。EvalVerse 不再问「对不对」（prompt-following），而是想问「好不好」（电影质量/演技/美学）。按 pre/production/post 拆分类、收专家标注、用 expert-calibrated finetuning 教 VLM 做显式 CoT 评分。还涵盖多镜头剪辑和音画整合。",
+      "original_abstract": "The rapid evolution of generative video foundation models has propelled the field toward professional-grade cinematic synthesis. To achieve such demanding quality, the community transitions towards Reinforcement Learning (RL) and agentic workflows. However, reliable evaluation has emerged as a critical bottleneck. Existing benchmarks predominantly evaluate ''whether it is right'' (basic prompt-following) while fundamentally neglecting ''whether it is good'' (cinematic quality, acting, and aesthetics). Furthermore, current automated metrics lack the domain-specific rigor required to provide trustworthy signals, creating a severe credibility gap between human aesthetic perception and machine scoring. To bridge this gap, we introduce EvalVerse, a comprehensive, pipeline-aware, and expert-calibrated evaluation framework. We treat video generation assessment not merely as an engineering task, but as a core scientific problem: the systematic digitization of subjective cinematic expertise. First, we organize domain knowledge into an evaluation taxonomy aligned with the professional filmmaking workflow (pre-production, production, and post-production). Second, we distill human expert judgments into a curated dataset with large-scale human annotations. Third, we inject this knowledge into Vision-Language Models (VLMs) through an expert-calibrated fine-tuning strategy, enabling the VLM to perform explicit Chain-of-Thought reasoning. Compared to previous works, EvalVerse not only retains compatibility with foundational ''rightness'' metrics, but also significantly expands the criteria to ''goodness'' and broaden the task coverage to complex multi-shot sequencing and audio-visual integration. Consequently, by providing granular diagnostic signals, EvalVerse transcends a static leaderboard and establishes a fundamental infrastructure for future work, such as reward models and evaluator agent.",
+      "highlights": {
+        "contribution": "面向专业电影级视频生成的 pipeline-aware、专家校准评测框架 EvalVerse。",
+        "innovation": "把电影专业知识系统数字化：评测分类法对齐影片工作流，用专家校准的 CoT VLM 替代传统打分。",
+        "method": "1) 按 pre/production/post 构造评测分类法；2) 收集大规模专家标注；3) 用 expert-calibrated finetuning 训 VLM 做显式 CoT 评分。",
+        "results": "在保留兼容传统「对不对」指标的同时显著扩展「好不好」评估，覆盖复杂多镜头剪辑和音画整合。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T06:22:21Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vlm",
+        "audio-visual"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 7.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23271v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23271v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23165",
+      "title": "Autonomous Frontier-Based Exploration with VLM Guidance",
+      "authors": [
+        "Aarush Aitha",
+        "Avideh Zakhor"
+      ],
+      "affiliations": [
+        "UC Berkeley"
+      ],
+      "summary": "把 VLM 拿来做自主探索的高层决策。机器人在 frontier 决策点把当前地图 + 各个 frontier 的图像组成多模态 prompt 喂给 VLM，让它替换掉传统的几何启发式来挑下一个前沿。在 6 个室内仿真场景里 map coverage 比已有方法提升最多 24%，免训练、可迁移。",
+      "original_abstract": "Autonomous robotic exploration of unknown and hazardous environments, a long-standing challenge, can be significantly improved by leveraging the advanced reasoning of Vision-Language Models (VLMs). We introduce a novel exploration pipeline where a VLM performs high-level strategic decision-making, guiding a conventional low-level robotics control stack. At decision points, the robot generates a multimodal prompt with its current map and visual imagery of potential paths, or frontiers. The VLM analyzes this prompt to select the most promising frontier, replacing simple geometric heuristics with contextual spatial reasoning. This approach, validated in simulation across six indoor environments, improves map coverage by up to 24\\% over existing methods. Our pipeline is lightweight, training-free, and easily transferable to any robot with standard sensors and an internet connection.",
+      "highlights": {
+        "contribution": "VLM 引导的 frontier-based 自主探索 pipeline。",
+        "innovation": "把 frontier 选择从几何启发式换成 VLM 的上下文空间推理，无需训练。",
+        "method": "在决策点合成 map + 每个 frontier 的图像作为多模态 prompt 给 VLM；VLM 输出选择，下层走经典控制栈。",
+        "results": "6 个室内仿真场景平均 map coverage 提升最多 24%；轻量、训练-free。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T02:33:47Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vlm",
+        "spatial reasoning"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23165v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23165v1",
+      "venue": null
+    }
+  ],
+  "total": 25
+}

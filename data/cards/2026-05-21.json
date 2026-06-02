@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2605.21854",
+    "summary": "VLA 后训练里 DPO 几乎只在自回归模型上玩过,这篇把它扩到 pi-0.5 这类 flow-matching 连续动作头上。作者搞了个 surrogate log-prob 估计器绕开 ODE 积分,顺便对比 LoRA/DoRA,LIBERO 上 DoRA 平均涨 10.4 个点。还附了一份推理时延剖析,说明 denoise 占 78.6% 时间,VLA-Cache 类前缀缓存加速天花板才 21%。",
+    "highlights": {
+      "contribution": "把 DPO 偏好对齐从离散 token VLA 扩到 flow-matching 连续动作 VLA,并系统比较了 PEFT 选择与推理加速上限。",
+      "innovation": "提出 surrogate flow-matching log-prob 估计器,让 DPO 可以直接作用在连续动作骨干上,避开概率流 ODE 积分。",
+      "method": "OpenVLA / pi-0.5 上跑 SFT+DPO,用 LoRA 与 DoRA 做 PEFT,LIBERO 4 套件 600 trials × 3 seeds 评估;额外训一个多视角时序投影头用于检索初始化。",
+      "results": "LIBERO 上 DoRA 比 OpenVLA SFT 平均 +10.4pp(Object +20、Long +11、Goal +8、Spatial +2.7);多视角投影头 k-NN recall@1 达 99.5%,代码权重全开。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22183",
+    "summary": "现在的 VLA 大多让语言+图像直接映射到动作,作者觉得这把指令理解、空间感知、电机控制全压一个目标上太挤了。AVP 让 VLM 先吐出「视觉原语 token」指明下一步目标,再用 flow-matching 动作专家去执行。真机抓取任务上比 pi-0.5 直接涨了 27.61%。",
+    "highlights": {
+      "contribution": "提出视觉原语作为 VLM 与动作专家之间的中间接口,把认知和控制解耦。",
+      "innovation": "用 visual-primitive token 取代直接动作监督,由末端运动学派生监督信号,实现端到端但模块化的 VLA。",
+      "method": "VLM 推断下一阶段目标并输出视觉原语 token,作为 flow-matching 动作专家的 condition;真机 pick-and-place 任务上端到端训练。",
+      "results": "真机通用抓放任务成功率比 pi-0.5 高 27.61%,在数据效率、空间组合泛化、跨物体迁移上全面胜出。"
+    },
+    "scores": {
+      "relevance": 9.2,
+      "recency": 7,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 8.0
+    },
+    "affiliations": ["清华大学"]
+  },
+  {
+    "arxiv_id": "2605.22896",
+    "summary": "VLA 在新环境跑得差,作者搞了套在线 agentic 训练框架。三招:自适应奖励合成把长任务拆成子目标做课程学习,语言引导的探索代替随机采样,经验记忆库存过去任务策略权重用于热启动。LIBERO 长程任务 +12.3,1-shot +28.5,跨任务从 0 涨到 31.2。",
+    "highlights": {
+      "contribution": "一个针对 VLA 的在线 agentic 自适应训练框架,显著降低对演示数据的依赖。",
+      "innovation": "把奖励合成、探索引导、经验回放三件套打包,让 VLA 能在线持续学习新任务而不是只做离线 SFT。",
+      "method": "Adaptive Reward Synthesis 拆任务,Critic 模型给语言式探索建议,Experience Memory 检索任务相似的策略权重做 warm-start;LIBERO 与 RoboTwin 2.0 双臂上评估。",
+      "results": "LIBERO 长程 +12.3%、1-shot +28.5%,跨任务迁移 0→31.2%,收敛比已有在线适配快 2.4 倍;RoboTwin 2.0 Hard 设置依旧领先。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 7,
+      "popularity": 6,
+      "quality": 7.0,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22671",
+    "summary": "BehaviorVLA 关注的是 VLA 在分布漂移下表现差的问题。作者觉得现有 action-centric 隐变量学到的行为太碎,所以用 causal Mamba 编一段长时段的行为表征,再用相位条件解码器把它落到动作。RoboTwin 2.0 58%、LIBERO 98%、CALVIN 4.36 三连 SOTA,sim2real 上一半数据就追平 OpenVLA-OFT。",
+    "highlights": {
+      "contribution": "提出一个端到端可学的时间连贯行为表征,显著提升 VLA 在分布漂移和长程任务下的鲁棒性。",
+      "innovation": "对称的 VBE+PBD 结构:Mamba 编码长程轨迹形成统一行为表征,相位条件解码动态对齐任务先验和实时进度。",
+      "method": "Visuomotor Behavior Encoder 用 causal Mamba 聚合长程轨迹;Phase-conditioned Behavior Decoder 根据执行进度解码动作;LIBERO/CALVIN/RoboTwin 2.0 + sim2real 真机评估。",
+      "results": "RoboTwin 2.0 58%、LIBERO 98%、CALVIN 4.36 全部 SOTA;sim2real 上用 50% 演示数据就追平 OpenVLA-OFT。"
+    },
+    "scores": {
+      "relevance": 9.3,
+      "recency": 7,
+      "popularity": 7,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": ["哈工大深圳", "中山大学"]
+  },
+  {
+    "arxiv_id": "2605.21976",
+    "summary": "触觉对操作有帮助大家都同意,但到底用哪种传感器一直没人系统比过。作者搭了一个任务驱动的基准 TacO,在视觉、声学、磁、电阻四类触觉模态、三类任务(抓取未知质量、重定向、插拔)上分别训策略对比。结论是触觉的有用程度强依赖模态、材料和任务,不是一刀切。",
+    "highlights": {
+      "contribution": "提供一个用策略性能为评测目标的触觉传感器选型基准与方法论。",
+      "innovation": "用下游操作策略表现而非传感器本身指标来评估触觉,而且四种模态全部纳入横向比较。",
+      "method": "为四种触觉模态各训独立策略,在三类操作任务上对比成功率,分析分辨率、剪切感知、表征、材料摩擦的影响;硬件、数据、代码全开。",
+      "results": "无统一赢家:模态-任务-材料三者交互决定触觉是否有用,提供选型经验性指南。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": ["UCSD", "CMU"]
+  },
+  {
+    "arxiv_id": "2605.22089",
+    "summary": "把 VLA 用到端到端自动驾驶上,作者觉得只用稀疏动作监督浪费了 VLM 的场景理解能力,而以像素重建做世界模型又太低层。LVDrive 引入未来场景预测,但完全在 latent space 里做,用预训练视觉骨干提供监督,而且未来场景和运动一并在统一 embedding 里单次前向预测。Bench2Drive 闭环成绩显著领先。",
+    "highlights": {
+      "contribution": "一个面向自动驾驶 VLA 的潜空间未来预测框架,跳过像素重建直接学语义级未来。",
+      "innovation": "把未来场景预测和运动预测放进同一 embedding,一次前向完成 future-aware reasoning,并用预训练 backbone 监督潜在未来。",
+      "method": "在 VLA 中加入未来场景预测分支,用预训练视觉骨干作为潜在监督;两阶段轨迹解码先粗后精,基于潜在未来表征再精化。",
+      "results": "Bench2Drive 闭环驾驶上显著优于纯动作监督方法和图像重建型世界模型方法。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 7,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": ["港科大", "阿里"]
+  },
+  {
+    "arxiv_id": "2605.22283",
+    "summary": "目前的 VLA 默认目标物在视野里,目标一旦不在画面里就抓瞎。SOMA 通过可动头相机扫描积累多视角观察形成持久的空间-语义记忆,VLA 推理时按指令检索相关记忆。五个真实出视野操作任务里成功率显著提升,而且行为变得更主动:不到处乱找,直接朝目标走。",
+    "highlights": {
+      "contribution": "给 VLA 装上面向出视野任务的空间记忆,显著扩展其工作范围。",
+      "innovation": "用可动头相机+多视角扫描构造持久空间-语义记忆,并设计动态精化和上下文检索,使其超越当前视锥。",
+      "method": "三模块:Spatial Memory Construction 聚合扫描,Dynamic Memory Refinement 维护全局一致性,Contextual Memory Retrieval 按指令激活相关记忆;真机+RoboCasa GR1+SimplerEnv 评估。",
+      "results": "五个真实出视野任务成功率显著提升,行为质变(快速定位、视点搜索更少、近似 one-shot 抓取);常规可见设置也涨。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 7,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 7.7
+    },
+    "affiliations": ["港科大广州"]
+  },
+  {
+    "arxiv_id": "2605.22322",
+    "summary": "一篇 position 短文,讨论怎么把 reasoning 能力注入到内窥镜手术 VLA copilot 里。论点是好的 reasoning 应该让 AI 整合多模态线索、解释手术意图、推断隐藏组织动态,从被动执行变成认知协作。没有实验,主要是观点和路线展望。",
+    "highlights": {
+      "contribution": "提出在外科 VLA copilot 中引入显式 reasoning 能力的研究蓝图。",
+      "innovation": "把 reasoning 视角带入内窥镜手术 VLA,从「反应式执行」过渡到「认知协作」。",
+      "method": "纯论述,讨论多模态信息整合、术中意图理解、隐藏组织动态推断在 VLA copilot 中的角色。",
+      "results": "无实验结果,主要为未来工作提供方向。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 5.0,
+      "recommendation": 5.5
+    },
+    "affiliations": ["港中文"]
+  },
+  {
+    "arxiv_id": "2605.22812",
+    "summary": "复杂场景多个相似物体光靠语言指令容易歧义,GesVLA 把「手势」作为并行指令模态丢进 VLA。手势特征编进 latent 直接参与高层推理和底层动作,同时双 VLM 架构紧耦合手势和动作策略。数据上用渲染手部叠到真实场景生成大规模手势-指向标注,真机验证目标定位精度明显提升。",
+    "highlights": {
+      "contribution": "提出在 VLA 里把手势作为与语言并列的指令模态,缓解多相似物体的空间歧义。",
+      "innovation": "手势特征同时参与高层推理和低层动作生成,而非仅作高层语义提示;并设计渲染管线大规模合成手势-场景数据。",
+      "method": "双 VLM 架构耦合手势和动作策略;手部模型渲染到真实图缩小 sim-to-real;两阶段训练分别学手势感知和动作预测。",
+      "results": "多个真实任务里手势显著提升目标定位准确率和人机协作效率,尤其在杂乱场景。"
+    },
+    "scores": {
+      "relevance": 8.2,
+      "recency": 7,
+      "popularity": 6,
+      "quality": 7.0,
+      "recommendation": 7.2
+    },
+    "affiliations": ["清华大学", "Megvii"]
+  },
+  {
+    "arxiv_id": "2605.23089",
+    "summary": "DreamerV3 学到的 latent 动态没显式约束平滑性,作者觉得这是个被忽视的归纳偏置。GPLD 给 posterior latent 加一个行向 Jacobian 惩罚鼓励局部平滑,数学上等价于离散嵌入 MDP 转移律的有限差分平滑。DMC 上整体样本效率提升,quadruped 等复杂任务收益更大。",
+    "highlights": {
+      "contribution": "为 DreamerV3 提出一个简洁的局部平滑正则,改善 latent 世界模型的样本效率。",
+      "innovation": "把 Jacobian 行向惩罚解释为离散 MDP 转移律有限差分平滑的连续 latent 类比,用 Hutchinson 估计高效计算。",
+      "method": "在 DreamerV3 上加 GPLD 正则项,Hutchinson 随机探针估算 Jacobian 行向范数;DMC proprioceptive 任务集上评估。",
+      "results": "DMC 上聚合样本效率提升,quadruped 等复杂运动任务尤为明显,代码已开源。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22164",
+    "summary": "latent world model 的规划经常用终态 latent 到目标 latent 的欧氏距离打分,但这隐含假设了 latent 距离和「可达性」权重一致。TRM 训一个小的成对终态打分头替换原成本,关键是「horizon-aware」监督。TwoRoom 上把 LeWM 的 7% 抬到 97%,PLDM 从 32.7% 抬到 84%。",
+    "highlights": {
+      "contribution": "提出 post-hoc 的轨迹可达度量替换/补强欧氏 latent 距离,显著修复 latent MPC 的终态排序。",
+      "innovation": "horizon-aware 监督:用广覆盖时间跨度训练成对距离头,匹配长程终态候选排序问题,而不动 encoder/dynamics。",
+      "method": "在 fixed latent world model 上加训一个 pairwise head,提供成对距离作为新成本;TwoRoom、PushT、PLDM baseline 上验证;并做 SCSA 排序审计。",
+      "results": "TwoRoom 上 LeWM 7%→97%,PLDM 32.7%→84%;短时距 TRM 仅 35%,验证 horizon 设计关键。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22446",
+    "summary": "VLA 和世界模型在长程具身任务里很强,但生成的动作偶尔出问题,要么执行翻车,要么让世界模型滚出错误未来。Pre-VLA 在动作真正执行前对候选动作 chunk 做安全置信度+critic 优势的双分支预测,并在算力预算内动态重采样。LIBERO 上把 RynnVLA-002 的平均成功率从 30.79 抬到 37.62。",
+    "highlights": {
+      "contribution": "一个面向 VLA 和世界模型 rollouts 的预防性运行时验证框架,执行前过滤掉低质量动作。",
+      "innovation": "多模态轻量双分支头同时预测安全置信度和 critic 优势,并用焦点分类+优势回归+软阈值校准抗类别失衡。",
+      "method": "多模态 backbone+modality-aware pooling+双分支头;Focal+advantage regression+soft-threshold 校准;部署时双模式预防式重采样调度。",
+      "results": "LIBERO 四套件平均成功率 RynnVLA-002 30.79%→37.62%,平均验证时延 183.9ms/chunk,执行步数下降。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 6.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22456",
+    "summary": "云端 LLM 司机太慢跟不上控制步,作者就让 LLM 提前选未来轨迹,把决策和实时控制解耦。SteinsGateDrive 让 LLM 生成三类「world line」(标称/交互反事实/危险压力),控制运行时只在安全契约成立时复用所选预测。10 seeds 高速场景里 GPT-5.4-mini 的有效时延从 1s 视野的 +3s 缩到 4s 视野的 -0.01s。",
+    "highlights": {
+      "contribution": "提出 latency-decoupled 的 LLM 规划-运行时架构,让大模型能在闭环驾驶里及时贡献语义判断。",
+      "innovation": "用「world line」角色生成三类典型未来,并把所选预测封装成带契约/失效/回退的 StrategicForecast 在运行时复用。",
+      "method": "LLM 离散时刻挑反事实未来,运行时按 atom-predicate 安全检查决定是否复用;高速公路场景 within-subject 10-seed 评估。",
+      "results": "GPT-5.4 mini 在 4s 视野把有效 lag 从 +3.07s 降到 -0.01s,在测量到的零碰撞边界内,安全主要靠运行时谓词检查。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 6.0,
+      "recommendation": 6.2
+    },
+    "affiliations": ["DFKI"]
+  },
+  {
+    "arxiv_id": "2605.23025",
+    "summary": "把世界模型概念扩展到时间序列,World Machine 用 transformer + latent state 让模型自适应不同长度的观测上下文,避免传统 transformer 上下文成本平方爆炸。在自建的 Toy1D 合成数据上验证可行,展示了普通 transformer 没有的能力。",
+    "highlights": {
+      "contribution": "提出面向时序数据的生成式世界模型架构,关键是 latent state 替代 quadratic attention 上下文。",
+      "innovation": "把「世界模型」范式直接搬到时间序列任务,并用 latent state 实现可变上下文长度的高效推理。",
+      "method": "transformer 主干带 latent state,可适配不同观测量;在自建 Toy1D 合成数据集上做能力验证和训练协议消融。",
+      "results": "Toy1D 上证明可行,展示传统 transformer 不具备的可变上下文适配能力。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 5.0,
+      "recommendation": 5.3
+    },
+    "affiliations": ["UNICAMP"]
+  },
+  {
+    "arxiv_id": "2605.21963",
+    "summary": "长程临床轨迹预测对慢病管理很关键,但现在的 EHR 模型大多是判别式,LLM 在反复干预下会漂。CMWM 是动作条件 latent 世界模型:joint embedding 状态编码、宽动作编码(支持结构化指令和自由文本)、递归潜在转移,六项损失里塞了三个生理形状先验。CKD 上 eGFR 预测比 GPT-5.5 baseline MAE 降 7.28%。",
+    "highlights": {
+      "contribution": "提出面向长程患者轨迹建模的动作条件 latent 世界模型框架,通用而非 CKD 专属。",
+      "innovation": "宽动作编码同时吃结构化干预指标和自由文本沟通,并用生理形状先验+闭环 rollout 训练匹配部署。",
+      "method": "joint-embedding 状态编码+宽动作编码+递归潜在转移;6 项损失含 next-obs、next-latent、SIGReg、斜率/连续/大跳惩罚;rollout-prefix 闭环训练。",
+      "results": "CKD 2232 患者队列 dynamic-50% rollout MAE 7.384、RMSE 10.256,比 GPT-5.5 提示基线 MAE -7.28%、RMSE -7.35%。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22138",
+    "summary": "目前 agent 都是反应式策略+CoT 让规划隐式涌现,token 用得多但准确率没保证。作者把决策拆成三系统:模拟推理 (II) 用世界模型预测未来,自调节 (III) 决定什么时候/多深规划,反应式 (I) 处理细粒度动作。SR²AM 把这俩塞进 CoT,30B 模型在多任务上能打 685B-1T 系统,token 少 25.8-95.3%。",
+    "highlights": {
+      "contribution": "一个三系统 agentic 推理框架,把「何时规划」显式学出来,在准确率不降的前提下大幅减 token。",
+      "innovation": "self-regulation(System III)作为可学 configurator 决定规划深度和频率,LLM 自身既是世界模型又是执行器。",
+      "method": "v0.1 从提示式多模块系统记录决策,v1.0 从已训 reasoning LLM 轨迹重建结构化 plan,先 SFT 后 RL;数学/科学/表格/Web 多任务评估。",
+      "results": "v0.1-8B 和 v1.0-30B 在 Pass@1 上与 120-355B 及 685B-1T 系统打平,token 比同档 agent 少 25.8-95.3%;RL 后规划平均视野 +22.8%,频率仅 +2.0%。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 7,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": ["CMU", "MBZUAI"]
+  },
+  {
+    "arxiv_id": "2605.22597",
+    "summary": "校准过的 isotropic 物理模型挺好,但真实物体往往有点各向异性和不均匀,这残差就成了 real-to-sim 最后一道坎。MoSA 把这部分残差用神经网拟合,但保留各向同性物理先验,在 microplane 约束下逐步分配应力,还监督形变场的时空导数。机器人操作上 sim-to-real 迁移更稳。",
+    "highlights": {
+      "contribution": "针对连续体真实-仿真差距,提出学习「残差各向异性应力算子」的物理引导框架。",
+      "innovation": "保留 isotropic 物理 backbone,只学残差各向异性+不均匀部分,并在 microplane 约束下做渐进式应力重分配。",
+      "method": "isotropic 模型作物理先验,神经网学残差应力算子;物理信息级联网络做 microplane 约束应力重分配;监督形变场时空导数;在机器人操作上验证 sim2real。",
+      "results": "动力学拟合精度、泛化、鲁棒性全面优于基线,机器人操作场景中 sim-to-real 迁移更可靠。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 6.4
+    },
+    "affiliations": ["港科大广州"]
+  },
+  {
+    "arxiv_id": "2605.24047",
+    "summary": "EMMA 想从原始视频/音频/图像时序联合反推系统所有可识别的物理参数,不需要分割掩码、可微渲染或专门传感器。用 LTC 网络学异构模态的潜在动态,加物理约束损失保持微分方程一致。100+ 场景含 5 标准基准、真实 rover 和 quadrotor 系统,显著超过单模态和方程发现基线。",
+    "highlights": {
+      "contribution": "一个物理引导的多模态参数辨识框架,可在统一连续时间模型里联合估出显式参数、隐式动态和校准不变量。",
+      "innovation": "用 Liquid Time-Constant 网络处理异构模态潜在动态,并通过统一特征管线无需分割/可微渲染就能对齐视频/声学/图表测量。",
+      "method": "LTC 学潜在动态+物理约束损失;视频/音频/图表三模态特征对齐;在 100+ 场景上跑多参数恢复。",
+      "results": "在 5 个标准动力学基准(75 Delfys 视频)、真实 rover/quadrotor 及生物/混沌仿真上显著优于单模态和方程发现基线。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": ["ASU"]
+  },
+  {
+    "arxiv_id": "2605.22190",
+    "summary": "现有 feed-forward 3DGS 要么搞动态要么搞 unposed 多视角,从来没有人一口气把动态+多视角+无位姿一起做。NoPo4D 在预训练几何骨干+4D Gaussian 基础上把高斯运动拆成图像平面位移和深度变化,2D 部分直接用 pseudo GT 光流监督。四个动态 benchmark 上稳超基线,可选后优化甚至打过逐场景优化方法。",
+    "highlights": {
+      "contribution": "首个同时处理动态内容、多视角输入和未知位姿的 feed-forward 4D 重建系统。",
+      "innovation": "速度分解:把 Gaussian 运动拆成图像平面位移+深度变化,只用 2D 光流监督就避开了对位姿和 3D 运动 GT 的依赖。",
+      "method": "预训练几何 backbone+4D Gaussian 框架;双向运动编码器做跨视角跨帧聚合;视依赖 opacity 缓解错位;速度分解+光流监督。",
+      "results": "四个多视角动态 benchmark 上稳超 feed-forward 基线,加可选后优化可超越逐场景方法,速度数量级更快。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 7,
+      "popularity": 7,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": ["ETH Zurich"]
+  },
+  {
+    "arxiv_id": "2605.22020",
+    "summary": "Feed-forward 3DGS 想追上逐场景优化的画质受限于 3D 标注稀缺。常见折衷是 predict-then-refine,但训练时只看零步渲染误差,没考虑预测是不是好的初始化。ForeSplat 用 MetaGrad,把短内循环的精化轨迹展开后用一阶梯度反传,等于优化-感知微调,推理零额外成本。",
+    "highlights": {
+      "contribution": "提出优化-感知训练框架,让 feed-forward 3DGS 输出专门为后续 refinement 服务的初始化。",
+      "innovation": "MetaGrad:用多锚点元梯度规则避开二阶可微分,通过展开短期 refinement 轨迹聚合一阶梯度作为代理监督。",
+      "method": "MetaGrad 在 AnySplat/Pi3X/edge 蒸馏版骨干上微调,展开短内循环采样锚点态再回传一阶梯度;不改推理。",
+      "results": "在多 backbone 上 refinement 收敛步数更少、最终质量更高,即使原方法完全收敛后也仍领先,推理零额外成本。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 7,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": ["ShanghaiTech"]
+  },
+  {
+    "arxiv_id": "2605.22069",
+    "summary": "稀疏视角下 3DGS 难是因为点云本身稀。TWINGS 用 thin plate spline 把深度反投的点和三角化的 3D 控制点做非刚体对齐,得到几何更准的初始化再喂给 3DGS。DTU/LLFF/Mip-NeRF360 上比已有方法整体更好。",
+    "highlights": {
+      "contribution": "针对稀疏视角 3DGS 提出一个 TPS warp-aligned 初始化方法,显著改善重建。",
+      "innovation": "把 thin plate spline 平滑形变模型引入 3DGS 初始化,通过最小化弯曲能拟合控制点对应。",
+      "method": "用 TPS 把估计深度反投点对齐到三角化 3D 控制点;在 control point 附近采样形成 3DGS 的几何初始化;DTU/LLFF/Mip-NeRF360 评测。",
+      "results": "三个稀疏视角基准上一致优于现有方法,结构细节和颜色保真度更好。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": ["Yonsei University"]
+  },
+  {
+    "arxiv_id": "2605.21935",
+    "summary": "人形机器人导航的难点是行走带来的感知抖动+场景动态。MIF 用置信度感知的语义 3DGS、差异触发的空间记忆更新、面向任务的几何重建做闭环。Unitree-G1 真机办公室里把非静态场景下的重定位成功率从 12% 拉到 94%,语义内存还瘦身 91.4%。",
+    "highlights": {
+      "contribution": "面向人形机器人的多模态交互场,统一处理步态扰动、动态变化和交互几何安全。",
+      "innovation": "三场协同(Appearance/Spatial/Geometry)+ discrepancy-triggered 局部更新,把步态导致的伪变化和真实变化分开。",
+      "method": "置信度感知语义 3DGS 抑制行走模糊;空间场维护拓扑记忆;几何场支撑 IPS;差异分数触发只更新局部不一致区域;Unitree-G1 真机部署。",
+      "results": "真实办公室动态场景中重定位 12%→94%,通过特征蒸馏把语义内存降 91.4%。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": ["北大"]
+  },
+  {
+    "arxiv_id": "2605.22147",
+    "summary": "遥感图像超分,扩散模型质量好但要几十到上千步,而且做连续尺度不方便。FlowGS 用 flow matching + shortcut consistency 学高频细节先验,降低生成复杂度;再用 2D 高斯 splatting 构连续特征场,支持任意位置查询。连续/固定尺度上都拿到有竞争力的感知质量,速度大幅提升。",
+    "highlights": {
+      "contribution": "面向遥感图任意尺度 SR 的生成式重建框架,兼顾质量和推理效率。",
+      "innovation": "把 flow matching 用 shortcut consistency 约束学高频细节先验,并用 2D Gaussian splatting 做连续特征场支持任意查询尺度。",
+      "method": "FM 建模高/低分辨率高频细节差,shortcut consistency 约束训练;2D 高斯 splatting 构连续特征场;在连续尺度和固定尺度 SR 上评测。",
+      "results": "在连续尺度和固定尺度 SR 上感知质量与已有方法竞争,推理效率显著提升。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 6.0,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22342",
+    "summary": "4D Gaussian Splatting 资产怎么打水印?常规隐写忽略运动学流形,会产生时间闪烁等非物理伪影。4D-GSW 提出「时空曲率」指标识别动态瞬间,自适应屏蔽水印注入避开关键运动流形,再用 HMM-MRF 联合能量最小化把水印相位在时空邻域同步,实验显示鲁棒且不伤渲染。",
+    "highlights": {
+      "contribution": "面向 4DGS 的运动学感知水印框架,保持时空一致性和高鲁棒性。",
+      "innovation": "用时空曲率定位动态瞬间并自适应屏蔽水印梯度,联合 HMM-MRF 同步水印相位,且各向异性梯度路由解耦水印与光度重建。",
+      "method": "STC 指标驱动梯度门控;HMM-MRF 联合能量最小化同步时序+空间;anisotropic gradient routing 解耦水印嵌入和重建;在多种攻击下验证。",
+      "results": "在多种攻击下保持水印鲁棒,同时维持高渲染质量和时空一致性。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 6.0,
+      "recommendation": 4.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22467",
+    "summary": "合成数据集对下游任务到底有没有用,目前没指标可以不训模型就预测。作者发现外观相似(FID/CLIP)和几何相似单看都不行,关键是它们非线性交互。SADGE 在 5 个 sim-to-real benchmark、15 变体、79k 图对上验证,最佳组合是 DINOv3 外观+MASt3R 几何 + 双线性融合,与下游表现的 Pearson 0.88 / Spearman 0.77。",
+    "highlights": {
+      "contribution": "提出一个无需训练下游模型就能预测合成数据集效用的相似性指标 SADGE。",
+      "innovation": "外观和几何相似性单一指标都不行,他们用约束双线性融合把 DINOv3 外观和 MASt3R 几何耦合起来。",
+      "method": "在 5 个公开 sim2real 基准 15 个数据集变体(79k 图对)上比较多种外观和几何相似性,按下游(检测/分割/位姿)迁移性能做相关分析;最终融合 DINOv3+MASt3R。",
+      "results": "Pearson r=0.88、Spearman ρ=0.77 与下游表现关联,超过纯几何或纯外观最强基线。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 5,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": ["KAUST"]
+  }
+]

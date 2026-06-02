@@ -1,0 +1,1118 @@
+{
+  "date": "2026-05-04",
+  "papers": [
+    {
+      "arxiv_id": "2605.02881",
+      "title": "MolmoAct2: Action Reasoning Models for Real-world Deployment",
+      "authors": [
+        "Haoquan Fang",
+        "Jiafei Duan",
+        "Donovan Clay",
+        "Sam Wang",
+        "Shuo Liu",
+        "Weikai Huang",
+        "Xiang Fan",
+        "Wei-Chuan Tsai",
+        "Shirui Chen",
+        "Yi Ru Wang",
+        "Shanli Xing",
+        "Jaemin Cho",
+        "Jae Sung Park",
+        "Ainaz Eftekhar",
+        "Peter Sushko",
+        "Karen Farley",
+        "Angad Wadhwa",
+        "Cole Harrison",
+        "Winson Han",
+        "Ying-Chun Lee",
+        "Eli VanderBilt",
+        "Rose Hendrix",
+        "Suveen Ellawela",
+        "Lucas Ngoo",
+        "Joyce Chai",
+        "Zhongzheng Ren",
+        "Ali Farhadi",
+        "Dieter Fox",
+        "Ranjay Krishna"
+      ],
+      "affiliations": [
+        "Allen Institute for AI",
+        "University of Washington",
+        "University of Michigan"
+      ],
+      "summary": "AI2 出的全开源 VLA 大版本升级。从骨干 MolmoER（3.3M 样本练具身推理）到 720 小时双臂遥操数据集，再到 OpenFAST tokenizer，最后给离散 token VLM 接了个 flow-matching 连续动作专家。还提出 MolmoThink 自适应深度推理：只对场景里变化区域重新预测深度 token，省延迟。在 7 个 sim/real benchmark 上压过 π0.5，具身推理压过 GPT-5 和 Gemini Robotics ER-1.5。",
+      "original_abstract": "Vision-Language-Action (VLA) models aim to provide a single generalist controller for robots, but today's systems fall short on the criteria that matter for real-world deployment. Frontier models are closed, open-weight alternatives are tied to expensive hardware, reasoning-augmented policies pay prohibitive latency for their grounding, and fine-tuned success rates remain below the threshold for dependable use. We present MolmoAct2, a fully open action reasoning model built for practical deployment, advancing its predecessor along five axes. We introduce MolmoER, a VLM backbone specialized for spatial and embodied reasoning, trained on a 3.3M-sample corpus with a specialize-then-rehearse recipe. We release three new datasets spanning low-to-medium cost platforms, including MolmoAct2-BimanualYAM, 720 hours of teleoperated bimanual trajectories that constitute the largest open bimanual dataset to date, together with quality-filtered Franka (DROID) and SO100/101 subsets. We provide OpenFAST, an open-weight, open-data action tokenizer trained on millions of trajectories across five embodiments. We redesign the architecture to graft a flow-matching continuous-action expert onto a discrete-token VLM via per-layer KV-cache conditioning. Finally, we propose MolmoThink, an adaptive-depth reasoning variant that re-predicts depth tokens only for scene regions that change between timesteps, retaining geometric grounding at a fraction of prior latency. In the most extensive empirical study of any open VLA to date, spanning 7 simulation and real-world benchmarks, MolmoAct2 outperforms strong baselines including Pi-05, while MolmoER surpasses GPT-5 and Gemini Robotics ER-1.5 across 13 embodied-reasoning benchmarks. We release model weights, training code, and complete training data. Project page: https://allenai.org/blog/molmoact2",
+      "highlights": {
+        "contribution": "把上一代 MolmoAct 沿五条轴全面升级成一个真正能落地的开源 VLA：模型、数据、tokenizer、架构、推理都换了一遍。",
+        "innovation": "1) flow-matching 连续动作专家通过逐层 KV-cache 嫁接到离散 VLM；2) MolmoThink 只对动区域重算 depth token，几何 grounding 几乎免费；3) 史上最大开源双臂遥操数据集。",
+        "method": "MolmoER backbone + specialize-then-rehearse 训练；离散 VLM 头 + 连续 flow-matching 动作专家；OpenFAST tokenizer 跨 5 embodiment；MolmoThink 自适应深度 token 重预测。",
+        "results": "7 个 sim/real 基准全面超 π0.5；13 个具身推理基准超 GPT-5 和 Gemini Robotics ER-1.5。全开源权重+数据+代码。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T17:51:21Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "pi-0"
+      ],
+      "scores": {
+        "relevance": 9.8,
+        "recency": 5.0,
+        "popularity": 9.0,
+        "quality": 9.0,
+        "recommendation": 9.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02881v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.02881v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02739",
+      "title": "Latent Bridge: Feature Delta Prediction for Efficient Dual-System Vision-Language-Action Model Inference",
+      "authors": [
+        "Yudong Liu",
+        "Yuan Li",
+        "Zijia Tang",
+        "Yuxi Zheng",
+        "Yueqian Lin",
+        "Qinsi Wang",
+        "Yi Li",
+        "Shuangjun Liu",
+        "Shuai Zhang",
+        "Taotao Jing",
+        "Dashan Gao",
+        "Ning Bi",
+        "Jingwei Sun",
+        "Yiran Chen",
+        "Hai Li"
+      ],
+      "affiliations": [
+        "Duke University"
+      ],
+      "summary": "双系统 VLA 模型每个控制步都得跑一遍 VLM backbone，又慢特征又冗余。作者训了个轻量级的 Latent Bridge 来预测相邻时刻 VLM 输出的 delta，让 action head 拿预测特征直接用，backbone 只需周期性触发。在 GR00T-N1.6 和 π0.5 两个完全不同架构的 VLA 上都接通了，LIBERO/RoboCasa/ALOHA 上保 95-100% 性能、VLM 调用减半到 3/4，整体加速 1.65-1.73x。",
+      "original_abstract": "Dual-system Vision-Language-Action (VLA) models achieve state-of-the-art robotic manipulation but are bottlenecked by the VLM backbone, which must   execute at every control step while producing temporally redundant features. We propose Latent Bridge, a lightweight model that predicts VLM output   deltas between timesteps, enabling the action head to operate on predicted outputs while the expensive VLM backbone is called only periodically. We   instantiate Latent Bridge on two architecturally distinct VLAs: GR00T-N1.6 (feature-space bridge) and π0.5 (KV-cache bridge), demonstrating that the   approach generalizes across VLA designs. Our task-agnostic DAgger training pipeline transfers across benchmarks without modification. Across four   LIBERO suites, 24 RoboCasa kitchen tasks, and the ALOHA sim transfer-cube task, Latent Bridge achieves 95-100% performance retention while reducing   VLM calls by 50-75%, yielding 1.65-1.73x net per-episode speedup.",
+      "highlights": {
+        "contribution": "用一个轻量预测器加速双系统 VLA 推理，几乎不掉点但 VLM 调用减 50-75%。",
+        "innovation": "不是改 backbone 本身，而是预测 backbone 输出的时序变化，做到与具体 VLA 架构解耦（特征空间或 KV-cache 两种形态都行）。",
+        "method": "训练一个小 delta predictor 接在 VLM 输出处，用 DAgger 做任务无关的轨迹蒸馏；推理时大部分步直接用预测值，间歇性调真 VLM 做校正。",
+        "results": "LIBERO 四套 + RoboCasa 24 厨房任务 + ALOHA transfer-cube，性能保 95-100%，端到端 1.65-1.73x 加速。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T15:37:55Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 5.0,
+        "popularity": 6.5,
+        "quality": 8.0,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02739v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02739v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02757",
+      "title": "Seeing Realism from Simulation: Efficient Video Transfer for Vision-Language-Action Data Augmentation",
+      "authors": [
+        "Chenyu Hui",
+        "Xiaodi Huang",
+        "Siyu Xu",
+        "Yunke Wang",
+        "Shan You",
+        "Fei Wang",
+        "Tao Huang",
+        "Chang Xu"
+      ],
+      "affiliations": [
+        "University of Sydney"
+      ],
+      "summary": "仿真数据便宜可并行但和真实有 visual gap。这工作把仿真 VLA 视频用 conditional video transfer 模型转成像真实的视频，同时保住任务语义和动作轨迹。还做了 token 跨步复用加速生成，加 coreset 采样在算力受限下挑代表性子集。结果在 Robotwin/LIBERO/LIBERO-Plus 和真机上都涨点，π0 在 LIBERO-Plus 涨 5.1%，RDT-1B 在 Robotwin 涨 8%。",
+      "original_abstract": "Vision-language-action (VLA) models typically rely on large-scale real-world videos, whereas simulated data, despite being inexpensive and highly parallelizable to collect, often suffers from a substantial visual domain gap and limited environmental diversity, resulting in weak real-world generalization. We present an efficient video augmentation framework that converts simulated VLA videos into realistic training videos while preserving task semantics and action trajectories. Our pipeline extracts structured conditions from simulation via video semantic segmentation and video captioning, rewrites captions to diversify environments, and uses a conditional video transfer model to synthesize realistic videos. To make augmentation practical at scale, we introduce a diffusion feature-reuse mechanism that reuses video tokens across adjacent timesteps to accelerate generation, and a coreset sampling strategy that identifies a compact, non-redundant subset for augmentation under limited computation. Extensive experiments on Robotwin 2.0, LIBERO, LIBERO-Plus, and a real robotic platform demonstrate consistent improvements. For example, our method improves RDT-1B by 8% on Robotwin 2.0, and boosts $π_0$ by 5.1% on the more challenging LIBERO-Plus benchmark. Code is available at: https://github.com/nanfangxiansheng/Seeing-Realism-from-Simulation.",
+      "highlights": {
+        "contribution": "用视频生成给 VLA 仿真数据换皮，提升真实世界泛化，且解决了大规模生成的代价问题。",
+        "innovation": "diffusion feature 跨时间步复用做加速 + coreset 选样在有限算力下挑增广候选，让 sim2real 视频增广真的能 scale。",
+        "method": "仿真视频经语义分割+caption 提条件，改写 caption 多样化环境，conditional video transfer 出真实风格视频喂给下游 VLA 训练。",
+        "results": "RDT-1B 在 Robotwin 2.0 +8%，π0 在 LIBERO-Plus +5.1%，LIBERO/真机也都有一致提升，代码开源。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T15:57:07Z",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 5.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02757v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02757v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.08168",
+      "title": "Understanding Asynchronous Inference Methods for Vision-Language-Action Models",
+      "authors": [
+        "Ayoub Agouzoul"
+      ],
+      "affiliations": [],
+      "summary": "VLA 推理慢会导致动作执行时观测过时，最近有四种缓解方案：IT-RTC、TT-RTC、VLASH、A2C2，但都在各自代码里测过，没法横向比。这文章把四种全部放进统一 codebase，用 MLPMixer policy 跑 Kinetix、SmolVLA 跑 LIBERO，扫到延迟 d=20。结论：A2C2 总体最强，TT-RTC 最稳且零推理开销，IT-RTC 在大 chunk 长延迟下崩，VLASH 有明显低/高延迟权衡。",
+      "original_abstract": "Vision-Language-Action (VLA) models offer a promising path to generalist robot control, but their inference latency causes observation staleness when generated actions are executed asynchronously. Several methods have been proposed concurrently to mitigate this problem: inference-time inpainting (IT-RTC), training-time delay simulation (TT-RTC), future-state-aware conditioning (VLASH), and lightweight residual correction (A2C2). Each takes a fundamentally different approach, but they have so far been evaluated independently with different codebases, base policies, and protocols. We present a systematic comparison of these four methods under controlled conditions. We develop two unified codebases that integrate all methods with harmonized library and dataset versions, and we benchmark them on the Kinetix suite with MLPMixer policies and on the LIBERO manipulation benchmark with SmolVLA, sweeping inference delays up to $d=20$ control steps. A2C2's per-step residual correction is the most effective method on Kinetix, holding above 90% solve rate up to $d=8$, and also leads on LIBERO from $d=4$ onwards. IT-RTC is competitive at low delays but degrades sharply under long chunks ($H=30$) and high delays. TT-RTC is the most robust training-based method: stable across $d_\\max$ choices, generalizes beyond its training delay distribution, and adds zero inference overhead. VLASH exhibits a clear low-delay vs. high-delay trade-off governed by the fine-tuning delay range $[0,d_\\max]$. Code is available at https://github.com/TheAyos/async-vla-inference",
+      "highlights": {
+        "contribution": "第一次把四种 async VLA 推理方案在统一框架下做公平比较，给出选型指南。",
+        "innovation": "构建了两个统一 codebase，把 inference-time inpainting / training-time delay sim / future-state-aware / residual correction 四类方法都接进来。",
+        "method": "MLPMixer 在 Kinetix、SmolVLA 在 LIBERO，统一库版本与数据，扫不同 inference delay 与 chunk length 看 solve rate。",
+        "results": "A2C2 在 Kinetix d=8 保持 >90% solve rate 且在 LIBERO d≥4 也领先；TT-RTC 鲁棒且零开销；IT-RTC 大 chunk 崩；VLASH 延迟权衡明显。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T18:01:15Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 5.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.08168v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.08168v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02667",
+      "title": "AnchorD: Metric Grounding of Monocular Depth Using Factor Graphs",
+      "authors": [
+        "Simon Dorer",
+        "Martin Büchner",
+        "Nick Heppert",
+        "Abhinav Valada"
+      ],
+      "affiliations": [
+        "University of Freiburg"
+      ],
+      "summary": "单目深度大模型预测结构精细但 metric scale 不准，传感器深度在透明/镜面物体上又会出错。AnchorD 用 factor graph 把两者结合：以传感器深度为锚做 patch-wise 仿射对齐，把单目模型的结构先验拉回真实尺度。还做了一个新的真实场景 benchmark，用消光喷雾+多相机融合获得密集 GT。免训练，跨多种传感器/域都稳定提升。",
+      "original_abstract": "Dense and accurate depth estimation is essential for robotic manipulation, grasping, and navigation, yet currently available depth sensors are prone to errors on transparent, specular, and general non-Lambertian surfaces. To mitigate these errors, large-scale monocular depth estimation approaches provide strong structural priors, but their predictions can be potentially skewed or mis-scaled in metric units, limiting their direct use in robotics. Thus, in this work, we propose a training-free depth grounding framework that anchors monocular depth estimation priors from a depth foundation model in raw sensor depth through factor graph optimization. Our method performs a patch-wise affine alignment, locally grounding monocular predictions in metric real-world depth while preserving fine-grained geometric structure and discontinuities. To facilitate evaluation in challenging real-world conditions, we introduce a benchmark dataset with dense scene-wide ground truth depth in the presence of non-Lambertian objects. Ground truth is obtained via matte reflection spray and multi-camera fusion, overcoming the reliance on object-only CAD-based annotations used in prior datasets. Extensive evaluations across diverse sensors and domains demonstrate consistent improvements in depth performance without any (re-)training. We make our implementation publicly available at https://anchord.cs.uni-freiburg.de.",
+      "highlights": {
+        "contribution": "一个免训练的深度 grounding 框架，把单目深度大模型校准到传感器 metric scale，对非朗伯物体表现更稳。",
+        "innovation": "patch-wise 仿射对齐 + factor graph 优化的组合，不需要重训；并给了一个用消光喷涂解决透明/镜面 GT 难题的新基准。",
+        "method": "单目 depth foundation model 出结构先验 + 传感器原始深度做锚，在 factor graph 里对每个 patch 联合优化仿射变换，保留几何不连续性。",
+        "results": "在自建非朗伯 benchmark 与多传感器/多域上一致提升 depth 精度，免训练即可用，代码开源。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T14:48:52Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 5.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02667v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02667v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02699",
+      "title": "Learning Equivariant Neural-Augmented Object Dynamics From Few Interactions",
+      "authors": [
+        "Sergio Orozco",
+        "Tushar Kusnur",
+        "Brandon May",
+        "George Konidaris",
+        "Laura Herlant"
+      ],
+      "affiliations": [
+        "Brown University",
+        "Toyota Research Institute"
+      ],
+      "summary": "操作可变形物体时，纯数据驱动的粒子动力学模型容易在长视野下违反物理，又很费数据。PIEGraph 把分析物理（弹簧-质点）和等变 GNN 结合：物理模型保可行性，等变 GNN 修正残差。在绳/布/毛绒玩具/刚体的重定位任务上比 SOTA 强，仿真和真机都验证了。",
+      "original_abstract": "Learning data-efficient object dynamics models for robotic manipulation remains challenging, especially for deformable objects. A popular approach is to model objects as sets of 3D particles and learn their motion using graph neural networks. In practice, this is not enough to maintain physical feasibility over long horizons and may require large amounts of interaction data to learn. We introduce PIEGraph, a novel approach to combining analytical physics and data-driven models to capture object dynamics for both rigid and deformable bodies using limited real-world interaction data. PIEGraph consists of two components: (1) a \\textbf{P}hysically \\textbf{I}nformed particle-based analytical model (implemented as a spring--mass system) to enforce physically feasible motion, and (2) an \\textbf{E}quivariant \\textbf{Graph} Neural Network with a novel action representation that exploits symmetries in particle interactions to guide the analytical model. We evaluate PIEGraph in simulation and on robot hardware for reorientation and repositioning tasks with ropes, cloth, stuffed animals and rigid objects. We show that our method enables accurate dynamics prediction and reliable downstream robotic manipulation planning, which outperforms state of the art baselines.",
+      "highlights": {
+        "contribution": "把弹簧-质点分析模型和等变 GNN 拼起来，做数据高效又物理合理的物体动力学预测。",
+        "innovation": "用等变 GNN 设计了新的 action 表示去引导分析模型，而不是单纯叠 residual，能兼顾刚体和可变形物体。",
+        "method": "粒子表示 + 弹簧-质点物理基底 + 等变 GNN 修正与 action conditioning，少量真机交互数据训练，下游接 planner。",
+        "results": "在绳、布、毛绒玩具、刚体的 reorientation/repositioning 仿真和真机任务上超过 baseline，长视野预测更稳。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T15:11:22Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 5.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02699v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02699v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02134",
+      "title": "Video Generation with Predictive Latents",
+      "authors": [
+        "Yian Zhao",
+        "Feng Wang",
+        "Qiushan Guo",
+        "Chang Liu",
+        "Xiangyang Ji",
+        "Jian Zhang",
+        "Jie Chen"
+      ],
+      "affiliations": [
+        "Peking University",
+        "Tsinghua University"
+      ],
+      "summary": "视频 VAE 的重建越来越好但生成不一定跟着涨，diffusability 才是瓶颈。PV-VAE 把预测学习塞进重建目标：随机扔掉未来帧、只编码部分过去观测，decoder 同时重建已观测帧加预测未来帧。这样 latent 自带时序预测结构。在 UCF101 上比 Wan2.2 VAE 收敛快 52%、FVD 提升 34.42。",
+      "original_abstract": "Video Variational Autoencoder (VAE) enables latent video generative modeling by mapping the visual world into compact spatiotemporal latent spaces, improving training efficiency and stability. While existing video VAEs achieve commendable reconstruction quality, continued optimization of reconstruction does not necessarily translate into improved generative performance. How to enhance the diffusability of video latents remains a critical and unresolved challenge. In this work, inspired by principles of predictive world modeling, we investigate the potential of predictive learning to improve the video generative modeling. To this end, we introduce a simple and effective predictive reconstruction objective that unifies predictive learning with video reconstruction. Specifically, we randomly discard future frames and encode only partial past observations, while training the decoder to reconstruct the observed frames and predict future ones simultaneously. This design encourages the latent space to encode temporally predictive structures and build a more coherent understanding of video dynamics, thereby improving generation quality. Our model, termed Predictive Video VAE (PV-VAE), achieves superior performance on video generation, with 52% faster convergence and a 34.42 FVD improvement over the Wan2.2 VAE on UCF101. Furthermore, comprehensive analyses demonstrate that PV-VAE not only exhibits favorable scalability, with generative performance improving alongside VAE training, but also yields consistent gains in downstream video understanding, underscoring a latent space that effectively captures temporal coherence and motion priors.",
+      "highlights": {
+        "contribution": "提出预测重建目标 PV-VAE，让视频 latent 更适合下游 diffusion 生成。",
+        "innovation": "把 predictive world modeling 的思想直接嵌入 VAE 训练目标——重建已观测加预测未观测——而不是另起一套预测模块。",
+        "method": "丢掉随机未来帧，仅编码过去观测，decoder 联合监督重建和预测，得到带时序预测结构的 latent。",
+        "results": "UCF101 上比 Wan2.2 VAE 收敛快 52%，FVD 提升 34.42；下游 video understanding 也涨，且具备可扩展性。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T01:30:04Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 5.0,
+        "popularity": 6.5,
+        "quality": 8.0,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02134v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02134v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02759",
+      "title": "DynoSLAM: Dynamic SLAM with Generative Graph Neural Networks for Real-World Social Navigation",
+      "authors": [
+        "Danil Tokhchukov",
+        "Veronika Morozova",
+        "Gonzalo Ferrer"
+      ],
+      "affiliations": [
+        "Skolkovo Institute of Science and Technology"
+      ],
+      "summary": "传统 SLAM 默认环境静态，碰到行人就头疼。DynoSLAM 把 socially-aware GNN 直接塞进 factor graph，作为随机世界模型预测行人轨迹，用 Monte Carlo rollout 捕捉认知不确定性，再以动态 Mahalanobis factor 反馈给 SLAM 图。仿真显示既保持后向跟踪精度，又避开了确定性 argmax 问题，给下游 planner 提供有理论根据的安全包络。",
+      "original_abstract": "Traditional Simultaneous Localization and Mapping (SLAM) algorithms rely heavily on the static environment assumption, which severely limits their applicability in real-world spaces populated by moving entities, such as pedestrians. In this work, we propose DynoSLAM, a tightly-coupled Dynamic GraphSLAM architecture that integrates socially-aware Graph Neural Networks (GNNs) directly into the factor graph optimization. Unlike conventional approaches that use rigid constant-velocity heuristics or deterministic single-agent neural priors, our framework formulates pedestrian motion forecasting as a stochastic World Model. By utilizing Monte Carlo rollouts from a trained GNN, we capture the multimodal epistemic uncertainty of human interactions and embed it into the SLAM graph via a dynamic Mahalanobis distance factor. We demonstrate through extensive simulated experiments that this stochastic formulation not only maintains highly accurate retrospective tracking but also prevents the optimization failures caused by the deterministic \"argmax problem\". Ultimately, extracting the empirical mean and covariance matrices of future pedestrian states provides a mathematically rigorous, probabilistic safety envelope for downstream local planners, enabling anticipatory and collision-free robot navigation in densely crowded environments.",
+      "highlights": {
+        "contribution": "把 GNN 行人轨迹随机预测当世界模型嵌入 dynamic SLAM 的 factor graph，让机器人在拥挤环境下能安全导航。",
+        "innovation": "用 MC rollout 捕捉多模态认知不确定性并通过 Mahalanobis factor 反馈到 SLAM 优化，避免单点 argmax 引发的优化失败。",
+        "method": "tightly-coupled GraphSLAM 加 socially-aware GNN 预测；MC sample 得到经验均值/协方差，作为动态因子注入 factor graph；为下游 local planner 输出安全包络。",
+        "results": "仿真上后向跟踪保持高精度，避免确定性单峰预测的失败模式；为 planner 提供概率安全包络以实现 anticipatory 无碰撞导航。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T15:58:08Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 5.0,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02759v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.02759v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02475",
+      "title": "Shadow-Loom: Causal Reasoning over Graphical World Models of Narratives",
+      "authors": [
+        "David Wilmot"
+      ],
+      "affiliations": [],
+      "summary": "Shadow-Loom 把故事转成版本化的图式世界模型，分别用因果引擎（Pearl 因果之梯 + 反事实运算）和叙事引擎（mystery/dramatic irony/suspense/surprise 四种结构状态）来推理。LLM 只用在边界（抽取、渲染、审计），核心因果与反事实推理都跑在类型化代码里。这是个开源研究工件，不是 NLP benchmark 产品。",
+      "original_abstract": "Stories hold a reader's attention because they have causes, secrets, and consequences. Shadow-Loom is an experimental open-source framework that turns a narrative into a versioned graphical world model and lets two engines act on it: a causal physics grounded in Pearl's ladder of causation and a recently proposed counterfactual calculus over Ancestral Multi-World Networks; and a narrative physics that scores the same graph against four structural reader-states -- mystery, dramatic irony, suspense, and surprise -- in the tradition of Sternberg's curiosity/suspense/surprise triad, with suspense formalised in the structural-affect line of work on story comprehension and computational suspense. Large language models are used only at the boundary: extraction, rendering, and audit; identification, intervention, and counterfactual reasoning are carried out in typed code over the graph. The system is offered as a research artefact rather than as a benchmarked NLP model; code, fixtures, and pipeline are released open source.",
+      "highlights": {
+        "contribution": "为叙事文本构建一个版本化图式世界模型，并提供基于 Pearl 因果架构的反事实推理工具链。",
+        "innovation": "把 LLM 限定在抽取/渲染/审计边界，把因果识别、干预、反事实推理全部交给类型化代码，跟以往把 LLM 当推理器的做法截然不同。",
+        "method": "narrative 转图式世界模型；causal physics（Pearl ladder + Ancestral Multi-World Networks）+ narrative physics（四种 reader-state 评分）；LLM 仅做接口层。",
+        "results": "作为开源研究工件释出代码、fixtures、pipeline；未做 benchmark 对比，是工程/框架贡献而非 SOTA 报告。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T11:18:14Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 5.0,
+        "popularity": 4.0,
+        "quality": 5.0,
+        "recommendation": 4.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02475v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.02475v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02405",
+      "title": "Closed-Loop CO2 Storage Control With History-Based Reinforcement Learning and Latent Model-Based Adaptation",
+      "authors": [
+        "Sofianos Panagiotis Fotias",
+        "Vassilis Gaganis"
+      ],
+      "affiliations": [
+        "National Technical University of Athens"
+      ],
+      "summary": "地质 CO2 封存的闭环控制要在不确定油藏行为下做策略，且只能用现场实际能拿到的井口信号。作者把 CO2 注入/盐水开采写成 POMDP，对比了 privileged/well-only/history-conditioned/masking-curriculum/teacher-student 几种 model-free 策略，再做了 latent model-based 适配管线，在井故障/泄漏/隔室连通等异常情境下做 retuning。结论：history-conditioned 策略基本追平特权信息策略，latent 适配在异常情景下打赢直接 model-free retuning。",
+      "original_abstract": "Closed-loop management of geological CO2 storage requires control policies that adapt to uncertain reservoir behavior while relying on observations that are realistically available during operation. This work formulates CO2 injection and brine-production control as a partially observable sequential decision problem and studies deployable deep reinforcement-learning controllers trained with high-fidelity reservoir simulation. We first compare privileged-state, well-only, history-conditioned, masking-curriculum, and asymmetric teacher-student model-free policies in order to quantify the value of temporal well-response information and training-time privileged simulator states. We then evaluate a latent model-based adaptation pipeline that reuses nominal latent dynamics and retunes controllers under known injector failure, leakage-induced dynamics and reward shift, and compartmentalized reservoir connectivity. The results show that history-conditioned policies recover nearly all of the privileged-state performance while using only deployable well-level information, and that latent model-based retuning outperforms direct model-free retuning under the same scenario-specific real-simulator budget in the abnormal operating cases. The proposed framework therefore provides a simulator-budget-aware alternative to repeated online history matching and re-optimization for closed-loop CO2 storage control.",
+      "highlights": {
+        "contribution": "给地质 CO2 封存提了一个真正可部署、能在异常情境下重调的闭环 RL 控制框架。",
+        "innovation": "强调只能用井口信号的 deployable 约束，并系统比较 history conditioning 与 privileged training，加上 latent model-based 适配做异常 retuning。",
+        "method": "POMDP 框架加高保真油藏仿真训练；多种 model-free 基线对比；提出 latent dynamics 复用加 retuning 管线处理 injector failure/leakage/区隔等情景。",
+        "results": "history-conditioned 几乎追平 privileged-state；异常情境下 latent 适配在等仿真预算下击败直接 model-free retuning。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T09:49:44Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 3.0,
+        "recency": 5.0,
+        "popularity": 4.0,
+        "quality": 6.5,
+        "recommendation": 4.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02405v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02405v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02784",
+      "title": "HumanSplatHMR: Closing the Loop Between Human Mesh Recovery and Gaussian Splatting Avatar",
+      "authors": [
+        "Yeheng Zong",
+        "Pou-Chun Kung",
+        "Yike Pan",
+        "Seth Isaacson",
+        "Yizhou Chen",
+        "Ram Vasudevan",
+        "Katherine A. Skinner"
+      ],
+      "affiliations": [
+        "University of Michigan"
+      ],
+      "summary": "现有方案要么 ViT 估姿态在 2D 视角上过拟合，要么 NeRF/Gaussian splat avatar 把姿态和外观分开搞，对新姿态泛化差。HumanSplatHMR 把可微渲染和 mesh recovery 的姿态估计闭环：用 photometric/分割/深度损失反传到 pose 参数和全局位置，让 SMPL 姿态随视频自我精炼，同时学高保真 avatar。只需 SOTA 姿态估计器初值，无需 mocap。",
+      "original_abstract": "Accurately recovering human pose and appearance from video is an essential component of scene reconstruction, with applications to motion capture, motion prediction, virtual reality, and digital twinning. Despite significant interest in building realistic human avatars from video, this paper demonstrates that existing methods do not accurately recover the 3D geometry of humans. ViT-based approaches are not consistently reliable and can overfit to 2D views, while NeRF- and Gaussian Splatting-based avatars treat pose and appearance separately, limiting rendering generalization to new poses. To resolve these shortcomings, this paper proposes HumanSplatHMR, a joint optimization framework that refines 3D human poses while simultaneously learning a high-fidelity avatar for novel-view and novel-pose synthesis. Our key insight is to close the loop between geometric pose estimation and differentiable rendering. Unlike prior human avatar methods that rely on accurate human pose obtained through motion capture systems or offline refinement, which are impractical in in-the-wild scenarios, our approach uses only human mesh estimates from a state-of-the-art human pose estimator to better reflect real-world conditions. Therefore, instead of using the human pose only as a deformation prior, HumanSplatHMR backpropagates photometric, segmentation, and depth losses through a differentiable renderer to the pose parameters and global position. This coupling refines the global 3D pose over time, improving accuracy and alignment while producing better renderings from novel views. Experiments show consistent improvements over pose recovery baselines that omit image-level refinement and avatar baselines that decouple pose estimation from avatar reconstruction.",
+      "highlights": {
+        "contribution": "把 human mesh recovery 和 Gaussian splat avatar 学习放进同一个可微渲染闭环，一边修姿态一边学外观。",
+        "innovation": "不像以前 avatar 工作把 mocap 姿态当死参数，而是真的反传光度/分割/深度损失到 SMPL 姿态和全局位置，对 in-the-wild 视频友好。",
+        "method": "SMPL 姿态初始化来自现成 pose estimator，Gaussian splat avatar 表示外观，可微渲染同时优化 avatar 与全局/局部 pose 参数，多种监督闭环。",
+        "results": "比单独做 pose recovery 或单独做 avatar 重建的基线在姿态精度和 novel-view/novel-pose 合成上都一致提升。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T16:26:11Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 5.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02784v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.02784v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02834",
+      "title": "VideoNet: A Large-Scale Dataset for Domain-Specific Action Recognition",
+      "authors": [
+        "Tanush Yadav",
+        "Mohammadreza Salehi",
+        "Jae Sung Park",
+        "Vivek Ramanujan",
+        "Hannaneh Hajishirzi",
+        "Yejin Choi",
+        "Ali Farhadi",
+        "Rohun Tripathi",
+        "Ranjay Krishna"
+      ],
+      "affiliations": [
+        "Allen Institute for AI",
+        "University of Washington"
+      ],
+      "summary": "现在 VLM 几乎没人测动作识别了，作者觉得这是因为缺挑战性数据。VideoNet 横跨 37 个领域、1000 个细分动作。差距很显著：闭源 Gemini 3.1 Pro 多选 69.9%，开源 Qwen3-VL-8B 只有 45%；连放宽到二分类、给 few-shot 例子 VLM 都不能像人类那样有效利用。作者还放了 50 万级训练集，用它微调 Molmo2-4B 就超过所有 8B 开源模型。",
+      "original_abstract": "Videos are unique in their ability to capture actions which transcend multiple frames. Accordingly, for many years action recognition was the quintessential task for video understanding. Unfortunately, due to a lack of sufficiently diverse and challenging data, modern vision-language models (VLMs) are no longer evaluated on their action recognition capabilities. To revitalize action recognition in the era of VLMs, we advocate for a returned focus on domain-specific actions. To this end, we introduce VideoNet, a domain-specific action recognition benchmark covering 1,000 distinct actions from 37 domains. We begin with a multiple-choice evaluation setting, where the difference between closed and open models is stark: Gemini 3.1 Pro attains 69.9% accuracy while Qwen3-VL-8B gets a mere 45.0%. To understand why VLMs struggle on VideoNet, we relax the questions into a binary setting, where random chance is 50%. Still, Qwen achieves only 59.2% accuracy. Further relaxing the evaluation setup, we provide $k\\in\\{1,2,3\\}$ in-context examples of the action. Some models excel in the few-shot setting, while others falter; Qwen improves $+7.0\\%$, while Gemini declines $-4.8\\%$. Notably, these gains fall short of the $+13.6\\%$ improvement in non-expert humans when given few-shot examples. Finding that VLMs struggle to fully exploit in-context examples, we shift from test-time improvements to the training side. We collect the first large-scale training dataset for domain-specific actions, totaling nearly 500k video question-answer pairs. Fine-tuning a Molmo2-4B model on our data, we surpass all open-weight 8B models on the VideoNet benchmark.",
+      "highlights": {
+        "contribution": "VideoNet 把领域特化动作识别拉回 VLM 评测视野，并给出大规模训练数据填补开源差距。",
+        "innovation": "强调 domain-specific 而非泛化动作；多挡难度评测（多选→二分类→few-shot）系统揭示 VLM 真不会看动作，并配套放出 500k 训练数据。",
+        "method": "1000 actions × 37 domains 的视频题库；多选/二分类/k-shot 多重评测；50 万视频 QA 训练集；用其微调 Molmo2-4B。",
+        "results": "Gemini 3.1 Pro 69.9% vs Qwen3-VL-8B 45%；Qwen few-shot 仅 +7%，Gemini 反而 -4.8%，远低于人类 +13.6%；微调后的 Molmo2-4B 超过全部 8B 开源模型。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T17:11:16Z",
+      "categories": [
+        "cs.CV",
+        "cs.LG"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vlm"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 5.0,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02834v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.02834v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02600",
+      "title": "CoRAL: Contact-Rich Adaptive LLM-based Control for Robotic Manipulation",
+      "authors": [
+        "Berk Çiçek",
+        "Mert K. Er",
+        "Ozgur S. Oguz"
+      ],
+      "affiliations": [
+        "Bilkent University",
+        "University of Nottingham"
+      ],
+      "summary": "LLM/VLM 直接拿来做接触丰富的操控不灵：缺物理 grounding，控制也不够自适应。CoRAL 把 LLM 当成 cost designer 而不是控制器，让它写 cost function 给 MPPI 用；VLM 出语义先验（质量、摩擦），再在线 system ID 修正。LLM 根据反馈调 cost 结构改策略，还有 retrieval memory 复用历史。真机加仿真上比 SOTA VLA 和 foundation-model planner 平均提升 50%+ 成功率，尤其是利用墙面外部接触翻物体这种难任务。",
+      "original_abstract": "While Large Language Models (LLMs) and Vision-Language Models (VLMs) demonstrate remarkable capabilities in high-level reasoning and semantic understanding, applying them directly to contact-rich manipulation remains a challenge due to their lack of explicit physical grounding and inability to perform adaptive control. To bridge this gap, we propose CoRAL (Contact-Rich Adaptive LLM-based control), a modular framework that enables zero-shot planning by decoupling high-level reasoning from low-level control. Unlike black-box policies, CoRAL uses LLMs not as direct controllers, but as cost designers that synthesize context-aware objective functions for a sampling-based motion planner (MPPI). To address the ambiguity of physical parameters in visual data, we introduce a neuro-symbolic adaptation loop: a VLM provides semantic priors for environmental dynamics, such as mass and friction estimates, which are then explicitly refined in real time via online system identification, while the LLM iteratively modulates the cost-function structure to correct strategic errors based on interaction feedback. Furthermore, a retrieval-based memory unit allows the system to reuse successful strategies across recurrent tasks. This hierarchical architecture ensures real-time control stability by decoupling high-level semantic reasoning from reactive execution, effectively bridging the gap between slow LLM inference and dynamic contact requirements. We validate CoRAL on both simulation and real-world hardware across challenging and novel tasks, such as flipping objects against walls by leveraging extrinsic contacts. Experiments demonstrate that CoRAL outperforms state-of-the-art VLA and foundation-model-based planner baselines by boosting success rates over 50% on average in unseen contact-rich scenarios, effectively handling sim-to-real gaps through its adaptive physical understanding.",
+      "highlights": {
+        "contribution": "提出 zero-shot 接触丰富操控框架 CoRAL，把高层语义推理与低层自适应控制解耦。",
+        "innovation": "LLM 不当 controller 当 cost designer 加 VLM 出物理先验加在线 system ID 闭环修正；neuro-symbolic adaptation loop 把语义先验和真实物理校准串起来。",
+        "method": "LLM 合成 MPPI 的 task-aware cost；VLM 估质量/摩擦初值，在线辨识修正；LLM 根据反馈迭代调 cost 结构；检索记忆复用成功策略。",
+        "results": "仿真加真机的接触丰富任务（如借助墙面翻物）上比 SOTA VLA 和 foundation-model planner 平均成功率提升 50%+，对 sim-to-real gap 鲁棒。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T13:49:19Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vlm"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 5.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02600v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.02600v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02130",
+      "title": "From Where Things Are to What They Are For: Benchmarking Spatial-Functional Intelligence in Multimodal LLMs",
+      "authors": [
+        "Le Zhang",
+        "Jihan Yang",
+        "Soundarya Krishnan",
+        "Jimit Majmudar",
+        "Xiou Ge",
+        "Prasoon Puri",
+        "Prathamesh Nandkishor Saraf",
+        "Shruti Bhargava",
+        "Dhivya Piraviperumal",
+        "Yinan Ling",
+        "Cindy Pan",
+        "Hong Yu",
+        "Aishwarya Agrawal",
+        "Bo-Hsiang Tseng"
+      ],
+      "affiliations": [
+        "Apple",
+        "University of Montreal"
+      ],
+      "summary": "现有 MLLM benchmark 多在测东西在哪里的几何感知，少有问东西干嘛用的功能推理。SFI-Bench 用 egocentric 室内视频扫描造了 1500+ 专家标注题，覆盖结构空间推理（条件计数、多跳关系、布局理解）和功能推理（affordance、语境下的可用性）。结果当前 MLLM 在把空间记忆加功能推理加外部知识结合上都很弱，成为 grounded 智能的瓶颈。",
+      "original_abstract": "Human-level agentic intelligence extends beyond low-level geometric perception, evolving from recognizing where things are to understanding what they are for. While existing benchmarks effectively evaluate the geometric perception capabilities of multimodal large language models (MLLMs), they fall short of probing the higher-order cognitive abilities required for grounded intelligence. To address this gap, we introduce the Spatial-Functional Intelligence Benchmark (SFI-Bench), a video-based benchmark with over 1,500 expert-annotated questions derived from diverse egocentric indoor video scans. SFI-Bench systematically evaluates two complementary dimensions of advanced reasoning: (1) Structured Spatial Reasoning, which requires understanding complex layouts and forming coherent spatial representations, and (2) Functional Reasoning, which involves inferring object affordances and their context-dependent utility. The benchmark includes tasks such as conditional counting, multi-hop relational reasoning, functional pairing, and knowledge-grounded troubleshooting, directly challenging models to integrate perception, memory, and inference. Our experiments reveal that current MLLMs consistently struggle to combine spatial memory with functional reasoning and external knowledge, highlighting a critical bottleneck in achieving grounded intelligence. SFI-Bench therefore provides a diagnostic tool for measuring progress toward more cognitively capable and truly grounded multimodal agents.",
+      "highlights": {
+        "contribution": "提了第一个把空间几何与功能 affordance 一起评测的视频 MLLM benchmark SFI-Bench，揭示当前模型短板。",
+        "innovation": "从 where 到 what-for 的视角切换：评测 conditional counting、多跳关系、功能配对、知识 grounded troubleshooting 等真正需要语义加记忆加推理结合的任务。",
+        "method": "基于 egocentric 室内视频扫描，专家标注 1500+ 题；任务覆盖结构化空间推理与功能推理两大类；评测主流 MLLM。",
+        "results": "主流 MLLM 在空间记忆加功能推理整合上一致性下降，benchmark 暴露了 grounded multimodal 智能的关键瓶颈。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T01:19:36Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "multimodal large language model",
+        "mllm",
+        "spatial reasoning"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 5.0,
+        "popularity": 6.5,
+        "quality": 7.0,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02130v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02130v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02730",
+      "title": "Perceptual Flow Network for Visually Grounded Reasoning",
+      "authors": [
+        "Yangfu Li",
+        "Yuning Gong",
+        "Hongjian Zhan",
+        "Teng Li",
+        "Yuanhuiyi Lyu",
+        "Tianyi Chen",
+        "Qi Liu",
+        "Ziyuan Huang",
+        "Zhihang Zhong",
+        "Dandan Zheng",
+        "Yue Lu"
+      ],
+      "affiliations": [
+        "East China Normal University",
+        "Ant Group"
+      ],
+      "summary": "LVLM 标准 MLE 训练管不住视觉轨迹，容易语言偏置和幻觉。作者发现以前用视觉专家几何先验做监督偏几何精度、对推理帮助有限。PFlowNet 把感知和推理解耦做自条件生成，再用变分 RL 配多维奖励加邻域几何 shaping，引导推理导向的感知行为。V* Bench 90.6%、MME-RealWorld-lite 67.0% 新 SOTA。",
+      "original_abstract": "Despite the success of Large-Vision Language Models (LVLMs), general optimization objectives (e.g., standard MLE) fail to constrain visual trajectories, leading to language bias and hallucination. To mitigate this, current methods introduce geometric priors from visual experts as additional supervision. However, we observe that such supervision is typically suboptimal: it is biased toward geometric precision and offers limited reasoning utility. To bridge this gap, we propose Perceptual Flow Network (PFlowNet), which eschews rigid alignment with the expert priors and achieves interpretable yet more effective visual reasoning. Specifically, PFlowNet decouples perception from reasoning to establish a self-conditioned generation process. Based on this, it integrates multi-dimensional rewards with vicinal geometric shaping via variational reinforcement learning, thereby facilitating reasoning-oriented perceptual behaviors while preserving visual reliability. PFlowNet delivers a provable performance guarantee and competitive empirical results, particularly setting new SOTA records on V* Bench (90.6%) and MME-RealWorld-lite (67.0%).",
+      "highlights": {
+        "contribution": "提出 PFlowNet 解耦感知和推理，在视觉 grounded 推理上拿到 V* 和 MME-RealWorld-lite 双 SOTA。",
+        "innovation": "不再硬对齐几何专家先验，而是用 vicinal geometric shaping 加多维奖励加变分 RL，让感知服务于推理。",
+        "method": "感知-推理解耦的自条件生成框架；变分 RL 优化；多维奖励加邻域几何 shaping；保留视觉可靠性同时鼓励推理导向感知。",
+        "results": "V* Bench 90.6%、MME-RealWorld-lite 67.0% 创 SOTA，并提供性能保证理论。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T15:31:11Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision language model",
+        "vlm"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 5.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02730v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02730v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02537",
+      "title": "Orchestrating Spatial Semantics via a Zone-Graph Paradigm for Intricate Indoor Scene Generation",
+      "authors": [
+        "Meisheng Zhang",
+        "Shizhao Sun",
+        "Yang Zhao",
+        "Ziyuan Liu",
+        "Zhijun Gao",
+        "Jiang Bian"
+      ],
+      "affiliations": [
+        "Microsoft Research"
+      ],
+      "summary": "3D 室内场景合成在非凸房间加强空间约束下容易崩。数据驱动缺拓扑先验，迭代 agent 容易把语义碎掉。ZoneMaestro 切换到 Zone-Graph 范式：先把高层语义意图翻译成功能 zone 和拓扑约束，再编排具体对象。配套放了 Zone-Scene-10K 数据集，用交替对齐策略加 Z-GRPO 调和语义丰富与几何合法的张力，还出了 SCALE stress-test benchmark。比 SOTA 在结构连贯和意图遵循上都强。",
+      "original_abstract": "Autonomous 3D indoor scene synthesis breaks down in non-convex rooms with tightly coupled spatial constraints. Data-driven generators lack topological priors for long-horizon planning, while iterative agents fragment semantics and become geometrically brittle. We present ZoneMaestro, a unified framework that shifts the paradigm from object-centric synthesis to Zone-Graph Orchestration. By internalizing a novel zone-based logic, ZoneMaestro translates high-level semantic intent into functional zones and topological constraints, enabling robust adaptation to diverse architectural forms. To support this, we construct Zone-Scene-10K, a large-scale dataset enriched with explicit Zone-Graph annotations. We further introduce an Alternating Alignment Strategy that cycles between reasoning internalization and Zone-Aware Group Relative Policy Optimization (Z-GRPO), effectively reconciling the tension between semantic richness and geometric validity without relying on external physics engines. To rigorously evaluate spatial intelligence beyond convex primitives, we formally define the task of Intricate Spatial Orchestration and release SCALE, a stress-test benchmark for irregular indoor scenarios with complex, dense spatial relations. Extensive experiments demonstrate that ZoneMaestro resolves the density-safety dichotomy, significantly outperforming state-of-the-art baselines in both structural coherence and intent adherence.",
+      "highlights": {
+        "contribution": "把 3D 室内场景合成从 object-centric 切换到 Zone-Graph 编排，攻克非凸房间下的密集约束。",
+        "innovation": "提出 Zone-Graph 中介表示加 Zone-Aware GRPO，让生成器先理功能分区再摆物体，避免几何/语义对立；配套 Zone-Scene-10K 数据集与 SCALE benchmark。",
+        "method": "Zone-Scene-10K 数据加 Zone-Graph 注解；交替对齐策略循环 reasoning 内化与 Z-GRPO；无需外部物理引擎调和几何与语义。",
+        "results": "在 SCALE 等难度 benchmark 上结构连贯性和意图符合度全面超过 SOTA，专门面向不规则室内场景。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T12:40:37Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "long-horizon planning"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 5.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02537v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02537v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02168",
+      "title": "Planner Matters! An Efficient and Unbalanced Multi-agent Collaboration Framework for Long-horizon Planning",
+      "authors": [
+        "Wenyi Wu",
+        "Sibo Zhu",
+        "Kun Zhou",
+        "Biwei Huang"
+      ],
+      "affiliations": [
+        "UC San Diego"
+      ],
+      "summary": "LM agent 在长视野任务上挣扎。作者把任务分成 planner/actor/memory manager 三块，做系统的计算分配分析，发现 planner 才是主导因素，actor 和 memory 不需要那么多 compute。基于这个发现，只对 planner 做 RL（用 VLM-as-judge 给 trajectory-level reward），冻结其他组件。Web 导航、OS 控制、工具使用三类 benchmark 一致受益。",
+      "original_abstract": "Language model (LM)-based agents have demonstrated promising capabilities in automating complex tasks from natural language instructions, yet they continue to struggle with long-horizon planning and reasoning. To address this, we propose an enhanced multi-agent framework that decomposes automation into three roles: a planner for high-level decision-making, an actor for task execution, and a memory manager for contextual reasoning. While this modular decomposition aligns with established design patterns, our core contribution lies in a systematic compute-allocation analysis, revealing that planning is the dominant factor influencing task performance. Execution and memory management require significantly less compute and model capacity to achieve competitive results. Building on these insights, we introduce a planner-centric reinforcement learning approach, which exclusively optimizes the planner using trajectory-level rewards from a VLM-as-judge, while freezing the other components. Extensive experiments on benchmarks spanning web navigation, OS control, and tool use demonstrate that concentrating model capacity and learning on high-level planning yields robust and compute-efficient improvements in long-horizon agent automation. Our code is publicly released.",
+      "highlights": {
+        "contribution": "实证了多 agent 系统里 planner 是性能瓶颈，并提出只对 planner 做 RL 的高效训练方案。",
+        "innovation": "不是又造一个 multi-agent 框架，而是做系统的 compute allocation 分析，给出 planner-centric 的资源/学习分配指南。",
+        "method": "planner+actor+memory manager 三角色；trajectory-level VLM-as-judge 给 planner 奖励，其余冻结；测 web/OS/tool 三类长视野任务。",
+        "results": "在 web navigation、OS control、tool use 上一致提升，且 compute 高效；代码已开源。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T02:58:05Z",
+      "categories": [
+        "cs.AI",
+        "cs.LG",
+        "cs.MA"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vlm",
+        "long-horizon planning"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 5.0,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02168v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02168v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02378",
+      "title": "Enhancing Multimodal In-Context Learning via Inductive-Deductive Reasoning",
+      "authors": [
+        "Haoyu Wang",
+        "Haonan Wang",
+        "Yuyan Chen",
+        "Jun Chen",
+        "Gang Liu",
+        "Qian Wang",
+        "Jiahong Yan",
+        "Yanghua Xiao"
+      ],
+      "affiliations": [
+        "Fudan University"
+      ],
+      "summary": "VLM 多模态 ICL 不稳定的根源是归纳缺口：模型能从错误推理得出对答案，却抓不到一致规则。原因是冗余视觉 token 淹没文本线索，且注意力倾向首张图。作者提了归纳-演绎框架：相似度视觉 token 压缩加动态注意力再平衡加显式 CoT 引导归纳规则，再用 SFT+RL 强化忠实引用与噪声过滤。8 个 benchmark 一致提升多种开源 VLM。",
+      "original_abstract": "In-context learning (ICL) allows large models to adapt to tasks using a few examples, yet its extension to vision-language models (VLMs) remains fragile. Our analysis reveals that the fundamental limitation lies in an inductive gap, models often produce correct answers from flawed reasoning, while struggling to extract consistent rules across demonstrations. This gap is further exacerbated by two visual-level obstacles: an overwhelming proportion of redundant visual tokens that obscure textual cues, and a skewed attention distribution that favors the initial image at the expense of subsequent context. To address these issues, we introduce a framework that restructures multimodal ICL as a principled inductive-deductive process. The framework incorporates a similarity-based visual token compression module to filter out redundant patches, a dynamic attention rebalancing mechanism to distribute focus equitably across all images, and a chain-of-thought paradigm that explicitly guides the model to analyze individual examples, derive a generalizable rule, and then apply it to the query. An auxiliary learning pipeline combines supervised fine-tuning with reinforcement learning using verifiable rewards to reinforce faithful citation and noise filtering. Evaluations across eight benchmarks covering visual perception, logical reasoning, STEM problems, and sarcasm detection demonstrate consistent and significant improvements over standard ICL baselines for multiple open-source VLMs, highlighting the potential of equipping models with genuine inductive capabilities in multimodal settings.",
+      "highlights": {
+        "contribution": "把多模态 ICL 重新组织成归纳-演绎流程，并系统性解决视觉冗余和注意力偏差两个底层问题。",
+        "innovation": "诊断出 inductive gap 这个根因，再针对性设计三件套：相似度视觉 token 压缩加动态注意力再平衡加 CoT 显式归纳。",
+        "method": "视觉 token 相似度过滤加注意力再分布；CoT 提示先分析示例再总结规则再回答；辅助 SFT+RL 加可验证奖励训练。",
+        "results": "在 8 个视觉感知/逻辑/STEM/讽刺识别基准上一致超越标准 ICL，多种开源 VLM 受益。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T09:18:19Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vlm"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 5.0,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02378v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02378v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02525",
+      "title": "A Semantic Autonomy Framework for VLM-Integrated Indoor Mobile Robots: Hybrid Deterministic Reasoning and Cross-Robot Adaptive Memory",
+      "authors": [
+        "Bogdan Felician Abaza",
+        "Andrei-Alexandru Staicu",
+        "Cristian Vasile Doicin"
+      ],
+      "affiliations": [
+        "Politehnica University of Bucharest"
+      ],
+      "summary": "工业室内移动机器人能跑 ROS Nav2 但听不懂去拿那杯水。这工作搭了六层语义自主栈：88% 的指令用七步参数 resolver 在 0.1ms 内搞定，根本不调 VLM；只有真正歧义的指令才上 VLM。再加跨会话/跨机器人的语义记忆框架，一个机器人学到的偏好能编译成 digest 转给另一台用，延迟降 10 万倍。两台 Raspberry Pi 5 机器人实测 82 个决策语义准确率 100%。",
+      "original_abstract": "Autonomous indoor mobile robots can navigate reliably to metric coordinates using established frameworks such as ROS 2 Navigation 2, yet they lack the ability to interpret natural language instructions that express intent rather than positions. Vision-Language Models offer the semantic reasoning required to bridge this gap, but their inference latency (2-9 seconds per decision on consumer hardware) and session-by-session amnesia limit practical deployment. This paper presents the Semantic Autonomy Stack, a six-layer reference framework for semantically autonomous indoor navigation, and validates a complete instance featuring hybrid deterministic-VLM reasoning and cross-robot adaptive memory on physical robots with off-the-shelf edge hardware. A seven-step parametric resolver handles 88% of instructions in under 0.1 milliseconds without invoking a language model, camera, or GPU; only genuinely ambiguous instructions escalate to VLM reasoning. A five-category semantic memory framework with explicit scope taxonomy (global environment knowledge, per-operator preferences, per-robot capabilities) enables cross-session learning and cross-robot knowledge transfer: preferences learned through VLM interactions on one robot are promoted to deterministic resolution and transferred to a second robot via a shared compiled digest, achieving a measured latency reduction of 103,000-fold. Experimental validation on two custom-built differential-drive robots across 82 scenario-level decisions and three sessions demonstrates 100% semantic transfer accuracy (33/33, 95% CI [0.894, 1.000]), 100% semantic resolution accuracy, and concurrent multi-robot operation feasibility - all on Raspberry Pi 5 platforms with no onboard GPU, requiring zero training data.",
+      "highlights": {
+        "contribution": "用混合确定性加 VLM 推理 + 跨机器人语义记忆，把 VLM 室内导航的延迟和无状态问题打掉。",
+        "innovation": "把绝大多数指令拦在确定性解析层 (<0.1ms)，只让真正歧义的进 VLM；并把学到的偏好编译成跨机器人共享 digest，实现一台学、全队会。",
+        "method": "六层语义自主栈；七步参数解析器；五类语义记忆加显式 scope 分类；仅在歧义时调 VLM 并把结果回写记忆。",
+        "results": "Pi 5 平台无 GPU 实测 82 个场景级决策，语义转移 100% (33/33)，语义解析 100%，跨机器人延迟降 ~10^5 倍。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T12:27:03Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vlm"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 5.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02525v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02525v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02630",
+      "title": "AutoFocus: Uncertainty-Aware Active Visual Search for GUI Grounding",
+      "authors": [
+        "Ruilin Yao",
+        "Shegnwu Xiong",
+        "Tianyu Zou",
+        "Shili Xiong",
+        "Yi Rong"
+      ],
+      "affiliations": [
+        "Wuhan University of Technology"
+      ],
+      "summary": "VLM 做 GUI grounding 在高分辨率界面上掉得厉害——元素小、布局密。已有 zoom-in 方法靠固定 anchor 或启发式网格。AutoFocus 用 token-level perplexity 作为空间不确定性信号，采样多个坐标假设转成各向异性高斯空间概率场，再据此提全局/局部区域候选，并用 Shape-Aware Zoom 兼顾紧框和上下文。免训练，在 ScreenSpot-Pro/V2 上对通用和 GUI 专用 VLM 都涨点。",
+      "original_abstract": "Vision-Language Models (VLMs) have enabled autonomous GUI agents that translate natural language instructions into executable screen coordinates. However, grounding performance degrades in high-resolution interfaces, where dense layouts and small interactive elements expose a resolution gap between modern displays and model input constraints. Existing zoom-in strategies rely on fixed anchors, heuristic grids, or reinforcement learning, lacking a principled mechanism to adaptively determine where refinement is needed and how much spatial uncertainty should be explored. We propose AutoFocus, a training-free, uncertainty-aware active visual search framework for GUI grounding. Our key insight is that token-level perplexity in coordinate generation naturally reflects spatial uncertainty. Rather than committing to a single prediction, AutoFocus samples multiple coordinate hypotheses and converts their axial perplexities into an anisotropic gaussian spatial probability field, explicitly modeling directional uncertainty. Based on this field, we generate global and local region proposals and introduce Shape-Aware Zooming to balance tight localization with contextual preservation. A visual prompt-based aggregation step then selects the most consistent prediction via structured comparison. Extensive experiments on ScreenSpot-Pro and ScreenSpot-V2 demonstrate consistent improvements across both general-purpose and GUI-specialized VLMs.",
+      "highlights": {
+        "contribution": "提了免训练的不确定性驱动主动视觉搜索框架 AutoFocus，解决高分辨率 GUI grounding 难题。",
+        "innovation": "把 coordinate token 的 perplexity 解释成方向性空间不确定性，由此生成各向异性高斯概率场和区域候选，是 principled 而非启发式。",
+        "method": "采样多坐标假设，axial perplexity 估各向异性高斯，全局/局部 region proposal，Shape-Aware Zoom 保上下文，visual prompt 聚合最终预测。",
+        "results": "ScreenSpot-Pro/V2 上通用 VLM 和 GUI 专用 VLM 都一致提升，且免训练即用。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T14:18:46Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vlm"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 5.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02630v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02630v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02206",
+      "title": "Metric Unreliability in Multimodal Machine Unlearning: A Systematic Analysis and Principled Unified Score",
+      "authors": [
+        "Abdullah Ahmad Khan",
+        "Hamid Laga",
+        "Ferdous Sohel"
+      ],
+      "affiliations": [
+        "Murdoch University"
+      ],
+      "summary": "VLM unlearning 为合规 GDPR 越来越重要，但当前 5 个常用指标 FA/RA/MIA/AD/JS 在三个 VQA benchmark 上给出互相矛盾的方法排名。作者做了 Kendall tau 分析，发现指标分两簇且多模态比单模态更不一致。然后提了 UQS：用每个指标和 oracle retrain 模型距离的 Spearman 相关来加权，给出稳定的统一打分。",
+      "original_abstract": "Machine unlearning in Vision-Language Models (VLMs) is required for compliance with the General Data Protection Regulation (GDPR), yet current evaluation practices are inconsistent. We present the first systematic study of metric reliability in multimodal unlearning. Five standard metrics, Forget Accuracy (FA), Retain Accuracy (RA), Membership Inference Attack (MIA), Activation Distance (AD), and JS divergence (JS), yield conflicting method rankings across three VQA benchmarks (MLLMU-Bench, UnLOK-VQA, MMUBench). Kendall tau analysis over 36 unlearned LLaVA-1.5-7B models reveals two opposing clusters, {FA, RA, MIA} and {AD, JS}, with tau_FA_AD = -0.26, reproduced on BLIP-2 OPT-2.7B. Agreement is lower in multimodal VQA (average tau = 0.086) than in unimodal classification (average tau = 0.158; difference = 0.072), indicating that dual image-and-text pathways amplify inconsistency. We introduce the Unified Quality Score (UQS), a composite metric with weights derived from each metric's Spearman correlation with the oracle distance d(M_hat, M_star), where M_star is the oracle model retrained only on the retain set. RA shows the strongest reliability (rho = 0.484, p = 0.003), while FA is negatively correlated (rho = -0.418, p = 0.011). UQS yields stable rankings under 100 random weight perturbations (tau = 0.647 +- 0.262). We release the benchmark, 36 checkpoints, and an interactive leaderboard. Code and pre-computed results are available at https://github.com/neurips26/UnifiedUnl.",
+      "highlights": {
+        "contribution": "系统揭示了多模态 unlearning 指标之间的不一致性，并提出基于 oracle 距离加权的统一评分 UQS。",
+        "innovation": "Kendall tau 横评加用 oracle retrain 模型距离作为 ground truth 来锚定各指标可靠性，让哪个 metric 真的有用有了量化答案。",
+        "method": "训练 36 个 LLaVA-1.5-7B unlearned 模型在 MLLMU-Bench/UnLOK-VQA/MMUBench 上评测；BLIP-2 OPT-2.7B 验证；权重源自 oracle 距离的 Spearman 相关。",
+        "results": "RA 与 oracle 距离相关最强 (ρ=0.484)，FA 反向相关 (ρ=-0.418)；UQS 在 100 次权重扰动下排名稳定 (τ=0.647±0.262)。开源 36 checkpoint 和 leaderboard。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T04:13:00Z",
+      "categories": [
+        "cs.CV",
+        "cs.LG"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "mllm",
+        "vision-language model",
+        "vlm"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 5.0,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02206v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.02206v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02218",
+      "title": "CoVSpec: Efficient Device-Edge Co-Inference for Vision-Language Models via Speculative Decoding",
+      "authors": [
+        "Yuanyuan Jia",
+        "Shunpu Tang",
+        "Qianqian Yang"
+      ],
+      "affiliations": [
+        "Zhejiang University"
+      ],
+      "summary": "大 VLM 在端上跑不动，常见解法是端云协同 speculative decoding，但视觉 token 又多通信又贵。CoVSpec 在端侧做 training-free 视觉 token 修剪（综合 query 相关性、token 活跃度、低秩依赖），再上自适应草稿长度加频率，最后用解耦验证-纠错的并行分支机制减少通信。吞吐比仅云端推理快 2.21x，通信开销降 96%+，精度不掉。",
+      "original_abstract": "Vision-language models (VLMs) have demonstrated strong capabilities in multimodal perception and reasoning. However, deploying large VLMs on mobile devices remains challenging due to their substantial computational and memory demands. A practical alternative is device-edge co-inference, where a lightweight draft VLM on the mobile device collaborates with a larger target VLM on the edge server via speculative decoding. Nevertheless, directly extending speculative decoding to VLMs suffers from severe inefficiency due to excessive visual-token computation and high communication overhead. To address these challenges, we propose CoVSpec, an efficient collaborative speculative decoding framework for VLM inference. Specifically, we first develop a training-free visual token reduction framework that prunes redundant visual tokens on the mobile device by jointly considering query relevance, token activity, and low-rank dependency. Moreover, we design an adaptive drafting strategy that dynamically adjusts both the verification frequency and the draft length. In addition, we introduce a parallel branching mechanism with decoupled verification-correction to improve draft-side utilization during target-side verification and reduce correction-related transmission overhead. Experiments on multiple benchmarks show that CoVSpec achieves up to 2.21x higher throughput than target-only inference and reduces communication overhead by more than 96% compared with baselines, without compromising task accuracy.",
+      "highlights": {
+        "contribution": "把 speculative decoding 框架真正搬到 VLM 端云协同上，解决视觉 token 计算和通信瓶颈。",
+        "innovation": "三件套：query/活跃度/低秩三联视觉 token 修剪加自适应草稿长度&频率加并行分支解耦验证-纠错通信。",
+        "method": "端侧轻量 draft VLM 加边缘大 target VLM；视觉 token 修剪基于多信号联合判定；端云之间并行执行草稿与验证并解耦纠错传输。",
+        "results": "多个 benchmark 上比纯 target 推理吞吐高 2.21x，通信开销降 96%+，任务精度保持。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T04:43:15Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vlm"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 5.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02218v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02218v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02623",
+      "title": "Retrieving Any Relevant Moments: Benchmark and Models for Generalized Moment Retrieval",
+      "authors": [
+        "Yiming Ding",
+        "Siyu Cao",
+        "Luyuan Jiao",
+        "Yixuan Li",
+        "Zitong Wang",
+        "Zhiyong Liu",
+        "Lu Zhang"
+      ],
+      "affiliations": [
+        "Chinese Academy of Sciences"
+      ],
+      "summary": "传统 Video Moment Retrieval 假设每个 query 只对应一个片段，现实里可能是多个或零个。作者把这扩展成 Generalized Moment Retrieval (GMR)，并基于足球视频造了 Soccer-GMR 大规模基准，里面有真实的多正例和负例 query。再做了两类 baseline：给判别式 VMR 模型加 GMR adapter，以及给 MLLM 用 GMR 定制 GRPO 奖励。",
+      "original_abstract": "Video Moment Retrieval (VMR) aims to localize temporal segments in videos that correspond to a natural language query, but typically assumes only a single matching moment for each query. This assumption does not always hold in real-world scenarios, where queries may correspond to multiple or no moments. Thus, we formulate Generalized Moment Retrieval (GMR), a unified setting that requires retrieving the complete set of relevant moments or predicting an empty set. To enable systematic study of GMR, we introduce Soccer-GMR, a large-scale benchmark built on challenging soccer videos that reflect general GMR scenarios, with realistic negative and positive queries. The benchmark is constructed via a duration-flexible semi-automated pipeline with human verification, enabling scalable data generation while maintaining high annotation quality. We further design a unified evaluation protocol with complementary metrics tailored for null-set rejection, positive-query localization, and end-to-end GMR performance. Finally, we establish strong baselines across two modeling paradigms: a lightweight plug-and-play GMR adapter for discriminative VMR models, and a GMR-tailored GRPO reward for fine-tuning multimodal large language models (MLLMs). Extensive experiments show consistent gains across all metrics and expose key limitations of current methods, positioning GMR as a more realistic and challenging benchmark for video-language understanding.",
+      "highlights": {
+        "contribution": "把视频片段检索任务推广到 GMR 设定（多正/零正），并发布 Soccer-GMR 大规模 benchmark 与统一评测协议。",
+        "innovation": "duration-flexible 半自动标注管线加显式的 null-set 拒绝评测加给 MLLM 定制的 GRPO 奖励都为多/零片段场景而设计。",
+        "method": "Soccer-GMR 基准建设；轻量 GMR adapter 即插到判别式 VMR；GMR 定制 GRPO 奖励微调 MLLM；统一 null/positive/end-to-end 三类指标。",
+        "results": "新基准加两类 baseline 在所有指标上一致提升，并暴露当前方法在多正/零正场景下的关键短板。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T14:14:06Z",
+      "categories": [
+        "cs.CV",
+        "cs.MM"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "multimodal large language model",
+        "mllm"
+      ],
+      "scores": {
+        "relevance": 3.5,
+        "recency": 5.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 5.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02623v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02623v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02262",
+      "title": "WindowQuant: Mixed-Precision KV Cache Quantization based on Window-Level Similarity for VLMs Inference Optimization",
+      "authors": [
+        "Wei Tao",
+        "Xiaoyang Qu",
+        "Peiqiang Wang",
+        "Guokuan Li",
+        "Jiguang Wan",
+        "Kai Lu",
+        "Jianzong Wang"
+      ],
+      "affiliations": [
+        "Huazhong University of Science and Technology",
+        "Ping An Technology"
+      ],
+      "summary": "视频 VLM 的视觉 token 序列很长，KV cache 占显存且推理慢。现有 token 级混合精度量化搜索代价大、硬件也不友好。WindowQuant 改成 window 级：根据视觉 token 窗口与文本 prompt 的相似度快速决定每个窗口的最佳位宽，并在量化前重排 KV cache 窗口避免混合精度算的硬件低效。多个数据集上超过 SOTA VLM KV cache 量化方法。",
+      "original_abstract": "Recently, video language models (VLMs) have been applied in various fields. However, the visual token sequence of the VLM is too long, which may cause intolerant inference latency and GPU memory usage. Existing methods propose mixed-precision quantization to the key-value (KV) cache in VLMs based on token granularity, which is time-consuming in the search process and hardware inefficient during computation. This paper introduces a novel approach called WindowQuant, which employs window-adaptive mixed-precision quantization to optimize the KV cache. WindowQuant consists of two modules: window-level quantization search and window-level KV cache computation. Window-level quantization search quickly determines the optimal bit-width configuration of the KV cache windows based on the similarity scores between the corresponding visual token windows and the text prompt, maintaining the model accuracy. Furthermore, window-level KV cache computation reorders the KV cache windows before quantization, avoiding the hardware inefficiency caused by mixed-precision quantization in inference computation. Extensive experiments demonstrate that WindowQuant outperforms state-of-the-art VLM models and KV cache quantization methods on various datasets.",
+      "highlights": {
+        "contribution": "提出 window 级混合精度 KV cache 量化 WindowQuant，加速视频 VLM 推理。",
+        "innovation": "把混合精度的颗粒度从 token 抬到 window，并用 prompt-视觉窗口相似度做快速搜索；再加 KV cache 窗口重排来避免硬件低效。",
+        "method": "window 级量化搜索：相似度分配 bit-width；window 级 KV cache 计算：先重排再量化以保持硬件对齐。",
+        "results": "多数据集上超过 SOTA VLM 和 KV cache 量化方法，保持精度同时减少推理延迟与显存。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T06:17:13Z",
+      "categories": [
+        "cs.CV",
+        "cs.CL"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vlm"
+      ],
+      "scores": {
+        "relevance": 3.5,
+        "recency": 5.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 5.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02262v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02262v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02202",
+      "title": "CBV: Clean-label Backdoor Attacks on Vision Language Models via Diffusion Models",
+      "authors": [
+        "Ji Guo",
+        "Xiaolong Qin",
+        "Cencen Liu",
+        "Jielei Wang",
+        "Jierun Chen",
+        "Wenbo Jiang"
+      ],
+      "affiliations": [],
+      "summary": "现有 VLM 后门攻击靠改图像加改标签，图文不匹配很容易被检测。CBV 用 diffusion 模型在反向生成过程中改 score，让生成的含触发器图像还保留原标签，做到 clean-label。再用 GradCAM mask 把扰动限制在最语义相关的区域，更隐蔽。在 MSCOCO 和 VQAv2 加四种 VLM 上达到 80%+ ASR。",
+      "original_abstract": "Vision-Language Models (VLMs) have achieved remarkable success in tasks such as image captioning and visual question answering (VQA). However, as their applications become increasingly widespread, recent studies have revealed that VLMs are vulnerable to backdoor attacks. Existing backdoor attacks on VLMs primarily rely on data poisoning by adding visual triggers and modifying text labels, where the induced image-text mismatch makes poisoned samples easy to detect. To address this limitation, we propose the Clean-Label Backdoor Attack on VLMs via Diffusion Models (CBV), which leverages diffusion models to generate natural poisoned examples via score matching. Specifically, CBV modifies the score during the reverse generation process of the diffusion model to guide the generation of poisoned samples that contain triggered image features. To further enhance the effectiveness of the attack, we incorporate the textual information of the triggered images as multimodal guidance during generation. Moreover, to enhance stealthiness, we introduce a GradCAM-guided Mask (GM) that restricts modifications to only the most semantically important regions, rather than the entire image. We evaluate our method on MSCOCO and VQA v2 with four representative VLMs, achieving over 80% ASR while preserving normal functionality.",
+      "highlights": {
+        "contribution": "提出针对 VLM 的 clean-label backdoor 攻击 CBV，用 diffusion 生成触发样本而不改标签。",
+        "innovation": "score modification 把视觉触发器嵌入 diffusion 反向过程加文本作为多模态 guidance；GradCAM mask 控制扰动区域提升隐蔽性。",
+        "method": "diffusion 反向生成时改 score 注入触发器，多模态 caption guidance 强化效果，GradCAM 限制改动区域。",
+        "results": "MSCOCO 和 VQA v2 上四种 VLM 均超 80% ASR，正常功能保持。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T04:02:23Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
+        "vision language model",
+        "vlm"
+      ],
+      "scores": {
+        "relevance": 3.5,
+        "recency": 5.0,
+        "popularity": 5.0,
+        "quality": 6.0,
+        "recommendation": 4.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02202v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02202v1",
+      "venue": null
+    }
+  ],
+  "total": 25
+}
