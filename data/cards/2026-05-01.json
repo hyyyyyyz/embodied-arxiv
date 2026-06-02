@@ -36,24 +36,6 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2605.00321",
-    "summary": "想搞清楚 VLA 泛化失败是不是因为看了「虚假视觉相关」。他们把视觉到动作的归因当成 interventional 估计问题,提出 ISS 来打分每个视觉区域的因果影响,再用 NMR 量化策略对任务无关特征的依赖。结果显示 NMR 能预测泛化好坏,ISS 比已有解释器更忠实。",
-    "highlights": {
-      "contribution": "给 VLA 提供了一个基于因果干预的可解释性诊断工具,用以预判策略会不会泛化失败。",
-      "innovation": "把「看 mask 后动作差异」形式化为无偏的 interventional 估计,并提出 NMR 这种衡量「看错重点」程度的标量指标。",
-      "method": "对视觉区域做 interventional masking 计算 ISS;NMR 汇总落在任务无关区域的归因质量;在多种操控任务里验证统计性质与有效性。",
-      "results": "NMR 与泛化表现相关,ISS 在归因忠实度上优于现有可解释方法。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 5,
-      "popularity": 5.5,
-      "quality": 7,
-      "recommendation": 6.8
-    },
-    "affiliations": []
-  },
-  {
     "arxiv_id": "2605.08133",
     "summary": "把 RAG 思路塞进自动驾驶 VLA。视觉先抽成时空语义图过滤噪声,再用 Graph-DTW 对齐做拓扑感知的检索,把找出来的历史先验喂进 query-based VLA backbone 生成轨迹。在 Bench2Drive 上拿到 89.12 Driving Score 的新 SOTA。",
     "highlights": {
@@ -148,26 +130,6 @@
       "recommendation": 6.5
     },
     "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.00932",
-    "summary": "Meta 给自家 Code World Model 出的安全 preparedness 报告,主要是在 Frontier AI Framework 划定的高风险域内做发布前测试,结论是 CWM 不引入额外的 frontier 风险,所以以 open-weight 发布。",
-    "highlights": {
-      "contribution": "给 Code World Model 的开放发布做了 preparedness 评估,提供官方安全声明。",
-      "innovation": "更多是 release report,而非新算法。",
-      "method": "按 Frontier AI Framework 在各高风险域跑评测 + misalignment propensity 评估。",
-      "results": "结论是 CWM 没有超出现有生态的额外风险,可作 open-weight 发布。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 5,
-      "popularity": 7,
-      "quality": 6,
-      "recommendation": 5.5
-    },
-    "affiliations": [
-      "Meta"
-    ]
   },
   {
     "arxiv_id": "2605.00943",
@@ -269,100 +231,6 @@
     ]
   },
   {
-    "arxiv_id": "2605.00323",
-    "summary": "现在治 LVLM 幻觉一般靠从 GPT 蒸偏好,学生模型被强行对齐到自己看不到的细节。OSCAR 利用 LVLM 自身「判别强于生成」的 gap 做在线自校准:MCTS 搜索 + 双粒度 reward 自动构造偏好,再 DPO 反复打磨。在幻觉 benchmark 上拿到 SOTA。",
-    "highlights": {
-      "contribution": "给 LVLM 提出一个不靠外部强模型的在线自校准抗幻觉框架。",
-      "innovation": "利用模型在判别任务上比生成更准的 Generative-Discriminative Gap,自己给自己造可靠偏好信号。",
-      "method": "MCTS + dual-granularity reward 自动产偏好对;DPO 迭代精化;在多个幻觉与通用多模态 benchmark 上验证。",
-      "results": "幻觉 benchmark 上 SOTA,同时通用多模态能力没掉。"
-    },
-    "scores": {
-      "relevance": 5.5,
-      "recency": 5,
-      "popularity": 6,
-      "quality": 7,
-      "recommendation": 6.5
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.00326",
-    "summary": "讨论一个被忽视的问题:零样本 VLM 安全分类器靠单 prompt 的 first-token 概率打分,语义等价 prompt 一换分数就飞,跨 prompt 方差还能预测错误。做了 training-free 的 mean ensemble,14 对数据-模型上 NLL 全胜,ECE 12/14 胜,排名也比单 prompt 强。",
-    "highlights": {
-      "contribution": "指出零样本 VLM 安全打分对 prompt 高度脆弱,并给出 label-free 的可靠性诊断与基线。",
-      "innovation": "提出用 prompt 家族评估 + 均值聚合作为标准的 label-free 校准基线,把跨 prompt 方差当 fragility 信号。",
-      "method": "构造语义等价 prompt 集合;mean ensemble first-token 概率;跨 14 个数据-模型对评测 NLL/ECE/AUROC/AUPRC;对照温度/Platt/isotonic。",
-      "results": "NLL 14/14 胜 train-selected 单 prompt 基线,ECE 12/14 胜;AUPRC 全面提升,AUROC 多数提升。"
-    },
-    "scores": {
-      "relevance": 5.0,
-      "recency": 5,
-      "popularity": 5,
-      "quality": 7,
-      "recommendation": 6.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.00347",
-    "summary": "Odysseus 在 Super Mario Land 这种 100+ 轮交互的视觉游戏里训练 VLM。提出带 turn-level critic 的 PPO 变体,显著比 GRPO/Reinforce++ 稳;预训练 VLM 提供强 action prior,样本效率胜过从零 deep RL。开源框架在多个关卡 3× 优于前沿模型,还能跨关卡泛化。",
-    "highlights": {
-      "contribution": "把 VLM agent 的 RL 训练推到 100+ 长 horizon 视觉决策场景,并系统对比关键算法成分。",
-      "innovation": "提出 turn-level critic 的 PPO 变体,把 VLM 当强 action prior,既稳定又省样本。",
-      "method": "在 Super Mario Land 用 PPO + lightweight turn-level critic;对比 GRPO、Reinforce++ 等;基于预训练 VLM 起步,无需手工 action engineering。",
-      "results": "多关卡平均进度比前沿模型高 3 倍以上;跨关卡、跨游戏泛化稳定;通用能力未损。"
-    },
-    "scores": {
-      "relevance": 6.0,
-      "recency": 5,
-      "popularity": 7,
-      "quality": 7.5,
-      "recommendation": 7.3
-    },
-    "affiliations": [
-      "Princeton"
-    ]
-  },
-  {
-    "arxiv_id": "2605.04098",
-    "summary": "评估 MLLM 在真实皮肤科决策里的表现,跑了 4 个开源 + GPT-4.1,3 个公开数据集 + 一个 5811 病例真实多医院 cohort。结论很直接:公开 benchmark 上 GPT-4.1 top-3 42.25%,真实图像 only 跌到 24.65%,开源模型 1.5-13.35%;加临床上下文有提升但对错误描述非常敏感。",
-    "highlights": {
-      "contribution": "量化 MLLM 在真实临床皮肤科里的 benchmark-to-bedside 落差。",
-      "innovation": "把公开 benchmark 表现和 5811 例真实多中心咨询数据直接对比,加入 severity-based triage 评估。",
-      "method": "评测 InternVL/LLaVA-Med/SkinGPT4/MedGemma + GPT-4.1;两类任务:鉴别诊断和分诊;评估有无临床上下文的差异。",
-      "results": "真实场景下开源模型 top-3 仅 1.5-13.35%,GPT-4.1 24.65%;加临床上下文至 38.93%,但对错描述高敏感;triage 灵敏度 >60% 仅可用于筛查。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 5,
-      "popularity": 6,
-      "quality": 8,
-      "recommendation": 6.5
-    },
-    "affiliations": [
-      "Yale"
-    ]
-  },
-  {
-    "arxiv_id": "2605.00392",
-    "summary": "针对 DeepSeek-OCR 的 visual token 冗余做剪枝。观察到模型解码呈「先高 norm token 后剩余」的两阶段轨迹,RTPrune 第一阶段保留高 norm token,第二阶段用最优传输配对合并剩余 token,还按 token 相似度和文本密度动态调整剪枝比。OmniDocBench 上 99.47% 精度、prefill 加速 1.23×、保留 84.25% token。",
-    "highlights": {
-      "contribution": "给 DeepSeek-OCR 设计了 OCR-aware 的两阶段 visual token 剪枝。",
-      "innovation": "依据「两次阅读」轨迹分阶段:先 norm-based 剪枝,再 OT 合并,动态比例适配文本密度。",
-      "method": "第一阶段保留高 norm 视觉 token;第二阶段用 optimal transport 配对合并剩余 token;按相似度与文本密度动态调剪枝率。",
-      "results": "OmniDocBench 上准确率 99.47%、prefill 加速 1.23×、token 保留 84.25%,在 DeepSeek-OCR-Large 上 SOTA。"
-    },
-    "scores": {
-      "relevance": 4.0,
-      "recency": 5,
-      "popularity": 6,
-      "quality": 7,
-      "recommendation": 6.2
-    },
-    "affiliations": []
-  },
-  {
     "arxiv_id": "2605.00444",
     "summary": "做长视频理解,但每个 agent 的感知预算解耦于全局视频复杂度。MACF 把视频切段,每个 agent 在本地预算下编码出紧凑 token,通过 latent 协议给中央 coordinator 沟通,而不是绕文本中介。配合课程学习训对齐、证据汇总、跨 agent 协同。在多个视频理解 benchmark 上同预算下优于 SOTA MLLM 和多 agent。",
     "highlights": {
@@ -384,106 +252,245 @@
     ]
   },
   {
-    "arxiv_id": "2605.02937",
-    "summary": "把蛋白质设计变成「理解 + 生成」两专家分工。MLLM 做 understanding expert,从序列结构文本里挑出关键残基,把这些 residue-level 约束作为硬约束传给 diffusion 生成专家做几何 co-design。这种「先理解再下笔」的因式分解让 LLM reasoning 与 SOTA 几何生成模块稳定模块化结合。",
+    "arxiv_id": "2605.15206",
+    "summary": "本地跑 LLM agent 的时候经常会因为反复重试、工具调用一堆 token 烧掉一大堆电。作者实测了消费级设备上跑 agent 的功耗和电池开销，然后做了个轻量的 supervisor AgentStop，用 token 级 log-prob 这种便宜信号去预测某条轨迹是不是要扑街，扑街就提前掐掉。在 web QA 和 coding 任务上能省 15-20% 的浪费能耗，任务成功率只掉 5% 不到。",
     "highlights": {
-      "contribution": "给 de novo 蛋白质设计提供一个可解释、可控的双专家 reasoning 框架。",
-      "innovation": "把 reasoning 操作化为显式 residue 级 commitment,而不是隐式文本提示,从而稳定串联 MLLM 与 diffusion。",
-      "method": "MLLM 做多模态理解决定关键残基;diffusion 生成专家在固定 anchor 下做条件 co-design;开放代码、数据、demo。",
-      "results": "强调框架稳定性与可解释性,具体数字未在摘要披露。"
+      "contribution": "提出 AgentStop，用预测性早停来降低本地 LLM agent 的能耗与算力浪费。",
+      "innovation": "相比传统从云端关心 cost 的视角，这里第一次把消费级设备上的功耗/电池纳入 agent 设计目标，并且只用极便宜的运行时信号做预测。",
+      "method": "实测本地 agent 的功耗、温度、电池数据；用 token-level log-prob 等廉价信号训练一个轻量分类器，预测当前轨迹是否大概率失败，是的话就直接终止。",
+      "results": "在 web QA 和 coding benchmark 上能省 15-20% 浪费的能耗，任务效用下降低于 5%。"
     },
     "scores": {
-      "relevance": 3.5,
+      "relevance": 6.0,
       "recency": 5,
-      "popularity": 7,
-      "quality": 6.5,
-      "recommendation": 6.0
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.5
     },
     "affiliations": [
-      "Stanford",
-      "Tokyo",
-      "RIKEN"
+      "Brave Software",
+      "Imperial College London"
     ]
   },
   {
-    "arxiv_id": "2605.00480",
-    "summary": "VLM 在细粒度识别上的标注质量随粒度大降,但粗粒度上仍可靠。作者在 active learning 里把 VLM 当 weak annotator:精标用人,粗标交给 VLM,再用一小组可信全标签建模 VLM 噪声。CUB200 和 FGVC-Aircraft 上同预算下持续优于现有 AL 方法。",
+    "arxiv_id": "2605.01101",
+    "summary": "面向口吃治疗的 AI 平台 VST：语音先经过深度学习分类，然后多 agent LLM 互相生成、批评、迭代出个性化训练计划，再交给临床医生 review。Critic agent 负责把不符合临床指南的方案毙掉，保持 clinician-in-the-loop。专家评估说推荐质量在线。",
     "highlights": {
-      "contribution": "在 active learning 里把 VLM 用作粗粒度弱标注源,显著降低人力成本。",
-      "innovation": "实例级混合 fine-grained 人标和 coarse-grained VLM 标签,并用少量 trusted full label 建模 VLM 的系统噪声。",
-      "method": "AL 框架:每次同时为部分样本求人精标、其余用 VLM 给粗标;trusted label 集合估计噪声参数;在 CUB200 / FGVC-Aircraft 评测。",
-      "results": "同标注预算下,CUB200 和 FGVC-Aircraft 上一致优于现有 AL 方法。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 5,
-      "popularity": 5,
-      "quality": 6.5,
-      "recommendation": 5.8
-    },
-    "affiliations": [
-      "Kyushu University"
-    ]
-  },
-  {
-    "arxiv_id": "2605.00583",
-    "summary": "VLM 的视觉模态作为攻击面被严重低估。作者提出四类视觉 jailbreak:视觉符号编码 + 解码图、危险词换成无害替代、图里把危险文字替换成无害词、视觉类比 puzzle。六款前沿 VLM 都被攻破,例如 Claude-Haiku-4.5 视觉 cipher 成功率 40.9%,而等价文本只有 10.7%,说明文本安全训练没自动迁移到视觉。",
-    "highlights": {
-      "contribution": "系统揭示 VLM 视觉模态作为安全攻击面,提出四类有效 jailbreak。",
-      "innovation": "把「视觉编码」「无害替代物 + 视觉上下文」「视觉文字替换」和「视觉类比 puzzle」四种攻击形式化并大规模评测。",
-      "method": "构造四类视觉攻击 prompt;在 6 个前沿 VLM 上测攻击成功率;给出初步可解释性与缓解结果。",
-      "results": "Claude-Haiku-4.5 视觉 cipher 攻击成功 40.9% vs 文本 cipher 10.7%,六款前沿 VLM 都存在跨模态对齐 gap。"
+      "contribution": "把口吃评估 + 个性化治疗方案生成整合成一个 clinician-in-the-loop 的多 agent 工作流。",
+      "innovation": "在医疗 agent 系统中显式加了一个 critic agent 用循证指南做安全过滤，再人工 review 闭环。",
+      "method": "采集语音 -> 提特征 -> 深度学习分类口吃类型 -> 多个 LLM agent 协作生成/批评/迭代治疗方案 -> critic agent 检查 -> 医生 review 后再产出正式版。",
+      "results": "专家评估表明 VST 一致地生成高质量、循证的治疗推荐；提供在线交互界面 demo。"
     },
     "scores": {
       "relevance": 5.0,
       "recency": 5,
-      "popularity": 7,
-      "quality": 7.2,
-      "recommendation": 7.0
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.5
     },
     "affiliations": [
-      "UC Berkeley"
+      "Imperial College London",
+      "Université de Lorraine"
     ]
   },
   {
-    "arxiv_id": "2605.00789",
-    "summary": "LVLM prefill 阶段视觉 token 巨多,KV cache 把显存吃满。LightKV 用文本 prompt 引导做跨模态 message passing,把 vision token 嵌入里的冗余压缩掉,prefill 阶段渐进缩减。八个开源 LVLM、八个 benchmark 下,只留 55% vision token 就能把 KV cache 减半、算力降 40%,通用性能保住且优于已有压缩方法。",
+    "arxiv_id": "2605.01143",
+    "summary": "针对 LLM agent 容易被 prompt injection、多轮渐进 jailbreak 这类对抗交互攻击，作者做了一个低延迟的欺诈检测层：不看单条 prompt 是否恶意，而是把整个 interaction trajectory 抽 42 个结构化特征丢给 XGBoost。比 LLM-based 检测快 9 倍以上。",
     "highlights": {
-      "contribution": "针对 LVLM 提出 prompt-aware 的 KV cache 压缩方案,显著降低显存与算力。",
-      "innovation": "用文本 prompt 引导的跨模态 message passing 来挑选/聚合 vision token,而不是纯视觉冗余度。",
-      "method": "prefill 时跨模态 message passing 聚合 vision token,渐进压缩;在 8 个 LVLM、8 个 benchmark(含 MME、SeedBench)评测。",
-      "results": "保留 55% vision token 时 KV cache 减半、计算降至多 40%,通用任务性能保留且优于已有基线。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 5,
-      "popularity": 6,
-      "quality": 7,
-      "recommendation": 6.3
-    },
-    "affiliations": [
-      "National University of Singapore"
-    ]
-  },
-  {
-    "arxiv_id": "2605.00809",
-    "summary": "GenLIP 把 ViT 预训练直接换成「用 visual token 自回归预测语言 token」,不用对比学习、也不接额外文本 decoder。8B Recap-DataComp-1B 数据训出来就能打平甚至超过强 baseline;再续训多分辨率原生宽高比后,OCR、chart 这种细节任务还能涨。",
-    "highlights": {
-      "contribution": "给 MLLM 的视觉 encoder 提出极简的生成式语言-图像预训练范式。",
-      "innovation": "单 transformer 同时建模 vision 和 text token,完全去掉对比学习与额外 text decoder。",
-      "method": "ViT 把视觉 token 喂进 LLM 直接预测语言 token;标准语言建模 loss;用 Recap-DataComp-1B 的 8B 样本训练,再多分辨率续训。",
-      "results": "数据更少时与强 baseline 持平或更好;多分辨率续训后在 OCR、chart understanding 等细节任务上进一步提升,作为 MLLM vision encoder 表现强。"
+      "contribution": "提出运行时基于交互轨迹的轻量 fraud-detection 层，用来防 LLM agent 被对抗交互攻破。",
+      "innovation": "把信用卡反欺诈那一套行为级监测搬到 agent 防御，跨多轮看 session 动态而不是单 prompt 过滤。",
+      "method": "构造 12000 条多轮 agent 交互合成语料；提取 prompt 特征、session 动态、工具使用、执行上下文等 42 维结构化特征；用 XGBoost 训分类器实时判断。",
+      "results": "比基于 LLM 的检测速度快 9 倍以上，消融显示交互级行为检测能补 prompt 过滤的不足。"
     },
     "scores": {
       "relevance": 5.5,
       "recency": 5,
-      "popularity": 7,
-      "quality": 7.5,
-      "recommendation": 7.2
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.00400",
+    "summary": "传统的表格检索就是看主题相关度，但 LLM agent 用表的时候经常带很细粒度的 schema 和内容约束。作者定义了 Instruction-Following Table Retrieval 任务，搭了 FollowTable 基准，还提了个 Instruction Responsiveness Score 衡量排序是不是真的对指令敏感。结论是现有 retriever 在这上面挺差。",
+    "highlights": {
+      "contribution": "提出 IFTR 任务和首个大规模基准 FollowTable，配套了衡量指令响应度的新指标。",
+      "innovation": "把表格检索从 topical similarity 升级到要同时满足 content 包含/排除约束和 schema-grounded 约束。",
+      "method": "用 taxonomy 驱动的标注 pipeline 构建 benchmark；定义 Instruction Responsiveness Score 衡量带指令排序相对纯主题 baseline 的提升；评估多个现有检索模型。",
+      "results": "现有 retriever 普遍偏向表层语义线索、对 schema 约束几乎没感觉，留出明显改进空间。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 5.8
     },
     "affiliations": [
-      "Beijing Jiaotong University",
-      "ByteDance"
+      "Southeast University",
+      "Huawei Noah's Ark Lab"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00425",
+    "summary": "Agentic RL 痛点：稀疏的 outcome reward 不好给每一步分信用，常见办法是塞 process reward model 或自监督信号，但很难调。AEM 不要额外监督，而是从理论分析熵漂移出发，把熵动力学从 token 提到 response 级，给每条 response 算个不确定性代理来动态调 advantage，自然完成探索-利用过渡。在 ALFWorld、WebShop、SWE-bench-Verified 上 1.5B-32B 都有稳定提升。",
+    "highlights": {
+      "contribution": "提出 AEM，一个无需额外监督的 agentic RL credit assignment 方法，动态调控熵动力学。",
+      "innovation": "首次把熵分析从 token 级抬到 response 级，并通过 natural-gradient 下的熵漂移理论得出 response-level 的不确定性代理。",
+      "method": "推导 response-level 熵动力学和 sampled-response advantage、相对 surprisal 的关系；用这个不确定性代理 rescale advantage；自然在 RL 训练过程中从 explore 过渡到 exploit。",
+      "results": "在 ALFWorld、WebShop、SWE-bench-Verified 上一致提升强 RL baseline；接入 SOTA SWE RL 框架后再 +1.4%。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 5,
+      "popularity": 6.5,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.02939",
+    "summary": "多模态争议内容检测以前都是静态地从视频和评论抽特征，没考虑不同观众群对同一内容反应不一样。AuDisAgent 把任务建模成动态传播过程：三个 screening agent 分别看视频、评论和跨模态，没共识时叫出 Viewing Panel agent 模拟不同立场观众讨论，最后 Arbitration 拍板。还设计了冷启动时拿语义相似视频历史评论作引导的策略。",
+    "highlights": {
+      "contribution": "提出训练-free 的多 agent 框架 AuDisAgent，把 MCD 重塑为受众间内容传播过程。",
+      "innovation": "用 Viewing Panel agent 模拟不同观众的解读差异，弥补静态特征学不到的视角多样性；并设计冷启动 Comment Bootstrapping 策略。",
+      "method": "Video/Comment/Interaction 三个 Screening agent 先评估，分歧时启动 Viewing Panel agent 模拟群组讨论，Arbitration agent 整合做最终判断；新视频无评论时从语义近视频借历史评论。",
+      "results": "在公开数据集上无论评论多少都显著超越现有 SOTA。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": [
+      "Sichuan University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00505",
+    "summary": "观点论文：当 IR 的下游消费者从人变成 LLM，主要瓶颈不是 recall 也不是排序，而是 denoising —— 怎么在有限 context 里塞最多可用、可验证的证据。作者把 IR 的挑战分成 inaccessible/undiscoverable/misaligned/unverifiable 四阶段，给出了贯穿 index、检索、context engineering、verification 和 agentic workflow 的信噪比优化技术 taxonomy。",
+    "highlights": {
+      "contribution": "提出一种 LLM 时代 IR 的 denoising-first 观点，并组织出全 pipeline 的信噪比优化 taxonomy。",
+      "innovation": "把 IR 重新定义在 LLM 注意力预算之下，引入 evidence density 和 verifiability 作为核心指标。",
+      "method": "提出四阶段 IR 挑战框架；按 pipeline 阶段整理 denoising 技术；列举 lifelong assistant、coding agent、deep research、多模态等下游案例。",
+      "results": "立场/综述类论文，无实验数据。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 5.8
+    },
+    "affiliations": [
+      "HKUST(GZ)"
+    ]
+  },
+  {
+    "arxiv_id": "2605.02940",
+    "summary": "Meme 有害内容检测往往要大量标注，PrismAgent 把它当成一个刑事调查来玩：4 个 agent 分工 analysis/investigation/prosecution/judgment。analyst 用善意/恶意两种假设去解读 meme，investigator 从未标注集找证据，prosecutor 给出三种判断，judge 综合裁决。整个 zero-shot，链路全公开可解释。在三个数据集上显著超过 zero-shot baseline。",
+    "highlights": {
+      "contribution": "提出零样本可解释多 agent 框架 PrismAgent 检测有害 meme，无需大量标注。",
+      "innovation": "把检测建模成法庭刑事调查流程，多 agent 分工产出可追溯的多步推理链而不是只给最终标签。",
+      "method": "analyst 双假设释义 meme -> investigator 从未标注库取证 -> prosecutor 三次配对独立判 -> judge 综合裁决。",
+      "results": "在三个公开数据集上显著优于现有 zero-shot 方法。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.3
+    },
+    "affiliations": [
+      "Sichuan University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00742",
+    "summary": "一个立场论文：作者认为 agentic AI 系统 orchestration 这一层就该用贝叶斯。让 LLM 内部权重做贝叶斯太重，但 control layer 维护对潜在量的信念、用观察更新、做效用驱动的动作选择，是贝叶斯决策理论天然该上场的地方。给出了几个 design pattern 和示例。",
+    "highlights": {
+      "contribution": "提出 agentic AI 的 orchestration/control 层应当遵循贝叶斯决策理论。",
+      "innovation": "把贝叶斯切入点从 LLM 参数本身挪到 orchestration 层，绕开了让 LLM 整体贝叶斯化的计算障碍。",
+      "method": "立场论文：分析 orchestration 与 belief update 的关系，列出 Bayesian control 应有的实际性质，并给出具体例子和 design pattern。",
+      "results": "立场/positions 论文，无实证结果。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5,
+      "popularity": 7.0,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": [
+      "University of Manchester",
+      "ESSEC Business School",
+      "Helmholtz AI"
+    ]
+  },
+  {
+    "arxiv_id": "2605.12532",
+    "summary": "一个金融 POC：用多 agent LLM 做完全自主交易。先用 Adaptive Z-Score 触发引擎只在异常市况下叫 LLM 节省算力，然后 Analyst/Risk Manager/Executor 串成 deliberative pipeline，靠 JSON 契约和 hard-gate safety 层保证安全；还有 mutex 调度保证可复现。5 天 live 干跑，76 个资产上 157 次零干预激活。",
+    "highlights": {
+      "contribution": "提出 AgenticAITA，一个无需训练、确定性安全约束的多 agent LLM 自主交易框架原型。",
+      "innovation": "把 LLM 推理当成稀缺认知资源，用 Z-Score gating 触发；并用 mutex 串行化保证审计可复现。",
+      "method": "Adaptive Z-Score 触发 -> Analyst/Risk Manager/Executor 顺序推理 -> JSON 契约 + 硬安全门 + Inference Gating mutex -> Correlation-Break Diversification 评分指导组合。",
+      "results": "5 天 live 干跑：76 个资产、157 次零干预激活、11.5% agentic friction 表明非平凡协商；正式收益评估留到后续。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5,
+      "popularity": 5.0,
+      "quality": 5.5,
+      "recommendation": 5.0
+    },
+    "affiliations": [
+      "University of L'Aquila"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00798",
+    "summary": "LLM 直接执行多步流程经常崩，作者搞了个 RunAgent：先把自然语言计划翻成有 IF/GOTO/FORALL 等控制结构的 agent 语言，再在每步里自动派生约束和 rubric 去 verify；推理、调工具、写 Python 自动选；context 历史也每步过滤只保留相关。在 Natural-plan 和 SciBench 上比 baseline 和 SOTA PlanGEN 都强。",
+    "highlights": {
+      "contribution": "提出 RunAgent，一个多 agent 的自然语言计划执行平台，靠约束和 rubric 保证步级正确。",
+      "innovation": "把 NL 计划编译成带显式控制结构的 agentic 语言，并自动从任务描述派生约束做步级校验。",
+      "method": "把自然语言计划翻成带 IF/GOTO/FORALL 的 agentic 语言；每步自动派生约束 + 语义/语法校验；动态在 LLM 推理、工具调用、Python 代码生成执行间选择；过滤 context 仅留相关信息。",
+      "results": "在 Natural-plan 和 SciBench 上超过 baseline LLM 和 SOTA 的 PlanGEN。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": [
+      "University of Maryland",
+      "NEC Labs America"
+    ]
+  },
+  {
+    "arxiv_id": "2605.00803",
+    "summary": "Coding agent 在软件工程 benchmark 上看着强，但能不能跑通真正的科学计算工作流？作者和材料学专家一起搞了 AutoMat benchmark：从真实材料学论文里抽 claim，让 agent 去补全 underspecified 流程、跑 toolchain、判 claim 是否成立。结果最强配置成功率才 54.1%，错因主要是流程不全、方法走样、执行脆弱。",
+    "highlights": {
+      "contribution": "提出 AutoMat，第一个专门评估 LLM coding agent 能否复现计算材料学论文 claim 的基准。",
+      "innovation": "评估对象不止是写代码，还包括恢复欠定的计算流程、操作专业 toolchain 和判断 claim 支持度三件套。",
+      "method": "联合领域专家从真实论文里 curate 一组 claim 和对应的 end-to-end 计算工作流；评估多种 LLM 和 coding agent 设置；错误分析定位失败模式。",
+      "results": "最佳设置成功率仅 54.1%，纯文本恢复流程的场景最差，主要错误是 incomplete procedures、方法走样、执行脆弱。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.5
+    },
+    "affiliations": [
+      "Johns Hopkins University"
     ]
   }
 ]

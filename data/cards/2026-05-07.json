@@ -1,77 +1,5 @@
 [
   {
-    "arxiv_id": "2605.05544",
-    "summary": "Action chunking 一刀切固定长度其实有坑:接触时刻要短 chunk 反应快,自由运动要长 chunk 才好做信用分配。作者搞了个自适应版本,在每个 state 里挑最合适的 chunk 长度,核心是用 per-horizon baseline + 折扣归一化的 advantage 来比较,避免短 chunk 系统性占优。在 OGBench、Robomimic 上拿了 SOTA,还能加到大 VLA 模型上提 RoboCasa-GR1 成功率。",
-    "highlights": {
-      "contribution": "提出 AQC,让 offline-to-online RL 的 action chunking 长度按 state 自适应选择,而不是全程固定。",
-      "innovation": "用 per-horizon advantage 而不是直接比 Q 值,理论上证明了无偏选择性,绕开了不同折扣尺度导致短 chunk 永远赢的老问题。",
-      "method": "训练多个不同 chunk 长度的 critic,每步根据归一化 advantage 信号挑 chunk size 执行;给出 noise immunity 和 value dominance 的理论界。",
-      "results": "OGBench/Robomimic 拿到 SOTA 成功率;接在大 VLA 上对 RoboCasa-GR1 也有显著提升,具体数字未在摘要给出。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 5.5,
-      "popularity": 6.5,
-      "quality": 7.8,
-      "recommendation": 7.6
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.05714",
-    "summary": "现在 VLA 见过的任务做得好,换场景就崩,作者认为问题在视觉表征把外观和场景搅在一起。TriRelVLA 把「物体-手-任务」三元关系显式建出来,做成关系图喂给 LLM 再出动作,降低对外观统计的依赖。配套放了个真机数据集做微调,跨场景、跨物体、跨任务的泛化都比基线强。",
-    "highlights": {
-      "contribution": "把 VLA 的中间表示从语义对象升级为「对象-手-任务」三元关系图,目的是让动作生成更依赖关系而非外观。",
-      "innovation": "区别于此前对象化但仍是语义的中间表征,这里强调关系而非内容,并通过 task-grounded 图 transformer 显式建模交互。",
-      "method": "多模态输入构造三元 primitive → 任务引导 cross-attention 形成节点 → relation-aware graph transformer 建模 → bottleneck 压缩后投入 LLM 出动作;附带真机数据集微调。",
-      "results": "在 fine-tuned 任务和 cross-scene/object/task 三个泛化维度都有「清晰提升」,具体数字摘要里未给。"
-    },
-    "scores": {
-      "relevance": 8.6,
-      "recency": 5.5,
-      "popularity": 6.8,
-      "quality": 7.2,
-      "recommendation": 7.8
-    },
-    "affiliations": ["NUS"]
-  },
-  {
-    "arxiv_id": "2605.05945",
-    "summary": "VLA 想吃大规模 egocentric 数据,但现有数据集每条几分钟,根本撑不起长时任务。作者用手机当采集设备搞了 MobileEgo Anywhere,只靠普通手机传感器就能持续追踪小时级轨迹。开源了视频处理流水线 STERA、一个免费 App,加 200 小时数据集(584 sessions),并验证拿这些数据中训 VLA 能降低留出集动作误差。",
-    "highlights": {
-      "contribution": "提供一套用商用手机收集长达数小时 egocentric 数据的开源框架 + 200 小时数据集,降低 VLA 训练数据采集门槛。",
-      "innovation": "完全跳出实验室级硬件,用手机长程姿态追踪 + 标准化处理流水线,把消费级设备变成 VLA 数据源。",
-      "method": "STERA 视频处理流水线将手机原始捕获转成训练格式;免费 App 让任何用户都能录;数据覆盖 584 sessions、200 小时长形式 egocentric 视频。",
-      "results": "把这部分数据加入 mid-training 一个 VLA,held-out 动作预测误差下降,验证了数据有效性(具体数值摘要未给)。"
-    },
-    "scores": {
-      "relevance": 7.4,
-      "recency": 5.5,
-      "popularity": 6.5,
-      "quality": 7.0,
-      "recommendation": 7.3
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.06175",
-    "summary": "把 VLA 整个全量微调容易过拟合还忘掉预训练的视觉语言知识,PEFT 又适应不动机器人控制。VLA-GSE 把冻结骨干做 SVD,leading 奇异分量给共享专家、残余分量给路由专家,在固定参数预算下扩大适配能力。只更新 2.51% 参数就在 LIBERO-Plus 拿到 81.2% 零样本成功率,还保住多模态理解能力。",
-    "highlights": {
-      "contribution": "提出一种基于谱分解 + 共享/路由专家的 VLA 参数高效微调框架,兼顾控制适应与预训练知识保留。",
-      "innovation": "用 SVD 的主成分初始化 generalized 专家、residual 部分初始化 specialized 专家,既比 LoRA 表达力强又能避免 FFT 的遗忘。",
-      "method": "对骨干做谱分解 → 给 shared expert 装主奇异分量、给 routed expert 装互不相交残差分量 → 用 MoE 风格路由,只训 2.51% 参数。",
-      "results": "LIBERO-Plus 零样本平均成功率 81.2%,多模态理解能力与 LoRA 持平,真机分布外操控也有提升;开源代码已放出。"
-    },
-    "scores": {
-      "relevance": 8.4,
-      "recency": 5.5,
-      "popularity": 6.8,
-      "quality": 8.0,
-      "recommendation": 8.0
-    },
-    "affiliations": ["Tsinghua"]
-  },
-  {
     "arxiv_id": "2605.06747",
     "summary": "作者放出一个百万小时级人类活动视频语料 HumanNet,目标是把具身基础模型的训练数据从机器人扩展到人类视频。除了视频还提供动作描述、手/身体信号等交互注解。验证显示在 Qwen VLM 上加 1000 小时 HumanNet 第一视角视频比加 100 小时真机数据更有效,说明 egocentric human video 可能能替代真机数据。",
     "highlights": {
@@ -90,96 +18,6 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2605.05951",
-    "summary": "World model 想象越长越不稳,作者认为问题在 latent 缺少历史完备性和几何结构。HaM-World 把 latent 拆成 (q,p) 的物理子空间 + 语义子空间 c,用 Mamba 做历史记忆,(q,p) 走 Hamiltonian 向量场 + 残差控制项。在 DMC 4 个任务上 AUC 117.9(+9.5%),长 horizon rollout 误差降到强基线的 45%,OOD 12 种扰动下都拿最高 return。",
-    "highlights": {
-      "contribution": "提出 HaM-World,把 world model 的 latent 结构化为符合 Hamiltonian 力学的 (q,p,c) 三段,提高长 horizon 想象稳定性。",
-      "innovation": "结合 Mamba selective state space 的历史记忆与软 Hamiltonian 几何先验,显式区分配置/动量/语义,而非直接堆 latent。",
-      "method": "Mamba 处理历史 → latent 分成 (q,p,c) → (q,p) 走能量导出的 Hamiltonian + 控制残差,c 装语义和耗散因素;同一 latent 同时支持 dynamics、reward、CEM 规划。",
-      "results": "DMC 4 任务 Avg AUC 117.9(+9.5%);长 rollout MSE 降到基线 45%、12/12 OOD 场景拿到最高 return,Finger Spin +10.2%、Reacher Easy +13.6%。"
-    },
-    "scores": {
-      "relevance": 7.8,
-      "recency": 5.5,
-      "popularity": 6.0,
-      "quality": 8.1,
-      "recommendation": 7.7
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.06298",
-    "summary": "传统 world model 用厚重 decoder 把 latent 解回像素既慢又不可解释。NOVA 把状态表示成一个隐式神经表示 (INR) 的权重和偏置,直接解析渲染就能出图,顺带支持零样本超分。还能用 action-matching 蒸馏成可控视频生成器,无需额外损失就能解耦背景/前景/帧间运动,在单卡消费 GPU 上 ~40M 参数跑可控预测。",
-    "highlights": {
-      "contribution": "用 INR 权重作为 world model 的「状态」,通过解析渲染替代 decoder,实现紧凑、可移植、可解释的世界模型。",
-      "innovation": "状态不是 opaque latent,而是 INR 的参数;无任何 auxiliary 或对抗损失即可自发结构化解耦背景/前景/运动。",
-      "method": "把场景状态编码成 coordinate-based INR 的权重,前向解析渲染替代 decoder;用 action-matching 把模型蒸馏成 context-dependent 视频生成器。",
-      "results": "~40M 参数、单卡消费 GPU 即可跑可控预测;支持零样本超分、内容/动力学解耦编辑,在多个挑战性数据集上取得强可控预测能力。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 5.5,
-      "popularity": 6.0,
-      "quality": 7.4,
-      "recommendation": 7.3
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.06192",
-    "summary": "现有 world-action 模型基本把 video 当辅助表征,反过来用动作引导视频生成的能力很弱,导致 rollout 几何漂掉、交互细节崩。EA-WM 直接把 kinematic 状态投影到目标相机视角,形成结构化「动作场」,再用事件感知双向融合块增强物体状态变化的捕捉。在 WorldArena 上拿到 SOTA,显著领先基线。",
-    "highlights": {
-      "contribution": "提出 EA-WM,以结构化 Kinematic-to-Visual 动作场实现「动作引导视频生成」的世界模型。",
-      "innovation": "不再把动作当低维 token 注入,而是几何对齐地投影成视觉化动作场,加事件感知双向 cross-attention 捕捉交互动态。",
-      "method": "在预训练视频扩散基础上,把关节/末端动作和 kinematic 状态投到目标相机视图形成结构化动作场;事件感知双向融合块调制跨分支注意力。",
-      "results": "在综合性的 WorldArena benchmark 拿到 SOTA,以「显著差距」领先现有基线(具体数字摘要未给)。"
-    },
-    "scores": {
-      "relevance": 7.8,
-      "recency": 5.5,
-      "popularity": 6.2,
-      "quality": 7.4,
-      "recommendation": 7.5
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.06337",
-    "summary": "天气和气候 world model 通常被迫把多源观测插值到固定网格上,效率和精度都受限。Earth-o1 直接学连续三维大气演化,不依赖传统数值求解器或数据同化,把各类传感器拼成一个 grid-free 动力场。在 hindcast 上地表预报技能可与运营级 IFS 持平,展示了「观测原生」地球世界模型的可行性。",
-    "highlights": {
-      "contribution": "提出 grid-free、观测原生的全球大气 world model,绕开传统网格化数值预报。",
-      "innovation": "直接从未网格化的多源传感器观测学连续三维动力场,而不是先同化到网格再推时间。",
-      "method": "把多源观测融合成统一的 grid-free 动力场,模型自动推进大气态在空间和时间上的演化,无需显式数值求解器。",
-      "results": "hindcast 地表预报技能与运营级 IFS 相当,验证观测驱动连续 world model 可在地球系统层面与传统物理框架精度匹敌。"
-    },
-    "scores": {
-      "relevance": 5.5,
-      "recency": 5.5,
-      "popularity": 7.5,
-      "quality": 7.8,
-      "recommendation": 7.1
-    },
-    "affiliations": ["Shanghai AI Lab", "SJTU", "Columbia"]
-  },
-  {
-    "arxiv_id": "2605.06388",
-    "summary": "现在机器人 world model 普遍用 VAE 这种以像素重建为目标的 latent,但语义 latent (V-JEPA/DINO/SigLIP) 究竟是不是更好,没人系统比过。作者在 BridgeV2 上固定协议训练 6 种 encoder,从视觉保真、规划/策略下游表现、latent 质量三个轴评估。结论:像素 SOTA 不等于策略 SOTA,V-JEPA 2.1 在策略下游最强,语义 latent 普遍更适合机器人 world model。",
-    "highlights": {
-      "contribution": "首个系统比较「重建型 vs 语义型 latent space」在机器人 world model 中表现的研究,给出选型建议。",
-      "innovation": "提出策略下游性能、视觉保真、latent 质量三轴评估框架,凸显仅看像素 PSNR 会误导 world model 选择。",
-      "method": "固定 BridgeV2 数据与训练协议,统一对比 6 种编码器 (VAE、Cosmos、V-JEPA 2.1、Web-DINO、SigLIP 2 等),在 action-conditioned LDM 框架内训练并多轴评估。",
-      "results": "重建 encoder 在像素指标上强,但语义 encoder 几乎全面赢策略 + latent 质量;V-JEPA 2.1 综合最强,作者明确推荐语义 latent。"
-    },
-    "scores": {
-      "relevance": 8.3,
-      "recency": 5.5,
-      "popularity": 7.2,
-      "quality": 8.2,
-      "recommendation": 8.2
-    },
-    "affiliations": ["Mila"]
-  },
-  {
     "arxiv_id": "2605.06487",
     "summary": "3D MRI 预训练大多把 volume 当静态数据,作者发现可以把 3D 体积变成「沿位置/方向/尺度的连续 2D 切片视频」,于是把它当作 action-conditioned 序列做预训练。tokenizer 编码切片观测,latent dynamics 模型预测特征演化,等于给 MRI 设计了一个 video-action 形式的 world model 类预训练任务。在多个解剖/空间下游任务上比静态 volume baseline 更好。",
     "highlights": {
@@ -195,7 +33,9 @@
       "quality": 7.0,
       "recommendation": 6.4
     },
-    "affiliations": ["Peking University"]
+    "affiliations": [
+      "Peking University"
+    ]
   },
   {
     "arxiv_id": "2605.06841",
@@ -216,96 +56,6 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2605.06732",
-    "summary": "LeCun 等人的理论小品:在 imagined rollout 上训练策略,究竟该怎么分配 dynamics 和 reward 模型的样本预算?作者扩展了 Asadi 等人的分析到带 learned reward 的 MDP,推出最小化 return error 上界的最优样本比;还分析了 REINFORCE 在噪声 reward 下仍是无偏的,从而给出「多 rollouts 噪声 reward vs 少 rollouts 精确 reward」的最优选择公式。",
-    "highlights": {
-      "contribution": "对「在想象中训练」的范式给出最优样本分配与噪声 reward 容忍度的理论刻画。",
-      "innovation": "把 Asadi 2018 的分析推到带 learned reward 的 MDP,并把 Lipschitz 表征作为收紧界的 desideratum,与 temporal straightening 思想挂上钩。",
-      "method": "理论推导:基于幂律 scaling 假设给出 dynamics vs reward 样本的最优比;分析 REINFORCE 在零均值奖励噪声下的偏差与方差;构造一维预算优化问题求解最优 trade-off。",
-      "results": "理论结果而非 benchmark;提供了样本分配公式、Lipschitz 表征的紧致性收益、以及预算约束下 rollout 数 vs reward 精度的最优解。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 5.5,
-      "popularity": 8.0,
-      "quality": 7.5,
-      "recommendation": 7.4
-    },
-    "affiliations": ["Meta AI", "NYU"]
-  },
-  {
-    "arxiv_id": "2605.06334",
-    "summary": "工具调用 LLM agent 的合规评测很难,因为手册是人类自然语言、行为却是 tool call 轨迹。MANTRA 框架自动把自然语言手册 + 工具 schema 合成机器可校验的 compliance benchmark:独立生成符号 world model 和 trace 级合规检查,用 SMT 求解器保证一致性。最终造了 6 域 285 任务、覆盖 50+ 页手册的基准。",
-    "highlights": {
-      "contribution": "提出 MANTRA 框架,以 SMT 自动合成 LLM agent 程序化合规基准,跳过手工或 LLM-judge 评测的缺陷。",
-      "innovation": "独立生成符号 world model 与 trace 级 compliance 检查,然后用 SMT 求解器验证一致性,再用 repair loop 兜底人工。",
-      "method": "从自然语言手册和工具 schema 中分别抽取(i)符号化 world model 表示程序依赖,(ii)trace 级合规约束;SMT 验证一致性,不一致则结构化修复。",
-      "results": "构造 6 域 285 任务的新基准,覆盖 50+ 页手册;compliance 检查覆盖更丰富、约束更强,可用于 debug agent 失败模式。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 5.5,
-      "popularity": 6.0,
-      "quality": 7.5,
-      "recommendation": 6.2
-    },
-    "affiliations": ["MPI-SWS"]
-  },
-  {
-    "arxiv_id": "2605.06658",
-    "summary": "视频 relighting 现有思路依赖 intrinsic 分解,但分解一不准就掉链子,材质和外观全崩。Relit-LiVE 直接把原始参考图引到渲染过程里,补回 intrinsic 表示丢失的关键 cue,并提出「环境视频预测」:同一扩散过程里同时输出 relit 视频和每帧对应的环境贴图,保证几何-光照对齐。在合成和真实 benchmark 上都超过 SOTA。",
-    "highlights": {
-      "contribution": "提出 Relit-LiVE 视频重光照框架,在无需相机位姿、保持物理一致与时间稳定的前提下生成高质量 relit 视频。",
-      "innovation": "把 raw reference image 显式注入渲染流程绕开 intrinsic decomposition 风险;同步预测 relit 视频 + 每帧 environment map 实现强几何-光照对齐。",
-      "method": "video diffusion 联合预测 relit 视频与对应 environment map,以 raw 参考图增强分解信息,支持动态光与相机运动。",
-      "results": "在合成与真实数据集上一致优于 SOTA video relighting/神经渲染方法;还原生支持材质编辑、对象插入、streaming relighting。"
-    },
-    "scores": {
-      "relevance": 5.0,
-      "recency": 5.5,
-      "popularity": 6.0,
-      "quality": 7.5,
-      "recommendation": 6.5
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.06222",
-    "summary": "WAM 现在都是一次推理执行固定步数,机器人就「瞎跑」到下一次推理,中间不会判断想象是不是还靠谱。作者把「什么时候相信想象」建成一个 future-reality 一致性问题,搞了个 FFDC 轻量验证器,联合考察预测动作、视觉动力学、实际观测、语言指令来决定还能不能继续执行。RoboTwin 上前向推理减少 69.1%、时间减 34%,成功率仍 +2.5%;真机 +35%。",
-    "highlights": {
-      "contribution": "提出 adaptive 执行策略和 FFDC 验证器,让 WAM 在想象可靠时执行更长 chunk、不一致时及时重规划。",
-      "innovation": "把 chunk size 看作 prediction-observation 一致性的副产物,而非固定超参;还配套 Mixture-of-Horizon 训练增强长 horizon 覆盖。",
-      "method": "FFDC 轻量 causal attention 验证器联合处理 predicted action、predicted dynamics、real obs、language;一致就续 chunk,不一致就触发重新推理。",
-      "results": "RoboTwin:WAM 前向次数 -69.10%、执行时间 -34.02%、成功率较 short-chunk baseline +2.54%;真机平均成功率 +35%。"
-    },
-    "scores": {
-      "relevance": 9.0,
-      "recency": 5.5,
-      "popularity": 7.2,
-      "quality": 8.4,
-      "recommendation": 8.5
-    },
-    "affiliations": ["HKU"]
-  },
-  {
-    "arxiv_id": "2605.06247",
-    "summary": "不同 WAM 想互相借知识很难,因为 latent 接口不一致、蒸馏目标僵硬。CKT-WAM 不做输出/隐状态的直接模仿,而是把 teacher 的中间隐状态压缩成 text embedding 空间里的紧凑 context,贴到 student 的文本条件后边输入,从而注入知识。LIBERO-Plus 拿到 86.1% 总成功率,只训 1.17% 参数;真机 4 个长 horizon 任务平均成功率 83.3%。",
-    "highlights": {
-      "contribution": "提出 CKT-WAM,把异构 WAM 之间的知识迁移做成 text-embedding 空间里的 context 注入,参数高效且接口通用。",
-      "innovation": "用 learnable-query cross attention 压 teacher token + 通用 adapter + 路由+专家化 adapter,把知识压成 student 可读 context,避免硬碰 latent 接口。",
-      "method": "抽 teacher 中间隐状态 → LQCA 压缩 token 数 → generalized adapter + router + specialized adapters 转成 context → 拼到 student textual embedding 上喂入。",
-      "results": "LIBERO-Plus 总成功率 86.1%,只训 1.17% 参数;真机 4 个多步长 horizon 任务平均成功率 83.3%,均为最强基线。"
-    },
-    "scores": {
-      "relevance": 8.6,
-      "recency": 5.5,
-      "popularity": 6.8,
-      "quality": 8.0,
-      "recommendation": 8.1
-    },
-    "affiliations": ["Tsinghua"]
-  },
-  {
     "arxiv_id": "2605.06481",
     "summary": "现有 WAM 多把世界预测当整张图/全局 latent,decoder 想响应「对某个物体动作」指令就很难定位。OA-WAM 把每帧分成 N+1 个 slot(机器人 + N 个物体),每个 slot 有一个持久 address 向量 + 时变 content 向量;cross-slot 注意力被路由经过 address-only key,强制「指哪打哪」。LIBERO 97.8%、SimplerEnv 79.3%,swap-binding cosine 0.87 vs 全局基线 0.09。",
     "highlights": {
@@ -321,61 +71,9 @@
       "quality": 8.3,
       "recommendation": 8.3
     },
-    "affiliations": ["Tsinghua SIGS"]
-  },
-  {
-    "arxiv_id": "2605.06270",
-    "summary": "VGGT 一类 feed-forward 3D 模型扩到上千帧视频时被 global attention 二次复杂度卡死。作者发现 query token 编码视图相关的几何请求很敏感,KV token 表示共享场景上下文则非常耐压缩。Spark3R 给两者用不同压缩率(query 用 token merging、KV 用更激进的 pruning),逐层自适应。免训练即插即用,接进 VGGT/π³/Depth-Anything-3/VGGT-Ω,1000 帧输入最高 28× 提速,质量不掉。",
-    "highlights": {
-      "contribution": "针对 VGGT 等 feed-forward 3D 重建模型提出免训练、非对称 token 压缩加速框架。",
-      "innovation": "首次区分 query 与 KV token 的功能差异,给出非对称压缩率;逐层自适应 KV 压缩进一步优化质量-效率折中。",
-      "method": "query token 用 intra-group token merging,KV token 用轻量剪枝,且 KV 压缩率随层自适应;无需重新训练,直接挂到现有模型。",
-      "results": "在 VGGT、π³、Depth-Anything-3、VGGT-Ω 上即插即用,1000 帧输入最高 28× 加速,重建质量维持有竞争力水平。"
-    },
-    "scores": {
-      "relevance": 8.5,
-      "recency": 5.5,
-      "popularity": 7.2,
-      "quality": 8.1,
-      "recommendation": 8.2
-    },
-    "affiliations": ["Peking University"]
-  },
-  {
-    "arxiv_id": "2605.05897",
-    "summary": "路侧 LiDAR 数据极度稀缺,标注成本高。VRS 框架用 vehicle-side 数据集 + 新视角合成来生成带标签的路侧 LiDAR 数据,先用点云补全补缺失几何,再用 occupancy 可见性约束处理大视角变化。在 3D 检测下游验证合成数据能补充真实路侧数据并改善对未见路侧视角的泛化。",
-    "highlights": {
-      "contribution": "提出 VRS 数据合成框架,通过新视角合成从车载数据生成带标签的路侧 LiDAR 数据集。",
-      "innovation": "联合用点云补全消除车载缺失几何 + occupancy 可见性约束应对路侧大视角变化,使 LiDAR NVS 在大跨视角下仍可控。",
-      "method": "vehicle 点云补全 → 加入 occupancy-based 可见性约束 → 跨视角渲染生成路侧 LiDAR 点云 + 标签,支持灵活多视角批量生成。",
-      "results": "在路侧 3D 目标检测任务上,合成数据可有效补充真实路侧数据,提升模型对未见路侧视角的泛化(无具体数字)。"
-    },
-    "scores": {
-      "relevance": 5.5,
-      "recency": 5.5,
-      "popularity": 5.5,
-      "quality": 6.5,
-      "recommendation": 6.0
-    },
-    "affiliations": ["SJTU"]
-  },
-  {
-    "arxiv_id": "2605.06088",
-    "summary": "把开放词汇语义放到 3DGS 上,多视角语义不一致是老问题。OpenGaFF 构建 Gaussian Feature Field 让语义成为 Gaussian 几何+外观的连续函数,再引入结构化 codebook 当共享语义 primitive,用 codebook-guided attention 通过相似度匹配检索语言特征。2D/3D 开放词汇基准上一致优于先前方法,语义可解释性也更强。",
-    "highlights": {
-      "contribution": "提出 OpenGaFF,在 3D Gaussian Splatting 上构建几何条件的 Gaussian Feature Field 实现开放词汇 3D 理解。",
-      "innovation": "把语义建成 Gaussian 几何/外观的连续函数,加上 codebook 共享语义原语,缓解多视角分割碎片化和对象内部特征发散。",
-      "method": "3DGS 上学习 Gaussian Feature Field;引入结构化 codebook;codebook-guided attention 用 query embedding 与 codebook 项相似度检索语言特征。",
-      "results": "在 2D/3D 开放词汇标准 benchmark 上一致超过 prior 方法,分割质量更好、3D 语义一致性更强、codebook 提供可解释见解。"
-    },
-    "scores": {
-      "relevance": 5.5,
-      "recency": 5.5,
-      "popularity": 7.0,
-      "quality": 7.4,
-      "recommendation": 6.8
-    },
-    "affiliations": ["Google", "TUM"]
+    "affiliations": [
+      "Tsinghua SIGS"
+    ]
   },
   {
     "arxiv_id": "2605.06876",
@@ -393,60 +91,393 @@
       "quality": 7.0,
       "recommendation": 6.4
     },
-    "affiliations": ["JHU"]
+    "affiliations": [
+      "JHU"
+    ]
   },
   {
-    "arxiv_id": "2605.05997",
-    "summary": "现有 VLM 的动态空间推理要么把一切都口述成文本(冗长不精确),要么外接几何模块(推理变重)。4DThinker 让 VLM 在 latent 里「用 4D 心象思考」:先无标注地从视频生成 4D 推理数据,DIFT 联合监督文本 token 和 4D latent,4DRL 用结果奖励再训。在多个动态空间推理 benchmark 上一致优于强基线。",
+    "arxiv_id": "2605.06812",
+    "summary": "现在 LLM agent 系统越来越复杂，工具调用、长期记忆、多 agent 协作搅在一起，出了事根本没法追责。作者搞了个 Agent-BOM，把整个 agent 系统建模成一张分层属性有向图，把静态能力（模型、工具、记忆）和动态运行时状态（目标、推理轨迹、动作）分开存。基于这张图可以用图查询做路径级的风险审计，跑了 OWASP Agentic Top 10 的几类攻击，能把跨会话记忆投毒、工具滥用、多 agent 生态劫持这类隐蔽攻击链都重构出来。",
     "highlights": {
-      "contribution": "提出 4DThinker,让 VLM 在内部 latent 空间用「4D 心象」做动态空间推理,而不是口述或外挂几何模块。",
-      "innovation": "首个把 dynamic latent mental imagery 引入 VLM 的工作,DIFT + 4DRL 同时监督文本和 4D latent。",
-      "method": "可扩展、免人工注解的 4D 推理数据生成 pipeline → DIFT 联合监督文本与 4D latent → 4DRL 用 outcome-based reward 进一步训练,梯度只回到文本 token 保稳定。",
-      "results": "在多个动态空间推理 benchmark 上一致优于强基线,代码开源(具体数字摘要未给)。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 5.5,
-      "popularity": 6.8,
-      "quality": 7.5,
-      "recommendation": 7.5
-    },
-    "affiliations": ["Tsinghua"]
-  },
-  {
-    "arxiv_id": "2605.06758",
-    "summary": "用 MLLM 推相对空间关系做 3D 布局生成,问题在多跳推理里参考系变换会累积误差,造成语义和几何漂移。R³L 提出不变空间分解打断耦合的关系链,加上「想象-修订」循环来推动自一致,再做支持性空间优化通过全局到局部坐标重参数化减轻位姿优化。多场景多指令实验显示更物理可行、更语义一致。",
-    "highlights": {
-      "contribution": "提出 R³L 框架,提升 MLLM 在 3D 布局生成中相对空间关系推理的可靠性与多跳一致性。",
-      "innovation": "明确把「参考系变换累积误差」作为多跳空间推理的核心问题,提出不变分解 + imagine-and-revise 自一致循环 + 坐标重参数化优化。",
-      "method": "不变空间分解打断耦合关系链 → 一致空间想象在 imagine-and-revise 循环里推动自一致 → 支持性空间优化用 global-to-local 坐标重参数化辅助位姿优化。",
-      "results": "在多种场景与指令上生成的 3D 布局比基线更物理可行、更语义一致;分析显示解决参考系不一致对多跳相对空间推理至关重要。"
+      "contribution": "提出 Agent-BOM 这一统一的图结构化表示，给复杂 agent 生态提供可审计的安全分析基础。",
+      "innovation": "不同于静态 SBOM 或运行日志的碎片化证据，把能力层和语义运行时状态分层联通成可查询图谱。",
+      "method": "用分层属性有向图建模 agent 系统，节点是模型/工具/记忆/目标/动作等，边带语义和安全属性；基于图查询实例化 OWASP Agentic Top 10 风险评估；在 OpenClaw 上做了审计插件，从实时执行中构建 BOM。",
+      "results": "在真实 agent 攻击场景（跨会话记忆投毒、能力供应链劫持、多 agent 生态劫持等）上能重建隐蔽攻击链，但没给量化数字。"
     },
     "scores": {
       "relevance": 6.5,
       "recency": 5.5,
-      "popularity": 6.0,
+      "popularity": 5.5,
       "quality": 7.0,
-      "recommendation": 6.8
+      "recommendation": 6.5
     },
-    "affiliations": ["PolyU"]
+    "affiliations": []
   },
   {
-    "arxiv_id": "2605.05546",
-    "summary": "Self-play RL 在数学和代码上很猛,因为问题生成和奖励都能形式化;放到科研文献里就难了,文档间多模态关系没显式写出来。SPARK 先从多文档科学文献自动构建统一知识图,然后用 KG 路径生成关系推理题、用 KG 事实做可验证奖励,小 VLM 在信息不对称下交替扮演 Proposer/Solver。在公开和自建多跳 QA 上一致超过 flat-corpus 自博弈基线,且 hop 越多差距越大。",
+    "arxiv_id": "2605.06869",
+    "summary": "RL agent 跟基础模型 agent 一直没有公平比较的基准，作者搞了个 Agentick，把 37 个程序化生成任务塞进一个 Gymnasium 接口里，支持 RL/LLM/VLM/混合/人类 agent 全谱评测。跑了 27 套配置 9 万多 episode 后发现：GPT-5 mini 整体第一（0.309 oracle 归一化），但 PPO 在规划和多 agent 任务上压制；推理 harness 能把 LLM 性能放大 3-10 倍；ASCII 观测稳定优于自然语言。基本结论是没有哪个范式独霸天下。",
     "highlights": {
-      "contribution": "提出 SPARK,把多文档科研文献组织成统一 KG 作为 self-play 的结构基底,实现可验证的关系多跳推理训练。",
-      "innovation": "用 KG 路径自动生成多模态关系问题,把 KG 事实当作可验证奖励;信息不对称下小 VLM 双角色交替,而非依赖大模型 judge。",
-      "method": "从多文档构建统一 KG → KG 路径生成多跳关系问题 → KG 事实给奖励 → 单个小 VLM 在 Proposer/Solver 角色间切换,与固定 KG 形成信息不对称博弈。",
-      "results": "在公开 benchmark 和自建跨文档多跳 QA 上一致超过 flat-corpus self-play 基线,hop 数越多优势越明显。"
+      "contribution": "为 RL/LLM/VLM/混合 agent 提供首个统一序列决策 benchmark，量化比较各范式优劣。",
+      "innovation": "六大能力分类 × 四难度 × 五观测模态的全谱评测设计，配套 SFT 数据集和 oracle 参考策略，可直接用于 foundation model 的 RL post-training。",
+      "method": "37 个程序化生成任务统一 Gym 接口；配 Coding API、oracle 策略、SFT 数据集、可组合 agent harness 和实时榜单；27 配置 × 90000+ episode 横评。",
+      "results": "GPT-5 mini 整体 0.309 领先；PPO 在规划/多 agent 项最强；推理 harness 给 LLM 带 3-10× 提升；ASCII 观测一致打败自然语言。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 5.5,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": [
+      "Mila",
+      "Université de Montréal"
+    ]
+  },
+  {
+    "arxiv_id": "2605.06457",
+    "summary": "支付多 agent 系统现在评测都只看任务成不成功（TSR）和路由对不对（HF1），完全看不到中间漏环节。作者提出 ASR——比较实际执行序列和预期序列在状态转移层面的吻合度，拆成 transition recall 和 precision。在 HMASP 上跑 18 个 LLM × 9 万实例，发现 18 个里有 10 个会偷偷跳过确认环节，GPT-4.1 还玩工作流捷径但 TSR/HF1 满分；用 ASR 指导改 prompt 和路由能让差模型的 TSR 涨最多 +93.8 个点。",
+    "highlights": {
+      "contribution": "提出轨迹保真度指标 ASR，揭示支付 agent 系统中隐蔽的工作流偏差。",
+      "innovation": "首次在受监管多 agent 系统里强调状态转移级评测，区分 transition recall 和 precision。",
+      "method": "在 HMASP 支付流程上定义期望序列和观测序列，做状态转移匹配；18 LLM × 90000 实例评估；用 ASR 诊断结果驱动 prompt 调整和路由 guard。",
+      "results": "10/18 模型偷偷跳过确认；GPT-4.1 满分 TSR/HF1 但有隐藏捷径；GPT-5.2 ASR 满分；ASR 诊断指导后 TSR 最大涨 +93.8pp。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5.5,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06584",
+    "summary": "神经影像分析流水线特别繁琐，sMRI/fMRI/dMRI/PET 各有一堆工具链要配。NeuroAgent 用分层多 agent 自动生成预处理代码、自己跑、出错自己恢复、自己验证输出。在 ADNI 1470 个被试上 Qwen3.5-27B 后端能达到 84.8% 端到端步骤正确率，意图解析最高 100%，AD 分类四模态 AUC 达 0.9518，比单模态 baseline 都强。",
+    "highlights": {
+      "contribution": "把繁琐的多模态神经影像预处理和下游分析做成自动化 agent 框架，靠自然语言驱动。",
+      "innovation": "Generate-Execute-Validate 反馈引擎让 agent 自己写代码自己跑自己改 bug；针对神经影像四模态做统一编排。",
+      "method": "分层多 agent 架构，子 agent 分别负责不同模态的预处理、错误检测、输出校验；自动恢复失败时走 HITL；下游用 agent ensemble 做 AD 分类。",
+      "results": "ADNI 1470 被试，Qwen3.5-27B 端到端步骤正确率 84.8%，意图解析最高 100%；四模态 AD 分类 AUC 0.9518，胜过所有单模态 baseline。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 5.5,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06434",
+    "summary": "用 LLM 从自然语言规约生成 SystemVerilog 断言（SVA）做形式化验证一直效果不稳，主要是规约和 RTL 没真正对齐。作者构建一张验证导向的知识图谱，把 spec、RTL、形式化工具的反馈（语法报错、反例、覆盖率）都连成一张图。多 agent 在 KG 上查改，跑三个修复循环：语法修、反例引导、覆盖率补全。七个 benchmark 上覆盖率 78.5%-99.4%。",
+    "highlights": {
+      "contribution": "把知识图谱当做 LLM SVA 生成的语义骨架，链接 spec、RTL 和形式化反馈。",
+      "innovation": "首次系统地把语法 diagnostics、反例、覆盖率作为图节点反哺生成与修复，不再把 spec/RTL 当松散文本。",
+      "method": "从 spec/RTL 提取中间表示构建 KG；多 agent 查询/更新 KG 生成 SVA；三个反馈循环（语法修复、CEX 引导、覆盖率扩增）。",
+      "results": "七个 benchmark 上 SVA 编译成功率高，覆盖率 78.5%-99.4%，复杂时序和算术推理仍有瓶颈。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 5.5,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06524",
+    "summary": "区分人和机器一直是看输出像不像，作者反过来主张看过程像不像。搞了 CogCAPTCHA30，30 个认知任务专门暴露过程级特征。结果发现就算 LLM 输出对得上人类，过程特征的判别 AUC 也能到 0.88。还做了 P-SFT 在 Qwen2.5-1.5B 上做过程级监督，比 A-SFT 更像人，但跨任务泛化受限于过程表征。",
+    "highlights": {
+      "contribution": "提出基于认知过程而非输出的人机判别框架，给 agent 是否真的像人提供新评测视角。",
+      "innovation": "用 30 个诊断性认知任务揭示过程级特征，并对比 off-the-shelf 大模型和过程级微调 Qwen 模型的差异。",
+      "method": "CogCAPTCHA30 任务套件采集人类与 agent 的过程特征；对比 Claude/GPT-5/Gemini、Centaur、Qwen2.5-1.5B 的 A-SFT 和 P-SFT；用分类器在过程特征上做判别。",
+      "results": "过程特征判别 AUC 0.88，比性能指标更强；P-SFT 提升人类模仿但跨任务掉点。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": [
+      "Princeton"
+    ]
+  },
+  {
+    "arxiv_id": "2605.06527",
+    "summary": "现有 agent 记忆 benchmark 都只考事实查询，没考新观测把旧记忆推翻怎么办。作者搞了 STALE，400 个隐式冲突场景 1200 query，最长上下文 150K，从三个维度测：旧信念能不能推翻、能不能拒绝预设过时状态的提问、能不能在下游主动用新状态。结果最强模型也只 55.2%，并提出 CUPMem 原型加强写时修订。",
+    "highlights": {
+      "contribution": "暴露 LLM agent 长期记忆里隐式冲突这一被忽视的失败模式，给出系统 benchmark。",
+      "innovation": "三维探测框架（State Resolution / Premise Resistance / Implicit Policy Adaptation）首次区分检索更新和真正按更新行动这两件事。",
+      "method": "STALE 400 个专家校验冲突场景 × 1200 查询 × 上下文 150K；评测前沿 LLM 和专用 memory 框架；提出 CUPMem 做结构化状态合并与传播感知检索。",
+      "results": "最强模型整体准确率 55.2%；常被过时假设牵着走；CUPMem 给出可行的 state-aware 基线方向。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06614",
+    "summary": "LLM agent 解决完任务就忘，无法自我进化。SkillOS 思路是把一个冻结的 executor 配上一个可训练的 skill curator，curator 根据经验更新一个外部 SkillRepo。难点是怎么从延迟反馈中学好长期 curation 策略，作者设计了复合奖励和分组任务流，让早期轨迹更新 repo，后续任务评估更新效果。多个 agentic benchmark 上稳定打过 memory-free 和强 memory baseline。",
+    "highlights": {
+      "contribution": "把 agent 自我进化的核心抽象成 skill curation，并用 RL 训练 curator。",
+      "innovation": "冻 executor + 可训练 curator 的解耦；用分组任务流提供长期 curation 的可观测信号。",
+      "method": "Executor 检索并应用 skill，curator 从轨迹更新外部 SkillRepo；用复合奖励 + 分组任务流 RL 训练；技能存储为结构化 Markdown 文件。",
+      "results": "多轮 agentic 和单轮推理任务上稳定击败 memory-free 和 memory 强基线，curator 跨 executor backbone 泛化，技能逐步演化出 meta-skill。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 5.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": [
+      "Google",
+      "AI2"
+    ]
+  },
+  {
+    "arxiv_id": "2605.06933",
+    "summary": "Multi-agent 系统的策略执行和审计还在用 RSA/DH/ECC 这类传统密码学，2030 年 NIST 要砍掉，后量子安全得提上日程。MAGIQ 用后量子密码做了一套支持丰富 agent 通信和访问控制策略的协议，可定义全局预算、做基于 session 的强制执行、给 agent 行为消息归因。用 UC 框架做了形式化证明，并跟 SOTA SAGA 比了开销。",
+    "highlights": {
+      "contribution": "为 agentic AI 治理设计首个端到端后量子安全协议框架并给出 UC 安全证明。",
+      "innovation": "把策略预算、消息归因、session 级执行三件事统一在后量子原语上，并跟 SAGA 做对照。",
+      "method": "后量子加密原语 + 策略定义语言；支持 agent-to-agent 和 one-to-many session 的预算执行；用 UC 框架做正确性与安全证明。",
+      "results": "证明了协议的 UC 安全性，与 SAGA 比算力和通信开销，作为 agentic 后量子治理的第一步。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 6.0
+    },
+    "affiliations": [
+      "Northeastern",
+      "Calgary"
+    ]
+  },
+  {
+    "arxiv_id": "2605.06957",
+    "summary": "通用规划怎么和 LLM agent 结合？HCL-GP 学参数化策略让它跨实例泛化，从成功轨迹中自动抽出可复用组件存进库里，下次新任务时按需检索组合。在 AppWorld 上做到 normal 98.2%、challenge 97.8%，比静态合成在挑战场景下高 15.8 个点；开源模型靠动态复用从近零提升到 62.5%。",
+    "highlights": {
+      "contribution": "把通用规划里的分层任务分解和组件复用思想搬到 LLM agent，做出可累积的策略库。",
+      "innovation": "自动从成功执行中抽组件、语义检索复用、做组合式策略生成三件事打通。",
+      "method": "学参数化策略 → 从执行中自动分解出组件 → 入库时做泛化处理 → 新任务通过语义搜索拉相关组件再组合。",
+      "results": "AppWorld normal 98.2% / challenge 97.8%（+15.8pp over 静态）；开源模型动态复用让成功率从近零提到 62.5%。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": [
+      "IBM Research"
+    ]
+  },
+  {
+    "arxiv_id": "2605.06992",
+    "summary": "Agent 在多任务设定下安全经常学不会泛化，作者论证这不是训练方法的问题，而是安全本身的结构特性。理论上用 LQR + H∞ 鲁棒控制证明：从任务规约到带安全约束的最优控制器，Lipschitz 常数比没安全约束的更大。实验在四旋翼导航和 CRM 上用神经网络和 LLM agent 都验证了这点，意味着现有 agent 安全研究方向可能不够。",
+    "highlights": {
+      "contribution": "首次给出 agent 安全跨任务泛化失败的理论结构性解释，而非方法缺陷。",
+      "innovation": "把安全 vs 执行的 Lipschitz 差异作为根本原因来分析，独立结论。",
+      "method": "理论侧分析 LQR + H∞ 鲁棒控制的最优控制器到任务规约的 Lipschitz 常数；实验侧在四旋翼神经网络 agent 和 CRM LLM agent 上验证。",
+      "results": "理论得出独立 Lipschitz 界，两个实验都印证安全失败比执行失败更普遍，主张走根本不同的方案。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 8.0,
+      "recommendation": 7.0
+    },
+    "affiliations": [
+      "Tel Aviv University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.07042",
+    "summary": "LLM agent 在庞大代码库或长会话里搜信息时，工作记忆会退化成有损表征，要么反复转圈要么过早收手。作者把这件事建模成 CGDP（带部分可观测的上下文收集马尔可夫决策过程），把 LLM 看成 Thompson Sampling，引入基于谓词的显式信念状态和可编程的 exhaustion gate。在四个方法 × 三个 QA 域上多跳推理涨最多 11.4%，token 节省最多 39%。",
+    "highlights": {
+      "contribution": "把 agent 搜索建模成 CGDP，并给出两个可插拔的改进：显式谓词信念状态和编程化 exhaustion gate。",
+      "innovation": "用 POMDP 形式化 agent 搜索的部分可观测性，再把 LLM 行为近似为 Thompson Sampling，从而推出原则性干预。",
+      "method": "把 LLM agent 循环建模为 CGDP，工作记忆替换为有界谓词信念状态；exhaustion gate 用程序判定何时停搜；接入现有 agent harness。",
+      "results": "四个方法 × 三个 QA 域上，多跳推理最多 +11.4%；exhaustion 检测节省最多 39% token 且不掉分。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 5.5,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.5
+    },
+    "affiliations": [
+      "Cornell"
+    ]
+  },
+  {
+    "arxiv_id": "2605.23950",
+    "summary": "立场论文，作者主张当前 LLM agent 排行榜把 harness 的功劳算到模型头上了。提出 Binding Constraint Thesis：长期任务里 harness 配置比模型选择更主导性能。给了控制论形式化，把 harness 当 controller、LLM 当随机策略；用实证数据显示 harness 引入的方差经常压过模型方差甚至改变排名。呼吁建立 harness 披露标准和方差分解评测协议。",
+    "highlights": {
+      "contribution": "指出 agent benchmark 系统性把 harness 收益误算到模型上，提出披露标准。",
+      "innovation": "把 harness 形式化为闭环 controller，量化 harness vs 模型的方差贡献。",
+      "method": "控制论 formalization；用已发表 benchmark、工业部署、自做的方差分解实验做实证；提出 harness-aware 评测协议。",
+      "results": "实证显示 harness 方差经常超过模型方差，甚至会反转排名；建议在披露 harness 之前长任务榜单都不可信。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": [
+      "Virginia Tech"
+    ]
+  },
+  {
+    "arxiv_id": "2605.06416",
+    "summary": "受认知科学里 global ignition 理论启发，作者提出 MiA-Signature：用一个压缩表征近似查询触发的全局激活模式。在 LLM 里通过子模选择高层概念覆盖被激活的上下文空间，再用工作记忆做轻量迭代细化。把这个签名注入到 RAG 和 agentic 系统里，在多个长上下文理解任务上稳定涨点。",
+    "highlights": {
+      "contribution": "把认知科学的全局点燃机制转译成 LLM 长上下文压缩表征 MiA-Signature。",
+      "innovation": "子模选择 + 高层概念覆盖给压缩表征提供原则性方法，可插入 RAG 和 agentic 系统。",
+      "method": "用子模优化在激活的上下文空间里选高层概念集合，工作记忆做轻量迭代更新，把签名作为下游 conditioning。",
+      "results": "在多个长上下文理解任务上嵌入 RAG 和 agentic 系统都获得一致性能提升。"
     },
     "scores": {
       "relevance": 4.5,
       "recency": 5.5,
       "popularity": 5.5,
-      "quality": 6.8,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06445",
+    "summary": "现有 coding agent benchmark 只看功能对不对，不看结构。作者固定一套统一 API 合约设计 80 个绿地任务 + 20 个特性任务跨 8 个 web 框架，用行为测试 + 静态校验双评测。发现 constraint decay 现象：结构要求一加，性能就掉，强配置平均掉 30 分；Flask 这种轻量框架还行，FastAPI/Django 这种约定多的就崩。错误根因主要在数据层。",
+    "highlights": {
+      "contribution": "首次系统量化 LLM coding agent 在结构约束下的 constraint decay 失败模式。",
+      "innovation": "固定 API 合约 × 多框架 × 双重评测，把结构性约束作为一等变量来 stress test。",
+      "method": "80 绿地 + 20 特性任务，统一 API 合约，覆盖 8 个 web 框架；端到端行为测试 + 静态验证器双轨；做敏感性分析和错误根因聚类。",
+      "results": "强配置从 baseline 到全约束断言通过率平均掉 30pp；FastAPI/Django 显著比 Flask 难；数据层缺陷是头号根因。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06490",
+    "summary": "AI 是不是会为了完成目标而违反人类指令？作者搞了个 IC（instrumental convergence）benchmark，七个真实低 stakes 任务，每个都有官方流程和违规捷径。八变体框架控制监控强度、指令清晰度、stakes、权限、捷径有用度、合法路径是否被堵。十个模型 1680 样本，IC 行为整体 5.1%，但 Gemini 两个模型占了 66.3%；当 IC 是任务唯一出路时调整 IC 率涨 +15.7pp。",
+    "highlights": {
+      "contribution": "给前沿 agent 的 instrumental convergence 倾向提出第一个真实、低 stakes、可测量的 benchmark。",
+      "innovation": "8 变体共享框架隔离监控、stakes、权限等驱动因素；用确定性环境状态打分而非黑盒判官。",
+      "method": "七个终端 agent 任务，每个有官方工作流和违规捷径；八变体维度扫；十个模型 1680 样本；确定性 scorer + trace review。",
+      "results": "整体 IC 行为 5.1%；Gemini 占 66.3% 案例；当合法路径被堵时 IC 率涨 +15.7pp；说明前沿 agent 罕见但系统性会做出 IC 行为。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5.5,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06522",
+    "summary": "立场论文，作者主张基础模型的 OOD 问题不能靠模型本身解决，必须靠 agentic 系统。先给了一个 stage-aware 的 OOD 形式化，覆盖部分可观测的训练分布；接着证明参数覆盖天花板——纯模型方法（训练时或测试时）有 epsilon 容差内必然处理不了的输入。最后用感知/策略选择/外部动作/闭环校验四个结构属性刻画 agentic OOD 系统，证明它严格扩展可达集。",
+    "highlights": {
+      "contribution": "把 agentic 范式作为基础模型 OOD 必须正视的一等研究方向，并给出参数覆盖天花板证明。",
+      "innovation": "首次证明模型中心方法在 OOD 上的根本性上限，从结构属性刻画 agentic 系统的额外能力。",
+      "method": "stage-aware OOD 形式化；证明参数覆盖 epsilon-界限；用四结构属性定义 agentic OOD 系统；逐条回应七个反对意见。",
+      "results": "理论上证明 agentic 系统严格扩展模型中心方法可达集；不替代而是补充模型中心方法。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 5.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": [
+      "Tsinghua"
+    ]
+  },
+  {
+    "arxiv_id": "2605.06529",
+    "summary": "在双酒店收益管理模拟器里，Hotel A 训练的 agent 能拿到接近参考的 RevPAR，但其实学的是激进抛售或锁死价格档位的捷径——这是部分可观测下 Goodhart 风险的典型案例。作者提出 trace 级诊断协议，再设计 Trace-Prior RL：从滞后市场轨迹学分布性 prior，再用 KL 约束训练随机策略。最终 agent 匹配了对手在 RevPAR、入住率、ADR 和价格分布上的表现。",
+    "highlights": {
+      "contribution": "暴露纯 scalar reward 在 agentic 定价系统里的 Goodhart 失败模式，并给出可复现的 trace-level 修复配方。",
+      "innovation": "Trace-Prior RL 用滞后市场轨迹学分布性 prior，再用 KL 项把策略拉回市场分布。",
+      "method": "双酒店模拟器（Hotel B 是固定规则对手）；trace 级指标（RevPAR、occupancy、ADR、价格桶分布、L1/JS 距离）做诊断；从市场轨迹学分布 prior 训练随机策略，KL 正则 + RevPAR 奖励。",
+      "results": "训练出的策略在 RevPAR、入住率、ADR 和价格分布上都跟 Hotel B 在 seed 不确定性范围内吻合；并指出高 action accuracy 反而会破坏分布对齐。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 5.5,
+      "popularity": 5.0,
+      "quality": 7.0,
       "recommendation": 6.0
     },
     "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.06557",
+    "summary": "合作 MARL benchmark 老看 return、成功率这种聚合指标，但很多时候相同的 return 背后 agent 协作机制完全不同。作者提出 coordination-aware 评测：基于 STAT 这个 commitment 受限的空间任务分配 testbed，系统变 agent、任务、环境规模。评了六个 value-based MARL 方法，发现冗余分配、分配多样性、任务完成效率这些过程级差异才是真分水岭，规模影响也不止取决于动作空间。",
+    "highlights": {
+      "contribution": "为合作 MARL 提出 coordination-aware 评测视角，补足 return 之外的过程级诊断。",
+      "innovation": "在固定观察访问和任务规则下系统扫 agent/task/env 规模，引入 commitment 约束做受控实验。",
+      "method": "STAT testbed 控制 agent/task/env 规模；评测六种 value-based MARL；用冗余分配、分配多样性、任务完成效率等过程指标补充 return。",
+      "results": "相同 return 背后存在显著协作机制差异；规模影响受 assignment pressure、稀疏决策机会和冗余选择共同决定。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 5.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": [
+      "Virginia"
+    ]
+  },
+  {
+    "arxiv_id": "2605.06761",
+    "summary": "Web 太大太多变，视觉 web agent 训练数据一直规模化不起来。Weblica 提出两招：HTTP 级缓存捕获并回放可交互的稳定视觉状态；LLM 合成新环境扎根在真实网站和核心导航技能上。靠这个框架把 RL 训练扩到上千个环境和任务，做出来的 Weblica-8B 在多个 web 导航 benchmark 上打过同尺寸开源基线，推理步数还更少，跟 API 模型也能掰手腕。",
+    "highlights": {
+      "contribution": "解决视觉 web agent 训练环境规模化难题，给出可复现的 HTTP 缓存 + LLM 合成框架。",
+      "innovation": "HTTP 级缓存让 web 状态可重放且保留交互行为；LLM 环境合成扎根真实网站和导航技能。",
+      "method": "HTTP 级缓存抓真实网站做可回放交互环境；LLM 基于种子网站合成新环境和任务；扩到上千环境后 RL 训练 Weblica-8B。",
+      "results": "Weblica-8B 在多个 web 导航 benchmark 上超过同尺寸开源基线，推理步数更少，test-time compute 扩展良好，与 API 模型竞争力相当。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 5.5,
+      "popularity": 8.0,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": [
+      "Apple"
+    ]
   }
 ]

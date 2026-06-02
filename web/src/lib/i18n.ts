@@ -57,7 +57,7 @@ const translations: Record<Language, Record<string, string>> = {
     "about.workflowDesc":
       "由 /research-assistant skill 每天在 Claude Code 对话里手动执行：拉取当日论文 → Claude 阅读分析 → 同步到 Obsidian + 部署到 GitHub Pages。",
     "about.directions": "覆盖方向",
-    "about.directionsList": "VLA · World Model · WAM · VGGT · 多模态",
+    "about.directionsList": "VLA · World Model · WAM · VGGT · Agent · Diffusion · 多模态",
     "about.appearance": "外观",
     "about.themeLight": "浅色",
     "about.themeDark": "深色",
@@ -131,7 +131,7 @@ const translations: Record<Language, Record<string, string>> = {
     "about.workflowDesc":
       "A /research-assistant Claude Code skill that runs manually each day: fetch arXiv → Claude reads in chat → sync to Obsidian + deploy to GitHub Pages.",
     "about.directions": "Coverage",
-    "about.directionsList": "VLA · World Model · WAM · VGGT · Multi-modal",
+    "about.directionsList": "VLA · World Model · WAM · VGGT · Agent · Diffusion · Multi-modal",
     "about.appearance": "Appearance",
     "about.themeLight": "Light",
     "about.themeDark": "Dark",

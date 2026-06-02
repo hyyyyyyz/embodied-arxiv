@@ -2,55 +2,6 @@
   "date": "2026-05-28",
   "papers": [
     {
-      "arxiv_id": "2605.30011",
-      "title": "VisualThink-VLA: Visual Intermediate Reasoning for Effective and Low-Latency Vision-Language-Action Policies",
-      "authors": [
-        "Mingjian Gao",
-        "Wenqiao Zhang",
-        "Yuqian Yuan",
-        "Yang Dai",
-        "Binhe Yu",
-        "Zheqi Lv",
-        "Haoyu Zheng",
-        "Jiaqi Zhu",
-        "Zhiqi Ge",
-        "Zixuan Wan",
-        "Siliang Tang",
-        "Yueting Zhuang"
-      ],
-      "affiliations": [
-        "Zhejiang University"
-      ],
-      "summary": "给 VLA 加 text chain-of-thought 一直有两个问题：无关文本会干扰动作，自回归解码慢得离谱。VisualThink-VLA 改用紧凑的“视觉证据 token”做中间推理，保留空间精度同时省掉文本解码；再加选择性路由提升专化能力。BridgeData V2 上推理延迟从 ECoT 的 8.377s 降到 0.367s，22.8× 加速。",
-      "original_abstract": "Recent work has begun to equip vision-language-action (VLA) policies with explicit intermediate reasoning. In embodied control, however, textual chain-of-thought is a poor fit: irrelevant or weakly textual information can interfere with action prediction, while autoregressive text decoding adds too much latency for real-time closed-loop execution. We present VISUALTHINK-VLA, a visual intermediate-reasoning framework for accurate, low-latency VLA policies. Our bootstrapping philosophy is to guide action with effective visual thinking: VISUALTHINK-VLA bootstraps action prediction through a compact visual-evidence interface that preserves spatial precision while avoiding decoding overhead. Besides, to further improve performance and efficiency, VISUALTHINK-VLA adopts a tailored selective routing mechanism to learn the visual evidence tokens, enabling low-latency inference while preserving high-capacity specialization. We also introduce VisualEvidence-Kit, a supervision-and-audit resource centered on a VisualEvidence-Agent that constructs a 754.7k VLA instructions VisualEvidence-Set for route supervision and counterfactual faithfulness tests. Across multiple benchmarks and real-robot evaluation, VISUALTHINK-VLA achieves the highest success rate on most benchmarks while reducing the multi-second latency of reasoning-augmented baselines to the sub-second regime. For example, on BridgeData V2, it reduces step latency from 8.377,s with ECoT to 0.367,s, achieving a 22.8 times speedup.",
-      "highlights": {
-        "contribution": "把 VLA 的中间 reasoning 从文本 CoT 换成视觉证据 token，推理质量和延迟双赢。",
-        "innovation": "Visual-evidence interface 替代 text CoT，配合 selective routing 做 token 专化；并放出 754.7k 指令规模的监督集。",
-        "method": "训一个 VisualEvidence-Agent 自动构造视觉证据 + 反事实测试集，VLA 主干用 selective routing 学习何时使用视觉证据 token 而非文本中间步骤。",
-        "results": "多 benchmark 大多刷新成功率；BridgeData V2 上 step latency 从 8.377s 降至 0.367s（22.8× 加速）。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T14:36:53Z",
-      "categories": [
-        "cs.CV",
-        "cs.AI"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "vision-language-action"
-      ],
-      "scores": {
-        "relevance": 9.0,
-        "recency": 9.0,
-        "popularity": 7.0,
-        "quality": 8.0,
-        "recommendation": 8.3
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.30011v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.30011v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.30226",
       "title": "BORA: Bridging Offline Reinforcement Learning and Online Residual Adaptation for Real-World Dexterous VLA Models",
       "authors": [
@@ -147,99 +98,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.29562",
-      "title": "VLA-Pro: Cross-Task Procedural Memory Transfer for Vision-Language-Action Models",
-      "authors": [
-        "Shengyu Si",
-        "Yuanzhuo Lu",
-        "Ruimeng Yang",
-        "Ziyi Ye",
-        "Zuxuan Wu",
-        "Yu-Gang Jiang"
-      ],
-      "affiliations": [
-        "Fudan University"
-      ],
-      "summary": "VLA 跨任务迁移依旧拉胯，VLA-Pro 走的是检索增强思路：训练时把每个任务训成一个 LoRA 当“程序性记忆”存起来，推理时根据当前场景动态检索并融合相关 LoRA。在 RoboTwin、RLBench 和真机上都能即插即用，仿真上相对提升达 207%，真机成功率从 5.8% 直接拉到 65%。",
-      "original_abstract": "Vision-Language-Action~(VLA) models have shown strong potential for general-purpose robotic manipulation, yet they still struggle to generalize to unseen tasks that necessitate transferring relevant experience across objects, scenes, and action patterns. This paper proposes VLA-Pro, a plug-and-play framework designed to enhance cross-task generalization by storing task-relevant procedural memories at training time and transferring these memories during inference. Specifically, VLA-Pro stores task-specific LoRA adapters as parameterized procedural memories during training. At inference time, VLA-Pro retrieves relevant procedural memories based on the current multi-modal context and dynamically fuses these memories for generating the current action chunk. Experiments on RoboTwin, RLBench, and real-world manipulation tasks show that VLA-Pro consistently improves cross-task generalization across multiple backbones, achieving up to a 207% relative improvement in simulation and increasing real-world success rate from 5.8% to 65.0%. These results suggest that procedural memory retrieval and adaptation provide an effective mechanism for transferring manipulation experience to novel tasks while preserving modularity and execution stability.",
-      "highlights": {
-        "contribution": "用任务级 LoRA 做程序性记忆库，让 VLA 在面对新任务时能检索调用旧经验。",
-        "innovation": "把 LoRA 当作可检索可融合的“记忆”而不是单一适配器，对多 backbone 都即插即用。",
-        "method": "训练阶段每个任务训一个 LoRA 入库，推理时用当前多模态上下文检索 top-k LoRA 并动态融合生成动作 chunk。",
-        "results": "RoboTwin/RLBench 仿真上跨任务泛化相对 +207%，真机成功率从 5.8% 提到 65%。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T08:14:08Z",
-      "categories": [
-        "cs.RO",
-        "cs.AI",
-        "cs.CV"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "vision-language-action",
-        "robotic manipulation"
-      ],
-      "scores": {
-        "relevance": 9.0,
-        "recency": 9.0,
-        "popularity": 6.5,
-        "quality": 7.5,
-        "recommendation": 7.9
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.29562v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.29562v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.30117",
-      "title": "VLA-Trace: Diagnosing Vision-Language-Action Models through Representation and Behavior Tracing",
-      "authors": [
-        "Haoyuan Shi",
-        "Xiancong Ren",
-        "Yingji Zhang",
-        "Qinfan Zhang",
-        "Jiayu Hu",
-        "Haozhe Shan",
-        "Han Dong",
-        "Jinpeng Lu",
-        "Yinda Chen",
-        "Yi Zhang",
-        "Yong Dai",
-        "Xiaozhu Ju"
-      ],
-      "affiliations": [],
-      "summary": "作者想搞清楚 VLA 模型到底是怎么把视觉-语言知识转成动作的，于是搭了 VLA-Trace 这套诊断工具。它把表征演化（CKA）、注意力 knockout 干预和 rollout 行为探针串成一条证据链，应用在 π0.5 和 OpenVLA 上。结论挺有意思：两个模型 finetune 时的模态适配方式完全不同，而且 VLA 整体擅长视觉轨迹但细粒度语义跟随还很弱。",
-      "original_abstract": "Understanding how Vision-Language-Action (VLA) models transform multimodal knowledge into embodied control remains an open challenge. We present VLA-Trace, a progressive diagnostic framework that analyzes VLA models through a unified evidence chain from representation dynamics to causal control attribution and behavioral manifestation. It specifically combines cross-modal and checkpoint-drift centered kernel alignment (CKA) to trace representation evolution, attention knockout interventions to identify modality-specific control pathways, and rollout-level behavioral probes to examine grounding, shortcut dependence, and semantic following. Experiments on $π_{0.5}$ and OpenVLA reveal three key findings. First, the two models exhibit distinct modality-specific adaptation dynamics during VLA finetuning. Second, they rely on different multimodal routing strategies and layer-wise dependencies during action decoding. Third, although VLA policies excel at visually grounded trajectory generation, they remain limited in fine-grained semantic following. These findings highlight future directions for representation-preserving adaptation, causal VLA circuits, and compositional semantic control.",
-      "highlights": {
-        "contribution": "提出一套从表征→因果→行为的 VLA 诊断框架，把 VLA 黑盒拆开看模态适配和控制路径。",
-        "innovation": "把 cross-modal CKA、attention knockout 和 rollout 行为探针组合成统一证据链，专门用于 VLA 而不是普通 VLM。",
-        "method": "在 π0.5 和 OpenVLA 上跑：用 CKA 追表征漂移、用 attention knockout 切断特定模态看动作变化、用 rollout 探针测 grounding 和 shortcut 依赖。",
-        "results": "发现两个 VLA 的模态适配动力学差异显著、动作解码时模态路由不同、细粒度语义跟随仍是短板。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T15:50:56Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "vision-language-action",
-        "vla model",
-        "openvla"
-      ],
-      "scores": {
-        "relevance": 9.0,
-        "recency": 9.0,
-        "popularity": 6.0,
-        "quality": 7.5,
-        "recommendation": 7.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.30117v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.30117v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.30282",
       "title": "Gaze2Act: Gaze-Conditioned Vision-Language-Action Policies for Interactive Robot Manipulation",
       "authors": [
@@ -288,174 +146,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.29662",
-      "title": "SAFE-Pruner: Semantic Attention-Guided Future-Aware Token Pruning for Efficient Vision-Language-Action Manipulation",
-      "authors": [
-        "Shilin Ma",
-        "Chubin Zhang",
-        "Changyuan Wang",
-        "Yuji Wang",
-        "Yue Wu",
-        "Zixuan Wang",
-        "Jingqi Tian",
-        "Zheng Zhu",
-        "Yansong Tang"
-      ],
-      "affiliations": [
-        "Tsinghua University"
-      ],
-      "summary": "VLA 推理慢，token pruning 是常见加速方案，但浅层剪枝可能误删深层需要的视觉信息。SAFE-Pruner 观察到 VLA 跨步骤会持续关注同一语义实体（语义注意力一致性），就用这个先验前瞻预测深层 token 显著度，再加自适应子任务切分检测注意力突变。实验拿到 1.89× 加速，成功率掉不到 1.7%，比 SOTA 还要高 1.9 个点。",
-      "original_abstract": "Real-time inference of vision-language-action (VLA) models is essential for robotic control. While visual token pruning has shown strong potential for accelerating inference, most existing methods mainly base pruning decisions on shallow-layer cues and risk discarding visual information required by deep layers. To address this issue, we propose SAFE-Pruner, a plug-and-play pruning framework that incorporates attention cues of future layers into pruning decisions. Specifically, we identify semantic attention consistency, the tendency that VLA models concentrate their attention probability mass on the same semantic entity across execution steps. Based on this observation, we design a forward-looking strategy to forecast the token saliency in deep layers, which prevents the premature removal of critical tokens and leads to more stable acceleration. We further introduce an adaptive subtask division strategy to detect abrupt attention shifts, thereby improving forecasting accuracy and pruning reliability. Extensive experiments in simulation and real-world settings demonstrate that our method achieves up to 1.89x speedup with a minimal degradation in success rate of less than 1.7%, while outperforming state-of-the-art methods by up to 1.9%.",
-      "highlights": {
-        "contribution": "给 VLA 设计了一个考虑未来层注意力的视觉 token 剪枝器，加速同时基本不掉点。",
-        "innovation": "利用“语义注意力跨步骤一致性”做前瞻预测，避免传统浅层剪枝误删深层关键 token。",
-        "method": "用早期层注意力预测深层 token saliency，加自适应子任务划分检测注意力突变并刷新预测，剪掉非关键视觉 token。",
-        "results": "仿真+真机加速 1.89×，成功率下降 <1.7%，比现有 SOTA 剪枝再高 1.9%。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T09:23:08Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "vision-language-action",
-        "vla model"
-      ],
-      "scores": {
-        "relevance": 8.0,
-        "recency": 9.0,
-        "popularity": 6.0,
-        "quality": 7.5,
-        "recommendation": 7.4
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.29662v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.29662v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.29710",
-      "title": "PhAIL: A Real-Robot VLA Benchmark and Distributional Methodology",
-      "authors": [
-        "Sergey Arkhangelskiy"
-      ],
-      "affiliations": [],
-      "summary": "真机 VLA 评测目前还停留在“N≤25 次 rollout、二元成功率、不给置信区间”的水平，遇到相近模型根本分不清。PhAIL 提出用 time-to-success CDF 当评测原语，配 HRT（相对人类吞吐）做主分数、KS 检验做显著性。在 Franka FR3 上跑 GR00T、ACT、OpenPI 等四个 VLA，N≤30 就能把 GR00T vs ACT 和 OpenPI vs ACT 这两对分开，而二元指标做不到。",
-      "original_abstract": "Real-world evaluation of vision-language-action (VLA) policies still rests on binary success rate at a fixed timeout with $N \\le 25$ rollouts per condition, almost always without confidence intervals or paired statistical comparison; these cohort sizes struggle to resolve close comparisons reliably. We introduce PhAIL (Physical AI Leaderboard, https://phail.ai), an open real-robot benchmark on a Franka FR3 (dataset, per-rollout artifacts, and end-to-end reference implementation) of a distributional evaluation methodology: the time-to-success cumulative distribution function (CDF) as the evaluation primitive, with two separated jobs. The first is scoring via Human-Relative Throughput (HRT), a dimensionless scalar with bootstrap confidence intervals, anchored to same-fixture human teleoperation. The second is a significance test (Kolmogorov-Smirnov, computed per-object and macro-averaged across objects). On four publicly-available VLAs, the macro-averaged KS test resolves two close comparisons (GR00T vs. ACT, OpenPI vs. ACT) at $N \\le 30$ rollouts per (model, object) cell where binary-threshold metrics do not; the closest pair (OpenPI vs. GR00T) remains unresolved within our budget. The best evaluated VLA is $\\sim 7\\times$ slower per operation (RMST ratio) than the human reference.",
-      "highlights": {
-        "contribution": "推出一个公开的真机 VLA 评测基准 + 分布式评测协议，能在小样本下做严格的统计比较。",
-        "innovation": "以 time-to-success CDF + HRT 为主指标、Macro-averaged KS 检验做显著性，比二元 success rate 更有分辨率。",
-        "method": "Franka FR3 上跑统一 fixture，开源 dataset 和 per-rollout artifact；HRT 用 bootstrap CI，KS 按 object 聚合。",
-        "results": "N≤30 rollout 即可分辨 GR00T vs ACT、OpenPI vs ACT；最强 VLA 比人类参考慢约 7×（RMST 比）。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T10:10:19Z",
-      "categories": [
-        "cs.RO"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "vision-language-action"
-      ],
-      "scores": {
-        "relevance": 7.5,
-        "recency": 9.0,
-        "popularity": 5.5,
-        "quality": 7.5,
-        "recommendation": 7.3
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.29710v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.29710v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.29766",
-      "title": "MARS Policy: Multimodality Only When It Matters",
-      "authors": [
-        "Jindou Jia",
-        "Tuo An",
-        "Yuxuan Hu",
-        "Gen Li",
-        "Jingliang Li",
-        "Bohan Hou",
-        "Xiangyu Chen",
-        "Jiaqi Bai",
-        "Bofan Lyu",
-        "Jianfei Yang"
-      ],
-      "affiliations": [],
-      "summary": "Diffusion 策略多模态强但训得慢推得也慢，而很多任务阶段其实根本不需要多模态。MARS 的想法很简单：在真正需要多样性的时候才注入合适噪声，其余阶段退化到确定性学习。8 个仿真 + 4 个真机任务里成功率涨 16.67%，真机推理延迟降 83.2%，连近确定性任务的训练速度都更快。",
-      "original_abstract": "Imitation learning has become a cornerstone for solving complex robotic manipulation tasks. In particular, multimodality, which enables robots to capture diverse yet valid behavioral patterns, has driven the rapid emergence of generative policies as a dominant paradigm in robot learning. However, achieving such multimodality typically relies on stochastic noise initialization and iterative denoising procedures, resulting in substantial training complexity and low inference efficiency. Meanwhile, not all phases of a robotic task inherently require behavioral diversity. Motivated by this insight, we propose the Modality-Adaptive Robot Sampling (MARS) policy, which adaptively invokes tailored stochasticity only when it is truly beneficial, while reverting to an efficient deterministic learning during single-modal phases. In other words, the proper amount of noise is injected only at the proper time. By selectively activating multimodal generation, MARS policy bridges the gap between the multimodal capability of generative policies and the superior training and inference efficiency of deterministic models. Empirical studies across 8 simulated and 4 real-world tasks demonstrate that MARS exhibits robust multimodal expressivity and high efficiency, with a 16.67% success rate improvement and an 83.20% inference latency reduction in real-world tests. Counterintuitively, MARS also outpaces deterministic policies in training efficiency on near-deterministic tasks by more effectively modeling nuanced action diversity.",
-      "highlights": {
-        "contribution": "一个能自适应在多模态和确定性之间切换的机器人 imitation 策略，既保留多模态表达又拿回效率。",
-        "innovation": "提出 modality-adaptive sampling：只在需要时注入随机性，单模态阶段直接确定性学习。",
-        "method": "判断任务阶段是单模态还是多模态，多模态阶段用 diffusion-style 噪声 + 去噪，单模态阶段用确定性头预测动作。",
-        "results": "8 仿真 + 4 真机任务平均成功率 +16.67%，真机推理延迟 -83.2%，训练效率在近确定性任务上也优于纯确定性 baseline。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T11:12:30Z",
-      "categories": [
-        "cs.RO"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "robotic manipulation"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 9.0,
-        "popularity": 6.0,
-        "quality": 7.5,
-        "recommendation": 7.3
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.29766v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.29766v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.29605",
-      "title": "VLAConf: Calibrated Task-Success Confidence for Vision-Language-Action Models",
-      "authors": [
-        "Dehao Huang",
-        "Aoxiang Gu",
-        "Chengjie Zhang",
-        "Bolin Zou",
-        "Wenlong Dong",
-        "Zilang Cen",
-        "Yue Wang",
-        "Hong Zhang"
-      ],
-      "affiliations": [],
-      "summary": "现有 VLA 置信度估计要么靠 ensemble 反复采样、要么只能用 discrete action token 概率，效率和适用性都不行。VLAConf 干脆冻住 VLA 内部表征，用一个轻量 head 单次前向出 step-wise 异常分数，还做了 step-conditioned 建模来捕捉 rollout 阶段信息。LIBERO 上 calibration 质量明显甩开 baseline，推理效率优势更大，真机也验证有效。",
-      "original_abstract": "Confidence estimation for Vision-Language-Action (VLA) models is essential for robots to perform manipulation tasks in the open world, providing crucial signals for risk-sensitive decision-making and failure anticipation. Existing confidence estimation methods typically rely on ensemble-based paradigms or action-token probabilities to predict the likelihood of task success. However, they still encounter challenges in computational efficiency and cross-architecture generalizability. These methods usually require repeated sampling, leading to inference inefficiency, and are restricted to VLA models with discrete action outputs, making them difficult to apply to continuous action spaces. To address this issue, we propose VLAConf, a one-class discriminative confidence framework. By leveraging frozen pretrained VLA internal representations, VLAConf directly estimates step-wise anomaly scores in a single forward pass using a lightweight confidence head, thereby eliminating the overhead of exhaustive resampling. We additionally use step-conditioned modeling to encode rollout-phase information along the manipulation trajectory. Experiments on the LIBERO benchmark demonstrate that VLAConf significantly improves the quality of the confidence signal constructed for post-hoc calibration, outperforming existing baselines by a large margin in inference efficiency. The effectiveness of VLAConf is further validated in real-robot experiments. To access the source code and supplementary videos, visit https://sites.google.com/view/vlaconf.",
-      "highlights": {
-        "contribution": "给 VLA（包括连续动作空间的）做了一个单次前向、轻量的任务成功置信度估计器。",
-        "innovation": "用 one-class discriminative head 替代 ensemble/采样，并且只用冻结的 VLA 内部表征，跨架构通用。",
-        "method": "冻 VLA 主干，加 step-conditioned 轻量 head 学异常分数，post-hoc calibration 输出每步成功概率。",
-        "results": "LIBERO 上 calibration 信号质量显著领先，推理速度优势“大幅”，真机进一步验证。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T08:42:12Z",
-      "categories": [
-        "cs.RO"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "vision-language-action",
-        "vla model"
-      ],
-      "scores": {
-        "relevance": 8.5,
-        "recency": 9.0,
-        "popularity": 5.5,
-        "quality": 7.0,
-        "recommendation": 7.2
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.29605v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.29605v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.30660",
       "title": "BOKBO (Best of K Bad Options): Calibrated Abstention for VLA Policies",
       "authors": [
@@ -494,90 +184,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2605.30660v1",
       "arxiv_url": "https://arxiv.org/abs/2605.30660v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.29661",
-      "title": "Geometry-Guided Modeling of Foundation Features Enables Generalizable Object Shape Deformation Learning",
-      "authors": [
-        "Yiyao Ma",
-        "Kai Chen",
-        "Zhongxiang Zhou",
-        "Zhuheng Song",
-        "Dongsheng Xie",
-        "Zelong Tan",
-        "Rong Xiong",
-        "Qi Dou"
-      ],
-      "affiliations": [
-        "Zhejiang University",
-        "CUHK"
-      ],
-      "summary": "GODeform 想做能跨视角和跨类目的单目 3D 形变恢复。思路是显式把类别级模板形变到目标观测：先把模板拓扑信息注入 foundation feature 拿到 geometry-aware 表征，再和目标观测做关联指导形变；多视角模板特征 + 相机位姿做 view-adaptive 聚合解决任意视角问题。在大型变形和未见类目上拿到 SOTA，下游灵巧抓取也能用。",
-      "original_abstract": "Monocular 3D shape recovery is fundamental to geometric understanding, yet achieving robust generalization across arbitrary viewpoints and unseen object categories remains a significant challenge. In this paper, we present a generalizable deformation learning framework that reconstructs 3D objects by explicitly deforming a category-level shape template to match the target observation. To address complex shape variations between the template and the target, we introduce a geometry-guided feature modeling mechanism. This process first enriches foundation features with template topology to yield a geometry-aware representation, which is then explicitly correlated with the target observation to guide precise deformation. Furthermore, to bridge the disparity between the fixed template and arbitrary target views, we propose a view-adaptive feature aggregation module. This module leverages multi-view template features and their corresponding camera poses to enrich the canonical template representation, ensuring robust feature alignment regardless of the target's perspective. Extensive experiments demonstrate that our approach significantly outperforms state-of-the-art methods in handling large shape variations and diverse viewpoints, exhibiting strong generalization to novel categories and effectively supporting downstream real-world dexterous robotic manipulation tasks. Project homepage: https://GODeform.github.io/",
-      "highlights": {
-        "contribution": "提出一个能泛化到新类别、新视角的单目 3D 物体形变学习框架，并能直接喂给灵巧抓取。",
-        "innovation": "用模板拓扑去“引导”foundation 特征建模；view-adaptive 多视角模板聚合解决固定模板 vs 任意视角的不一致。",
-        "method": "类别级模板形变成目标观测；模板拓扑增强 foundation feature 得 geometry-aware 表征，再与目标视图关联出形变场。",
-        "results": "在大形变和未见类目上显著超 SOTA，并演示了下游真机灵巧抓取。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T09:22:57Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "robotic manipulation"
-      ],
-      "scores": {
-        "relevance": 6.5,
-        "recency": 9.0,
-        "popularity": 6.0,
-        "quality": 7.5,
-        "recommendation": 6.9
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.29661v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.29661v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.29564",
-      "title": "VE2VF: Vision-Enabled to Vision-Free Distillation via Real-world Reinforcement Learning for Robust Contact-Rich Manipulation",
-      "authors": [
-        "Victor Kowalski",
-        "Chengxi Li",
-        "Dongheui Lee"
-      ],
-      "affiliations": [
-        "TU Wien"
-      ],
-      "summary": "纯视觉 RL 策略容易过拟合训练时的视觉条件。这篇用 human-in-the-loop teacher-student 蒸馏，teacher 看视觉但 student 只用 pose/twist/wrench，全部在真机上训、不靠 domain randomization。NIST 装配板 3 个任务训 50 分钟达到 95% 整体成功，还能泛化到 8 个未见过的变体。",
-      "original_abstract": "When using reinforcement learning (RL) for contact-rich robotic manipulation, vision can provide task-relevant information that accelerates learning beyond what proprioception alone can achieve. However, vision-enabled policies tend to overfit to the visual conditions seen during training, limiting their robustness and transferability. We present a human-in-the-loop RL framework that employs teacher-student distillation to achieve robust performance across multiple task variants, trained entirely in the real world without requiring domain randomization or data augmentation. A vision-enabled teacher distills its knowledge into a vision-free student that relies solely on pose, twist, and wrench sensing, combining fast training with strong task generalization. On the real-world NIST assembly benchmark board, our approach achieves 95\\% overall success after approximately 50 minutes of training on 3 representative tasks, including robust generalization to 8 unseen task variants. Fine-tuning with distillation achieves full success on the most challenging task. We demonstrate that the resulting policies outperform baselines in both robustness and adaptability.",
-      "highlights": {
-        "contribution": "用真机 HiL RL + teacher-student 蒸馏训出一个 vision-free 的接触 rich 装配策略，又快又鲁棒。",
-        "innovation": "完全真机训练、无需 domain randomization 或数据增强；视觉 teacher 直接蒸馏到力觉/位姿 student。",
-        "method": "vision-enabled teacher 通过 HiL RL 学装配，再把策略蒸馏到只看 pose/twist/wrench 的 student；最后再蒸馏 fine-tune。",
-        "results": "NIST 装配板 3 任务 50 分钟训练即达 95% 成功率，泛化到 8 个未见变体；最难任务蒸馏 fine-tune 后全部成功。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T08:15:59Z",
-      "categories": [
-        "cs.RO"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "robotic manipulation"
-      ],
-      "scores": {
-        "relevance": 6.5,
-        "recency": 9.0,
-        "popularity": 5.5,
-        "quality": 7.0,
-        "recommendation": 6.6
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.29564v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.29564v1",
       "venue": null
     },
     {
@@ -675,6 +281,70 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.00133",
+      "title": "World Models: A Comprehensive Survey of Architectures, Methodologies, Reasoning Paradigms, and Applications",
+      "authors": [
+        "Arif Hassan Zidan",
+        "Yi Pan",
+        "Hanqi Jiang",
+        "Ruiyu Yan",
+        "Wei Ruan",
+        "Zihao Wu",
+        "Lifeng Chen",
+        "Weihang You",
+        "Xinliang Li",
+        "Bowen Chen",
+        "Huawen Hu",
+        "Peilong Wang",
+        "Sizhuang Liu",
+        "Jing Zhang",
+        "Siyuan Li",
+        "Zhengliang Liu",
+        "Yu Bao",
+        "Lin Zhao",
+        "Lichao Sun",
+        "Dajiang Zhu",
+        "Xiang Li",
+        "Jinglei Lv",
+        "Quanzheng Li",
+        "Wei Liu",
+        "Tianming Liu",
+        "Wei Zhang"
+      ],
+      "affiliations": [],
+      "summary": "这是一篇 world model 的综合综述。作者觉得 world model 在 RL、机器人、自驾、视频生成里跑得很快，但缺一张统一的地图，于是按架构、方法族、推理策略、应用领域四个轴搭了个分类法，把 PlaNet、Dreamer、MuZero、Sora、Cosmos、Genie 这些里程碑串起来，还专门讨论了 chain-of-thought 和 world-model 想象力开始融合的趋势。",
+      "original_abstract": "World models, internal simulators that learn the structure and dynamics of an environment, have emerged as a central paradigm in the pursuit of artificial general intelligence, enabling agents to predict, plan, and reason within learned representations. Despite rapid progress across reinforcement learning, robotics, autonomous driving, and video generation, the field lacks a unified framework integrating its diverse architectural choices, training methods, reasoning mechanisms, and application settings. This survey addresses that gap with a multi-axis taxonomy organized along four dimensions: (i) architecture, encompassing representation format, dynamics formulation, input modality, learning paradigm, and downstream application; (ii) methodological family, including state-space and recurrent approaches, transformer-based models, diffusion-based generators, physics-informed networks, and language-augmented multimodal systems; (iii) reasoning strategy, covering imagination-based planning, latent policy learning, counterfactual reasoning, and planning under uncertainty; and (iv) application domain, spanning robotics, autonomous driving, video prediction, multimodal agents, reinforcement learning, scientific modeling, medical imaging, educational measurement, and business and finance. Tracing the field from early cognitive-science foundations to milestone systems such as PlaNet, the Dreamer family, MuZero, Sora, Cosmos, and Genie, we examine how these dimensions interact and highlight the recent convergence of chain-of-thought reasoning with world-model imagination. We review evaluation protocols and benchmarks, identify persistent challenges such as compounding prediction errors, sim-to-real transfer, and fragmented evaluation, and outline future directions toward unified multimodal world models, foundation-scale interactive simulators, and safe deployment in safety-critical domains.",
+      "highlights": {
+        "contribution": "给 world model 这个杂乱的领域提供了一张四维分类地图，并梳理了评估协议、benchmark 和未来方向。",
+        "innovation": "不是单一视角的综述，而是同时覆盖架构 / 方法族 / 推理策略 / 应用域四个轴，并特别指出 CoT 推理与 world model 想象的融合趋势。",
+        "method": "走的是 survey 套路：先回顾认知科学起源，再按 state-space、Transformer、Diffusion、physics-informed、language-augmented 等方法族分类，每条线分别梳理代表系统、训练范式和典型 benchmark。",
+        "results": "没有数值结果，主要是定性梳理。指出了 compounding 误差、sim-to-real、评测割裂等持续性挑战，建议走向统一多模态 world model 和 foundation-scale 交互式 simulator。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T21:23:24Z",
+      "categories": [
+        "cs.LG",
+        "cs.ET"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "video prediction",
+        "genie"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 9.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.00133v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.00133v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2605.30346",
       "title": "YoCausal: How Far is Video Generation from World Model? A Causality Perspective",
       "authors": [
@@ -764,83 +434,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.30100",
-      "title": "Chess-World-Model: A 10M-Game Benchmark for Exact State Tracking from Chess Move Sequences",
-      "authors": [
-        "Benjamin Walker",
-        "Terry Lyons"
-      ],
-      "affiliations": [
-        "Oxford"
-      ],
-      "summary": "World model 的核心能力是 state tracking。作者用 1000 万真实国际象棋对局造了一个超大 benchmark：给一串合法走法，模型要预测精确的棋盘状态。除了真实对局，还做了 uniformly random 合法走法的 OOD split，专门测模型是不是真的学到了转移规则而非靠人类常见局面投机。对比 Transformer、SLiCE、Mamba-3、Gated DeltaNet，recurrent 模型在 3M/8M 参数下大幅领先 Transformer，真实 split 在 18M 后饱和但 OOD split 40M 依然能分高下。",
-      "original_abstract": "World models require state tracking, which is the ability to maintain a correct latent state across action sequences. Existing benchmarks are often synthetic or language-based, limiting their value as tests of structured state updates in realistic domains. We introduce Chess-World-Model, a large-scale state-tracking benchmark built from 10 million real chess games, where models predict the exact board state reached after a sequence of legal moves. Alongside a held-out real-game split, we include an out-of-distribution split from uniformly random legal play, which tests whether models learn the transition rules rather than shortcuts from common human positions. Prior theoretical and empirical work has shown that Transformers struggle to state-track, while input-dependent linear RNNs require expressive state-transition matrices to do so. We therefore benchmark a causal Transformer, block-diagonal SLiCE, Mamba-3, and Gated DeltaNet with negative eigenvalues under a matched interface and training protocol. The recurrent models strongly outperform the Transformer at 3 and 8 million parameters. Real-game performance saturates above 18 million parameters, but the random-uniform split remains discriminative up to 40 million, exposing failures otherwise hidden by scale. Additionally, ablations show that less expressive state-transition mechanisms reduce performance on the out-of-distribution split for all three recurrent models. Together, these results establish Chess-World-Model as a practical large-scale benchmark for state tracking that exposes failures model scale would otherwise conceal.",
-      "highlights": {
-        "contribution": "提出 Chess-World-Model：基于 1000 万真实对局的大规模精确状态追踪基准。",
-        "innovation": "用 uniformly random 合法走法构造 OOD split，把“学规则”和“靠人类先验 shortcut”分开测；推到 40M 仍可分辨。",
-        "method": "统一接口和训练协议下比较 causal Transformer、block-diagonal SLiCE、Mamba-3、Gated DeltaNet 等多种线性 RNN 在精确状态预测上的表现。",
-        "results": "Recurrent 模型在 3M/8M 强于 Transformer；真实 split >18M 饱和但 random split 40M 仍有区分；transition matrix 表达能力降低会损害 OOD 性能。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T15:43:31Z",
-      "categories": [
-        "cs.LG"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model",
-        "world models"
-      ],
-      "scores": {
-        "relevance": 6.0,
-        "recency": 9.0,
-        "popularity": 7.0,
-        "quality": 8.0,
-        "recommendation": 7.3
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.30100v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.30100v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.29585",
-      "title": "World Models in Words: Auditing Physical State-Transition Commitments in Vision-Language Models",
-      "authors": [
-        "Emmanuelle Bourigault"
-      ],
-      "affiliations": [
-        "Oxford"
-      ],
-      "summary": "VLM 物理推理评测通常只看最后答案，掩盖了“答对但理由错”的问题。这篇要求模型显式吐出 (s0, Δs, s1, a) 四元组，再用混合 verifier 检查 schema、状态 grounding、转移一致性和答案-trace 兼容性，给出 object/relation/force 等类型化错误标签。结果发现中等模型 35% 的正确答案其实背后是物理错误的 trace，verifier-guided rerank 能再涨 7 个点 trace 有效性。",
-      "original_abstract": "Vision-language models (VLMs) are increasingly used to answer questions about physical scenes, yet most evaluations reduce performance to a final answer. This hides whether the model perceived the right objects, represented the right physical state, predicted a plausible transition, or merely selected the right option for the wrong reasons. We introduce \\wmw, an evaluation framework for auditing the \\emph{language-expressed physical commitments} of VLMs. Instead of scoring only $I,q\\mapsto a$, we ask models to produce a typed trace $I,q\\mapsto(s_0,Δs,s_1,a)$: an initial state, a state transition, a resulting state, and an answer. A hybrid verifier then checks schema validity, state grounding, transition consistency, and answer-trace compatibility, yielding typed error labels such as object, relation, force, transition, temporal, unit/scale, and faithfulness errors. We release \\tracebank, a controlled trace resource with \\nSeed schema- and recomputation-validated synthetic scenarios across \\nFamilies physics families, \\nPairs minimally perturbed contrastive preference pairs, verifier code, audit guidelines, and model outputs. We evaluate \\nModels VLMs on both controlled and external physical-reasoning examples. \\wmw reveals failures that answer-only evaluation misses: 35\\% of correct answers from mid-tier models are backed by physically invalid traces. Verifier-guided reranking recovers up to 7 percentage points of trace validity without sacrificing answer accuracy, and trace-level preference tuning reduces hidden inconsistency by 41\\% relative. The contribution is not another final-answer physics benchmark, but a reusable protocol for measuring whether a VLM's stated physical world can be true at the same time as its answer.",
-      "highlights": {
-        "contribution": "一个面向 VLM 的物理状态-转移评测协议，把“看上去对”和“真的物理一致”分开打分。",
-        "innovation": "强制 VLM 输出可验证的物理状态 trace 而不只看答案；混合 verifier + 类型化错误标签。",
-        "method": "构造 schema 验证过的合成场景与对照对，VLM 输出 (s0,Δs,s1,a) 后送 verifier 检查多个一致性维度并打标签。",
-        "results": "中等模型 35% 正确答案对应物理无效 trace；rerank 提升 trace 有效率 +7pp；preference tuning 降低隐藏不一致 41%。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T08:29:32Z",
-      "categories": [
-        "cs.CL"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model",
-        "world models"
-      ],
-      "scores": {
-        "relevance": 6.5,
-        "recency": 9.0,
-        "popularity": 5.5,
-        "quality": 7.0,
-        "recommendation": 6.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.29585v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.29585v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.30542",
       "title": "Physically Viable World Models: A Case for Query-Conditioned Embodied AI",
       "authors": [
@@ -887,125 +480,262 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.29930",
-      "title": "Toward AI Systems That Understand Self and Others: A Multi-Phase Inference Framework for Human Cognitive Diversity and World-Model Alignment",
+      "arxiv_id": "2605.30215",
+      "title": "Déjà View: Looping Transformers for Multi-View 3D Reconstruction",
       "authors": [
-        "Toru Takahashi"
-      ],
-      "affiliations": [],
-      "summary": "这是一篇偏哲学/认知层面的概念框架文章，提出 Multi-Phase Inference Mechanism (MIM) 来解释为什么不同主体在同一观察下会形成不同的世界模型。作者把 world-model alignment 重新定义为“让异质表征可互相处理”，而不是强行收敛到同一价值系统。没有实验，主要是给 AI alignment 提供新的描述词汇。",
-      "original_abstract": "Mutual misunderstanding in contemporary society does not arise merely because people hold different opinions or values. Even under the same observations, different subjects may form different inferential targets, state representations, prediction errors, and update priorities. This paper proposes a multi-phase inference framework and defines its core internal mechanism as the Multi-Phase Inference Mechanism (MIM). MIM formalizes how heterogeneous world models arise through a phase-formation space, a foregrounding field, subject-specific profile states, and alignment maps between state representations. On this basis, the paper reframes world-model alignment as the problem of making heterogeneous representations mutually processable, rather than forcing agreement or convergence to a single value system. It further connects this formalism to philosophical disagreements, cognitive typology, social fragmentation, and AI alignment. The aim is to provide a constructive vocabulary for AI systems that can help humans understand self and others by making differences in meaning, value, and prediction error visible, comparable, and transformable.",
-      "highlights": {
-        "contribution": "提出一个解释异质世界模型如何形成的多阶段推理概念框架 MIM。",
-        "innovation": "把 alignment 问题重定义为“表征互可处理”而不是“收敛到一致”。",
-        "method": "形式化 phase-formation space、foregrounding field、subject profile、representation alignment map 等理论要素。",
-        "results": "无实证结果，主要给出概念词汇，并连接哲学分歧、社会碎片化、AI alignment 等议题。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T13:43:23Z",
-      "categories": [
-        "cs.AI",
-        "cs.CY",
-        "cs.HC"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model",
-        "world models"
-      ],
-      "scores": {
-        "relevance": 3.5,
-        "recency": 9.0,
-        "popularity": 4.0,
-        "quality": 4.5,
-        "recommendation": 4.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.29930v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.29930v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.29849",
-      "title": "BuilDyn: Excitation-Driven Data Generation for Building Thermal Dynamics Modeling and Control",
-      "authors": [
-        "Felix Koch",
-        "Thomas Krug",
-        "Fabian Raisch",
-        "Benjamin Schäfer",
-        "Benjamin Tischler"
+        "Alessandro Burzio",
+        "Tobias Fischer",
+        "Sven Elflein",
+        "Qunjie Zhou",
+        "Riccardo de Lutio",
+        "Jiawei Ren",
+        "Jiahui Huang",
+        "Shengyu Huang",
+        "Marc Pollefeys",
+        "Laura Leal-Taixé",
+        "Zan Gojcic",
+        "Haithem Turki"
       ],
       "affiliations": [
-        "Karlsruhe Institute of Technology"
+        "NVIDIA",
+        "ETH Zürich"
       ],
-      "summary": "数据驱动的建筑热力学模型在实际控制策略下常常因为状态空间没被充分激发而泛化不动。BuilDyn 在 BuilDa 基础上加可定制的激励策略，让用户能生成覆盖更广状态空间的训练数据，还能从建筑分布里采样。作者用一个建筑做了对比：用激励数据训出来的 ML 模型在未见工况下确实更稳。这篇严格说更偏建筑能源控制，跟具身 AI 关联弱。",
-      "original_abstract": "Machine learning (ML) is increasingly used for data-driven modeling of buildings to enable downstream tasks such as fault detection and diagnosis, and energy-efficient control. While recent work improves generalization across building characteristics, weather, and occupancy, generalization also depends on sufficient exploration of the control-driven system state space. Existing real-world datasets and simulation environments predominantly reflect stationary operation under fixed control policies, resulting in limited excitation and reduced robustness to unseen operating conditions.   This paper introduces BuilDyn, a package based on BuilDa that enables customizable excitation strategies for control-oriented data generation. BuilDyn further supports sampling from representative building distributions and provides a Python interface for easy integration into machine learning pipelines. We demonstrate the benefits of BuilDyn by comparing the performance of data-driven ML models trained on non-excited and excited data for one building. With BuilDyn, we hope to advance scalable control-oriented modeling and support future directions such as transfer learning and building-specific foundation models.",
+      "summary": "现在 feed-forward 3D reconstruction transformer 已经做到十亿参数了，但作者注意到深层 transformer 其实在反复做类似操作，多视图重建网络是逐层 refine 的。于是 DéjàView 把这种「迭代」显式建模出来：单个 block 重复跑 K 步。一次训练，推理时 K 可调，参数远少于大模型但效果反而能匹敌甚至超过。",
+      "original_abstract": "Recent feed-forward 3D reconstruction transformers have scaled to over a billion parameters, following the broader trend of increasing model capacity in computer vision. Yet emerging evidence suggests that contiguous transformer layers often behave like repeated applications of similar operations, and multi-view reconstruction transformers refine their predictions progressively across decoder depth. We posit that model depth partially buys iteration, paid for inefficiently in unique parameters, and instead make that iteration explicit in architecture. Our model, DéjàView, applies a single looped transformer block recurrently to per-view features for K refinement steps. Trained once, it exposes K as an inference-time compute knob, matching or outperforming substantially larger feed-forward baselines across five reconstruction benchmarks spanning indoor, outdoor, object-centric, and driving scenes, while using a fraction of their parameters and comparable or lower compute. Importantly, the same looped block formulation outperforms an otherwise identical variant with independent per-step parameters under matched training data and compute, suggesting that explicit iteration is not merely a compute-efficient substitute for capacity but a stronger inductive bias for multi-view 3D reconstruction.",
       "highlights": {
-        "contribution": "给建筑热动力学建模做了一个可定制激励信号的数据生成包，强调控制相关的状态空间覆盖。",
-        "innovation": "把“控制激励设计”引入数据生成 pipeline，并配建筑分布采样与 Python 接口便于 ML 集成。",
-        "method": "基于 BuilDa 提供多种激励策略，从代表性建筑分布采样，用激励 vs 非激励数据训同一 ML 建筑模型并比较。",
-        "results": "在一个建筑上展示激励数据训练的 ML 模型在未见工况下更鲁棒，但实验规模有限。"
+        "contribution": "提出 DéjàView：用一个循环展开的 transformer block 替代深层堆叠，在多视图 3D 重建上以小得多的参数量打平甚至超越大模型。",
+        "innovation": "证明显式 iteration 不仅是省参数的替代品，本身就是更强的 inductive bias —— 同等数据/compute 下，循环共享参数比每步独立参数还要好。",
+        "method": "把多视图 transformer 的解码深度替换成单 block × K 次循环 refinement；K 训练时固定一次，推理时变成 compute knob 可调。",
+        "results": "在 5 个跨室内/室外/object-centric/驾驶场景的重建 benchmark 上匹配或超过参数大几倍的 feed-forward baseline，compute 也持平或更低。"
       },
       "images": [],
-      "published_date": "2026-05-28T12:30:50Z",
-      "categories": [
-        "eess.SY",
-        "cs.LG"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "dynamics model"
-      ],
-      "scores": {
-        "relevance": 2.5,
-        "recency": 9.0,
-        "popularity": 4.0,
-        "quality": 5.5,
-        "recommendation": 4.2
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.29849v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.29849v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.29997",
-      "title": "FRUC: Feedforward Dynamic Scene Reconstruction from Uncalibrated Collaborative Driving Views",
-      "authors": [
-        "Yihang Tao",
-        "Yu Guo",
-        "Zhengru Fang",
-        "Haonan An",
-        "Yuguang Fang"
-      ],
-      "affiliations": [
-        "CityU HK"
-      ],
-      "summary": "多车协同重建一般要求精准外参标定 + per-scene 优化，太死板。FRUC 把它当作一个时空非结构化的 ego-centric 多相机系统：用一个视觉 grounded 几何 Transformer backbone 实现 one-shot、免标定推理；再加 ego-centric causal occlusion field 显式建模遮挡演化，cross-agent 融合用零初始化残差去噪做。V2XReal 和 UrbanIng-V2X 上渲染质量和效率都新 SOTA。",
-      "original_abstract": "We present FRUC, a feed-forward 3D Gaussian splatting framework for dynamic scene reconstruction from uncalibrated collaborative driving views. Existing multi-agent reconstruction frameworks are often hindered by rigid prerequisites, demanding precise spatial calibration and slow per-scene optimization. In this paper, we rethink this task by conceptualizing a distributed multi-vehicle network as a spatio-temporally unstructured ego-centric multi-camera system, where the core challenge lies in enhancing ego-centric occluded geometry through collaboration without degrading the ego's accurately observed visible geometry, while preserving reconstruction efficiency. For efficient reconstruction, FRUC is built upon a visual grounded geometric Transformer backbone to enable one-shot, calibration-free inference from a flexible number of multi-vehicle views. To achieve non-destructive geometric supplementation under uncalibrated cross-agent misalignment, FRUC first introduces an ego-centric causal occlusion field that explicitly derives occlusion evolution as latent priors by modeling agent-wise spatio-temporal correlations. Guided by these occlusion priors, it further formulates cross-agent integration as a deterministic residual denoising process via zero-initialized injection, turning challenging cross-agent fusion into bounded residual learning for robust collaborative blind-spot completion. Through extensive evaluations on the real-world V2XReal and UrbanIng-V2X datasets, FRUC is shown to be a new state-of-the-art for the scene reconstruction of dynamic collaborative driving environments, significantly outperforming existing methods in both rendering quality and efficiency.",
-      "highlights": {
-        "contribution": "提出一个 feedforward、免标定的协同驾驶动态场景 3DGS 重建框架。",
-        "innovation": "用 causal occlusion field 当先验、用零初始化残差注入实现“非破坏性”跨 agent 几何补全。",
-        "method": "VGGT 风格几何 Transformer 做 one-shot 推理；ego-centric occlusion field 建模时空遮挡演化；零初始化残差去噪做跨 agent fusion。",
-        "results": "V2XReal 和 UrbanIng-V2X 上协同驾驶动态场景重建拿到新 SOTA，渲染质量和效率都明显领先。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T14:27:30Z",
+      "published_date": "2026-05-28T16:47:48Z",
       "categories": [
         "cs.CV"
       ],
       "matched_domain": "VGGT",
       "matched_keywords": [
-        "feed-forward 3d",
+        "feed-forward 3d"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 9.0,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.30215v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.30215v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.30488",
+      "title": "CoMo3R-SLAM: Collaborative Monocular Dense SLAM with Learned 3D Reconstruction Priors for Outdoor Multi-Agent Systems",
+      "authors": [
+        "Zhihao Cao",
+        "Qi Shao",
+        "Shuhao Zhai",
+        "Feng Tian",
+        "Anh Nguyen",
+        "Hesheng Wang",
+        "Baoru Huang"
+      ],
+      "affiliations": [
+        "上海交大",
+        "University of Liverpool"
+      ],
+      "summary": "多机器人协作 dense SLAM 在户外做很难：RGB-D 太重，但只用单目 RGB 又有 scale 模糊和跨 agent 关联不可靠的问题。CoMo3R-SLAM 用 learned feed-forward 3D reconstruction prior 撑起协作单目 SLAM —— 每个 agent 跑 prior-guided 前端，协调器做跨 agent dense pointmap 匹配、Sim(3) 同步和 GPU 加速 global BA。",
+      "original_abstract": "Collaborative dense SLAM is essential for multi-robot teams to achieve scalable and consistent 3D perception across large-scale outdoor environments. Existing systems typically depend on depth sensors, incurring significant payload, power, and calibration costs. Monocular RGB cameras are a lightweight alternative, but collaborative monocular dense SLAM remains difficult due to scale ambiguity, unreliable inter-agent data association, especially in outdoor scenes where low overlap and repetitive structures make traditional feature matching unreliable, motivating robust geometric information. We propose CoMo3R-SLAM, the first collaborative monocular dense RGB SLAM system that leverages robust learned feed-forward 3D reconstruction priors for outdoor multi-agent mapping. Each agent runs a prior-guided front-end for real-time tracking and local dense fusion, while a coordinator performs dense pointmap matching for cross-agent verification, closed-form Sim(3) gauge synchronization, and GPU-accelerated global bundle adjustment with segment-level depth optimization. Requiring neither depth sensors nor parametric intrinsics, our system produces robust cross-agent constraints and globally consistent metric maps from monocular RGB alone. On Tanks and Temples and Waymo sequences, CoMo3R-SLAM achieves the best ATE on three of four Tanks and Temples scenes and competitive Waymo accuracy, matching or exceeding state-of-the-art RGB-D methods while running online at 8 FPS.",
+      "highlights": {
+        "contribution": "第一个面向户外多 agent 协作的 monocular dense RGB SLAM 系统，不需要深度传感器和已知内参就能输出 metric global map。",
+        "innovation": "把 feed-forward 3D 重建先验融进协作 SLAM 的前后端：前端 prior-guided tracking + dense fusion，后端 dense pointmap matching + 闭式 Sim(3) gauge 同步 + segment-level 深度优化。",
+        "method": "每 agent prior-guided 实时 tracking 和 local dense fusion；coordinator 做跨 agent dense pointmap matching，闭式 Sim(3) 同步，GPU 加速 global BA 含 segment 级深度优化。",
+        "results": "Tanks and Temples 4 个场景里 3 个 ATE 最佳，Waymo 上与 RGB-D SOTA 持平甚至更好，online 8 FPS 运行。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T19:06:19Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "feed-forward 3d"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 9.0,
+        "popularity": 6.5,
+        "quality": 8.0,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.30488v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.30488v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.30342",
+      "title": "Uncertainty-driven 3D Gaussian Splatting Active Mapping via Anisotropic Visibility Field",
+      "authors": [
+        "Shangjie Xue",
+        "Jesse Dill",
+        "Dhruv Ahuja",
+        "Frank Dellaert",
+        "Panagiotis Tsiotras",
+        "Danfei Xu"
+      ],
+      "affiliations": [
+        "Georgia Tech"
+      ],
+      "summary": "3DGS 在没看过的视角下容易给出不可靠预测。GAVIS 提出在 3DGS 上做不确定性量化和主动建图：把每个高斯粒子相对训练视角的可见性建成各向异性场，用球谐表示，再嵌进 Bayesian Network rasterizer，能 200FPS 实时算出新视角的不确定性。",
+      "original_abstract": "We present Gaussian Splatting Anisotropic Visibility Field (GAVIS), a novel framework for uncertainty quantification and active mapping in 3DGS. Our key insight is that regions unseen from the training views yield unreliable predictions from the 3DGS. To address this, we introduce a principled and efficient method for quantifying the visibility field in 3DGS, defined as the anisotropic visibility of each particle with respect to the training views, and represented using spherical harmonics. The resulting visibility field is integrated into a Bayesian Network-based uncertainty-aware 3DGS rasterizer, enabling real-time (200 FPS) uncertainty quantification for synthesized views. Active mapping is further performed within a maximum information gain framework building on this formulation. Extensive experiments across diverse environments demonstrate that GAVIS consistently and significantly outperforms prior approaches in both accuracy and efficiency. Moreover, beyond standalone use, our method can be applied post-hoc to improve the performance of existing approaches.",
+      "highlights": {
+        "contribution": "给 3DGS 提供 principled 的各向异性可见性场，实现实时不确定性量化和 information-gain 驱动的 active mapping。",
+        "innovation": "不再用经验启发的 ensemble，而是用球谐表示的 anisotropic visibility field，对未观测区域给出原理性的可信度度量；既能独立用，又能 post-hoc 改善已有方法。",
+        "method": "对每个粒子定义并表征 anisotropic visibility；用 SH 表达后塞进 Bayesian Network 形式的 3DGS rasterizer；active mapping 用 max information gain 框架挑下一观测视角。",
+        "results": "在多个环境上不确定性和 active mapping 精度都优于现有方法，速度可达 200 FPS，还能直接 plug 到别的 3DGS 方法上提分。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T17:59:32Z",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 9.0,
+        "popularity": 6.5,
+        "quality": 7.8,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.30342v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.30342v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.30320",
+      "title": "MonoPhysics: Estimating Geometry, Appearance, and Physical Parameters from Monocular Videos",
+      "authors": [
+        "Daniel Rho",
+        "Jun Myeong Choi",
+        "Matthew Thornton",
+        "Biswadip Dey",
+        "Roni Sengupta"
+      ],
+      "affiliations": [
+        "UNC Chapel Hill",
+        "Siemens"
+      ],
+      "summary": "单目视频做 inverse physics 一直很难，因为缺少多视角约束导致 scale 模糊、几何不准。MonoPhysics 把 differentiable MPM 仿真和 3DGS 拼在一起，从单视角联合优化几何、外观和物理参数。它用三座「视觉-物理桥梁」：全局 scale 对齐、physics-aware 几何细化、可微 position map。",
+      "original_abstract": "Existing inverse physics methods recover physical parameters from multi-view videos, where geometric constraints across views resolve scale and 3D structure. In monocular settings, however, such constraints are absent, leading to severe scale ambiguity, inaccurate geometry, and weak coupling between appearance optimization and physical simulation. We propose MonoPhysics, a framework for monocular inverse physics estimation of deformable objects using differentiable MPM simulation and 3D Gaussian Splatting, which jointly optimizes geometry, appearance, and physical parameters from a single camera view. We address these challenges through three visual-physical bridges: global scale alignment, physics-aware geometry refinement, and a differentiable position map, which together enable accurate optimization from monocular observations alone. We evaluate on Vid2Sim and our new dataset of elastic and plastic objects, showing that MonoPhysics outperforms existing baselines in monocular settings and achieves performance comparable to multi-view baselines using only a single camera. Our project page is available at https://daniel03c1.github.io/MonoPhysics/",
+      "highlights": {
+        "contribution": "把单目 inverse physics 估计做出来，可形变物体的几何、外观、物理参数能从一台相机的视频联合恢复。",
+        "innovation": "首个把 differentiable MPM 和 3DGS 在单目场景里强耦合的方案，用三种 visual-physical bridge 解 scale 模糊和外观-物理弱耦合问题。",
+        "method": "用 3DGS 表征几何外观，MPM 做可微仿真；通过 global scale alignment、physics-aware geometry refinement 和可微 position map 把视觉和物理联系起来，端到端优化。",
+        "results": "在 Vid2Sim 和自建弹性/塑性物体数据集上超过现有单目基线，单视角下达到与多视角方法相当的效果。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T17:55:34Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
         "gaussian splatting"
       ],
       "scores": {
         "relevance": 7.0,
         "recency": 9.0,
-        "popularity": 6.0,
+        "popularity": 6.5,
         "quality": 7.5,
-        "recommendation": 7.1
+        "recommendation": 7.3
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.29997v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.29997v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.30320v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.30320v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.30310",
+      "title": "City-Mesh3R: Simulation-Ready City-Scale 3D Mesh Reconstruction from Multi-View Images",
+      "authors": [
+        "Sayan Paul",
+        "Sourav Ghosh",
+        "Siddharth Katageri",
+        "Soumyadip Maity",
+        "Sanjana Sinha",
+        "Brojeshwar Bhowmick"
+      ],
+      "affiliations": [],
+      "summary": "城市级三维重建一直挺难的，NeRF 和 3DGS 容易出现破洞和噪声表面，不能直接给 simulator 用。City-Mesh3R 走 end-to-end image-to-mesh 路线，用分治策略：先做拓扑聚类的稀疏 SfM 和地图合并，再分块密集重建、自适应 remesh，最后拼成全局水密 mesh。",
+      "original_abstract": "City-scale 3D surface reconstruction from multiview images for downstream 3D simulation, poses highly challenging problems due to the scale and complexity of urban scenes. Existing city-scale 3D reconstruction methods based on NeRF, Gaussian Splatting etc. often fail to recover 3D meshes ready for simulation due to incomplete/missing geometry and irregular, noisy surfaces. Scaling existing small-scale 3D reconstruction methods to arbitrarily large urban scenes is highly infeasible due to their computational complexity. We present City-Mesh3R, a scalable framework for reconstructing watertight surface meshes directly from large unordered image collections. Unlike recent methods which use global sparse SfM point-cloud initialization followed by a distributed 3D dense reconstruction of large-scale scenes, our method follows an end-to-end images-to-mesh 3D reconstruction approach using a divide-and-conquer strategy. The sparse city map is reconstructed via topological image clustering, cluster-wise independent sparse SfM and map merging, without need for exhaustive image feature matching. Then this map is partitioned spatially to perform geometry-aware camera selection, followed by dense surface reconstruction and surface refinement using curvature-aware adaptive vertex density remeshing. These partition meshes are then stitched together to produce the global mesh of the city. The proposed end-to-end framework is evaluated on city-scale reconstruction datasets. As demonstrated by our qualitative and quantitative results, our proposed method yields high-fidelity watertight 3D meshes with regular geometry, capturing fine surface details, and is suitable for scaling to arbitrarily large scenes owing to the end-to-end processing in a distributed setting.",
+      "highlights": {
+        "contribution": "提出一个直接从无序图像产出 simulation-ready 水密 mesh 的城市级重建框架。",
+        "innovation": "不走传统的「全局稀疏 SfM 初始化 + 分布式 dense」两段式，而是端到端 image-to-mesh 分治：聚类→cluster 内 SfM→空间分块密集重建→curvature-aware remesh→拼接。",
+        "method": "拓扑聚类 + 独立稀疏 SfM + 地图合并；空间分割后 geometry-aware 选相机做 dense 重建；用曲率感知自适应顶点密度 remesh；最后 stitch 各 partition mesh。",
+        "results": "在城市级数据集上得到 watertight、规整、保留细节的 mesh，定性定量都比对照方法强，并具备分布式扩展能力。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T17:53:26Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.GR"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 9.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.30310v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.30310v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.00137",
+      "title": "Advances in Neural 3D Mesh Texturing: A Survey",
+      "authors": [
+        "Sai Raj Kishore Perla",
+        "Hao Zhang",
+        "Ali Mahdavi-Amiri"
+      ],
+      "affiliations": [],
+      "summary": "一篇专门讲 neural 3D mesh texturing 的综述。作者强调虽然 NeRF/3DGS 也能生成带纹理资产，但 mesh 仍是工业管线的核心表征，所以纹理合成、迁移、补全这条线值得整理。文章从 GAN 时代讲到 diffusion 时代，按方法、监督、数据集和应用做了统一分类。",
+      "original_abstract": "Texturing 3D meshes plays a vital role in determining the visual realism of digital objects and scenes. Although recent generative 3D approaches based on Neural Radiance Fields and Gaussian Splatting can produce textured assets directly, polygonal meshes remain the core representation across modeling, animation, visual effects, and gaming pipelines. Neural 3D mesh texturing therefore continues to be an essential and active area of research. In this survey, we present a comprehensive review of recent advances in neural 3D mesh texturing, covering methods for texture synthesis, transfer, and completion. We first summarize key foundations in mesh geometry, texture mapping, differentiable rendering, and neural generative models, and then organize the literature into a unified taxonomy spanning early GAN-based methods to modern diffusion-based pipelines. We further analyze common architectures and supervision strategies, review datasets and evaluation protocols, and discuss emerging applications, practical/commercial systems, and open challenges. Together, these insights provide a structured perspective on the current landscape and help guide future developments in learning-based 3D mesh texturing.",
+      "highlights": {
+        "contribution": "把 neural 3D mesh texturing 的发展线索系统化，覆盖合成 / 迁移 / 补全三类任务并梳理常用架构和监督方式。",
+        "innovation": "相对其他 3D 生成综述，专门聚焦 mesh 这一仍主导工业管线的表征，并把 GAN→diffusion 路线拉到统一 taxonomy 下。",
+        "method": "综述方法：先打基础（mesh 几何、texture mapping、differentiable rendering、neural generative models），再按代表方法分类，最后讨论数据集、评测和实际落地系统。",
+        "results": "无定量比较，主要给出 landscape、open problem 和工程实践建议。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T23:18:08Z",
+      "categories": [
+        "cs.CV",
+        "cs.GR"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "neural radiance",
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 9.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.00137v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.00137v1",
       "venue": null
     },
     {
@@ -1051,44 +781,360 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.29549",
-      "title": "Learning Representations from 3D Gaussian Splats",
+      "arxiv_id": "2605.30469",
+      "title": "3DAE: Binaural Quality Assessment for Audio Novel View Synthesis with Spatial Maps and Benchmark",
       "authors": [
-        "Julia Farganus",
-        "Krzysztof Żurawicki",
-        "Arkadiusz Gaweł",
-        "Weronika Jakubowska",
-        "Halina Kwaśnicka"
+        "Jialu Xu",
+        "Yifan Zhou"
       ],
-      "affiliations": [
-        "Wroclaw University of Science and Technology"
-      ],
-      "summary": "3DGS 主要用来渲染，但作为场景理解 backbone 怎么样？作者拿点云和图网络架构在常规点云数据集和专门的 GS 数据集上跑分类、linear probe、聚类，看不同几何感知架构和不同输入特征配置对学到的 GS 表征质量有什么影响。结论主要是架构家族间存在一致差异，Gaussian-specific 属性会显著影响表征质量。",
-      "original_abstract": "3D Gaussian Splatting (3DGS) is a recent approach for scene rendering. Although primarily designed for view synthesis, its potential for scene understanding tasks remains underexplored. In this work, we conduct a comparative evaluation of various geometric deep learning architectures for the classification of 3D scenes represented using Gaussian Splatting. We benchmark point-based and graph-based models across both traditional point cloud datasets and dedicated Gaussian Splatting datasets. Scenes are embedded into latent representations, which are evaluated through end-to-end classification, linear probing, and clustering analysis. Our study provides insight into the suitability of different geometry-aware architectures and input feature configurations for learning effective 3D Gaussian Splat representations. The results highlight consistent differences between architectural families and reveal the impact of Gaussian-specific attributes on the quality of representation.",
+      "affiliations": [],
+      "summary": "音频 novel-view synthesis 通常只看全局指标，但全局指标会把「哪里错了、为啥错了」藏起来。作者搞了一套 time-frequency 错误地图，覆盖幅度、ILD、IPD、时间对齐、响度、高频失败六个维度，合成 3D Audio Error Map，并打包成 3DAE Bench 来做可视化诊断。",
+      "original_abstract": "3D audio and novel-view acoustic synthesis models are usually evaluated with global metrics.However, global metrics often hide where and why binaural prediction fails. We propose a full-reference diagnostic framework that uses time-frequency audio error maps for magnitude, ILD, IPD, temporal alignment, loudness, and high-frequency failures, forming a 3D Audio Error Map (3DAE Map) for visual inspection. We frame these diagnostics into a model-agnostic benchmark, Spatial Audio Error Bench (3DAE Bench), which takes arbitrary ground-truth and predicted binaural pairs and reports the prediction quality of audio novel-view synthesis models. Experiments on ViGAS outputs over Replay-NVAS and SoundSpaces show different dominant failure modes: temporal misalignment on Replay-NVAS and ILD mismatch on SoundSpaces. Overall, the framework provides interpretable failure-mode summaries and intuitive visual maps for audio Novel-view-synthesis model development optimization.",
       "highlights": {
-        "contribution": "系统比较点和图几何深度学习架构在 3DGS 场景分类/表征学习上的表现。",
-        "innovation": "针对 3DGS 输入做专门的架构 + 特征配置基准研究，而不是把 3DGS 当渲染器。",
-        "method": "把 3DGS 场景嵌入到 latent，用 end-to-end 分类、linear probing 和聚类三种方式评测多种点/图模型，覆盖点云和 GS 数据集。",
-        "results": "不同架构家族之间存在一致性能差异，Gaussian 特有属性显著影响表征质量；属于基准研究类论文。"
+        "contribution": "提出 audio novel-view synthesis 的诊断式评测框架，让 binaural 预测失败模式可视化、可解释。",
+        "innovation": "把音频 NVS 的评测从单一全局数字升级成多维 TF 错误地图，明确区分哪个失败模式占主导。",
+        "method": "构建 6 类全参考错误图（magnitude/ILD/IPD/temporal/loudness/HF），合成 3DAE Map；提供 model-agnostic benchmark 输入 GT/预测 binaural 对就能出诊断。",
+        "results": "在 ViGAS × Replay-NVAS / SoundSpaces 上验证：Replay-NVAS 主要错在时间对齐，SoundSpaces 主要错在 ILD 不匹配，诊断结果直观可用。"
       },
       "images": [],
-      "published_date": "2026-05-28T08:02:17Z",
+      "published_date": "2026-05-28T18:40:55Z",
       "categories": [
+        "cs.SD",
         "cs.CV"
       ],
       "matched_domain": "VGGT",
       "matched_keywords": [
-        "gaussian splatting"
+        "novel view synthesis"
       ],
       "scores": {
         "relevance": 4.0,
         "recency": 9.0,
-        "popularity": 4.5,
-        "quality": 6.0,
+        "popularity": 5.0,
+        "quality": 6.5,
         "recommendation": 5.2
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.29549v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.29549v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.30469v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.30469v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.30159",
+      "title": "Meta-Cognitive Memory Policy Optimization for Long-Horizon LLM Agents",
+      "authors": [
+        "Ziyan Liu",
+        "Zhezheng Hao",
+        "Yeqiu Chen",
+        "Hong Wang",
+        "Jingren Hou",
+        "Ruiyi Ding",
+        "Yongkang Yang",
+        "Wence Ji",
+        "Wei Xia",
+        "Feng Liu"
+      ],
+      "affiliations": [],
+      "summary": "长时序的 memory-augmented LLM agent 通常靠把交互历史 recursively summarize 成记忆，但模糊的 summary 会逐步丢信息、加噪，导致 belief 偏移，最后任务失败。作者认为应该看中间 summary 引发的 belief 清晰度，于是引入 Belief Entropy 作为自监督代理，并基于它提出 MMPO：用 belief 不确定性来惩罚坏 summary。",
+      "original_abstract": "Memory-augmented LLM agents tackle complex long-horizon tasks by recursively summarizing interaction trajectories into compact memory. However, existing approaches typically train these memory policies using outcome-based reinforcement learning, failing to localize where intermediate memory quality degrades. As interactions unfold, ambiguous recursive summaries progressively discard task-relevant information and introduce semantic noise. This exacerbates belief deviation, obscuring the agent's estimate of the latent task state and ultimately derailing long-horizon reasoning. We therefore argue that memory optimization should focus not merely on trajectory-level success, but on the clarity of the belief induced by intermediate summaries. To this end, we introduce Belief Entropy, a self-supervised proxy that probes how uncertain the model remains about the latent task state given its current memory. Based on this proxy, we propose Metacognitive Memory Policy Optimization (MMPO). Instead of relying only on sparse outcome-based signals, MMPO provides fine-grained, memory-specific supervision via explicitly penalizing summaries that induce high epistemic uncertainty. Experiments show that MMPO consistently outperforms existing methods on diverse long-horizon tasks, maintaining 97.1% performance even when scaled to 1.75M-token contexts.",
+      "highlights": {
+        "contribution": "把长时序 agent 的 memory 优化重新对齐到中间 belief 清晰度上，提出 MMPO 给 memory policy 提供细粒度监督。",
+        "innovation": "用 self-supervised Belief Entropy 度量当前 summary 让模型对潜在任务状态的不确定性，作为非稀疏 reward 信号；区别于只看 trajectory 成功的 outcome-based RL。",
+        "method": "agent 走 recursive summarization 形成 memory，对每一步 summary 计算 belief entropy；MMPO 在 RL 训练里显式惩罚高 epistemic uncertainty 的 summary，作为对 outcome reward 的补充。",
+        "results": "在多种长时序任务上一致超过现有方法；scale 到 175 万 token 上下文仍保持 97.1% 性能。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T16:17:19Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 9.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.30159v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.30159v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.30407",
+      "title": "Exploring Autonomous Agentic Data Engineering for Model Specialization",
+      "authors": [
+        "Yujie Luo",
+        "Xiangyuan Ru",
+        "Jingsheng Zheng",
+        "Jingjing Wang",
+        "Yuqi Zhu",
+        "Jintian Zhang",
+        "Runnan Fang",
+        "Kewei Xu",
+        "Ye Liu",
+        "Zheng Wei",
+        "Jiang Bian",
+        "Zang Li",
+        "Shumin Deng"
+      ],
+      "affiliations": [
+        "浙大"
+      ],
+      "summary": "现有的 LLM 数据策展基本是人工写 workflow，作者想知道 LLM 能不能自己端到端跑数据工程。于是把「自主 agentic 数据工程」定义成一个任务：agent 计划、生成、迭代优化训练数据，让一个学生模型在专门领域学得好。GPT-5.2 当 data engineer 时单靠 agent 自动调数据就给学生模型涨了 57.29%。",
+      "original_abstract": "Large Language Models (LLMs) have demonstrated strong performance on general tasks, while often struggling to adapt to specialized domains without high-quality domain-specific data. Existing LLM-based data curation methods primarily rely on human-designed workflows, leaving it unexamined whether LLMs can autonomously execute an end-to-end data engineering pipeline for model specialization. We formalize \\textbf{Autonomous Agentic Data Engineering}, a novel task designed to evaluate LLMs as autonomous data engineers that drive model specialization through end-to-end data curation. We frame data as an optimizable component and study agents that plan, generate, and iteratively optimize training data across multiple domains, guided by post-training performance improvement. Experiments show that autonomous LLM data engineers yield substantial gains, as GPT-5.2 constructs a training curriculum that improves a student model by \\textbf{57.29\\%}, entirely through iterative, agent-driven data adaptation. By illuminating both potential and bottlenecks, our study establishes autonomous data engineering as a measurable capability and charts a path toward agent-driven model specialization\\footnote{Code will be released at https://github.com/zjunlp/DataAgent.}.",
+      "highlights": {
+        "contribution": "把 LLM-as-data-engineer 作为可度量任务正式提出，并验证 agent 自主跑数据工程能显著提升下游模型。",
+        "innovation": "不再让 LLM 只做单点数据筛选/生成，而是把数据当作可优化组件，用 agent 闭环：规划→生成→评测→修正。",
+        "method": "agent 框架自主完成 plan / generate / iteratively optimize 训练数据；学生模型 post-training 性能作为反馈信号驱动优化。",
+        "results": "GPT-5.2 当 data engineer 时构造课程能让学生模型涨 57.29%，覆盖多个领域。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T17:50:10Z",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.IR",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 9.0,
+        "popularity": 6.5,
+        "quality": 7.0,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.30407v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.30407v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.00131",
+      "title": "AI-PROPELLER: Warehouse-Scale Interprocedural Code Layout Optimization with AlphaEvolve",
+      "authors": [
+        "Chaitanya Mamatha Ananda",
+        "Rajiv Gupta",
+        "Mircea Trofin",
+        "Aiden Grossman",
+        "Sriraman Tallam",
+        "Xinliang David Li",
+        "Amir Yazdanbakhsh"
+      ],
+      "affiliations": [
+        "Google",
+        "UC Riverside"
+      ],
+      "summary": "PLO (Propeller、BOLT) 这种 post-link 优化器一直限制在过程内优化，跨过程的代码布局虽然潜力大但搜索空间巨大、call-return 语义难建模。AI-PROPELLER 用 Magellan 这个 agentic workflow 让 LLM 演化 Propeller 的启发式，把它升级成细粒度跨过程优化器，并用真实硬件上的性能计数器当 reward 做演化。",
+      "original_abstract": "Post-link optimizers (PLOs) such as Propeller and BOLT have demonstrated that precise, profile-guided code layout can extract significant performance gains from heavily optimized binaries. However, these systems are currently restricted to intraprocedural techniques, leaving the global potential of interprocedural layout largely untapped. Interprocedural code layout is historically difficult due to a combinatorially intractable search space and complex call-return semantics that are challenging to model. Consequently, the performance potential of fine-grained interprocedural layout remains unproven in practice. AI-PROPELLER uses Magellan, an agentic workflow that evolves the compiler heuristic in Propeller into a fine-grained interprocedural optimizer and fine-tunes the resulting policy hyperparameters. To ensure high-fidelity, we move away from approximate static cost models and the agentic workflow generates multiple layout variants that are executed on actual hardware to measure real performance counters, providing a precise reward signal for the evolutionary loop. AI-PROPELLER has been evaluated on several benchmarks including large warehouse-scale applications and experiments show performance improvements of 0.23% to 1.6% optimized with state-of-the-art FDO and PLO which is significant for real-world binaries. This is the first time ever that large warehouse-scale applications in industrial settings have been optimized with fine-grained interprocedural code layout.",
+      "highlights": {
+        "contribution": "第一次在 warehouse-scale 真实工业应用上做细粒度 interprocedural 代码布局优化，性能提升明显。",
+        "innovation": "用 agentic workflow + LLM 演化 compiler 启发式，反馈不是近似 cost model，而是真实硬件 perf counter，可信度高。",
+        "method": "Magellan agentic workflow 演化 Propeller 启发式，再 fine-tune hyper-parameters；生成多种 layout 变体在真实硬件上跑，性能计数器做演化 reward。",
+        "results": "在多个 benchmark 包括 warehouse-scale 应用上，相比 SOTA FDO+PLO 再涨 0.23%-1.6%（工业级 binary 上这是显著提升）。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T20:43:55Z",
+      "categories": [
+        "cs.SE",
+        "cs.AI",
+        "cs.LG",
+        "cs.PL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agentic workflow"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 9.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.00131v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.00131v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.30611",
+      "title": "Crafter: A Multi-Agent Harness for Editable Scientific Figure Generation from Diverse Inputs",
+      "authors": [
+        "Haozhe Zhao",
+        "Shuzheng Si",
+        "Zhenhailong Wang",
+        "Zheng Wang",
+        "Liang Chen",
+        "Xiaotong Li",
+        "Zhixiang Liang",
+        "Maosong Sun",
+        "Minjia Zhang"
+      ],
+      "affiliations": [
+        "清华",
+        "UIUC"
+      ],
+      "summary": "做科研图非常费时间，已有自动系统只能在文本输入下处理单种图类型，输出还是不可改的位图。Crafter 用多 agent harness 来生成图，CraftEditor 把位图转成可编辑 SVG。它们都建在「科学图本质上是离散语义组件的结构化组合」这一观察上。",
+      "original_abstract": "Scientific figures are among the most effective means of communicating complex research ideas, yet producing publication-quality illustrations remains one of the most labor-intensive parts of paper preparation. Existing automated systems each target a single figure type under text-only input, leaving the diversity of types and conditions researchers actually use unaddressed; their raster outputs further cannot be locally revised. Because scientific figures are structured compositions of discrete semantic components, the localized errors generators produce on such layouts demand not a stronger backbone but a harness. We instantiate this harness in two complementary systems: Crafter, a multi-agent harness for figure generation that generalizes across figure types and input conditions without architectural changes, and CraftEditor, which applies the same pattern to convert raster outputs into editable SVGs. Moreover, we introduce CraftBench, a benchmark spanning three figure types and four input conditions with human quality annotation. Experiments show that Crafter substantially outperforms both standalone generators and the agentic baseline on PaperBanana-Bench and CraftBench, with ablations confirming each component's independent contribution; CraftEditor faithfully converts outputs into editable SVGs that surpass all baselines. Our code and benchmark are available at https://github.com/HaozheZhao/Crafter.",
+      "highlights": {
+        "contribution": "提出 Crafter / CraftEditor 多 agent 框架以及 CraftBench，把科学图生成扩展到多类型、多输入条件、并支持可编辑 SVG 输出。",
+        "innovation": "不靠加强主干模型而是设计 harness：多 agent 分工解决局部错误；同样的模式用在 raster → editable SVG 转换上。",
+        "method": "多 agent 协作分别处理 figure type 和输入条件；CraftEditor 用同一 harness 做 raster→SVG 转换；CraftBench 覆盖 3 类图 4 种条件并带人工质量标注。",
+        "results": "在 PaperBanana-Bench 和 CraftBench 上显著超越 standalone 生成器和 agentic baseline；CraftEditor 输出的 SVG 比基线都强；消融确认每个 agent 贡献。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T22:04:30Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 9.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.30611v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.30611v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.00138",
+      "title": "A Multi-AI-agent Framework Enabling End-to-end Finite Element Analysis for Solid Mechanics Problems",
+      "authors": [
+        "Titu Ranjan Sarker",
+        "Muhammed Jawaad Zulqernine",
+        "Ling Yue",
+        "Shaowu Pan",
+        "Chenxi Wang",
+        "Shiyao Lin"
+      ],
+      "affiliations": [
+        "RPI"
+      ],
+      "summary": "FEA（有限元分析）入门门槛高，边界条件 / 载荷 / 求解变量定义错了就出假结果。AbaqusAgent 用 6 个 LLM agent 把用户自然语言指令变成 Abaqus 真实跑出来的 FEA 分析和结果可视化，分工是 interpreter / architect / input writer / runner / reviewer / visualizer。",
+      "original_abstract": "Finite element analysis (FEA) is the most important numerical approach for solid mechanics. Challenges of FEA include a steep learning curve for entry-level users and potential false simulations due to incorrect definitions of key simulation components, such as boundary conditions, load cases, and solution variables. Years of engineering experience are usually necessary for real-world problem-solving. To address these issues, we present AbaqusAgent, a multi-agent framework grounded in large language models (LLMs) for solid mechanics analyses. AbaqusAgent is developed to facilitate analysis case generation and execution using Abaqus, one of the most widely used FEA packages, by turning users' natural-language instructions into executed FEA analyses and result visualization. AbaqusAgent is composed of six agents, including interpreter, architect, input writer, runner, reviewer, and visualizer agents, encompassing all the essential pre-processing and post-processing steps of standard FEA analyses. A wide variety of 50 solid mechanics problems have been successfully validated, achieving an overall success rate of 86%. Beyond improving the efficiency of FEA for solid mechanics problems and lowering the barrier to computational mechanics education, AbaqusAgent advances the human-simulation interaction paradigm and enables integration with AI-empowered optimization and material characterization workflows. The code is available at https://github.com/LIRAM-LIN/AbaqusAgent",
+      "highlights": {
+        "contribution": "搭了一个面向 Abaqus 的多 agent 框架，把自然语言到 FEA 端到端打通。",
+        "innovation": "对应 FEA 工作流的 6 个 agent 明确分工，覆盖从指令理解、模型架构、输入文件生成到运行、复核、可视化的全链条。",
+        "method": "六个 agent：interpreter 解析意图，architect 设计分析方案，input writer 生成 Abaqus 输入卡，runner 执行，reviewer 检查，visualizer 出图。",
+        "results": "50 个 solid mechanics 问题上整体成功率 86%。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T23:18:33Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 9.0,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.00138v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.00138v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.30169",
+      "title": "Dissociative Identity: Language Model Agents Lack Grounding for Reputation Mechanisms",
+      "authors": [
+        "Botao Amber Hu",
+        "Helena Rong",
+        "Max Van Kleek"
+      ],
+      "affiliations": [
+        "NYU",
+        "University of Oxford"
+      ],
+      "summary": "作者觉得现在大家想用「信誉机制」管理 LLM agent（类似 KYC、credit score），但这思路根本走不通。LLM agent 是「解离」的——基础模型、prompt、工具策略、记忆都可换，身份不稳定，prompt injection 也容易让 persona 漂移。所以建议从声誉式事后治理转向 protocol-based、ex ante、可观测的行为约束。",
+      "original_abstract": "As autonomous language model agents proliferate, forming an emerging agentic web with real-world consequences, what credibility signals can you use to decide whether to trust an unfamiliar agent in the wild and delegate to it? A natural governance intuition is to extend human identity verification and reputation mechanisms, from ``Know Your Customer'' and credit scores to ``Know Your Agent'' regimes. However, we argue that this analogy is fundamentally incomplete. Reputation mechanisms function both as social signals and as corrective feedback that sustain an equilibrium of trustworthy behavior, presuming a persistent identity associated with behavioral continuity, sanction sensitivity, and costly non-fungibility. Yet language model agents are ontologically \\emph{dissociative}: they are essentially an assemblage of mutable modules -- foundation models, system prompts, tool-access policies, external memory, and, in some cases, a multi-agent system as a whole -- any of which may change agent behavior -- with a fluid persona that is also vulnerable to adversarial attack and may not internalize sanctions. Drawing on dissociative identity disorder jurisprudence, this dissociativity leaves agents without grounding for identifiability, predictability, credibility, and rehabilitability -- the very properties that reputation mechanisms aim to sustain -- thereby collapsing trust. We argue that identity-based, ex post, regulative, sanction-based governance, such as reputation, is structurally inapplicable to dissociative agents, and we suggest a shift to observability-based, ex ante, constitutive, protocol-based behavioral harnesses.",
+      "highlights": {
+        "contribution": "理论文：论证 reputation-based 治理对 LLM agent 在结构上不成立，并提出走 observability-based、protocol-based 路线。",
+        "innovation": "借用解离性人格障碍（DID）法理框架来类比 agent 的可识别性、可预测性、可信度、可矫正性缺失，比同类批评更系统。",
+        "method": "纯论证：拆解 reputation 的前提（持久身份、行为延续、可制裁、不可替代），逐条证伪在 LLM agent 上的成立性，得出治理范式应改向。",
+        "results": "无实验，给政策和 protocol 设计者一份理论参考。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T16:20:19Z",
+      "categories": [
+        "cs.CY",
+        "cs.AI",
+        "cs.MA"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 9.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.30169v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.30169v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.30160",
+      "title": "On Distributional Reinforcement Learning in Chaotic Dynamical Systems",
+      "authors": [
+        "James Rudd-Jones",
+        "Mirco Musolesi",
+        "María Pérez-Ortiz"
+      ],
+      "affiliations": [
+        "UCL"
+      ],
+      "summary": "混沌系统对初值敏感，标准 RL 的 bootstrap target 方差爆炸、梯度难调。作者证明在温和稳定性假设下，return 分布在 1-Wasserstein 度量下比单条轨迹「演化得更规则」，所以 distributional RL 在混沌动力系统里天然给出更光滑的 Bellman 目标。",
+      "original_abstract": "Chaotic dynamical systems pose a fundamental challenge for Reinforcement Learning (RL): exponential sensitivity to initial conditions induces high-variance bootstrap targets and poorly conditioned gradient updates. Chaotic dynamics arise across scientific and engineering domains, from fluid flows and climate systems to multi-agent systems, where reliable learning is highly desirable. Standard RL methods optimise expected returns through scalar value functions, implicitly averaging over diverging trajectories and entangling trajectory level instability with the learning objective. We show that under mild statistical stability assumptions, the return distribution evolves more regularly than individual trajectories when measured under the $1$-Wasserstein metric, yielding a smoother distributional Bellman objective. By aligning optimisation with this measure level structure, distributional RL provides better conditioned learning. We offer a principled explanation for the advantages of distributional methods in chaotic systems and the geometries of RL objectives under chaos.",
+      "highlights": {
+        "contribution": "理论解释了为什么 distributional RL 在混沌动力系统里比 expected-return RL 表现更好。",
+        "innovation": "用 1-Wasserstein 度量分析 return distribution 的演化规则性，把混沌不稳定性和 RL 目标几何挂钩。",
+        "method": "理论分析：在 mild statistical stability 假设下，证明 return 分布的 Bellman 算子在 1-Wasserstein 下比逐轨迹更光滑；从而 distributional RL 的优化条件更好。",
+        "results": "无大规模实验，主要是理论结果加上 chaotic system 的解释性 case。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T16:17:32Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 9.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.30160v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.30160v1",
       "venue": null
     }
   ],

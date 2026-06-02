@@ -1,41 +1,5 @@
 [
   {
-    "arxiv_id": "2605.21854",
-    "summary": "VLA 后训练里 DPO 几乎只在自回归模型上玩过,这篇把它扩到 pi-0.5 这类 flow-matching 连续动作头上。作者搞了个 surrogate log-prob 估计器绕开 ODE 积分,顺便对比 LoRA/DoRA,LIBERO 上 DoRA 平均涨 10.4 个点。还附了一份推理时延剖析,说明 denoise 占 78.6% 时间,VLA-Cache 类前缀缓存加速天花板才 21%。",
-    "highlights": {
-      "contribution": "把 DPO 偏好对齐从离散 token VLA 扩到 flow-matching 连续动作 VLA,并系统比较了 PEFT 选择与推理加速上限。",
-      "innovation": "提出 surrogate flow-matching log-prob 估计器,让 DPO 可以直接作用在连续动作骨干上,避开概率流 ODE 积分。",
-      "method": "OpenVLA / pi-0.5 上跑 SFT+DPO,用 LoRA 与 DoRA 做 PEFT,LIBERO 4 套件 600 trials × 3 seeds 评估;额外训一个多视角时序投影头用于检索初始化。",
-      "results": "LIBERO 上 DoRA 比 OpenVLA SFT 平均 +10.4pp(Object +20、Long +11、Goal +8、Spatial +2.7);多视角投影头 k-NN recall@1 达 99.5%,代码权重全开。"
-    },
-    "scores": {
-      "relevance": 9.0,
-      "recency": 7,
-      "popularity": 5,
-      "quality": 7.5,
-      "recommendation": 7.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.22183",
-    "summary": "现在的 VLA 大多让语言+图像直接映射到动作,作者觉得这把指令理解、空间感知、电机控制全压一个目标上太挤了。AVP 让 VLM 先吐出「视觉原语 token」指明下一步目标,再用 flow-matching 动作专家去执行。真机抓取任务上比 pi-0.5 直接涨了 27.61%。",
-    "highlights": {
-      "contribution": "提出视觉原语作为 VLM 与动作专家之间的中间接口,把认知和控制解耦。",
-      "innovation": "用 visual-primitive token 取代直接动作监督,由末端运动学派生监督信号,实现端到端但模块化的 VLA。",
-      "method": "VLM 推断下一阶段目标并输出视觉原语 token,作为 flow-matching 动作专家的 condition;真机 pick-and-place 任务上端到端训练。",
-      "results": "真机通用抓放任务成功率比 pi-0.5 高 27.61%,在数据效率、空间组合泛化、跨物体迁移上全面胜出。"
-    },
-    "scores": {
-      "relevance": 9.2,
-      "recency": 7,
-      "popularity": 7,
-      "quality": 7.5,
-      "recommendation": 8.0
-    },
-    "affiliations": ["清华大学"]
-  },
-  {
     "arxiv_id": "2605.22896",
     "summary": "VLA 在新环境跑得差,作者搞了套在线 agentic 训练框架。三招:自适应奖励合成把长任务拆成子目标做课程学习,语言引导的探索代替随机采样,经验记忆库存过去任务策略权重用于热启动。LIBERO 长程任务 +12.3,1-shot +28.5,跨任务从 0 涨到 31.2。",
     "highlights": {
@@ -69,61 +33,10 @@
       "quality": 8.0,
       "recommendation": 8.2
     },
-    "affiliations": ["哈工大深圳", "中山大学"]
-  },
-  {
-    "arxiv_id": "2605.21976",
-    "summary": "触觉对操作有帮助大家都同意,但到底用哪种传感器一直没人系统比过。作者搭了一个任务驱动的基准 TacO,在视觉、声学、磁、电阻四类触觉模态、三类任务(抓取未知质量、重定向、插拔)上分别训策略对比。结论是触觉的有用程度强依赖模态、材料和任务,不是一刀切。",
-    "highlights": {
-      "contribution": "提供一个用策略性能为评测目标的触觉传感器选型基准与方法论。",
-      "innovation": "用下游操作策略表现而非传感器本身指标来评估触觉,而且四种模态全部纳入横向比较。",
-      "method": "为四种触觉模态各训独立策略,在三类操作任务上对比成功率,分析分辨率、剪切感知、表征、材料摩擦的影响;硬件、数据、代码全开。",
-      "results": "无统一赢家:模态-任务-材料三者交互决定触觉是否有用,提供选型经验性指南。"
-    },
-    "scores": {
-      "relevance": 6.0,
-      "recency": 7,
-      "popularity": 7,
-      "quality": 7.5,
-      "recommendation": 6.8
-    },
-    "affiliations": ["UCSD", "CMU"]
-  },
-  {
-    "arxiv_id": "2605.22089",
-    "summary": "把 VLA 用到端到端自动驾驶上,作者觉得只用稀疏动作监督浪费了 VLM 的场景理解能力,而以像素重建做世界模型又太低层。LVDrive 引入未来场景预测,但完全在 latent space 里做,用预训练视觉骨干提供监督,而且未来场景和运动一并在统一 embedding 里单次前向预测。Bench2Drive 闭环成绩显著领先。",
-    "highlights": {
-      "contribution": "一个面向自动驾驶 VLA 的潜空间未来预测框架,跳过像素重建直接学语义级未来。",
-      "innovation": "把未来场景预测和运动预测放进同一 embedding,一次前向完成 future-aware reasoning,并用预训练 backbone 监督潜在未来。",
-      "method": "在 VLA 中加入未来场景预测分支,用预训练视觉骨干作为潜在监督;两阶段轨迹解码先粗后精,基于潜在未来表征再精化。",
-      "results": "Bench2Drive 闭环驾驶上显著优于纯动作监督方法和图像重建型世界模型方法。"
-    },
-    "scores": {
-      "relevance": 8.5,
-      "recency": 7,
-      "popularity": 6,
-      "quality": 7.5,
-      "recommendation": 7.6
-    },
-    "affiliations": ["港科大", "阿里"]
-  },
-  {
-    "arxiv_id": "2605.22283",
-    "summary": "目前的 VLA 默认目标物在视野里,目标一旦不在画面里就抓瞎。SOMA 通过可动头相机扫描积累多视角观察形成持久的空间-语义记忆,VLA 推理时按指令检索相关记忆。五个真实出视野操作任务里成功率显著提升,而且行为变得更主动:不到处乱找,直接朝目标走。",
-    "highlights": {
-      "contribution": "给 VLA 装上面向出视野任务的空间记忆,显著扩展其工作范围。",
-      "innovation": "用可动头相机+多视角扫描构造持久空间-语义记忆,并设计动态精化和上下文检索,使其超越当前视锥。",
-      "method": "三模块:Spatial Memory Construction 聚合扫描,Dynamic Memory Refinement 维护全局一致性,Contextual Memory Retrieval 按指令激活相关记忆;真机+RoboCasa GR1+SimplerEnv 评估。",
-      "results": "五个真实出视野任务成功率显著提升,行为质变(快速定位、视点搜索更少、近似 one-shot 抓取);常规可见设置也涨。"
-    },
-    "scores": {
-      "relevance": 8.8,
-      "recency": 7,
-      "popularity": 6,
-      "quality": 7.5,
-      "recommendation": 7.7
-    },
-    "affiliations": ["港科大广州"]
+    "affiliations": [
+      "哈工大深圳",
+      "中山大学"
+    ]
   },
   {
     "arxiv_id": "2605.22322",
@@ -141,7 +54,9 @@
       "quality": 5.0,
       "recommendation": 5.5
     },
-    "affiliations": ["港中文"]
+    "affiliations": [
+      "港中文"
+    ]
   },
   {
     "arxiv_id": "2605.22812",
@@ -159,7 +74,10 @@
       "quality": 7.0,
       "recommendation": 7.2
     },
-    "affiliations": ["清华大学", "Megvii"]
+    "affiliations": [
+      "清华大学",
+      "Megvii"
+    ]
   },
   {
     "arxiv_id": "2605.23089",
@@ -176,24 +94,6 @@
       "popularity": 5,
       "quality": 7.0,
       "recommendation": 6.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.22164",
-    "summary": "latent world model 的规划经常用终态 latent 到目标 latent 的欧氏距离打分,但这隐含假设了 latent 距离和「可达性」权重一致。TRM 训一个小的成对终态打分头替换原成本,关键是「horizon-aware」监督。TwoRoom 上把 LeWM 的 7% 抬到 97%,PLDM 从 32.7% 抬到 84%。",
-    "highlights": {
-      "contribution": "提出 post-hoc 的轨迹可达度量替换/补强欧氏 latent 距离,显著修复 latent MPC 的终态排序。",
-      "innovation": "horizon-aware 监督:用广覆盖时间跨度训练成对距离头,匹配长程终态候选排序问题,而不动 encoder/dynamics。",
-      "method": "在 fixed latent world model 上加训一个 pairwise head,提供成对距离作为新成本;TwoRoom、PushT、PLDM baseline 上验证;并做 SCSA 排序审计。",
-      "results": "TwoRoom 上 LeWM 7%→97%,PLDM 32.7%→84%;短时距 TRM 仅 35%,验证 horizon 设计关键。"
-    },
-    "scores": {
-      "relevance": 8.0,
-      "recency": 7,
-      "popularity": 5,
-      "quality": 7.5,
-      "recommendation": 7.3
     },
     "affiliations": []
   },
@@ -231,7 +131,9 @@
       "quality": 6.0,
       "recommendation": 6.2
     },
-    "affiliations": ["DFKI"]
+    "affiliations": [
+      "DFKI"
+    ]
   },
   {
     "arxiv_id": "2605.23025",
@@ -249,43 +151,9 @@
       "quality": 5.0,
       "recommendation": 5.3
     },
-    "affiliations": ["UNICAMP"]
-  },
-  {
-    "arxiv_id": "2605.21963",
-    "summary": "长程临床轨迹预测对慢病管理很关键,但现在的 EHR 模型大多是判别式,LLM 在反复干预下会漂。CMWM 是动作条件 latent 世界模型:joint embedding 状态编码、宽动作编码(支持结构化指令和自由文本)、递归潜在转移,六项损失里塞了三个生理形状先验。CKD 上 eGFR 预测比 GPT-5.5 baseline MAE 降 7.28%。",
-    "highlights": {
-      "contribution": "提出面向长程患者轨迹建模的动作条件 latent 世界模型框架,通用而非 CKD 专属。",
-      "innovation": "宽动作编码同时吃结构化干预指标和自由文本沟通,并用生理形状先验+闭环 rollout 训练匹配部署。",
-      "method": "joint-embedding 状态编码+宽动作编码+递归潜在转移;6 项损失含 next-obs、next-latent、SIGReg、斜率/连续/大跳惩罚;rollout-prefix 闭环训练。",
-      "results": "CKD 2232 患者队列 dynamic-50% rollout MAE 7.384、RMSE 10.256,比 GPT-5.5 提示基线 MAE -7.28%、RMSE -7.35%。"
-    },
-    "scores": {
-      "relevance": 5.0,
-      "recency": 7,
-      "popularity": 5,
-      "quality": 7.0,
-      "recommendation": 5.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.22138",
-    "summary": "目前 agent 都是反应式策略+CoT 让规划隐式涌现,token 用得多但准确率没保证。作者把决策拆成三系统:模拟推理 (II) 用世界模型预测未来,自调节 (III) 决定什么时候/多深规划,反应式 (I) 处理细粒度动作。SR²AM 把这俩塞进 CoT,30B 模型在多任务上能打 685B-1T 系统,token 少 25.8-95.3%。",
-    "highlights": {
-      "contribution": "一个三系统 agentic 推理框架,把「何时规划」显式学出来,在准确率不降的前提下大幅减 token。",
-      "innovation": "self-regulation(System III)作为可学 configurator 决定规划深度和频率,LLM 自身既是世界模型又是执行器。",
-      "method": "v0.1 从提示式多模块系统记录决策,v1.0 从已训 reasoning LLM 轨迹重建结构化 plan,先 SFT 后 RL;数学/科学/表格/Web 多任务评估。",
-      "results": "v0.1-8B 和 v1.0-30B 在 Pass@1 上与 120-355B 及 685B-1T 系统打平,token 比同档 agent 少 25.8-95.3%;RL 后规划平均视野 +22.8%,频率仅 +2.0%。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 7,
-      "popularity": 7,
-      "quality": 7.5,
-      "recommendation": 7.0
-    },
-    "affiliations": ["CMU", "MBZUAI"]
+    "affiliations": [
+      "UNICAMP"
+    ]
   },
   {
     "arxiv_id": "2605.22597",
@@ -303,7 +171,9 @@
       "quality": 7.0,
       "recommendation": 6.4
     },
-    "affiliations": ["港科大广州"]
+    "affiliations": [
+      "港科大广州"
+    ]
   },
   {
     "arxiv_id": "2605.24047",
@@ -321,97 +191,9 @@
       "quality": 7.0,
       "recommendation": 6.0
     },
-    "affiliations": ["ASU"]
-  },
-  {
-    "arxiv_id": "2605.22190",
-    "summary": "现有 feed-forward 3DGS 要么搞动态要么搞 unposed 多视角,从来没有人一口气把动态+多视角+无位姿一起做。NoPo4D 在预训练几何骨干+4D Gaussian 基础上把高斯运动拆成图像平面位移和深度变化,2D 部分直接用 pseudo GT 光流监督。四个动态 benchmark 上稳超基线,可选后优化甚至打过逐场景优化方法。",
-    "highlights": {
-      "contribution": "首个同时处理动态内容、多视角输入和未知位姿的 feed-forward 4D 重建系统。",
-      "innovation": "速度分解:把 Gaussian 运动拆成图像平面位移+深度变化,只用 2D 光流监督就避开了对位姿和 3D 运动 GT 的依赖。",
-      "method": "预训练几何 backbone+4D Gaussian 框架;双向运动编码器做跨视角跨帧聚合;视依赖 opacity 缓解错位;速度分解+光流监督。",
-      "results": "四个多视角动态 benchmark 上稳超 feed-forward 基线,加可选后优化可超越逐场景方法,速度数量级更快。"
-    },
-    "scores": {
-      "relevance": 8.0,
-      "recency": 7,
-      "popularity": 7,
-      "quality": 8.0,
-      "recommendation": 7.8
-    },
-    "affiliations": ["ETH Zurich"]
-  },
-  {
-    "arxiv_id": "2605.22020",
-    "summary": "Feed-forward 3DGS 想追上逐场景优化的画质受限于 3D 标注稀缺。常见折衷是 predict-then-refine,但训练时只看零步渲染误差,没考虑预测是不是好的初始化。ForeSplat 用 MetaGrad,把短内循环的精化轨迹展开后用一阶梯度反传,等于优化-感知微调,推理零额外成本。",
-    "highlights": {
-      "contribution": "提出优化-感知训练框架,让 feed-forward 3DGS 输出专门为后续 refinement 服务的初始化。",
-      "innovation": "MetaGrad:用多锚点元梯度规则避开二阶可微分,通过展开短期 refinement 轨迹聚合一阶梯度作为代理监督。",
-      "method": "MetaGrad 在 AnySplat/Pi3X/edge 蒸馏版骨干上微调,展开短内循环采样锚点态再回传一阶梯度;不改推理。",
-      "results": "在多 backbone 上 refinement 收敛步数更少、最终质量更高,即使原方法完全收敛后也仍领先,推理零额外成本。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 7,
-      "popularity": 6,
-      "quality": 7.5,
-      "recommendation": 7.0
-    },
-    "affiliations": ["ShanghaiTech"]
-  },
-  {
-    "arxiv_id": "2605.22069",
-    "summary": "稀疏视角下 3DGS 难是因为点云本身稀。TWINGS 用 thin plate spline 把深度反投的点和三角化的 3D 控制点做非刚体对齐,得到几何更准的初始化再喂给 3DGS。DTU/LLFF/Mip-NeRF360 上比已有方法整体更好。",
-    "highlights": {
-      "contribution": "针对稀疏视角 3DGS 提出一个 TPS warp-aligned 初始化方法,显著改善重建。",
-      "innovation": "把 thin plate spline 平滑形变模型引入 3DGS 初始化,通过最小化弯曲能拟合控制点对应。",
-      "method": "用 TPS 把估计深度反投点对齐到三角化 3D 控制点;在 control point 附近采样形成 3DGS 的几何初始化;DTU/LLFF/Mip-NeRF360 评测。",
-      "results": "三个稀疏视角基准上一致优于现有方法,结构细节和颜色保真度更好。"
-    },
-    "scores": {
-      "relevance": 6.0,
-      "recency": 7,
-      "popularity": 5,
-      "quality": 6.5,
-      "recommendation": 6.0
-    },
-    "affiliations": ["Yonsei University"]
-  },
-  {
-    "arxiv_id": "2605.21935",
-    "summary": "人形机器人导航的难点是行走带来的感知抖动+场景动态。MIF 用置信度感知的语义 3DGS、差异触发的空间记忆更新、面向任务的几何重建做闭环。Unitree-G1 真机办公室里把非静态场景下的重定位成功率从 12% 拉到 94%,语义内存还瘦身 91.4%。",
-    "highlights": {
-      "contribution": "面向人形机器人的多模态交互场,统一处理步态扰动、动态变化和交互几何安全。",
-      "innovation": "三场协同(Appearance/Spatial/Geometry)+ discrepancy-triggered 局部更新,把步态导致的伪变化和真实变化分开。",
-      "method": "置信度感知语义 3DGS 抑制行走模糊;空间场维护拓扑记忆;几何场支撑 IPS;差异分数触发只更新局部不一致区域;Unitree-G1 真机部署。",
-      "results": "真实办公室动态场景中重定位 12%→94%,通过特征蒸馏把语义内存降 91.4%。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 7,
-      "popularity": 6,
-      "quality": 7.5,
-      "recommendation": 6.8
-    },
-    "affiliations": ["北大"]
-  },
-  {
-    "arxiv_id": "2605.22147",
-    "summary": "遥感图像超分,扩散模型质量好但要几十到上千步,而且做连续尺度不方便。FlowGS 用 flow matching + shortcut consistency 学高频细节先验,降低生成复杂度;再用 2D 高斯 splatting 构连续特征场,支持任意位置查询。连续/固定尺度上都拿到有竞争力的感知质量,速度大幅提升。",
-    "highlights": {
-      "contribution": "面向遥感图任意尺度 SR 的生成式重建框架,兼顾质量和推理效率。",
-      "innovation": "把 flow matching 用 shortcut consistency 约束学高频细节先验,并用 2D Gaussian splatting 做连续特征场支持任意查询尺度。",
-      "method": "FM 建模高/低分辨率高频细节差,shortcut consistency 约束训练;2D 高斯 splatting 构连续特征场;在连续尺度和固定尺度 SR 上评测。",
-      "results": "在连续尺度和固定尺度 SR 上感知质量与已有方法竞争,推理效率显著提升。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 7,
-      "popularity": 5,
-      "quality": 6.0,
-      "recommendation": 5.0
-    },
-    "affiliations": []
+    "affiliations": [
+      "ASU"
+    ]
   },
   {
     "arxiv_id": "2605.22342",
@@ -447,6 +229,258 @@
       "quality": 7.5,
       "recommendation": 6.5
     },
-    "affiliations": ["KAUST"]
+    "affiliations": [
+      "KAUST"
+    ]
+  },
+  {
+    "arxiv_id": "2605.22809",
+    "summary": "Waymo 这帮人想用网上随便能搞到的行车记录仪视频来扩展自动驾驶训练集，但 ADS 需要的是结构化多模态传感器数据（多视角相机 + LiDAR）。他们用 4D Gaussian Splatting 把真实 AV log 重渲染成 dashcam 风格视频，造出配对训练对，再用 diffusion 反向把单目 dashcam 视频翻译成完整传感器套件。最后能把网上随手抓的视频直接转成可训可验的多模态数据。",
+    "highlights": {
+      "contribution": "提出一个把单目 dashcam 视频翻译成多视角相机 + LiDAR 的生成式范式 Sensor2Sensor，把海量野外驾驶视频纳入自动驾驶数据 pipeline。",
+      "innovation": "用 4DGS 重建 + 新视角渲染把真实 AV log 反向生成 dashcam 风格视频，自动造配对数据，这绕开了完全没有 paired 数据的核心瓶颈。",
+      "method": "训练管线两段：先把 Waymo 风格多模态 log 经 4D Gaussian Splatting 重建成场景，再渲染单目 dashcam 视角作为输入；然后一个 diffusion 模型学习从单目视频生成多视角 + LiDAR。下游对生成数据的保真度和真实感做定量评估。",
+      "results": "在内部 AV log 上验证了生成多模态数据的保真度，能把网上拿到的 dashcam 和 internet 视频成功转成 ADS 兼容的传感器格式，为长尾场景注入数据；论文主要为定性 + 保真度指标。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 7,
+      "popularity": 8.5,
+      "quality": 8.2,
+      "recommendation": 8.0
+    },
+    "affiliations": [
+      "Waymo"
+    ]
+  },
+  {
+    "arxiv_id": "2605.22321",
+    "summary": "现在 agent 安全分析基本只看单轮 prompt，不管多轮 + 工具调用展开出的更大攻击面。作者搞了个三维 evasion 框架：时序拆 payload、空间藏 payload、语义掩盖意图，造了一个 2254 条真实 agent 轨迹的 benchmark A3S-Bench。在 10 个主流 LLM 后端上，平均风险触发率从 28% 抬到 52%，说明现有防御对这种 stateful 攻击基本失效。",
+    "highlights": {
+      "contribution": "构建 A3S-Bench 与一套三维（时序/空间/语义）evasion 攻击框架，系统量化 LLM agent 在 stateful 多轮 + 工具调用下的安全风险。",
+      "innovation": "把 agent 攻击从单轮静态扩展到 stateful 多轮，并把 payload 切片 / 外部 artifact 隐藏 / 语义混淆三种向量结构化成评估维度。",
+      "method": "在标准 agent 框架下，构造 2254 条真实轨迹，覆盖 20 个威胁场景；对 10 个主流 LLM 后端各跑一遍，统计风险触发率。",
+      "results": "三种 evasion 把平均风险触发率从 28.3% 提到 52.6%，表明当前 agent 框架存在架构级漏洞。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.2,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22897",
+    "summary": "在表格科学数据上，要么用统计模型预测准但解释不了，要么用 LLM 直接预测又得搜整个输出空间。作者反过来让 LLM 只回答 base model 漏了什么：MARICL 用多 agent 分析高残差样本，假设缺失的结构，再通过 textual gradient 多轮优化出显式修正项。9 个 benchmark 都比 base 强，并在 Cell-Free Protein 数据上证明学到的公式能跨 batch 泛化但不会跨协议。",
+    "highlights": {
+      "contribution": "提出 MARICL，把 LLM agent 用于学习 base model 残差结构，输出可读、可冻结、可机制泛化的修正公式。",
+      "innovation": "不直接让 LLM 预测目标，而是让它解释 base model 的残差；用 textual gradient 多轮把假设打磨成显式公式，并通过冻结跨 batch 测试验证这是机制而非噪声。",
+      "method": "Base 模型先预测，多 agent LLM 分析高残差样本、提出缺失结构假设，再用 in-context residual learning + 多轮 textual gradient 迭代修正项；最终把公式冻结迁移到新 batch。",
+      "results": "9 个科学/生物/社经 benchmark 上一致优于 base；冻结的公式在同协议新 batch 上 92% 以上场景仍提升，在不同协议下系统性失败，符合生化机制边界。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 6.4
+    },
+    "affiliations": [
+      "University of Toronto"
+    ]
+  },
+  {
+    "arxiv_id": "2605.22502",
+    "summary": "现在大家都在用 LangGraph / CrewAI 这种外挂 orchestrator 跑 agent，但作者证明把整个流程编译进一个小 fine-tune 模型权重里，成本能砍两个数量级、还逼近 frontier 质量。论文针对开发者不愿意切换的三个心理障碍逐一做实验：travel booking、Zoom support、insurance claims 三个场景验证 subterranean agent 的可行性。",
+    "highlights": {
+      "contribution": "实证论证把 agentic workflow 编译进小模型权重（subterranean agent）能在 procedural 任务上达到接近 frontier 模型的质量，但成本降 100×。",
+      "innovation": "把架构对比从 orchestration vs prompt 进一步推到 orchestration vs weight-baked workflow，并系统拆解了开发者不采纳的三个 perceived barriers。",
+      "method": "在三个真实流程（travel 14 节点、Zoom support 14 节点、insurance 55 节点 6 决策枢）上 fine-tune 小模型，把节点逻辑直接编译到权重；对比 frontier 模型 + 系统提示和传统 orchestration。",
+      "results": "声称近 frontier 质量但成本降两个数量级，三个域均验证；具体数字论文里给出，moat 强调成本/隐私优势。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22608",
+    "summary": "评估 agent 现在要么只能 observability 看 trace，要么靠人手写错误分类法，新域就废了。Agentic CLEAR 直接在 observability 层上面架一层自动评估，能给出系统/trace/节点三级文字洞察，UI 也好用。在 4 个 benchmark、7 个 agent 配置、几万次 LLM 调用上跑出来，文字反馈和人标注误差对得上，还能预测任务成功率。",
+    "highlights": {
+      "contribution": "提出 Agentic CLEAR，把 LLM agent 评估从静态错误分类升级为自动、动态、多粒度的文本洞察框架。",
+      "innovation": "评估层从单一全局指标拆成 system/trace/node 三粒度文字反馈，并能根据新域自适应，而不是依赖手写 taxonomy。",
+      "method": "在 observability 层上加一个自动化 evaluator pipeline，对 agent 行为生成三层次文字洞察；UI 包装成易用工具。在 4 benchmark × 7 agent 设置上做大规模 LLM 调用验证。",
+      "results": "与人工标注误差的对齐度高，并能预测任务成功率，作者把它作为可代替 hand-crafted taxonomy 的实用替代。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": [
+      "IBM Research"
+    ]
+  },
+  {
+    "arxiv_id": "2605.22786",
+    "summary": "多 agent 系统不只能用自然语言通信，最近开始直接共享 transformer KV cache 跑 latent 通信，效率高但同时把敏感上下文也传了出去。LCGuard 在传 KV 之前先做一层表示级变换，对抗训练里让 decoder 学习从 cache 重建敏感输入，guard 则学习去掉可重建信息保留任务语义。多模型多 benchmark 上能大幅降低重建泄露和攻击成功率，同时不掉太多任务表现。",
+    "highlights": {
+      "contribution": "首次系统化 KV-cache latent 通信中的敏感信息泄露问题，并给出 LCGuard 这个表示级安全变换框架。",
+      "innovation": "用 reconstruction-based leakage 作为形式化定义，再以对抗训练同时约束 task 信息保留与敏感信息抹除，比起 textual 防御更贴近 latent 通信本质。",
+      "method": "把 KV cache 视为共享 latent working memory，对要传输的 cache 学一个 transformation；adversarial decoder 学重建 sensitive 输入，LCGuard 反向去除可重建特征。",
+      "results": "多模型族 + 多 multi-agent benchmark 上一致降低 reconstruction leakage 和攻击成功率，同时任务性能与标准 KV-sharing baseline 相当。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": [
+      "IBM Research",
+      "RPI"
+    ]
+  },
+  {
+    "arxiv_id": "2605.22794",
+    "summary": "所谓 self-evolving agent 现在全在改 prompt、skill、memory 这些文本层的东西，但 routing、hook 顺序、dispatch 这些其实写在代码里，文本层根本碰不到。MOSS 把 self-rewriting 直接做到 agent harness 源代码层：从生产故障打包成 batch，多阶段管线 + 外挂 coding-agent CLI 做改码，再用 ephemeral worker replay 验证、健康探针守门做容器热切换。在 OpenClaw 上 mean score 一轮从 0.25 提到 0.61。",
+    "highlights": {
+      "contribution": "提出 MOSS，一个面向生产 agent harness 的源码级 self-evolution 框架，把 self-evolving agent 从文本层扩展到 Turing 完备的代码层。",
+      "innovation": "论点鲜明：文本层 evolution 是真子集，结构性故障必须改源代码；用 production failure batch 锚定每次 evolution，并做 replay 验证 + 容器热替换 + 健康探针回滚。",
+      "method": "失败案例自动聚合成 batch，进入多阶段确定性管线；代码修改外包给外部 coding agent CLI，MOSS 控阶段编排与裁决；候选用 ephemeral worker 在同 batch 上 replay，过了才在生产容器 in-place 替换，健康探针失败自动回滚。",
+      "results": "OpenClaw 四任务 mean grader score 单轮从 0.25 跃升到 0.61，全程无人参与。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 7,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": [
+      "HKUST"
+    ]
+  },
+  {
+    "arxiv_id": "2605.22949",
+    "summary": "多 agent 部署里 coordinator 经常按 LLM 自报的 confidence 加权选 trust 谁，但 LLM 的 confidence 系统性失准，在难题上甚至和准确率反相关。设计时 calibration（温度/Platt/binning）一遇到分布漂移就废。MARGIN 在线学每个 agent、每个置信带的修正系数，不要 held-out 数据、不要重训，3-6× 降低 calibration error；在代码 benchmark 上把 pairwise resolution 从 43-50% 拉到 70-89%。",
+    "highlights": {
+      "contribution": "提出 MARGIN，一种纯在线、模型不可知的多 agent runtime 置信校准方法，解决 design-time calibration 在分布漂移下失效的问题。",
+      "innovation": "per-agent + per-confidence-band 的对称 EWMA + Bayes shrinkage 更新规则，不需要 held-out 数据；并给出 6 条形式化命题分析收敛与跟踪速度。",
+      "method": "每个 agent × 每个置信带在线维护一组对称 EWMA 校准因子，用 Bayesian shrinkage 在样本少时收缩；只需任务流自带的反馈信号即可更新。",
+      "results": "18 个 foundation 模型、8 个 benchmark、4 万+ 观测下，校准误差比最佳 design-time baseline 低 3-6×；多 agent 选择上把 pairwise resolution 从随机水平拉到 70-89%，闭合 37-78% 的 Raw 到 Oracle pass@1 差距。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 8.0,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.23058",
+    "summary": "搞自治 Kubernetes 运维 agent 的论文大多没有可证伪的对照实验：没有 agent-off baseline、选择偏差、样本太小。作者搭了 agent-breakage 框架：往 K8s 集群注入故障、观察 agent 反应、四维评分、累积 (state, action, outcome) 三元组。用它当案例做了一个 retrieval 是否增强 agent 能力的研究，反而发现 retrieval 只在 1/3 场景显著、整体效应只有 +3.9pp 且不显著，并抓出三个会让结论错掉的 confound。",
+    "highlights": {
+      "contribution": "为 agentic Kubernetes 运维提供一个可证伪的闭环测量基础设施 agent-breakage，并开源。",
+      "innovation": "把代码 agent 那种 ground truth 验证范式搬到运维：故障注入 + deterministic-embedder 控制 off 条件 + 预注册决策矩阵；并把框架错误和推理错误明确分开。",
+      "method": "向 K8s 集群注入故障，agent 响应后按四个轴对 ground truth 打分，累积 (state, action, outcome) 三元组；用 deterministic-embedder 实现真 off-condition 对照，并强制预注册决策矩阵。案例：检索 postmortem 是否提升 agent。",
+      "results": "案例上抓出 pgvector index bug、19% 选择偏差、约 3× 小样本效应放大三个会让结论作废的 confound；retrieval 本身在 dense 语料 3 场景中仅 1 个 p<0.05 显著，n=60 池化效应 +3.9pp 不显著。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22363",
+    "summary": "电动车之间 V2V 卖电这件事，集中式优化算不动、分布式又不公平。作者把 Nash bargaining 塞进 MADDPG 训练目标里，让 agent 学习去靠近 Nash bargaining 的最优定价。30 天连续仿真上 social welfare 提升 61.6%、交易量提升 62.9%、公平性 Jain 指数提升 40.1%，并在 6-100 agent 区间都稳。",
+    "highlights": {
+      "contribution": "提出 Nash-MADDPG，把 Nash Bargaining Solution 作为 reward shaping 融进多 agent RL，用于 V2V 电能交易的激励对齐。",
+      "innovation": "把博弈论的 bargaining-optimal 定价显式作为 RL 信号，绕过纯中心化优化或纯无约束分布式两个极端。",
+      "method": "每对 EV 用 Nash bargaining 计算高效双边定价作为 anchor，MADDPG 训练目标加 price proximity reward 引导 agent 行为；处理充电需求和到达离开的不确定性。",
+      "results": "30 天连续运行：相比 Double Auction social welfare +61.6%、交易量 +62.9%、Jain 公平性 +40.1%；6-100 agent 区间内定价稳定靠近 Nash bargaining 基准。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22478",
+    "summary": "Composed Image Retrieval 既要保住参考图视觉连续，又要按 modification text 改语义，单空间方法容易短视、多 agent 迭代又会逻辑漂移。DeliCIR 搞了个分层多 agent 框架，先用 Intent Routing Manager 调度多视角 Worker 构造高召回候选池，再用一个 Decision Manager + Tournament 风格 TTS 做训练-free 的细粒度推理。在 CIRR、CIRCO、FashionIQ 三个 benchmark 上 SOTA。",
+    "highlights": {
+      "contribution": "提出 PDF / DeliCIR，把 test-time scaling + 经验自演化首次引入 Composed Image Retrieval，并配上分层 multi-agent 架构。",
+      "innovation": "把 retrieval 从单空间 perception 拆成 perception → deliberation 两段，并用 tournament 风格的 TTS 做训练-free 细粒度推理。",
+      "method": "Intent Routing Manager 根据 modification 意图动态调度多视角 Worker，构造高召回候选池；Decision Manager 用 training-free reasoning policy distillation + Tournament TTS 在 test 时迭代精排得到最终结果。",
+      "results": "CIRR、CIRCO、FashionIQ 三个 zero-shot CIR benchmark 上 SOTA；代码承诺接收后开源。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.2,
+      "recommendation": 6.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22504",
+    "summary": "协同自驾的车之间最近开始不传图像 feature 也不传自然语言，而是直接共享 foundation model 的 latent state，但作者发现直接融 latent 会出现 agent identity confusion，把不同车的决策表示纠缠在一起。LACO 是 training-free 的 latent 通信范式：迭代式 latent 推理、跨时域显著性筛选要传的内容、再用结构化语义蒸馏稳住自车决策。在 CARLA 闭环上明显降通信和推理延迟，同时保住协同表现。",
+    "highlights": {
+      "contribution": "提出 LACO，一个 training-free 的 latent 协同驾驶通信范式，解决 latent 直接融合带来的 agent identity confusion。",
+      "innovation": "在 latent 通信路径中显式分离 ego-centric 决策表示，加入 Iterative Latent Deliberation + Cross-Horizon Saliency Attribution + SSKD 三件套，避免自然语言通信的自回归延迟和 token 压缩信息损失。",
+      "method": "在已有 pretrained 驾驶模型上做 plug-in：ILD 让多车 latent 做多轮 deliberate 推理，CHSA 选择跨 horizon 显著的通信内容，SSKD 用结构化语义蒸馏稳住 ego 决策。全过程不需要重训。",
+      "results": "CARLA 闭环实验显著降低通信和推理延迟，并保持强 collaborative driving 表现。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.2,
+      "recommendation": 6.8
+    },
+    "affiliations": [
+      "KAIST"
+    ]
+  },
+  {
+    "arxiv_id": "2605.22564",
+    "summary": "工具调用 agent 的内部数据要么有敏感信息不能用、要么部署前根本没有，大家就改用合成数据评估，但合成 vs 真实之间到底差多少没人能量化。SynAE 给出一个针对多轮 tool-calling agent 的合成数据评估框架，从指令、tool call、最终输出、下游评估四组指标看 validity / fidelity / diversity；在主流 agent benchmark 上验证它能识别细粒度的合成质量差异。",
+    "highlights": {
+      "contribution": "提出 SynAE，一个多轮工具调用 agent 合成评估数据的多轴度量框架，量化合成与真实数据的关系。",
+      "innovation": "把合成质量评估从单一指标改成 4 类（指令、tool call、输出、下游评估）× 3 个维度（validity、fidelity、diversity）的多轴框架，并展示单一指标不够。",
+      "method": "对真实和合成 agent 轨迹分别计算上述四类指标，并故意构造合成数据失败模式做对照测试；在近期 agent benchmark 上跑评估。",
+      "results": "能识别 validity、fidelity、diversity 上的细粒度变化，证明单指标不充分；放出 demo 和开源代码。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": [
+      "CMU",
+      "Microsoft Research"
+    ]
   }
 ]

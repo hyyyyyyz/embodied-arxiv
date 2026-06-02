@@ -196,94 +196,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.14211",
-      "title": "ASH: Agents that Self-Hone via Embodied Learning",
-      "authors": [
-        "Benjamin Schneider",
-        "Xavier Schneider",
-        "Victor Zhong",
-        "Sun Sun"
-      ],
-      "affiliations": [],
-      "summary": "长时具身任务最大的痛点：奖励要人写、动作要人标。ASH 干脆从未标注的网络视频里学：先跑 IDM、再用 IDM 反过来从网络视频抽监督，无监督找关键瞬间当长期记忆。在 8 小时 Pokemon Emerald 和 Zelda 评估里跑赢 BC、检索增强和 zero-shot foundation model 基线。",
-      "original_abstract": "Long-horizon embodied tasks remain a fundamental challenge in AI, as current methods rely on hand-engineered rewards or action-labeled demonstrations, neither of which scales. We introduce ASH, an agentic system that learns an embodied policy from unlabeled, noisy internet video, without reward shaping or expert annotation. ASH follows a self-improvement loop; when it gets stuck, ASH learns an Inverse Dynamics Model (IDM) from its own trajectories, and uses its IDM to extract supervision from relevant internet video. ASH uses unsupervised learning to identify key moments from large-scale internet video and retains them as long-term memory -- allowing it to tackle long-horizon problems. We evaluate ASH on two complementary environments demanding multi-hour planning: Pokemon Emerald, a turn-based RPG, and The Legend of Zelda: The Minish Cap, a real-time action-adventure game. In both games, behavioral cloning, retrieval-augmented and zero-shot foundation-model baselines plateau, while ASH sustains progression across our 8-hour evaluation. ASH reaches an average of $11.2/12$ milestones in Pokemon Emerald and $9.9/12$ in Legend of Zelda, while the strongest baseline gets stuck in both environments at an average of $6.5/12$ and $6.0/12$ milestones, respectively. We demonstrate that self-improving agents are a scalable recipe for long-horizon embodied learning.",
-      "highlights": {
-        "contribution": "把自改进 agent 做成可扩展的 long-horizon embodied 学习范式，全程不用 reward shaping 也不用专家标注。",
-        "innovation": "Self-honing 循环：卡住时从自己轨迹学 IDM，再用 IDM 给网络视频伪标动作；无监督挑关键时刻塞进长期记忆。",
-        "method": "ASH = IDM + 检索 + 关键帧记忆 + 自改进循环；用网络视频作为唯一外部数据；测试场景是回合制和实时游戏。",
-        "results": "Pokemon Emerald 11.2/12，Zelda 9.9/12 milestones；最强基线只有 6.5/12 和 6.0/12。"
-      },
-      "images": [],
-      "published_date": "2026-05-14T00:10:12Z",
-      "categories": [
-        "cs.AI",
-        "cs.LG"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "embodied policy"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 6.0,
-        "popularity": 6.0,
-        "quality": 7.5,
-        "recommendation": 7.4
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.14211v2",
-      "arxiv_url": "https://arxiv.org/abs/2605.14211v2",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.14526",
-      "title": "DiffPhD: A Unified Differentiable Solver for Projective Heterogeneous Materials in Elastodynamics with Contact-Rich GPU-Acceleration",
-      "authors": [
-        "Shih-Yu Lai",
-        "Sung-Han Tien",
-        "Jui-I Huang",
-        "Yen-Chen Tseng",
-        "Yi-Ting Chiu",
-        "Siyuan Luo",
-        "Ziqiu Zeng",
-        "Fan Shi",
-        "Peter Yichen Chen",
-        "Tiantian Liu",
-        "Yu-Lun Liu",
-        "Bing-Yu Chen"
-      ],
-      "affiliations": [],
-      "summary": "可微软体仿真在 sim2real、轨迹优化里很关键，但 DiffPD 这类方法遇到极端刚度差、超弹性、富接触场景就崩。DiffPhD 把异质性、超弹梯度稳定、接触一起塞进一个 GPU 流水线，重用同一个稀疏因子做前向反向接触。和老 PD 比快一个数量级，100x 刚度差还稳。",
-      "original_abstract": "Differentiable simulation of soft bodies is a foundation for system identification, trajectory optimization, and Real2Sim transfer. Yet, existing methods such as the differentiable Projective Dynamics (DiffPD) struggle when faced with heterogeneous materials with extreme stiffness contrasts, hyperelasticity under large deformations, and contact-rich interactions, which are common scenarios in the real world. We present DiffPhD, a unified GPU-accelerated differentiable Projective Dynamics framework for heterogeneous materials that tackles these intertwined challenges simultaneously. Our key insight is a careful integration of: (i) stiffness-aware projective weights to embed heterogeneity into the global system; (ii) trust-region eigenvalue filtering lifted to the backward pass for stable hyperelastic gradients and a type-II Anderson Acceleration scheme with dual-gate convergence to stabilize forward iteration under large stiffness contrasts; and (iii) a unified GPU pipeline that reuses a single sparse factor across forward, backward, and contact computations, with stiffness-amplified Rayleigh damping folded into the same factor for heterogeneity-aware dissipation at zero recurring cost. DiffPhD achieves strict gradient accuracy while delivering up to an order-of-magnitude speedup over prior differentiable solvers on heterogeneous, hyperelastic, contact-rich benchmarks. Crucially, this speedup does not come at the cost of stability: DiffPhD remains convergent on stiffness contrasts up to 100x where prior PD solvers degrade. This unlocks end-to-end gradient-based optimization on regimes previously bottlenecked by either solver fragility or per-iteration cost -- shell--joint composite creatures, soft characters wielding stiff weapons, and soft-gripper robotic manipulation -- all handled within a single forward--backward pass.",
-      "highlights": {
-        "contribution": "做出一个统一的可微 Projective Dynamics 求解器，同时支持异质材料、超弹、富接触并 GPU 加速。",
-        "innovation": "刚度感知投影权重 + trust-region 特征值滤波 + 类型-II Anderson 加速 + 单稀疏因子复用，把多个棘手问题合并求解。",
-        "method": "在 PD 框架里嵌刚度权重；反向传播加特征值滤波保数值稳；GPU 上一份稀疏因子供前向反向接触共用；Rayleigh damping 也融进去。",
-        "results": "异质/超弹/接触 benchmark 上比前作快 10x，能稳到 100x 刚度差；演示了软-硬复合生物、软爪机器人抓取等场景。"
-      },
-      "images": [],
-      "published_date": "2026-05-14T08:09:42Z",
-      "categories": [
-        "cs.GR",
-        "cs.DC",
-        "cs.RO",
-        "math.NA"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "robotic manipulation"
-      ],
-      "scores": {
-        "relevance": 5.5,
-        "recency": 6.0,
-        "popularity": 5.0,
-        "quality": 7.5,
-        "recommendation": 6.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.14526v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.14526v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.15178",
       "title": "SANA-WM: Efficient Minute-Scale World Modeling with Hybrid Linear Diffusion Transformer",
       "authors": [
@@ -460,52 +372,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.14696",
-      "title": "EponaV2: Driving World Model with Comprehensive Future Reasoning",
-      "authors": [
-        "Jiawei Xu",
-        "Zhizhou Zhong",
-        "Zhijian Shu",
-        "Mingkai Jia",
-        "Mingxiao Li",
-        "Jia-Wang Bian",
-        "Qian Zhang",
-        "Kaicheng Zhang",
-        "Jin Xie",
-        "Jian Yang",
-        "Wei Yin"
-      ],
-      "affiliations": [],
-      "summary": "目前 perception-free driving world model 只学下一帧像素，规划质量不行。EponaV2 让 world model 学更全面的未来表征，可以再解码出未来几何和语义图。再借鉴 LLM 训练，加了 flow-matching GRPO 提升 planning 精度。三个 NAVSIM benchmark 上对 perception-free 模型刷 SOTA：+1.3 PDMS, +5.5 EPDMS。",
-      "original_abstract": "Data scaling plays a pivotal role in the pursuit of general intelligence. However, the prevailing perception-planning paradigm in autonomous driving relies heavily on expensive manual annotations to supervise trajectory planning, which severely limits its scalability. Conversely, although existing perception-free driving world models achieve impressive driving performance, their real-world reasoning ability for planning is solely built on next frame image forecasting. Due to the lack of enough supervision, these models often struggle with comprehensive scene understanding, resulting in unsatisfactory trajectory planning. In this paper, we propose EponaV2, a novel paradigm of driving world models, which achieves high-quality planning with comprehensive future reasoning. Inspired by how human drivers anticipate 3D geometry and semantics, we train our model to forecast more comprehensive future representations, which can be additionally decoded to future geometry and semantic maps. Extracting the 3D and semantic modalities enables our model to deeply understand the surrounding environment, and the future prediction task significantly enhances the real-world reasoning capabilities of EponaV2, ultimately leading to improved trajectory planning. Moreover, inspired by the training recipe of Large Language Models (LLMs), we introduce a flow matching group relative policy optimization mechanism to further improve planning accuracy. The state-of-the-art (SOTA) performances of EponaV2 among perception-free models on three NAVSIM benchmarks (+1.3PDMS, +5.5EPDMS) demonstrate the effectiveness of our methods.",
-      "highlights": {
-        "contribution": "为自动驾驶 world model 加入几何+语义的未来预测，提升 trajectory planning。",
-        "innovation": "未来表征可解码出 3D 几何/语义图；并用 flow-matching 的 GRPO 进一步 RL 优化规划。",
-        "method": "在 driving world model 上 forecasting 多模态未来表征 + 解码头；GRPO+flow matching 做策略优化；NAVSIM 评测。",
-        "results": "NAVSIM 三 benchmark perception-free SOTA：+1.3 PDMS, +5.5 EPDMS。"
-      },
-      "images": [],
-      "published_date": "2026-05-14T11:12:23Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model",
-        "world models"
-      ],
-      "scores": {
-        "relevance": 7.5,
-        "recency": 6.0,
-        "popularity": 7.0,
-        "quality": 7.5,
-        "recommendation": 7.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.14696v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.14696v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.14937",
       "title": "Slot-MPC: Goal-Conditioned Model Predictive Control with Object-Centric Representations",
       "authors": [
@@ -546,46 +412,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2605.14937v1",
       "arxiv_url": "https://arxiv.org/abs/2605.14937v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.14398",
-      "title": "Coding Agent Is Good As World Simulator",
-      "authors": [
-        "Hongyu Wang",
-        "Jingquan Wang",
-        "Bocheng Zou",
-        "Radu Serban",
-        "Dan Negrut"
-      ],
-      "affiliations": [],
-      "summary": "视频 world model 物理上不靠谱，作者干脆让 agent 写代码：planning agent 出场景计划、code agent 生成可执行仿真代码、视觉与物理 agent 评审，循环修代码直到符合 prompt 和物理约束。在驾驶仿真和具身机器人任务上物理精度、指令对齐、视觉质量都比视频 world model 强。",
-      "original_abstract": "World models have emerged as a powerful paradigm for building interactive simulation environments, with recent video-based approaches demonstrating impressive progress in generating visually plausible dynamics. However, because these models typically infer dynamics from video and represent them in latent states, they do not explicitly enforce physical constraints. As a result, the generated video rollouts are not physically plausible, exhibiting unstable contacts, distorted shapes, or inconsistent motion. In this paper, we present an agentic framework constructing physics-based world models through executable simulation code. The framework coordinates planning, code generation, visual review, and physics analysis agents. The planning agent converts the natural language prompt into a structured scene plan, the code agent implements it as executable simulation code, and the visual review agent provide visual feedback while the physics analysis agent checks physical consistency. The code is iteratively revised based on the feedback until the simulation matches the prompt reqirements and physical constraints. Experimental results show that our framework outperforms advanced video-based models in physical accuracy, instruction fidelity and visual quality, which could be applied to various scenarios including driving simulation and embodied robot tasks.",
-      "highlights": {
-        "contribution": "把 world model 从 \"视频生成\" 改成 \"代码生成\"，用多 agent 把物理约束硬塞进生成流程。",
-        "innovation": "Planning/Coding/Visual review/Physics analysis 四 agent 协同；输出是可执行 simulation code 而非视频。",
-        "method": "自然语言 prompt → 场景计划 → 仿真代码 → 视觉+物理检查 → 反馈式迭代修代码，直到通过；输出可用于驾驶/机器人任务。",
-        "results": "在物理一致性、指令保真、视觉质量上超过基于视频的 world model；适用驾驶和具身机器人场景。"
-      },
-      "images": [],
-      "published_date": "2026-05-14T05:33:41Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model",
-        "world models"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 6.0,
-        "popularity": 6.0,
-        "quality": 7.0,
-        "recommendation": 7.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.14398v2",
-      "arxiv_url": "https://arxiv.org/abs/2605.14398v2",
       "venue": null
     },
     {
@@ -672,49 +498,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2605.15391v1",
       "arxiv_url": "https://arxiv.org/abs/2605.15391v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.14382",
-      "title": "Delta Forcing: Trust Region Steering for Interactive Autoregressive Video Generation",
-      "authors": [
-        "Yuheng Wu",
-        "Xiangbo Gao",
-        "Tianhao Chen",
-        "Xinghao Chen",
-        "Qing Yin",
-        "Zhengzhong Tu",
-        "Dongman Lee"
-      ],
-      "affiliations": [],
-      "summary": "交互式 AR 视频生成的核心矛盾：响应要快、轨迹要稳。作者发现现有 streaming long tuning 会有 \"conditional bias\"：teacher 提供的是局部对的、全局不对的方向。Delta Forcing 借 TRPO 思路，用 teacher-student latent delta 估转移一致性，把 teacher 监督约束在 trust region 内，与单调连续目标加权，平衡反应性和连贯。",
-      "original_abstract": "Interactive real-time autoregressive video generation is essential for applications such as content creation and world modeling, where visual content must adapt to dynamically evolving event conditions. A fundamental challenge lies in balancing reactivity and stability: models must respond promptly to new events while maintaining temporal coherence over long horizons. Existing approaches distill bidirectional models into autoregressive generators and further adapt them via streaming long tuning, yet often exhibit persistent drift after condition changes. We identify the cause as conditional bias, where the teacher may provide condition-aligned but trajectory-agnostic guidance, biasing generation toward locally valid yet globally inconsistent modes. Inspired by Trust Region Policy Optimization, we propose Delta Forcing, a simple yet effective framework that constrains unreliable teacher supervision within an adaptive trust region. Specifically, Delta Forcing estimates transition consistency from the latent delta between teacher and generator trajectories, and uses it to balance teacher supervision with a monotonic continuity objective. This suppress unreliable teacher-induced shifts while preserving responsiveness to new events. Extensive experiments demonstrate that Delta Forcing significantly improves consistency while maintaining event reactivity.",
-      "highlights": {
-        "contribution": "提出 Delta Forcing，给交互 AR 视频生成加 trust region 约束，缓解事件切换后的漂移。",
-        "innovation": "用 teacher-student latent delta 估转移一致度，自适应缩放 teacher 监督；类比 TRPO 的 trust region 思想。",
-        "method": "在 distilled AR 视频模型基础上做 streaming long tuning，监督被 trust region 与 monotonic continuity 共同约束。",
-        "results": "在长时一致性和事件响应间取得更好平衡，明显减少 condition 变化后的漂移现象。"
-      },
-      "images": [],
-      "published_date": "2026-05-14T05:06:57Z",
-      "categories": [
-        "cs.CV",
-        "cs.GR",
-        "cs.MM"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model"
-      ],
-      "scores": {
-        "relevance": 6.5,
-        "recency": 6.0,
-        "popularity": 6.0,
-        "quality": 7.0,
-        "recommendation": 6.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.14382v3",
-      "arxiv_url": "https://arxiv.org/abs/2605.14382v3",
       "venue": null
     },
     {
@@ -808,256 +591,136 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.14805",
-      "title": "Learning Cross-Coupled and Regime Dependent Dynamics for Aerial Manipulation",
+      "arxiv_id": "2605.15186",
+      "title": "VGGT-Edit: Feed-forward Native 3D Scene Editing with Residual Field Prediction",
       "authors": [
-        "Rishabh Dev Yadav",
-        "Samaksh Ujjawal",
-        "Sihao Sun",
-        "Spandan Roy",
-        "Wei Pan"
-      ],
-      "affiliations": [],
-      "summary": "空中操作（四旋翼带机械臂载货）耦合复杂、空气动力学滞后、随载荷/构型变化非平稳。作者提了一个 encoder-decoder：非线性 encoder 抓时序耦合，线性 decoder 在线 Bayesian 自适应，配 consistency-driven 协方差膨胀。MPC 上残差预测更准、适应更快、跟踪更稳。",
-      "original_abstract": "Accurate dynamics models are critical for aerial manipulators operating under complex tasks such as payload transport. However, modeling these systems remains fundamentally challenging due to strong quadrotor-manipulator coupling, delayed aerodynamic interactions, and regime-dependent dynamics variations arising from payload changes and manipulator reconfiguration. These effects produce residual dynamics that are simultaneously cross-coupled, history-dependent, and nonstationary, causing both analytical models and purely offline learned models to degrade during deployment. To address these challenges, we propose a structured encoder-decoder framework for adaptive residual dynamics learning in aerial manipulators. The proposed nonlinear latent encoder captures cross-variable coupling and temporal dependencies from state-input histories, while a lightweight linear latent decoder enables online adaptation under regime-dependent nonstationary dynamics. The linear-in-parameter decoder structure permits closed-form Bayesian adaptation together with consistency-driven covariance inflation, enabling rapid and stable adaptation to both transient and slowly varying dynamics changes while remaining compatible with real-time model predictive control (MPC). Experimental results on a real aerial manipulation platform demonstrate improved residual prediction accuracy, faster adaptation under changing operating conditions, and enhanced MPC-based trajectory tracking performance. These results highlight the importance of jointly modeling coupled temporal dynamics and deployment-time nonstationarity for reliable aerial manipulation.",
-      "highlights": {
-        "contribution": "为空中机械臂提出结构化 encoder-decoder 残差动力学模型，支持在线自适应与实时 MPC。",
-        "innovation": "非线性 encoder + 线性 decoder 结构允许闭式 Bayesian adaptation；consistency-driven 协方差膨胀提速收敛。",
-        "method": "Encoder 从 state-input 历史学耦合潜变量；线性 decoder 在线最小二乘适配；与 MPC 串联做轨迹跟踪。",
-        "results": "真实空中操作平台上残差预测精度、适应速度、MPC 跟踪都改善。"
-      },
-      "images": [],
-      "published_date": "2026-05-14T13:17:04Z",
-      "categories": [
-        "cs.RO"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "dynamics model"
-      ],
-      "scores": {
-        "relevance": 5.0,
-        "recency": 6.0,
-        "popularity": 5.0,
-        "quality": 7.0,
-        "recommendation": 6.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.14805v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.14805v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.14405",
-      "title": "Watch your neighbors: Training statistically accurate chaotic systems with local phase space information",
-      "authors": [
-        "Joon-Hyuk Ko",
-        "Andrus Giraldo",
-        "Deok-Sun Lee"
-      ],
-      "affiliations": [],
-      "summary": "混沌系统数据驱动建模的难点：误差指数放大，没法长程精确预测。本文把目标从 \"复制轨迹\" 改成同时复制 Jacobian 和长期统计行为。方法是在 attractor 上构造局部 covering，比较 covering 在真模型/代理模型下的 pushforward 分布的 MMD。结果 Jacobian 精度大涨，还保持 SOTA 统计精度。",
-      "original_abstract": "Chaotic systems pose fundamental challenges for data-driven dynamics discovery, as small modeling errors lead to exponentially growing trajectory discrepancies. Since exact long-term prediction is unattainable, it is natural to ask what a good surrogate model for chaotic dynamics is. Prior work has largely focused either on reproducing the Jacobian of the underlying dynamics, which governs local expansion and contraction rates, or on training surrogate models that reproduce the ground-truth dynamics' long-term statistical behavior. In this work, we propose a new framework that aims to bridge these two paradigms by training surrogate dynamics models with accurate Jacobians and long-term statistical properties. Our method constructs a local covering of a chaotic attractor in phase space and analyzes the expansion and contraction of these coverings under the dynamics. The surrogate model is trained by minimizing the maximum mean discrepancy between the pushforward distributions of the coverings under the surrogate and ground-truth dynamics. Experiments show that our method significantly improves Jacobian accuracy while remaining competitive with state-of-the-art statistically accurate dynamics learning methods. Our code is fully available at https://anonymous.4open.science/r/neighborwatch.",
-      "highlights": {
-        "contribution": "提出新混沌动力学代理模型框架，兼顾 Jacobian 精度和长期统计行为。",
-        "innovation": "用局部 phase space covering 的 pushforward 分布 MMD 作为训练目标，桥接局部展开和长期统计两条路径。",
-        "method": "在 attractor 上做局部 covering，分别计算真模型和代理模型 covering 的 pushforward 分布，最小化 MMD。",
-        "results": "Jacobian 精度显著提升，同时与 SOTA 统计代理模型相当；代码开源。"
-      },
-      "images": [],
-      "published_date": "2026-05-14T05:45:41Z",
-      "categories": [
-        "cs.LG",
-        "math.DS"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "dynamics model"
-      ],
-      "scores": {
-        "relevance": 4.5,
-        "recency": 6.0,
-        "popularity": 5.0,
-        "quality": 7.0,
-        "recommendation": 5.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.14405v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.14405v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.14723",
-      "title": "Agentifying Patient Dynamics within LLMs through Interacting with Clinical World Model",
-      "authors": [
-        "Minghao Wu",
-        "Yuting Yan",
-        "Zhenyang Cai",
-        "Ke Ji",
-        "Chuangsen Fang",
-        "Ziying Sheng",
-        "Xidong Wang",
-        "Rongsheng Wang",
-        "Hejia Zhang",
-        "Shuang Li",
-        "Benyou Wang",
-        "Hongyuan Zha"
-      ],
-      "affiliations": [],
-      "summary": "脓毒症 ICU 治疗需要序列化决策，LLM 有医学知识但不懂动作条件下患者会怎么演化。SepsisAgent 在 LLM 上接一个 Clinical World Model，让 agent 在执行处方前 propose-simulate-refine 一遍。再用三阶段课程（SFT + behavior cloning + world-model based agentic RL）训。MIMIC-IV 上 off-policy value 和安全指标都最好。",
-      "original_abstract": "Sepsis management in the ICU requires sequential treatment decisions under rapidly evolving patient physiology. Although large language models (LLMs) encode broad clinical knowledge and can reason over guidelines, they are not inherently grounded in action-conditioned patient dynamics. We introduce SepsisAgent, a world model-augmented LLM agent for sepsis treatment recommendation. SepsisAgent uses a learned Clinical World Model to simulate patient responses under candidate fluid--vasopressor interventions, and follows a propose--simulate--refine workflow before committing to a prescription. We first show that world-model access alone yields inconsistent LLM decision performance, motivating agent-specific training. We then train SepsisAgent through a three-stage curriculum: patient-dynamics supervised fine-tuning, propose--simulate--refine behavior cloning, and world-model-based agentic reinforcement learning. On MIMIC-IV sepsis trajectories, SepsisAgent outperforms all traditional RL and LLM-based baselines in off-policy value while achieving the best safety profile under guideline adherence and unsafe-action metrics. Further analysis shows that repeated interaction with the Clinical World Model enables the agent to learn regularities in patient evolution, which remain useful even when simulator access is removed.",
-      "highlights": {
-        "contribution": "把 world model 接到 LLM agent 上，让 LLM 在做治疗决策前模拟患者反应，并以三阶段课程训练。",
-        "innovation": "Propose-simulate-refine 工作流 + 三阶段训练（动力学 SFT、行为克隆、world model agentic RL）。",
-        "method": "训一个 Clinical World Model 模拟患者对 fluid/vasopressor 的响应；LLM agent 三阶段课程训练；用 MIMIC-IV 评测。",
-        "results": "MIMIC-IV 上 off-policy value 和安全指标双 SOTA；即使关闭模拟器，agent 仍保留患者演化规律。"
-      },
-      "images": [],
-      "published_date": "2026-05-14T11:50:00Z",
-      "categories": [
-        "cs.AI",
-        "cs.CL",
-        "cs.LG"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model"
-      ],
-      "scores": {
-        "relevance": 4.0,
-        "recency": 6.0,
-        "popularity": 5.0,
-        "quality": 7.0,
-        "recommendation": 5.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.14723v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.14723v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.14851",
-      "title": "IFPV: An Integrated Multi-Agent Framework for Generative Operational Planning and High-Fidelity Plan Verification",
-      "authors": [
-        "Zhigao Huang",
-        "Zhengqing Hu",
-        "Dong Chen",
-        "Shaohan Zhang",
-        "Zhao Jin",
-        "Bo Zhang",
-        "Han Wu",
-        "Mingliang Xu"
-      ],
-      "affiliations": [],
-      "summary": "战术作战计划生成-验证的多 agent 框架。生成端 MPHA 把指挥意图分解成多平台动作序列，验证端 ACSE 给对手装一个定制 world model 来预测关键平台演化并动态反制候选方案。在 ACTS 仿真里任务成功率 +19.4%，成本 -41.7%，比规则验证器更狠地暴露漏洞。",
-      "original_abstract": "Operational plan generation and verification are critical for modern complex and rapidly changing battlefield environments, yet traditional generation and verification methods still respectively face the challenges of generation infeasibility and verification insufficiency. To alleviate these limitations, we propose an Integrated Multi-Agent Framework for Generative Operational Planning and High-Fidelity Plan Verification (IFPV). IFPV consists of two tightly coupled modules: Multi-Perspective Hierarchical Agents (MPHA) for generative operational planning and an Adversarial Cognitive Simulation Engine (ACSE) for high-fidelity adversarial plan verification. MPHA decomposes commander intent into executable multi-platform tactical action sequences through the collaboration of Pathfinder, Analyst, and Planner agents. ACSE introduces an opponent equipped with a customized world model, which predicts the future evolution of mission-critical platforms and conducts dynamic counteractions against candidate plans. Simulation experiments in the Asymmetric Combat Tactic Simulator (ACTS) show that IFPV improves mission success by 19.4% and reduces operational cost by 41.7% compared with a single-step large language model (LLM) planning baseline. Compared with a traditional rule-based validator, ACSE increases the average suppression rate by 31.8%, indicating that the proposed verification environment is stricter and more discriminative in revealing the latent vulnerabilities of candidate plans. The code for IFPV can be found at https://github.com/zhigao3ks/IFPV.",
-      "highlights": {
-        "contribution": "提出 IFPV：作战计划生成 + world model 驱动的对抗验证一体化框架。",
-        "innovation": "ACSE 给对手装可定制 world model 主动反制候选方案，比传统规则验证更鉴别力。",
-        "method": "MPHA：Pathfinder/Analyst/Planner 三 agent 分解指挥意图；ACSE：对手 world model 预测演化 + 反制；在 ACTS 仿真测。",
-        "results": "比单步 LLM 规划 baseline 任务成功 +19.4%、成本 -41.7%；比规则验证器抑制率 +31.8%。"
-      },
-      "images": [],
-      "published_date": "2026-05-14T13:58:36Z",
-      "categories": [
-        "cs.MA",
-        "cs.AI"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model"
-      ],
-      "scores": {
-        "relevance": 3.5,
-        "recency": 6.0,
-        "popularity": 5.0,
-        "quality": 6.5,
-        "recommendation": 5.2
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.14851v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.14851v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.14315",
-      "title": "TurboVGGT: Fast Visual Geometry Reconstruction with Adaptive Alternating Attention",
-      "authors": [
-        "David Huang",
-        "Guile Wu",
-        "Chengjie Huang",
-        "Bingbing Liu",
-        "Dongfeng Bai"
+        "Kaixin Zhu",
+        "Yiwen Tang",
+        "Yifan Yang",
+        "Renrui Zhang",
+        "Bohan Zeng",
+        "Ziyu Guo",
+        "Ruichuan An",
+        "Zhou Liu",
+        "Qizhi Chen",
+        "Delin Qu",
+        "Jaehong Yoon",
+        "Wentao Zhang"
       ],
       "affiliations": [
-        "Huawei Noah's Ark Lab"
+        "Peking University",
+        "CUHK"
       ],
-      "summary": "VGGT 类 feed-forward 3D 重建质量好但贵。TurboVGGT 把 alternating attention 改成自适应：全局注意里学一组代表 token 做稀疏跨帧聚合，配合 frame attention 抓局部。各层/各帧稀疏率不同，由模型自己学。多 benchmark 上重建质量竞争力，但速度显著快。",
-      "original_abstract": "Recent feed-forward 3D reconstruction methods, such as visual geometry transformers, have substantially advanced the traditional per-scene optimization paradigm by enabling effective multi-view reconstruction in a single forward pass. However, most existing methods struggle to achieve a balance between reconstruction quality and computational efficiency, which limits their scalability and efficiency. Although some efficient visual geometry transformers have recently emerged, they typically use the same sparsity ratio across layers and frames and lack mechanisms to adaptively learn representative tokens to capture global relationships, leading to suboptimal performance. In this work, we propose TurboVGGT, a novel approach that employs an efficient visual geometry transformer with adaptive alternating attention for fast multi-view 3D reconstruction. Specifically, TurboVGGT employs an end-to-end trainable framework with adaptive sparse global attention guided by adaptive sparsity selection to capture global relationships across frames and frame attention to aggregate local details within each frame. In the adaptive sparse global attention, TurboVGGT adaptively learns representative tokens with varying sparsity levels for global geometry modeling, considering that token importance varies across frames, attention layers operate tokens at different levels of abstraction, and global dependencies rely on structurally informative regions. Extensive experiments on multiple 3D reconstruction benchmarks demonstrate that TurboVGGT achieves fast multi-view reconstruction while maintaining competitive reconstruction quality compared with state-of-the-art methods. Project page: https://turbovggt.github.io/.",
+      "summary": "现有 3D 编辑大多是先 2D 编辑再 lift 回 3D，几何容易糊。作者基于 VGGT 做了一个 feed-forward 的原生 3D 场景编辑器，把文本指令和 backbone 的 spatial pose 对齐，再用残差头直接预测 3D 几何位移。还顺手做了个 DeltaScene 数据集，结果细节更锐、跨视角更一致，推理基本是实时。",
+      "original_abstract": "High-quality 3D scene reconstruction has recently advanced toward generalizable feed-forward architectures, enabling the generation of complex environments in a single forward pass. However, despite their strong performance in static scene perception, these models remain limited in responding to dynamic human instructions, which restricts their use in interactive applications. Existing editing methods typically rely on a 2D-lifting strategy, where individual views are edited independently and then lifted back into 3D space. This indirect pipeline often leads to blurry textures and inconsistent geometry, as 2D editors lack the spatial awareness required to preserve structure across viewpoints. To address these limitations, we propose VGGT-Edit, a feed-forward framework for text-conditioned native 3D scene editing. VGGT-Edit introduces depth-synchronized text injection to align semantic guidance with the backbone's spatial poses, ensuring stable instruction grounding. This semantic signal is then processed by a residual transformation head, which directly predicts 3D geometric displacements to deform the scene while preserving background stability. To ensure high-fidelity results, we supervise the framework with a multi-term objective function that enforces geometric accuracy and cross-view consistency. We also construct the DeltaScene Dataset, a large-scale dataset generated through an automated pipeline with 3D agreement filtering to ensure ground-truth quality. Experiments show that VGGT-Edit substantially outperforms 2D-lifting baselines, producing sharper object details, stronger multi-view consistency, and near-instant inference speed. The project page is https://chriszkxxx.github.io/VGGT-Edit/.",
       "highlights": {
-        "contribution": "提出 TurboVGGT，把 VGGT 风格 3D 重建做得既快又保质量。",
-        "innovation": "自适应稀疏全局注意：不同层/帧学不同稀疏率、各自挑代表 token，相比固定稀疏率方案更精细。",
-        "method": "Adaptive sparsity 选 representative tokens 做全局注意 + frame attention 抓局部细节；端到端可训。",
-        "results": "多个 3D 重建 benchmark 上重建质量与 SOTA 相当但显著更快。"
+        "contribution": "提出 VGGT-Edit，把 VGGT 风格的 feed-forward 3D 重建扩展到文本驱动的原生 3D 编辑。",
+        "innovation": "用 depth-synchronized 文本注入对齐 VGGT 的 spatial pose，再用残差变换头直接在 3D 空间预测形变，绕开 2D-lift 的几何不一致问题。",
+        "method": "在 VGGT backbone 上做 depth-synchronized 文本注入做 grounding，残差变换头预测 3D 几何位移，用 multi-term loss（几何精度+跨视角一致）监督；配套自动化的 DeltaScene 数据集，用 3D agreement 过滤来保证 GT 质量。",
+        "results": "显著超过 2D-lifting baseline，物体细节更锐、跨视角更稳，推理接近实时。"
       },
       "images": [],
-      "published_date": "2026-05-14T03:24:09Z",
+      "published_date": "2026-05-14T17:59:04Z",
       "categories": [
-        "cs.CV"
+        "cs.CV",
+        "cs.AI"
       ],
       "matched_domain": "VGGT",
       "matched_keywords": [
         "vggt",
-        "feed-forward 3d",
-        "visual geometry"
+        "3d scene reconstruction"
       ],
       "scores": {
         "relevance": 8.5,
         "recency": 6.0,
-        "popularity": 7.0,
+        "popularity": 7.5,
         "quality": 7.5,
-        "recommendation": 7.8
+        "recommendation": 8.2
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.14315v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.14315v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.15186v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.15186v2",
       "venue": null
     },
     {
-      "arxiv_id": "2605.14629",
-      "title": "Efficient Dense Matching for Enhanced Gaussian Splatting Using AV1 Motion Vectors",
+      "arxiv_id": "2605.15010",
+      "title": "3D Skew-Normal Splatting",
       "authors": [
-        "Julien Zouein",
-        "Vibhoothi Vibhoothi",
-        "François Pitié",
-        "Anil Kokaram"
+        "Xiangru Wu",
+        "Ke Fan",
+        "Yanwei Fu"
       ],
       "affiliations": [
-        "Trinity College Dublin"
+        "Fudan University"
       ],
-      "summary": "3DGS 初始化依赖 COLMAP，慢且在弱纹理区稀疏。作者发现 AV1 视频编码本身就有 motion vectors，可以拿来跳过 exhaustive matching 还能产出 8x 稠密的 SfM 点云。再喂给 3DGS，VMAF +9 分，达到基线质量的训练时间平均减 63%。",
-      "original_abstract": "3D Gaussian Splatting (3DGS) has emerged as a prominent framework for real-time, photorealistic scene reconstruction, offering significant speed-ups over Neural Radiance Fields (NeRF). However, the fidelity of 3DGS representations remains heavily dependent on the quality of the initial point cloud. While standard Structure-from-Motion (SfM) pipelines using COLMAP provide adequate initialisation, they often suffer from high computational costs and sparsity in textureless regions, which degrades subsequent reconstruction accuracy and convergence speed. In this work, we introduce an AV1-based feature detection and matching pipeline that significantly reduces SfM processing overhead. By leveraging motion vectors inherent to the AV1 video codec, we bypass computationally expensive exhaustive matching while maintaining geometric robustness. Our pipeline produces substantially denser point clouds, with up to eight times as many points as classical SfM. We demonstrate that this enhanced initialisation directly improves 3DGS performance, yielding an 9-point increase in VMAF and a 63% average reduction in training time required to reach baseline quality. The project page: https://sigmedia.tv/AV1-3DGS.github.io/",
+      "summary": "3DGS 的高斯核是对称的，碰到物体边界、单面薄壁结构时不够省 primitive。作者把核换成 Azzalini 偏斜正态分布，给每个基元加一个可学习的 skew 参数，能在对称高斯和半高斯之间连续切换。结果是在标准 NVS benchmark 上比高斯和近期非高斯核都要好，尤其是锐边和薄结构。",
+      "original_abstract": "3D Gaussian Splatting (3DGS) has emerged as a leading representation for real-time novel view synthesis and has been widely adopted in various downstream applications. The core strength of 3DGS lies in its efficient kernel-based scene representation, where Gaussian primitives provide favorable mathematical and computational properties. However, under a finite primitive budget, the symmetric shape of each primitive directly affects representation compactness, especially near asymmetric structures such as object boundaries and one-sided surfaces. Recent works have explored more complex kernel distributions; however, they either remain within the elliptical family or rely on hard truncation, which limits continuous shape control and introduces distributional discontinuities. In this paper, we propose Skew-Normal Splatting (SNS), which adopts the Azzalini Skew-Normal distribution as the fundamental primitive. By introducing a learnable and bounded skewness parameter, SNS can continuously interpolate between symmetric Gaussians and Half-Gaussian-like shapes, enabling flexible modeling of both sharp boundaries and interior regions. Moreover, SNS preserves analytical tractability under affine transformations and marginalization. This property allows seamless integration into existing Gaussian Splatting rasterization pipelines. Furthermore, to address the strong coupling between scale, rotation, and skewness parameters, we introduce a decoupled parameterization and a block-wise optimization strategy to enhance training stability and accuracy. Extensive experiments on standard novel-view synthesis benchmarks show that SNS consistently improves reconstruction quality over Gaussian and recent non-Gaussian kernels, with clearer benefits on sharp boundaries and thin or one-sided structures.",
       "highlights": {
-        "contribution": "用 AV1 motion vectors 替代部分 SfM 特征匹配，给 3DGS 更稠密初始化。",
-        "innovation": "把视频编码器内已有的 motion vectors 当作几何先验，绕开昂贵的 exhaustive matching。",
-        "method": "AV1 编码抽 motion vectors → 替代/补充 SfM 匹配 → 得到稠密点云 → 喂给 3DGS。",
-        "results": "点数 8×，VMAF +9，训练到 baseline 质量时间平均 -63%。"
+        "contribution": "提出 Skew-Normal Splatting (SNS)，用偏斜正态分布作为新的 3DGS 基元，缓解了对称核在边界处的表达不足。",
+        "innovation": "相比之前要么留在椭圆族、要么硬截断的方案，SNS 在仿射变换和边缘化下保持解析可处理性，可以直接塞进现有 rasterizer。",
+        "method": "用 Azzalini 偏斜正态分布替换高斯，引入有界的 skewness 参数；针对 scale/rotation/skewness 强耦合，设计解耦参数化和 block-wise 优化策略来稳住训练。",
+        "results": "在标准 NVS benchmark 上稳定超过高斯和近期非高斯核基线，在锐边、薄/单面结构上提升更明显。"
       },
       "images": [],
-      "published_date": "2026-05-14T09:41:19Z",
+      "published_date": "2026-05-14T16:10:41Z",
       "categories": [
-        "eess.IV",
         "cs.CV"
       ],
       "matched_domain": "VGGT",
       "matched_keywords": [
-        "neural radiance",
+        "novel view synthesis",
         "gaussian splatting"
       ],
       "scores": {
-        "relevance": 4.5,
+        "relevance": 6.5,
         "recency": 6.0,
-        "popularity": 5.0,
-        "quality": 6.5,
-        "recommendation": 5.6
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 6.8
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.14629v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.14629v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.15010v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.15010v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.15398",
+      "title": "3DEditSafe: Defending 3D Editing Pipelines from Unsafe Generation",
+      "authors": [
+        "Nicole Meng",
+        "Zheyuan Liu",
+        "Meng Jiang",
+        "Yingjie Lao"
+      ],
+      "affiliations": [
+        "Notre Dame",
+        "Tufts"
+      ],
+      "summary": "3DGS 编辑管线现在很强，但用户给个不安全的 prompt，会得到 NSFW 的 3D 场景，而且跨视角一致。作者第一次系统研究这个问题，提出 3DEditSafe，在优化阶段直接限制不安全语义的传播。结果显示 2D 安全防护不够，必须在 3D 优化层面做拦截，且存在安全-质量 trade-off。",
+      "original_abstract": "Recent advances in 3D generative editing, particularly pipelines based on 3D Gaussian Splatting (3DGS), have achieved high-fidelity, multi-view-consistent scene manipulation from text prompts. However, we find that these pipelines also introduce new safety risks when unsafe prompts produce edits that are propagated and optimized across views. In this work, we study unsafe generation in 3D editing pipelines and show that such behavior can lead to coherent, undesirable Not-Safe-For-Work (NSFW) content in the final 3D representation.   To address this, we propose 3DEditSafe, a safety-regularized 3D editing framework that constrains unsafe semantic propagation during optimization. 3DEditSafe combines generation-stage safety guidance with rendered-view 3D safety regularization, safe semantic projection, residue suppression, and mask-aware preservation to steer optimization away from unsafe editing directions. We evaluate our approach on EditSplat scenes using an object-compatible unsafe prompt benchmark and show that 2D safety guidance alone is not consistently sufficient to prevent unsafe 3D edits. 3DEditSafe reduces unsafe semantic alignment and view-level attack success rates, while revealing a safety-quality tradeoff in which stronger unsafe suppression can introduce artifacts or reduce unsafe-prompt fidelity. To our knowledge, this work is the first attempt to study and defend against unsafe generation in text-driven 3D editing pipelines, highlighting the need for safety mechanisms that operate directly on optimized 3D representations.",
+      "highlights": {
+        "contribution": "首次研究文本驱动 3D 编辑管线中的 NSFW 风险，并提出在 3D 优化阶段约束不安全语义的防御框架 3DEditSafe。",
+        "innovation": "指出仅靠 2D 安全 guidance 不足以阻止 3D 编辑的不安全语义传播，转而在 3D 优化的迭代过程做正则。",
+        "method": "结合生成阶段的安全引导、render-view 的 3D 安全正则、安全语义投影、残留抑制和 mask-aware preservation，把优化方向推离不安全编辑。",
+        "results": "在 EditSplat 场景的 unsafe prompt benchmark 上降低了不安全语义对齐和视角级攻击成功率，但也观察到更强压制会带来 artifacts。"
+      },
+      "images": [],
+      "published_date": "2026-05-14T20:30:50Z",
+      "categories": [
+        "cs.GR",
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 6.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.15398v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.15398v1",
       "venue": null
     },
     {
@@ -1103,6 +766,386 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2605.14880v1",
       "arxiv_url": "https://arxiv.org/abs/2605.14880v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.15040",
+      "title": "Orchard: An Open-Source Agentic Modeling Framework",
+      "authors": [
+        "Baolin Peng",
+        "Wenlin Yao",
+        "Qianhui Wu",
+        "Hao Cheng",
+        "Xiao Yu",
+        "Rui Yang",
+        "Tao Ge",
+        "Alessandro Sordoni",
+        "Xingdi Yuan",
+        "Yelong Shen",
+        "Pengcheng He",
+        "Tong Zhang",
+        "Zhou Yu",
+        "Jianfeng Gao"
+      ],
+      "affiliations": [
+        "Microsoft"
+      ],
+      "summary": "Microsoft 开源 Orchard 框架，目标是补 agent training 这块的开源空白：核心是 Orchard Env 这个轻量 sandbox 服务，上面挂三个 recipe — coding 用的 SWE、GUI/computer-use、个人助理 Claw。Orchard-SWE 在 SWE-bench Verified 拿 67.5%（30B 同档开源 SOTA），Orchard-GUI 4B 模型在 WebVoyager 74.1%。",
+      "original_abstract": "Agentic modeling aims to transform LLMs into autonomous agents capable of solving complex tasks through planning, reasoning, tool use, and multi-turn interaction with environments. Despite major investment, open research remains constrained by infrastructure and training gaps. Many high-performing systems rely on proprietary codebases, models, or services, while most open-source frameworks focus on orchestration and evaluation rather than scalable agent training. We present Orchard, an open-source framework for scalable agentic modeling. At its core is Orchard Env, a lightweight environment service providing reusable primitives for sandbox lifecycle management across task domains, agent harnesses, and pipeline stages. On top of Orchard Env, we build three agentic modeling recipes. Orchard-SWE targets coding agents. We distill 107K trajectories from MiniMax-M2.5 and Qwen3.5-397B, introduce credit-assignment SFT to learn from productive segments of unresolved trajectories, and apply Balanced Adaptive Rollout for RL. Starting from Qwen3-30B-A3B-Thinking, Orchard-SWE achieves 64.3% on SWE-bench Verified after SFT and 67.5% after SFT+RL, setting a new state of the art among open-source models of comparable size. Orchard-GUI trains a 4B vision-language computer-use agent using only 0.4K distilled trajectories and 2.2K open-ended tasks. It achieves 74.1%, 67.0%, and 64.0% success rates on WebVoyager, Online-Mind2Web, and DeepShop, respectively, making it the strongest open-source model while remaining competitive with proprietary systems. Orchard-Claw targets personal assistant agents. Trained with only 0.2K synthetic tasks, it achieves 59.6% pass@3 on Claw-Eval and 73.9% when paired with a stronger ZeroClaw harness. Collectively, these results show that a lightweight, open, harness-agnostic environment layer enables reusable agentic data, training recipes, and evaluations across domains.",
+      "highlights": {
+        "contribution": "开源 Orchard：一套可扩展的 agentic modeling 框架，覆盖 coding、GUI、个人助理三类 agent 的训练。",
+        "innovation": "强调 harness-agnostic 的轻量 environment layer（Orchard Env），可复用 sandbox 生命周期管理；还提出 credit-assignment SFT 和 Balanced Adaptive Rollout 这种从失败 trajectory 学习的方法。",
+        "method": "Orchard-SWE 从 MiniMax-M2.5 和 Qwen3.5-397B 蒸馏 107K trajectory，在 Qwen3-30B-A3B-Thinking 上做 SFT + RL；Orchard-GUI 用 0.4K 蒸馏 + 2.2K 开放任务训 4B VLM；Orchard-Claw 只用 0.2K 合成任务。",
+        "results": "SWE-bench Verified 64.3%(SFT)→67.5%(SFT+RL) 开源同档 SOTA；WebVoyager 74.1%、Online-Mind2Web 67.0%、DeepShop 64.0%；Claw-Eval pass@3 59.6%。"
+      },
+      "images": [],
+      "published_date": "2026-05-14T16:35:12Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 6.0,
+        "popularity": 8.5,
+        "quality": 8.0,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.15040v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.15040v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.15155",
+      "title": "Self-Distilled Agentic Reinforcement Learning",
+      "authors": [
+        "Zhengxi Lu",
+        "Zhiyuan Yao",
+        "Zhuowen Han",
+        "Zi-Han Wang",
+        "Jinyang Wu",
+        "Qi Gu",
+        "Xunliang Cai",
+        "Weiming Lu",
+        "Jun Xiao",
+        "Yueting Zhuang",
+        "Yongliang Shen"
+      ],
+      "affiliations": [
+        "Zhejiang University",
+        "Meituan"
+      ],
+      "summary": "On-Policy Self-Distillation 给 token 级密集监督，但搬到多轮 agent 上不稳；负样本也不能一刀切。SDAR 把 OPSD 当 RL 的辅助目标，用 sigmoid gate 控制蒸馏强度：teacher endorse 的正样本加强，负样本软衰减。Qwen2.5/3 在 ALFWorld 提升 9.4%、Search-QA +7.0%、WebShop-Acc +10.2%。",
+      "original_abstract": "Reinforcement learning (RL) has emerged as a central paradigm for post-training LLM agents, yet its trajectory-level reward signal provides only coarse supervision for long-horizon interaction. On-Policy Self-Distillation (OPSD) complements RL by introducing dense token-level guidance from a teacher branch augmented with privileged context. However, transferring OPSD to multi-turn agents proves problematic: compounding multi-turn instability destabilizes supervision, while skill-conditioned privileged guidance requires asymmetric treatment for negative teacher rejections may arise from imperfect skills retrieval or utilization. We introduce SDAR (Self-Distilled Agentic Reinforcement Learning), which treats OPSD as a gated auxiliary objective while keeping RL as the primary optimization backbone. SDAR maps detached token-level signals into a sigmoid gate, strengthening distillation on teacher-endorsed positive-gap tokens and softly attenuating negative teacher rejections. Across the Qwen2.5 and Qwen3 families on ALFWorld, WebShop, and Search-QA, SDAR substantially improves over GRPO (+9.4% on ALFWorld, +7.0% on Search-QA, +10.2% on WebShop-Acc), avoids the instability of naive GRPO+OPSD, and consistently outperforms hybrid RL--OPSD baselines across model scales.",
+      "highlights": {
+        "contribution": "提出 SDAR：把 On-Policy Self-Distillation 作为 gated 辅助目标，在多轮 agent RL 里稳定 token 级蒸馏。",
+        "innovation": "用 detached token signal 算 sigmoid gate，区分对待 teacher 的正样本和负样本拒绝，避免 skill 检索/利用不完美引发的错监督。",
+        "method": "保持 GRPO/RL 为主干优化，把 OPSD 作为门控辅助 loss；正 gap token 强化蒸馏，负 teacher rejection 软衰减。",
+        "results": "Qwen2.5/3 系列在 ALFWorld +9.4%、Search-QA +7.0%、WebShop-Acc +10.2% over GRPO，跨规模稳定优于 naive GRPO+OPSD 混合。"
+      },
+      "images": [],
+      "published_date": "2026-05-14T17:51:26Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 6.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.15155v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.15155v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.15301",
+      "title": "Solvita: Enhancing Large Language Models for Competitive Programming via Agentic Evolution",
+      "authors": [
+        "Han Li",
+        "Jinyu Tian",
+        "Rili Feng",
+        "Yuqiao Du",
+        "Chong Zheng",
+        "Chenyu Wang",
+        "Chenchen Liu",
+        "Shihao Li",
+        "Xinping Lei",
+        "Yifan Yao",
+        "Weihao Xie",
+        "Letian Zhu",
+        "Jiaheng Liu"
+      ],
+      "affiliations": [],
+      "summary": "现有 multi-agent code agent 是 stateless 的，做完一题经验就扔了。Solvita 让四个 agent (Planner/Solver/Oracle/Hacker) 各自配一张可训练的图结构知识网络，把 pass/fail、hacker 找到的漏洞当成 RL 信号去更新这些网络权重，不用动 LLM 的 weights。在 CodeContests/APPS/Codeforces 上拿到 code-gen agent 的新 SOTA。",
+      "original_abstract": "Large language models (LLMs) still struggle with the rigorous reasoning demands of hard competitive programming. While recent multi-agent frameworks attempt to bridge this reliability gap, they remain fundamentally stateless: they rely on static retrieval and discard the valuable problem-solving and debugging experience gained from previous tasks. To address this, we present Solvita, an agentic evolution framework that enables continuous learning without requiring weight updates to the underlying LLM. Solvita reorganizes problem-solving into a closed-loop system of strategy selection, program synthesis, certified supervision, and targeted hacking, executed by four specialized agents: Planner, Solver, Oracle, and Hacker. Crucially, each agent is paired with a trainable, graph-structured knowledge network. As the system operates, outcome signals, such as pass/fail verdicts, test certification quality, and adversarial vulnerabilities discovered by the Hacker, are recast as reinforcement learning updates to these network weights. This allows the agents to dynamically route future queries based on past successes and failures, effectively accumulating transferable reasoning experience over time. Evaluated across CodeContests, APPS, AetherCode, and live Codeforces rounds, Solvita establishes a new state-of-the-art among code-generation agents, outperforming existing multi-agent pipelines and nearly doubling the accuracy of single-pass baselines.",
+      "highlights": {
+        "contribution": "提出 Solvita agentic evolution 框架，让 code-gen multi-agent 在不改 LLM 权重的前提下持续学习。",
+        "innovation": "把每个 agent 绑定一张可训练的 graph-structured 知识网络，用 pass/fail、对抗 hacker 找漏洞这些 outcome signal 做 RL 更新，从而累积可迁移的解题经验。",
+        "method": "四 agent 闭环：Planner 选策略、Solver 写代码、Oracle 做带认证的监督、Hacker 找漏洞；用对应 graph network 路由后续 query。",
+        "results": "在 CodeContests、APPS、AetherCode、live Codeforces 上达到 code-gen agent 新 SOTA，比单 pass baseline 准确率几乎翻倍。"
+      },
+      "images": [],
+      "published_date": "2026-05-14T18:15:09Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 6.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.15301v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.15301v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.15184",
+      "title": "Is Grep All You Need? How Agent Harnesses Reshape Agentic Search",
+      "authors": [
+        "Sahil Sen",
+        "Akhil Kasturi",
+        "Elias Lumer",
+        "Anmol Gulati",
+        "Vamse Kumar Subbiah"
+      ],
+      "affiliations": [],
+      "summary": "一个实证研究：在 agentic search 里，到底是 grep 这种朴素工具好，还是 vector retrieval 好？作者拿 LongMemEval 116 题，跨 Chronos 自研 harness 和 Claude Code/Codex/Gemini CLI 测，还测了把无关对话掺进去的鲁棒性。结论是 grep 普遍比 vector 准，但 harness 和 tool-calling 风格的影响同样大。",
+      "original_abstract": "Recent advances in Large Language Model (LLM) agents have enabled complex agentic workflows where models autonomously retrieve information, call tools, and reason over large corpora to complete tasks on behalf of users. Despite the growing adoption of retrieval-augmented generation (RAG) in agentic search systems, existing literature lacks a systematic comparison of how retrieval strategy choice interacts with agent architecture and tool-calling paradigm. Important practical dimensions, including how tool outputs are presented to the model and how performance changes when searches must cope with more irrelevant surrounding text, remain under-explored in agent loops. This paper reports an empirical study organized into two experiments. Experiment 1 compares grep and vector retrieval on a 116-question sample from LongMemEval, using a custom agent harness (Chronos) and provider-native CLI harnesses (Claude Code, Codex, and Gemini CLI), for both inline tool results and file-based tool results that the model reads separately. Experiment 2 compares grep-only and vector-only retrieval while progressively mixing in additional unrelated conversation history, so that each query is embedded in more distracting material alongside the passages that matter. Across Chronos and the provider CLIs, grep generally yields higher accuracy than vector retrieval in our comparisons in experiment 1; at the same time, overall scores still depend strongly on which harness and tool-calling style is used, even when the underlying conversation data are the same.",
+      "highlights": {
+        "contribution": "系统比较 grep vs vector retrieval 在 agentic search 里的表现，并量化 agent harness 对结果的影响。",
+        "innovation": "把 harness/tool-calling 范式作为一个独立变量去研究，而不只是看检索算法本身；还专门测 inline vs file-based tool 结果的展示方式。",
+        "method": "实验 1 在 LongMemEval 116 题上比 grep 和 vector，在 Chronos、Claude Code、Codex、Gemini CLI 四个 harness 跑；实验 2 渐进往 query 里掺无关对话历史测鲁棒性。",
+        "results": "grep 普遍优于 vector retrieval；但同样数据下，换 harness/tool-calling 风格会显著改变整体分数。"
+      },
+      "images": [],
+      "published_date": "2026-05-14T17:58:41Z",
+      "categories": [
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agentic workflow"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 6.0,
+        "popularity": 6.0,
+        "quality": 6.5,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.15184v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.15184v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.14857",
+      "title": "A Deterministic Agentic Workflow for HS Tariff Classification: Multi-Dimensional Rule Reasoning with Interpretable Decisions",
+      "authors": [
+        "Yu Zhang",
+        "Dongjiang Zhuang",
+        "Qu Zhou",
+        "Zheng Huang",
+        "Junhe Wu",
+        "Jing Cao",
+        "Kai Chen"
+      ],
+      "affiliations": [],
+      "summary": "海关 HS 编码分类不是知识量问题，而是要在多个维度上同时满足优先级规则；纯 prompting 经常只顾一个轴。作者做了一个完全确定性的 agentic workflow：控制流写死，LLM 只在窄阶段做事，每一步都引用法规原文。Qwen3.6-plus 在 HSCodeComp 上 6 位 top-1 64.2%、4 位 75%。",
+      "original_abstract": "Harmonized System (HS) tariff classification is a high-stakes, expert-level task in which a free-form product description must be mapped to a specific six- or eight-digit code under the General Interpretive Rules (GIR), section notes, chapter notes, and Explanatory Notes. The difficulty lies not in knowledge volume but in *multi-dimensional rule reasoning*: a correct classification must satisfy competing priority rules along several axes simultaneously, including material, form, function, essential character, the part-versus-whole boundary, and specific listing versus residual headings. End-to-end prompting of large language models fails characteristically by resolving one axis while ignoring the priority constraints on the others. We present a *deterministic agentic workflow* in contrast to self-planning agents: the control flow is fixed, language model calls are confined to narrow stages, and reflection and verification are retained as local mechanisms. This design yields interpretability by construction--each decision is decomposed into stage-wise structured outputs with verbatim citation of the chapter or section notes that bear on it. The architecture combines offline knowledge-engineering of the Chinese HS tariff with an online six-stage pipeline. Evaluated on HSCodeComp at the six-digit level, the workflow reaches 75.0% top-1 and 91.5% top-3 at four digits, and 64.2% top-1 and 78.3% top-3 at six digits with Qwen3.6-plus; an open-weight Qwen3.6-27B-FP8 backbone in non-thinking mode achieves 84.2% four-digit and 77.4% six-digit top-1 agreement with the frontier model. A two-stage manual audit of 226 six-digit disagreements suggests that a non-trivial fraction of HSCodeComp ground-truth labels may deviate from HS general rules; full adjudication records are released in the appendix as preliminary findings for community review.",
+      "highlights": {
+        "contribution": "为 HS 关税编码分类提出确定性 agentic workflow，强调可解释性 by construction，每一步引用法规原文。",
+        "innovation": "和自规划 agent 反着来：控制流固定、LLM 调用限制在窄阶段，把反思和验证收敛为局部机制，避免端到端 prompting 把多轴优先级搞乱。",
+        "method": "离线对中国 HS 关税做知识工程，在线走六阶段管线，输出阶段化结构化结果并逐条引用 chapter/section notes。",
+        "results": "在 HSCodeComp 上用 Qwen3.6-plus 4 位 top-1 75%、top-3 91.5%，6 位 top-1 64.2%、top-3 78.3%；开源 Qwen3.6-27B-FP8 也能拿到 84.2%/77.4% 的 4/6 位 top-1。"
+      },
+      "images": [],
+      "published_date": "2026-05-14T14:04:46Z",
+      "categories": [
+        "cs.AI",
+        "cs.IR"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "planning agent",
+        "agentic workflow"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 6.0,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.14857v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.14857v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.15132",
+      "title": "APWA: A Distributed Architecture for Parallelizable Agentic Workflows",
+      "authors": [
+        "Evan Rose",
+        "Tushin Mallick",
+        "Matthew D. Laws",
+        "Cristina Nita-Rotaru",
+        "Alina Oprea"
+      ],
+      "affiliations": [
+        "Northeastern University"
+      ],
+      "summary": "多 agent 系统在任务变大时被推理/协调/算力瓶颈卡住，没法把高并行任务真正吃下去。APWA 是一个分布式多 agent 架构，把工作流自动拆成互不干涉的子问题，每个子问题独立跑、不用 cross-talk。论文说在原系统直接失败的大任务上 APWA 还能 scale。",
+      "original_abstract": "Autonomous multi-agent systems based on large language models (LLMs) have demonstrated remarkable abilities in independently solving complex tasks in a wide breadth of application domains. However, these systems hit critical reasoning, coordination, and computational scaling bottlenecks as the size and complexity of their tasks grow. These limitations hinder multi-agent systems from achieving high-throughput processing for highly parallelizable tasks, despite the availability of parallel computing and reasoning primitives in the underlying LLMs. We introduce the Agent-Parallel Workload Architecture (APWA), a distributed multi-agent system architecture designed for the efficient processing of heavily parallelizable agentic workloads. APWA facilitates parallel execution by decomposing workflows into non-interfering subproblems that can be processed using independent resources without cross-communication. It supports heterogeneous data and parallel processing patterns, and it accommodates tasks from a wide breadth of domains. In our evaluation, we demonstrate that APWA can dynamically decompose complex queries into parallelizable workflows and scales on larger tasks in settings where prior systems fail completely.",
+      "highlights": {
+        "contribution": "提出 APWA 分布式多 agent 架构，把高并行 agentic workload 真正并行化执行。",
+        "innovation": "强调把工作流分解成不相互依赖的子问题，无需跨 agent 通信，从而吃满底层 LLM 的并行原语。",
+        "method": "动态把复杂 query 拆成可并行 workflow，支持异构数据/并行模式，独立资源各跑各的子任务。",
+        "results": "在已有 multi-agent 系统完全失败的更大任务上能持续扩展，但没给具体 benchmark 数字。"
+      },
+      "images": [],
+      "published_date": "2026-05-14T17:40:20Z",
+      "categories": [
+        "cs.AI",
+        "cs.DC",
+        "cs.MA"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "agentic workflow"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 6.0,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.15132v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.15132v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.14892",
+      "title": "Beyond Individual Intelligence: Surveying Collaboration, Failure Attribution, and Self-Evolution in LLM-based Multi-Agent Systems",
+      "authors": [
+        "Shihao Qi",
+        "Jie Ma",
+        "Rui Xing",
+        "Wei Guo",
+        "Xiao Huang",
+        "Zhitao Gao",
+        "Jianhao Deng",
+        "Jun Liu",
+        "Lingling Zhang",
+        "Bifan Wei",
+        "Boqian Yang",
+        "Pinghui Wang",
+        "Jianwen Sun",
+        "Jing Tao",
+        "Yaqiang Wu",
+        "Hui Liu",
+        "Yu Yao",
+        "Tongliang Liu"
+      ],
+      "affiliations": [
+        "XJTU"
+      ],
+      "summary": "一篇 LLM multi-agent 综述，把已有研究串成 LIFE 四阶段：打底个体能力、协作集成、归因找错、自我进化。重点是阶段之间的因果依赖，指出现有 survey 都只覆盖一个片段。给了分类法和跨阶段 research agenda。",
+      "original_abstract": "LLM-based autonomous agents have demonstrated strong capabilities in reasoning, planning, and tool use, yet remain limited when tasks require sustained coordination across roles, tools, and environments. Multi-agent systems address this through structured collaboration among specialized agents, but tighter coordination also amplifies a less explored risk: errors can propagate across agents and interaction rounds, producing failures that are difficult to diagnose and rarely translate into structural self-improvement. Existing surveys cover individual agent capabilities, multi-agent collaboration, or agent self-evolution separately, leaving the causal dependencies among them unexamined. This survey provides a unified review organized around four causally linked stages, which we term the LIFE progression: Lay the capability foundation, Integrate agents through collaboration, Find faults through attribution, and Evolve through autonomous self-improvement. For each stage, we provide systematic taxonomies and formally characterize the dependencies between adjacent stages, revealing how each stage both depends on and constrains the next. Beyond synthesizing existing work, we identify open challenges at stage boundaries and propose a cross-stage research agenda for closed-loop multi-agent systems capable of continuously diagnosing failures, reorganizing structures, and refining agent behaviors, extending current coordination frameworks toward more self-organizing forms of collective intelligence. By bridging these previously fragmented research threads, this survey aims to offer both a systematic reference and a conceptual roadmap toward autonomous, self-improving multi-agent intelligence.",
+      "highlights": {
+        "contribution": "提出 LIFE 四阶段框架来统一梳理 LLM-based multi-agent 系统的能力、协作、归因和自演化研究。",
+        "innovation": "不像以前 survey 单看某一环节，这篇强调相邻阶段的因果依赖，并指出阶段边界处的 open problem。",
+        "method": "对每个阶段做系统分类，形式化相邻阶段的依赖关系，最后给出闭环 multi-agent 的研究路线图。",
+        "results": "综述类，无 benchmark；价值在于提供统一参考和 cross-stage 研究议题。"
+      },
+      "images": [],
+      "published_date": "2026-05-14T14:36:13Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 6.0,
+        "popularity": 6.0,
+        "quality": 6.5,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.14892v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.14892v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.14851",
+      "title": "IFPV: An Integrated Multi-Agent Framework for Generative Operational Planning and High-Fidelity Plan Verification",
+      "authors": [
+        "Zhigao Huang",
+        "Zhengqing Hu",
+        "Dong Chen",
+        "Shaohan Zhang",
+        "Zhao Jin",
+        "Bo Zhang",
+        "Han Wu",
+        "Mingliang Xu"
+      ],
+      "affiliations": [],
+      "summary": "战术作战计划生成-验证的多 agent 框架。生成端 MPHA 把指挥意图分解成多平台动作序列，验证端 ACSE 给对手装一个定制 world model 来预测关键平台演化并动态反制候选方案。在 ACTS 仿真里任务成功率 +19.4%，成本 -41.7%，比规则验证器更狠地暴露漏洞。",
+      "original_abstract": "Operational plan generation and verification are critical for modern complex and rapidly changing battlefield environments, yet traditional generation and verification methods still respectively face the challenges of generation infeasibility and verification insufficiency. To alleviate these limitations, we propose an Integrated Multi-Agent Framework for Generative Operational Planning and High-Fidelity Plan Verification (IFPV). IFPV consists of two tightly coupled modules: Multi-Perspective Hierarchical Agents (MPHA) for generative operational planning and an Adversarial Cognitive Simulation Engine (ACSE) for high-fidelity adversarial plan verification. MPHA decomposes commander intent into executable multi-platform tactical action sequences through the collaboration of Pathfinder, Analyst, and Planner agents. ACSE introduces an opponent equipped with a customized world model, which predicts the future evolution of mission-critical platforms and conducts dynamic counteractions against candidate plans. Simulation experiments in the Asymmetric Combat Tactic Simulator (ACTS) show that IFPV improves mission success by 19.4% and reduces operational cost by 41.7% compared with a single-step large language model (LLM) planning baseline. Compared with a traditional rule-based validator, ACSE increases the average suppression rate by 31.8%, indicating that the proposed verification environment is stricter and more discriminative in revealing the latent vulnerabilities of candidate plans. The code for IFPV can be found at https://github.com/zhigao3ks/IFPV.",
+      "highlights": {
+        "contribution": "提出 IFPV：作战计划生成 + world model 驱动的对抗验证一体化框架。",
+        "innovation": "ACSE 给对手装可定制 world model 主动反制候选方案，比传统规则验证更鉴别力。",
+        "method": "MPHA：Pathfinder/Analyst/Planner 三 agent 分解指挥意图；ACSE：对手 world model 预测演化 + 反制；在 ACTS 仿真测。",
+        "results": "比单步 LLM 规划 baseline 任务成功 +19.4%、成本 -41.7%；比规则验证器抑制率 +31.8%。"
+      },
+      "images": [],
+      "published_date": "2026-05-14T13:58:36Z",
+      "categories": [
+        "cs.MA",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 3.5,
+        "recency": 6.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 5.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.14851v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.14851v1",
       "venue": null
     }
   ],

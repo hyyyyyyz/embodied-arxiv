@@ -8,6 +8,8 @@ const DOMAIN_COLORS: Record<string, string> = {
   "World Model": "border-l-[var(--accent-cyan)] text-[var(--accent-cyan)]",
   WAM: "border-l-[var(--accent-cyan)] text-[var(--accent-cyan)]",
   VGGT: "border-l-[var(--accent-green)] text-[var(--accent-green)]",
+  Agent: "border-l-[var(--tint-agent-text)] text-[var(--tint-agent-text)]",
+  Diffusion: "border-l-[var(--tint-diff-text)] text-[var(--tint-diff-text)]",
   "Multi-modal": "border-l-[var(--accent-orange)] text-[var(--accent-orange)]",
 };
 

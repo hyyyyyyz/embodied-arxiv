@@ -44,7 +44,7 @@
 
 零运行时 LLM 调用，零云函数 — 一切发生在你本机的 Claude Code 对话里。
 
-## 覆盖的五个研究方向
+## 覆盖的七个研究方向
 
 | | 关键词样例 |
 |---|---|
@@ -52,6 +52,8 @@
 | **World Model** | world model, latent dynamics, video generation for robotics |
 | **WAM** | world action model, unified action model |
 | **VGGT** | vggt, dust3r/mast3r, feed-forward 3D, gaussian splatting |
+| **Agent** | LLM agent, multi-agent, agentic, ReAct, tool-use, GUI/web agent |
+| **Diffusion** | diffusion policy, DiT, flow matching, rectified flow, video diffusion |
 | **Multi-modal** | MLLM, VLM, embodied chain-of-thought, spatial reasoning |
 
 全部关键词列表在 [`scripts/config.py`](scripts/config.py) 的 `DIRECTIONS` 里，自己改即可。

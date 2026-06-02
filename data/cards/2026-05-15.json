@@ -36,60 +36,6 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2605.15548",
-    "summary": "传统机器手指标都是静态的（工作空间、可操控性），但 dexterous 的本质是在保持接触下连续改变物体姿态。作者提出 KaRMA，一个纯运动学指标，量化两指精密夹捏中球状物体能通过滚动达到的平移和旋转范围。在 16 款机器手上跑出三种 score，能区分静态指标分不开的手。",
-    "highlights": {
-      "contribution": "提出 KaRMA，一个针对滚动式 in-hand manipulation 的纯运动学 dexterity 指标。",
-      "innovation": "用 BFS 搜索可达 in-hand 位姿，强制关节限位、碰撞、滚动接触和对偶力可行性，把动态灵巧性变成一个可计算的指标。",
-      "method": "对球形测试物在两指精密夹捏下做平移和旋转的 BFS，输出三个分数：平移覆盖 KaRMA-T、旋转覆盖 KaRMA-R、初始姿态敏感度 KaRMA-S。",
-      "results": "在 16 款主流机器手上对比静态基线，能区分静态指标相同的手，并揭示 Jacobian 指标看不出的平移-旋转权衡。"
-    },
-    "scores": {
-      "relevance": 5.0,
-      "recency": 6,
-      "popularity": 6.5,
-      "quality": 7.0,
-      "recommendation": 6.4
-    },
-    "affiliations": ["MIT"]
-  },
-  {
-    "arxiv_id": "2605.15753",
-    "summary": "现有功能型 3D 场景图主要关注大件家具，缺层级结构，小物体也搞不定。作者扩展了 benchmark 加入桌面密集小物体和多级功能关系，然后用 2D 视觉 grounding 锚定细粒度功能边、再做 3D 图优化。整套 pipeline 在真实场景里能稳定推断层级化功能场景图。",
-    "highlights": {
-      "contribution": "扩展 open-vocab 功能 3D 场景图任务到桌面密集小物体和多级功能关系，并给出对应的推断 pipeline。",
-      "innovation": "用 2D 视觉证据锚定功能边，多线索做跨帧 3D 节点关联，并把边关联建模成带证据累积/熵正则/时序平滑的图优化。",
-      "method": "2D visual grounding 给细粒度功能边证据，跨帧多 cue 关联 3D 节点，时序图优化决定功能连接，最后全局层级整形恢复层级结构。",
-      "results": "在真实复杂场景上能可靠推断功能 3D 场景图，相对前作在密集小物体场景下显著提升（具体数字未在摘要中给出）。"
-    },
-    "scores": {
-      "relevance": 6.0,
-      "recency": 6,
-      "popularity": 6.0,
-      "quality": 6.5,
-      "recommendation": 6.6
-    },
-    "affiliations": ["Tsinghua", "ETH Zurich"]
-  },
-  {
-    "arxiv_id": "2605.15836",
-    "summary": "少样本 visuomotor 学习里，VFM 冻结后所有任务适配都压在小 pooling 模块上，很容易抓到 task-irrelevant shortcut。作者提出 GAP，一个 action-free 的几何 warm-up：用模拟数据先把 pooling 教会输出落在物体上、覆盖物体范围、时间上重复的 keypoint。然后再正常做 imitation。在 RoboMimic 和 ManiSkill 上 15-50 个示例就能比 attention pooler 和全 fine-tune 都强。",
-    "highlights": {
-      "contribution": "提出 GAP，一种 action-free 的几何锚预训练阶段，用来正则化 visuomotor 策略中的 spatial adapter。",
-      "innovation": "把 'pooling 容易抓 shortcut' 当成 inductive bias 问题，用模拟 proxy + 物体 mask 监督关键点的物体附着性、覆盖性和时间一致性。",
-      "method": "冻结 VFM，在轻量仿真 proxy 任务上训练空间 pooling，要求其输出 keypoint 落在物体上、空间覆盖好、时间稳定；之后再对下游做模仿学习。",
-      "results": "15 示例 RoboMimic Can 62% 成功（+16% vs AFA），50 示例 Tool Hang 63%，30 示例 ManiSkill StackCube 61%（+11% vs 全 fine-tune）。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 6,
-      "popularity": 5.5,
-      "quality": 7.5,
-      "recommendation": 7.3
-    },
-    "affiliations": ["Politecnico di Torino"]
-  },
-  {
     "arxiv_id": "2605.16514",
     "summary": "把机器人控制里的 AICON（reactive 梯度下降框架）拿来做认知科学：让它在 Tower of London 任务上模拟人类计划能力。结果不用 lookahead 它就重现了 24 道题的人类难度排序，而且在帕金森等 planning 能力下降的患者群体上表现得比 planning baseline 更像人。",
     "highlights": {
@@ -105,25 +51,9 @@
       "quality": 6.5,
       "recommendation": 5.5
     },
-    "affiliations": ["TU Berlin"]
-  },
-  {
-    "arxiv_id": "2605.15618",
-    "summary": "现在大家爱把自监督视频模型当 world model 用，但评测全靠 top-1 准确率。作者系统性比较了 V-JEPA 2.1/V-JEPA 2/VideoPrism/VideoMAEv2 四个同 capacity 模型，沿 5 个 robustness 轴看它们的差异。结论很清楚：latent prediction 类（V-JEPA）在腐蚀、遮挡、细粒度物理接触、时间方向感知上都明显占优。",
-    "highlights": {
-      "contribution": "首次系统性地从 world model 角度评估视频自监督模型的鲁棒性。",
-      "innovation": "提出 5 个针对 world model 部署的 robustness 轴（特征可分性、腐蚀、细粒度区分、遮挡、时间方向），并对比 latent-prediction 与 reconstruction 路线。",
-      "method": "选 V-JEPA 2.1/V-JEPA 2/VideoPrism/VideoMAEv2 四个 matched-capacity 模型，沿 5 个轴评测；额外做 frozen V-JEPA 2 + 轻量 attentive probe 与全 fine-tune 对比。",
-      "results": "latent prediction 路线在全部 5 轴上形成一致优势画像；frozen V-JEPA 2 + 轻 probe 在腐蚀和遮挡鲁棒性上超过 fully fine-tuned VideoMAE 和监督 TimeSformer。"
-    },
-    "scores": {
-      "relevance": 8.5,
-      "recency": 6,
-      "popularity": 7.5,
-      "quality": 8.0,
-      "recommendation": 8.2
-    },
-    "affiliations": ["University of Melbourne"]
+    "affiliations": [
+      "TU Berlin"
+    ]
   },
   {
     "arxiv_id": "2605.16713",
@@ -141,79 +71,9 @@
       "quality": 7.0,
       "recommendation": 7.6
     },
-    "affiliations": ["Harvard"]
-  },
-  {
-    "arxiv_id": "2605.16457",
-    "summary": "token-based transformer world model 在长 rollout 时经常物体复制、消失或变形，原因是逐 token 生成根本没考虑物体跨帧的持续性。作者加了 ITC 解码层，把下一帧预测建模成结构化分配：每个 token 要么从前帧复制、要么新生。架构不变，直接套上去。Craftax-classic 上 return 72.5、score 35.6，远超之前 67.4/27.9。",
-    "highlights": {
-      "contribution": "提出 ITC，一个可插拔的 token-correspondence 解码步骤，提升 token-based world model 的长时时序一致性。",
-      "innovation": "把 next-frame token 预测建模为结构化分配问题，引入显式的 'copy or generate' 潜变量，区别于纯生成式预测。",
-      "method": "在已有 token transformer world model 上加一层 ITC 解码：每个新 token 通过 latent assignment 决定是从前帧 token 复制还是新生成；架构和训练流程都不改。",
-      "results": "Craftax-classic 上 return 72.5%、score 35.6%，比之前最好 67.4% / 27.9% 大幅提升；4 个 benchmark 上达 SOTA。已开源。"
-    },
-    "scores": {
-      "relevance": 8.5,
-      "recency": 6,
-      "popularity": 7.0,
-      "quality": 8.0,
-      "recommendation": 8.1
-    },
-    "affiliations": ["Seoul National University"]
-  },
-  {
-    "arxiv_id": "2605.15705",
-    "summary": "World model 一遇 OOD 状态就预测崩盘，但其实每一步执行后真实 next state 都送回来了，作者觉得这个信号没人用很可惜。于是搞了 feedback world model：在线维护一个轻量 feedback state，实时根据真实观测纠正未来预测，不用额外训练。在 LIBERO-Plus、Robomimic 和真机上预测误差降 76.4%、OOD 成功率涨 30%。",
-    "highlights": {
-      "contribution": "提出 feedback world model 范式，把推理时真实观测当反馈信号在线校正 world model 预测。",
-      "innovation": "把 world model 从 static open-loop predictor 变成 closed-loop 形式，用轻量 feedback state 在线修正，无需重训；加 action-aware guidance 突出可控分量。",
-      "method": "每次 action 后用观测更新 feedback state，迭代修正未来预测；可解释为潜空间观测器并给出收敛保证；用 action-aware guidance 翻译为控制。",
-      "results": "LIBERO-Plus / Robomimic / 真机上 world model 预测误差降 76.4%，OOD 成功率涨 30%。"
-    },
-    "scores": {
-      "relevance": 9.0,
-      "recency": 6,
-      "popularity": 6.5,
-      "quality": 8.0,
-      "recommendation": 8.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.15725",
-    "summary": "LAM 学动作抽象时永远卡在抽象 vs 生成质量之间。作者提出 DiLA：观察到 latent action 的预测瓶颈本身就在逼模型把空间结构和视觉细节分开，于是把 content（细节）和 structure（结构）做显式 disentanglement。结果在视频生成、动作迁移、视觉规划等任务上都更好，并且 latent action 空间是连续可解释的。",
-    "highlights": {
-      "contribution": "提出 DiLA，一个 content-structure 解耦的 latent action world model，缓解 LAM 的抽象-生成 trade-off。",
-      "innovation": "发现 disentanglement 和 latent action 学习可以共进化：latent action 的瓶颈天然推动 structure/content 解耦，不用两阶段或 optical-flow trick。",
-      "method": "单阶段训练两条路径——structure 路径承载空间布局供 latent action 抽取，content 路径承载视觉细节用于生成；不依赖预训练 world model 或 OF。",
-      "results": "在视频生成质量、动作迁移、visual planning、manifold 可解释性上均超过现有 LAM 方法（摘要未列具体数字）。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 6,
-      "popularity": 6.0,
-      "quality": 6.5,
-      "recommendation": 7.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.15733",
-    "summary": "海马-内嗅皮层既能表征空间也能表征概念，但怎么从连续高维动态里抽出抽象结构还不太清楚。作者提出一个 brain-inspired 模型：用 inverse model 抽结构，再用 HPC-MEC 耦合模型分别表征关系结构（MEC）和整合的 episodic 场景（HPC）。在 primitive transformation 动力学 benchmark 上展示了抽象和泛化。",
-    "highlights": {
-      "contribution": "提出一个 HPC-MEC 灵感的层级世界模型，同时学 latent 转移和视觉预测。",
-      "innovation": "把 inverse model 抽结构与 HPC-MEC 关系/场景解耦结合，并用 velocity 驱动的 path integration 做结构复用。",
-      "method": "Inverse model 提取结构性表征供 MEC 模块，HPC 模块承担 episodic 场景整合；用 primitive transformation 动力学做训练 benchmark。",
-      "results": "展示了结构抽象能力，能在不同上下文中做鲁棒预测和结构复用，验证结构泛化（无标准 benchmark 数字）。"
-    },
-    "scores": {
-      "relevance": 5.5,
-      "recency": 6,
-      "popularity": 5.0,
-      "quality": 5.5,
-      "recommendation": 5.6
-    },
-    "affiliations": []
+    "affiliations": [
+      "Harvard"
+    ]
   },
   {
     "arxiv_id": "2605.15843",
@@ -231,7 +91,9 @@
       "quality": 6.0,
       "recommendation": 6.8
     },
-    "affiliations": ["Shanghai Jiao Tong University"]
+    "affiliations": [
+      "Shanghai Jiao Tong University"
+    ]
   },
   {
     "arxiv_id": "2605.15960",
@@ -249,7 +111,10 @@
       "quality": 7.5,
       "recommendation": 6.5
     },
-    "affiliations": ["Stanford", "University of Edinburgh"]
+    "affiliations": [
+      "Stanford",
+      "University of Edinburgh"
+    ]
   },
   {
     "arxiv_id": "2605.15964",
@@ -267,7 +132,9 @@
       "quality": 7.5,
       "recommendation": 8.0
     },
-    "affiliations": ["Tsinghua"]
+    "affiliations": [
+      "Tsinghua"
+    ]
   },
   {
     "arxiv_id": "2605.15967",
@@ -303,7 +170,9 @@
       "quality": 7.0,
       "recommendation": 7.0
     },
-    "affiliations": ["University of Toronto"]
+    "affiliations": [
+      "University of Toronto"
+    ]
   },
   {
     "arxiv_id": "2605.16030",
@@ -321,7 +190,9 @@
       "quality": 8.0,
       "recommendation": 7.4
     },
-    "affiliations": ["Tsinghua"]
+    "affiliations": [
+      "Tsinghua"
+    ]
   },
   {
     "arxiv_id": "2605.16054",
@@ -339,7 +210,10 @@
       "quality": 6.5,
       "recommendation": 6.6
     },
-    "affiliations": ["MBZUAI", "CMU"]
+    "affiliations": [
+      "MBZUAI",
+      "CMU"
+    ]
   },
   {
     "arxiv_id": "2605.16154",
@@ -375,25 +249,9 @@
       "quality": 7.0,
       "recommendation": 6.7
     },
-    "affiliations": ["TU Darmstadt"]
-  },
-  {
-    "arxiv_id": "2605.15507",
-    "summary": "这其实是信息论里 Gaussian mixture 源的 rate-distortion 经典问题的新解。作者证明 mixture 结构只多付一个 component label 代价，bit allocation 由一个全局 reverse-waterfilling level 决定。基于此提出 PrismQuant：无损传 label，残差走匹配的 KLT + 标量量化。CSI 数据上比 transformer-based codec 小一个数量级还能打。",
-    "highlights": {
-      "contribution": "建立 Gaussian mixture 源的构造性 RD 理论，并给出实用 PrismQuant 编解码。",
-      "innovation": "证明全局 reverse-waterfilling level 跨 mixture 分量共享，把 mixture RD 还原成可控形式。",
-      "method": "EM 学 mixture，分量自适应 KLT，熵约束标量量化（ECSQ）；无损传 component label。",
-      "results": "合成 GMM 上接近理论 RD 下界；真实 CSI 数据上接近或优于 transformer-based learned codec，模型尺寸小一个量级以上。"
-    },
-    "scores": {
-      "relevance": 2.0,
-      "recency": 6,
-      "popularity": 5.5,
-      "quality": 7.5,
-      "recommendation": 4.5
-    },
-    "affiliations": ["POSTECH"]
+    "affiliations": [
+      "TU Darmstadt"
+    ]
   },
   {
     "arxiv_id": "2605.16547",
@@ -411,7 +269,9 @@
       "quality": 6.0,
       "recommendation": 5.8
     },
-    "affiliations": ["Virginia Tech"]
+    "affiliations": [
+      "Virginia Tech"
+    ]
   },
   {
     "arxiv_id": "2605.16682",
@@ -429,7 +289,9 @@
       "quality": 7.0,
       "recommendation": 5.7
     },
-    "affiliations": ["Vanderbilt"]
+    "affiliations": [
+      "Vanderbilt"
+    ]
   },
   {
     "arxiv_id": "2605.16692",
@@ -447,6 +309,191 @@
       "quality": 7.5,
       "recommendation": 6.9
     },
-    "affiliations": ["TU Delft"]
+    "affiliations": [
+      "TU Delft"
+    ]
+  },
+  {
+    "arxiv_id": "2605.16065",
+    "summary": "3D Gaussian Splatting 重建很快但要做编辑（删物体、抠物体、改色）就抓瞎，因为分割不稳。作者借 SAM-HQ 拿到更细的 2D mask，再用一套带先验的标签分配把 mask 投到 3D Gaussian 上保证多视角一致，最后能在 VR 和机器人场景里实时编辑物体且边界保得很好。",
+    "highlights": {
+      "contribution": "提出一套面向可编辑 3D-GS 场景的鲁棒物体分割框架，把 2D 高质量 mask 一致地提升到 3D Gaussians 上。",
+      "innovation": "用 SAM-HQ 替代原版 SAM 解决边界粗糙，并设计 prior-guided label reassignment 让 3D Gaussian 的标签满足多视角一致。",
+      "method": "输入多视角 RGB → SAM-HQ 出高质量 2D mask → 用学到的先验对 Gaussian 的语义标签做重分配，强制多视角一致 → 支持删除/抽取/换色编辑。",
+      "results": "在 3D 物体分割精度上达到 SOTA，定性结果展示边界保持好、可实时交互编辑，论文给出 VR 和机器人应用示例。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 6,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 6.4
+    },
+    "affiliations": [
+      "University of Surrey"
+    ]
+  },
+  {
+    "arxiv_id": "2605.16258",
+    "summary": "现有 visual geometry foundation model 大多回归 pointmap，结果冗余又不连续。作者搞了个 IVGT，从无位姿多视角图直接学一个隐式神经场景表征，输出 SDF + 颜色，能渲染 RGB/深度/法线还能估位姿。多任务多数据集联合训练，泛化挺强。",
+    "highlights": {
+      "contribution": "提出隐式视觉几何 Transformer IVGT，把无位姿多视角图映射为统一的连续神经场景表征，覆盖几何与外观一系列任务。",
+      "innovation": "相比 VGGT 系列回归显式 pointmap 的做法，改成隐式 SDF + 颜色查询，几何连续、表面光滑、可任意采样查询。",
+      "method": "Transformer 编码无位姿多视角输入到规范坐标系下的特征体，对任意 3D 点查局部特征后用轻量 decoder 输出 SDF 与颜色；用 2D 渲染监督 + 3D 几何正则做多数据集联合训练。",
+      "results": "在 mesh/点云重建、新视角合成、深度法线估计、相机位姿估计多任务上都达到强性能，并显示出跨场景泛化。"
+    },
+    "scores": {
+      "relevance": 8.6,
+      "recency": 6,
+      "popularity": 7.2,
+      "quality": 7.8,
+      "recommendation": 8.0
+    },
+    "affiliations": [
+      "Tsinghua University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.16582",
+    "summary": "做铰接物体重建时，主流的 3D-GS pipeline 拿一堆无结构点表达，根本没办法推理零件边界。ArtMesh 直接用 mesh 当原生表达，加上一种 part-aware 的受限 Delaunay 重网格化，让三角形不跨越部件边界，再用顶点和像素两层运动一致性来优化关节。还顺手发了 100 个铰接物体的新 benchmark。",
+    "highlights": {
+      "contribution": "提出 mesh-native 的铰接物体重建方法 ArtMesh，并发布含 100 个物体、16 PartNet-Mobility 类别的 Articulate-100 benchmark。",
+      "innovation": "相对 3DGS 系列拿无序点的做法，改为带拓扑的 mesh + part-aware 重网格化，使运动一致性可以沿结构传播。",
+      "method": "用可微 mesh 渲染做骨干 → part-aware restricted Delaunay 重网格化得到不跨边界的子网格 → 双向 vertex-wise 运动一致性 + pixel-wise RGB-D 运动一致性，联合优化铰接参数和零件几何。",
+      "results": "在 Articulate-100 上，关节参数估计和零件几何重建均显著超过此前的 3DGS 方法，对多关节物体提升最大。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 6,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": [
+      "UC San Diego",
+      "University of British Columbia"
+    ]
+  },
+  {
+    "arxiv_id": "2605.15871",
+    "summary": "Meta 这帮人让 LLM agent 自己设计基础模型架构，做了 AIRA-Compose 和 AIRA-Design 两套：前者 11 个 agent 在 24 小时预算里搜架构 primitive，后者 20 个 agent 写新的 attention。结果 1B 规模上跑出来的 AIRAformer/AIRAhybrid 直接吊打 Llama 3.2，下游任务 +2.4~3.8%，scaling 还更快。算是 recursive self-improvement 的一个早期实证。",
+    "highlights": {
+      "contribution": "用多 agent LLM 系统自动发现新型基础模型架构，得到一族 Transformer 与 Transformer-Mamba 混合架构，在 1B 规模超越 Llama 3.2。",
+      "innovation": "不是搜超参，而是让 agent 直接探索计算 primitive 并生成 attention 实现，分别覆盖 high-level architecture search 与 low-level mechanism design。",
+      "method": "AIRA-Compose 11 个 agent 在百万参数候选上评估、外推到 350M/1B/3B；AIRA-Design 20 个 agent 写 long-range attention 与训练脚本；外推到 1B 进行预训练。",
+      "results": "AIRAformer-D / AIRAhybrid-D 在下游分别 +2.4% / +3.8%；scaling 比 Llama 3.2 快 54% / 71%；Long Range Arena 上接近 SOTA；Autoresearch 下 Greedy Opus 4.5 拿到 0.968 val bpb 超过此前最优。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 6,
+      "popularity": 8.5,
+      "quality": 8.2,
+      "recommendation": 7.8
+    },
+    "affiliations": [
+      "Meta AI"
+    ]
+  },
+  {
+    "arxiv_id": "2605.16217",
+    "summary": "Deep research agent 平行采样越多答案重复越多，token 还压爆 context。Argus 把任务当拼图：Searcher 负责跑 ReAct 拿 evidence，Navigator 维护证据图、查缺补漏、调度新 Searcher，再合成带溯源的答案。Navigator 用 RL 训出来，单 Searcher 就 +5.5 分，8 并发 +12.7 分，64 并发上 BrowseComp 拿到 86.2。",
+    "highlights": {
+      "contribution": "提出 Searcher + Navigator 的 deep research agent 框架 Argus，用证据图替代平行 rollout 聚合，做到证据互补不重复。",
+      "innovation": "传统 best-of-N 是同一答案重复采样，Argus 用 Navigator 主动识别缺失证据并调度，新增的 RL Navigator 在小 context 下完成验证-调度-合成。",
+      "method": "Searcher 跑标准 ReAct；Navigator 用 RL 训练做 verify/dispatch/synthesize；共享 evidence graph；两者 backbone 都是 35B-A3B MoE；推理时可灵活伸缩 Searcher 数。",
+      "results": "8 benchmark 平均：单 Searcher +5.5、8 并发 +12.7；64 并发在 BrowseComp 上 86.2 超过所有 proprietary agent；Navigator 推理 context 维持 <21.5K token。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 6,
+      "popularity": 7.8,
+      "quality": 8.5,
+      "recommendation": 8.0
+    },
+    "affiliations": [
+      "Alibaba DAMO",
+      "NTU"
+    ]
+  },
+  {
+    "arxiv_id": "2605.16233",
+    "summary": "FORGE 想让 agent 不更新权重也能自我进化：把失败轨迹反思成 Rule/Example/Mixed 类型的记忆，再用 population 广播让最好实例的记忆传给整群。在 CAGE-2 网络防御 POMDP 上四种 LLM 都跑出 1.7-7.7 倍 zero-shot 的收益，比 Reflexion 也强 29-72%。population broadcast 是关键，graduation 主要省算力。",
+    "highlights": {
+      "contribution": "提出无需 gradient 的自演化记忆框架 FORGE，让 hierarchical ReAct agent 通过反思 + population broadcast 持续进化。",
+      "innovation": "在 Reflexion 内循环外加了一个 staged population-based 的外循环，跨实例广播记忆并按 graduation 准则冻结收敛实例，区分了 Rules / Examples / Mixed 三种记忆形态。",
+      "method": "反思 agent 用同一 LLM 把失败 trajectory 转成自然语言记忆 → 内循环 Reflexion 优化单实例 → 外循环把表现最好实例的记忆广播给整个 population → graduation 标准冻结收敛实例。",
+      "results": "CybORG CAGE-2 上四种 LLM 平均 +1.7~7.7× zero-shot 回报，+29~72% vs Reflexion；major-failure 率压到 ~1%；ablation 显示 broadcast 是核心，graduation 主要省 token。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 6,
+      "popularity": 5.8,
+      "quality": 7.6,
+      "recommendation": 7.2
+    },
+    "affiliations": [
+      "Carleton University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.16565",
+    "summary": "Web agent 慢且贵不是任务本身要求高，是每一步都跑完整的 frontier model + 浏览器 + ReAct。Skim 观察到网站 URL 模式、答案格式都比较稳定，所以离线 profiler 把这些模板抓出来，运行时直接 match → 合成 URL → 小模型抽答案，有 verifier 兜底没匹配上的 fallback 回完整 agent。中位 cost 降 1.9 倍，延迟降 33.4%，精度不掉。",
+    "highlights": {
+      "contribution": "提出 web agent 的 speculative execution 框架 Skim，用站点稳定模式跳过昂贵的 frontier 推理与浏览器渲染。",
+      "innovation": "把投机执行思想用到 agent 系统层：离线 profile 站点模板，运行时 fast-path + verifier gate + warm-started fallback，三套 backbone agent 都通用。",
+      "method": "离线 profiler 每个站点抓 URL 模板 / 答案模式 → 运行时把 query match 到模板 → 合成目标 URL → 小模型抽答案 → verifier 检查，失败时 cascade 回完整 agent，并用 fast-path 的最终 URL 暖启动。",
+      "results": "在 WebVoyager / AgentOccam / BrowserUse 三个 backbone 上：中位 per-task cost 降 1.9×，延迟降 33.4%，精度无损。"
+    },
+    "scores": {
+      "relevance": 6.2,
+      "recency": 6,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.3
+    },
+    "affiliations": [
+      "Princeton University",
+      "Microsoft Research"
+    ]
+  },
+  {
+    "arxiv_id": "2605.15846",
+    "summary": "现有 coding agent benchmark 都是单 issue bug fix，跟真实开发差太远。RoadmapBench 取了 17 个 repo、5 种语言的 115 个版本升级任务，每个要改约 3700 行/51 文件。13 个 frontier model 里最强的 Claude-Opus-4.7 也只解 39.1%，最弱的 5.2%，说明长程多目标开发还是远没解决。",
+    "highlights": {
+      "contribution": "构建 RoadmapBench：基于真实 OSS 版本升级的 115 个长程多目标 coding agent 任务，跨 17 个 repo 与 5 种语言。",
+      "innovation": "相对 SWE-bench 等单文件 bug fix，任务粒度跃迁到版本级 roadmap，单任务中位 3.7k 行/51 文件，可显著拉开模型差距。",
+      "method": "选取 17 个开源项目的版本升级；将 agent 放在源版本 snapshot，给出目标版本 roadmap 指令；评测 13 个 frontier model 的实现完成度。",
+      "results": "Claude-Opus-4.7 仅 39.1%，最弱模型只有 5.2%，远低于已有 bug-fix benchmark 的水平，说明长程软件开发仍是开放问题。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 6,
+      "popularity": 7.5,
+      "quality": 7.6,
+      "recommendation": 7.2
+    },
+    "affiliations": [
+      "Peking University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.21516",
+    "summary": "Harness 设计（任务分解 + 引导执行）不一定越精细越好。作者用 inference-time trajectory alignment 的视角分析 harness：分解切子目标 + 引导调动作分布，量化 workflow 颗粒度、retry budget、guidance 的作用，揭示 over-decomposition、over-pruning、hallucinated execution 这些 failure mode，并发现部分 harness（只规定前几步）反而更好。",
+    "highlights": {
+      "contribution": "从 inference-time trajectory alignment 角度系统分析 LLM agent harness 的设计原则，揭示典型 failure mode 并提出 partial harness 设计。",
+      "innovation": "把 harness 拆成 task decomposition 与 guided execution 两个机制独立量化，给出何时 harness 反而有害的理论解释。",
+      "method": "建立分析框架把 workflow 颗粒度、retry budget、guidance 引发的 action reweighting 与 final success 关联 → 用合成实验 + 真实 terminal agent benchmark 验证 → 提出 partial harness（只指定开头几步）。",
+      "results": "合成与 terminal agent benchmark 上验证了理论预测：partial harness 的 pass rate 超过 fully structured workflow。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 6,
+      "popularity": 5.8,
+      "quality": 7.2,
+      "recommendation": 6.7
+    },
+    "affiliations": [
+      "Southern University of Science and Technology"
+    ]
   }
 ]

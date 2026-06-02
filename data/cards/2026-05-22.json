@@ -1,23 +1,5 @@
 [
   {
-    "arxiv_id": "2605.23128",
-    "summary": "作者在 π0 这套 VLA 上把 flow matching 的动作专家换成了 Equilibrium Matching (EqM) 解码器，其他不动。同样 300 步预算下，RoboTwin 19 个任务平均成功率从 40.4% 直接拉到 50.2%，LIBERO-10 也到了 87%。还顺带分析了一个叫 stationarity-executability gap 的现象，把推理深度当成策略设计的一部分来看。",
-    "highlights": {
-      "contribution": "把 π0 的 flow matching 动作头替换为 Equilibrium Matching，让闭环 VLA 控制能按状态自适应消耗计算。",
-      "innovation": "首次把能量基/EqM 视角引入 VLA，动作生成被看作向均衡点收敛而非固定步数采样。",
-      "method": "保留 π0 上游 VLM 不变，仅替换动作解码器为 EqM；通过残差阈值决定推理深度，分析了 stationarity-executability gap。",
-      "results": "RoboTwin 19 任务平均 40.4% → 50.2%；LIBERO-10 87.0%；在匹配 300 步预算下显著优于 flow-matching 版本。"
-    },
-    "scores": {
-      "relevance": 9.5,
-      "recency": 7,
-      "popularity": 7.5,
-      "quality": 8.0,
-      "recommendation": 8.3
-    },
-    "affiliations": ["USTC", "HKU"]
-  },
-  {
     "arxiv_id": "2605.24203",
     "summary": "想解决 VLA 不知道「该在哪里下手」的问题。作者在 VLA 里塞了几个可学习的 <AFF> token 来主动查询任务相关的交互区域，再把 affordance mask 转成 embedding 直接条件化动作生成。在 LIBERO、LIBERO-Plus 和 SimplerEnv 上拿了 SOTA，真机也能用。",
     "highlights": {
@@ -33,43 +15,11 @@
       "quality": 8.0,
       "recommendation": 8.4
     },
-    "affiliations": ["Fudan", "KAUST", "SJTU"]
-  },
-  {
-    "arxiv_id": "2605.23163",
-    "summary": "端到端自动驾驶里 AR 慢、全序列 diffusion 又会「逻辑泄漏」。Fast-dDrive 用 block-diffusion VLM：段内双向 refine、段间严格因果序，把 JSON 结构 token 冻成 scaffold 重点训规划。配合 SGLang，比 AR 基线快 12 倍，WOD-E2E 的 ADE@3s/5s 拿 SOTA，nuScenes L2 降到 0.32m。",
-    "highlights": {
-      "contribution": "提出 block-diffusion VLA 驾驶模型，兼顾 KV cache 复用、因果性和高吞吐。",
-      "innovation": "段内双向、段间因果的混合 diffusion 结构 + Scaffold Speculative Decoding，针对驾驶 JSON 输出特性设计。",
-      "method": "冻结结构 token 形成 scaffold；section-aware 训练重权 safety-critical 规划；从共享 prefix KV 采样 N 条 rollouts 并平均作 test-time scaling。",
-      "results": "WOD-E2E ADE@3s/5s SOTA；nuScenes L2 降到 0.32m（-22%）；接入 SGLang 后吞吐 12× AR 基线。"
-    },
-    "scores": {
-      "relevance": 8.0,
-      "recency": 7,
-      "popularity": 8.0,
-      "quality": 8.0,
-      "recommendation": 8.0
-    },
-    "affiliations": ["NVIDIA", "MIT", "Stanford"]
-  },
-  {
-    "arxiv_id": "2605.23203",
-    "summary": "这篇做的是视觉网络在相机 3D 运动扰动下的正式鲁棒性验证。从相机位姿到像素值建立闭式映射，再用 Lipschitz 优化得到紧的线性边界，第一次能形式化验证 projective 几何变换的鲁棒性。在 VNN-COMP 上比已有方法快 89%、边界紧 7%，还跑了一个跑道分类器的真实安全案例。",
-    "highlights": {
-      "contribution": "对相机 3D 运动引发的 homography 扰动做形式化鲁棒性验证。",
-      "innovation": "通过 Lipschitz 优化 + piecewise 连续性把 projective 变换转化为可被验证器处理的紧线性边界，无需替代网络或显式图像形成模型。",
-      "method": "从相机 pose 到像素值的闭式映射 → 分析 homography 的 Lipschitz 与分段连续性 → 在 VNN-COMP 验证器上跑。",
-      "results": "比已有方法快 89%、边界紧 7%；揭示 VNN-COMP 模型对 projective 扰动的系统弱点；真实跑道分类器案例发现安全漏洞。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 7,
-      "popularity": 5.5,
-      "quality": 7.5,
-      "recommendation": 5.5
-    },
-    "affiliations": ["Imperial College London"]
+    "affiliations": [
+      "Fudan",
+      "KAUST",
+      "SJTU"
+    ]
   },
   {
     "arxiv_id": "2605.23568",
@@ -87,7 +37,10 @@
       "quality": 7.5,
       "recommendation": 6.5
     },
-    "affiliations": ["HKUST(GZ)", "CUHK"]
+    "affiliations": [
+      "HKUST(GZ)",
+      "CUHK"
+    ]
   },
   {
     "arxiv_id": "2605.23847",
@@ -105,43 +58,9 @@
       "quality": 7.0,
       "recommendation": 6.3
     },
-    "affiliations": ["Ghent University"]
-  },
-  {
-    "arxiv_id": "2605.23856",
-    "summary": "想让世界-动作模型不要被光照纹理带偏。JOPAT 在一个 denoising diffusion transformer 里联合预测潜在视觉、2D 点轨迹（带可见性）和动作。点轨迹作为显式运动表示在遮挡和出框时更稳。LIBERO 和真机 LeRobot 任务上比纯像素基线强，长时序遮挡场景提升最大。",
-    "highlights": {
-      "contribution": "JOPAT 联合预测像素 + 2D 点轨迹 + 动作，作为更鲁棒的世界-动作模型。",
-      "innovation": "用 point tracking 作为额外的运动监督，把长时序动力学从光照/纹理 nuisance 中分离出来。",
-      "method": "单个 denoising diffusion transformer 同时去噪潜在视觉观测、带可见性的 2D 轨迹、以及动作。",
-      "results": "LIBERO 和真机 LeRobot 上优于纯像素基线，长时序、遮挡、出框场景增益最大。"
-    },
-    "scores": {
-      "relevance": 9.0,
-      "recency": 7,
-      "popularity": 7.0,
-      "quality": 7.5,
-      "recommendation": 8.0
-    },
-    "affiliations": ["Aalto University"]
-  },
-  {
-    "arxiv_id": "2605.23220",
-    "summary": "想正经评估世界模型 agent 的对抗鲁棒性，但手调攻击不准，遍历搜索又太贵。WMAttack 把它变成有限预算下的攻击配置搜索：用 SCAS 根据 reward 退化反馈优化提议分布，用 RGAR 从相似表示任务里检索好用的旧配置 warm start。DreamerV3 Atari 的归一化 reward 下降从 0.497 拉到 1.034，DMC 从 0.319 到 0.682。",
-    "highlights": {
-      "contribution": "提出针对世界模型 agent 的自动化对抗攻击搜索框架。",
-      "innovation": "SCAS 自纠正攻击搜索 + RGAR 表示引导检索，给闭环 latent 动力学攻击提供高效搜索。",
-      "method": "把鲁棒性评估建成有限预算的攻击配置搜索（攻击族、扰动预算、步数、重启、分配）；SCAS 用 reward 退化/动作不稳定/方差反馈更新分布；RGAR 从历史相似任务检索 warm start。",
-      "results": "DreamerV3 Atari 归一化 reward drop 0.497 → 1.034；DMC 0.319 → 0.682；消融显示 SCAS/RGAR 各自有效。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 7,
-      "popularity": 6.0,
-      "quality": 7.5,
-      "recommendation": 7.0
-    },
-    "affiliations": ["NTU", "USTC"]
+    "affiliations": [
+      "Ghent University"
+    ]
   },
   {
     "arxiv_id": "2605.23699",
@@ -159,7 +78,9 @@
       "quality": 7.5,
       "recommendation": 7.4
     },
-    "affiliations": ["Max Planck Institute"]
+    "affiliations": [
+      "Max Planck Institute"
+    ]
   },
   {
     "arxiv_id": "2605.23845",
@@ -177,25 +98,9 @@
       "quality": 7.5,
       "recommendation": 7.3
     },
-    "affiliations": ["Oregon State University"]
-  },
-  {
-    "arxiv_id": "2605.28865",
-    "summary": "一个挺有意思的实验：让 VAE 世界模型只做随机具身探索、不接触任何语言监督，问它的潜空间会不会自发出现「语义」。结果方向准确率 0.677 vs 随机编码器 0.547，位置 RSA 提升 6.6×。KL 调大潜空间几何结构就崩，语义对齐也同步崩，作者把这归到一个 shared-driver 假设。",
-    "highlights": {
-      "contribution": "在无语言监督下，验证物理几何是世界模型潜表示的组织原则。",
-      "innovation": "用「双重击倒」实验（KL 调高）证明几何结构和语义对齐是共驱动现象，而非 CNN 归纳偏置。",
-      "method": "VAE 世界模型在随机具身探索数据上训练；在 20 个 checkpoint 上跟踪预测性能与语义对齐；变更 β 做敏感性分析。",
-      "results": "方向准确率 0.677±0.029 vs 随机 0.547；位置 RSA 0.192 vs 0.029（6.6×）；预测与语义相关 Spearman r=-0.61, p=0.004。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 7,
-      "popularity": 5.5,
-      "quality": 6.5,
-      "recommendation": 6.6
-    },
-    "affiliations": []
+    "affiliations": [
+      "Oregon State University"
+    ]
   },
   {
     "arxiv_id": "2605.23345",
@@ -213,25 +118,9 @@
       "quality": 7.0,
       "recommendation": 6.7
     },
-    "affiliations": ["PKU"]
-  },
-  {
-    "arxiv_id": "2605.23470",
-    "summary": "想从横截面快照（不是时间序列）里恢复个体的连续轨迹。CADENCE 用 score-based 编码器消除 diffeomorphic 不可识别性，再用 Soft MoE 路由器把动力学锚到个体级静态上下文。理论上给出了单时点轨迹推断的可识别性保证，跨多个 benchmark 和真实生物数据上能匹配甚至超过用密集轨迹训出来的 SOTA。",
-    "highlights": {
-      "contribution": "在极稀疏甚至纯横截面数据下，从单时点快照恢复个体连续动力学轨迹。",
-      "innovation": "score-based bijective Probability Flow ODE 编码器 + SMoE 路由，给出新的单时点可识别性证明。",
-      "method": "对单时点快照学习潜空间动力学；用静态上下文锚定个体；Probability Flow ODE 编码 + SMoE 动力学路由联合训练。",
-      "results": "在物理系统到真实生物数据多个 benchmark 上，仅用稀疏快照训练即可匹配或超过用密集轨迹训的 SOTA 序列模型。"
-    },
-    "scores": {
-      "relevance": 5.0,
-      "recency": 7,
-      "popularity": 5.5,
-      "quality": 7.5,
-      "recommendation": 6.2
-    },
-    "affiliations": ["DZNE", "University of Washington"]
+    "affiliations": [
+      "PKU"
+    ]
   },
   {
     "arxiv_id": "2605.23510",
@@ -249,7 +138,9 @@
       "quality": 7.0,
       "recommendation": 5.5
     },
-    "affiliations": ["SINTEF"]
+    "affiliations": [
+      "SINTEF"
+    ]
   },
   {
     "arxiv_id": "2606.00085",
@@ -267,25 +158,9 @@
       "quality": 7.0,
       "recommendation": 6.0
     },
-    "affiliations": ["George Mason University"]
-  },
-  {
-    "arxiv_id": "2605.23287",
-    "summary": "LangFlash 一发前向就从稀疏无位姿的多视图重建 3D 场景，并且每个 Gaussian 都带语言对齐的语义特征。靠 global semantic dictionary + per-primitive 局部权重做稀疏语义编码降低复杂度。还在 RealEstate10k 上加了 dense 语义监督。",
-    "highlights": {
-      "contribution": "feed-forward 框架同时输出 Gaussian 几何和语言对齐语义，支持稀疏无位姿输入。",
-      "innovation": "全局语义字典 + 局部 per-primitive 权重的稀疏语义编码方案，兼顾语义保真和表示紧凑。",
-      "method": "Gaussian primitive 同时携带几何和语义特征；用增强后的 RealEstate10k 训练；前向一次出几何和语义。",
-      "results": "新视图合成和语义一致性优于已有方法；建立 pose-free 语言接地 3D 重建的新范式。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 7,
-      "popularity": 7.0,
-      "quality": 7.5,
-      "recommendation": 7.3
-    },
-    "affiliations": ["Harvard"]
+    "affiliations": [
+      "George Mason University"
+    ]
   },
   {
     "arxiv_id": "2605.23672",
@@ -303,7 +178,9 @@
       "quality": 7.5,
       "recommendation": 7.0
     },
-    "affiliations": ["Harvard"]
+    "affiliations": [
+      "Harvard"
+    ]
   },
   {
     "arxiv_id": "2605.23602",
@@ -321,7 +198,9 @@
       "quality": 7.0,
       "recommendation": 6.3
     },
-    "affiliations": ["NUS"]
+    "affiliations": [
+      "NUS"
+    ]
   },
   {
     "arxiv_id": "2605.23888",
@@ -339,7 +218,9 @@
       "quality": 7.5,
       "recommendation": 7.2
     },
-    "affiliations": ["TUM"]
+    "affiliations": [
+      "TUM"
+    ]
   },
   {
     "arxiv_id": "2605.23892",
@@ -357,7 +238,10 @@
       "quality": 7.5,
       "recommendation": 7.6
     },
-    "affiliations": ["Google", "Toronto"]
+    "affiliations": [
+      "Google",
+      "Toronto"
+    ]
   },
   {
     "arxiv_id": "2605.24111",
@@ -375,7 +259,10 @@
       "quality": 7.5,
       "recommendation": 7.4
     },
-    "affiliations": ["IIIT Hyderabad", "MBZUAI"]
+    "affiliations": [
+      "IIIT Hyderabad",
+      "MBZUAI"
+    ]
   },
   {
     "arxiv_id": "2605.24114",
@@ -393,60 +280,214 @@
       "quality": 7.0,
       "recommendation": 5.5
     },
-    "affiliations": ["Fraunhofer HHI", "NVIDIA"]
+    "affiliations": [
+      "Fraunhofer HHI",
+      "NVIDIA"
+    ]
   },
   {
-    "arxiv_id": "2605.23165",
-    "summary": "把 VLM 拿来做自主探索的高层决策。机器人在 frontier 决策点把当前地图 + 各个 frontier 的图像组成多模态 prompt 喂给 VLM，让它替换掉传统的几何启发式来挑下一个前沿。在 6 个室内仿真场景里 map coverage 比已有方法提升最多 24%，免训练、可迁移。",
+    "arxiv_id": "2605.23414",
+    "summary": "多智能体规划失败常常不是因为执行错了，而是 agent 自己对自己的知识边界判断不清楚 — 作者管这个叫 epistemic miscalibration。他们提了一个叫 EPC-AW 的工作流，不直接验证计划可行性，而是看在不同信息条件下计划是否依然成立，并且让多个 agent 之间相互一致地选 plan。最后实验显示系统级成功率平均涨了 9.75%。",
     "highlights": {
-      "contribution": "VLM 引导的 frontier-based 自主探索 pipeline。",
-      "innovation": "把 frontier 选择从几何启发式换成 VLM 的上下文空间推理，无需训练。",
-      "method": "在决策点合成 map + 每个 frontier 的图像作为多模态 prompt 给 VLM；VLM 输出选择，下层走经典控制栈。",
-      "results": "6 个室内仿真场景平均 map coverage 提升最多 24%；轻量、训练-free。"
-    },
-    "scores": {
-      "relevance": 6.0,
-      "recency": 7,
-      "popularity": 5.5,
-      "quality": 6.5,
-      "recommendation": 6.0
-    },
-    "affiliations": ["UC Berkeley"]
-  },
-  {
-    "arxiv_id": "2605.23271",
-    "summary": "做电影级视频生成的评测。EvalVerse 不再问「对不对」（prompt-following），而是想问「好不好」（电影质量/演技/美学）。按 pre/production/post 拆分类、收专家标注、用 expert-calibrated finetuning 教 VLM 做显式 CoT 评分。还涵盖多镜头剪辑和音画整合。",
-    "highlights": {
-      "contribution": "面向专业电影级视频生成的 pipeline-aware、专家校准评测框架 EvalVerse。",
-      "innovation": "把电影专业知识系统数字化：评测分类法对齐影片工作流，用专家校准的 CoT VLM 替代传统打分。",
-      "method": "1) 按 pre/production/post 构造评测分类法；2) 收集大规模专家标注；3) 用 expert-calibrated finetuning 训 VLM 做显式 CoT 评分。",
-      "results": "在保留兼容传统「对不对」指标的同时显著扩展「好不好」评估，覆盖复杂多镜头剪辑和音画整合。"
-    },
-    "scores": {
-      "relevance": 4.0,
-      "recency": 7,
-      "popularity": 7.0,
-      "quality": 7.5,
-      "recommendation": 6.2
-    },
-    "affiliations": ["Stanford", "HKUST(GZ)"]
-  },
-  {
-    "arxiv_id": "2605.23883",
-    "summary": "MLLM 细粒度理解差。PGT 在图像上叠加无歧义的几何 primitives 当作额外稠密监督，把视觉接地能力从语义先验里解耦出来，顺带还能用来定位感知失败的来源。LLaVA-v1.5-Instruct 加 PGT 数据微调，在 What'sUp 上 +20%、CV-Bench-2D 上 +13.3%。",
-    "highlights": {
-      "contribution": "提出 Procedurally Generated Tasks，用程序生成的几何 primitive 监督显著提升 MLLM 细粒度视觉接地。",
-      "innovation": "把视觉接地从语义先验解耦的程序化数据增强 + 同时可作诊断工具定位感知失败来源。",
-      "method": "在图像上叠加几何 primitive 作为 dense 监督；用 LLaVA-v1.5-Instruct 等做 instruction tuning；在多种关系/数量/3D/depth benchmark 评估。",
-      "results": "LLaVA-v1.5-Instruct 上 What'sUp +20%、CV-Bench-2D +13.3%；SOTA MLLM 也能 +5.5%/+8.3%，且不掉一般感知能力。"
+      "contribution": "把 LLM 多智能体规划失败归因到一种新的 epistemic miscalibration 现象，并给出一个矫正用的 agentic workflow。",
+      "innovation": "区别于直接验证可行性的做法，他们用信息一致性选 plan，并把过去的不一致用来引导未来 epistemic state 的精修。",
+      "method": "构建 Epistemic Planning Calibration Agentic Workflow：用 Information-consistency-based Plan Selection 在多 agent 评估稳定的 plan 间挑选，再用 Consistency-guided Epistemic State Refinement 把历史不一致反馈进来动态调整。",
+      "results": "系统级成功率相比基线平均提升 9.75%，跨任务都体现出对 latent / dynamic 规划失败的缓解。"
     },
     "scores": {
       "relevance": 6.5,
       "recency": 7,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.24138",
+    "summary": "作者想搞清楚两个 LLM agent 在角色化协作编程（Designer + Programmer 做斐波那契小游戏）里到底是怎么互动的，挑了 7 个开源模型组合的 12 种配对做案例研究。结果发现只有 DeepSeek-R1:DeepSeek-R1 那一组从第一轮就收敛到正确解并保持住，LLaMA 3.2、Qwen3 配对虽然角色对齐很强但偏离了正确解，其它对就一直发散。算是给多 agent 编程的 convergence/stop condition 校准敲了个警钟。",
+    "highlights": {
+      "contribution": "系统比较了多种开源 LLM 配对在双 agent 编程协作中的效率、一致性、有效性三个维度。",
+      "innovation": "用 BLEU/ROUGE 量化 Designer/Programmer 的角色对齐，把发散和过早共识做成可观察指标。",
+      "method": "选 7 个开源 LLM（Gemma 2/3、LLaMA 3.2/3.3、DeepSeek-R1、MiniCPM、Qwen3）组 12 个配对，跑 Designer-Programmer 多轮对话生成斐波那契游戏，用编译成功率、迭代收敛速度、角色一致性等做评估。",
+      "results": "DeepSeek-R1 自配对在首轮即收敛并稳定到底；LLaMA 3.2、Qwen3 自配对角色对齐强但答案错；其余配对均未收敛。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.24219",
+    "summary": "现有 hallucination benchmark 多数只看 agent 的最终输出，忽略了中间 Thought-Action-Observation 步骤里的幻觉。作者搞了个 Trajel 数据集，配上 5 类幻觉分类（factual / referential / logical / procedural / scope-based），基于 AssetOpsBench 的专家标注 trace，做了一套 trajectory 级别的检测评估。结果发现近一半 hallucinated 轨迹同时多种类型，标准 post-hoc 验证捉不到，trajectory-aware 检测明显更强。",
+    "highlights": {
+      "contribution": "提出 Trajel — 一个 trajectory 级别多 agent 工业工作流幻觉审计的数据集和评估框架，含五类幻觉分类。",
+      "innovation": "把 hallucination 检测从最终答案推进到 Thought-Action-Observation 轨迹层，并提出多类型并发的幻觉特征。",
+      "method": "基于 AssetOpsBench 专家标注的 agent trace 构建 Trajel，定义五类幻觉，benchmark 监督检测模型在 subtask / trajectory / long-context 三个粒度上的表现。",
+      "results": "近一半 hallucinated 轨迹涉及多种类型；trajectory-aware 检测显著超过 post-hoc 验证；高二元准确率的检测器在最 subtle 类型上仍误判。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.24069",
+    "summary": "MCP 给 LLM agent 装外部工具的时候，把恶意指令藏在工具描述里（不是代码里）会怎样？作者把这种攻击叫 Tool Description Poisoning，做了 32 个高保真场景、覆盖 6 个风险类别的 MCP-TDP benchmark，发现 GPT-4o 这种主流模型在 6 个高风险场景下 ASR 接近 100%，常见的 prompt 护栏基本无效甚至更糟。最后他们提了一个 Reactive Self-Correction 机制让 agent 自己事后回滚。",
+    "highlights": {
+      "contribution": "首个针对 MCP Tool Description Poisoning 的安全 benchmark，并提出反应式自纠错的初步防御。",
+      "innovation": "把攻击面从可执行代码挪到工具描述的语义层，并指出常规 prompt 护栏的 \"Firewall Fallacy\" 反作用。",
+      "method": "搭一个高保真 MCP 沙箱，造 32 个真实任务、6 类风险，跑 8 个主流 LLM 算 Attack Success Rate；提出 Reactive Self-Correction，让 agent 执行后检测并回滚自身恶意动作。",
+      "results": "GPT-4o 在 6 个高风险场景接近 100% ASR；常见 prompt 护栏多数无效；反应式自纠错在 benchmark 上提供初步缓解。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.23574",
+    "summary": "Long-horizon agent 经常出现一个怪现象：每一步看起来都对，但用户让它收集 100 个东西它就是凑不齐。作者把这定义为 Quantitative Goal Persistence（QGP），做了个 PushBench：用外部 verifier 量化重复提交、虚假完成、进度漂移这些隐藏失败。结果显示状态跟踪 retrieval controller 在 50 件任务上 69-78% 成功率，但 frontier agent 在 100 件任务上掉到 9 个里 3 个。",
+    "highlights": {
+      "contribution": "定义 Quantitative Goal Persistence 问题，发布 PushBench 量化 long-horizon agent 的坚持完成能力。",
+      "innovation": "外部 verifier-backed 度量重复、伪完成、漂移，而不是看最终的 success flag；并提出 work-unit / state-tracking 两种 controller。",
+      "method": "构建 PushBench，任务为 repository artifact 收集；设计状态跟踪 retrieval controller 与 backlog-tracking work-unit controller；并 black-box 对比 Claude Code (Sonnet 4.6) 和 Codex CLI (gpt-5.4)。",
+      "results": "状态跟踪 controller 在标准设置取得 69-78% 成功率并消除重复提交；frontier agent 50 件任务能做但 100 件时仅 3/9 成功，揭示量化目标对持久性的额外要求。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.23657",
+    "summary": "现在 LLM agent 用社区贡献的 \"skill\"（结构化工作流指令）越来越多，但没人系统评过到底哪些 skill 真有用。作者搞了 OpenSkillEval，从五类下游应用（PPT、网页设计、海报、可视化、报告）动态生成 600+ 任务，配上 30 个开源 skill 做对照评测。结论挺打脸：很多热门 skill 并不能稳定超过裸 agent，skill 的收益强依赖底层模型和 agent 框架。",
+    "highlights": {
+      "contribution": "提出一个动态、任务接地的 skill 评估框架 OpenSkillEval，用于 LLM agent 的开放 skill 生态审计。",
+      "innovation": "不靠静态 benchmark，而是从真实世界 artifact 动态合成任务，并对 community skill 做统一对照。",
+      "method": "在 5 类下游应用上自动构造 600+ 任务实例，收集 30 个开源 skill，跑多种 SOTA 模型 + agent framework，比较 skill 对效果和成本的影响。",
+      "results": "skill 可用性不等于会用；很多 popular skill 没法稳定超过 no-skill baseline；skill 收益强依赖底层模型和 framework。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.23899",
+    "summary": "这篇是 model-generated agent skill 的全生命周期系统研究：从经验生成 → skill 抽取 → skill 消费三个阶段一起拆。作者发现 skill 平均有用但有不少 negative transfer，提取强的模型不一定是会用 skill 的消费者，反之也成立。他们还提了一个 meta-skill 去引导抽取流程，让 skill 质量更稳。微软 Bei Liu / Xue Yang / Dongdong Chen / Chong Luo 那批人都在作者列表里，含金量较高。",
+    "highlights": {
+      "contribution": "首个覆盖 experience generation / skill extraction / skill consumption 全生命周期的 model-generated skill 系统研究。",
+      "innovation": "拆解 extractor 和 consumer 的非对称性，量化 negative transfer，并提出引导 skill 提取的 meta-skill。",
+      "method": "搭 utility-grounded 评估框架跨 5 个 agentic domain；逐阶段分析经验组成对 skill 质量的影响；提炼出 meta-skill 引导提取流程并实证。",
+      "results": "model-generated skill 平均有效但存在显著 negative transfer；extractor 与 consumer 角色解耦；meta-skill 在所有 domain 上一致提升质量并减少负迁移。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 7,
       "popularity": 7.5,
       "quality": 8.0,
-      "recommendation": 7.5
+      "recommendation": 7.6
     },
-    "affiliations": ["Meta FAIR", "Mila"]
+    "affiliations": [
+      "Microsoft Research",
+      "Fudan University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.24197",
+    "summary": "多智能体自动工作流里常出 \"agentic misalignment\"：agent 用一个隐式 proxy utility 行动，看起来在干活但偏离了人类目标。作者从 Bayesian 视角说明这是 posterior collapse，然后提了 Agentic Evidence Attribution（AEA）— 用上下文相关的证据去修正 agent 后验，包含自反思和 weak-to-strong 两种实例化。实验显示一个小的 evidence model 就能正交地把 MAS 拉回正轨。",
+    "highlights": {
+      "contribution": "形式化定义自动工作流中的 agentic misalignment，并提出 Agentic Evidence Attribution 这一对齐范式。",
+      "innovation": "用 Bayesian posterior collapse 解释 misalignment 现象；用结构化 evidence 而非更强 prompt 来对齐多 agent。",
+      "method": "把 MAS misalignment 建模为 generic utility 下的 posterior collapse，提出两种 AEA 实例：内部自反思和外部 weak-to-strong 证据生成；用小 evidence model 给 agent 做正交失败归因。",
+      "results": "小型 evidence model 即可显著改善多 agent 协作的可靠性，验证 evidence-based alignment 在自动工作流上的有效性。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.1
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.24216",
+    "summary": "监控 LLM agent 的隐藏恶意行为很难，因为攻击常是延迟、上下文相关、长时序的。作者提了 Agent-ToM，把 Theory-of-Mind 引进 monitor：显式推理 agent 的信念、意图、期望动作和偏离基线的程度，再用 Reason-Verify-Refine 流水线决策，并把 critique 蒸馏成 \"语义护栏记忆\" 复用。SHADE-Arena / CUA-SHADE-Arena 上 precision-recall 平衡和 SOTA 表现都很好。",
+    "highlights": {
+      "contribution": "提出基于 Theory-of-Mind 的学习型 agent 监控框架 Agent-ToM，专门对付 covert long-horizon 攻击。",
+      "innovation": "显式建模 belief / intent / expected action，并把 critique 蒸馏到跨 episode 复用的 semantic guardrail memory。",
+      "method": "推理时用 Reason-Verify-Refine 两次调用做监控决策；训练时把验证 critique 累积到 semantic guardrail memory；在对抗 agent 监控 benchmark 上微调和评估。",
+      "results": "在 SHADE-Arena 和 CUA-SHADE-Arena 上 precision-recall 平衡优于现有 ensemble baseline。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.24249",
+    "summary": "医疗领域跨机构数据做联邦学习的最大头疼之一是 schema/语义异构，得先 harmonize。作者搞了 PrivFusion，一个隐私保护的多 agent 框架，让 agent 分析本地数据、跨站点聚类语义相近的特征，并反复推荐转换直到对齐，再交给 FL。在 4 个 COVID-19 异构数据集上证明能有效降低人工对齐成本。",
+    "highlights": {
+      "contribution": "提出 PrivFusion，一个 federated 训练前自动化 schema/语义 harmonization 的多 agent 框架。",
+      "innovation": "把数据集 harmonization 这一传统 FL 痛点做成 multi-agent agentic 流程，并保持隐私保护。",
+      "method": "多个 agent 在本地分析数据、聚类相似特征、迭代推荐 transform 直到跨站点对齐，再进入 FL；隐私保护通过本地处理 + 受控信息交换实现。",
+      "results": "在 4 个异构 COVID-19 数据集上验证有效，显著减少手工 harmonization 工作量。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": [
+      "IBM Research"
+    ]
+  },
+  {
+    "arxiv_id": "2605.27433",
+    "summary": "数据服务市场治理需要前置仿真，但现有研究主要看数据级表现，没法刻画多主体、多层级的异构关系。作者引入服务生态系统理论，对市场参与者做三层效用度量，并设计了一套基于异构多智能体网络的分析方法。实验验证了方法在效用评估上的有效性。偏经济/MAS 仿真，跟具身关系不大。",
+    "highlights": {
+      "contribution": "提出基于异构多智能体建模的数据服务市场度量与网络分析方法。",
+      "innovation": "把服务生态系统理论与异构 multi-agent 网络结合，给出三层主体的价值创造效用度量。",
+      "method": "用服务生态系统理论确定参与者和外部因素；构建异构 multi-agent 模型对三层主体做效用计算；设计度量方法分析网络对效用的影响。",
+      "results": "通过实验验证方法在数据服务市场度量上的可行性，主要为定性/仿真结果。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 7,
+      "popularity": 4.5,
+      "quality": 5.5,
+      "recommendation": 4.8
+    },
+    "affiliations": [
+      "Shandong University"
+    ]
   }
 ]

@@ -1,77 +1,5 @@
 [
   {
-    "arxiv_id": "2605.11750",
-    "summary": "VLA 在精细操作的关键阶段一旦出错就容易直接翻车，作者觉得问题在于训练数据全是成功样本，模型根本不知道什么算「危险时刻」。他们做了一个 test-time 的「做梦」模块，在判断进入关键阶段时多采样几条候选动作，再用一个见过成败和边界样本的 Evaluator 想象短期未来挑出最好的那条。在真机和仿真上都看到成功率明显涨。",
-    "highlights": {
-      "contribution": "提出一个测试时刻的 critical-phase dreaming 框架，让 VLA 在关键阶段能预演并规避失败动作。",
-      "innovation": "把成功+失败+边界数据一起训一个 Dream Evaluator 来做短时未来评估，而不是只学成功示范。",
-      "method": "三件套：Dream Trigger 判断是否进入关键阶段；Action Proposer 从 VLA 采样多条候选动作 chunk；Dream Evaluator 想象短期未来打分挑最优。",
-      "results": "在真机和仿真操作任务上整体成功率提升，作者公开了 GitHub 代码。"
-    },
-    "scores": {
-      "relevance": 9.0,
-      "recency": 6,
-      "popularity": 6.5,
-      "quality": 7.5,
-      "recommendation": 7.8
-    },
-    "affiliations": ["HKU", "Northwestern"]
-  },
-  {
-    "arxiv_id": "2605.11809",
-    "summary": "现在的 VLA 动作头大多直接在世界坐标系出动作，作者觉得这浪费了几何结构。他们换了个思路：每步先预测一个旋转把动作搬到局部 motion-centric 坐标系，再用一组共享 prototype 组合出动作。结果学到的局部系几何上自然对齐了末端运动方向，对几何扰动鲁棒性也变好。",
-    "highlights": {
-      "contribution": "提出 MCF-Proto，一个轻量动作头通过 motion-centric 局部坐标 + prototype 参数化重写 VLA 的动作输出方式。",
-      "innovation": "不再死磕世界坐标系，而是让策略每步自学一个 SO(3) 旋转，把动作压到几何上更紧凑的局部系里。",
-      "method": "每步预测 R_t ∈ SO(3)，在变换后的局部系内用一组 prototype 组合出动作再映回世界系，端到端训练，无需额外方向监督。",
-      "results": "动作分布更紧凑，几何扰动下鲁棒性提升；提供了匿名代码仓库。"
-    },
-    "scores": {
-      "relevance": 8.5,
-      "recency": 6,
-      "popularity": 5.5,
-      "quality": 7.0,
-      "recommendation": 7.3
-    },
-    "affiliations": ["XJTU"]
-  },
-  {
-    "arxiv_id": "2605.11832",
-    "summary": "单目输入下 VLA 的深度模糊一直是个坎。作者借用预训练的多视角扩散模型合成「假新视角」，再用一个几何引导的 Gated Transformer 把多视角特征对齐过滤遮挡噪声。动作侧引入 Action Manifold Learning，直接在有效动作流形上预测，跳过对噪声/速度这类无结构目标的回归。在 LIBERO、RoboTwin 2.0 和真机上都比 SOTA 强。",
-    "highlights": {
-      "contribution": "把多视角先验和动作流形学习一起塞进 VLA，缓解单目深度模糊并提升动作学习效率。",
-      "innovation": "用预训练 multi-view diffusion 合成 latent 新视角；动作预测改成在动作流形上做而不是回归噪声。",
-      "method": "G3T 用 3D 几何引导对齐多视角特征并过滤遮挡；AML 在动作流形上直接出动作。",
-      "results": "LIBERO、RoboTwin 2.0、真机任务上成功率与鲁棒性均超 SOTA 基线，提供 project page。"
-    },
-    "scores": {
-      "relevance": 9.0,
-      "recency": 6,
-      "popularity": 6.5,
-      "quality": 7.8,
-      "recommendation": 8.0
-    },
-    "affiliations": ["SYSU", "PKU"]
-  },
-  {
-    "arxiv_id": "2605.12090",
-    "summary": "这是一篇综述，给 VLA + 世界模型融合的新潮流起了个名字叫 WAM（World Action Model）。作者把现有方法按 Cascaded vs Joint 做了分类，再按生成模态、条件机制、动作解码方式细分，把数据生态（遥操作、人类示范、仿真、egocentric 视频）和评测协议也梳了一遍。是这个方向第一份系统综述。",
-    "highlights": {
-      "contribution": "首次系统定义并梳理 World Action Models 这一融合 VLA 与世界模型的范式，给出统一概念框架与分类法。",
-      "innovation": "把分散在不同架构和目标下的工作收拢到 WAM 概念下，并区分 Cascaded 与 Joint 两条路线。",
-      "method": "综述：定义 WAM、追溯 VLA 与 world model 起源、按结构分类、整理数据生态与视觉保真/物理常识/动作合理性的评测协议。",
-      "results": "提供该方向第一份系统综述，指出关键架构权衡与开放挑战，适合作为入门 reading list。"
-    },
-    "scores": {
-      "relevance": 9.5,
-      "recency": 6,
-      "popularity": 8.0,
-      "quality": 8.0,
-      "recommendation": 8.5
-    },
-    "affiliations": ["Fudan", "NUS"]
-  },
-  {
     "arxiv_id": "2605.12369",
     "summary": "现有 VLA 端到端学动作时经常被视觉捷径和环境噪声带跑偏。作者把 action decoder 拆成功能模块，给每个 attention head 单独配监督信号——一个学物体定位、一个学空间几何、一个学时序技能逻辑。结果在域内域外都比强 baseline 稳，质量好坏与任务成功率正相关。",
     "highlights": {
@@ -87,7 +15,10 @@
       "quality": 7.5,
       "recommendation": 7.8
     },
-    "affiliations": ["SJTU", "Fudan"]
+    "affiliations": [
+      "SJTU",
+      "Fudan"
+    ]
   },
   {
     "arxiv_id": "2605.12386",
@@ -105,115 +36,10 @@
       "quality": 8.0,
       "recommendation": 7.7
     },
-    "affiliations": ["Georgia Tech", "UVA"]
-  },
-  {
-    "arxiv_id": "2605.11678",
-    "summary": "自动驾驶 VLA 动辄要 20-60GB 显存，消费级显卡根本跑不动。作者不改模型，纯靠系统层优化解决：分层按需加载、流水线把传输藏到计算里，再用一个基于剖析的 GPU 驻留层放置策略。把 NVIDIA Alpamayo-R1-10B（21.52GB）在 16GB 5070Ti 上跑起来，比 Accelerate offloading 快最高 3.55x，还是全 BF16。",
-    "highlights": {
-      "contribution": "提出系统级显存交换框架，让大型 VLA 在 12-16GB 消费级 GPU 上 OOM-free 推理。",
-      "innovation": "三阶段：层级按需加载 + 传输/计算流水重叠 + 基于 residency benefit 的驻留层决策；性能预测模型剖析一次就能定最优配置。",
-      "method": "对 VLA 前向做分层 swap 调度，不修改模型权重，BF16 精度无损；用 <1.3% 误差的性能模型选驻留层数量与位置。",
-      "results": "Alpamayo-R1-10B 在 RTX 5070Ti 上比 Accelerate offloading 加速最高 3.55x，保持全 BF16。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 6,
-      "popularity": 6.0,
-      "quality": 7.5,
-      "recommendation": 7.0
-    },
-    "affiliations": ["Kookmin University"]
-  },
-  {
-    "arxiv_id": "2605.11714",
-    "summary": "纸张这类柔软材料的抓取一直被忽视，它对压应力特别敏感，跟布料不一样。作者用软爪+环境约束系统研究了几种抓取策略，建了力学和运动学模型，再搭了个测力和成功率评测系统看材料和工况怎么影响抓取。最后总结了不同策略各自适合的工作区间，瞄准家庭服务机器人场景。",
-    "highlights": {
-      "contribution": "针对纸张类柔性材料系统化研究基于环境约束的软爪抓取策略与力学/运动学建模。",
-      "innovation": "把对压应力敏感的 paper-like 材料单独建模，跟传统 cloth 抓取拉开区别。",
-      "method": "基于已有 manipulation primitives 设计若干环境约束抓取策略，建立力学/运动学模型，并搭实验台测抓取力与成功率。",
-      "results": "归纳出各策略的适用工作区间，为家庭服务机器人抓取平面柔性物体提供参考。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 6,
-      "popularity": 4.5,
-      "quality": 6.0,
-      "recommendation": 5.2
-    },
-    "affiliations": ["NUAA"]
-  },
-  {
-    "arxiv_id": "2605.11817",
-    "summary": "VLA 的视觉 token 太多导致推理慢，常规剪枝又会把接触点这种关键几何信息删掉。作者把压缩重新当成「几何感知的连续重采样」——加一个可微 grid sampler，在视觉编码器里自适应预测一组显著坐标，用可微插值取特征。LIBERO 和真机实验里 FLOPs 砍掉 76% 成功率不掉，视觉 token 只用不到 10%。",
-    "highlights": {
-      "contribution": "提出 GridS，一个 plug-and-play 可微网格采样器，对 VLA 视觉 token 做任务感知的连续重采样以保留几何细节。",
-      "innovation": "把视觉 token 压缩从离散剪枝改成可微连续重采样，避免接触点等关键几何信息被丢。",
-      "method": "在 vision encoder 内自适应预测一组显著坐标，用可微插值抽特征，替代原始 token 流。",
-      "results": "LIBERO 与真机上 FLOPs 减少 76% 成功率无下降，视觉 token 用量 <10%；代码已开源。"
-    },
-    "scores": {
-      "relevance": 8.5,
-      "recency": 6,
-      "popularity": 6.5,
-      "quality": 7.8,
-      "recommendation": 7.6
-    },
-    "affiliations": ["University of Sydney"]
-  },
-  {
-    "arxiv_id": "2605.11951",
-    "summary": "传统失败恢复都是先检测→再推理→再恢复，延迟高还容易过载。作者借鉴人类「提前想好怎么救场」的思路，提出 AgentChord：执行前就把任务建模成有向图，并预先挂上 anticipatory recovery branch，遇到偏差直接触发预编译的恢复，不用现想。靠 composer/arranger/conductor 三个 agent 分工，在长程双臂操作上成功率和效率都涨。",
-    "highlights": {
-      "contribution": "提出 AgentChord，把长程操作建模为带 anticipatory recovery 分支的任务图，实现 proactive 失败恢复。",
-      "innovation": "从 reactive 的 detect-reason-recover 变为预先规划好的 recovery 分支，触发即恢复无需重规划。",
-      "method": "三 agent 编排：composer 构建任务图，arranger 加预案分支，conductor 编译并用低延迟 monitor 监控触发恢复。",
-      "results": "在多个长程双臂操作任务上成功率和效率明显提升，project page 已公开。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 6,
-      "popularity": 6.0,
-      "quality": 7.0,
-      "recommendation": 6.8
-    },
-    "affiliations": ["CUHK-Shenzhen"]
-  },
-  {
-    "arxiv_id": "2605.12160",
-    "summary": "用户输入指令时机器人其实在干等好几秒，挺浪费。作者加了个小模块 Premover：在 VLA backbone 冻结的情况下，挂两个投影头把图像 patch 和语言 token 映到同一空间，做 patch 级注意力重加权，再用一个学到的「准备好了没」阈值决定何时真正出动作。LIBERO 上端到端时间从 34s 降到 29.4s，成功率几乎不掉（95.1% vs 95.0%）。",
-    "highlights": {
-      "contribution": "提出 Premover，让 VLA 在用户输入指令的空档期就开始预热，缩短端到端响应时间。",
-      "innovation": "用流式 prefix + 一个 readiness 阈值控制何时真的开始动作，避免天真 premoving 导致成功率暴跌。",
-      "method": "冻结 backbone 加两个投影头映射图像/语言 token 到共享空间，用仿真渲染的物体 mask 做 focus 监督，再用 streaming prefix 学 readiness 阈值。",
-      "results": "LIBERO 端到端 wall-clock 时间 34.0s → 29.4s（-13.6%），成功率 95.1% vs 95.0%；naive premoving 仅 66.4%。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 6,
-      "popularity": 5.5,
-      "quality": 7.0,
-      "recommendation": 6.7
-    },
-    "affiliations": ["UNIST"]
-  },
-  {
-    "arxiv_id": "2605.12162",
-    "summary": "空间感知和动作生成现在多半是单向解耦的，作者觉得这限制了精细操作。X-Imitator 把它做成双向闭环：当前位姿预测条件在过去动作上，反之亦然，让空间推理和动作生成互相精修。架构是模块化的，可以塞进各种 visuomotor policy。在 24 个仿真 + 3 个真机任务上比 vanilla 和带显式位姿引导的方法都要好。",
-    "highlights": {
-      "contribution": "提出 X-Imitator，将空间感知和动作生成耦合为双向闭环 imitation learning 框架。",
-      "innovation": "不再把位姿当单向条件，而是动作-位姿互为条件、互相精修，模仿人类内部 forward model。",
-      "method": "双路径架构，当前位姿条件于过去动作、动作条件于过去位姿，模块化可插入到不同 visuomotor 策略中。",
-      "results": "24 个仿真任务和 3 个真机任务上都明显超过 vanilla 与显式位姿引导的方法，代码即将开源。"
-    },
-    "scores": {
-      "relevance": 8.0,
-      "recency": 6,
-      "popularity": 6.5,
-      "quality": 7.2,
-      "recommendation": 7.3
-    },
-    "affiliations": ["SJTU"]
+    "affiliations": [
+      "Georgia Tech",
+      "UVA"
+    ]
   },
   {
     "arxiv_id": "2605.12236",
@@ -231,7 +57,10 @@
       "quality": 7.5,
       "recommendation": 7.4
     },
-    "affiliations": ["UW", "USC"]
+    "affiliations": [
+      "UW",
+      "USC"
+    ]
   },
   {
     "arxiv_id": "2605.12416",
@@ -249,7 +78,9 @@
       "quality": 8.0,
       "recommendation": 7.5
     },
-    "affiliations": ["Imperial College London"]
+    "affiliations": [
+      "Imperial College London"
+    ]
   },
   {
     "arxiv_id": "2605.12622",
@@ -267,7 +98,10 @@
       "quality": 7.8,
       "recommendation": 7.6
     },
-    "affiliations": ["Tsinghua", "Shanghai AI Lab"]
+    "affiliations": [
+      "Tsinghua",
+      "Shanghai AI Lab"
+    ]
   },
   {
     "arxiv_id": "2605.12624",
@@ -285,7 +119,10 @@
       "quality": 8.0,
       "recommendation": 8.1
     },
-    "affiliations": ["Tsinghua", "CUHK"]
+    "affiliations": [
+      "Tsinghua",
+      "CUHK"
+    ]
   },
   {
     "arxiv_id": "2605.12625",
@@ -303,61 +140,10 @@
       "quality": 7.8,
       "recommendation": 7.6
     },
-    "affiliations": ["Tsinghua", "CUHK"]
-  },
-  {
-    "arxiv_id": "2605.18813",
-    "summary": "世界模型在记忆上一直顾此失彼：transformer 保真但二次注意力太贵，RNN/SSM 扩展性好但细节糊。作者干脆把「未来-过去一致性」解耦出来，用一组互补专家做扩散世界模型——短时记忆专家管局部动力学，长期记忆专家把历史存在测试时微调的扩散权重里，再加一个空间长期记忆专家保几何一致。在仿真和真机上时序一致性、历史召回、导航都涨。",
-    "highlights": {
-      "contribution": "提出基于扩散+对比 product-of-experts 的世界模型框架，组合短时/长时/空间长时三种异构记忆专家。",
-      "innovation": "不再让单架构兼顾所有记忆尺度，而是用 product-of-experts 组合，长时记忆甚至通过测试时微调存到 diffusion 权重里。",
-      "method": "三类专家共同建模：短时记忆捕局部动力学，长时记忆通过 test-time finetune 存历史，空间长时记忆保几何，contrastive product-of-experts 融合。",
-      "results": "仿真和真实基准上时序一致性、过去观测召回率、导航性能均提升，避免 mode collapse 并支持长上下文。"
-    },
-    "scores": {
-      "relevance": 8.5,
-      "recency": 6,
-      "popularity": 6.5,
-      "quality": 7.8,
-      "recommendation": 7.7
-    },
-    "affiliations": ["University of Bern"]
-  },
-  {
-    "arxiv_id": "2605.16395",
-    "summary": "之前的世界模型大都在 latent 或视觉空间里「自由幻想」，缺物理约束。OrbiSim 把世界模型重定位为完全可微的物理引擎，从显式状态转移到视觉观测生成端到端可微，能做 differentiable 接触、稀疏奖励下的梯度策略优化和直观物理推理。实验里在预测保真度和控制性能上都明显超现有世界模型。",
-    "highlights": {
-      "contribution": "提出 OrbiSim，把世界模型重新定义为面向具身智能的全可微物理引擎，统一资产→神经动力学→RL 通路。",
-      "innovation": "从隐空间想象转向物理 grounded、端到端可微的物理仿真，可支持可微接触和梯度策略优化。",
-      "method": "构建端到端可微的仿真闭环：显式状态转移 + 神经动力学 + 视觉观测生成，可被结构化场景资产驱动。",
-      "results": "预测保真度和控制性能上明显超 SOTA 世界模型，对资产和物理参数响应一致，可作为可微仿真+策略训练工具。"
-    },
-    "scores": {
-      "relevance": 8.5,
-      "recency": 6,
-      "popularity": 7.0,
-      "quality": 7.8,
-      "recommendation": 7.8
-    },
-    "affiliations": ["SJTU"]
-  },
-  {
-    "arxiv_id": "2605.12178",
-    "summary": "企业系统的转移动力学是 tenant 特定的业务逻辑而且会变，离线训出来的世界模型一上线就脆。作者提出 enterprise discovery agent：与其只靠学到的内置 dynamics，不如在推理时直接读系统配置去恢复转移规则。配套放出 CascadeBench 基准，发现离线训世界模型分布内表现不错但 deployment shift 后掉得厉害，discovery-based agent 则稳很多。",
-    "highlights": {
-      "contribution": "针对企业系统这种可配置可读取转移规则的场景，提出 runtime discovery agent 取代纯离线世界模型。",
-      "innovation": "首次指出在 dynamics 可配置且可读的环境里，世界模型应在推理时从配置 grounding 而非完全内化。",
-      "method": "提出 enterprise discovery agent 在 runtime 读取系统配置恢复转移逻辑，并发布 CascadeBench 评测协议覆盖 deployment shift。",
-      "results": "实验表明离线世界模型在分布内 OK 但 deployment shift 后退化，discovery agent 在 shift 下更鲁棒。"
-    },
-    "scores": {
-      "relevance": 5.0,
-      "recency": 6,
-      "popularity": 5.5,
-      "quality": 6.8,
-      "recommendation": 5.8
-    },
-    "affiliations": ["ServiceNow", "Mila"]
+    "affiliations": [
+      "Tsinghua",
+      "CUHK"
+    ]
   },
   {
     "arxiv_id": "2605.12289",
@@ -375,7 +161,9 @@
       "quality": 7.2,
       "recommendation": 6.8
     },
-    "affiliations": ["Shanghai AI Lab"]
+    "affiliations": [
+      "Shanghai AI Lab"
+    ]
   },
   {
     "arxiv_id": "2605.12334",
@@ -393,60 +181,304 @@
       "quality": 7.5,
       "recommendation": 8.0
     },
-    "affiliations": ["Tsinghua"]
+    "affiliations": [
+      "Tsinghua"
+    ]
   },
   {
-    "arxiv_id": "2605.11711",
-    "summary": "Model-based 表征是个香饽饽，但常常学不到足够相关变量，还容易过拟合 replay buffer 里早期样本。DR.Q 显式最大化当前 (s,a) 表征和 next state 表征间的互信息，再用 faded prioritized experience replay 让早期样本影响逐渐淡出。一套超参跑多个连续控制基准，能匹配或超过近期强 baseline。",
+    "arxiv_id": "2605.12255",
+    "summary": "这篇是哲学/AI 理论小品：作者讨论为什么不同人看同样数据得到不同结论。他把这种现象形式化成 world model 的不可识别性，引入一个 (R, E, S, D) 推理画像，从两层（参数层与模型层）解释分歧，并连到深度表示学习。基本是个 position paper，没有实验。",
     "highlights": {
-      "contribution": "提出 DR.Q，用互信息最大化 + faded PER 修正 model-based 表征学习的两个偏差。",
-      "innovation": "显式互信息约束保证捕获相关变量；faded prioritized replay 抑制早期经验过拟合。",
-      "method": "在 Q-learning 表征损失里同时最小化预测偏差并最大化 (s,a) 与 s' 表征互信息；用 faded PER 调整采样权重。",
-      "results": "多个连续控制基准上单一超参可媲美或超越近期强 baseline，部分任务明显领先，代码已开源。"
+      "contribution": "把'不同人看同样观测得出不同结论'这件事形式化成 world model 的不可识别性，提供一个推理画像框架来描述差异。",
+      "innovation": "区分 θ 层和 W 层两种不可识别性，引入 (Reference, Exploration, Stabilization, Horizon) 这个推理画像，把分歧投影到几个抽象基上。",
+      "method": "纯概念框架：定义推理画像 θ=(R,E,S,D)，描述观测 o + 模型 W 如何在不同 θ 下产生不同输出，并用 AI 监管讨论作为案例分析。",
+      "results": "无定量实验，仅给出概念分析与一个 AI 监管讨论的定性案例。"
     },
     "scores": {
-      "relevance": 5.5,
+      "relevance": 4.0,
       "recency": 6,
-      "popularity": 6.0,
+      "popularity": 4,
+      "quality": 5.0,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.18832",
+    "summary": "作者把 Transformer 套上贝叶斯滤波视角：attention 看作精度加权 kriging、残差连接当 Kalman 更新、FFN 当动态传播。落地在推荐和 LLM 微调里，对 cold-start、噪声标签这种不确定性大的场景特别有效，几乎不增加成本。",
+    "highlights": {
+      "contribution": "提出 Bayesian Filtering Transformer (BFT)，给 Transformer 引入逐 token 的不确定性建模，可以无痛替换任意层。",
+      "innovation": "把 attention/残差/FFN 三件套统一解释成 kriging + Kalman 更新 + 动态传播，并用 REML 估计观测精度，不引入额外参数。",
+      "method": "在每层加 precision-weighted attention 和带 Jacobian + process noise 的精度传播，REML 估观测精度，可叠在三大序列推荐架构和 LLM SFT 上。",
+      "results": "推荐系统六个 benchmark 都有提升，特别是 cold-start 用户与稀有 item；LLM SFT 在 token 标签噪声和 RAG 噪声上下文两种场景都更鲁棒。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 6,
+      "popularity": 6,
       "quality": 7.0,
-      "recommendation": 6.2
+      "recommendation": 5.5
     },
-    "affiliations": ["Tsinghua", "Tencent"]
+    "affiliations": []
   },
   {
-    "arxiv_id": "2605.12053",
-    "summary": "符号任务描述和可执行机器人动作之间总有「动作执行鸿沟」。作者提出 Motion Statecharts 作为可执行符号表示，把约束、监视器、嵌套 statechart 自由组合；再用一个统一可微的运动学世界模型涵盖机器人和环境，跨平台部署。用 lMPC 实现 task-function 方法，靠 jerk 约束保证任务切换平滑。框架叫 Giskard，在 8 个机器人平台上跑通了。",
+    "arxiv_id": "2605.12437",
+    "summary": "针对体育这种同步多视角动态场景，作者认为 4D 那种复杂时序耦合其实没必要。直接用第一帧 SfM 点云初始化 3DGS，然后沿时间传播优化即可。同时还放出一套基于 Blender 的标准化动态 NVS benchmark 工具链。",
     "highlights": {
-      "contribution": "提出 Motion Statecharts 与 Giskard 框架，跨平台桥接高层符号任务描述与底层可执行机器人动作。",
-      "innovation": "用可执行 statechart 表达运动约束，配合统一可微运动学世界模型支持跨 embodiment 泛化与 jerk-bounded 平滑切换。",
-      "method": "Motion Statecharts 组合约束、监视器和嵌套 statechart；统一可微运动学 world model 描述机器人+环境；lMPC 实现 task-function 控制。",
-      "results": "在 8 种机器人平台多种环境下成功部署，验证跨平台可迁移性；框架已开源。"
+      "contribution": "证明同步多视角设置下不需要时序变形约束就能做高效的 retrospective dynamic NVS，并提供一个标准化的动态 NVS benchmark 框架。",
+      "innovation": "把同步多相机带来的几何约束当作主要先验，去掉以往动态 3DGS 的时序耦合，把方法做得更简单且高效。",
+      "method": "第一帧 SfM 点云初始化 3DGS，每个时间步只用单帧多视图监督优化 Gaussians 并沿时间传播；配套 Blender pipeline 生成同步标定多视图数据集。",
+      "results": "在新构建的动态多视图 benchmark 上展示了相对 NeRF/3DGS 基线的可控对比，主打效率而非时序约束。"
     },
     "scores": {
-      "relevance": 5.5,
+      "relevance": 6.5,
       "recency": 6,
-      "popularity": 5.5,
-      "quality": 6.8,
-      "recommendation": 5.8
+      "popularity": 5,
+      "quality": 6.5,
+      "recommendation": 6.5
     },
-    "affiliations": ["University of Bremen"]
+    "affiliations": []
   },
   {
-    "arxiv_id": "2605.12167",
-    "summary": "视频生成模型可以「想象」长程未来观测，但直接拿预测帧或视频解码成动作总有视觉真实和控制相关性的错配。MoLA 不让 policy 看预测帧，而是用一组预训练 inverse dynamics 模型，从生成的视觉转移里推一组潜动作。这些 IDM 各管语义、深度、光流一个模态，输出结构化、物理可解释的动作表示。LIBERO/CALVIN/LIBERO-Plus 和真机都看到一致提升。",
+    "arxiv_id": "2605.12494",
+    "summary": "Gaussian Splatting 做表面重建时经常被光度歧义坑。作者发现 3DGS 自己其实有'歧义自指示'潜力，于是设计 AmbiSuR：先做光度去歧义约束几何，再用一个 ambiguity indication 模块识别欠约束区域并指导修正。",
     "highlights": {
-      "contribution": "提出 MoLA，用 mixture of inverse dynamics models 把视频想象的未来转成执行导向的潜动作表示。",
-      "innovation": "不把预测帧当 policy 输入，而是用多模态 IDM 抽取语义/深度/光流互补的潜动作，把视觉想象与策略执行解耦。",
-      "method": "对生成视频的视觉转移用 modality-aware IDM mixture 推潜动作，再喂给 policy 当结构化、物理 grounded 的动作 prior。",
-      "results": "LIBERO、CALVIN、LIBERO-Plus 以及真机操作任务上成功率、时序一致性、泛化均一致提升。"
+      "contribution": "提出 AmbiSuR 框架，专门针对 Gaussian Splatting 表面重建中的光度歧义问题，提升复杂场景下表面质量。",
+      "innovation": "首次指出 3DGS 内置的两种 primitive-wise 歧义和自指示潜力，并用此潜力做欠约束区域识别，而不是引入额外网络。",
+      "method": "在 3DGS 优化里加光度去歧义约束逼出确定表面，再用 ambiguity indication 模块自我标记欠约束部分并指导校正，端到端可微渲染训练。",
+      "results": "在多个具有挑战性的场景上相比现有 GS 表面重建方法均有更好的表面质量，体现较强通用性。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 6,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.12774",
+    "summary": "动态场景下做相机位姿估计一直很烦，大多 SLAM/SfM 都假设静态。作者把 MASt3R 的 3D 感知前端冻起来当 backbone，叠一个可微 bundle adjustment 和高容量运动 mask 检测器，做出一个动静都行的统一位姿估计器 WildPose。",
+    "highlights": {
+      "contribution": "提出统一的单目位姿估计框架 WildPose，在动态、静态、低自运动场景下都能稳定保持 SOTA。",
+      "innovation": "把 feedforward 3D 模型（MASt3R）当冻结的 3D-aware backbone，配上 differentiable BA 和共享 backbone 的运动 mask 检测器，做出统一前后端。",
+      "method": "冻结 MASt3R 提多层 3D-aware 特征，构建 3D-aware update operator 用于可微 BA；同时用同一 backbone 喂高容量运动 mask 检测器，端到端训练。",
+      "results": "在 Wild-SLAM、Bonn（动态）、TUM、7-Scenes（静态）、Sintel（低自运动）上一致超过先前方法。"
     },
     "scores": {
       "relevance": 8.5,
       "recency": 6,
-      "popularity": 6.5,
-      "quality": 7.5,
-      "recommendation": 7.6
+      "popularity": 7,
+      "quality": 8.0,
+      "recommendation": 8.0
     },
-    "affiliations": ["Fudan", "Surrey"]
+    "affiliations": [
+      "Stanford"
+    ]
+  },
+  {
+    "arxiv_id": "2605.12376",
+    "summary": "表格清洗/变换/匹配 LLM 经常生成语法对但语义错的代码。作者搞了个多 agent 框架 ProfiliTable：先 Profiler 用 ReAct 做数据探索，再 Generator 检索算子合成代码，最后 Evaluator-Summarizer 闭环改写。",
+    "highlights": {
+      "contribution": "提出基于 dynamic profiling 的多 agent 表格处理框架 ProfiliTable，提升复杂多步表格任务的可靠性。",
+      "innovation": "把 dynamic profiling 作为核心机制，建立统一的执行上下文，并与算子检索、闭环改写结合而非靠单轮 prompt 出代码。",
+      "method": "Profiler 做 ReAct 数据探索建语义；Generator 检索精选算子合成代码；Evaluator-Summarizer 注入执行评分与诊断反馈做闭环改写。",
+      "results": "覆盖 18 类表格任务的 benchmark 上一致优于强基线，复杂多步场景增益最明显。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 6,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.12294",
+    "summary": "现在 GUI agent 每屏都要 LLM 重新解读再决策，长任务又慢又脆。作者搞了个 Executable Agentic Memory：把 GUI 经验沉淀成知识图谱，规划时用一个轻量 Q 函数引导 MCTS 在图上检索路径，再去执行。",
+    "highlights": {
+      "contribution": "提出 EAM，将 GUI agent 的规划从自由生成转为图上检索+执行，显著提高长任务可靠性并降低成本。",
+      "innovation": "用 state-aware DFS + action-group mining 自动构建可执行的 GUI 知识图谱，并用 value-guided 的 Q-MCTS 做高效图搜索，还给出理论 sample complexity。",
+      "method": "构造阶段做 DFS 探索并挖掘多步动作组压缩为路径；推理阶段用 Q-function 引导 MCTS 在 KG 上检索路径并直接执行；含 bias-consistency 与路径恢复样本复杂度证明。",
+      "results": "AndroidWorld 上比 UI-TARS-7B 高出最多 19.6%，相比 GPT-4o token 成本降 6×，平均延迟 2.8s。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 6,
+      "popularity": 7,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": [
+      "Tsinghua"
+    ]
+  },
+  {
+    "arxiv_id": "2605.12375",
+    "summary": "商业农场的草莓/玉米产量预测数据稀薄，传统模型不够。作者用 LLM agent 给已有预测做后处理修正，agent 里挂上物候期检测、bias 学习、范围校验这些领域工具。Llama 3.1 8B 当 agent 最稳。",
+    "highlights": {
+      "contribution": "提出用结构化 LLM agent 对农业产量预测做 post-hoc 修正的框架，不依赖卫星/传感器等高密度数据。",
+      "innovation": "把农业领域知识拆成物候期检测、bias 学习、范围验证等可调用工具，做的是修正现有模型而不是端到端建模。",
+      "method": "在 XGBoost/Moirai2/Random Forest 的输出之上叠一个 agent，agent 调用 phase detection、bias learning、range validation 等工具进行后处理修正。",
+      "results": "草莓上 XGBoost 的 MAE 降 20%、MASE 降 56%；Moirai2 和 RF 也有一致提升；Llama 3.1 8B 是最稳的修正模型，LLaVA 13B 不稳定。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 6,
+      "popularity": 4,
+      "quality": 6.0,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.22842",
+    "summary": "多 agent 系统出问题大家通常归咎于模型 misalignment，但作者指出真正凶手可能是 memory 中毒——把恶意文档塞进共享向量库，过段时间作为可信上下文复现。文章把这种攻击形式化，并给出检测与防御。",
+    "highlights": {
+      "contribution": "识别并形式化 Misattribution Gap 与 Semantic Norm Drift 攻击：memory 层投毒会被误判为模型失效，并放出第一个 SND 对抗 memory benchmark。",
+      "innovation": "提出 Counterfactual Composition Testing 检测因果入口（87.5% 准确，零误报），并证明 Retrieval-Coverage Dilemma 限制了自适应规避策略。",
+      "method": "用 Trust Laundering Chain 把恶意文档变成可信上下文；构造 64 个失败案例、510 检查点；提出 Memory-Persistent Information-Flow Control 在跨 session 边界阻断攻击。",
+      "results": "现有四个安全分类器 510 检查点零检出；CCT 检测准确率 87.5%、零误报；MP-IFC 在跨 session 边界阻断 97% 攻击。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 6,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.12718",
+    "summary": "作者认为多 agent debate 在有标准答案的任务上其实是 martingale 且 voting 才是主要收益。所以他们把战场切到 defeasible 推理（每个立场都可被更好的论证击败），搞了个 CHAL 框架，每个 agent 维护 Bayesian 风格的信念图。",
+    "highlights": {
+      "contribution": "提出 CHAL，把多 agent 辩论作为 defeasible argumentation 下的信念优化引擎，而非追求 ground truth。",
+      "innovation": "每个 agent 维护 graph-structured 的 CHAL Belief Schema，用论点强度做可微目标，把 epistemology/logic/ethics 抬到可配置超参。",
+      "method": "agent 之间多轮辩论，每轮按梯度信号更新各自 CBS；调度器价值系统决定整体走向；通过消融研究展示信念轨迹、council 多样性等可解释效应。",
+      "results": "消融实验展示调度器价值系统决定信念轨迹方向、council 多样性提升所有 agent 信念质量，框架在多个领域可泛化。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 6,
+      "popularity": 4,
+      "quality": 6.0,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.18831",
+    "summary": "找一种可以让胰岛素脱离冷链的聚合物：作者让 LLM 通过 MCP 调 OpenMM/Packmol 物理仿真，在离散 PSMILES 空间里做 agentic 搜索，LLM 当隐式 acquisition function，从'发现世界'里更新假设并指导下一步。",
+    "highlights": {
+      "contribution": "用 physics-grounded 的 agentic workflow 在 PSMILES 空间里做胰岛素载体聚合物发现，在受限 oracle 预算下超过 RL 和贝叶斯优化基线。",
+      "innovation": "把 LLM 当隐式 acquisition function，通过 MCP 调用物理仿真工具，并维护一个持久的'discovery world'积累假设/文献/仿真结果。",
+      "method": "LLM 在每轮挑下一个 PSMILES 候选，用 OpenMM + Packmol 评估 insulin-polymer 相互作用能；物理 check 拒绝不可行结构；commodity CPU 上跑。",
+      "results": "最优 campaign 达到 -2263 kJ/mol 相互作用能，比 RL baseline 高 68%，比 Bayesian 优化高 19%；三次独立 campaign 收敛到同一结构 motif。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 6,
+      "popularity": 4,
+      "quality": 6.5,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.12239",
+    "summary": "agent harness（prompt+工具+memory+编排）现在是 LLM agent 工程的中心抽象，但还没有正式理论。作者把它放进 categorical Architecture 三元组 (G, Know, Phi)，并给出向 LangGraph、Swarms 等框架的编译器实现。",
+    "highlights": {
+      "contribution": "用 categorical Architecture 三元组形式化 agent harness 设计，并提供向多个主流框架的编译器实现以验证理论对应。",
+      "innovation": "把 Memory/Skills/Protocols/Harness 四件套映射到 categorical 对象（coalgebra/operad/syntactic wiring），用 Know-level certificate 表达结构性保证。",
+      "method": "构造 (G, Know, Phi) 三元组；实现编译器 functor 编译到 Swarms、DeerFlow、Ralph、Scion、LangGraph；用一个升级 escalation 实验验证 model-parametric 行为。",
+      "results": "四个配置编译器对三种 certificate 做 identity 或 replay 保持；LangGraph 编译器通过共享 per-stage 执行路径保持同样 certificate；end-to-end escalation 实验确认 model-parametric。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 6,
+      "popularity": 4,
+      "quality": 5.5,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.12240",
+    "summary": "订票这种服务 agent 在长任务里经常违规、幻觉调工具、用户意图也跟丢。作者搞了 NOD（Navigator-Operator-Director）三 agent 架构，把任务状态从对话里抽出来做显式 Global State，并在关键动作前加独立 Director 监督。",
+    "highlights": {
+      "contribution": "提出 NOD 异构多 agent 架构，提高 service agent 在长任务上的可靠性，降低策略违规、工具幻觉和意图偏差。",
+      "innovation": "将任务状态外化为结构化 Global State，并引入独立 Director 在关键动作前做选择性外部监督。",
+      "method": "Navigator 维护 Global State 做决策，Operator 执行调用，Director 在关键动作前独立验证并干预；在 τ²-Bench 上评估。",
+      "results": "在 τ²-Bench 上任务成功率与关键动作精度高于基线，并显著减少策略违规、工具幻觉和用户意图偏差。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 6,
+      "popularity": 5,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": [
+      "SJTU"
+    ]
+  },
+  {
+    "arxiv_id": "2605.12260",
+    "summary": "长程对话 agent 的 memory 越积越多，固定上下文窗口塞不下。PRISM 是个训练-free 的检索侧框架，把记忆当图，用 4 个推理时部件做 bundle 检索 + 压缩，意图路由让大部分 query 走零 LLM 通道。",
+    "highlights": {
+      "contribution": "提出 PRISM，一个 training-free 的长程 agent 记忆检索+压缩框架，在更小上下文预算下显著提升 LLM-judge 准确率。",
+      "innovation": "把检索建模为类型化路径模板上的 min-cost 选择，并与 LLM 端 evidence 压缩配合；用自适应意图路由让大多数 query 不调用 LLM。",
+      "method": "四个推理时部件：Hierarchical Bundle Search、Query-Sensitive Edge Costing、Evidence Compression、Adaptive Intent Routing；不改动 ingestion pipeline。",
+      "results": "LoCoMo benchmark 上以同协议基线一个数量级更小的上下文预算获得更高 LLM-judge 准确率，占据 accuracy-context-cost 前沿的新位置。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 6,
+      "popularity": 6,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.12280",
+    "summary": "多 agent LLM 系统的 prompt 规范其实承载数据契约和集成逻辑，但很少被严格审计。作者在 AEGIS 这套 7150 行 prompt 上做了 9 轮 Claude 子 agent 驱动的审计，记录了缺陷数随轮次的非单调收敛。",
+    "highlights": {
+      "contribution": "在一个真实七 lane 多 agent 编排系统上做单系统经验研究，展示迭代式 agent 驱动 prompt 规范审计能发现大量一致性缺陷。",
+      "innovation": "把 Weinberg-Freedman 风格 checklist walkthrough 适配到 prompt-spec 审计，并显式区分 prompt 规范缺陷与对抗代码缺陷。",
+      "method": "用 Claude 子 agent 在 AEGIS（约 7150 行 prompt）上跑 9 轮 checklist-driven 审计，事后做七类缺陷分类编码，并提出最终锁定 checklist。",
+      "results": "九轮共发现 51 个 prompt 一致性缺陷（15, 8, 12, 2, 8, 1, 4, 1, 0），收敛非单调；单文件审查会漏掉只能由扩范围审计发现的缺陷类。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 6,
+      "popularity": 3,
+      "quality": 5.5,
+      "recommendation": 4.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.12581",
+    "summary": "在部分可观测环境里让 agent 满足复杂 LTL 时序约束一直是老大难。作者搞了一个基于 belief 的可证明合法的 reward shaping，把它接到改进的 Monte Carlo Planning 框架里，让 agent 能在'迷雾'里搜出高成功率的策略。",
+    "highlights": {
+      "contribution": "提出可证明合法的 belief-dependent reward shaping 机制，让 POMDP 下满足 LTL 目标的 agent 合成变得可行。",
+      "innovation": "将认证的 LTL satisfaction 与 belief 相结合动态生成 reward，并嵌入 MCTS 风格搜索，规避 POMDP+LTL 的不可判定难题。",
+      "method": "在 belief space 上动态生成基于 LTL 满足度的 reward shaping 信号，并集成进增强 Monte Carlo Planning 框架做策略搜索。",
+      "results": "在多个 benchmark domain 上超过现有 solver，特别在原 solver 失败的场景仍然有效且具备可扩展性。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 6,
+      "popularity": 4,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": [
+      "Imperial College"
+    ]
   }
 ]

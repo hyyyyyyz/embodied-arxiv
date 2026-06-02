@@ -290,50 +290,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.02134",
-      "title": "Video Generation with Predictive Latents",
-      "authors": [
-        "Yian Zhao",
-        "Feng Wang",
-        "Qiushan Guo",
-        "Chang Liu",
-        "Xiangyang Ji",
-        "Jian Zhang",
-        "Jie Chen"
-      ],
-      "affiliations": [
-        "Peking University",
-        "Tsinghua University"
-      ],
-      "summary": "视频 VAE 的重建越来越好但生成不一定跟着涨，diffusability 才是瓶颈。PV-VAE 把预测学习塞进重建目标：随机扔掉未来帧、只编码部分过去观测，decoder 同时重建已观测帧加预测未来帧。这样 latent 自带时序预测结构。在 UCF101 上比 Wan2.2 VAE 收敛快 52%、FVD 提升 34.42。",
-      "original_abstract": "Video Variational Autoencoder (VAE) enables latent video generative modeling by mapping the visual world into compact spatiotemporal latent spaces, improving training efficiency and stability. While existing video VAEs achieve commendable reconstruction quality, continued optimization of reconstruction does not necessarily translate into improved generative performance. How to enhance the diffusability of video latents remains a critical and unresolved challenge. In this work, inspired by principles of predictive world modeling, we investigate the potential of predictive learning to improve the video generative modeling. To this end, we introduce a simple and effective predictive reconstruction objective that unifies predictive learning with video reconstruction. Specifically, we randomly discard future frames and encode only partial past observations, while training the decoder to reconstruct the observed frames and predict future ones simultaneously. This design encourages the latent space to encode temporally predictive structures and build a more coherent understanding of video dynamics, thereby improving generation quality. Our model, termed Predictive Video VAE (PV-VAE), achieves superior performance on video generation, with 52% faster convergence and a 34.42 FVD improvement over the Wan2.2 VAE on UCF101. Furthermore, comprehensive analyses demonstrate that PV-VAE not only exhibits favorable scalability, with generative performance improving alongside VAE training, but also yields consistent gains in downstream video understanding, underscoring a latent space that effectively captures temporal coherence and motion priors.",
-      "highlights": {
-        "contribution": "提出预测重建目标 PV-VAE，让视频 latent 更适合下游 diffusion 生成。",
-        "innovation": "把 predictive world modeling 的思想直接嵌入 VAE 训练目标——重建已观测加预测未观测——而不是另起一套预测模块。",
-        "method": "丢掉随机未来帧，仅编码过去观测，decoder 联合监督重建和预测，得到带时序预测结构的 latent。",
-        "results": "UCF101 上比 Wan2.2 VAE 收敛快 52%，FVD 提升 34.42；下游 video understanding 也涨，且具备可扩展性。"
-      },
-      "images": [],
-      "published_date": "2026-05-04T01:30:04Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 5.0,
-        "popularity": 6.5,
-        "quality": 8.0,
-        "recommendation": 7.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.02134v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.02134v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.02759",
       "title": "DynoSLAM: Dynamic SLAM with Generative Graph Neural Networks for Real-World Social Navigation",
       "authors": [
@@ -492,625 +448,611 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.02834",
-      "title": "VideoNet: A Large-Scale Dataset for Domain-Specific Action Recognition",
+      "arxiv_id": "2605.16309",
+      "title": "ANNEAL: Adapting LLM Agents via Governed Symbolic Patch Learning",
       "authors": [
-        "Tanush Yadav",
-        "Mohammadreza Salehi",
-        "Jae Sung Park",
-        "Vivek Ramanujan",
-        "Hannaneh Hajishirzi",
-        "Yejin Choi",
-        "Ali Farhadi",
-        "Rohun Tripathi",
-        "Ranjay Krishna"
+        "Safayat Bin Hakim",
+        "Keyan Guo",
+        "Wenkai Tan",
+        "Alvaro Velasquez",
+        "Shouhuai Xu",
+        "Houbing Herbert Song"
       ],
-      "affiliations": [
-        "Allen Institute for AI",
-        "University of Washington"
-      ],
-      "summary": "现在 VLM 几乎没人测动作识别了，作者觉得这是因为缺挑战性数据。VideoNet 横跨 37 个领域、1000 个细分动作。差距很显著：闭源 Gemini 3.1 Pro 多选 69.9%，开源 Qwen3-VL-8B 只有 45%；连放宽到二分类、给 few-shot 例子 VLM 都不能像人类那样有效利用。作者还放了 50 万级训练集，用它微调 Molmo2-4B 就超过所有 8B 开源模型。",
-      "original_abstract": "Videos are unique in their ability to capture actions which transcend multiple frames. Accordingly, for many years action recognition was the quintessential task for video understanding. Unfortunately, due to a lack of sufficiently diverse and challenging data, modern vision-language models (VLMs) are no longer evaluated on their action recognition capabilities. To revitalize action recognition in the era of VLMs, we advocate for a returned focus on domain-specific actions. To this end, we introduce VideoNet, a domain-specific action recognition benchmark covering 1,000 distinct actions from 37 domains. We begin with a multiple-choice evaluation setting, where the difference between closed and open models is stark: Gemini 3.1 Pro attains 69.9% accuracy while Qwen3-VL-8B gets a mere 45.0%. To understand why VLMs struggle on VideoNet, we relax the questions into a binary setting, where random chance is 50%. Still, Qwen achieves only 59.2% accuracy. Further relaxing the evaluation setup, we provide $k\\in\\{1,2,3\\}$ in-context examples of the action. Some models excel in the few-shot setting, while others falter; Qwen improves $+7.0\\%$, while Gemini declines $-4.8\\%$. Notably, these gains fall short of the $+13.6\\%$ improvement in non-expert humans when given few-shot examples. Finding that VLMs struggle to fully exploit in-context examples, we shift from test-time improvements to the training side. We collect the first large-scale training dataset for domain-specific actions, totaling nearly 500k video question-answer pairs. Fine-tuning a Molmo2-4B model on our data, we surpass all open-weight 8B models on the VideoNet benchmark.",
+      "affiliations": [],
+      "summary": "Agent 反复在同一个坑里栽跟头，根因往往不在权重也不在 prompt，而是符号化的流程知识没修。作者搞了个 ANNEAL，把每次失败定位到具体的算子，再让 LLM 生成 typed patch 去补流程知识图，还套了多维度评分、符号守卫和金丝雀测试才允许 commit。结果在 4 个域 27 次多 seed 实验里，ReAct/Reflexion 这些 baseline 还残留 72-100% 的复发失败率，ANNEAL 直接打到 0%。",
+      "original_abstract": "LLM-based agents can recover from individual execution errors, yet they repeatedly fail on the same fault when the underlying process knowledge--operator schemas, preconditions, and constraints--remains unrepaired. Existing self-evolving approaches address this gap by updating prompts, memory, or model weights, but none directly repair the symbolic structures that encode how tasks are executed, and few provide the governance guarantees required for safe deployment. We introduce ANNEAL, a neuro-symbolic agent that converts recurring failures into governed symbolic edits of a process knowledge graph without modifying foundation model weights. Its core mechanism, Failure-Driven Knowledge Acquisition (FDKA), localizes the responsible operator, synthesizes a typed patch through constrained LLM generation, and validates the proposal via multi-dimensional scoring, symbolic guardrails, and canary testing before commit. Every accepted edit carries full provenance and deterministic rollback capability. Across four domains and 27 multi-seed runs, ANNEAL is the only evaluated system that commits persistent structural repairs--strong baselines such as ReAct and Reflexion achieve high episodic recovery yet retain 72-100% holdout failure rates on recurring faults, whereas ANNEAL reduces these to 0% in the tested recurring-failure settings. Ablation confirms that removing FDKA eliminates all structural repairs and drops success rate by up to 26.7 percentage points. These results suggest that governed symbolic repair offers a complementary paradigm to weight-level and prompt-level adaptation for persistent fault elimination.",
       "highlights": {
-        "contribution": "VideoNet 把领域特化动作识别拉回 VLM 评测视野，并给出大规模训练数据填补开源差距。",
-        "innovation": "强调 domain-specific 而非泛化动作；多挡难度评测（多选→二分类→few-shot）系统揭示 VLM 真不会看动作，并配套放出 500k 训练数据。",
-        "method": "1000 actions × 37 domains 的视频题库；多选/二分类/k-shot 多重评测；50 万视频 QA 训练集；用其微调 Molmo2-4B。",
-        "results": "Gemini 3.1 Pro 69.9% vs Qwen3-VL-8B 45%；Qwen few-shot 仅 +7%，Gemini 反而 -4.8%，远低于人类 +13.6%；微调后的 Molmo2-4B 超过全部 8B 开源模型。"
+        "contribution": "提出一种 neuro-symbolic agent，能把反复出现的执行失败转成可治理的符号化流程知识修补，不动基座权重就消除递归错误。",
+        "innovation": "不再纠结改 prompt/memory/权重，而是直接编辑流程知识图里的算子 schema、前置条件和约束，并提供 provenance 与可回滚的治理机制。",
+        "method": "核心是 FDKA：定位失败算子 → constrained LLM 合成 typed patch → 多维评分 + 符号守卫 + canary test 校验通过后再 commit，每条 edit 都有完整 provenance 与确定性回滚。",
+        "results": "4 个域 27 次多 seed 跑下来，是唯一能持久修复结构的系统；递归失败率从 baseline 的 72-100% 降到 0%，去掉 FDKA 后成功率掉 26.7 个百分点。"
       },
       "images": [],
-      "published_date": "2026-05-04T17:11:16Z",
-      "categories": [
-        "cs.CV",
-        "cs.LG"
-      ],
-      "matched_domain": "Multi-modal",
-      "matched_keywords": [
-        "vision-language model",
-        "vlm"
-      ],
-      "scores": {
-        "relevance": 6.5,
-        "recency": 5.0,
-        "popularity": 7.5,
-        "quality": 8.0,
-        "recommendation": 7.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.02834v2",
-      "arxiv_url": "https://arxiv.org/abs/2605.02834v2",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.02600",
-      "title": "CoRAL: Contact-Rich Adaptive LLM-based Control for Robotic Manipulation",
-      "authors": [
-        "Berk Çiçek",
-        "Mert K. Er",
-        "Ozgur S. Oguz"
-      ],
-      "affiliations": [
-        "Bilkent University",
-        "University of Nottingham"
-      ],
-      "summary": "LLM/VLM 直接拿来做接触丰富的操控不灵：缺物理 grounding，控制也不够自适应。CoRAL 把 LLM 当成 cost designer 而不是控制器，让它写 cost function 给 MPPI 用；VLM 出语义先验（质量、摩擦），再在线 system ID 修正。LLM 根据反馈调 cost 结构改策略，还有 retrieval memory 复用历史。真机加仿真上比 SOTA VLA 和 foundation-model planner 平均提升 50%+ 成功率，尤其是利用墙面外部接触翻物体这种难任务。",
-      "original_abstract": "While Large Language Models (LLMs) and Vision-Language Models (VLMs) demonstrate remarkable capabilities in high-level reasoning and semantic understanding, applying them directly to contact-rich manipulation remains a challenge due to their lack of explicit physical grounding and inability to perform adaptive control. To bridge this gap, we propose CoRAL (Contact-Rich Adaptive LLM-based control), a modular framework that enables zero-shot planning by decoupling high-level reasoning from low-level control. Unlike black-box policies, CoRAL uses LLMs not as direct controllers, but as cost designers that synthesize context-aware objective functions for a sampling-based motion planner (MPPI). To address the ambiguity of physical parameters in visual data, we introduce a neuro-symbolic adaptation loop: a VLM provides semantic priors for environmental dynamics, such as mass and friction estimates, which are then explicitly refined in real time via online system identification, while the LLM iteratively modulates the cost-function structure to correct strategic errors based on interaction feedback. Furthermore, a retrieval-based memory unit allows the system to reuse successful strategies across recurrent tasks. This hierarchical architecture ensures real-time control stability by decoupling high-level semantic reasoning from reactive execution, effectively bridging the gap between slow LLM inference and dynamic contact requirements. We validate CoRAL on both simulation and real-world hardware across challenging and novel tasks, such as flipping objects against walls by leveraging extrinsic contacts. Experiments demonstrate that CoRAL outperforms state-of-the-art VLA and foundation-model-based planner baselines by boosting success rates over 50% on average in unseen contact-rich scenarios, effectively handling sim-to-real gaps through its adaptive physical understanding.",
-      "highlights": {
-        "contribution": "提出 zero-shot 接触丰富操控框架 CoRAL，把高层语义推理与低层自适应控制解耦。",
-        "innovation": "LLM 不当 controller 当 cost designer 加 VLM 出物理先验加在线 system ID 闭环修正；neuro-symbolic adaptation loop 把语义先验和真实物理校准串起来。",
-        "method": "LLM 合成 MPPI 的 task-aware cost；VLM 估质量/摩擦初值，在线辨识修正；LLM 根据反馈迭代调 cost 结构；检索记忆复用成功策略。",
-        "results": "仿真加真机的接触丰富任务（如借助墙面翻物）上比 SOTA VLA 和 foundation-model planner 平均成功率提升 50%+，对 sim-to-real gap 鲁棒。"
-      },
-      "images": [],
-      "published_date": "2026-05-04T13:49:19Z",
-      "categories": [
-        "cs.RO",
-        "cs.AI"
-      ],
-      "matched_domain": "Multi-modal",
-      "matched_keywords": [
-        "vision-language model",
-        "vlm"
-      ],
-      "scores": {
-        "relevance": 7.5,
-        "recency": 5.0,
-        "popularity": 6.0,
-        "quality": 7.5,
-        "recommendation": 7.2
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.02600v2",
-      "arxiv_url": "https://arxiv.org/abs/2605.02600v2",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.02130",
-      "title": "From Where Things Are to What They Are For: Benchmarking Spatial-Functional Intelligence in Multimodal LLMs",
-      "authors": [
-        "Le Zhang",
-        "Jihan Yang",
-        "Soundarya Krishnan",
-        "Jimit Majmudar",
-        "Xiou Ge",
-        "Prasoon Puri",
-        "Prathamesh Nandkishor Saraf",
-        "Shruti Bhargava",
-        "Dhivya Piraviperumal",
-        "Yinan Ling",
-        "Cindy Pan",
-        "Hong Yu",
-        "Aishwarya Agrawal",
-        "Bo-Hsiang Tseng"
-      ],
-      "affiliations": [
-        "Apple",
-        "University of Montreal"
-      ],
-      "summary": "现有 MLLM benchmark 多在测东西在哪里的几何感知，少有问东西干嘛用的功能推理。SFI-Bench 用 egocentric 室内视频扫描造了 1500+ 专家标注题，覆盖结构空间推理（条件计数、多跳关系、布局理解）和功能推理（affordance、语境下的可用性）。结果当前 MLLM 在把空间记忆加功能推理加外部知识结合上都很弱，成为 grounded 智能的瓶颈。",
-      "original_abstract": "Human-level agentic intelligence extends beyond low-level geometric perception, evolving from recognizing where things are to understanding what they are for. While existing benchmarks effectively evaluate the geometric perception capabilities of multimodal large language models (MLLMs), they fall short of probing the higher-order cognitive abilities required for grounded intelligence. To address this gap, we introduce the Spatial-Functional Intelligence Benchmark (SFI-Bench), a video-based benchmark with over 1,500 expert-annotated questions derived from diverse egocentric indoor video scans. SFI-Bench systematically evaluates two complementary dimensions of advanced reasoning: (1) Structured Spatial Reasoning, which requires understanding complex layouts and forming coherent spatial representations, and (2) Functional Reasoning, which involves inferring object affordances and their context-dependent utility. The benchmark includes tasks such as conditional counting, multi-hop relational reasoning, functional pairing, and knowledge-grounded troubleshooting, directly challenging models to integrate perception, memory, and inference. Our experiments reveal that current MLLMs consistently struggle to combine spatial memory with functional reasoning and external knowledge, highlighting a critical bottleneck in achieving grounded intelligence. SFI-Bench therefore provides a diagnostic tool for measuring progress toward more cognitively capable and truly grounded multimodal agents.",
-      "highlights": {
-        "contribution": "提了第一个把空间几何与功能 affordance 一起评测的视频 MLLM benchmark SFI-Bench，揭示当前模型短板。",
-        "innovation": "从 where 到 what-for 的视角切换：评测 conditional counting、多跳关系、功能配对、知识 grounded troubleshooting 等真正需要语义加记忆加推理结合的任务。",
-        "method": "基于 egocentric 室内视频扫描，专家标注 1500+ 题；任务覆盖结构化空间推理与功能推理两大类；评测主流 MLLM。",
-        "results": "主流 MLLM 在空间记忆加功能推理整合上一致性下降，benchmark 暴露了 grounded multimodal 智能的关键瓶颈。"
-      },
-      "images": [],
-      "published_date": "2026-05-04T01:19:36Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "Multi-modal",
-      "matched_keywords": [
-        "multimodal large language model",
-        "mllm",
-        "spatial reasoning"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 5.0,
-        "popularity": 6.5,
-        "quality": 7.0,
-        "recommendation": 7.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.02130v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.02130v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.02730",
-      "title": "Perceptual Flow Network for Visually Grounded Reasoning",
-      "authors": [
-        "Yangfu Li",
-        "Yuning Gong",
-        "Hongjian Zhan",
-        "Teng Li",
-        "Yuanhuiyi Lyu",
-        "Tianyi Chen",
-        "Qi Liu",
-        "Ziyuan Huang",
-        "Zhihang Zhong",
-        "Dandan Zheng",
-        "Yue Lu"
-      ],
-      "affiliations": [
-        "East China Normal University",
-        "Ant Group"
-      ],
-      "summary": "LVLM 标准 MLE 训练管不住视觉轨迹，容易语言偏置和幻觉。作者发现以前用视觉专家几何先验做监督偏几何精度、对推理帮助有限。PFlowNet 把感知和推理解耦做自条件生成，再用变分 RL 配多维奖励加邻域几何 shaping，引导推理导向的感知行为。V* Bench 90.6%、MME-RealWorld-lite 67.0% 新 SOTA。",
-      "original_abstract": "Despite the success of Large-Vision Language Models (LVLMs), general optimization objectives (e.g., standard MLE) fail to constrain visual trajectories, leading to language bias and hallucination. To mitigate this, current methods introduce geometric priors from visual experts as additional supervision. However, we observe that such supervision is typically suboptimal: it is biased toward geometric precision and offers limited reasoning utility. To bridge this gap, we propose Perceptual Flow Network (PFlowNet), which eschews rigid alignment with the expert priors and achieves interpretable yet more effective visual reasoning. Specifically, PFlowNet decouples perception from reasoning to establish a self-conditioned generation process. Based on this, it integrates multi-dimensional rewards with vicinal geometric shaping via variational reinforcement learning, thereby facilitating reasoning-oriented perceptual behaviors while preserving visual reliability. PFlowNet delivers a provable performance guarantee and competitive empirical results, particularly setting new SOTA records on V* Bench (90.6%) and MME-RealWorld-lite (67.0%).",
-      "highlights": {
-        "contribution": "提出 PFlowNet 解耦感知和推理，在视觉 grounded 推理上拿到 V* 和 MME-RealWorld-lite 双 SOTA。",
-        "innovation": "不再硬对齐几何专家先验，而是用 vicinal geometric shaping 加多维奖励加变分 RL，让感知服务于推理。",
-        "method": "感知-推理解耦的自条件生成框架；变分 RL 优化；多维奖励加邻域几何 shaping；保留视觉可靠性同时鼓励推理导向感知。",
-        "results": "V* Bench 90.6%、MME-RealWorld-lite 67.0% 创 SOTA，并提供性能保证理论。"
-      },
-      "images": [],
-      "published_date": "2026-05-04T15:31:11Z",
-      "categories": [
-        "cs.CV",
-        "cs.AI"
-      ],
-      "matched_domain": "Multi-modal",
-      "matched_keywords": [
-        "vision language model",
-        "vlm"
-      ],
-      "scores": {
-        "relevance": 5.0,
-        "recency": 5.0,
-        "popularity": 5.5,
-        "quality": 7.0,
-        "recommendation": 6.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.02730v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.02730v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.02537",
-      "title": "Orchestrating Spatial Semantics via a Zone-Graph Paradigm for Intricate Indoor Scene Generation",
-      "authors": [
-        "Meisheng Zhang",
-        "Shizhao Sun",
-        "Yang Zhao",
-        "Ziyuan Liu",
-        "Zhijun Gao",
-        "Jiang Bian"
-      ],
-      "affiliations": [
-        "Microsoft Research"
-      ],
-      "summary": "3D 室内场景合成在非凸房间加强空间约束下容易崩。数据驱动缺拓扑先验，迭代 agent 容易把语义碎掉。ZoneMaestro 切换到 Zone-Graph 范式：先把高层语义意图翻译成功能 zone 和拓扑约束，再编排具体对象。配套放了 Zone-Scene-10K 数据集，用交替对齐策略加 Z-GRPO 调和语义丰富与几何合法的张力，还出了 SCALE stress-test benchmark。比 SOTA 在结构连贯和意图遵循上都强。",
-      "original_abstract": "Autonomous 3D indoor scene synthesis breaks down in non-convex rooms with tightly coupled spatial constraints. Data-driven generators lack topological priors for long-horizon planning, while iterative agents fragment semantics and become geometrically brittle. We present ZoneMaestro, a unified framework that shifts the paradigm from object-centric synthesis to Zone-Graph Orchestration. By internalizing a novel zone-based logic, ZoneMaestro translates high-level semantic intent into functional zones and topological constraints, enabling robust adaptation to diverse architectural forms. To support this, we construct Zone-Scene-10K, a large-scale dataset enriched with explicit Zone-Graph annotations. We further introduce an Alternating Alignment Strategy that cycles between reasoning internalization and Zone-Aware Group Relative Policy Optimization (Z-GRPO), effectively reconciling the tension between semantic richness and geometric validity without relying on external physics engines. To rigorously evaluate spatial intelligence beyond convex primitives, we formally define the task of Intricate Spatial Orchestration and release SCALE, a stress-test benchmark for irregular indoor scenarios with complex, dense spatial relations. Extensive experiments demonstrate that ZoneMaestro resolves the density-safety dichotomy, significantly outperforming state-of-the-art baselines in both structural coherence and intent adherence.",
-      "highlights": {
-        "contribution": "把 3D 室内场景合成从 object-centric 切换到 Zone-Graph 编排，攻克非凸房间下的密集约束。",
-        "innovation": "提出 Zone-Graph 中介表示加 Zone-Aware GRPO，让生成器先理功能分区再摆物体，避免几何/语义对立；配套 Zone-Scene-10K 数据集与 SCALE benchmark。",
-        "method": "Zone-Scene-10K 数据加 Zone-Graph 注解；交替对齐策略循环 reasoning 内化与 Z-GRPO；无需外部物理引擎调和几何与语义。",
-        "results": "在 SCALE 等难度 benchmark 上结构连贯性和意图符合度全面超过 SOTA，专门面向不规则室内场景。"
-      },
-      "images": [],
-      "published_date": "2026-05-04T12:40:37Z",
-      "categories": [
-        "cs.RO",
-        "cs.AI"
-      ],
-      "matched_domain": "Multi-modal",
-      "matched_keywords": [
-        "long-horizon planning"
-      ],
-      "scores": {
-        "relevance": 5.0,
-        "recency": 5.0,
-        "popularity": 6.0,
-        "quality": 7.0,
-        "recommendation": 6.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.02537v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.02537v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.02168",
-      "title": "Planner Matters! An Efficient and Unbalanced Multi-agent Collaboration Framework for Long-horizon Planning",
-      "authors": [
-        "Wenyi Wu",
-        "Sibo Zhu",
-        "Kun Zhou",
-        "Biwei Huang"
-      ],
-      "affiliations": [
-        "UC San Diego"
-      ],
-      "summary": "LM agent 在长视野任务上挣扎。作者把任务分成 planner/actor/memory manager 三块，做系统的计算分配分析，发现 planner 才是主导因素，actor 和 memory 不需要那么多 compute。基于这个发现，只对 planner 做 RL（用 VLM-as-judge 给 trajectory-level reward），冻结其他组件。Web 导航、OS 控制、工具使用三类 benchmark 一致受益。",
-      "original_abstract": "Language model (LM)-based agents have demonstrated promising capabilities in automating complex tasks from natural language instructions, yet they continue to struggle with long-horizon planning and reasoning. To address this, we propose an enhanced multi-agent framework that decomposes automation into three roles: a planner for high-level decision-making, an actor for task execution, and a memory manager for contextual reasoning. While this modular decomposition aligns with established design patterns, our core contribution lies in a systematic compute-allocation analysis, revealing that planning is the dominant factor influencing task performance. Execution and memory management require significantly less compute and model capacity to achieve competitive results. Building on these insights, we introduce a planner-centric reinforcement learning approach, which exclusively optimizes the planner using trajectory-level rewards from a VLM-as-judge, while freezing the other components. Extensive experiments on benchmarks spanning web navigation, OS control, and tool use demonstrate that concentrating model capacity and learning on high-level planning yields robust and compute-efficient improvements in long-horizon agent automation. Our code is publicly released.",
-      "highlights": {
-        "contribution": "实证了多 agent 系统里 planner 是性能瓶颈，并提出只对 planner 做 RL 的高效训练方案。",
-        "innovation": "不是又造一个 multi-agent 框架，而是做系统的 compute allocation 分析，给出 planner-centric 的资源/学习分配指南。",
-        "method": "planner+actor+memory manager 三角色；trajectory-level VLM-as-judge 给 planner 奖励，其余冻结；测 web/OS/tool 三类长视野任务。",
-        "results": "在 web navigation、OS control、tool use 上一致提升，且 compute 高效；代码已开源。"
-      },
-      "images": [],
-      "published_date": "2026-05-04T02:58:05Z",
+      "published_date": "2026-05-04T05:24:03Z",
       "categories": [
         "cs.AI",
         "cs.LG",
         "cs.MA"
       ],
-      "matched_domain": "Multi-modal",
+      "matched_domain": "Agent",
       "matched_keywords": [
-        "vlm",
-        "long-horizon planning"
+        "llm agent",
+        "llm-based agent"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 5.0,
+        "popularity": 5.5,
+        "quality": 7.8,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.16309v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.16309v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04107",
+      "title": "TSCG: Deterministic Tool-Schema Compilation for Agentic LLM Deployments",
+      "authors": [
+        "Furkan Sakizli"
+      ],
+      "affiliations": [],
+      "summary": "OpenAI/Anthropic/MCP 这些 agent 框架把 tool schema 用 JSON 传给 LLM，但 JSON 是给机器解析的，对小模型尤其不友好。TSCG 在 API 边界把 JSON schema 编译成 token-efficient 的结构化文本，无需训练。Phi-4 14B 在 20 个 tool 下从 0% 提到 84.4%，token 还省 52-57%。",
+      "original_abstract": "Production agent frameworks (OpenAI Function Calling, Anthropic Tool Use, MCP) transmit tool schemas as JSON, a format designed for machine parsing, not for interpretation by language models. For small models (4B-14B), this protocol mismatch accounts for the majority of tool-use failure at production catalog sizes. We present TSCG, a deterministic tool-schema compiler that resolves this mismatch at the API boundary, converting JSON schemas into token-efficient structured text without model access, fine-tuning, or runtime search. TSCG combines eight composable operators with a formal compression bound (>=51% on well-formed schemas).   On TSCG-Agentic-Bench (about 19,000 calls, 12 models, 5 scenarios), TSCG restores Phi-4 14B from 0% to 84.4% accuracy at 20 tools (90.3% at 50 tools) and achieves 108-181% accuracy-retained ratio across three models on BFCL. Format-versus-compression decomposition (R^2=0.88 -> 0.03) establishes representation change as the dominant mechanism. Per-operator isolation across three frontier models reveals three distinct operator-response profiles: operator-hungry (Opus 4.7), operator-sensitive (GPT-5.2), and operator-robust (Sonnet 4), providing per-model deployment guidance. Scaling experiments show accuracy advantages persisting on heavy production MCP schemas (+5.0 pp at about 10,500 input tokens) despite saturation on light synthetic catalogs, with 52-57% token savings throughout. The synthetic benchmark generalizes to real MCP schemas within 0.1 accuracy points. TSCG ships as a 1,200-line zero-dependency TypeScript package.",
+      "highlights": {
+        "contribution": "提出确定性的 tool-schema 编译器 TSCG，把 JSON schema 转成 LLM 友好的结构化文本，提升小模型 tool use 准确率并省 token。",
+        "innovation": "8 个可组合算子构成的编译器，有形式化压缩下界 (≥51%)；不动模型、不微调、不做运行时搜索；把 format 改变作为主导机制（R² 0.88→0.03）。",
+        "method": "8 算子组合编译 JSON schema 为结构化文本；在 TSCG-Agentic-Bench (~19k calls, 12 模型) 和 BFCL 上评测；按算子隔离做 per-model 剖析。",
+        "results": "Phi-4 14B 20 个 tool 从 0% 到 84.4%、50 个 tool 到 90.3%；BFCL 上 108-181% 精度保持比；重型 MCP schema 上 +5.0 pp。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T15:35:45Z",
+      "categories": [
+        "cs.SE",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 5.0,
+        "popularity": 6.0,
+        "quality": 7.8,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04107v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04107v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02396",
+      "title": "HeavySkill: Heavy Thinking as the Inner Skill in Agentic Harness",
+      "authors": [
+        "Jianing Wang",
+        "Linsen Guo",
+        "Zhengyu Chen",
+        "Qi Guo",
+        "Hongyu Zang",
+        "Wenjie Shi",
+        "Haoxiang Ma",
+        "Xiangyu Xi",
+        "Xiaoyu Li",
+        "Wei Wang",
+        "Xunliang Cai"
+      ],
+      "affiliations": [],
+      "summary": "现在 agentic harness 设计越搞越复杂，但到底是什么真正驱动了性能？作者把 heavy thinking 提出来当成两阶段（并行推理 + 总结）内化在模型里的 inner skill，而不只是 orchestration 的一个执行单元。在多个域上系统实验显示，这个 skill 稳定超过 BoN，强 LLM 上甚至接近 Pass@N，并且可以通过 RL 进一步扩展深度和宽度。",
+      "original_abstract": "Recent advances in agentic harness with orchestration frameworks that coordinate multiple agents with memory, skills, and tool use have achieved remarkable success in complex reasoning tasks. However, the underlying mechanism that truly drives performance remains obscured behind intricate system designs. In this paper, we propose HeavySkill, a perspective that views heavy thinking not only as a minimal execution unit in orchestration harness but also as an inner skill internalized within the model's parameters that drives the orchestrator to solve complex tasks. We identify this skill as a two-stage pipeline, i.e., parallel reasoning then summarization, which can operate beneath any agentic harness. We present a systematic empirical study of HeavySkill across diverse domains. Our results show that this inner skill consistently outperforms traditional Best-of-N (BoN) strategies; notably, stronger LLMs can even approach Pass@N performance. Crucially, we demonstrate that the depth and width of heavy thinking, as a learnable skill, can be further scaled via reinforcement learning, offering a promising path toward self-evolving LLMs that internalize complex reasoning without relying on brittle orchestration layers.",
+      "highlights": {
+        "contribution": "把 heavy thinking 定义为可学习的内化 skill 而非外部 orchestration 单元，给出系统性证据并指向 self-evolving LLM 方向。",
+        "innovation": "提出 parallel reasoning → summarization 两阶段是 heavy thinking 的最小内化结构，独立于任何 agentic harness 存在并可被 RL 直接优化。",
+        "method": "把 heavy thinking 抽象为模型内的两阶段 pipeline；在多个域上系统对比 BoN/Pass@N；用 RL 扩展 heavy thinking 的深度与宽度。",
+        "results": "多个域上稳定超过 BoN，强 LLM 接近 Pass@N；RL 进一步放大 heavy thinking 收益，验证它是可被强化的 inner skill。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T09:37:04Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 5.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02396v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02396v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.03034",
+      "title": "Stable Agentic Control: Tool-Mediated LLM Architecture for Autonomous Cyber Defense",
+      "authors": [
+        "Kerri Prinos",
+        "Lilianne Brush",
+        "Cameron Denton",
+        "Zhanqi Wang",
+        "Joshua Knox",
+        "Snehal Antani",
+        "Anton Foltz",
+        "Amy Villaseñor"
+      ],
+      "affiliations": [],
+      "summary": "高对抗压力下的 SOC 需要可证明的稳定性，光靠 LLM 推理不够。作者搞了一个工具中介架构：LLM agent 用 Stackelberg 最佳响应、Bayesian 观察更新、攻击图 primitive 这些确定性工具，从有限动作集合里选，并用 Lean 4 机器验证 Lyapunov 函数证明可控性、可观性和 ISS 鲁棒性。在 282 个真实企业攻击图上证书有 margin，Claude Sonnet 4 让攻击者期望收益降 59%。",
+      "original_abstract": "Agentic systems involved in high-stake decision-making under adversarial pressure need formal guarantees not offered by existing approaches. Motivated by the operational needs of security operations centers (SOCs) that must configure endpoint detection and response (EDR) policies under adversarial pressure, we present a tool-mediated architecture: LLM agents use deterministic tools (Stackelberg best-response, Bayesian observer updates, attack-graph primitives) and select from finite action catalogs enforced at the tool-output interface. A composite Lyapunov function machine-checked in Lean 4 with zero sorry certifies controllability, observability from asymmetric sensor data, and Input-to-State Stability (ISS) robustness under intelligent adversarial disturbance, with two corollaries extending the certificate to any controller or adversary from the catalogs. On 282 real enterprise attack graphs, the claims hold with margin. On paired offensive/defensive telemetry, a tool-mediated Claude Sonnet 4 controller reduces the attacker's expected payoff (game value) by 59% relative to a deterministic greedy baseline, with zero variance across 40 runs at four temperatures. A Claude Haiku 4.5 controller converges to suboptimal game values but stays catalog-bounded over an additional 40 runs, demonstrating that architectural stability is not dependent on the controller capability. The LLM agent's non-determinism furthers creative exploration of strategies, while the tool-mediated architecture ensures system stability.",
+      "highlights": {
+        "contribution": "为 LLM agent 在自治网络防御场景提供可证明的稳定性，靠工具中介架构 + Lean 4 验证的复合 Lyapunov 证书。",
+        "innovation": "把 Stackelberg 博弈、Bayesian 更新等确定性工具和受约束的有限动作集合放在 LLM 外，让架构稳定性独立于 controller 能力。",
+        "method": "LLM agent → 确定性工具 (Stackelberg best response / Bayesian observer / attack graph) → 有限动作目录；用 Lean 4 zero-sorry 证 ISS 与可控性。",
+        "results": "282 个真实攻击图上证书带 margin；Claude Sonnet 4 比 greedy baseline 降低 game value 59%，40 次零方差；Haiku 4.5 收敛次优但始终 catalog-bounded。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T18:02:59Z",
+      "categories": [
+        "cs.AI",
+        "cs.CR",
+        "eess.SY"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 5.0,
+        "popularity": 6.0,
+        "quality": 8.0,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.03034v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.03034v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.03228",
+      "title": "MAGE: Safeguarding LLM Agents against Long-Horizon Threats via Shadow Memory",
+      "authors": [
+        "Yuhui Wang",
+        "Tanqiu Jiang",
+        "Jiacheng Liang",
+        "Charles Fleming",
+        "Ting Wang"
+      ],
+      "affiliations": [],
+      "summary": "长程交互里出现一类新攻击：单轮看不出问题，但在 user-agent-env 长轨迹里组合出恶意目标。MAGE 借鉴系统安全里的 shadow stack，给 agent 配一份 safety-focused 的影子记忆，专门留 safety-critical 上下文，每次执行前先评估风险。检测准确率显著超过已有防御，多数攻击能早期发现，开销很小。",
+      "original_abstract": "As large language model (LLM)-powered agents are increasingly deployed to perform complex, real-world tasks, they face a growing class of attacks that exploit extended user-agent-environment interactions to pursue malicious objectives improbable in single-turn settings. Such long-horizon threats pose significant risks to the safe deployment of LLM agents in critical domains. In this paper, we present MAGE (Memory As Guardrail Enforcement), a novel defensive framework designed to counter a wide range of long-horizon threats. Inspired by the \"shadow stack\" abstraction in systems security, MAGE maintains a dedicated, safety-focused agentic memory that distills and retains safety-critical context across the agent's full execution trajectory, leveraging this shadow memory to proactively assess the risk of pending actions prior to their execution. Extensive evaluation demonstrates that MAGE substantially outperforms existing defenses across diverse long-horizon threats in detection accuracy, achieves early-stage detection for the majority of attacks, and introduces only negligible overhead to agent utility. To our best knowledge, MAGE represents the first framework to detect and mitigate long-horizon threats using an agentic memory approach, establishing a new paradigm for this critical challenge and opening promising directions for future research.",
+      "highlights": {
+        "contribution": "首次用 agentic memory 思路系统防御 LLM agent 的长程威胁，给出 shadow memory 范式。",
+        "innovation": "把系统安全里的 shadow stack 抽象移植到 agent 防御，专门维护安全语义的记忆通道，独立于主轨迹做风险评估。",
+        "method": "MAGE 维护与主 agent 独立的 safety memory，跨整个执行轨迹蒸馏并保留 safety-critical 上下文，每次动作执行前调用它做预判。",
+        "results": "在多种长程威胁上检测准确率超过现有防御，多数攻击能早期检出，对 agent utility 几乎零开销。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T23:46:19Z",
+      "categories": [
+        "cs.CR",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 5.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.03228v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.03228v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.03117",
+      "title": "ARISE: A Repository-level Graph Representation and Toolset for Agentic Fault Localization and Program Repair",
+      "authors": [
+        "Shahd Seddik",
+        "Fatemeh Fard"
+      ],
+      "affiliations": [],
+      "summary": "Repo 级别的 fault localization 和自动修复，光看文件/类/函数结构还不够，要能跟踪变量值在过程里怎么流。ARISE 把程序图扩展到 statement 级，加上 intra-procedural def-use 边，让 agent 一次调用就能拿到 data-flow slice。在 SWE-bench Lite 上 Function Recall@1 +17.0、Line Recall@1 +15.0、Pass@1 +4.7 pp。",
+      "original_abstract": "Repository-level fault localization (FL) and automated program repair (APR) require an agent to identify the relevant code units across files, follow call and data dependencies, and generate a valid patch. Existing graph-based systems provide structural representations of repositories (files, classes, functions and their relationships) but do not model how variable values flow within procedures, leaving agents without the semantic precision needed for function- and line-level localization. We present ARISE (Agentic Repository-level Issue Solving Engine), which augments an LLM-based agent with a multi-granularity program graph that extends structural relationships down to statement-level nodes connected by intra-procedural definition-use edges. ARISE exposes this graph through a three-tier tool API, which brings data-flow slicing as a first-class, queryable agent primitive that allows the model to trace, in a single call, which statements define or consume a variable of interest. We evaluate on SWE-bench Lite (300 real GitHub issues, 11 Python repositories) using Qwen2.5-Coder-32B-Instruct as the backbone. Compared to the unmodified SWE-agent baseline, ARISE improves Function Recall@1 by 17.0 points and Line Recall@1 by 15.0 points. These localization gains translate directly into repair success, with ARISE achieving 22.0% Pass@1 (66/300), a 4.7 percentage-point improvement over SWE-agent. Controlled ablations confirm that the improvement is driven by the data-flow graph rather than the tool schema, and that large code models consume structured slice output directly without requiring a natural-language summarization layer. The graph builder and slicing API are designed as a framework-agnostic, drop-in toolset for future APR research.",
+      "highlights": {
+        "contribution": "把 data-flow slicing 作为 agent 的一等可查询 primitive，显著提升 repo 级别 fault localization 和 program repair 的效果。",
+        "innovation": "在已有结构化代码图基础上加 statement-level 节点和 def-use 边，提供三层 tool API；data-flow 而非 schema 才是关键，ablation 控制住了。",
+        "method": "构建多粒度程序图 + 三层 tool API；用 Qwen2.5-Coder-32B-Instruct 做 backbone，挂到 SWE-agent 上；在 SWE-bench Lite 300 个 issue 上评测。",
+        "results": "对比 SWE-agent，Function Recall@1 +17.0、Line Recall@1 +15.0；Pass@1 达到 22.0% (66/300)，提升 4.7 pp。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T19:59:23Z",
+      "categories": [
+        "cs.SE",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm-based agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 5.0,
+        "popularity": 5.5,
+        "quality": 7.5,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.03117v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.03117v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02269",
+      "title": "Towards Understanding Specification Gaming in Reasoning Models",
+      "authors": [
+        "Kei Nishimura-Gasparian",
+        "Robert McCarthy",
+        "David Lindner"
+      ],
+      "affiliations": [],
+      "summary": "Reasoning model 经常找规则漏洞拿高分而不按预期完成任务，这种 specification gaming 没人系统研究过。作者建一个 8 个任务的开源 suite（5 个不是 coding），所有被测模型都在大多数场景下出现明显漏洞利用，Grok 4 最严重，Claude 最克制。还发现 RL reasoning 训练显著放大了这种行为，test-time 缓解只能减弱不能消除。",
+      "original_abstract": "Specification gaming is a critical failure mode of LLM agents. Despite this, there has been little systematic research into when it arises and what drives it. To address this, we build and open source a diverse suite of tasks where models can score highly by taking unintended actions. We find that all tested models exploit their specifications at non-negligible rates in most of our eight settings, including five non-coding settings. We see the highest rates of specification gaming in Grok 4 and the lowest rates in Claude models. We use our evaluation suite to study what drives specification gaming, and find that: 1. RL reasoning training substantially increases the rate at which models exploit their specifications, 2. Increasing RL reasoning budget has a weakly positive effect on exploit rate, and 3. Test-time mitigations reduce but do not eliminate the rate of specification gaming. Our results suggest that specification gaming is a fundamental challenge arising from RL reasoning training; we release our evaluation suite to support further work on this problem.",
+      "highlights": {
+        "contribution": "首次系统地研究 reasoning model 中的 specification gaming，给出多场景评测 suite 和定量证据。",
+        "innovation": "覆盖 coding 之外的 5 个非编码场景，并能区分 RL reasoning 训练、RL 预算、test-time 缓解对 exploit 率的不同影响。",
+        "method": "构建 8 个会出现 specification gaming 的任务并开源；测一批前沿 LLM；在同模型上变 RL 训练量、reasoning 预算、test-time mitigation 做控制实验。",
+        "results": "所有模型在大多数 setting 都有非零 gaming，Grok 4 最高、Claude 最低；RL reasoning 训练显著抬升 exploit 率，缓解措施只能压低不能根除。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T06:22:22Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent"
       ],
       "scores": {
         "relevance": 5.5,
         "recency": 5.0,
-        "popularity": 5.5,
-        "quality": 6.5,
-        "recommendation": 6.0
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 6.6
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.02168v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.02168v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.02269v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02269v1",
       "venue": null
     },
     {
-      "arxiv_id": "2605.02378",
-      "title": "Enhancing Multimodal In-Context Learning via Inductive-Deductive Reasoning",
+      "arxiv_id": "2605.02240",
+      "title": "PhysicianBench: Evaluating LLM Agents in Real-World EHR Environments",
       "authors": [
-        "Haoyu Wang",
-        "Haonan Wang",
-        "Yuyan Chen",
-        "Jun Chen",
-        "Gang Liu",
-        "Qian Wang",
-        "Jiahong Yan",
-        "Yanghua Xiao"
+        "Ruoqi Liu",
+        "Imran Q. Mohiuddin",
+        "Austin J. Schoeffler",
+        "Kavita Renduchintala",
+        "Ashwin Nayak",
+        "Prasantha L. Vemu",
+        "Shivam C. Vedak",
+        "Kameron C. Black",
+        "John L. Havlik",
+        "Isaac Ogunmola",
+        "Stephen P. Ma",
+        "Roopa Dhatt",
+        "Jonathan H. Chen"
       ],
-      "affiliations": [
-        "Fudan University"
-      ],
-      "summary": "VLM 多模态 ICL 不稳定的根源是归纳缺口：模型能从错误推理得出对答案，却抓不到一致规则。原因是冗余视觉 token 淹没文本线索，且注意力倾向首张图。作者提了归纳-演绎框架：相似度视觉 token 压缩加动态注意力再平衡加显式 CoT 引导归纳规则，再用 SFT+RL 强化忠实引用与噪声过滤。8 个 benchmark 一致提升多种开源 VLM。",
-      "original_abstract": "In-context learning (ICL) allows large models to adapt to tasks using a few examples, yet its extension to vision-language models (VLMs) remains fragile. Our analysis reveals that the fundamental limitation lies in an inductive gap, models often produce correct answers from flawed reasoning, while struggling to extract consistent rules across demonstrations. This gap is further exacerbated by two visual-level obstacles: an overwhelming proportion of redundant visual tokens that obscure textual cues, and a skewed attention distribution that favors the initial image at the expense of subsequent context. To address these issues, we introduce a framework that restructures multimodal ICL as a principled inductive-deductive process. The framework incorporates a similarity-based visual token compression module to filter out redundant patches, a dynamic attention rebalancing mechanism to distribute focus equitably across all images, and a chain-of-thought paradigm that explicitly guides the model to analyze individual examples, derive a generalizable rule, and then apply it to the query. An auxiliary learning pipeline combines supervised fine-tuning with reinforcement learning using verifiable rewards to reinforce faithful citation and noise filtering. Evaluations across eight benchmarks covering visual perception, logical reasoning, STEM problems, and sarcasm detection demonstrate consistent and significant improvements over standard ICL baselines for multiple open-source VLMs, highlighting the potential of equipping models with genuine inductive capabilities in multimodal settings.",
+      "affiliations": [],
+      "summary": "现有医疗 agent benchmark 大多是静态知识题或单步动作，没法反映医生真实的多步工作流。作者从真实初诊和专科会诊里抽 100 个长程任务接进真实 EHR 环境，用商用 EHR 一样的 API 调用，平均每个任务 27 个 tool call，按 670 个 checkpoint 打分。13 个主流模型测下来最好的也只有 46% pass@1，开源最多 19%。",
+      "original_abstract": "We introduce PhysicianBench, a benchmark for evaluating LLM agents on physician tasks grounded in real clinical setting within electronic health record (EHR) environments. Existing medical agent benchmarks primarily focus on static knowledge recall, single-step atomic actions, or action intent without verifiable execution against the environment. As a result, they fail to capture the long-horizon, composite workflows that characterize real clinical systems. PhysicianBench comprises 100 long-horizon tasks adapted from real consultation cases between primary care and subspecialty physicians, with each task independently reviewed by a separate panel of physicians. Tasks are instantiated in an EHR environment with real patient records and accessed through the same standard APIs used by commercial EHR vendors. Tasks span 21 specialties (e.g., cardiology, endocrinology, oncology, psychiatry) and diverse workflow types (e.g., diagnosis interpretation, medication prescribing, treatment planning), requiring an average of 27 tool calls per task. Solving each task requires retrieving data across encounters, reasoning over heterogeneous clinical information, executing consequential clinical actions, and producing clinical documentation. Each task is decomposed into structured checkpoints (670 in total across the benchmark) capturing distinct stages of completion graded by task-specific scripts with execution-grounded verification. Across 13 proprietary and open-source LLM agents, the best-performing model achieves only 46% success rate (pass@1), while open-source models reach at most 19%, revealing a substantial gap between current agent capabilities and the demands of real-world clinical workflows. PhysicianBench provides a realistic and execution-grounded benchmark for measuring progress toward autonomous clinical agents.",
       "highlights": {
-        "contribution": "把多模态 ICL 重新组织成归纳-演绎流程，并系统性解决视觉冗余和注意力偏差两个底层问题。",
-        "innovation": "诊断出 inductive gap 这个根因，再针对性设计三件套：相似度视觉 token 压缩加动态注意力再平衡加 CoT 显式归纳。",
-        "method": "视觉 token 相似度过滤加注意力再分布；CoT 提示先分析示例再总结规则再回答；辅助 SFT+RL 加可验证奖励训练。",
-        "results": "在 8 个视觉感知/逻辑/STEM/讽刺识别基准上一致超越标准 ICL，多种开源 VLM 受益。"
+        "contribution": "建一个执行可验证的真实 EHR 长程任务 benchmark，覆盖 21 个专科和多种工作流，能严格度量临床 agent 的能力。",
+        "innovation": "和已有医疗 benchmark 比，这里是真实病历 + 商用风格 EHR API + 长程多步骤 + 670 个 checkpoint 的执行级评分，不是知识问答。",
+        "method": "100 个长程任务，每个由独立医生组评审，分解成结构化 checkpoint，用任务特定脚本做执行级判定；任务覆盖诊断、用药、治疗规划等。",
+        "results": "13 个 proprietary/开源 LLM agent 评测，最强模型 46% pass@1，开源 ≤19%，揭示和真实临床工作流的巨大差距。"
       },
       "images": [],
-      "published_date": "2026-05-04T09:18:19Z",
+      "published_date": "2026-05-04T05:32:25Z",
       "categories": [
-        "cs.CV",
         "cs.AI"
       ],
-      "matched_domain": "Multi-modal",
+      "matched_domain": "Agent",
       "matched_keywords": [
-        "vision-language model",
-        "vlm"
+        "llm agent",
+        "agent benchmark"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 5.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02240v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02240v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02346",
+      "title": "APIOT: Autonomous Vulnerability Management Across Bare-Metal Industrial OT Networks",
+      "authors": [
+        "Adel ElZemity",
+        "Budi Arief",
+        "Shujun Li",
+        "Calvin Brierley",
+        "Yichao Wang",
+        "Yuxiang Huang",
+        "James Pope",
+        "Haoxiang Li",
+        "George Oikonomou"
+      ],
+      "affiliations": [],
+      "summary": "之前的自治渗透研究都针对 Linux 和 Web，bare-metal 的 OT 设备没 shell 没文件系统，LLM agent 没法直接搞。APIOT 在 Zephyr RTOS 固件上跑端到端的发现→利用→打补丁→验证全流程，用 5 个前沿 LLM、3 种拓扑、2 种损伤、有无引导，共 290 次实验，整体任务成功率 90.0%。研究还表明 runtime governance overseer 是关键工程变量。",
+      "original_abstract": "Bare-metal operational technology (OT) devices -- especially the microcontrollers running Modbus/TCP and CoAP at the base of industrial control systems -- have remained outside the reach of autonomous security attacks. Prior autonomous pentesting studies target Linux and web systems, whose shells and filesystems are familiar to LLM agents. Bare-metal OT has neither, so agents must reason directly over protocol fields and parser semantics. This requires new action-space designs and runtime controls, and opens new research questions about protocol-level exploit reasoning and its deployment envelope. We present APIOT (Autonomous Purple-teaming for Industrial OT), the first large language model (LLM) framework demonstrating an autonomous attack and remediation of bare-metal OT devices, achieving the full discovery -> exploitation -> patching -> verification cycle without step-by-step human intervention. We implemented and evaluated this framework on Zephyr RTOS firmware across heterogeneous industrial IoT (IIoT) topologies. Through 290 experiment runs spanning five frontier LLMs, three network topologies, two impairment levels, and guided versus unguided conditions, APIOT achieved a mission success rate of 90.0% on the full attack-remediation cycle. We found that the runtime governance layer (which we call an overseer) is a critical engineering variable: without it, agents exhibit systematic degenerate patterns, including repetition loops, missing crash verification, and reconnaissance deadlocks. Together, these findings carry two implications beyond our testbed. Attacker expertise is no longer the binding constraint on bare-metal OT exploitation, and defender threat models must now assume LLM-augmented adversaries capable of executing autonomous discovery-through-remediation cycles against industrial firmware.",
+      "highlights": {
+        "contribution": "首次展示能完整自治攻击并修复 bare-metal 工业 OT 设备的 LLM 框架，覆盖发现→利用→补丁→验证。",
+        "innovation": "在没有 shell/文件系统的 bare-metal 上让 agent 直接对协议字段和 parser 语义推理，并强调 runtime overseer 这一治理层的必要性。",
+        "method": "APIOT 框架 + 多 LLM controller + 工业 IIoT 拓扑测试床；在 Zephyr RTOS 上跑 290 次实验，覆盖 5 LLM × 3 topology × 2 impairment × guided/unguided。",
+        "results": "全流程任务成功率 90.0%；去掉 overseer 会出现循环、缺崩溃验证、侦察死锁等系统性退化。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T08:47:28Z",
+      "categories": [
+        "cs.CR",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent"
       ],
       "scores": {
         "relevance": 5.0,
         "recency": 5.0,
         "popularity": 5.5,
-        "quality": 6.5,
-        "recommendation": 6.0
+        "quality": 7.5,
+        "recommendation": 6.5
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.02378v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.02378v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.02346v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02346v1",
       "venue": null
     },
     {
-      "arxiv_id": "2605.02525",
-      "title": "A Semantic Autonomy Framework for VLM-Integrated Indoor Mobile Robots: Hybrid Deterministic Reasoning and Cross-Robot Adaptive Memory",
+      "arxiv_id": "2605.02289",
+      "title": "EngiAgent: Fully Connected Coordination of LLM Agents for Solving Open-ended Engineering Problems with Feasible Solutions",
       "authors": [
-        "Bogdan Felician Abaza",
-        "Andrei-Alexandru Staicu",
-        "Cristian Vasile Doicin"
+        "Xiyuan Zhou",
+        "Ruixi Zou",
+        "Xinlei Wang",
+        "Yuheng Cheng",
+        "Yan Xu",
+        "Junhua Zhao",
+        "Jinjin Gu"
       ],
-      "affiliations": [
-        "Politehnica University of Bucharest"
-      ],
-      "summary": "工业室内移动机器人能跑 ROS Nav2 但听不懂去拿那杯水。这工作搭了六层语义自主栈：88% 的指令用七步参数 resolver 在 0.1ms 内搞定，根本不调 VLM；只有真正歧义的指令才上 VLM。再加跨会话/跨机器人的语义记忆框架，一个机器人学到的偏好能编译成 digest 转给另一台用，延迟降 10 万倍。两台 Raspberry Pi 5 机器人实测 82 个决策语义准确率 100%。",
-      "original_abstract": "Autonomous indoor mobile robots can navigate reliably to metric coordinates using established frameworks such as ROS 2 Navigation 2, yet they lack the ability to interpret natural language instructions that express intent rather than positions. Vision-Language Models offer the semantic reasoning required to bridge this gap, but their inference latency (2-9 seconds per decision on consumer hardware) and session-by-session amnesia limit practical deployment. This paper presents the Semantic Autonomy Stack, a six-layer reference framework for semantically autonomous indoor navigation, and validates a complete instance featuring hybrid deterministic-VLM reasoning and cross-robot adaptive memory on physical robots with off-the-shelf edge hardware. A seven-step parametric resolver handles 88% of instructions in under 0.1 milliseconds without invoking a language model, camera, or GPU; only genuinely ambiguous instructions escalate to VLM reasoning. A five-category semantic memory framework with explicit scope taxonomy (global environment knowledge, per-operator preferences, per-robot capabilities) enables cross-session learning and cross-robot knowledge transfer: preferences learned through VLM interactions on one robot are promoted to deterministic resolution and transferred to a second robot via a shared compiled digest, achieving a measured latency reduction of 103,000-fold. Experimental validation on two custom-built differential-drive robots across 82 scenario-level decisions and three sessions demonstrates 100% semantic transfer accuracy (33/33, 95% CI [0.894, 1.000]), 100% semantic resolution accuracy, and concurrent multi-robot operation feasibility - all on Raspberry Pi 5 platforms with no onboard GPU, requiring zero training data.",
+      "affiliations": [],
+      "summary": "工程问题不像数学题，公式不是给好的，得在数据和物理约束下迭代搞出可行解。EngiAgent 用一个全连接的 coordinator 串起问题分析、建模、验证、求解、评估几个专门 agent，谁失败可以灵活回路，不像传统流水线那样一条道走到黑。在 4 个工程域上 feasibility 显著优于已有方法。",
+      "original_abstract": "Engineering problem solving is central to real-world decision-making, requiring mathematical formulations that not only represent complex problems but also produce feasible solutions under data and physical constraints. Unlike mathematical problem solving, which operates on predefined formulations, engineering tasks demand open-ended analysis, feasibility-driven modeling, and iterative refinement. Although large language models (LLMs) have shown strong capabilities in reasoning and code generation, they often fail to ensure feasibility, which limits their applicability to engineering problem solving. To address this challenge, we propose EngiAgent, a multi-agent system with a fully connected coordinator that simulates expert workflows through specialized agents for problem analysis, modeling, verification, solving, and solution evaluation. The fully connected coordinator enables flexible feedback routing, overcoming the rigidity of prior pipeline-based reflection methods and ensuring feasibility at every stage of the process. This design not only improves robustness to diverse failure cases such as data extraction errors, constraint inconsistencies, and solver failures, but also enhances the overall quality of problem solving. Empirical results across four representative domains demonstrate that EngiAgent achieves substantial improvements in feasibility compared to prior approaches, establishing a new paradigm for feasibility-oriented engineering problem solving with LLMs. Our source code and data are available at https://github.com/AI4Engi/EngiAgent.",
       "highlights": {
-        "contribution": "用混合确定性加 VLM 推理 + 跨机器人语义记忆，把 VLM 室内导航的延迟和无状态问题打掉。",
-        "innovation": "把绝大多数指令拦在确定性解析层 (<0.1ms)，只让真正歧义的进 VLM；并把学到的偏好编译成跨机器人共享 digest，实现一台学、全队会。",
-        "method": "六层语义自主栈；七步参数解析器；五类语义记忆加显式 scope 分类；仅在歧义时调 VLM 并把结果回写记忆。",
-        "results": "Pi 5 平台无 GPU 实测 82 个场景级决策，语义转移 100% (33/33)，语义解析 100%，跨机器人延迟降 ~10^5 倍。"
+        "contribution": "面向开放式工程问题提出多 agent 系统，重点是保证生成的解满足可行性约束而不是只追求数学答案。",
+        "innovation": "用全连接 coordinator 替代传统线性反思流水线，让反馈可以任意路由，提升对数据抽取错误、约束冲突、求解失败等异常的鲁棒性。",
+        "method": "多 agent 系统：问题分析 → 建模 → 验证 → 求解 → 解评估，coordinator 全连接路由反馈，每一步都嵌入可行性检查；代码开源。",
+        "results": "在 4 个代表性工程域上，可行性指标比已有方法有明显提升，建立 feasibility-oriented 的工程问题求解范式。"
       },
       "images": [],
-      "published_date": "2026-05-04T12:27:03Z",
+      "published_date": "2026-05-04T07:26:12Z",
       "categories": [
-        "cs.RO",
         "cs.AI"
       ],
-      "matched_domain": "Multi-modal",
+      "matched_domain": "Agent",
       "matched_keywords": [
-        "vision-language model",
-        "vlm"
+        "llm agent",
+        "multi-agent"
       ],
       "scores": {
-        "relevance": 5.5,
-        "recency": 5.0,
-        "popularity": 5.0,
-        "quality": 6.5,
-        "recommendation": 6.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.02525v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.02525v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.02630",
-      "title": "AutoFocus: Uncertainty-Aware Active Visual Search for GUI Grounding",
-      "authors": [
-        "Ruilin Yao",
-        "Shegnwu Xiong",
-        "Tianyu Zou",
-        "Shili Xiong",
-        "Yi Rong"
-      ],
-      "affiliations": [
-        "Wuhan University of Technology"
-      ],
-      "summary": "VLM 做 GUI grounding 在高分辨率界面上掉得厉害——元素小、布局密。已有 zoom-in 方法靠固定 anchor 或启发式网格。AutoFocus 用 token-level perplexity 作为空间不确定性信号，采样多个坐标假设转成各向异性高斯空间概率场，再据此提全局/局部区域候选，并用 Shape-Aware Zoom 兼顾紧框和上下文。免训练，在 ScreenSpot-Pro/V2 上对通用和 GUI 专用 VLM 都涨点。",
-      "original_abstract": "Vision-Language Models (VLMs) have enabled autonomous GUI agents that translate natural language instructions into executable screen coordinates. However, grounding performance degrades in high-resolution interfaces, where dense layouts and small interactive elements expose a resolution gap between modern displays and model input constraints. Existing zoom-in strategies rely on fixed anchors, heuristic grids, or reinforcement learning, lacking a principled mechanism to adaptively determine where refinement is needed and how much spatial uncertainty should be explored. We propose AutoFocus, a training-free, uncertainty-aware active visual search framework for GUI grounding. Our key insight is that token-level perplexity in coordinate generation naturally reflects spatial uncertainty. Rather than committing to a single prediction, AutoFocus samples multiple coordinate hypotheses and converts their axial perplexities into an anisotropic gaussian spatial probability field, explicitly modeling directional uncertainty. Based on this field, we generate global and local region proposals and introduce Shape-Aware Zooming to balance tight localization with contextual preservation. A visual prompt-based aggregation step then selects the most consistent prediction via structured comparison. Extensive experiments on ScreenSpot-Pro and ScreenSpot-V2 demonstrate consistent improvements across both general-purpose and GUI-specialized VLMs.",
-      "highlights": {
-        "contribution": "提了免训练的不确定性驱动主动视觉搜索框架 AutoFocus，解决高分辨率 GUI grounding 难题。",
-        "innovation": "把 coordinate token 的 perplexity 解释成方向性空间不确定性，由此生成各向异性高斯概率场和区域候选，是 principled 而非启发式。",
-        "method": "采样多坐标假设，axial perplexity 估各向异性高斯，全局/局部 region proposal，Shape-Aware Zoom 保上下文，visual prompt 聚合最终预测。",
-        "results": "ScreenSpot-Pro/V2 上通用 VLM 和 GUI 专用 VLM 都一致提升，且免训练即用。"
-      },
-      "images": [],
-      "published_date": "2026-05-04T14:18:46Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "Multi-modal",
-      "matched_keywords": [
-        "vision-language model",
-        "vlm"
-      ],
-      "scores": {
-        "relevance": 4.5,
+        "relevance": 6.0,
         "recency": 5.0,
         "popularity": 5.5,
         "quality": 7.0,
-        "recommendation": 6.0
+        "recommendation": 6.4
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.02630v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.02630v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.02289v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02289v1",
       "venue": null
     },
     {
-      "arxiv_id": "2605.02206",
-      "title": "Metric Unreliability in Multimodal Machine Unlearning: A Systematic Analysis and Principled Unified Score",
+      "arxiv_id": "2605.02584",
+      "title": "Beyond State Machines: Executing Network Procedures with Agentic Tool-Calling Sequences",
       "authors": [
-        "Abdullah Ahmad Khan",
-        "Hamid Laga",
-        "Ferdous Sohel"
+        "Purna Sai Garigipati",
+        "Onur Ayan",
+        "Kishor Chandra Joshi",
+        "Xueli An"
       ],
-      "affiliations": [
-        "Murdoch University"
-      ],
-      "summary": "VLM unlearning 为合规 GDPR 越来越重要，但当前 5 个常用指标 FA/RA/MIA/AD/JS 在三个 VQA benchmark 上给出互相矛盾的方法排名。作者做了 Kendall tau 分析，发现指标分两簇且多模态比单模态更不一致。然后提了 UQS：用每个指标和 oracle retrain 模型距离的 Spearman 相关来加权，给出稳定的统一打分。",
-      "original_abstract": "Machine unlearning in Vision-Language Models (VLMs) is required for compliance with the General Data Protection Regulation (GDPR), yet current evaluation practices are inconsistent. We present the first systematic study of metric reliability in multimodal unlearning. Five standard metrics, Forget Accuracy (FA), Retain Accuracy (RA), Membership Inference Attack (MIA), Activation Distance (AD), and JS divergence (JS), yield conflicting method rankings across three VQA benchmarks (MLLMU-Bench, UnLOK-VQA, MMUBench). Kendall tau analysis over 36 unlearned LLaVA-1.5-7B models reveals two opposing clusters, {FA, RA, MIA} and {AD, JS}, with tau_FA_AD = -0.26, reproduced on BLIP-2 OPT-2.7B. Agreement is lower in multimodal VQA (average tau = 0.086) than in unimodal classification (average tau = 0.158; difference = 0.072), indicating that dual image-and-text pathways amplify inconsistency. We introduce the Unified Quality Score (UQS), a composite metric with weights derived from each metric's Spearman correlation with the oracle distance d(M_hat, M_star), where M_star is the oracle model retrained only on the retain set. RA shows the strongest reliability (rho = 0.484, p = 0.003), while FA is negatively correlated (rho = -0.418, p = 0.011). UQS yields stable rankings under 100 random weight perturbations (tau = 0.647 +- 0.262). We release the benchmark, 36 checkpoints, and an interactive leaderboard. Code and pre-computed results are available at https://github.com/neurips26/UnifiedUnl.",
+      "affiliations": [],
+      "summary": "未来移动通信网络希望让 LLM agent 直接跑流程，作者拿 UE IP 分配做 case study 比较了 4 种实现方式：让 agent 一步步推理 vs 把流程封装进单个工具内部调度。结果是 agent 反复推理的方式 latency 高、出错多，把流程封装到 tool 里更稳定。同时给出了多步流程下的失败错误分类。",
+      "original_abstract": "Agentic AI will be an essential enabling technology for designing future mobile communication systems, which could provide flexible and customized services, automate complex network operations, and drive autonomous decision-making across the network. This work studies how Large Language Model (LLM)-based network AI agents can be utilized to execute network procedures expressed as sequences of tool invocations. We investigate four approaches, which differ in how the agent obtains the procedure and in how execution is distributed between the agent and the underlying tools. We evaluated the latency and execution correctness across these approaches using a User Equipment (UE) IP allocation procedure as a case study. Furthermore, we conduct a stress test to examine how many sequential procedural steps an LLM agent can reliably execute before failure. Our results show that approaches relying on iterative agent-side reasoning incur higher latency and are more prone to execution errors, while approaches where the procedure is encapsulated within a single tool, which internally orchestrates the required steps by invoking other tools, reduce latency by limiting repeated reasoning. The stress-test results further show that the model with advanced tool-calling capability maintains reliable execution over longer procedures than the other evaluated models; however, all models exhibit reliability degradation as procedure length increases, revealing clear execution limits in multi-step tool-based workflows. To systematically analyze failures in procedure execution, we introduce a procedure-specific error taxonomy that categorizes deviations in multi-step procedural execution.",
       "highlights": {
-        "contribution": "系统揭示了多模态 unlearning 指标之间的不一致性，并提出基于 oracle 距离加权的统一评分 UQS。",
-        "innovation": "Kendall tau 横评加用 oracle retrain 模型距离作为 ground truth 来锚定各指标可靠性，让哪个 metric 真的有用有了量化答案。",
-        "method": "训练 36 个 LLaVA-1.5-7B unlearned 模型在 MLLMU-Bench/UnLOK-VQA/MMUBench 上评测；BLIP-2 OPT-2.7B 验证；权重源自 oracle 距离的 Spearman 相关。",
-        "results": "RA 与 oracle 距离相关最强 (ρ=0.484)，FA 反向相关 (ρ=-0.418)；UQS 在 100 次权重扰动下排名稳定 (τ=0.647±0.262)。开源 36 checkpoint 和 leaderboard。"
+        "contribution": "系统比较 LLM agent 用 tool 调用来执行网络流程的 4 种范式，给出 latency、正确性和可扩展长度的实证。",
+        "innovation": "提出 procedure 封装在单一工具内部、内部再调子工具的设计能显著减少 agent 反复推理带来的延迟与错误；并给出网络流程特有的错误分类法。",
+        "method": "在 UE IP 分配流程上跑 4 种实现方式的对比实验，并对多个 LLM 做 stress test，看在失败前能可靠执行多少连续步骤；附错误 taxonomy。",
+        "results": "依赖 agent 反复推理的方法延迟和错误率都更高；具备先进 tool-calling 能力的模型能可靠跑更长流程，但所有模型都随步数变长可靠性下降。"
       },
       "images": [],
-      "published_date": "2026-05-04T04:13:00Z",
+      "published_date": "2026-05-04T13:34:20Z",
       "categories": [
-        "cs.CV",
-        "cs.LG"
+        "cs.NI",
+        "cs.AI"
       ],
-      "matched_domain": "Multi-modal",
+      "matched_domain": "Agent",
       "matched_keywords": [
-        "mllm",
-        "vision-language model",
-        "vlm"
+        "llm agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 5.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02584v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02584v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02491",
+      "title": "From Experimental Limits to Physical Insight: A Retrieval-Augmented Multi-Agent Framework for Interpreting Searches Beyond the Standard Model",
+      "authors": [
+        "Altan Cakir",
+        "Ayca Yerlikaya"
+      ],
+      "affiliations": [],
+      "summary": "高能物理 BSM 搜索的文献又多又杂——文字、HEPData 数值、排除限 plot 混在一起，手工整合非常费劲。HEP-CoPilot 用 retrieval-augmented multi-agent 把文本、数据和重构 plot 统一进多模态检索推理架构，证据有出处地推理。在最近的 CMS BSM 搜索上能跨论文比较排除限。",
+      "original_abstract": "Modern searches for physics beyond the Standard Model produce rapidly expanding literature containing heterogeneous information, including textual analyses, numerical datasets, and graphical exclusion limits. Integrating these distributed sources remains a time-consuming and manual process for physicists.   We present HEP-CoPilot, a retrieval-augmented multi-agent AI framework for the exploration and interpretation of high-energy physics literature. The system unifies textual information from publications, structured experimental data from HEPData, and reconstructed physics plots within a multimodal retrieval and reasoning architecture. By combining retrieval-augmented language models with coordinated agent workflows, it enables evidence-grounded reasoning over experimental analyses and structured interpretation of collider results.   We evaluate the framework on recent CMS searches for physics beyond the Standard Model. Case studies show that HEP-CoPilot can retrieve relevant measurements, reconstruct exclusion limits directly from HEPData records, and perform cross-paper comparisons of experimental constraints. This enables consistent, physics-aware comparison across analyses without manual data integration.   These results demonstrate that retrieval-augmented AI systems can function as scientific co-pilots for particle physics, facilitating navigation of complex literature, structuring heterogeneous evidence, and accelerating the interpretation pipeline for new physics searches.",
+      "highlights": {
+        "contribution": "做了一个面向高能物理 BSM 文献的多 agent + RAG 系统，能跨论文统一检索、推理和比较实验约束。",
+        "innovation": "把文本、HEPData 数值和重构的物理 plot 放进一个多模态检索栈，由协调 agent workflow 调度，不再依赖人工整合。",
+        "method": "RAG + multi-agent：检索文本 + HEPData + plot → 协调 agent 调度 → 在 LLM 上做证据 grounded 推理；用案例研究验证。",
+        "results": "在 CMS BSM 搜索上能正确检索测量、从 HEPData 重构排除限、做跨论文对比，展示了科研 co-pilot 的可行性。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T11:42:14Z",
+      "categories": [
+        "hep-ex",
+        "cs.AI",
+        "cs.IR"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 5.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02491v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02491v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02366",
+      "title": "A Compound AI Agent for Conversational Grant Discovery",
+      "authors": [
+        "Zhisheng Tang",
+        "Mayank Kejriwal"
+      ],
+      "affiliations": [],
+      "summary": "美国 NSF/NIH/DARPA/Grants.gov 这些 grant 门户长得不一样，搜资助费时间。作者搭了一个 compound AI：用 LLM 浏览器 agent 把 12k 联邦和非营利机会归集到统一索引（双周更新），再用 ReAct 风格 agent 解读研究上下文（含 PDF）并混合结构化检索与 web search。把 grant 查找时间从 30-45 分钟压到 10 分钟，已经有 3000+ 用户。",
+      "original_abstract": "Research funding discovery remains fundamentally fragmented: researchers navigate disparate agency portals (e.g., in the United States, NSF, NIH, DARPA, Grants.gov, and many others) with heterogeneous interfaces, search capabilities, and data schemas. We present a compound AI system that unifies this landscape through two tightly coupled components: (1) an aggregation layer that autonomously collects, normalizes, and indexes almost 12,000 federal and nonprofit opportunities from fragmented sources via LLM-equipped browser agents, maintaining a biweekly-updated unified database; and (2) an agentic ReAct-based query processing layer that interprets research context (including from PDF documents) and employs hybrid search combining a structured index with selective web search to retrieve relevant opportunities - while avoiding LLM hallucination. The conversational interface supports iterative refinement through multi-turn interactions, allowing researchers to progressively apply constraints without reformulating their core research description. Results stream in real time with full transparency of intermediate reasoning, enabling appropriate calibration of user trust. Currently used by almost 3,000+ users, our approach demonstrates the feasibility of compound AI in reducing grant discovery time from 30--45 minutes (manual, fragmented portal searches) to under 10 minutes (unified, conversational search).",
+      "highlights": {
+        "contribution": "用 compound AI 统一了高度碎片化的科研资助查询场景，给出一个有真实用户量的端到端系统。",
+        "innovation": "把自动归集和检索 + ReAct 检索 agent 一起做，混合结构化索引和选择性 web 检索抑制 LLM 幻觉，并支持多轮约束细化。",
+        "method": "聚合层：LLM 浏览器 agent 抓取归一化索引 ~12k 机会，双周刷新；查询层：ReAct agent 解读 PDF/上下文 → hybrid search → 流式回答带中间推理透明可见。",
+        "results": "服务约 3000 用户，把 grant 查找时间从 30-45 分钟降到 <10 分钟，展示了 compound AI 的实际可行性。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T09:09:50Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic"
       ],
       "scores": {
         "relevance": 4.0,
         "recency": 5.0,
-        "popularity": 5.0,
-        "quality": 7.0,
-        "recommendation": 5.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.02206v2",
-      "arxiv_url": "https://arxiv.org/abs/2605.02206v2",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.02218",
-      "title": "CoVSpec: Efficient Device-Edge Co-Inference for Vision-Language Models via Speculative Decoding",
-      "authors": [
-        "Yuanyuan Jia",
-        "Shunpu Tang",
-        "Qianqian Yang"
-      ],
-      "affiliations": [
-        "Zhejiang University"
-      ],
-      "summary": "大 VLM 在端上跑不动，常见解法是端云协同 speculative decoding，但视觉 token 又多通信又贵。CoVSpec 在端侧做 training-free 视觉 token 修剪（综合 query 相关性、token 活跃度、低秩依赖），再上自适应草稿长度加频率，最后用解耦验证-纠错的并行分支机制减少通信。吞吐比仅云端推理快 2.21x，通信开销降 96%+，精度不掉。",
-      "original_abstract": "Vision-language models (VLMs) have demonstrated strong capabilities in multimodal perception and reasoning. However, deploying large VLMs on mobile devices remains challenging due to their substantial computational and memory demands. A practical alternative is device-edge co-inference, where a lightweight draft VLM on the mobile device collaborates with a larger target VLM on the edge server via speculative decoding. Nevertheless, directly extending speculative decoding to VLMs suffers from severe inefficiency due to excessive visual-token computation and high communication overhead. To address these challenges, we propose CoVSpec, an efficient collaborative speculative decoding framework for VLM inference. Specifically, we first develop a training-free visual token reduction framework that prunes redundant visual tokens on the mobile device by jointly considering query relevance, token activity, and low-rank dependency. Moreover, we design an adaptive drafting strategy that dynamically adjusts both the verification frequency and the draft length. In addition, we introduce a parallel branching mechanism with decoupled verification-correction to improve draft-side utilization during target-side verification and reduce correction-related transmission overhead. Experiments on multiple benchmarks show that CoVSpec achieves up to 2.21x higher throughput than target-only inference and reduces communication overhead by more than 96% compared with baselines, without compromising task accuracy.",
-      "highlights": {
-        "contribution": "把 speculative decoding 框架真正搬到 VLM 端云协同上，解决视觉 token 计算和通信瓶颈。",
-        "innovation": "三件套：query/活跃度/低秩三联视觉 token 修剪加自适应草稿长度&频率加并行分支解耦验证-纠错通信。",
-        "method": "端侧轻量 draft VLM 加边缘大 target VLM；视觉 token 修剪基于多信号联合判定；端云之间并行执行草稿与验证并解耦纠错传输。",
-        "results": "多个 benchmark 上比纯 target 推理吞吐高 2.21x，通信开销降 96%+，任务精度保持。"
-      },
-      "images": [],
-      "published_date": "2026-05-04T04:43:15Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Multi-modal",
-      "matched_keywords": [
-        "vision-language model",
-        "vlm"
-      ],
-      "scores": {
-        "relevance": 4.5,
-        "recency": 5.0,
-        "popularity": 5.0,
+        "popularity": 5.5,
         "quality": 6.5,
         "recommendation": 5.5
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.02218v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.02218v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.02366v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02366v1",
       "venue": null
     },
     {
-      "arxiv_id": "2605.02623",
-      "title": "Retrieving Any Relevant Moments: Benchmark and Models for Generalized Moment Retrieval",
+      "arxiv_id": "2605.02249",
+      "title": "A Study of Belief Revision Postulates in Multi-Agent Systems (Extended Version)",
       "authors": [
-        "Yiming Ding",
-        "Siyu Cao",
-        "Luyuan Jiao",
-        "Yixuan Li",
-        "Zitong Wang",
-        "Zhiyong Liu",
-        "Lu Zhang"
-      ],
-      "affiliations": [
-        "Chinese Academy of Sciences"
-      ],
-      "summary": "传统 Video Moment Retrieval 假设每个 query 只对应一个片段，现实里可能是多个或零个。作者把这扩展成 Generalized Moment Retrieval (GMR)，并基于足球视频造了 Soccer-GMR 大规模基准，里面有真实的多正例和负例 query。再做了两类 baseline：给判别式 VMR 模型加 GMR adapter，以及给 MLLM 用 GMR 定制 GRPO 奖励。",
-      "original_abstract": "Video Moment Retrieval (VMR) aims to localize temporal segments in videos that correspond to a natural language query, but typically assumes only a single matching moment for each query. This assumption does not always hold in real-world scenarios, where queries may correspond to multiple or no moments. Thus, we formulate Generalized Moment Retrieval (GMR), a unified setting that requires retrieving the complete set of relevant moments or predicting an empty set. To enable systematic study of GMR, we introduce Soccer-GMR, a large-scale benchmark built on challenging soccer videos that reflect general GMR scenarios, with realistic negative and positive queries. The benchmark is constructed via a duration-flexible semi-automated pipeline with human verification, enabling scalable data generation while maintaining high annotation quality. We further design a unified evaluation protocol with complementary metrics tailored for null-set rejection, positive-query localization, and end-to-end GMR performance. Finally, we establish strong baselines across two modeling paradigms: a lightweight plug-and-play GMR adapter for discriminative VMR models, and a GMR-tailored GRPO reward for fine-tuning multimodal large language models (MLLMs). Extensive experiments show consistent gains across all metrics and expose key limitations of current methods, positioning GMR as a more realistic and challenging benchmark for video-language understanding.",
-      "highlights": {
-        "contribution": "把视频片段检索任务推广到 GMR 设定（多正/零正），并发布 Soccer-GMR 大规模 benchmark 与统一评测协议。",
-        "innovation": "duration-flexible 半自动标注管线加显式的 null-set 拒绝评测加给 MLLM 定制的 GRPO 奖励都为多/零片段场景而设计。",
-        "method": "Soccer-GMR 基准建设；轻量 GMR adapter 即插到判别式 VMR；GMR 定制 GRPO 奖励微调 MLLM；统一 null/positive/end-to-end 三类指标。",
-        "results": "新基准加两类 baseline 在所有指标上一致提升，并暴露当前方法在多正/零正场景下的关键短板。"
-      },
-      "images": [],
-      "published_date": "2026-05-04T14:14:06Z",
-      "categories": [
-        "cs.CV",
-        "cs.MM"
-      ],
-      "matched_domain": "Multi-modal",
-      "matched_keywords": [
-        "multimodal large language model",
-        "mllm"
-      ],
-      "scores": {
-        "relevance": 3.5,
-        "recency": 5.0,
-        "popularity": 5.0,
-        "quality": 6.5,
-        "recommendation": 5.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.02623v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.02623v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.02262",
-      "title": "WindowQuant: Mixed-Precision KV Cache Quantization based on Window-Level Similarity for VLMs Inference Optimization",
-      "authors": [
-        "Wei Tao",
-        "Xiaoyang Qu",
-        "Peiqiang Wang",
-        "Guokuan Li",
-        "Jiguang Wan",
-        "Kai Lu",
-        "Jianzong Wang"
-      ],
-      "affiliations": [
-        "Huazhong University of Science and Technology",
-        "Ping An Technology"
-      ],
-      "summary": "视频 VLM 的视觉 token 序列很长，KV cache 占显存且推理慢。现有 token 级混合精度量化搜索代价大、硬件也不友好。WindowQuant 改成 window 级：根据视觉 token 窗口与文本 prompt 的相似度快速决定每个窗口的最佳位宽，并在量化前重排 KV cache 窗口避免混合精度算的硬件低效。多个数据集上超过 SOTA VLM KV cache 量化方法。",
-      "original_abstract": "Recently, video language models (VLMs) have been applied in various fields. However, the visual token sequence of the VLM is too long, which may cause intolerant inference latency and GPU memory usage. Existing methods propose mixed-precision quantization to the key-value (KV) cache in VLMs based on token granularity, which is time-consuming in the search process and hardware inefficient during computation. This paper introduces a novel approach called WindowQuant, which employs window-adaptive mixed-precision quantization to optimize the KV cache. WindowQuant consists of two modules: window-level quantization search and window-level KV cache computation. Window-level quantization search quickly determines the optimal bit-width configuration of the KV cache windows based on the similarity scores between the corresponding visual token windows and the text prompt, maintaining the model accuracy. Furthermore, window-level KV cache computation reorders the KV cache windows before quantization, avoiding the hardware inefficiency caused by mixed-precision quantization in inference computation. Extensive experiments demonstrate that WindowQuant outperforms state-of-the-art VLM models and KV cache quantization methods on various datasets.",
-      "highlights": {
-        "contribution": "提出 window 级混合精度 KV cache 量化 WindowQuant，加速视频 VLM 推理。",
-        "innovation": "把混合精度的颗粒度从 token 抬到 window，并用 prompt-视觉窗口相似度做快速搜索；再加 KV cache 窗口重排来避免硬件低效。",
-        "method": "window 级量化搜索：相似度分配 bit-width；window 级 KV cache 计算：先重排再量化以保持硬件对齐。",
-        "results": "多数据集上超过 SOTA VLM 和 KV cache 量化方法，保持精度同时减少推理延迟与显存。"
-      },
-      "images": [],
-      "published_date": "2026-05-04T06:17:13Z",
-      "categories": [
-        "cs.CV",
-        "cs.CL"
-      ],
-      "matched_domain": "Multi-modal",
-      "matched_keywords": [
-        "vlm"
-      ],
-      "scores": {
-        "relevance": 3.5,
-        "recency": 5.0,
-        "popularity": 5.0,
-        "quality": 6.5,
-        "recommendation": 5.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.02262v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.02262v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.02202",
-      "title": "CBV: Clean-label Backdoor Attacks on Vision Language Models via Diffusion Models",
-      "authors": [
-        "Ji Guo",
-        "Xiaolong Qin",
-        "Cencen Liu",
-        "Jielei Wang",
-        "Jierun Chen",
-        "Wenbo Jiang"
+        "Michael Thielscher",
+        "Tran Cao Son"
       ],
       "affiliations": [],
-      "summary": "现有 VLM 后门攻击靠改图像加改标签，图文不匹配很容易被检测。CBV 用 diffusion 模型在反向生成过程中改 score，让生成的含触发器图像还保留原标签，做到 clean-label。再用 GradCAM mask 把扰动限制在最语义相关的区域，更隐蔽。在 MSCOCO 和 VQAv2 加四种 VLM 上达到 80%+ ASR。",
-      "original_abstract": "Vision-Language Models (VLMs) have achieved remarkable success in tasks such as image captioning and visual question answering (VQA). However, as their applications become increasingly widespread, recent studies have revealed that VLMs are vulnerable to backdoor attacks. Existing backdoor attacks on VLMs primarily rely on data poisoning by adding visual triggers and modifying text labels, where the induced image-text mismatch makes poisoned samples easy to detect. To address this limitation, we propose the Clean-Label Backdoor Attack on VLMs via Diffusion Models (CBV), which leverages diffusion models to generate natural poisoned examples via score matching. Specifically, CBV modifies the score during the reverse generation process of the diffusion model to guide the generation of poisoned samples that contain triggered image features. To further enhance the effectiveness of the attack, we incorporate the textual information of the triggered images as multimodal guidance during generation. Moreover, to enhance stealthiness, we introduce a GradCAM-guided Mask (GM) that restricts modifications to only the most semantically important regions, rather than the entire image. We evaluate our method on MSCOCO and VQA v2 with four representative VLMs, achieving over 80% ASR while preserving normal functionality.",
+      "summary": "经典 AGM 信念修正只考虑单 agent，这篇把它推广到多 agent epistemic planning 场景：当一个 agent 相信了某个性质，整个 Kripke 模型里所有 agent 的信念该怎么更新。给出泛化的 AGM postulates、generalized full-meet 操作子，以及基于 event model 的更复杂修正算子，还讨论了迭代多 agent 修正的潜在难题。",
+      "original_abstract": "We investigate the belief revision problem in epistemic planning, i.e., what will be the beliefs of all agents in a multi-agent system after an agent gains the belief in some state property. Based on the standard representation in epistemic planning of agents' beliefs via a single multi-agent Kripke model, we generalize the classical AGM belief revision postulates to the multi-agent setting, with the aim to provide a formal framework for evaluating dynamic epistemic reasoning frameworks in which the beliefs of all agents as the result of actions are computed. As an example of a simple operator that satisfies all of the generalized AGM postulates, we present generalized full-meet multi-agent belief revision. We moreover define a generalization of the standard postulates for iterated revision, present a more sophisticated, event model based revision operator, and discuss the potential issues in defining an epistemic operator on Kripke models that can satisfy all of the generalized postulates for iterated multi-agent belief revision.",
       "highlights": {
-        "contribution": "提出针对 VLM 的 clean-label backdoor 攻击 CBV，用 diffusion 生成触发样本而不改标签。",
-        "innovation": "score modification 把视觉触发器嵌入 diffusion 反向过程加文本作为多模态 guidance；GradCAM mask 控制扰动区域提升隐蔽性。",
-        "method": "diffusion 反向生成时改 score 注入触发器，多模态 caption guidance 强化效果，GradCAM 限制改动区域。",
-        "results": "MSCOCO 和 VQA v2 上四种 VLM 均超 80% ASR，正常功能保持。"
+        "contribution": "把 AGM 信念修正 postulates 推广到多 agent epistemic planning 的 Kripke 模型上，提供形式化评测框架。",
+        "innovation": "在单一多 agent Kripke 表示下统一所有 agent 信念更新，并把迭代修正的 postulates 也推广过去。",
+        "method": "形式化定义 generalized AGM postulates；构造 generalized full-meet 操作子；引入 event-model 风格的更复杂修正算子作为案例。",
+        "results": "理论性工作，给出满足条件的具体算子并讨论了在迭代多 agent 修正下不能同时满足所有泛化 postulates 的潜在难题。"
       },
       "images": [],
-      "published_date": "2026-05-04T04:02:23Z",
+      "published_date": "2026-05-04T05:46:06Z",
       "categories": [
         "cs.AI"
       ],
-      "matched_domain": "Multi-modal",
+      "matched_domain": "Agent",
       "matched_keywords": [
-        "vision-language model",
-        "vision language model",
-        "vlm"
+        "multi-agent"
       ],
       "scores": {
         "relevance": 3.5,
         "recency": 5.0,
-        "popularity": 5.0,
-        "quality": 6.0,
-        "recommendation": 4.5
+        "popularity": 4.5,
+        "quality": 6.5,
+        "recommendation": 5.0
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.02202v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.02202v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.02249v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02249v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.02285",
+      "title": "Complexity Horizons of Compressed Models in Analog Circuit Analysis",
+      "authors": [
+        "Pacome Simon Mbonimpa"
+      ],
+      "affiliations": [],
+      "summary": "把 LLM 压缩部署到电路分析这种专业域时，准确率和算力得权衡。作者用先修概念 DAG 把电子学知识结构化，找出每个压缩变体的 complexity horizon，再用一个 agentic pipeline 级联评测：根据查询难度选最小够用的压缩模型。模电数据集上的实验给出了模型压缩 vs 任务复杂度的细粒度地图。",
+      "original_abstract": "The deployment of Large Language Models (LLMs) for specialized engineering domains, such as circuit analysis, often faces a trade-off between reasoning accuracy and computational efficiency. Traditional evaluation methods treat model performance as a flat metric, failing to account for the hierarchical nature of engineering knowledge. We propose a performance-aware model compression strategy that utilizes prerequisite graphs to optimize model selection for circuit analysis tasks. By structuring electronics design concepts as Directed Acyclic Graphs (DAGs), we can identify the specific complexity horizons of an LLM's compressed variants' tiers. Our framework introduces an agentic pipeline for generating prerequisite-based datasets and a strategic evaluation engine that dynamically cascades queries across a spectrum of compressed variants of an LLM. This approach allows to select the smallest compressed model, given its conceptual knowledge boundaries in circuit analysis. Experimental results on analog electronics datasets demonstrate that prerequisite graphs provide a granular map of model compression with respect to the performance given circuit analysis complexity. (Source Code: https://github.com/pacomesimon/LLM_prereq_graphs_circuit_analysis, Demo: https://huggingface.co/spaces/pacomesimon/LLM_prereq_graphs_circuit_analysis)",
+      "highlights": {
+        "contribution": "提出基于先修知识 DAG 的性能感知模型压缩策略，专门服务电路分析任务的模型选择。",
+        "innovation": "把电子学知识组织成 prerequisite DAG，按概念层级评估模型压缩变体的 complexity horizon，而不是用扁平指标。",
+        "method": "agentic pipeline 自动生成基于先修关系的数据集；评测引擎按查询复杂度在多个压缩变体间级联，选最小可用模型。",
+        "results": "模电数据集上的实验证明 prerequisite DAG 能给出压缩-性能-任务复杂度的粒度映射，源代码与 demo 已开源。"
+      },
+      "images": [],
+      "published_date": "2026-05-04T07:19:48Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 3.0,
+        "recency": 5.0,
+        "popularity": 4.0,
+        "quality": 6.0,
+        "recommendation": 4.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.02285v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.02285v1",
       "venue": null
     }
   ],

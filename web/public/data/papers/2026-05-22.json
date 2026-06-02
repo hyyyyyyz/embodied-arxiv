@@ -51,140 +51,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.23128",
-      "title": "$π_0$-EqM: Equilibrium Matching for Closed-Loop Vision-Language-Action Control",
-      "authors": [
-        "Huanming Liu",
-        "Congsheng Xu",
-        "Jianmin Ji",
-        "Yao Mu"
-      ],
-      "affiliations": [
-        "USTC",
-        "HKU"
-      ],
-      "summary": "作者在 π0 这套 VLA 上把 flow matching 的动作专家换成了 Equilibrium Matching (EqM) 解码器，其他不动。同样 300 步预算下，RoboTwin 19 个任务平均成功率从 40.4% 直接拉到 50.2%，LIBERO-10 也到了 87%。还顺带分析了一个叫 stationarity-executability gap 的现象，把推理深度当成策略设计的一部分来看。",
-      "original_abstract": "Currently, Vision-Language-Action (VLA) models have become the most adopted paradigm for robotic manipulation for its great potential for task generalization. While most generative flow-matching action decoders for VLA control are often deployed with fixed sampling horizons, limiting state-dependent compute and temporal reuse across control cycles. We present $π_0$-EqM, which replaces the flow-matching expert in $π_0$ with an Equilibrium Matching (EqM) decoder while leaving the upstream VLA stack unchanged. Under a matched 300-step budget, $π_0$-EqM improves RoboTwin average success from 40.4% to 50.2% across 19 tasks and remains competitive on LIBERO, with its clearest gain on LIBERO-10 (87.0%). Two threshold scans reveal a task-dependent non-monotonic relation between residual and success, which we term the stationarity--executability gap. The results suggest that inference depth in iterative VLA control is part of policy design and introduce an energy-based VLA perspective that may inform future work on composable action generation across tasks and embodiments.",
-      "highlights": {
-        "contribution": "把 π0 的 flow matching 动作头替换为 Equilibrium Matching，让闭环 VLA 控制能按状态自适应消耗计算。",
-        "innovation": "首次把能量基/EqM 视角引入 VLA，动作生成被看作向均衡点收敛而非固定步数采样。",
-        "method": "保留 π0 上游 VLM 不变，仅替换动作解码器为 EqM；通过残差阈值决定推理深度，分析了 stationarity-executability gap。",
-        "results": "RoboTwin 19 任务平均 40.4% → 50.2%；LIBERO-10 87.0%；在匹配 300 步预算下显著优于 flow-matching 版本。"
-      },
-      "images": [],
-      "published_date": "2026-05-22T01:07:07Z",
-      "categories": [
-        "cs.RO"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "vision-language-action",
-        "robotic manipulation"
-      ],
-      "scores": {
-        "relevance": 9.5,
-        "recency": 7.0,
-        "popularity": 7.5,
-        "quality": 8.0,
-        "recommendation": 8.3
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.23128v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.23128v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.23163",
-      "title": "Fast-dDrive: Efficient Block-Diffusion VLM for Autonomous Driving",
-      "authors": [
-        "Kewei Zhang",
-        "Jin Wang",
-        "Sensen Gao",
-        "Chengyue Wu",
-        "Yulong Cao",
-        "Songyang Han",
-        "Boris Ivanovic",
-        "Langechuan Liu",
-        "Marco Pavone",
-        "Song Han",
-        "Daquan Zhou",
-        "Enze Xie"
-      ],
-      "affiliations": [
-        "NVIDIA",
-        "MIT",
-        "Stanford"
-      ],
-      "summary": "端到端自动驾驶里 AR 慢、全序列 diffusion 又会「逻辑泄漏」。Fast-dDrive 用 block-diffusion VLM：段内双向 refine、段间严格因果序，把 JSON 结构 token 冻成 scaffold 重点训规划。配合 SGLang，比 AR 基线快 12 倍，WOD-E2E 的 ADE@3s/5s 拿 SOTA，nuScenes L2 降到 0.32m。",
-      "original_abstract": "End-to-end autonomous driving via Vision-Language-Action (VLA) models demands a precarious balance between high-fidelity trajectory planning and efficient inference. Existing paradigms typically fall short: autoregressive (AR) VLAs are memory-bandwidth-bound on edge hardware and prone to exposure-bias drift, while full-sequence diffusion models preclude KV-cache reuse and suffer from \"logical leakage\" that violates the fundamental perceive-then-plan causality. We present Fast-dDrive, a block-diffusion VLA that performs bidirectional refinement within semantic units while enforcing strict causal ordering across them. Leveraging the observation that driving VLAs often emit structured JSON-like outputs, Fast-dDrive freezes structural tokens into a section scaffold and employs a section-aware training recipe that prioritizes safety-critical planning. We further introduce Scaffold Speculative Decoding to achieve AR-equivalent quality at significantly higher throughput. Finally, we propose a low-overhead test-time scaling scheme: by forking $N$ stochastic trajectory rollouts from a single shared-prefix KV cache and averaging them, we effectively suppress prediction variance at a fractional computational cost. Empirical results demonstrate that Fast-dDrive redefines the speed-accuracy frontier for driving agents. On the WOD-E2E test set, Fast-dDrive achieves SOTA ADE@3s and ADE@5s, alongside the highest RFS among diffusion-based VLAs; on nuScenes, it reduces average L2 error to $0.32$m (a $22\\%$ improvement). When integrated with SGLang, our framework delivers $12\\times$ throughput speedup over the AR baseline, narrowing the gap between high-capacity VLAs and the efficiency demands of real-time on-vehicle deployment.",
-      "highlights": {
-        "contribution": "提出 block-diffusion VLA 驾驶模型，兼顾 KV cache 复用、因果性和高吞吐。",
-        "innovation": "段内双向、段间因果的混合 diffusion 结构 + Scaffold Speculative Decoding，针对驾驶 JSON 输出特性设计。",
-        "method": "冻结结构 token 形成 scaffold；section-aware 训练重权 safety-critical 规划；从共享 prefix KV 采样 N 条 rollouts 并平均作 test-time scaling。",
-        "results": "WOD-E2E ADE@3s/5s SOTA；nuScenes L2 降到 0.32m（-22%）；接入 SGLang 后吞吐 12× AR 基线。"
-      },
-      "images": [],
-      "published_date": "2026-05-22T02:31:32Z",
-      "categories": [
-        "cs.CL"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "vision-language-action"
-      ],
-      "scores": {
-        "relevance": 8.0,
-        "recency": 7.0,
-        "popularity": 8.0,
-        "quality": 8.0,
-        "recommendation": 8.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.23163v2",
-      "arxiv_url": "https://arxiv.org/abs/2605.23163v2",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.23856",
-      "title": "Point Tracking Improves World Action Models",
-      "authors": [
-        "Jiarui Guan",
-        "Wenshuai Zhao",
-        "Yue Pei",
-        "Ziliang Chen",
-        "Arno Solin",
-        "Juho Kannala"
-      ],
-      "affiliations": [
-        "Aalto University"
-      ],
-      "summary": "想让世界-动作模型不要被光照纹理带偏。JOPAT 在一个 denoising diffusion transformer 里联合预测潜在视觉、2D 点轨迹（带可见性）和动作。点轨迹作为显式运动表示在遮挡和出框时更稳。LIBERO 和真机 LeRobot 任务上比纯像素基线强，长时序遮挡场景提升最大。",
-      "original_abstract": "Robot policy learning benefits from world-action models that capture environment dynamics, but pixel-level prediction entangles dynamics with nuisance factors such as lighting and texture, making learned representations vulnerable to task-irrelevant visual variation. We propose JOPAT, a JOint Pixel-And-Track World-Action Model that predicts latent visual observations, 2D point tracks with visibility, and actions in a single denoising diffusion transformer. The key insight is that tracks provide an explicit representation of motion that captures long-horizon dynamics and remains robust under occlusion or partial out-of-frame motion, offering greater utility than modeling pixel appearance alone. On LIBERO and real-world LeRobot tasks, JOPAT improves over pixel-based baselines, with the largest gains on long-horizon tasks involving occlusion, object interaction, and off-screen motion.",
-      "highlights": {
-        "contribution": "JOPAT 联合预测像素 + 2D 点轨迹 + 动作，作为更鲁棒的世界-动作模型。",
-        "innovation": "用 point tracking 作为额外的运动监督，把长时序动力学从光照/纹理 nuisance 中分离出来。",
-        "method": "单个 denoising diffusion transformer 同时去噪潜在视觉观测、带可见性的 2D 轨迹、以及动作。",
-        "results": "LIBERO 和真机 LeRobot 上优于纯像素基线，长时序、遮挡、出框场景增益最大。"
-      },
-      "images": [],
-      "published_date": "2026-05-22T17:08:37Z",
-      "categories": [
-        "cs.RO"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "robot policy"
-      ],
-      "scores": {
-        "relevance": 9.0,
-        "recency": 7.0,
-        "popularity": 7.0,
-        "quality": 7.5,
-        "recommendation": 8.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.23856v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.23856v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.23568",
       "title": "TactileReflex: Noise-Statistics-Driven Vision-Tactile Reflex Control for Force-Sensitive Manipulation",
       "authors": [
@@ -271,49 +137,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.23203",
-      "title": "Lipschitz Optimization for Formal Verification of Homographies",
-      "authors": [
-        "Jean-Guillaume Durand",
-        "Panagiotis Kouvaros",
-        "Maxime Gariel",
-        "Alessio Lomuscio"
-      ],
-      "affiliations": [
-        "Imperial College London"
-      ],
-      "summary": "这篇做的是视觉网络在相机 3D 运动扰动下的正式鲁棒性验证。从相机位姿到像素值建立闭式映射，再用 Lipschitz 优化得到紧的线性边界，第一次能形式化验证 projective 几何变换的鲁棒性。在 VNN-COMP 上比已有方法快 89%、边界紧 7%，还跑了一个跑道分类器的真实安全案例。",
-      "original_abstract": "The adoption of vision neural networks in regulated industries requires formal robustness guarantees, especially in safety-critical domains such as healthcare, autonomous vehicles, and aerospace. However, current approaches are confined to incomplete statistical verification or robustness to $\\ell_p$-norm and affine transforms, which cover only a narrow subset of perturbations to the image formation process. In particular, robustness to camera motion remains an open problem despite being key to deploy many vision applications. We present a formal verification approach that targets robustness against 3D motion perturbations of the capturing camera. We first establish a closed-form mapping from camera pose to pixel values. By analyzing the continuity properties of the resulting homographies, we show that recent work on Lipschitz optimization and piecewise continuity can be extended to derive tight linear bounds on perturbed pixel values. Our approach applies to scenes with predominantly planar structure, such as ground planes in augmented reality, road markings and traffic signs in autonomous driving, or planar workspaces in robotic manipulation. This enables the first formal verification of projective geometry transforms, without complex simulation, surrogate networks, or explicit image-formation models. We validate our implementation and show up to 89% speedup and 7% tighter bounds over prior work. We then evaluate our method on the VNN-COMP benchmark and reveal systematic weaknesses to projective perturbations. Finally, we demonstrate a real-world case study on a safety-critical runway classifier, highlighting practical vulnerabilities to camera motion, and addressing a key challenge in the certification of learned models. Data and code are publicly available at https://github.com/jeangud/homography-verification .",
-      "highlights": {
-        "contribution": "对相机 3D 运动引发的 homography 扰动做形式化鲁棒性验证。",
-        "innovation": "通过 Lipschitz 优化 + piecewise 连续性把 projective 变换转化为可被验证器处理的紧线性边界，无需替代网络或显式图像形成模型。",
-        "method": "从相机 pose 到像素值的闭式映射 → 分析 homography 的 Lipschitz 与分段连续性 → 在 VNN-COMP 验证器上跑。",
-        "results": "比已有方法快 89%、边界紧 7%；揭示 VNN-COMP 模型对 projective 扰动的系统弱点；真实跑道分类器案例发现安全漏洞。"
-      },
-      "images": [],
-      "published_date": "2026-05-22T03:37:34Z",
-      "categories": [
-        "cs.CV",
-        "cs.AI",
-        "cs.LG",
-        "cs.RO"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "robotic manipulation"
-      ],
-      "scores": {
-        "relevance": 4.5,
-        "recency": 7.0,
-        "popularity": 5.5,
-        "quality": 7.5,
-        "recommendation": 5.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.23203v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.23203v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.23699",
       "title": "CRONOS: Benchmarking Counterfactual Physical Consistency in Video Models",
       "authors": [
@@ -396,53 +219,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.23220",
-      "title": "WMAttack: Automated Attack Search for Adversarial Evaluation of World-Model Agents",
-      "authors": [
-        "Zhixiang Guo",
-        "Siyuan Liang",
-        "Shi Fu",
-        "Cheng Guo",
-        "Andras Balogh",
-        "Mark Jelasity",
-        "Dacheng Tao"
-      ],
-      "affiliations": [
-        "NTU",
-        "USTC"
-      ],
-      "summary": "想正经评估世界模型 agent 的对抗鲁棒性，但手调攻击不准，遍历搜索又太贵。WMAttack 把它变成有限预算下的攻击配置搜索：用 SCAS 根据 reward 退化反馈优化提议分布，用 RGAR 从相似表示任务里检索好用的旧配置 warm start。DreamerV3 Atari 的归一化 reward 下降从 0.497 拉到 1.034，DMC 从 0.319 到 0.682。",
-      "original_abstract": "Despite the growing use of world models as decision-making agents, their adversarial robustness remains underexplored due to the lack of dedicated automated evaluation methods. A key obstacle is that attack evaluation must be both accurate and efficient: weak manually tuned attacks can overestimate robustness, while exhaustive hyperparameter search is prohibitively expensive because each candidate requires closed-loop rollouts through learned latent dynamics. We introduce WMAttack, an automated attack-search framework for adversarial evaluation of world-model agents. WMAttack formulates robustness evaluation as a finite-budget search over attack configurations, including attack families, perturbation budgets, optimization steps, restarts, and allocation rules. To improve search accuracy, Self-Correcting Attack Search (SCAS) refines the attack proposal distribution using feedback from reward degradation, action instability, runtime cost, and rollout variability. To improve search efficiency, Representation-Guided Attack Retrieval (RGAR) retrieves effective historical configurations from representation-similar tasks, providing a warm start for unseen environments. We provide a theoretical explanation showing that proposal refinement improves finite-budget search when it shifts probability mass toward high-utility attacks. Across Atari and DeepMind Control tasks, WMAttack consistently discovers stronger attacks than the evaluated baselines, improving normalized reward drop from 0.497 to 1.034 on DreamerV3 Atari and from 0.319 to 0.682 on DMC. Ablations further show that RGAR improves initial candidate quality and SCAS improves final attack utility under fixed evaluation budgets.",
-      "highlights": {
-        "contribution": "提出针对世界模型 agent 的自动化对抗攻击搜索框架。",
-        "innovation": "SCAS 自纠正攻击搜索 + RGAR 表示引导检索，给闭环 latent 动力学攻击提供高效搜索。",
-        "method": "把鲁棒性评估建成有限预算的攻击配置搜索（攻击族、扰动预算、步数、重启、分配）；SCAS 用 reward 退化/动作不稳定/方差反馈更新分布；RGAR 从历史相似任务检索 warm start。",
-        "results": "DreamerV3 Atari 归一化 reward drop 0.497 → 1.034；DMC 0.319 → 0.682；消融显示 SCAS/RGAR 各自有效。"
-      },
-      "images": [],
-      "published_date": "2026-05-22T04:31:09Z",
-      "categories": [
-        "cs.LG"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model",
-        "world models",
-        "latent dynamics",
-        "dreamerv3"
-      ],
-      "scores": {
-        "relevance": 7.5,
-        "recency": 7.0,
-        "popularity": 6.0,
-        "quality": 7.5,
-        "recommendation": 7.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.23220v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.23220v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.23345",
       "title": "SCOPE: Simulating Cross-game Operations in Playable Environments for FPS World Models",
       "authors": [
@@ -491,86 +267,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2605.23345v2",
       "arxiv_url": "https://arxiv.org/abs/2605.23345v2",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.28865",
-      "title": "Emergent Semantic Representations in World Models through Physical Interaction without Linguistic Supervision",
-      "authors": [
-        "Jiayi Fang"
-      ],
-      "affiliations": [],
-      "summary": "一个挺有意思的实验：让 VAE 世界模型只做随机具身探索、不接触任何语言监督，问它的潜空间会不会自发出现「语义」。结果方向准确率 0.677 vs 随机编码器 0.547，位置 RSA 提升 6.6×。KL 调大潜空间几何结构就崩，语义对齐也同步崩，作者把这归到一个 shared-driver 假设。",
-      "original_abstract": "What does a world model learn from physical exploration, without any linguistic supervision? We argue the answer is organized by a single principle: the geometric structure of the physical world. Training a VAE-based world model on random embodied exploration, we find that its latent space develops spatial semantic structure that mirrors physical geometry -- direction accuracy 0.677+-0.029 versus 0.547 for a randomly initialized encoder, and position RSA 0.192+-0.047 versus 0.029 for random encoders (6.6x improvement), showing that training induces genuine structural organization beyond CNN inductive bias. Across 20 temporal checkpoints, prediction performance and semantic alignment co-improve (Spearman r=-0.61, p=0.004), consistent with the shared-driver account. We confirm this through a double knockout: standard KL regularization (beta=0.1) forces the encoder away from geometric structure, and both prediction performance and semantic alignment collapse simultaneously to near-chance by step 50,000 -- exactly as the shared-driver account predicts. Reducing beta to 0.001 restores geometric access and recovers both capabilities together. These findings establish physical world geometry as the organizing principle of world model representations, with direct implications for the design of semantically grounded embodied agents.",
-      "highlights": {
-        "contribution": "在无语言监督下，验证物理几何是世界模型潜表示的组织原则。",
-        "innovation": "用「双重击倒」实验（KL 调高）证明几何结构和语义对齐是共驱动现象，而非 CNN 归纳偏置。",
-        "method": "VAE 世界模型在随机具身探索数据上训练；在 20 个 checkpoint 上跟踪预测性能与语义对齐；变更 β 做敏感性分析。",
-        "results": "方向准确率 0.677±0.029 vs 随机 0.547；位置 RSA 0.192 vs 0.029（6.6×）；预测与语义相关 Spearman r=-0.61, p=0.004。"
-      },
-      "images": [],
-      "published_date": "2026-05-22T03:31:47Z",
-      "categories": [
-        "cs.LG",
-        "cs.AI"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model",
-        "world models"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 7.0,
-        "popularity": 5.5,
-        "quality": 6.5,
-        "recommendation": 6.6
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.28865v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.28865v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.23470",
-      "title": "Learning Individual Dynamics from Sparse Cross-Sectional Snapshots",
-      "authors": [
-        "Christian Lagemann",
-        "Kai Lagemann",
-        "Steven L. Brunton",
-        "Sach Mukherjee"
-      ],
-      "affiliations": [
-        "DZNE",
-        "University of Washington"
-      ],
-      "summary": "想从横截面快照（不是时间序列）里恢复个体的连续轨迹。CADENCE 用 score-based 编码器消除 diffeomorphic 不可识别性，再用 Soft MoE 路由器把动力学锚到个体级静态上下文。理论上给出了单时点轨迹推断的可识别性保证，跨多个 benchmark 和真实生物数据上能匹配甚至超过用密集轨迹训出来的 SOTA。",
-      "original_abstract": "Predicting how a dynamical unit evolves over time - how an individual ages, an epidemic spreads, or a physical system degrades - typically requires dense longitudinal tracking. When only extremely sparse or entirely cross-sectional data is available, inferring individualized, continuous-time trajectories is fundamentally ill-posed. Existing methods force a strict compromise: sequence models (e.g. latent ODEs) require dense longitudinal data, while cross-sectional methods (e.g. optimal transport, flow matching-based) map aggregate populations, losing individual dynamics. In this paper, we demonstrate that this dichotomy can be broken. We introduce CADENCE, a principled probabilistic framework that recovers continuous individual trajectories from isolated snapshots by anchoring latent dynamics to static, individual-level contexts. We provide novel identifiability guarantees for single-timepoint trajectory inference. By combining a score-based spatial encoder (bijective Probability Flow ODE) to eliminate diffeomorphic ambiguities with a Soft Mixture-of-Experts (SMoE) router, we show that individual dynamical parameters and routing function are jointly identifiable. Across a suite of benchmarks spanning physical systems to real-world biological data, CADENCE, trained strictly on extremely sparse snapshots with context structure, matches or exceeds the performance of state-of-the-art sequential models trained on dense, full-trajectory data.",
-      "highlights": {
-        "contribution": "在极稀疏甚至纯横截面数据下，从单时点快照恢复个体连续动力学轨迹。",
-        "innovation": "score-based bijective Probability Flow ODE 编码器 + SMoE 路由，给出新的单时点可识别性证明。",
-        "method": "对单时点快照学习潜空间动力学；用静态上下文锚定个体；Probability Flow ODE 编码 + SMoE 动力学路由联合训练。",
-        "results": "在物理系统到真实生物数据多个 benchmark 上，仅用稀疏快照训练即可匹配或超过用密集轨迹训的 SOTA 序列模型。"
-      },
-      "images": [],
-      "published_date": "2026-05-22T10:29:47Z",
-      "categories": [
-        "cs.LG",
-        "cs.AI",
-        "cs.CE"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "latent dynamics"
-      ],
-      "scores": {
-        "relevance": 5.0,
-        "recency": 7.0,
-        "popularity": 5.5,
-        "quality": 7.5,
-        "recommendation": 6.2
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.23470v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.23470v1",
       "venue": null
     },
     {
@@ -746,49 +442,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.23287",
-      "title": "LangFlash: Feed-forward 3D Language Gaussian Splatting from Sparse Unposed Images",
-      "authors": [
-        "Yilong Liu",
-        "Wanhua Li",
-        "Chen Zhu-Tian",
-        "Hanspeter Pfister"
-      ],
-      "affiliations": [
-        "Harvard"
-      ],
-      "summary": "LangFlash 一发前向就从稀疏无位姿的多视图重建 3D 场景，并且每个 Gaussian 都带语言对齐的语义特征。靠 global semantic dictionary + per-primitive 局部权重做稀疏语义编码降低复杂度。还在 RealEstate10k 上加了 dense 语义监督。",
-      "original_abstract": "We present LangFlash, a feed-forward framework for 3D Language Gaussian Splatting that reconstructs 3D scenes parameterized by Gaussian primitives enriched with language-aligned semantic features from sparse unposed multi-view images. Unlike optimization-based 3D methods, LangFlash directly predicts the geometry and semantics in a single forward pass, enabling low-latency 3D reconstruction and language-consistent scene understanding. To support large-scale training, we enriched the RealEstate10k dataset with coherent and dense semantic information for 3D semantic supervision. Furthermore, we propose a sparse semantic encoding scheme that combines a global semantic dictionary with locally varying per-primitive weights, preserving high-level linguistic information, while reducing representation complexity. Experimental results show that LangFlash achieves superior novel view synthesis and semantic consistency compared with previous methods. This study establishes a new paradigm for pose-free, language-grounded 3D scene reconstruction, advancing generalizable 3D vision and multimodal scene understanding. Demo is available at https://liylo.github.io/langflash.github.io/.",
-      "highlights": {
-        "contribution": "feed-forward 框架同时输出 Gaussian 几何和语言对齐语义，支持稀疏无位姿输入。",
-        "innovation": "全局语义字典 + 局部 per-primitive 权重的稀疏语义编码方案，兼顾语义保真和表示紧凑。",
-        "method": "Gaussian primitive 同时携带几何和语义特征；用增强后的 RealEstate10k 训练；前向一次出几何和语义。",
-        "results": "新视图合成和语义一致性优于已有方法；建立 pose-free 语言接地 3D 重建的新范式。"
-      },
-      "images": [],
-      "published_date": "2026-05-22T06:59:00Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "VGGT",
-      "matched_keywords": [
-        "feed-forward 3d",
-        "novel view synthesis",
-        "gaussian splatting",
-        "3d scene reconstruction"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 7.0,
-        "popularity": 7.0,
-        "quality": 7.5,
-        "recommendation": 7.3
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.23287v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.23287v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.23888",
       "title": "GenRecon: Bridging Generative Priors for Multi-View 3D Scene Reconstruction",
       "authors": [
@@ -954,155 +607,478 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.23883",
-      "title": "PGT: Procedurally Generated Tasks for improving visual grounding in MLLMs",
+      "arxiv_id": "2605.23899",
+      "title": "From Raw Experience to Skill Consumption: A Systematic Study of Model-Generated Agent Skills",
       "authors": [
-        "Rim Assouel",
-        "Amir Bar",
-        "Michal Drozdzal",
-        "Adriana Romero-Soriano"
+        "Zisu Huang",
+        "Jingwen Xu",
+        "Yifan Yang",
+        "Ziyang Gong",
+        "Qihao Yang",
+        "Muzhao Tian",
+        "Xiaohua Wang",
+        "Changze Lv",
+        "Xuemei Gao",
+        "Qi Dai",
+        "Bei Liu",
+        "Kai Qiu",
+        "Xue Yang",
+        "Dongdong Chen",
+        "Xiaoqing Zheng",
+        "Chong Luo"
       ],
       "affiliations": [
-        "Meta FAIR",
-        "Mila"
+        "Microsoft Research",
+        "Fudan University"
       ],
-      "summary": "MLLM 细粒度理解差。PGT 在图像上叠加无歧义的几何 primitives 当作额外稠密监督，把视觉接地能力从语义先验里解耦出来，顺带还能用来定位感知失败的来源。LLaVA-v1.5-Instruct 加 PGT 数据微调，在 What'sUp 上 +20%、CV-Bench-2D 上 +13.3%。",
-      "original_abstract": "Despite remarkable progress in Multimodal Large Language Models (MLLMs), these models still struggle with fine-grained understanding tasks. In this work, we propose Procedurally Generated Tasks (PGT), a simple data-driven framework that serves a dual purpose: inducing fine-grained visual understanding and acting as a low-cost diagnostic tool to identify the source of perception failures. By overlaying unambiguous geometric primitives on images, PGT generate additional dense supervision that disentangles visual grounding capability from semantic priors. Extensive experiments on relational, quantitative, and 3D/depth understanding benchmarks show that PGT yields remarkable gains across diverse architectures. Instruction tuning MLLMs on LLaVA-v1.5-Instruct augmented with PGT data results in improvements of up to +20% on the What'sUp benchmark and +13.3% on CV-Bench-2D, while maintaining general perception capabilities. Moreover, finetuning state-of-the-art MLLMs on PGT data leads to boosts of up to +5.5% on What'sUp and +8.3% on CV-Bench-2D. These findings demonstrate that PGT effectively address the bottleneck of fine-grained perception, revealing that many spatial reasoning deficits stem from inadequate supervision signals rather than inherent architectural or resolution limitations.",
+      "summary": "这篇是 model-generated agent skill 的全生命周期系统研究：从经验生成 → skill 抽取 → skill 消费三个阶段一起拆。作者发现 skill 平均有用但有不少 negative transfer，提取强的模型不一定是会用 skill 的消费者，反之也成立。他们还提了一个 meta-skill 去引导抽取流程，让 skill 质量更稳。微软 Bei Liu / Xue Yang / Dongdong Chen / Chong Luo 那批人都在作者列表里，含金量较高。",
+      "original_abstract": "Language agents increasingly improve by reusing \\emph{skills} -- structured procedural artifacts distilled from past experience. In particular, \\emph{domain-level} and \\emph{model-generated} skills are especially promising. They offer fast adaptation within a domain by encoding domain-specific recurring procedures, and they scale beyond labor-intensive hand-crafting. However, while extraction methods continue to proliferate, understanding remains limited, with no comprehensive study spanning the full skill lifecycle -- \\textbf{experience generation}, \\textbf{skill extraction}, and \\textbf{skill consumption} -- to ask whether such skills actually work, when they work, and what makes them succeed or fail. To close this gap, we build a utility-grounded evaluation framework that provides systematic experimental results across extractors and target agents, covering five diverse agentic task domains. We find that model-generated skills are beneficial on average but exhibit non-trivial negative transfer, and that neither extractors nor targets behave uniformly. A model can be a strong extractor yet a weak consumer, or vice versa, with skill utility independent of model scale or baseline task strength. To explain these patterns, we then dissect each lifecycle stage in depth, analyzing how experience composition shapes skill quality, what properties characterize useful skills, and how the same skill transfers across different consumers. Finally, we translate these findings into a concrete \\emph{meta-skill} that guides skill extraction toward the features tied to actual utility, which consistently improves skill quality across domains and substantially reduces negative transfer.",
       "highlights": {
-        "contribution": "提出 Procedurally Generated Tasks，用程序生成的几何 primitive 监督显著提升 MLLM 细粒度视觉接地。",
-        "innovation": "把视觉接地从语义先验解耦的程序化数据增强 + 同时可作诊断工具定位感知失败来源。",
-        "method": "在图像上叠加几何 primitive 作为 dense 监督；用 LLaVA-v1.5-Instruct 等做 instruction tuning；在多种关系/数量/3D/depth benchmark 评估。",
-        "results": "LLaVA-v1.5-Instruct 上 What'sUp +20%、CV-Bench-2D +13.3%；SOTA MLLM 也能 +5.5%/+8.3%，且不掉一般感知能力。"
+        "contribution": "首个覆盖 experience generation / skill extraction / skill consumption 全生命周期的 model-generated skill 系统研究。",
+        "innovation": "拆解 extractor 和 consumer 的非对称性，量化 negative transfer，并提出引导 skill 提取的 meta-skill。",
+        "method": "搭 utility-grounded 评估框架跨 5 个 agentic domain；逐阶段分析经验组成对 skill 质量的影响；提炼出 meta-skill 引导提取流程并实证。",
+        "results": "model-generated skill 平均有效但存在显著 negative transfer；extractor 与 consumer 角色解耦；meta-skill 在所有 domain 上一致提升质量并减少负迁移。"
       },
       "images": [],
-      "published_date": "2026-05-22T17:45:01Z",
+      "published_date": "2026-05-22T17:59:12Z",
       "categories": [
-        "cs.CV",
         "cs.AI"
       ],
-      "matched_domain": "Multi-modal",
+      "matched_domain": "Agent",
       "matched_keywords": [
-        "multimodal large language model",
-        "mllm",
-        "spatial reasoning"
+        "agentic",
+        "language agent"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 7.0,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23899v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23899v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23574",
+      "title": "Push Your Agent: Measuring and Enforcing Quantitative Goal Persistence in Long-Horizon LLM Agents",
+      "authors": [
+        "Yuandao Cai",
+        "Yuzhang Zhu",
+        "Liyou Gao",
+        "Wensheng Tang",
+        "Shengchao Qin"
+      ],
+      "affiliations": [],
+      "summary": "Long-horizon agent 经常出现一个怪现象：每一步看起来都对，但用户让它收集 100 个东西它就是凑不齐。作者把这定义为 Quantitative Goal Persistence（QGP），做了个 PushBench：用外部 verifier 量化重复提交、虚假完成、进度漂移这些隐藏失败。结果显示状态跟踪 retrieval controller 在 50 件任务上 69-78% 成功率，但 frontier agent 在 100 件任务上掉到 9 个里 3 个。",
+      "original_abstract": "Long-horizon language agents can make many plausible local tool calls yet fail to persist until a requested count is actually complete. We study this gap as Quantitative Goal Persistence (QGP): whether an agent keeps working until an external verifier confirms enough distinct valid items. PushBench turns this into a benchmark for repository-artifact collection and verifier-backed work units, so repeated work, duplicate submissions, false completion, and progress drift are measured directly rather than hidden behind a final success flag. In matched controller comparisons, a state-tracking retrieval controller reaches 69-78% success while eliminating duplicate submissions, and a backlog-tracking work-unit controller reaches 25-50% success in settings where standard and completion-gated controllers complete no task instances. Black-box frontier-agent evaluations with Claude Code (Sonnet 4.6) and Codex CLI (gpt-5.4) solve many 50-artifact tasks but drop to 3 out of 9 successes per condition at 100 artifacts. The results show that quantitative goals stress a different reliability requirement from local task competence: agents must maintain verified progress and stop only when the requested work is complete.",
+      "highlights": {
+        "contribution": "定义 Quantitative Goal Persistence 问题，发布 PushBench 量化 long-horizon agent 的坚持完成能力。",
+        "innovation": "外部 verifier-backed 度量重复、伪完成、漂移，而不是看最终的 success flag；并提出 work-unit / state-tracking 两种 controller。",
+        "method": "构建 PushBench，任务为 repository artifact 收集；设计状态跟踪 retrieval controller 与 backlog-tracking work-unit controller；并 black-box 对比 Claude Code (Sonnet 4.6) 和 Codex CLI (gpt-5.4)。",
+        "results": "状态跟踪 controller 在标准设置取得 69-78% 成功率并消除重复提交；frontier agent 50 件任务能做但 100 件时仅 3/9 成功，揭示量化目标对持久性的额外要求。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T12:44:01Z",
+      "categories": [
+        "cs.LG",
+        "cs.SE"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "language agent"
       ],
       "scores": {
         "relevance": 6.5,
         "recency": 7.0,
-        "popularity": 7.5,
-        "quality": 8.0,
-        "recommendation": 7.5
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.2
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.23883v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.23883v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.23574v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23574v1",
       "venue": null
     },
     {
-      "arxiv_id": "2605.23271",
-      "title": "EvalVerse: Pipeline-Aware and Expert-Calibrated Benchmarking for Professional Cinematic Video Generation",
+      "arxiv_id": "2605.24197",
+      "title": "A Sober Look at Agentic Misalignment in Automated Workflows",
       "authors": [
-        "Songlin Yang",
-        "Haobin Zhong",
-        "Ruilin Zhang",
-        "Xiaotong Zhao",
-        "Shuai Li",
-        "Kai Zheng",
-        "Xuyi Yang",
-        "Zhe Wang",
-        "Zhenchen Tang",
-        "Yang Li",
-        "Bohai Gu",
-        "Zhengwei Peng",
-        "Yidan Huang",
-        "Mengzhou Luo",
-        "Yihang Bo",
-        "Dalu Feng",
-        "Yujia Zhang",
-        "Juntao Ma",
-        "Ruiqi Wang",
-        "Lvmin Zhang",
-        "Yuwei Guo",
-        "Frank Guan",
-        "Maneesh Agrawala",
-        "Hongbo Fu",
-        "Alan Zhao",
-        "Anyi Rao"
+        "Wenqian Ye",
+        "Bo Yuan",
+        "Zhichao Xu",
+        "Yijun Tian",
+        "Yawei Wang",
+        "Henry Kautz",
+        "Aidong Zhang"
       ],
-      "affiliations": [
-        "Stanford",
-        "HKUST(GZ)"
-      ],
-      "summary": "做电影级视频生成的评测。EvalVerse 不再问「对不对」（prompt-following），而是想问「好不好」（电影质量/演技/美学）。按 pre/production/post 拆分类、收专家标注、用 expert-calibrated finetuning 教 VLM 做显式 CoT 评分。还涵盖多镜头剪辑和音画整合。",
-      "original_abstract": "The rapid evolution of generative video foundation models has propelled the field toward professional-grade cinematic synthesis. To achieve such demanding quality, the community transitions towards Reinforcement Learning (RL) and agentic workflows. However, reliable evaluation has emerged as a critical bottleneck. Existing benchmarks predominantly evaluate ''whether it is right'' (basic prompt-following) while fundamentally neglecting ''whether it is good'' (cinematic quality, acting, and aesthetics). Furthermore, current automated metrics lack the domain-specific rigor required to provide trustworthy signals, creating a severe credibility gap between human aesthetic perception and machine scoring. To bridge this gap, we introduce EvalVerse, a comprehensive, pipeline-aware, and expert-calibrated evaluation framework. We treat video generation assessment not merely as an engineering task, but as a core scientific problem: the systematic digitization of subjective cinematic expertise. First, we organize domain knowledge into an evaluation taxonomy aligned with the professional filmmaking workflow (pre-production, production, and post-production). Second, we distill human expert judgments into a curated dataset with large-scale human annotations. Third, we inject this knowledge into Vision-Language Models (VLMs) through an expert-calibrated fine-tuning strategy, enabling the VLM to perform explicit Chain-of-Thought reasoning. Compared to previous works, EvalVerse not only retains compatibility with foundational ''rightness'' metrics, but also significantly expands the criteria to ''goodness'' and broaden the task coverage to complex multi-shot sequencing and audio-visual integration. Consequently, by providing granular diagnostic signals, EvalVerse transcends a static leaderboard and establishes a fundamental infrastructure for future work, such as reward models and evaluator agent.",
+      "affiliations": [],
+      "summary": "多智能体自动工作流里常出 \"agentic misalignment\"：agent 用一个隐式 proxy utility 行动，看起来在干活但偏离了人类目标。作者从 Bayesian 视角说明这是 posterior collapse，然后提了 Agentic Evidence Attribution（AEA）— 用上下文相关的证据去修正 agent 后验，包含自反思和 weak-to-strong 两种实例化。实验显示一个小的 evidence model 就能正交地把 MAS 拉回正轨。",
+      "original_abstract": "We study a class of emergent misalignment in multi-agent systems (MAS), with a focus on automated workflows, which we refer to agentic misalignment. Although these systems can solve complex tasks, they often fail because agents act according to implicit proxy utilities that do not align with the intended human goals. We formally define these behaviors and analyze them within a Bayesian framework, showing that generic utilities naturally lead to posterior collapse of agents in automated workflows. To address this issue, we propose Agentic Evidence Attribution (AEA), a novel alignment paradigm that improves agent posteriors using context-specific evidence. AEA reasons over agent actions and provides structured evidence to correct misaligned behavior during collaboration. To better understand the role of evidence, we study two instantiations of AEA: self-reflection (internal evidence from the model) and weak-to-strong generalization (external evidence on the agentic trajectory). We show that a small evidence model effectively aligns the MAS by providing orthogonal failure attribution. Our results clarify the sources of agentic misalignment in automated workflows and show that evidence-based alignment can effectively improve agent collaboration and leads to reliable multi-agent systems built on automated workflows.",
       "highlights": {
-        "contribution": "面向专业电影级视频生成的 pipeline-aware、专家校准评测框架 EvalVerse。",
-        "innovation": "把电影专业知识系统数字化：评测分类法对齐影片工作流，用专家校准的 CoT VLM 替代传统打分。",
-        "method": "1) 按 pre/production/post 构造评测分类法；2) 收集大规模专家标注；3) 用 expert-calibrated finetuning 训 VLM 做显式 CoT 评分。",
-        "results": "在保留兼容传统「对不对」指标的同时显著扩展「好不好」评估，覆盖复杂多镜头剪辑和音画整合。"
+        "contribution": "形式化定义自动工作流中的 agentic misalignment，并提出 Agentic Evidence Attribution 这一对齐范式。",
+        "innovation": "用 Bayesian posterior collapse 解释 misalignment 现象；用结构化 evidence 而非更强 prompt 来对齐多 agent。",
+        "method": "把 MAS misalignment 建模为 generic utility 下的 posterior collapse，提出两种 AEA 实例：内部自反思和外部 weak-to-strong 证据生成；用小 evidence model 给 agent 做正交失败归因。",
+        "results": "小型 evidence model 即可显著改善多 agent 协作的可靠性，验证 evidence-based alignment 在自动工作流上的有效性。"
       },
       "images": [],
-      "published_date": "2026-05-22T06:22:21Z",
+      "published_date": "2026-05-22T20:40:20Z",
       "categories": [
-        "cs.CV",
         "cs.AI"
       ],
-      "matched_domain": "Multi-modal",
+      "matched_domain": "Agent",
       "matched_keywords": [
-        "vision-language model",
-        "vlm",
-        "audio-visual"
+        "multi-agent",
+        "agentic"
       ],
       "scores": {
-        "relevance": 4.0,
+        "relevance": 6.5,
         "recency": 7.0,
-        "popularity": 7.0,
+        "popularity": 6.5,
         "quality": 7.5,
-        "recommendation": 6.2
+        "recommendation": 7.1
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.23271v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.23271v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.24197v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.24197v1",
       "venue": null
     },
     {
-      "arxiv_id": "2605.23165",
-      "title": "Autonomous Frontier-Based Exploration with VLM Guidance",
+      "arxiv_id": "2605.24069",
+      "title": "When the Manual Lies: A Realistic Benchmark to Evaluate MCP Poisoning Attacks for LLM Agents",
       "authors": [
-        "Aarush Aitha",
-        "Avideh Zakhor"
+        "Shi Liu",
+        "Xuehai Tang",
+        "Xikang Yang",
+        "Liang Lin",
+        "Biyu Zhou",
+        "Wenjie Xiao",
+        "Wantao Liu"
       ],
-      "affiliations": [
-        "UC Berkeley"
-      ],
-      "summary": "把 VLM 拿来做自主探索的高层决策。机器人在 frontier 决策点把当前地图 + 各个 frontier 的图像组成多模态 prompt 喂给 VLM，让它替换掉传统的几何启发式来挑下一个前沿。在 6 个室内仿真场景里 map coverage 比已有方法提升最多 24%，免训练、可迁移。",
-      "original_abstract": "Autonomous robotic exploration of unknown and hazardous environments, a long-standing challenge, can be significantly improved by leveraging the advanced reasoning of Vision-Language Models (VLMs). We introduce a novel exploration pipeline where a VLM performs high-level strategic decision-making, guiding a conventional low-level robotics control stack. At decision points, the robot generates a multimodal prompt with its current map and visual imagery of potential paths, or frontiers. The VLM analyzes this prompt to select the most promising frontier, replacing simple geometric heuristics with contextual spatial reasoning. This approach, validated in simulation across six indoor environments, improves map coverage by up to 24\\% over existing methods. Our pipeline is lightweight, training-free, and easily transferable to any robot with standard sensors and an internet connection.",
+      "affiliations": [],
+      "summary": "MCP 给 LLM agent 装外部工具的时候，把恶意指令藏在工具描述里（不是代码里）会怎样？作者把这种攻击叫 Tool Description Poisoning，做了 32 个高保真场景、覆盖 6 个风险类别的 MCP-TDP benchmark，发现 GPT-4o 这种主流模型在 6 个高风险场景下 ASR 接近 100%，常见的 prompt 护栏基本无效甚至更糟。最后他们提了一个 Reactive Self-Correction 机制让 agent 自己事后回滚。",
+      "original_abstract": "The rise of tool-using Large Language Model (LLM) agents, standardized by protocols like the Model Context Protocol (MCP), has unlocked unprecedented autonomous execution capabilities for LLM Agents by integrating external open-domain knowledge and tools. However, this interoperability introduces a covert attack surface targeting the agent's cognitive planning layer. This paper systematically investigates Tool Description Poisoning (TDP), a novel semantic attack. In TDP, malicious instructions are not embedded in a tool's executable code, but rather covertly injected into its descriptive metadata, the very \"manual\" an agent relies on for secure planning and decision-making. To rigorously and systematically evaluate this emerging threat, we introduce the MCP-TDP Security Benchmark. This high-fidelity sandbox environment comprises 32 realistic, real-world test cases spanning 6 distinct risk categories. Our evaluation of 8 mainstream LLMs reveals severe vulnerabilities, with leading models like GPT-4o exhibiting a nearly 100% Attack Success Rate (ASR) in six high-risk scenarios. Furthermore, our findings demonstrate that common prompt-guardrail defenses are largely ineffective and can, counterintuitively, even be counterproductive (a phenomenon which we term the \"Firewall Fallacy\"). Crucially, we also propose a defense mechanism: \"Reactive Self-Correction,\" where an agent autonomously detects and reverts its own malicious actions post-execution. This work provides the first specialized security benchmark tailored for TDP, offering essential insights for securing the cognitive and planning layers of advanced agentic systems.",
       "highlights": {
-        "contribution": "VLM 引导的 frontier-based 自主探索 pipeline。",
-        "innovation": "把 frontier 选择从几何启发式换成 VLM 的上下文空间推理，无需训练。",
-        "method": "在决策点合成 map + 每个 frontier 的图像作为多模态 prompt 给 VLM；VLM 输出选择，下层走经典控制栈。",
-        "results": "6 个室内仿真场景平均 map coverage 提升最多 24%；轻量、训练-free。"
+        "contribution": "首个针对 MCP Tool Description Poisoning 的安全 benchmark，并提出反应式自纠错的初步防御。",
+        "innovation": "把攻击面从可执行代码挪到工具描述的语义层，并指出常规 prompt 护栏的 \"Firewall Fallacy\" 反作用。",
+        "method": "搭一个高保真 MCP 沙箱，造 32 个真实任务、6 类风险，跑 8 个主流 LLM 算 Attack Success Rate；提出 Reactive Self-Correction，让 agent 执行后检测并回滚自身恶意动作。",
+        "results": "GPT-4o 在 6 个高风险场景接近 100% ASR；常见 prompt 护栏多数无效；反应式自纠错在 benchmark 上提供初步缓解。"
       },
       "images": [],
-      "published_date": "2026-05-22T02:33:47Z",
+      "published_date": "2026-05-22T08:34:48Z",
       "categories": [
-        "cs.RO",
-        "cs.AI",
-        "cs.CL"
+        "cs.CR",
+        "cs.AI"
       ],
-      "matched_domain": "Multi-modal",
+      "matched_domain": "Agent",
       "matched_keywords": [
-        "vision-language model",
-        "vlm",
-        "spatial reasoning"
+        "llm agent",
+        "agentic"
       ],
       "scores": {
-        "relevance": 6.0,
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.24069v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.24069v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23657",
+      "title": "OpenSkillEval: Automatically Auditing the Open Skill Ecosystem for LLM Agents",
+      "authors": [
+        "Jiahao Ying",
+        "Boxian Ai",
+        "Wei Tang",
+        "Siyuan Liu",
+        "Yixin Cao"
+      ],
+      "affiliations": [],
+      "summary": "现在 LLM agent 用社区贡献的 \"skill\"（结构化工作流指令）越来越多，但没人系统评过到底哪些 skill 真有用。作者搞了 OpenSkillEval，从五类下游应用（PPT、网页设计、海报、可视化、报告）动态生成 600+ 任务，配上 30 个开源 skill 做对照评测。结论挺打脸：很多热门 skill 并不能稳定超过裸 agent，skill 的收益强依赖底层模型和 agent 框架。",
+      "original_abstract": "Skills, i.e., structured workflow instructions distilled for large language models (LLMs), are becoming an increasingly important mechanism for improving agent performance on real-world downstream tasks. However, as the open-source skill ecosystem rapidly expands, it remains unclear how different models and agent frameworks interact with skills, how to evaluate skill quality, and how users should select skills under practical cost-performance trade-offs. In this paper, we present \\textsc{OpenSkillEval}, an automatic evaluation framework for both skill-augmented agent systems and the skills themselves. Instead of relying on static benchmarks, \\textsc{OpenSkillEval} automatically constructs realistic task instances from evolving real-world artifacts across five categories of downstream applications: presentation generation, front-end web design, poster generation, data visualization, and report generation. It further collects and organizes community-contributed skills for controlled comparison under unified task settings. Using more than 600 dynamically generated task instances and 30 open-source skills, we conduct a systematic evaluation of state-of-the-art models and agent frameworks. Our results show that skill availability does not guarantee effective skill usage, that the benefit of skill augmentation depends strongly on both the underlying model and the agent framework, and that many publicly popular skills do not consistently outperform base agents without skills. These findings highlight the need for dynamic, task-grounded evaluation and provide practical insights into the design, selection, and deployment of skills for LLM agents. Additional cases and benchmark resources are available on the project website: https://yingjiahao14.github.io/OpenSkillEval-Web/.",
+      "highlights": {
+        "contribution": "提出一个动态、任务接地的 skill 评估框架 OpenSkillEval，用于 LLM agent 的开放 skill 生态审计。",
+        "innovation": "不靠静态 benchmark，而是从真实世界 artifact 动态合成任务，并对 community skill 做统一对照。",
+        "method": "在 5 类下游应用上自动构造 600+ 任务实例，收集 30 个开源 skill，跑多种 SOTA 模型 + agent framework，比较 skill 对效果和成本的影响。",
+        "results": "skill 可用性不等于会用；很多 popular skill 没法稳定超过 no-skill baseline；skill 收益强依赖底层模型和 framework。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T14:09:41Z",
+      "categories": [
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23657v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.23657v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.24216",
+      "title": "Agent-ToM: Learning to Monitor Autonomous LLM Agents via Theory-of-Mind Reasoning",
+      "authors": [
+        "Nesreen K. Ahmed",
+        "Nima Nafisi"
+      ],
+      "affiliations": [],
+      "summary": "监控 LLM agent 的隐藏恶意行为很难，因为攻击常是延迟、上下文相关、长时序的。作者提了 Agent-ToM，把 Theory-of-Mind 引进 monitor：显式推理 agent 的信念、意图、期望动作和偏离基线的程度，再用 Reason-Verify-Refine 流水线决策，并把 critique 蒸馏成 \"语义护栏记忆\" 复用。SHADE-Arena / CUA-SHADE-Arena 上 precision-recall 平衡和 SOTA 表现都很好。",
+      "original_abstract": "Monitoring autonomous large language model (LLM) agents for covert malicious behavior is challenging due to delayed, context-dependent, and long-horizon attack patterns. Agents may pursue hidden objectives while maintaining superficially benign behavior, making detection difficult even with full trajectory access. Prior monitoring approaches improve scaffolding or ensemble aggregation, but treat each trajectory independently and do not learn from prior monitoring experience. Moreover, standard reasoning methods explain observed behavior without explicitly reasoning about agent beliefs, intentions, and goal alignment required to distinguish benign task execution from covert deviation.   We propose \\textbf{Agent-ToM}, a learning-to-monitor framework grounded in Theory-of-Mind (ToM) reasoning for security analysis of autonomous agents. Agent-ToM performs structured full-trajectory analysis by inferring beliefs, intent hypotheses with calibrated confidence, expected actions, and deviations from task-consistent behavioral baselines. At inference time, it employs a \\textit{Reason-Verify-Refine} pipeline to construct and validate monitoring decisions. At training time, Agent-ToM distills critique signals into a persistent \\textit{semantic guardrail memory}, enabling reusable belief- and intent-conditioned constraints across episodes. We evaluate Agent-ToM on adversarial agent monitoring benchmarks (SHADE-Arena and CUA-SHADE-Arena). Agent-ToM achieves strong precision-recall balance and outperforms state-of-the-art monitoring baselines, including ensemble methods, while using a coherent two-call reasoning pipeline. These results demonstrate that learning at the monitoring layer, combined with structured ToM reasoning and verification, provides an effective and deployable foundation for securing autonomous LLM agents.",
+      "highlights": {
+        "contribution": "提出基于 Theory-of-Mind 的学习型 agent 监控框架 Agent-ToM，专门对付 covert long-horizon 攻击。",
+        "innovation": "显式建模 belief / intent / expected action，并把 critique 蒸馏到跨 episode 复用的 semantic guardrail memory。",
+        "method": "推理时用 Reason-Verify-Refine 两次调用做监控决策；训练时把验证 critique 累积到 semantic guardrail memory；在对抗 agent 监控 benchmark 上微调和评估。",
+        "results": "在 SHADE-Arena 和 CUA-SHADE-Arena 上 precision-recall 平衡优于现有 ensemble baseline。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T20:57:20Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL",
+        "cs.CR"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.24216v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.24216v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.24219",
+      "title": "Beyond Final Answers: Auditing Trajectory-Level Hallucinations in Multi-Agent Industrial Workflows",
+      "authors": [
+        "Harshada Badave",
+        "Santosh Borse",
+        "Andrea Gomez",
+        "Harshitha Narahari",
+        "Sara Carter",
+        "Vishwa Bhatt",
+        "Aishani Rachakonda",
+        "Shuxin Lin",
+        "Dhaval Patel"
+      ],
+      "affiliations": [],
+      "summary": "现有 hallucination benchmark 多数只看 agent 的最终输出，忽略了中间 Thought-Action-Observation 步骤里的幻觉。作者搞了个 Trajel 数据集，配上 5 类幻觉分类（factual / referential / logical / procedural / scope-based），基于 AssetOpsBench 的专家标注 trace，做了一套 trajectory 级别的检测评估。结果发现近一半 hallucinated 轨迹同时多种类型，标准 post-hoc 验证捉不到，trajectory-aware 检测明显更强。",
+      "original_abstract": "Large Language Models (LLMs) are increasingly deployed as autonomous agents that reason, use tools, and act over multiple steps. Yet most hallucination benchmarks still evaluate only the final output, missing failures that originate in intermediate Thought-Action-Observation steps. We present Trajel, a dataset and evaluation framework for auditing trajectory-level hallucinations in multi-agent industrial workflows. Trajel introduces a five-type hallucination taxonomy (factual, referential, logical, procedural, and scope-based) over expert-annotated agent traces from AssetOpsBench. We benchmark supervised detection models at the subtask, trajectory, and long-context levels. Our results show that the most common failure modes are missed by existing benchmarks, that nearly half of hallucinated trajectories involve multiple types at once, and that automated detectors with high binary accuracy still misclassify the subtlest types. Trajectory-aware detection significantly outperforms standard post-hoc verification, making taxonomy-grounded evaluation necessary for safer agentic deployment.",
+      "highlights": {
+        "contribution": "提出 Trajel — 一个 trajectory 级别多 agent 工业工作流幻觉审计的数据集和评估框架，含五类幻觉分类。",
+        "innovation": "把 hallucination 检测从最终答案推进到 Thought-Action-Observation 轨迹层，并提出多类型并发的幻觉特征。",
+        "method": "基于 AssetOpsBench 专家标注的 agent trace 构建 Trajel，定义五类幻觉，benchmark 监督检测模型在 subtask / trajectory / long-context 三个粒度上的表现。",
+        "results": "近一半 hallucinated 轨迹涉及多种类型；trajectory-aware 检测显著超过 post-hoc 验证；高二元准确率的检测器在最 subtle 类型上仍误判。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T21:05:10Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 6.5,
         "recency": 7.0,
         "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.24219v2",
+      "arxiv_url": "https://arxiv.org/abs/2605.24219v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.23414",
+      "title": "When Planning Fails Despite Correct Execution: On Epistemic Calibration for LLM-Based Multi-Agent Systems",
+      "authors": [
+        "Zehao Wang",
+        "Shilong Jin",
+        "Zhao Cao",
+        "Lanjun Wang"
+      ],
+      "affiliations": [],
+      "summary": "多智能体规划失败常常不是因为执行错了，而是 agent 自己对自己的知识边界判断不清楚 — 作者管这个叫 epistemic miscalibration。他们提了一个叫 EPC-AW 的工作流，不直接验证计划可行性，而是看在不同信息条件下计划是否依然成立，并且让多个 agent 之间相互一致地选 plan。最后实验显示系统级成功率平均涨了 9.75%。",
+      "original_abstract": "LLM-based multi-agent systems can fail even when planned actions are executed correctly because agents may misjudge their knowledge when evaluating plan feasibility, a phenomenon we term epistemic miscalibration in planning. Unlike execution errors, epistemic miscalibration is latent during planning, as generated plans can remain self-consistent and executable without observable errors; the miscalibration is also dynamic, as new information can alter feasibility assessments, potentially obscuring past miscalibration signals and causing them to recur over time. To address this, we propose the Epistemic Planning Calibration Agentic Workflow (EPC-AW), which assesses whether plans remain supported under varying information conditions rather than directly verifying feasibility. EPC-AW employs Information-consistency-based Plan Selection, selecting plans whose evaluations are stable across agents, together with Consistency-guided Epistemic State Refinement to adapt calibration over time by leveraging past discrepancies to guide future planning. Experiments show that EPC-AW improves system-level success by an average of 9.75%.",
+      "highlights": {
+        "contribution": "把 LLM 多智能体规划失败归因到一种新的 epistemic miscalibration 现象，并给出一个矫正用的 agentic workflow。",
+        "innovation": "区别于直接验证可行性的做法，他们用信息一致性选 plan，并把过去的不一致用来引导未来 epistemic state 的精修。",
+        "method": "构建 Epistemic Planning Calibration Agentic Workflow：用 Information-consistency-based Plan Selection 在多 agent 评估稳定的 plan 间挑选，再用 Consistency-guided Epistemic State Refinement 把历史不一致反馈进来动态调整。",
+        "results": "系统级成功率相比基线平均提升 9.75%，跨任务都体现出对 latent / dynamic 规划失败的缓解。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T09:24:12Z",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "agentic workflow"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.23414v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.23414v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.24138",
+      "title": "Understanding Conversational Patterns in Multi-agent Programming: A Case Study on Fibonacci Game Development",
+      "authors": [
+        "Srijita Basu",
+        "Viktor Kjellberg",
+        "Simin Sun",
+        "Bengt Haraldsson",
+        "Md. Abu Ahammed Babu",
+        "Wilhelm Meding",
+        "Farnaz Fotrousi",
+        "Miroslaw Staron"
+      ],
+      "affiliations": [],
+      "summary": "作者想搞清楚两个 LLM agent 在角色化协作编程（Designer + Programmer 做斐波那契小游戏）里到底是怎么互动的，挑了 7 个开源模型组合的 12 种配对做案例研究。结果发现只有 DeepSeek-R1:DeepSeek-R1 那一组从第一轮就收敛到正确解并保持住，LLaMA 3.2、Qwen3 配对虽然角色对齐很强但偏离了正确解，其它对就一直发散。算是给多 agent 编程的 convergence/stop condition 校准敲了个警钟。",
+      "original_abstract": "Large Language Models (LLMs) are increasingly applied to software engineering (SE), yet their potential for autonomous, role-oriented collaboration remains largely underexplored. Understanding how multiple LLM-based agents coordinate, maintain role alignment, and converge on solutions is critical for SE, as naively allowing agents to interact does not reliably lead to correct or stable outcomes. Recent empirical studies show that unstructured or poorly understood interaction dynamics can result in error propagation, premature consensus on incorrect solutions, or prolonged disagreement that prevents convergence, even when correct partial solutions are present early in the interaction. As an initial step towards addressing this underexplored area, we undertake a systematic analysis of conversations between two agents, a Designer and a Programmer across 12 model combinations from 7 open-source LLMs (Gemma 2, Gemma 3, LLaMA 3.2, LLaMA 3.3, DeepSeek-R1, MiniCPM, and Qwen3). Our systematic approach reveals three key dimensions of multi-agent interaction: efficiency (the speed and stability of convergence), consistency (the degree of role alignment visualized by BLEU and ROUGE), and effectiveness (the extent of compilation success and error resolution). Results show that the DeepSeek-R1:DeepSeek-R1 pair was unique in converging to the correct solution from the very first iteration and sustaining it consistently to the final iteration, while LLaMA 3.2:LLaMA 3.2 and Qwen3:Qwen3 demonstrated strong Designer:Programmer role alignment despite of diverging from the correct solution. The other pairs deviated from the task, never to converge to a result. These findings advance understanding of agentic programming and highlight the need for further research on understanding and calibrating convergence and stop conditions essential for future autonomous SE.",
+      "highlights": {
+        "contribution": "系统比较了多种开源 LLM 配对在双 agent 编程协作中的效率、一致性、有效性三个维度。",
+        "innovation": "用 BLEU/ROUGE 量化 Designer/Programmer 的角色对齐，把发散和过早共识做成可观察指标。",
+        "method": "选 7 个开源 LLM（Gemma 2/3、LLaMA 3.2/3.3、DeepSeek-R1、MiniCPM、Qwen3）组 12 个配对，跑 Designer-Programmer 多轮对话生成斐波那契游戏，用编译成功率、迭代收敛速度、角色一致性等做评估。",
+        "results": "DeepSeek-R1 自配对在首轮即收敛并稳定到底；LLaMA 3.2、Qwen3 自配对角色对齐强但答案错；其余配对均未收敛。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T18:56:47Z",
+      "categories": [
+        "cs.SE",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm-based agent",
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.24138v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.24138v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.24249",
+      "title": "PrivFusion: A Privacy-preserving Multi-Agent Framework for Harmonizing Distributed Datasets",
+      "authors": [
+        "Anisa Halimi",
+        "Liubov Nedoshivina",
+        "Kieran Fraser",
+        "Stefano Braghin"
+      ],
+      "affiliations": [
+        "IBM Research"
+      ],
+      "summary": "医疗领域跨机构数据做联邦学习的最大头疼之一是 schema/语义异构，得先 harmonize。作者搞了 PrivFusion，一个隐私保护的多 agent 框架，让 agent 分析本地数据、跨站点聚类语义相近的特征，并反复推荐转换直到对齐，再交给 FL。在 4 个 COVID-19 异构数据集上证明能有效降低人工对齐成本。",
+      "original_abstract": "The growing availability of clinical data has increased the use of machine learning, yet centralized data aggregation is often infeasible for sensitive health information. Federated Learning (FL) offers a distributed alternative, but its adoption is limited by substantial heterogeneity across institutional datasets, making harmonization a critical but frequently overlooked prerequisite for multi-site analytics. We introduce PrivFusion, a privacy-preserving multi-agent framework that automates the harmonization of structured datasets prior to federated training. PrivFusion uses agents to analyze local data, cluster semantically similar features across sites, and provide iterative transformation recommendations until alignment is achieved. Evaluation across four heterogeneous COVID-19 datasets demonstrates that PrivFusion effectively and efficiently harmonizes multi-site data while substantially reducing manual effort.",
+      "highlights": {
+        "contribution": "提出 PrivFusion，一个 federated 训练前自动化 schema/语义 harmonization 的多 agent 框架。",
+        "innovation": "把数据集 harmonization 这一传统 FL 痛点做成 multi-agent agentic 流程，并保持隐私保护。",
+        "method": "多个 agent 在本地分析数据、聚类相似特征、迭代推荐 transform 直到跨站点对齐，再进入 FL；隐私保护通过本地处理 + 受控信息交换实现。",
+        "results": "在 4 个异构 COVID-19 数据集上验证有效，显著减少手工 harmonization 工作量。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T21:54:55Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.0,
+        "popularity": 5.0,
         "quality": 6.5,
         "recommendation": 6.0
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.23165v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.23165v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.24249v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.24249v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.27433",
+      "title": "Heterogeneous Multi-Agent Modeling for Measurement and Network Analysis of the Data Service Market",
+      "authors": [
+        "Deyu Zhou",
+        "Yuwei Guo",
+        "Xudong Lu",
+        "Linhao Zhang",
+        "Wei Guo",
+        "Lizhen Cui"
+      ],
+      "affiliations": [
+        "Shandong University"
+      ],
+      "summary": "数据服务市场治理需要前置仿真，但现有研究主要看数据级表现，没法刻画多主体、多层级的异构关系。作者引入服务生态系统理论，对市场参与者做三层效用度量，并设计了一套基于异构多智能体网络的分析方法。实验验证了方法在效用评估上的有效性。偏经济/MAS 仿真，跟具身关系不大。",
+      "original_abstract": "With the increasing complexity of collaboration among various social entities and user demands, the factors affecting the stable development of the data service market are also growing. These factors include the widespread dissemination of information enhancing subjective consciousness, the continuous improvement in intelligence, and the complexification of structural relationships. To achieve effective governance and regulation of the data service market, it is crucial to conduct simulation experiments before making regulatory decisions. However, current research and analysis of the data service market primarily focus on data-level performance, proving inadequate when it comes to measurement and analysis of multiple heterogeneous entities and the integration of various social elements within the data service market. Based on this, this paper innovatively proposes a data service market measurement and network analysis method based on heterogeneous multi-agent modeling. By introducing the service ecosystem theory, we clarify the participants and external factors of the data service market and conduct utility measurements for three-level entities based on value creation. Furthermore, an analytical methodology is devised to precisely assess the influence of heterogeneous networks on utility. Finally, the paper verifies the effectiveness of the proposed method through the analysis of experimental results.",
+      "highlights": {
+        "contribution": "提出基于异构多智能体建模的数据服务市场度量与网络分析方法。",
+        "innovation": "把服务生态系统理论与异构 multi-agent 网络结合，给出三层主体的价值创造效用度量。",
+        "method": "用服务生态系统理论确定参与者和外部因素；构建异构 multi-agent 模型对三层主体做效用计算；设计度量方法分析网络对效用的影响。",
+        "results": "通过实验验证方法在数据服务市场度量上的可行性，主要为定性/仿真结果。"
+      },
+      "images": [],
+      "published_date": "2026-05-22T08:44:56Z",
+      "categories": [
+        "cs.MA",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 3.0,
+        "recency": 7.0,
+        "popularity": 4.5,
+        "quality": 5.5,
+        "recommendation": 4.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.27433v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.27433v1",
       "venue": null
     }
   ],

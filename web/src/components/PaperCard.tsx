@@ -12,6 +12,8 @@ const DOMAIN_COLORS: Record<string, string> = {
   "World Model": "bg-[var(--tint-wm)] text-[var(--tint-wm-text)]",
   WAM: "bg-[var(--tint-wm)] text-[var(--tint-wm-text)]",
   VGGT: "bg-[var(--tint-vggt)] text-[var(--tint-vggt-text)]",
+  Agent: "bg-[var(--tint-agent)] text-[var(--tint-agent-text)]",
+  Diffusion: "bg-[var(--tint-diff)] text-[var(--tint-diff-text)]",
   "Multi-modal": "bg-[var(--tint-mm)] text-[var(--tint-mm-text)]",
 };
 

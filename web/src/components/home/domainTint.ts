@@ -7,6 +7,8 @@ export const DOMAIN_TINT_VAR: Record<string, string> = {
   "World Model": "--tint-wm-text",
   WAM: "--accent-purple",
   VGGT: "--tint-vggt-text",
+  Agent: "--tint-agent-text",
+  Diffusion: "--tint-diff-text",
   "Multi-modal": "--tint-mm-text",
 };
 

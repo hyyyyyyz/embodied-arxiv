@@ -134,50 +134,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.04470",
-      "title": "CRAFT: Counterfactual-to-Interactive Reinforcement Fine-Tuning for Driving Policies",
-      "authors": [
-        "Keyu Chen",
-        "Nanfei Ye",
-        "Yida Wang",
-        "Wenchao Sun",
-        "Danqi Zhao",
-        "Hao Cheng",
-        "Sifa Zheng"
-      ],
-      "affiliations": [
-        "清华大学"
-      ],
-      "summary": "自动驾驶里开环模仿学习容易在部署时漂移,闭环 RL 又苦于稀疏奖励。CRAFT 把反事实优势当作密集代理信号,再用真实交互事件的残差校正去对齐,理论上证明能降方差又降偏差。在 Bench2Drive 上对分层规划、VLA、词表打分三种架构都拿到最强闭环成绩。",
-      "original_abstract": "Open-loop imitation learning has advanced modern autonomous driving policy architectures, but closed-loop deployment remains vulnerable to policy-induced distribution shift. Existing post-training paradigms exhibit fundamental trade-offs: closed-loop RL fine-tuning provides grounded feedback from executed actions but is constrained by the sparsity of informative events, whereas counterfactual fine-tuning provides dense supervision over candidate futures but inherits bias from imperfect future estimates. We introduce Counterfactual-to-Interactive Reinforcement Fine-Tuning (CRAFT), an on-policy framework that formulates closed-loop post-training as proxy-residual optimization. CRAFT uses group-normalized counterfactual advantages as a dense proxy for real closed-loop advantages and aligns this proxy with the closed-loop world through grounded residual correction from interaction-critical events. To stabilize adaptation, CRAFT regularizes the online policy toward an EMA teacher via asymmetric KL self-distillation. Theoretically, CRAFT decomposes the real closed-loop policy gradient into proxy and residual terms under the same visited-state distribution, reducing residual variance with an aligned proxy while mitigating proxy bias through grounded residual approximation. Empirically, CRAFT achieves the strongest closed-loop gains on Bench2Drive across hierarchical planning, vision-language-action, and vocabulary-scoring architectures. Ablations, scaling behavior, stability analyses, and transfer results further validate the complementary roles of dense counterfactual proxy and grounded residual correction. Project page: https://currychen77.github.io/CRAFT.",
-      "highlights": {
-        "contribution": "把闭环后训练写成代理-残差优化,兼顾反事实的密集性和真实交互的真值。",
-        "innovation": "用 group-normalized 反事实优势当代理,再用关键事件的残差修正补齐偏差,加 EMA 教师 KL 自蒸馏稳住训练。",
-        "method": "On-policy 框架,代理项给所有候选未来打分,残差项只在交互关键事件触发,联合优化策略梯度;附加非对称 KL 自蒸馏。",
-        "results": "Bench2Drive 闭环最强,对分层规划、VLA、词表打分三类架构都涨;有 ablation、scaling、稳定性、迁移分析。"
-      },
-      "images": [],
-      "published_date": "2026-05-06T03:49:01Z",
-      "categories": [
-        "cs.LG",
-        "cs.RO"
-      ],
-      "matched_domain": "VLA",
-      "matched_keywords": [
-        "vision-language-action"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 5.5,
-        "popularity": 6.0,
-        "quality": 7.8,
-        "recommendation": 7.3
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.04470v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.04470v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.04709",
       "title": "ELVIS: Ensemble-Calibrated Latent Imagination for Long-Horizon Visual MPC",
       "authors": [
@@ -587,47 +543,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.04413",
-      "title": "Counterfactual identifiability beyond global monotonicity: non-monotone triangular structural causal models",
-      "authors": [
-        "Pengcheng Tan",
-        "Jiang Chen",
-        "Dehui Du"
-      ],
-      "affiliations": [
-        "华东师范大学"
-      ],
-      "summary": "结构因果模型大多假设全局单调,但具身交互里同一扰动在不同接触上下文可能反着来。作者提出 NM-TM-SCM,用机制级可逆 + 上下文无关逆传输替代全局单调,证明等价于外生同构且可完整识别反事实。MuJoCo Door 上能完美恢复事件级反事实。",
-      "original_abstract": "Structural causal models provide a unified semantics for interventions and counterfactuals, but most identifiability results rely on restrictive assumptions like global monotonicity, which are often violated in embodied interaction, where the same exogenous perturbation can induce opposite responses under different contact contexts. We ask what structure still suffices once global monotonicity is dropped. We introduce non-monotone triangular structural causal models (NM-TM-SCM), which retain triangular recursion but replace global monotonicity with mechanism-wise invertibility and context-independent inverse transport. We prove that these conditions are equivalent to exogenous isomorphism and imply complete counterfactual identifiability, and we give a counterexample showing that local invertibility alone is insufficient. We instantiate the theory in CausalInverter, with triangular invertible layers, orientation gates, and transport-stability regularization. On synthetic non-monotonic mechanisms, the structural bias yields systematic counterfactual gains as non-monotonicity increases. On MuJoCo Door, our model achieves perfect event-level counterfactual recovery, lowers continuous angle error relative to a Transformer baseline, and delivers substantially more stable recovery than Transformer and conditional-flow predictors. On MuJoCo Push, where non-monotonicity is weaker, the same low-data predictors remain competitive or better, consistent with a bias-variance boundary. These results identify a broader identifiable regime between globally monotone triangular models and unconstrained black-box world models.",
-      "highlights": {
-        "contribution": "在丢掉全局单调假设的前提下给出反事实可识别的新结构条件。",
-        "innovation": "用 mechanism-wise invertibility + context-independent inverse transport 替代全局单调,证明可完整识别反事实。",
-        "method": "提出 CausalInverter:三角可逆层 + 方向门 + 传输稳定正则;在合成与 MuJoCo Door/Push 上验证。",
-        "results": "MuJoCo Door 上事件级反事实完美恢复,角度误差和稳定性优于 Transformer 和 conditional-flow 基线。"
-      },
-      "images": [],
-      "published_date": "2026-05-06T02:11:46Z",
-      "categories": [
-        "cs.LG",
-        "stat.ME"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model",
-        "world models"
-      ],
-      "scores": {
-        "relevance": 5.5,
-        "recency": 5.5,
-        "popularity": 5.0,
-        "quality": 7.0,
-        "recommendation": 6.2
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.04413v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.04413v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.04899",
       "title": "A geometric relation of the error introduced by sampling a language model's output distribution to its internal state",
       "authors": [
@@ -704,51 +619,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.04435",
-      "title": "Ground4D: Spatially-Grounded Feedforward 4D Reconstruction for Unstructured Off-Road Scenes",
-      "authors": [
-        "Shuo Wang",
-        "Jilin Mei",
-        "Fuyang Liu",
-        "Wenfei Guan",
-        "Fanjie Kong",
-        "Zhihua Zhao",
-        "Shuai Wang",
-        "Chen Min",
-        "Yu Hu"
-      ],
-      "affiliations": [
-        "中科院自动化所"
-      ],
-      "summary": "Feedforward GS 用在越野无结构场景容易出现冲突高斯观测,要么糊要么有伪影。Ground4D 把 canonical Gaussian 空间划分到体素里做查询条件下的时间注意力,intra-voxel softmax 让时间选择与空间占用互补;再加表面法线引导。在 ORAD-3D 和 RELLIS-3D 上 SOTA 并零样本泛化。",
-      "original_abstract": "Feedforward Gaussian Splatting has recently emerged as an efficient paradigm for 4D reconstruction in autonomous driving. However, in unstructured off-road scenes, its performance degrades due to high-frequency geometry, ego-motion jitter, and increased non-rigid dynamics. These factors introduce conflicting Gaussian observations across timestamps, leading to either over-smoothed renderings or structural artifacts. To address this issue, we propose Ground4D, a spatially-grounded 4D feedforward framework for pose-free off-road reconstruction. The key idea is to resolve temporal conflicts through spatially localized conditioning. Specifically, we introduce voxel-grounded temporal Gaussian aggregation, which partitions the canonical Gaussian space into spatial voxels and performs query-conditioned temporal attention within each voxel. Intra-voxel softmax normalization ensures that temporal selectivity and spatial occupancy become mutually reinforcing rather than conflicting. We furthermore introduce surface normal cues as auxiliary geometric guidance to regularize the geometry of Gaussian primitives. Extensive experiments on ORAD-3D and RELLIS-3D demonstrate that Ground4D consistently outperforms existing feedforward methods in reconstruction quality and generalizes zero-shot to unseen off-road domains. Project page and code:https://github.com/wsnbws/Ground4D.",
-      "highlights": {
-        "contribution": "提出针对越野无结构场景的 pose-free feedforward 4D 高斯重建框架。",
-        "innovation": "体素 grounded 的时间高斯聚合 + intra-voxel softmax,让时间选择和空间占用相互强化;表面法线辅助几何。",
-        "method": "划分 canonical Gaussian 空间为体素,每个体素内做 query 条件下时间注意力,加表面法线正则。",
-        "results": "在 ORAD-3D 和 RELLIS-3D 上 SOTA,零样本泛化到未见越野域,有 code + project page。"
-      },
-      "images": [],
-      "published_date": "2026-05-06T02:58:47Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "VGGT",
-      "matched_keywords": [
-        "gaussian splatting"
-      ],
-      "scores": {
-        "relevance": 6.0,
-        "recency": 5.5,
-        "popularity": 5.5,
-        "quality": 7.5,
-        "recommendation": 7.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.04435v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.04435v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.04730",
       "title": "ULF-Loc: Unbiased Landmark Feature for Robust Visual Localization with 3D Gaussian Splatting",
       "authors": [
@@ -789,49 +659,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2605.04730v1",
       "arxiv_url": "https://arxiv.org/abs/2605.04730v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.04506",
-      "title": "Ilov3Splat: Instance-Level Open-Vocabulary 3D Scene Understanding in Gaussian Splatting",
-      "authors": [
-        "Binh Long Nguyen",
-        "Kien Nguyen",
-        "Sridha Sridharan",
-        "Clinton Fookes",
-        "Peyman Moghadam"
-      ],
-      "affiliations": [
-        "QUT",
-        "CSIRO Robotics"
-      ],
-      "summary": "把 3DGS 升级到实例级 + 开放词汇场景理解。Ilov3Splat 给 Gaussian splat 附上视图一致特征场,用多分辨率 hash 编码 CLIP,实例特征用 SAM 掩码对比学习。推理时 CLIP 查询 + 两阶段 3D 聚类拿到对应 Gaussian 组,实例分割和物体选择上超过现有 open-vocab 3DGS 方法。",
-      "original_abstract": "We introduce Ilov3Splat, a novel framework for instance-level open-vocabulary 3D scene understanding built on 3D Gaussian Splatting (3D-GS). Most prior work depends on 2D rendering-based matching or point-level semantic association, which undermines cross-view consistency, lacks coherent instance-level reasoning, and limits precision in downstream 3D tasks. To address these limitations, our method jointly optimizes scene geometry and semantic representations by augmenting Gaussian splats with view-consistent feature fields. Specifically, we leverage multi-resolution hash embedding to efficiently encode language-aligned CLIP features, enabling dense and coherent language grounding in 3D space. We further train an instance feature field using contrastive loss over SAM masks, supporting fine-grained object distinction across views. At inference time, CLIP-encoded queries are matched against the learned features, followed by two-stage 3D clustering to retrieve relevant Gaussian groups. This enables our framework to identify arbitrary objects in 3D scenes based on natural language descriptions, without requiring category supervision or manual annotations. Experiments on standard benchmarks demonstrate that Ilov3Splat outperforms prior open-vocabulary 3D-GS methods in both object selection and instance segmentation, offering a flexible and accurate solution for language-driven 3D scene understanding. Project page: https://csiro-robotics.github.io/Ilov3Splat.",
-      "highlights": {
-        "contribution": "面向 3DGS 的实例级开放词汇场景理解框架,联合几何与语义优化。",
-        "innovation": "用 hash embedding 编码 CLIP 特征做语言对齐 + SAM 掩码对比学习实例特征场,加两阶段 3D 聚类。",
-        "method": "增强 Gaussian splat 的特征场,语言特征训练对齐 CLIP,实例特征用 SAM 掩码对比;推理通过 CLIP query 匹配后聚类。",
-        "results": "在标准 benchmark 上 object selection 与实例分割均优于已有 open-vocab 3DGS 方法,有 project page。"
-      },
-      "images": [],
-      "published_date": "2026-05-06T05:23:41Z",
-      "categories": [
-        "cs.CV",
-        "cs.AI"
-      ],
-      "matched_domain": "VGGT",
-      "matched_keywords": [
-        "gaussian splatting"
-      ],
-      "scores": {
-        "relevance": 6.0,
-        "recency": 5.5,
-        "popularity": 5.5,
-        "quality": 7.0,
-        "recommendation": 6.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.04506v2",
-      "arxiv_url": "https://arxiv.org/abs/2605.04506v2",
       "venue": null
     },
     {
@@ -923,178 +750,340 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.05340",
-      "title": "How Far Are VLMs from Privacy Awareness in the Physical World? An Empirical Study",
+      "arxiv_id": "2605.05170",
+      "title": "Design Conductor 2.0: An agent builds a TurboQuant inference accelerator in 80 hours",
       "authors": [
-        "Junran Wang",
-        "Xinjie Shen",
-        "Zehao Jin",
-        "Pan Li"
+        "The Verkor Team",
+        "Ravi Krishna",
+        "Suresh Krishna",
+        "David Chin"
       ],
-      "affiliations": [],
-      "summary": "VLM 作为具身助理的核心大脑,在物理环境的隐私意识到底如何?作者搭了 Unity 模拟器 ImmersedPrivacy,设三层任务测识别敏感物、社交语境切换、命令与隐私冲突。测了 12 个 SOTA VLM,场景变复杂就掉、社交语境无一过 65%、Gemini-3.1-pro 在冲突命令下也只赢一半。",
-      "original_abstract": "As Vision-Language Models (VLMs) are increasingly deployed as autonomous cognitive cores for embodied assistants, evaluating their privacy awareness in physical environments becomes critical. Unlike digital chatbots, these agents operate in intimate spaces, such as homes and hospitals, where they possess the physical agency to observe and manipulate privacy-sensitive information and artifacts. However, current benchmarks remain limited to unimodal, text-based representations that cannot capture the demands of real-world settings. To bridge this gap, we present ImmersedPrivacy, an interactive audio-visual evaluation framework that simulates realistic physical environments using a Unity-based simulator. ImmersedPrivacy evaluates physically grounded privacy awareness across three progressive tiers that test a model's ability to identify sensitive items in cluttered scenes, adapt to shifting social contexts, and resolve conflicts between explicit commands and inferred privacy constraints. Our evaluation of 12 state-of-the-art models reveals consistent deficits. In cluttered scenes, all models exhibit monotonic performance decay as scene complexity grows due to perceptual deficit. When social context shifts, no model exceed 65% selection accuracy. Under conflicting commands, the best model gemini-3.1-pro perfectly balances task completion and privacy preservation in only 51% of cases. These findings reveal that current VLMs in the physical world suffer from perceptual fragility and fail to let their knowledge of privacy cues govern their situated behavior. Our code and data is available at https://github.com/immersed-privacy/immersed-privacy .",
+      "affiliations": [
+        "Verkor"
+      ],
+      "summary": "Verkor 团队接着 Design Conductor 的工作搞了 2.0，让多 agent 系统直接读 TurboQuant 的 arXiv 论文，80 小时自动设计出了一颗叫 VerTQ 的 LLM 推理加速器。里面塞了 5129 个 FP16/32 单元，FPGA 上跑到 125 MHz，TSMC 16FF 工艺下面积 5.7 mm²。比 12 月版的 Conductor 能搞定 80 倍大的任务。",
+      "original_abstract": "Driven by a rapid co-evolution of both harness and underlying models, LLM agents are improving at a dizzying pace. In our prior work (performed in Dec. 2025), we introduced \"Design Conductor\" (or just \"Conductor\"), a system capable of building a 5-stage Linux-capable RISC-V CPU in 12 hours. In this work, we introduce an updated multi-agent harness powered by frontier models released in April 2026, which is able to handle 80x larger tasks, at higher quality, fully autonomously. Following a brief introduction, we examine 4 designs that the system produced autonomously, including \"VerTQ\", an LLM inference accelerator which hard-wires support for TurboQuant in a 240-cycle pipeline, starting from the TurboQuant arXiv paper. VerTQ includes heavy compute processing, with 5129 FP16/32 units; the design was mapped to an FPGA at 125 MHz and consumes 5.7 mm^2 in TSMC 16FF (8 attention pipes). We review the key new characteristics that enabled these results. Finally, we analyze Design Conductor's token usage and other empirical characteristics, including its limitations.",
       "highlights": {
-        "contribution": "提出首个具身物理环境下 VLM 隐私意识评估框架与 benchmark。",
-        "innovation": "Unity 沉浸式模拟器 + 三层渐进任务,覆盖感知、社交、冲突三类隐私挑战。",
-        "method": "Unity 模拟室内场景,对 12 个 SOTA VLM 跑识别 / 社交 / 冲突三类任务,有 audio-visual 输入。",
-        "results": "所有模型随场景复杂度单调下降;社交语境无模型超 65%;Gemini-3.1-pro 仅 51% 兼顾任务与隐私;数据代码公开。"
+        "contribution": "Design Conductor 2.0 用更新的 agent harness + 2026 年 4 月新模型，能完全自主完成大规模硬件设计任务。",
+        "innovation": "agent + frontier LLM 联合迭代让自动硬件设计上到推理加速器级别，端到端从论文到 RTL 到 FPGA 映射。",
+        "method": "多 agent harness 解析 TurboQuant 论文、设计 240-cycle pipeline、生成 RTL、做综合到 TSMC 16FF 和 FPGA 映射，全程自动。",
+        "results": "产出 VerTQ 加速器，5129 个 FP16/32 单元、125 MHz FPGA、5.7 mm² 16FF、8 attention pipes；任务规模相比前作 ×80。"
       },
       "images": [],
-      "published_date": "2026-05-06T18:10:51Z",
+      "published_date": "2026-05-06T17:40:03Z",
       "categories": [
-        "cs.CR",
+        "cs.AR",
         "cs.AI"
       ],
-      "matched_domain": "Multi-modal",
+      "matched_domain": "Agent",
       "matched_keywords": [
-        "vision-language model",
-        "vlm",
-        "audio-visual"
+        "llm agent",
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 5.5,
+        "popularity": 7.5,
+        "quality": 7.5,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.05170v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.05170v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.05007",
+      "title": "Uno-Orchestra: Parsimonious Agent Routing via Selective Delegation",
+      "authors": [
+        "Zhiqing Cui",
+        "Haotong Xie",
+        "Jiahao Yuan",
+        "Cheng Yang",
+        "Hanqing Wang",
+        "Yuxin Wu",
+        "Yifan Wu",
+        "Siru Zhong",
+        "Tao Yu",
+        "Yifu Guo",
+        "Siyu Zhang",
+        "Xinlei Yu",
+        "Qibing Ren",
+        "Usman Naseem"
+      ],
+      "affiliations": [],
+      "summary": "多 agent 系统现在不是死板 flat routing 就是手写 task decomposition，分解深度、worker 选择、推理预算各自为政。Uno-Orchestra 把这些决策放到一个统一 RL policy 里联合学习。13 个 benchmark 上 macro pass@1 到 77%，比最强 workflow baseline 高约 16 个点，per-query 成本还低了一个数量级。",
+      "original_abstract": "Large language model (LLM) multi-agent systems typically rely on rigid orchestration, committing either to flat per-query routing or to hand-engineered task decomposition, so decomposition depth, worker choice, and inference budget are not jointly optimized under one objective. We introduce Uno-Orchestra, a unified orchestration policy that selectively decomposes a task and dispatches each subtask to an admissible (model, primitive) pair, with both decisions learned together from curated RL trajectories grounded in real worker interactions. Against 22 baselines on a 13-benchmark suite spanning math, code, knowledge, long-context, and agentic tool-use, Uno-Orchestra reaches 77.0% macro pass@1, roughly 16% above the strongest workflow baseline, at roughly an order of magnitude lower per-query cost, advancing the accuracy-efficiency frontier of selective delegation.",
+      "highlights": {
+        "contribution": "提出 Uno-Orchestra，一个统一的 orchestration policy，把 task 分解和 (model, primitive) 分派联合学习，平衡精度和成本。",
+        "innovation": "相比固定 routing 或手写 workflow，把 decomposition 深度、worker 选择和推理预算放在同一目标下联合优化。",
+        "method": "用 RL 在真实 worker 交互轨迹上训练统一策略，决定要不要分解任务以及每个子任务分给哪个 (model, primitive) 对。",
+        "results": "13 个 benchmark（数学/代码/知识/long-context/agentic tool-use）上 macro pass@1 77.0%，比最强 baseline 高约 16 个点，成本低约一个数量级。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T15:07:14Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 5.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.05007v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.05007v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04984",
+      "title": "Self-Induced Outcome Potential: Turn-Level Credit Assignment for Agents without Verifiers",
+      "authors": [
+        "Senkang Hu",
+        "Yong Dai",
+        "Xudong Han",
+        "Zhengru Fang",
+        "Yuzhi Zhao",
+        "Sam Tak Wu Kwong",
+        "Yuguang Fang"
+      ],
+      "affiliations": [
+        "City University of Hong Kong"
+      ],
+      "summary": "长 horizon 的 LLM agent 通常只有最终答案的奖励，中间检索/工具调用步骤没法分到 credit。作者搞了 SIOP，把 rollout 的最终答案语义聚类成 outcome 模式，用这个分布给中间 turn 算潜在奖励——不需要 gold answer 也不需要 verifier。在 7 个 search-augmented agent benchmark 上比 verifier-free baseline 强，逼近 gold-supervised 上界。",
+      "original_abstract": "Long-horizon LLM agents depend on intermediate information-gathering turns, yet training feedback is usually observed only at the final answer, because process-level rewards require high-quality human annotation. Existing turn-level shaping methods reward turns that increase the likelihood of a gold answer, but they require answer supervision or stable task-specific verifiers. Conversely, label-free RL methods extract self-signals from output distributions, but mainly at the answer or trajectory level and therefore cannot assign credit to intermediate turns. We propose Self-Induced Outcome Potential (SIOP), which treats semantic clusters of final answers as latent future outcome states for potential-based turn-level credit assignment. For each query, SIOP samples multiple rollouts, clusters final answers into semantic outcome modes, and builds a reliability-aware target distribution over these states. It then rewards turns for increasing posterior support for reliable future states using a tractable cluster-level approximation. The objective generalizes information-potential shaping from gold-answer supervision to settings without task-specific gold verifiers while avoiding the broadcasted rollout-level advantages used by standard GRPO. We formalize the framework, characterize its supervised gold-answer limit, and show that SIOP improves average performance over verifier-free outcome-level baselines on seven search-augmented agentic reasoning benchmarks while approaching a gold-supervised outcome baseline. Code is available at https://github.com/dl-m9/SIOP.git.",
+      "highlights": {
+        "contribution": "提出 SIOP，把语义聚类后的最终答案当作潜在 outcome state，做 turn-level credit assignment，不依赖 gold answer 或 task-specific verifier。",
+        "innovation": "相比 GRPO 之类只在 trajectory 级 broadcast advantage 的方法，SIOP 用 cluster 级 posterior 近似精细化到每一 turn，且摆脱标签依赖。",
+        "method": "对每个 query 采样多次 rollout，把最终答案做语义聚类得到 outcome modes，构造 reliability-aware 目标分布，按每个 turn 增加可靠 future state 的 posterior 来 shape reward。",
+        "results": "在 7 个 search-augmented agentic reasoning benchmark 上超越 verifier-free outcome-level baseline，接近 gold-supervised outcome baseline。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T14:38:48Z",
+      "categories": [
+        "cs.LG",
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "agentic"
       ],
       "scores": {
         "relevance": 6.5,
         "recency": 5.5,
         "popularity": 6.0,
         "quality": 7.5,
-        "recommendation": 7.0
+        "recommendation": 7.2
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.05340v2",
-      "arxiv_url": "https://arxiv.org/abs/2605.05340v2",
+      "pdf_url": "https://arxiv.org/pdf/2605.04984v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04984v1",
       "venue": null
     },
     {
-      "arxiv_id": "2605.04503",
-      "title": "DiffCap-Bench: A Comprehensive, Challenging, Robust Benchmark for Image Difference Captioning",
+      "arxiv_id": "2605.05386",
+      "title": "BALAR : A Bayesian Agentic Loop for Active Reasoning",
       "authors": [
-        "Yuancheng Wei",
-        "Haojie Zhang",
-        "Linli Yao",
-        "Lei Li",
-        "Jiali Chen",
-        "Tao Huang",
-        "Yiting Lu",
-        "Duojun Huang",
-        "Xin Li",
-        "Zhao Zhong"
+        "Aymen Echarghaoui",
+        "Dongxia Wu",
+        "Emily B. Fox"
       ],
       "affiliations": [],
-      "summary": "图像差异描述 (IDC) 现在 benchmark 都不够复杂,而 BLEU/METEOR 又抓不住语义和幻觉。DiffCap-Bench 覆盖 10 类差异,搭配 LLM-as-Judge 协议 + Difference List 评估。测了一堆 SOTA MLLM,闭源 vs 开源差距明显,推理能力很关键,模型 scaling 不一定有用。",
-      "original_abstract": "Image Difference Captioning (IDC) generates natural language descriptions that precisely identify differences between two images, serving as a key benchmark for fine-grained change perception, cross-modal reasoning, and image editing data construction. However, existing benchmarks lack diversity and compositional complexity, and standard lexical-overlap metrics (e.g., BLEU, METEOR) fail to capture semantic consistency or penalize hallucinations, which together prevent a comprehensive and robust evaluation of multimodal large language models (MLLMs) on IDC. To address these gaps, we introduce DiffCap-Bench, a comprehensive IDC benchmark covering ten distinct difference categories to ensure diversity and compositional complexity. Furthermore, we propose an LLM-as-a-Judge evaluation protocol grounded in human-validated Difference Lists, enabling a robust assessment of models' ability to both capture and describe visual changes. Through extensive evaluation of state-of-the-art MLLMs, we reveal significant performance gaps between proprietary and open-source models, highlight the critical importance of reasoning capability, and identify clear limitations in model scaling. Our framework also demonstrates strong alignment with human expert judgments and strong correlation with downstream image editing data construction quality. These findings establish DiffCap-Bench as both a reliable IDC evaluation framework and a practical predictor of downstream utility. The benchmark and code will be made publicly available to support further research.",
+      "summary": "LLM 在多轮交互里通常被动回应，缺乏主动追问的机制。BALAR 把主动 reasoning 当成一个贝叶斯外环：维护对潜在状态的信念，用 mutual information 选下一个 clarifying question，必要时还能扩展状态空间。三个 benchmark（侦探/思维题/临床诊断）全面超 baseline，最高 +38.5%。",
+      "original_abstract": "Large language models increasingly operate in interactive settings where solving a task requires multiple rounds of information exchange with a user. However, most current systems treat dialogue reactively and lack a principled mechanism to reason about what information is missing and which question should be asked next. We propose BALAR (Bayesian Agentic Loop for Active Reasoning), a task-agnostic outer-loop algorithm that requires no fine-tuning and enables structured multi-turn interaction between an LLM agent and a user. BALAR maintains a structured belief over latent states, selects clarifying questions by maximizing expected mutual information, and dynamically expands its state representation when the current one proves insufficient. We evaluate BALAR on three diverse benchmarks: AR-Bench-DC (detective cases), AR-Bench-SP (thinking puzzles), and iCraft-MD (clinical diagnosis). BALAR significantly outperforms all baselines across all three benchmarks, with $14.6\\%$ higher accuracy on AR-Bench-DC, $38.5\\%$ on AR-Bench-SP, and $30.5\\%$ on iCraft-MD.",
       "highlights": {
-        "contribution": "首个面向 IDC 的全面 benchmark + LLM-as-Judge 评估协议,与下游图像编辑数据构建相关。",
-        "innovation": "10 类差异类目 + Difference List 评估,显著改善人对齐和幻觉惩罚。",
-        "method": "构建多样化 IDC 数据集,基于人验证 Difference List 设计 LLM-as-Judge 评分;评估开源/闭源 SOTA MLLM。",
-        "results": "闭源 vs 开源差距明显,推理能力对 IDC 关键,scaling 收益有限;评测与下游图像编辑数据质量强相关。"
+        "contribution": "提出 BALAR，一个 task-agnostic 的贝叶斯外环算法，让 LLM agent 能在多轮交互中主动选最有信息量的 clarifying question。",
+        "innovation": "不用 fine-tune，纯外环逻辑结合 belief tracking + mutual information 最大化 + 动态扩展 state，比反应式对话更结构化。",
+        "method": "外环维护 latent state 上的结构化 belief，每轮按 expected mutual information 选问题，若现有 state 表达不足就动态扩展。",
+        "results": "AR-Bench-DC +14.6%、AR-Bench-SP +38.5%、iCraft-MD +30.5%，三个 benchmark 全面超 baseline。"
       },
       "images": [],
-      "published_date": "2026-05-06T05:12:41Z",
+      "published_date": "2026-05-06T19:18:59Z",
       "categories": [
-        "cs.CV",
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 5.5,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.05386v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.05386v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04870",
+      "title": "VTAgent: Agentic Keyframe Anchoring for Evidence-Aware Video TextVQA",
+      "authors": [
+        "Haibin He",
+        "Maoyuan Ye",
+        "Jing Zhang",
+        "Juhua Liu",
+        "Bo Du"
+      ],
+      "affiliations": [
+        "Wuhan University"
+      ],
+      "summary": "Video TextVQA 里 Video-LLM 表现拉胯，作者发现瓶颈不是推理而是定位——你单帧看其实能答对。于是搞了个 question-guided agent，先把相关关键帧锚定再答题。training-free 就有提升，再加 SFT+RL 平均涨 12.12 准确率、11.15 ANLS，刷了 SOTA。",
+      "original_abstract": "Video text-based visual question answering (Video TextVQA) aims to answer questions by reasoning over visual textual content appearing in videos. Despite the strong multimodal video understanding capabilities of recent Video-LLMs, their performance on existing Video TextVQA benchmarks remains limited. To better understand this gap, we conduct an upper-bound analysis through frame-wise question answering, counting a sample as correct if any frame yields the right answer, which significantly outperforms direct video-based inference and reveals a substantial performance gap. The results suggest that the primary bottleneck lies in the localization of key question-relevant evidence, rather than in reasoning capacity itself. Building on this insight, we propose a question-guided agent framework that explicitly anchors the relevant keyframes before answering. The approach operates effectively in a training-free setting and consistently surpasses direct video inference. With additional supervised fine-tuning (SFT) and reinforcement learning (RL), it achieves an average improvement of +12.12 in accuracy and +11.15 in ANLS across benchmarks, establishing new state-of-the-art results. Our study underscores the critical role of explicit keyframe anchoring for advancing Video TextVQA. The code will be publicly released.",
+      "highlights": {
+        "contribution": "提出 VTAgent，把 Video TextVQA 拆成关键帧锚定+回答两步，解决 Video-LLM 在视频文本 VQA 上的定位短板。",
+        "innovation": "通过 frame-wise 上界分析定位瓶颈在证据帧而非推理，再用 agent 显式做 keyframe anchoring，可 training-free。",
+        "method": "Question-guided agent 框架，先选关键帧再 VQA；training-free 即可工作，可选 SFT 和 RL 进一步微调 Video-LLM。",
+        "results": "在 Video TextVQA 多个 benchmark 上平均 +12.12 准确率、+11.15 ANLS，建立新 SOTA。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T13:01:52Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 5.5,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2605.04870v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04870v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2605.04608",
+      "title": "SensingAgents: A Multi-Agent Collaborative Framework for Robust IMU Activity Recognition",
+      "authors": [
+        "Naiyu Zheng",
+        "Tianlong Yu",
+        "Haochen Yin",
+        "Xiaoyi Fan",
+        "Xiping Hu",
+        "Zhimeng Yin"
+      ],
+      "affiliations": [],
+      "summary": "IMU 做人类活动识别一直被位置歧义和数据稀缺卡住，作者搞了个多 LLM agent 的协作框架来对付这事儿。分析员 agent 各管一个穿戴位置（手腕/腰/口袋等），辩论员 agent 处理传感器冲突，决策 agent 兜底。Shoaib 数据集 zero-shot 跑到 79.5%，比现有 agent 模型高 29 个点，比深度学习基线高 9.4 个点。",
+      "original_abstract": "Human Activity Recognition (HAR) using Inertial Measurement Unit (IMU) sensors is a cornerstone of mobile health, smart environments, and human-computer interaction. However, current deep learning-based HAR models often struggle with heavy reliance on labeled data, position-specific ambiguity, and a lack of transparent reasoning. Inspired by the advanced agents framework, which emulates a collaborative agent using Large Language Models (LLMs), we propose SensingAgents, a novel multi-agent system for robust IMU activity recognition. SensingAgents organizes LLM-powered agents into specialized roles: a group of Analyst Agents for position-specific sensor analysis (arm, wrist, belt, pocket), a pair of Advocate Agents that resolves sensor conflicts through dynamic and static dialectical debates, and a Decision Agent that ensures reliability under sensor drift or failure. Evaluation on the Shoaib dataset demonstrates that SensingAgents significantly outperforms state-of-the-art single-agent and multi-agent LLM models, achieving an accuracy of 79.5% in a zero setting--29% higher than existing agent models and 9.4% higher than deep learning baselines--particularly in complex scenarios where multi-sensor data is conflicting or noisy. Our work highlights the potential of multi-agent collaborative reasoning for advancing the robustness and interpretability of ubiquitous sensing systems.",
+      "highlights": {
+        "contribution": "提出 SensingAgents 多 agent 框架，把 LLM agent 用在 IMU 活动识别上，特别针对传感器冲突和噪声场景。",
+        "innovation": "把位置特定分析、动静态辩论、可靠性决策拆成三类专门 agent，区别于以往单 agent 或简单 majority voting 的方案。",
+        "method": "Analyst Agents 负责手腕/手臂/腰/口袋各自的传感器解读，Advocate Agents 通过辩证对话解冲突，Decision Agent 整合输出，全程 LLM 推理，无需重训。",
+        "results": "在 Shoaib 数据集上 zero-shot 准确率 79.5%，比已有 agent 模型 +29%、比深度学习基线 +9.4%。"
+      },
+      "images": [],
+      "published_date": "2026-05-06T07:55:46Z",
+      "categories": [
         "cs.AI"
       ],
-      "matched_domain": "Multi-modal",
+      "matched_domain": "Agent",
       "matched_keywords": [
-        "multimodal large language model",
-        "mllm"
+        "llm-powered agent",
+        "multi-agent"
       ],
       "scores": {
         "relevance": 5.5,
         "recency": 5.5,
-        "popularity": 6.0,
-        "quality": 7.0,
-        "recommendation": 6.5
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 6.0
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.04503v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.04503v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.04608v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.04608v1",
       "venue": null
     },
     {
-      "arxiv_id": "2605.04451",
-      "title": "RemoteZero: Geospatial Reasoning with Zero Human Annotations",
+      "arxiv_id": "2605.05499",
+      "title": "FoodCHA: Multi-Modal LLM Agent for Fine-Grained Food Analysis",
       "authors": [
-        "Liang Yao",
-        "Fan Liu",
-        "Shengxiang Xu",
-        "Chuanyi Zhang",
-        "Rui Min",
-        "Shimin Di",
-        "Yuhui Zheng"
+        "Woojin Lee",
+        "Pranav Mekkoth",
+        "Ye Tian",
+        "Onat Gungor",
+        "Tajana Rosing"
       ],
       "affiliations": [
-        "河海大学"
+        "UC San Diego"
       ],
-      "summary": "地理空间推理还离不开人工坐标标注。RemoteZero 利用 MLLM 验证一个区域是否匹配查询的能力强于直接生成坐标这一不对称性,用语义验证替代几何监督,跑 GRPO 训练而不要 box。可在无标注遥感图上自演化,效果接近强监督方法。",
-      "original_abstract": "Geospatial reasoning requires models to resolve complex spatial semantics and user intent into precise target locations for Earth observation. Recent progress has liberated the reasoning path from manual curation, allowing models to generate their own inference chains. Yet a final dependency remains: they are still supervised by human-annotated ground-truth coordinates. This leaves the reasoning process autonomous, but not its spatial endpoint, and prevents true self-evolution on abundant unlabeled remote sensing data. To break this bottleneck, we introduce RemoteZero, a box-supervision-free framework for geospatial reasoning. RemoteZero is motivated by a simple asymmetry: an MLLM is typically better at verifying whether a region satisfies a query than at directly generating precise coordinates. Leveraging this stronger discriminative ability, RemoteZero replaces geometric supervision with intrinsic semantic verification and enables GRPO training without box annotations. The resulting framework further supports iterative self-evolution, allowing the model to improve from unlabeled remote sensing imagery through its own verification signal. Experiments show that RemoteZero achieves competitive performance against strong supervised methods, demonstrating the potential of self-verifying training for geospatial reasoning localization.",
+      "summary": "拍餐食识别食物听起来简单，但同类食物长得太像、一张图里又常有多个菜，还得识别烹饪方式。FoodCHA 把这个问题搞成层次决策：先粗类、再子类、再烹饪方式，每步锚定上一步结果。用 Moondream-2B 这个轻量 VLM 部署，FoodNExTDB 上子类精度比 Food-Llama-3.2-11B 高 38.2%、烹饪方式高 153.2%。",
+      "original_abstract": "The widespread adoption of camera-equipped mobile devices and wearables has enabled convenient capture of meal images, making food recognition a key component for real time dietary monitoring. However, real-world food images present challenges due to high intra-class similarity and the frequent presence of multiple food items within a single image. While deep learning models achieve strong performance in coarse grained classification, they often struggle to capture fine-grained attributes such as cooking style. Moreover, open-ended generation in modern vision-language models can produce non-canonical labels, limiting their practical deployment. We propose FoodCHA, a multimodal agentic framework that reformulates food recognition as a hierarchical decision-making process. By progressively anchoring predictions, FoodCHA guides subcategory identification using high-level categories and guides cooking style recognition using subcategories, improving semantic consistency and attribute-level discrimination. To ensure practical deployability, FoodCHA utilizes the compact Moondream-2B vision language model, which provides strong reasoning capability while maintaining lower computational and memory overhead. Experiments on FoodNExTDB show that FoodCHA outperforms Food-Llama-3.2-11B by 13.8% and 38.2% in category and subcategory recognition precision, respectively, and achieves a striking 153.2% improvement in cooking style classification precision.",
       "highlights": {
-        "contribution": "提出零 box 监督的地理空间推理框架,解锁无标注遥感数据上的自演化训练。",
-        "innovation": "利用 MLLM 验证强、生成弱的不对称性,以内在语义验证作为 GRPO 训练信号。",
-        "method": "MLLM 自我生成推理路径 + 区域验证打分作奖励;GRPO 训练,无需 box 真值;支持迭代自演化。",
-        "results": "和强监督方法相当甚至接近 SOTA,展示了自验证训练在地理空间定位上的潜力。"
+        "contribution": "提出 FoodCHA 多模态 agentic 框架，把细粒度食物识别 reformulate 成层次决策过程，专攻烹饪风格这种属性级别识别。",
+        "innovation": "用 hierarchical anchoring 强约束 VLM 输出在 canonical 标签空间，避免开放生成跑偏，同时保留多步 reasoning。",
+        "method": "Moondream-2B VLM 作为后端，分三步 agent 决策：高层类别 → 子类别 → 烹饪风格，每步用上一步结果做条件。",
+        "results": "FoodNExTDB 上 category 精度比 Food-Llama-3.2-11B +13.8%、subcategory +38.2%、cooking style +153.2%。"
       },
       "images": [],
-      "published_date": "2026-05-06T03:25:41Z",
+      "published_date": "2026-05-06T22:46:59Z",
       "categories": [
-        "cs.CV"
+        "cs.AI"
       ],
-      "matched_domain": "Multi-modal",
+      "matched_domain": "Agent",
       "matched_keywords": [
-        "mllm",
-        "spatial reasoning"
+        "llm agent",
+        "agentic"
       ],
       "scores": {
         "relevance": 4.5,
         "recency": 5.5,
         "popularity": 5.5,
-        "quality": 7.0,
-        "recommendation": 6.3
+        "quality": 6.5,
+        "recommendation": 6.0
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.04451v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.04451v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.05499v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.05499v1",
       "venue": null
     },
     {
-      "arxiv_id": "2605.04505",
-      "title": "JASTIN: Aligning LLMs for Zero-Shot Audio and Speech Evaluation via Natural Language Instructions",
+      "arxiv_id": "2605.05440",
+      "title": "Authorization Propagation in Multi-Agent AI Systems: Identity Governance as Infrastructure",
       "authors": [
-        "Leying Zhang",
-        "Bowen Shi",
-        "Haibin Wu",
-        "Bach Viet Do",
-        "Yanmin Qian"
+        "Krti Tallam"
       ],
-      "affiliations": [
-        "上海交大"
-      ],
-      "summary": "现有音频/语音评估指标和通用 MLLM 在跨领域、零样本、指令灵活性上都不够好。JASTIN 把音频评估当成自指令推理任务,冻结音频编码器 + LLM 后端,中间加可训练适配器,加多源多任务多校准多描述的指令数据。在语音、声音、音乐和域外任务上均与人评强相关。",
-      "original_abstract": "The rapid advancement of generative audio models has outpaced the development of robust evaluation methodologies. Existing objective metrics and general multimodal large language models (MLLMs) often struggle with domain generalization, zero-shot capabilities, and instructional flexibility. To address these bottlenecks, we propose JASTIN, a generalizable, instruction-driven audio evaluation framework that formulates audio assessment as a self-instructed reasoning task. JASTIN bridges a frozen high-performance audio encoder with a fine-tuned LLM backbone via a trainable audio adapter. To ensure robust zero-shot generalization, we introduce a comprehensive instruction following data preparation pipeline, incorporating Multi-Source, Multi-Task, Multi-Calibration, and Multi-Description data. Experimental results demonstrate that JASTIN achieves state-of-the-art Pearson and Spearman correlations with human subjective ratings. It consistently outperforms general MLLMs across speech, sound, music, and out-of-domain evaluation tasks without the need for task-specific retraining.",
+      "affiliations": [],
+      "summary": "现在 agentic AI 的安全讨论太关注 prompt injection，作者指出多 agent 系统还有个独特问题：授权传播。非人类 principal 在不断变化的边界间检索数据、委派任务、合成结果时怎么维持 authorization 不变量。这篇论文 formalize 了这个问题，列出三类子问题和七条架构需求，并用一个生产平台的实际数据佐证。",
+      "original_abstract": "The security discussion around agentic AI focuses heavily on prompt injection. This paper argues that multi-agent systems also create a distinct authorization problem: maintaining authorization invariants as non-human principals retrieve data, delegate tasks, and synthesize results across changing boundaries. We call this problem authorization propagation. It is not reducible to prompt injection and is not fully addressed by classical access-control models such as RBAC, ABAC, or ReBAC. The paper formalizes authorization propagation as a workflow-level property, identifies three sub-problems (transitive delegation, aggregation inference, and temporal validity), and derives seven structural requirements for authorization architectures in multi-agent AI systems. Recent work on invocation-bound capability tokens, task-scoped authorization envelopes, dependency-graph policy enforcement, and execution-count revocation demonstrates that the field is converging on the problem, but not yet on a complete architecture. The central claim is that identity governance must be treated as infrastructure: evaluated continuously, enforced at every interaction boundary, and designed into the system before orchestration logic is allowed to scale. Preliminary implementation evidence from a production enterprise AI platform shows that ordinary system behavior, not only adversarial action, already produces the failures this model predicts.",
       "highlights": {
-        "contribution": "提出指令驱动的通用音频评估框架,SOTA 与人评相关性。",
-        "innovation": "冻结音频 encoder + 可训 adapter + LLM,后端做指令跟随;多源/多任务/多校准/多描述的指令数据。",
-        "method": "音频特征经 adapter 喂给微调 LLM,以自指令推理形式输出评分;无需任务特定再训。",
-        "results": "在语音、声音、音乐和域外评测上均与人主观评分 Pearson/Spearman 相关性 SOTA,优于通用 MLLM。"
+        "contribution": "明确 authorization propagation 是多 agent 系统区别于 prompt injection 的独立安全问题，并给出形式化定义和架构需求。",
+        "innovation": "把传统 RBAC/ABAC/ReBAC 之外的 workflow-level 不变量问题提炼出来，分成 transitive delegation/aggregation inference/temporal validity 三类。",
+        "method": "形式化 authorization propagation 性质，给出 7 条结构性架构需求，综述近期 invocation-bound token / task-scoped envelope / dependency-graph 等方案。",
+        "results": "用某生产级企业 AI 平台的初步观测数据表明，即便没有对抗行为，正常 workflow 也会触发其预测的失败模式。"
       },
       "images": [],
-      "published_date": "2026-05-06T05:18:42Z",
+      "published_date": "2026-05-06T20:56:17Z",
       "categories": [
-        "eess.AS",
-        "cs.AI",
-        "cs.SD"
+        "cs.AI"
       ],
-      "matched_domain": "Multi-modal",
+      "matched_domain": "Agent",
       "matched_keywords": [
-        "multimodal large language model",
-        "mllm"
+        "multi-agent",
+        "agentic"
       ],
       "scores": {
-        "relevance": 4.0,
+        "relevance": 4.5,
         "recency": 5.5,
-        "popularity": 5.5,
-        "quality": 7.0,
-        "recommendation": 6.0
+        "popularity": 5.0,
+        "quality": 6.0,
+        "recommendation": 5.5
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.04505v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.04505v1",
+      "pdf_url": "https://arxiv.org/pdf/2605.05440v1",
+      "arxiv_url": "https://arxiv.org/abs/2605.05440v1",
       "venue": null
     }
   ],

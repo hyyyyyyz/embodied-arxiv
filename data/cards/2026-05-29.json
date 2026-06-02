@@ -1,275 +1,5 @@
 [
   {
-    "arxiv_id": "2605.30795",
-    "summary": "VLA 做 RL 经常被稀疏奖励卡住，作者用预训练 visual world model 提取出 patch 级别的“进度“信号当 dense reward。具体是比对当前 patch 和 subgoal 的相似度，再用趋势聚类把 episode 切成语义阶段，训一个 value model 预测进度然后 reshape 终奖励。在 ManiSkill3 上把 OpenVLA-OFT 的 OOD 成功率从 17.5% 拉到 82.9%，RoboTwin 2.0 上 88.8%。",
-    "highlights": {
-      "contribution": "提出 Feat2Go：用预训练 visual world model 自动生成 dense progress reward，让 VLA 的 RL 不再依赖手工奖励工程。",
-      "innovation": "把视觉 world model 的 patch 相似度作为 fine-grained 进度信号，配合 trend clustering 自动切分子阶段，比 trajectory-level reward 更细。",
-      "method": "先用预训练 world model 比对 patch 与 subgoal，得到连续 progress；trend 聚类切阶段；训一个 value head 从观测+指令预测 progress；该 value 用来 reshape PPO/GRPO 的终奖励，兼容 OpenVLA-OFT 等现有 VLA。",
-      "results": "ManiSkill3 上 OpenVLA-OFT OOD 成功率 17.5%→82.9%，ID 保留 96.9%；RoboTwin 2.0 域随机化场景平均 88.8%，超过此前 RL baseline。"
-    },
-    "scores": {
-      "relevance": 9.2,
-      "recency": 9.5,
-      "popularity": 6.5,
-      "quality": 8.0,
-      "recommendation": 8.2
-    },
-    "affiliations": ["Peking University"]
-  },
-  {
-    "arxiv_id": "2605.30695",
-    "summary": "工业部署 VLA 最大的痛点是每来一个新任务都要 fine-tune。作者把训练数据按 primitive 切片+加 primitive 语言提示，发现训出来的模型在 inference 时只看 3 个 demo 就能 compose 出新任务，flat 训练需要 10 个 demo 才能匹敌——3 倍 sample efficiency 差距。还做了 ablation 证明确实是 primitive 子空间在起因果作用。",
-    "highlights": {
-      "contribution": "证明 primitive-aware 训练让 VLA 学到可组合的 sub-skill 库，无需 weight update 就能 few-shot 适应未见任务。",
-      "innovation": "把“primitive 分段+对应语言提示“作为 inductive bias，并通过 subspace ablation 给出因果证据：primitive 子空间被消融性能掉 32 个点，随机子空间不受影响。",
-      "method": "在 REASSEMBLE 数据集上用同样的 LoRA 配方训 OpenVLA 和 π0.5，只改训练序列形式（flat vs primitive-segmented + primitive prompt）；held out 6 个组合，给 m∈{0,1,3,5,10} 个 demo 做 in-context few-shot；3 个 seed + LIBERO-Long 验证。",
-      "results": "Primitive 训练 m=3 即可达到 fine-tune 上限的 78%，flat 训练要 m=10；3× sample efficiency 在多 seed/架构/数据集都稳定复现。"
-    },
-    "scores": {
-      "relevance": 9.0,
-      "recency": 9.5,
-      "popularity": 5.5,
-      "quality": 8.5,
-      "recommendation": 8.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.30834",
-    "summary": "VLA 在真实部署最怕半途出错没人察觉。作者把 failure detection 当成 coarsely supervised 学习问题，只用 trajectory 级标签做 inter/intra-trajectory 对比学习，就能把失败信号定位到具体动作步。在 LIBERO、VLABench 和真机上对 OpenVLA、π0、π0.5 都做了评估，配上 conformal prediction 取得 SOTA 多任务检测精度。",
-    "highlights": {
-      "contribution": "Hide-and-Seek：无需 step-level 标签即可定位 VLA 失败动作的运行时监控框架。",
-      "innovation": "用 inter-trajectory（成功 vs 失败）+ intra-trajectory（同轨迹内时序）双重对比目标，从粗标签里挖出局部失败信号，避开了 action-resampling/外部模型的昂贵代价。",
-      "method": "对 trajectory 级 success/fail 标签设计两类对比 loss：跨轨迹拉开成功失败 embedding，轨迹内时序对比突出转折点；推理时配合 conformal prediction 给阈值；evaluator 是 LIBERO/VLABench/真机三方位。",
-      "results": "在三个 benchmark 三个 VLA backbone 上取得 SOTA failure detection 精度，并展现 accuracy-timeliness 折中和对未见任务的泛化。"
-    },
-    "scores": {
-      "relevance": 8.5,
-      "recency": 9.5,
-      "popularity": 7.5,
-      "quality": 8.0,
-      "recommendation": 7.8
-    },
-    "affiliations": ["University of Wisconsin-Madison", "Georgia Tech"]
-  },
-  {
-    "arxiv_id": "2605.30957",
-    "summary": "VLA 训练数据基本靠人遥操，又贵又慢。作者反过来让 sim-to-real 训好的 RL 策略当 demo 生成器，自动产出干净轨迹喂给 VLA。系统由 VLM 任务解析、Grounding DINO 物体定位、RL 控制三块组成，在 pick-and-place 实验里 RL 跑出来的轨迹比人遥操更平滑，下游 VLA 性能更强。",
-    "highlights": {
-      "contribution": "提出用 sim-to-real RL 作为 VLA 训练数据的轨迹生成器，替代人遥操降低成本。",
-      "innovation": "不是把 RL 当最终控制策略，而是当“轨迹工厂“——成功 rollout 直接作为 VLA 的高质量监督数据。",
-      "method": "VLM 解析任务→Grounding DINO 定位目标→在 sim 训练 RL 然后 transfer 到真机；harvest 成功 rollout 做 VLA 的训练 demo，同时 sim 阶段额外扩充轨迹数据。",
-      "results": "Pick-and-place 任务里 RL 转移策略成功率高，且生成 demo 比人遥操更顺滑，下游 VLA 性能更好；规模实验偏小。"
-    },
-    "scores": {
-      "relevance": 7.8,
-      "recency": 9.5,
-      "popularity": 5.0,
-      "quality": 6.0,
-      "recommendation": 6.5
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.31066",
-    "summary": "空中 VLA 单机表现不错，但能不能跟地面机器人协同？作者搭了 CARLA-Air —— 一个把 CARLA 和 AirSim 装进同一个 Unreal runtime 的环境，能保证 UAV/UGV 共享物理时钟。实验发现现有 aerial VLA 单机跟踪没问题，可一旦做 team-level 协作就崩，state prompting 帮助有限，naive 双向交互甚至会放大错误。",
-    "highlights": {
-      "contribution": "提出 CARLA-Air 评估平台并系统评测当前 aerial VLA 在 closed-loop 空地协同上的能力短板。",
-      "innovation": "把 CARLA + AirSim 合进一个 UE 进程，共享世界状态和物理 tick，让 UAV/UGV 之间的时延和协调能被精确测。",
-      "method": "在 CARLA-Air 上设计两类诊断任务：移动平台降落、遮挡恢复跟随；对比 aerial VLA 与规划 baseline，测试 state prompting、双向交互等 prompt 变体；开源代码。",
-      "results": "现有 aerial VLA 单机能跟随但无法稳定协作；state prompt 收益有限，naive 双向交互反而放大错误；指出需要 partner-state grounding/低延迟/team objective 三件套。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 9.5,
-      "popularity": 5.5,
-      "quality": 7.0,
-      "recommendation": 6.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.30877",
-    "summary": "现在 VLA 几乎都要 fine-tune 才能看到效果，作者直接拷问：“预训练本身有没有可执行能力？” Wall-OSS-0.5 是个 4B 开源模型，3B VLM 骨干上加 action 头，跨 20+ 具身在百万级轨迹上做 gradient-bridged 共训。预训练 checkpoint 就能 zero-shot 跑十几个真机任务，fine-tune 后 60.5% 平均进度比 π0.5 高 17.5 个点。",
-    "highlights": {
-      "contribution": "Wall-OSS-0.5：开源 4B VLA，首次系统证明 VLA 预训练本身就能产出可执行的真机行为，而不仅是初始化。",
-      "innovation": "Gradient-bridged 共训：离散动作预测把 VLM 原生梯度灌进 backbone，多模态预测保留视觉-语言理解，连续 flow matching 当部署时动作接口，三任务功能互补。",
-      "method": "3B VLM + action 生成模块共 4B；20+ 种 embodiment 上每 epoch 百万条轨迹+多模态语料；三类目标共训；评估包括零-shot 真机、17/15 任务套件、多模态能力保持测试。",
-      "results": "Zero-shot 多任务非平凡完成；fine-tune 后 15 真机任务平均 60.5% 进度，超 π0.5 17.5 个点；vision-language 能力没掉。"
-    },
-    "scores": {
-      "relevance": 9.5,
-      "recency": 9.5,
-      "popularity": 8.0,
-      "quality": 8.5,
-      "recommendation": 8.7
-    },
-    "affiliations": ["Wall Intelligence"]
-  },
-  {
-    "arxiv_id": "2605.31041",
-    "summary": "自动驾驶 VLA 到底有没有真的“看“图？作者搞了一个三维度（通道级降质、信息级破坏、结构级修改）的视觉扰动框架，对 VLA 驾驶模型做 open-loop/closed-loop 评估。结论是 visual grounding 在不同抽象层不均匀，依赖关系还跟评估协议强相关——呼吁更结构化的诊断。",
-    "highlights": {
-      "contribution": "提出多层视觉扰动框架，量化 VLA 驾驶模型的视觉-行为依赖。",
-      "innovation": "不是看聚合 metric，而是把扰动分成通道/信息/结构三个互补维度，区分 open-loop 和 closed-loop 行为响应。",
-      "method": "设计 channel-level、information-level、structure-level 三种 controlled perturbation，对若干 VLA 驾驶系统在轨迹预测和闭环安全场景下做对比分析。",
-      "results": "不同评估协议下依赖模式不同；视觉 grounding 在抽象层之间不均匀；偏诊断分析，没有 SOTA 主张。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 9.5,
-      "popularity": 5.0,
-      "quality": 6.5,
-      "recommendation": 6.3
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.31234",
-    "summary": "想用人类视频训 VLA 但跨 embodiment 视觉差异太大，latent action 模型本身也会被 contaminated。HARP 用少量配对的人-机器人 demo 当桥，配上大量未配对视频做 dynamics 监督，对视觉编码器和 latent action 同步对齐。CALVIN ABC→D 拿到 4.481 平均长度，真机比最强 baseline 高 7.1%。",
-    "highlights": {
-      "contribution": "HARP：把人类视频和机器人视频对齐到同一视觉/动作表示，用于 VLA pretrain。",
-      "innovation": "新的 source-relative pair-discriminative alignment loss，让 robot encoder 朝人类语义对齐但仍保留 pair 级判别力；配套 manipulation-centric 辅助 cue 训 latent action。",
-      "method": "用少量配对 demo+大量非配对视频；训 robot-adapted visual encoder + latent action model；下游 VLA 用 latent-action 监督，再加轻量 action head 解码到真实命令。",
-      "results": "CALVIN ABC→D 平均长度 4.481；真机成功率比最强 baseline 高 7.1%；可视化和 sim 都体现 alignment 改善。"
-    },
-    "scores": {
-      "relevance": 9.0,
-      "recency": 9.5,
-      "popularity": 6.5,
-      "quality": 7.8,
-      "recommendation": 7.8
-    },
-    "affiliations": ["Tsinghua University"]
-  },
-  {
-    "arxiv_id": "2605.31271",
-    "summary": "Driving VLA 把语言塞进 planning 但 language↔action 总有鸿沟。DriveMA 把未来动作压成“meta-action”这种紧凑可验证的语言意图，从专家轨迹自动标注，再用 rule-based projection 校验生成轨迹是否符合 meta-action。配合 turn-level credit assignment 的 RL，Waymo Open Dataset E2E 上 2B 模型 RFS 8.060、4B 8.079，做到 SOTA。",
-    "highlights": {
-      "contribution": "DriveMA：用可验证的 meta-action 接口缝合 driving VLA 的语言决策和轨迹规划。",
-      "innovation": "meta-action 既能从专家轨迹自动注释，又能用规则投影回去校验生成轨迹，从而支持 dense reward 和细粒度 credit assignment 的 RL。",
-      "method": "trajectory-grounded 注释 pipeline 生成 meta-action 标签；action-centric SFT；turn-level credit assignment 的 RL 用 rule-based projection 给 dense reward；2B/4B 两档模型。",
-      "results": "Waymo Open Dataset E2E 上 2B RFS=8.060、4B=8.079 拿到新 SOTA；NAVSIM 上 closed-loop 也有竞争力；开源承诺。"
-    },
-    "scores": {
-      "relevance": 8.0,
-      "recency": 9.5,
-      "popularity": 7.0,
-      "quality": 8.0,
-      "recommendation": 7.7
-    },
-    "affiliations": ["Tsinghua University"]
-  },
-  {
-    "arxiv_id": "2605.31286",
-    "summary": "可变形物体（叠衣服）每个 category 都单独训策略太烦，naive 混合训又会任务互相打架。DeMaVLA 用 VLM+flow matching action expert，把 transformer 隔层剪掉减开销，先在 5000 小时双臂数据上预训，再人机回路 DAgger 后训。RoboTwin 上有竞争力，真机折衣服 benchmark 上表现强。",
-    "highlights": {
-      "contribution": "DeMaVLA：面向可变形物体（衣物折叠）的通用 VLA foundation model。",
-      "innovation": "action expert 用层级对齐的隔层 pruning 压一半算力；预训+混合 folding 数据+人机回路 DAgger 纠错数据三阶段配方。",
-      "method": "VLM backbone + flow matching action expert（layer pruning）；5000h 双臂真实 demo 预训；自采+真机失败纠正轨迹 DAgger 后训；在 RoboTwin 和自建真机 folding benchmark 评估。",
-      "results": "RoboTwin 上 competitive，真机 folding benchmark 表现强；强调数据 scale + corrective learning 的价值。"
-    },
-    "scores": {
-      "relevance": 8.7,
-      "recency": 9.5,
-      "popularity": 6.5,
-      "quality": 7.5,
-      "recommendation": 7.6
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.31158",
-    "summary": "交互式视频 world model 玩家一动相机就 generate 下一段，但越跑越慢、context 越堆越大。Light Interaction 训练免费加速：根据相机轨迹自适应丢弃旧记忆、复用 early-step 输出、再加块稀疏 attention 的 Triton kernel，HY-WorldPlay 和 Matrix-Game-3.0 上 2.59× 加速且画质基本保持。",
-    "highlights": {
-      "contribution": "training-free 框架把交互式 video world model 推理加速到 2.59×。",
-      "innovation": "把“交互天然提供轨迹依赖的自适应计算“作为核心观察：相机走新地方就丢空间记忆，回到老地方就复用早期 denoise 结果。",
-      "method": "三件套：adaptive context management、denoising cache 复用、3D 块稀疏 attention（软硬协同设计 + 融合 Triton kernel）；无需重训。",
-      "results": "HY-WorldPlay/Matrix-Game-3.0 上 ≤2.59× 加速，视觉质量保持竞争力。"
-    },
-    "scores": {
-      "relevance": 8.0,
-      "recency": 9.5,
-      "popularity": 6.5,
-      "quality": 7.5,
-      "recommendation": 7.5
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.30880",
-    "summary": "Text-agent 环境通常被建模成 POMDP 假设状态不可见，作者反问：能不能直接把可执行 Python 代码当 world model？PatchWorld 是个 gradient-free 框架，从离线轨迹用反例引导修补代码，得到可读、可重放、可局部 patch 的符号 belief-state 程序。7 个 AgentGym 环境上 76.4% 一步前瞻 macro 成功率，预测时不调 LLM。",
-    "highlights": {
-      "contribution": "PatchWorld：用可执行 Python 代码作为 text-agent world model，gradient-free 训练。",
-      "innovation": "Counterexample-guided code repair：从反例反推哪段动作更新逻辑要改，得到 symbolic、可 inspect 的 belief-state 程序，预测时不需要再调 LLM。",
-      "method": "从离线轨迹得到反例→局部修补 Python world model code；推理时直接执行 code 做 one-step lookahead，不调 LLM；可选 human-specified residual memory bias。",
-      "results": "7 个 AgentGym 环境上 76.4% macro 成功率（一步前瞻）为评估方法中最高；residual memory 提升 observation fidelity 但降低决策实用性，暴露 tradeoff。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 9.5,
-      "popularity": 6.0,
-      "quality": 7.5,
-      "recommendation": 6.8
-    },
-    "affiliations": ["HKBU", "HKUST"]
-  },
-  {
-    "arxiv_id": "2605.31111",
-    "summary": "JEPA latent 没有专门的维度编码“任务进度“。作者把 latent 切成两个正交子空间：低维 progression 子空间用 cosine-margin triplet loss 训，高维 content 子空间用 SIGReg 防塌缩。理论证明二者作用在不交坐标上互不打架；SD-JEPA 在 LeWM 的多数控制 benchmark 上提点，Push-T 上超过最强 non-LeWM baseline。1D 进度坐标还能当 scene-aware compass。",
-    "highlights": {
-      "contribution": "SD-JEPA：把 JEPA latent 解耦成 progression 与 content 两个正交子空间，让任务进度有专门的可解释方向。",
-      "innovation": "用 cosine-margin triplet shape 进度子空间 + SIGReg 防 content 塌缩，并给出二者作用坐标不交的理论证明；得到的 1D angular 进度坐标可作为定位语义事件的 compass，优于 latent-prediction-error。",
-      "method": "在 JEPA latent 中预留 8 维 progression 子空间用 triplet loss 训，剩余维度用 SIGReg；评估覆盖 LeWM control benchmark、Push-T 以及 progression coordinate 的 surprise 定位实验。",
-      "results": "多数 LeWM control benchmark 提点；Push-T 超过最强 non-JEPA baseline；进度坐标在 40 episode 上比标准 surprise 高 +0.18 pooled AUROC，linear probe 在 8 维子空间解释 72-95% 进度方差。"
-    },
-    "scores": {
-      "relevance": 8.0,
-      "recency": 9.5,
-      "popularity": 5.5,
-      "quality": 8.0,
-      "recommendation": 7.5
-    },
-    "affiliations": ["École Polytechnique", "IRT SystemX"]
-  },
-  {
-    "arxiv_id": "2605.31314",
-    "summary": "Diffusion 导航 world model 训练时拿 GT 监督，推理时却 autoregressive，分布漂移导致长时序崩。AR Forcing 把扩散 loss 套进自回归训练循环：每步用自己上一步预测当 context 再做单步去噪，相当于把推理状态分布暴露给训练。RECON/SCAND/HuRoN/TartanDrive 四个数据集上长时序图像一致性和轨迹精度都改善。",
-    "highlights": {
-      "contribution": "AR Forcing：autoregressive 训练策略修补 diffusion 导航 world model 的 train-inference 分布漂移。",
-      "innovation": "直接把单步 diffusion loss 嵌入自回归循环，无需额外 discriminator 或分布匹配项，框架/采样器全保留。",
-      "method": "训练时每步用模型自身预测更新 context 再优化单步噪声预测；保留原 diffusion loss/sampler；在四个多域导航数据集上对比 baseline。",
-      "results": "RECON/SCAND/HuRoN/TartanDrive 上长时序生成一致性和轨迹预测精度均提升；承诺开源代码。"
-    },
-    "scores": {
-      "relevance": 8.0,
-      "recency": 9.5,
-      "popularity": 5.5,
-      "quality": 7.0,
-      "recommendation": 7.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.31336",
-    "summary": "长时段可控视频生成最大的难题是 spatio-temporal 一致性。DecMem 不再依赖显式 3D 记忆或粗粒度帧记忆，而是用解耦的 Sparse Global Memory（细粒度全局历史）+ Anchored Local Memory（稳定外推），并分析了 naive 学习型 memory 的 attention dispersion 失败模式，做到分钟级长视频高保真。",
-    "highlights": {
-      "contribution": "DecMem：解耦记忆架构使可控 world generation 能稳定外推到分钟级。",
-      "innovation": "诊断出 attention dispersion 是 naive 学习型 memory 的核心瓶颈，对应设计 Sparse Global + Anchored Local 双轨记忆。",
-      "method": "Sparse Global Memory 支持细粒度全局检索，Anchored Local Memory 保证局部稳定；同时在 attention/compute 上优化避免 dispersion；可控视频生成作为评估场景。",
-      "results": "显著超越 SOTA，实现分钟级 controllable long video 生成且保持高保真度和一致性。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 9.5,
-      "popularity": 7.0,
-      "quality": 7.5,
-      "recommendation": 7.3
-    },
-    "affiliations": ["Kuaishou", "HKU"]
-  },
-  {
     "arxiv_id": "2605.31361",
     "summary": "Dreamer 在单 agent 上 sample efficient，但 cooperative MARL 时队友策略不可见就崩。作者把队友当作 world model 里的可学习组件：RSSM latent 拆成环境+队友两部分，再加 ToM 头从片段轨迹推断队友的 character/intent/predicted action，actor 和 critic 都拿这些 latent 做条件。文章本身偏概念+benchmark 提议。",
     "highlights": {
@@ -324,114 +54,6 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2605.31124",
-    "summary": "VGGT 是 1.2B 的前馈 3D 重建模型，UAV/手机上部署吃不消。QVGGT 提出对它专门设计的训后量化：发现不同 transformer block 对量化敏感度不一样，按敏感度做混合精度；再剔除 camera/register 这些高方差 token 并用 PCA 全局补偿；scale 搜索结合 multi-head 监督。W4A16 几乎无损，内存省 3-4.9×，硬件提速 2.8×。",
-    "highlights": {
-      "contribution": "QVGGT：为 VGGT 量身做的 PTQ 框架，把前馈 3D 重建塞进边缘设备。",
-      "innovation": "Per-block 敏感度分析 + 选择性混合精度；token filtering + PCA 全局补偿处理高方差 camera/register token；task-aware scale search 结合 cross-head 几何一致性监督。",
-      "method": "分析每个 block 量化敏感度→分配混合精度→剔除异常 token 并用 PCA 派生 compensation token 补偿→scale search 用 reconstruction + multi-head + cross-head consistency 监督。",
-      "results": "W4A16 近无损，所有 3D 头精度保持；内存 3~4.9× 缩减，真实硬件最高 2.8× 加速。"
-    },
-    "scores": {
-      "relevance": 8.8,
-      "recency": 9.5,
-      "popularity": 6.0,
-      "quality": 8.0,
-      "recommendation": 7.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.30863",
-    "summary": "动态 3DGS 把所有高斯都当动态，算得慢。DSD-GS 用 Feed-Forward Gaussian Splatting encoder + 光流模型先做静动分解，只对真正动的部分做时变建模。Neural 3D 数据集上 10 分钟训练、单卡 5090 上 1352×1014 分辨率 700+ FPS，免 COLMAP 还能确定性初始化。",
-    "highlights": {
-      "contribution": "DSD-GS：静动分解的动态 3DGS 框架，兼顾画质、训练/渲染速度和存储。",
-      "innovation": "用前馈 GS encoder + 光流做静动分解，避免对静态区域重复时变建模；去 COLMAP 化 + 确定性初始化提升复现性。",
-      "method": "前馈 Gaussian Splatting encoder 出初始高斯；光流模型识别动态区域；只对动态部分建时变；渲染走标准 3DGS 流程。",
-      "results": "Neural 3D 上 10 分钟训练；5090 上 1352×1014 渲染 700+ FPS；存储和质量优于现有 baseline。"
-    },
-    "scores": {
-      "relevance": 5.5,
-      "recency": 9.5,
-      "popularity": 5.5,
-      "quality": 7.5,
-      "recommendation": 6.5
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.30671",
-    "summary": "Egocentric 视频里手挡住画面时，VGGT 估相机姿态居然不如常数预测器。作者反其道而行，注意到此时 wrist 和相机的运动是被手臂-肩-头链条耦合的——所谓 kinematic coupling 才是关键 visual concept。4D 的 inter-wrist 特征 + 一个 GRU，200K 参数，zero-shot 跑到 Epic Kitchens 上 14.3° 中位 geodesic 误差，接近 1B VGGT。",
-    "highlights": {
-      "contribution": "提出 WristCompass：用 kinematic coupling 而非场景几何估 ego-camera 朝向，专治手遮场景。",
-      "innovation": "明确指出“场景几何缺失时反而是 wrist 运动结构在提供信号“，并给出 4D inter-wrist 特征比 126D hand keypoint 更有效的实证。",
-      "method": "提取 inter-wrist 的 4D 特征→GRU 在短窗上聚合时序→预测相机朝向；仅在 tabletop manipulation 上训练，zero-shot 测 Epic Kitchens。",
-      "results": "200K 参数 GRU 在 TACO/Epic Kitchens 上接近 1B VGGT，Epic Kitchens 中位 geodesic 误差 14.3°；揭示 VGGT 在手遮场景下不如 constant baseline。"
-    },
-    "scores": {
-      "relevance": 7.8,
-      "recency": 9.5,
-      "popularity": 5.5,
-      "quality": 8.0,
-      "recommendation": 7.5
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.30705",
-    "summary": "几何感知生成模型经常出现 latent misalignment —— 理论上的群作用和 latent 里实际需要的变换对不上。作者用 flow matching 训一个 residual 流去校正这种 misalignment，让 latent 真正满足 SO(n) 等群等变关系，novel view synthesis 质量改善。",
-    "highlights": {
-      "contribution": "Residual Latent Flow：用 flow matching 校正等变 latent 的 misalignment，提升 NVS 一致性。",
-      "innovation": "直接诊断“intended group action vs 实际所需 latent 变换“的差距，并用 flow matching 学一个残差校正。",
-      "method": "在等变 latent 上训 flow-based residual，使其在 SO(n) 群作用下满足等变关系；评估 NVS 质量和 latent alignment 指标。",
-      "results": "显著降低 latent misalignment，改善 SO(n) 群下的 novel view synthesis 质量。"
-    },
-    "scores": {
-      "relevance": 5.0,
-      "recency": 9.5,
-      "popularity": 5.0,
-      "quality": 6.5,
-      "recommendation": 5.8
-    },
-    "affiliations": ["Seoul National University"]
-  },
-  {
-    "arxiv_id": "2605.30855",
-    "summary": "动作可控的 image-to-video 长 rollout 容易“漂“。Robust Dreamer 找到两个病灶：latent↔RGB 反复编解码丢信息、训练时 memory 干净而推理时被污染。对策是把 diffusion latent 锚到高斯做 Latent Gaussian Memory，再用 Deviation Learning 主动合成 rollout 误差进训练记忆。ScanNet/DL3DV/OmniWorldGame 上拿到长时序 SOTA。",
-    "highlights": {
-      "contribution": "Robust Dreamer：面向 action-controlled AR 视频生成的记忆增强 world model，专治长时序漂移。",
-      "innovation": "Latent Gaussian Memory 把 diffusion latent 直接锚到 GS 原语，避免 VAE 反复编解码；Deviation Learning 用一步近似生成 rollout 误差并按阶段/时间归档注入训练记忆，弥合 train-test gap。",
-      "method": "把每步生成的 diffusion latent 写入高斯原语作为 dense、几何感知的条件；动态 Deviation Archive 按 AR 阶段和 denoising 时间存放合成误差，训练时混入历史 memory。",
-      "results": "在 ScanNet、DL3DV、OmniWorldGame 三个 benchmark 上取得长时序 SOTA。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 9.5,
-      "popularity": 6.0,
-      "quality": 7.8,
-      "recommendation": 7.3
-    },
-    "affiliations": ["NUS", "ANU"]
-  },
-  {
-    "arxiv_id": "2605.30987",
-    "summary": "3DGS 场景里做物体移除+inpaint 老在多视角一致性上翻车。作者比较一堆 2D inpainter 后发现，重建型的比扩散型更适合 3D；进一步对比不同单步集成路径，结论是“从零初始化场景“比 finetune 现有场景效果更好，并且必须先移除物体再 inpaint。顺便发布了带 GT 的多物体 360° 场景。",
-    "highlights": {
-      "contribution": "系统 benchmark 单步 3DGS 多物体场景 inpainting，并发布带 GT 的 360° 多物体数据集。",
-      "innovation": "强调 reconstruction-based 2D inpainter 在 3D 上比 diffusion 型一致性更好；强调“移除-再-inpaint”和“从零初始化“的重要性。",
-      "method": "对比多类 2D inpainter 集成进若干单步 3DGS pipeline；评估不同路径（finetune 现场景 vs 从零）；构造一个含真实 GT 与多物体遮挡的 benchmark。",
-      "results": "Reconstruction-based 2D inpainter 在 3D 一致性上胜出；从零初始化优于 finetune；GT benchmark 用于公平评估。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 9.5,
-      "popularity": 5.0,
-      "quality": 6.5,
-      "recommendation": 5.5
-    },
-    "affiliations": ["TU Munich"]
-  },
-  {
     "arxiv_id": "2605.31376",
     "summary": "室内自主导航既要避障又要懂物体。LiftNav 在 GSFusion 的 TSDF+GS 双地图上叠 YOLO 检测、TSDF 3D lifting 和 B 样条优化，再加一个 hinge-loss 形式的碰撞惩罚提升平滑性。Replica 仿真上对比 SOTA radiance field baseline，可行性率 100% 且轨迹更短。",
     "highlights": {
@@ -447,6 +69,421 @@
       "quality": 6.5,
       "recommendation": 5.7
     },
-    "affiliations": ["TU Munich"]
+    "affiliations": [
+      "TU Munich"
+    ]
+  },
+  {
+    "arxiv_id": "2606.00269",
+    "summary": "现有 VLA 测试时干预都是开环的固定系数，结果速度、平滑度这种时序属性容易过冲、震荡。作者搞了个闭环框架 CTRL-STEER，沿着运动对齐的残差方向干预，并用 PID 或 RL 控制器在线调节强度。在 OpenVLA + LIBERO 上比固定系数 baseline 更稳，不用动 base 模型。",
+    "highlights": {
+      "contribution": "提出一个闭环 VLA 表征干预框架，把静态 steering 系数换成时变控制信号，专门解决时序行为的过冲和震荡。",
+      "innovation": "把表征方向和调节强度解耦——steer 方向用运动对齐的残差方向，强度则交给 PID/RL 反馈控制器在线调，不需要重训 base policy。",
+      "method": "在 OpenVLA 内部找运动对齐残差方向作为干预通道，外面套 PID 或 RL 控制器，根据任务状态实时改变 intervention 幅度；不修改基础模型权重。",
+      "results": "在 LIBERO 四个子任务上，相比固定系数 baseline，CTRL-STEER 在概念调节稳定性和 steering-成功率权衡上都更优。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": [
+      "SRI International",
+      "US Army"
+    ]
+  },
+  {
+    "arxiv_id": "2606.00229",
+    "summary": "作者觉得 VLA 用语言推理太粗，task-level 节奏和 action chunk 节奏不匹配。于是改成 continuous reasoning：用一组结构化连续 thought 当共享上下文，再生成 chunk 化的动作。还加了 EMA teacher 自验证目标保证 reasoning 是可共享、可验证的。在 LIBERO-PRO 和真机上比 π0.5 强，TX-G2 上子任务成功率 +40.4%。",
+    "highlights": {
+      "contribution": "把 VLA 的推理媒介从离散语言换成可共享、可验证的连续 latent，专门匹配细粒度动作的时间尺度。",
+      "innovation": "提出连续 reasoning 必须满足 shareable + verifiable + 时间结构对齐三条；用共享高斯 latent + EMA teacher self-verification 防止 reasoning 退化成模型私有捷径。",
+      "method": "先预测一组连续 thought，再作为共享上下文条件化 chunk 动作生成；训练时学生输出 reasoning，EMA teacher 必须能用同一个 reasoning 预测目标 action。",
+      "results": "LIBERO-PRO 鲁棒性更强；真机上 TX-G2 (AgiBot G2) 子任务平均成功率比 π0.5 +40.4%，HSR 上 +26.3%。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 8.2,
+      "recommendation": 8.4
+    },
+    "affiliations": [
+      "Mitsubishi Electric Research Labs"
+    ]
+  },
+  {
+    "arxiv_id": "2606.00252",
+    "summary": "人形机器人甩绳挂重物属于欠驱动，难搞。HOIST 先用 VR 遥操数据微调一个 VLA 高层策略，下接 whole-body 控制器；再用 VLA rollout 跑迭代 batched RL 微调放置精度。比纯模仿学习强不少：真机上位置误差降 19.9 cm，角度误差降 3.56 度。",
+    "highlights": {
+      "contribution": "针对人形操作悬挂载荷这种欠驱动任务，给出 VLA imitation + 样本高效 RL 微调的组合方案。",
+      "innovation": "用 VR 遥操数据 bootstrap VLA，再用 VLA 自身 rollout 做 iterative batched RL，避免从零 RL 的不安全和低效。",
+      "method": "VR 遥操采数据 → 微调 VLA 高层策略 → 通过 whole-body 控制器执行 → 用 VLA 在仿真和真机 rollout，迭代 batched RL 提升放置精度和停止行为。",
+      "results": "真实人形机器人上比纯 VLA rollout 平移误差降 19.9 cm，角度误差降 3.56°；在仿真和真机上都比纯模仿和加数据 baseline 强。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.00253",
+    "summary": "在异构关节空间（手臂、夹爪、头、底盘）上微调 VLA，发现 total MSE 最低的 checkpoint 反而真机表现不是最好。作者拆开看每个 group 的 error，发现底盘收敛最慢拖整体，arm 误差才是选 checkpoint 的关键。60 次真机实验里 π0.5 (3.3B) 完胜两个微调变体，结论是别再用总 MSE 选 checkpoint。",
+    "highlights": {
+      "contribution": "实证指出 VLA 在异构关节机器人上做 checkpoint selection 应该用 per-group error 而不是 total MSE。",
+      "innovation": "区分每个关节 group 的预测误差，揭示易预测关节会掩盖关键 group 的失败，这一点之前都被合并成单一 MSE 忽略掉。",
+      "method": "在 11-DoF Toyota HSR 上微调 SmolVLA (action-expert) 和 π0.5；对比 total MSE 与 per-group MSE，再在 60 trials 真机评测看哪种 metric 与真实表现一致。",
+      "results": "π0.5 80k 在真机 4.0/4，显著超过 SmolVLA (3.5/4) 和 expert-only π0.5 (3.75/4)；arm-group offline error 比 total MSE 更预测真机表现 (Mann-Whitney p ≤ 0.010)。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": [
+      "TU Wien"
+    ]
+  },
+  {
+    "arxiv_id": "2606.00267",
+    "summary": "视频 world model 用来评 policy 时，名义 imagination 抓不到罕见的高影响场景。StressDream 通过优化扩散 WM 的初始噪声，把 imagination 主动 steer 到高影响但仍合理的未来。优化目标包含 VLM 语义梯度 + 防 OOD 的 plausibility 正则，在自驾和操作场景上能稳定生成失败场景视频用于鲁棒 policy 评估。",
+    "highlights": {
+      "contribution": "首次把扩散 WM 的初始噪声当成可优化变量，定向生成高影响 (failure-like) 但合理的未来，用于稳健 policy 评估和改进。",
+      "innovation": "用 VLM 给生成视频提供语义梯度（信息丰富但稀疏），配合 plausibility 损失防止噪声漂到 OOD，让 noise 优化在高维空间不崩。",
+      "method": "在扩散视频 WM 上对初始噪声做梯度优化；语义目标由 VLM 给出（针对推理时文本指定的事件），plausibility 损失约束噪声留在训练分布内。",
+      "results": "在 SOTA 自驾和机器人操作视频 WM 上，能可控地生成 text 指定的高影响 plausible 未来（如任务失败），从而暴露 policy 弱点。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": [
+      "NVIDIA",
+      "CMU",
+      "University of Washington"
+    ]
+  },
+  {
+    "arxiv_id": "2606.00352",
+    "summary": "3DGS 的 spatial partition 和光栅化对 tile 大小要求相反：分块希望大、光栅化希望小。HiGS 让两阶段各跑各的 tile：partition 用粗 macro-tile，光栅化用其中的细 render tile。这样密集区域并行展开，整体最高比原版 3DGS 快 15.8x，且保留精确 alpha 合成。",
+    "highlights": {
+      "contribution": "提出分层 tile 的 3DGS 渲染架构 HiGS，把分块和光栅化解耦到各自合适的尺度，提升实时渲染吞吐。",
+      "innovation": "首次拆开 partition tile 和 rasterization tile，按 macro-tile 内 Gaussian 数量分配光栅化工作，避免少数高密 tile 序列化拖整体。",
+      "method": "分两级 tile：粗 macro-tile 做空间分箱和深度排序，细 render tile 做光栅化；按 macro-tile 内 Gaussian 数发射 raster 工作以提高并行利用。",
+      "results": "实测最高比原版 3DGS 快 15.8×，在所有评估场景中超过所有对比 rasterizer，同时保持精确的 front-to-back alpha 合成。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": [
+      "NVIDIA"
+    ]
+  },
+  {
+    "arxiv_id": "2605.31419",
+    "summary": "现在 NVS 主流是 3DGS，但下游做仿真、碰撞、mesh 编辑还是离不开三角形。作者搞了 Triangle Splatting SLAM：用可微三角汤同时做 tracking 和 mapping，在线用 Delaunay 把汤切成 mesh。Replica/TUM-RGBD 上几何指标超 baseline，tracking 持平，还能边跑边编辑。",
+    "highlights": {
+      "contribution": "首个用 differentiable triangle splatting 作为 3D 表征的 dense RGB-D SLAM 系统，同时支持 tracking、mapping 和在线 mesh 化。",
+      "innovation": "把三角形而不是 3DGS 当 SLAM 的 primitive，online 用 restricted Delaunay 把三角汤变成连通 mesh，让 mesh 形变、碰撞检测直接在 SLAM 流程里完成。",
+      "method": "可微三角 soup 当地图表示，光栅化做 tracking 与 mapping；运行时用受限 Delaunay 三角化把 soup 转成连通 mesh，支持 on-the-fly 编辑。",
+      "results": "Replica 和 TUM-RGBD 上 3D 几何指标超过 baseline，相机 tracking 精度持平 3DGS-based SLAM；同时支持在线 mesh 编辑等新能力。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": [
+      "Imperial College London"
+    ]
+  },
+  {
+    "arxiv_id": "2605.31534",
+    "summary": "固定阈值取特征会浪费算力在重复纹理或低 parallax 区域。作者搞了个自适应特征选择策略，按纹理、可重复性、distinctiveness、三角化角度和空间覆盖打分，再按视角分配 budget。在小规模合成数据上比 random/texture-only/uniform-grid baseline 在 RMSE 和 completeness 上都更好。属于前端策略，不替代学习匹配。",
+    "highlights": {
+      "contribution": "提出一个适配 3D 重建的自适应特征选择前端策略，让 budget 花在真正有几何价值的视觉证据上。",
+      "innovation": "把纹理、可重复性、distinctiveness、期望三角化角度和空间覆盖联合打分，并按 per-view budget 分配特征。",
+      "method": "固定重建后端的前提下，前端打分候选特征并按 per-view budget 分配；评估时和 random、texture-only、uniform-grid 三种策略对比。",
+      "results": "在 corridor / facade / object-table / cluttered 四种合成场景上，自适应策略的质量加权 completeness 最高，aggregate RMSE 最低。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 4.5,
+      "quality": 5.5,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.31535",
+    "summary": "自监督 NVS 在真实视频上 scaling 很脆。RayDer 把相机估计、重建、渲染全塞进一个 feed-forward transformer，再用一个最小动态状态把时变内容当 nuisance 吸收掉，从而能稳定地在原始视频上训练。静态场景仍是目标任务，dynamic content 只当训练监督。表现出干净的 power-law scaling，多基准零样本接近监督 SOTA。",
+    "highlights": {
+      "contribution": "把自监督 NVS 变成一个单模型的 scaling 问题：统一 backbone 解决 camera/scene/render 三件事，可在无约束视频上稳定训练。",
+      "innovation": "引入一个 minimal dynamic state 当 nuisance 来吸收时间变化内容；动态内容只是 scalable supervision，不参与重建，从而保持静态 NVS 目标。",
+      "method": "单个 feed-forward transformer 共同建模相机、场景、渲染；动态状态吸收时变内容；多模型规模和数据规模上测 scaling。",
+      "results": "在多个 model size + 数量级数据上展示清晰 power-law scaling；零样本 open-set 在多 benchmark 上 competitive 于监督 SOTA。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": [
+      "CompVis",
+      "LMU Munich"
+    ]
+  },
+  {
+    "arxiv_id": "2605.31577",
+    "summary": "feedforward 3D 重建虽然全局 point map 不错，但局部表面几何还是糙，而现有 metric 又看不太出来。SurGe 引入一个 point map normal 指标暴露问题，再加 point gradient matching loss 监督深度归一化有限差分 + Neighborhood Attention Decoder 上采样。在 8 个 zero-shot 单目几何 benchmark 上拿到最佳平均排名。",
+    "highlights": {
+      "contribution": "针对 feedforward point map 局部表面几何的弱项，提出新的法向指标和两个互补改进让局部几何明显更好。",
+      "innovation": "把局部表面误差显式化（point map normal metric），并通过 point gradient matching loss + Neighborhood Attention Decoder 同时改善梯度监督和局部特征聚合。",
+      "method": "在 feedforward 重建模型上加 NAD：渐进上采样 + Neighborhood Attention 做局部特征 mixing；损失里加 depth-normalized 3D finite difference 的 gradient matching。",
+      "results": "在 8 个 zero-shot 单目几何 benchmark 上 global AbsRel 平均排名第一，local point map 和 normal 指标也一致提升。"
+    },
+    "scores": {
+      "relevance": 8.2,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": [
+      "RWTH Aachen"
+    ]
+  },
+  {
+    "arxiv_id": "2605.31514",
+    "summary": "一篇 position paper：作者训了个简单 NN 玩帝国时代 2，论证如果按现有标准说 LLM 有道德/语义理解，那 AoE2 也有。核心论点是 anthropomorphic 属性是 substrate-dependent，目前讨论都是循环论证。还顺手证了 AoE2 图灵完备。跟具身/VLA/Agent 落地几乎没关系。",
+    "highlights": {
+      "contribution": "用一个反例（AoE2 + 小 NN）论证当前关于 LLM 拟人化属性的讨论缺少明确测量标准、会陷入循环论证。",
+      "innovation": "提出 null assumption：默认 LLM 属性 substrate-非唯一，再去做实验设计；并形式化证明 AoE2 是 Turing-complete。",
+      "method": "训练一个简单神经网络玩 Age of Empires II，通过类比和分析论证拟人化属性可以归结到任何足够强 substrate；属于概念/论证性论文。",
+      "results": "无定量实验结果，主要是哲学/方法论论证 + AoE2 Turing-complete 的证明。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 9.5,
+      "popularity": 4.5,
+      "quality": 6.0,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.00288",
+    "summary": "一篇 vision survey/paper：作者把 Codex、Claude Code、AutoGPT 这一波 agent 系统类比成计算机体系结构，提了个六层 ICAM 框架，把 LLM 当成同时具备 CPU 和 OS 特征的双 plane（概率执行 + 确定控制）。还给出三个经验定律。没新实验。",
+    "highlights": {
+      "contribution": "为 model-native computing 提出一个统一六层架构 ICAM，把 LLM-as-OS、memory、agent 框架、tool 协议这些零散方向放在同一概念地图。",
+      "innovation": "用 dual-plane 视角（概率执行 + 确定控制）调和 LLM 既像 CPU 又像 OS 的争论；提出 Semantic Locality / Context Budget / Agent Speedup 三条经验定律。",
+      "method": "概念性 + 综述：把计算机体系结构概念映射到 model-native stack，定义六层框架和接口契约，并用已发表系统数据校验三条定律。",
+      "results": "无新实验，定律部分用文献中已发表的系统数据点做对照验证。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.00417",
+    "summary": "针对 6G 核心网管理复杂，作者提了 AgentxGCore：在 3GPP 架构上加一层 Agentic AI，用 planner agent 看网络状态、executor agent 执行 + 自我批评。基于开源 CN 和不同 LLM 验证，主打 self-organization。跟具身 AI 几乎没关系。",
+    "highlights": {
+      "contribution": "把 Agentic AI 设计成 6G/NextG 核心网架构里独立一层，闭环优化网络管理。",
+      "innovation": "用 planner + executor 多 agent 分工：planner 看网络状态规划，executor 负责批判和执行；扩展 3GPP API 而不是只做配置自动化。",
+      "method": "搭一个 Agentic AI-native 层接在 3GPP 之上，多 agent 协作通过 ReAct 风格 reasoning + tool use 调用 API；用开源核心网和多个 LLM 跑环境验证。",
+      "results": "在开源 CN 和异构数据集上展示了不同 LLM 的有效性，给出概念验证级实验。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 9.5,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 4.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.31468",
+    "summary": "AutoSci 想做一个能跑完整科研生命周期、还能跨项目记忆和自我进化的 agentic 系统。围绕 4 个模块：SciMem 管 schema 化记忆，SciFlow 跑五阶段流程，SciDAG 用 DAG 多 agent 做难任务，SciEvolve 把反馈变成 memory/flow/template 的版本更新。算是 memory-centric agent 框架的一次较完整尝试。",
+    "highlights": {
+      "contribution": "提出一个 memory-centric 的科研 agent 系统，覆盖 literature → rebuttal 的完整科研生命周期，并能跨项目自我进化。",
+      "innovation": "把研究记忆按 Long-Term Knowledge + Active Research 拆开做 schema 治理；引入 SciEvolve 把用户/实验/审稿反馈变成版本化 memory/flow/template 更新。",
+      "method": "SciMem 提供 schema 记忆；SciFlow harness 跑五阶段 lifecycle 并控制 state/context/verification/feedback/orchestration；SciDAG 给难任务做 DAG 多 agent；SciEvolve 接收信号迭代各模块。",
+      "results": "工程系统论文，提供开源仓库；没给单一基准的精确数字，强调跨项目持久研究环境能力。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": [
+      "Peking University"
+    ]
+  },
+  {
+    "arxiv_id": "2606.00189",
+    "summary": "Auto-design 出来的 agent 系统漂亮但难落地。这篇直接论证：在生产环境，手工模块化 fixed workflow 比 dynamic planner 更便宜更准。框架里用 'pseudo-tool' 强制模块化，再去学这些 pseudo-tool 和 workflow，最终比手写 agent 更好。还做了 cost-quality 多目标优化。",
+    "highlights": {
+      "contribution": "针对生产级 agentic 系统提出 pseudo-tool + fixed workflow 框架，并配套学习方法替代动态 planner，主打 simplicity / controllability / 成本可预测。",
+      "innovation": "把递归 LLM 调用封装成 pseudo-tool 强制模块化；论证 hand-engineered fixed workflow 在 cost 和 accuracy 上反而胜过 dynamic planner；用多目标优化在 cost 和质量间 blend。",
+      "method": "定义 agent framework 支持 pseudo-tool 和 fixed workflow；先手工搭，再针对 pseudo-tool 和 workflow 设计 learning 方法；最后用多目标优化联合 cost 和质量。",
+      "results": "在多个任务上 fixed workflow 比 dynamic plan 更便宜更准；学习方法整体优于手写 agent；多目标优化可在 cost-quality 上 blend 多个学习系统。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.31529",
+    "summary": "现有视频 benchmark 测不了真正的视频智能（因果 / 仿真 / 策略）。SVI-Bench 用团队体育当 microworld：10-22 个 agent 对抗决策但规则可验证。35K 小时广播视频、15M 动作标注，跨篮球/足球/冰球。覆盖感知到 agentic synthesis 四级层级，发现强 model 在 agentic 任务只有 5% 准确率，能力悬崖很明显。",
+    "highlights": {
+      "contribution": "提出大规模 Strategic Video Intelligence 评测 SVI-Bench，把团队体育当成既复杂又规则可验证的多智能体微观世界。",
+      "innovation": "用真实体育广播构造同时具备真多 agent 对抗复杂度和规则可验证 ground truth 的 benchmark；设计感知→因果→仿真→agentic 四层任务层级。",
+      "method": "搭数据引擎把比赛数据转成密集交叉引用语料：约 35K 小时视频 + 15M 动作标注 + 15K 小时解说 + 23K 比赛报告 + 103K 统计；9 个任务覆盖四层。",
+      "results": "感知类（细粒度 action QA）模型可到 ~73%，但 agentic synthesis 上最强 model 只有 5%，揭示明显能力悬崖。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.2,
+      "recommendation": 7.8
+    },
+    "affiliations": [
+      "UNC Chapel Hill"
+    ]
+  },
+  {
+    "arxiv_id": "2606.00204",
+    "summary": "图像生成对 prompt 敏感，已有 prompt enhancer 大多挂在 GPT/Gemini 这种闭源大模型上，又贵又有依赖。APE 用小语言模型做 prompt enhancer，单 agent 版 SAPE 一次重写，多 agent 版 MAPE 拆成 router-rewriter-composer 处理复杂组合约束。在生成/编辑 benchmark 上稳定超 base SLM，逼近闭源 enhancer。",
+    "highlights": {
+      "contribution": "把 prompt enhancer 从依赖闭源大模型迁到 post-trained 小模型，并扩展到多 agent 协作处理复杂组合 prompt。",
+      "innovation": "提出 task-aware reward 和 post-training 协议，让 SLM 做单 agent 重写 (SAPE) 或 router-rewriter-composer 三角色多 agent 协作 (MAPE)，不动下游视觉模型。",
+      "method": "对 SLM 做任务感知 post-training；SAPE 一次性重写 prompt；MAPE 把 enhancement 分解为 router/rewriter/composer 三 agent，处理对象/属性/空间关系/编辑约束。",
+      "results": "在多项 image generation / editing benchmark 上 post-trained 小 enhancer 一致超过 base SLM，缩小与闭源 enhancer 差距；MAPE 在复杂组合任务上尤其强。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": [
+      "NVIDIA"
+    ]
+  },
+  {
+    "arxiv_id": "2606.00408",
+    "summary": "搜索 agent 越跑 context 越爆，把过期 observation 屏蔽掉是常见做法。作者系统扫了 4B-284B 模型 + 三种 retriever，发现 mask 的收益是个非对称倒 U 形——弱 retriever 平、强 retriever + 中等模型最高、模型饱和后反崩。机理上是 token-for-turn 的 trade-off：mask 让多跑几轮，但代价是可能丢掉关键证据。",
+    "highlights": {
+      "contribution": "系统刻画搜索 agent 中 stale observation masking 的收益曲线，并解释机理上的 token-for-turn trade-off。",
+      "innovation": "在 backbone 大小 (4B-284B) × 三种 retriever × 多 benchmark 的扫描下，揭示 masking 增益是非对称倒 U 形，与 retriever recall 和模型隐式过滤能力共同决定。",
+      "method": "在 offline 和 live-web agentic 搜索 benchmark 上扫多种 backbone × retriever × 是否 masking 的组合；机理分析 attention 关注分布以及 mask 是否丢失再用证据。",
+      "results": "弱 retriever 下 masking 几乎无效；强 retriever + 中等模型增益最大；模型饱和后 masking 反而拖累，揭示需要按 regime 选择 context 管理策略。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.8,
+      "recommendation": 7.0
+    },
+    "affiliations": [
+      "UCSD"
+    ]
+  },
+  {
+    "arxiv_id": "2605.31370",
+    "summary": "知识图谱上做溯因推理，现有方法在多轮对话里抓不准 evolving intent，hypothesis 失败也讲不清原因。HypoAgent 用三 agent：Intent Recognition 把对话 ground 到 KG 条件，Hypothesis Generation 按条件生成假设，Root Cause Analysis 诊断不可靠片段并通过 KG 邻域 probing 修。常识和生物医学 KG 上单轮多轮无条件设置都 SOTA。",
+    "highlights": {
+      "contribution": "提出 KG 上交互式溯因假设生成的 agentic 框架，把意图理解、假设生成和根因分析显式分工。",
+      "innovation": "在传统 controllable hypothesis generation 之上加 Root Cause Analysis agent，用 KG 邻域 probing 定位失败假设片段并定向修正，支持多轮 intent 演变。",
+      "method": "三 agent 协同：Intent Recognition Agent 把 utterance + 历史 ground 成 KG executable 条件；Hypothesis Generation Agent 按意图做可控假设；Root Cause Analysis Agent 诊断片段、邻域 probing、refine。",
+      "results": "在常识 KG 和生物医学 KG 上，单轮 / 多轮 / 无条件三种设置下 semantic similarity 均 SOTA。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 9.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 5.8
+    },
+    "affiliations": [
+      "HKUST"
+    ]
+  },
+  {
+    "arxiv_id": "2605.31377",
+    "summary": "Agentic RAG 在新闻这种时效场景下推理开销太大。DynaTree 分两段：离线用多 agent 给一个 topic 物化一棵可复用的语义检索树，在线每天只做轻量子树选择，不再做新一轮 agentic 推理。多日 Syft 新闻 benchmark + BEIR 上 SOTA；A/B 在线把 survival rate 从 0.32-0.53 抬到 0.59-0.73。",
+    "highlights": {
+      "contribution": "针对时效性新闻检索提出 DynaTree：把昂贵的 agentic 推理压到离线，在线只做日级 lightweight 子树选择。",
+      "innovation": "把 agentic 语义扩展物化成一棵可复用的检索树，避免每次查询都重新跑 agentic loop，从而兼顾覆盖 / freshness / 推理成本。",
+      "method": "离线多 agent 协作构造 topic 检索树；在线每日通过 time-localized 评估代理在子树上做选择，不再修改树和不再调用 agent。",
+      "results": "Syft 多日新闻和多个 BEIR 数据集上 recall 和排序均超 RAG 和 agentic baseline；Syft 生产 A/B (2026-01-28 至 02-06) 把 survival rate 由 0.32-0.53 提到 0.59-0.73。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": [
+      "Shanghai Jiao Tong University"
+    ]
+  },
+  {
+    "arxiv_id": "2606.00183",
+    "summary": "一篇理论 paper：作者证明 agentic transformer 通过 RL 可以涌现出真正的搜索行为。在 stochastic k-ary 树环境里，构造了一个 two-head transformer 实现随机 DFS，再分析 policy gradient 在 depth-wise curriculum 下如何从稀疏 reward 自动学出该 DFS 机制。学到的 policy 还能 depth 泛化：只在 depth 1-2 训练，能解更深的树。",
+    "highlights": {
+      "contribution": "给 agentic transformer 学搜索这件事提供首个机理性理论解释：RL 训练下 DFS-like 机制如何从稀疏奖励涌现。",
+      "innovation": "构造性证明 + 训练动力学分析：two-head transformer 自然实现随机 DFS（一头追轨迹、一头检测失败触发回溯），并在 depth-wise curriculum 下 policy gradient 收敛到该机制。",
+      "method": "在 stochastic k-ary tree 环境中刻画 agentic transformer 的轨迹观测与稀疏 reward；构造解 + 训练动力学分析 + curriculum 学习；考察不平衡 goal 分布下 discount 的影响。",
+      "results": "证明在 depth-wise curriculum 下 DFS 机制分阶段涌现；只在 depth-1/2 训练即可泛化到更深的树；discount 在不平衡 goal 下导出 ranked DFS。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 8.2,
+      "recommendation": 6.8
+    },
+    "affiliations": [
+      "CMU",
+      "Ohio State University"
+    ]
   }
 ]

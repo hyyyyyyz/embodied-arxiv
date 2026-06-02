@@ -1,23 +1,5 @@
 [
   {
-    "arxiv_id": "2605.19580",
-    "summary": "作者觉得 VLA 在闭环操控里既当 planner 又当 executor,但现有 RL/IL 方法把所有 action 一视同仁。于是他们想办法显式找出那些决定走向的「规划性动作」,再在 GRPO 里给这些动作更大的优化权重。在多个 benchmark 上验证了对成功率有帮助。",
-    "highlights": {
-      "contribution": "提出 PAPO-VLA,显式识别 VLA 轨迹中的「规划性动作」并加权优化,提升闭环任务成功率。",
-      "innovation": "把动作分成 planning 和 execution 两类,用因果充分性/必要性度量 planning 动作的重要度,而不是均匀优化整条轨迹。",
-      "method": "先根据动作变化量和最终轨迹结果筛出 planner 动作,再用因果充分/必要性打分,把分数作为权重注入 GRPO 的优势估计,整条轨迹仍按 trajectory-level reward 优化。",
-      "results": "在多个 VLA benchmark 上比常见 GRPO/IL baseline 都有提升,论文未给统一数字但声称一致优于基线。"
-    },
-    "scores": {
-      "relevance": 9.0,
-      "recency": 7,
-      "popularity": 5.5,
-      "quality": 7.0,
-      "recommendation": 7.4
-    },
-    "affiliations": []
-  },
-  {
     "arxiv_id": "2605.24011",
     "summary": "把 VLA 模型压到 sub-4bit 部署到边缘端的尝试。常规 PTQ 在这种激进比特下崩盘,他们用「动作敏感度」决定每个权重矩阵分多少 bit,再优化每块的 scale,同时配了套 C/C++ 推理 runtime。在 LIBERO 上 3 bit 还能保 95% 性能,2.5 bit 仍有 90.1%,真机 UR3 上 π0.5 量化后成功率几乎不掉。",
     "highlights": {
@@ -36,84 +18,6 @@
     "affiliations": [
       "Northeastern University",
       "Cisco Research"
-    ]
-  },
-  {
-    "arxiv_id": "2605.19294",
-    "summary": "异步推理下 VLA 容易因为延迟而崩 — 模型预测时机器人已经走出去几步了。他们做了个纯离线的 post-training 修正方法,把延迟本身当成偏好信号:用 frozen policy 生成 fresh/stale 动作对,通过 flow-matching 隐式似然比来打分。在 Kinetix 高延迟段成功率涨了 +6.4。",
-    "highlights": {
-      "contribution": "DEFLECT,一个针对 async VLA 延迟漂移的离线 post-training 方案,显著扩展可用延迟窗口。",
-      "innovation": "把延迟漂移转成无标签的偏好信号 — 用 fresh vs stale 动作对作 counterfactual,无需 reward model 或在线 rollout。",
-      "method": "Frozen reference policy 同时生成「对应当前观测」和「过期观测」两套动作,用 flow-matching 的隐式似然比作 surrogate 评分,做偏好微调。",
-      "results": "Kinetix 高延迟(5-7 步)+6.4 成功率;真实尺度 VLA 最大延迟下 +4.6;两个真机任务(双臂传送带 pick-and-place、反应式 whack-a-mole)一致提升。"
-    },
-    "scores": {
-      "relevance": 8.7,
-      "recency": 7,
-      "popularity": 5.5,
-      "quality": 7.5,
-      "recommendation": 7.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.19524",
-    "summary": "自动驾驶 VLA 大多只用正样本(专家轨迹),对 long-tail 风险情景理解不足。这篇把 negative 数据系统性纳入 SFT 和 RL:先用反事实推理生成「危险情景的对照正确轨迹」,再做 SFT,再用 anchor-based GRPO 把正负作为对比锚。在 NAVSIM 89.1 PDMS,DeepAccident 碰撞率降到 3.36%。",
-    "highlights": {
-      "contribution": "SafeAlign-VLA — 把负样本系统性引入自动驾驶 VLA 的对齐流程,提升安全长尾表现。",
-      "innovation": "用反事实推理给危险场景配对正确轨迹,再做 anchor-based 正负 GRPO,而不仅是奖励惩罚。",
-      "method": "两阶段 — negative-enhanced SFT 学习失败反馈和修正轨迹,再 anchor-based GRPO 把正/负轨迹作为对比锚,group-relative advantage 惩罚高风险动作。",
-      "results": "NAVSIM v1 89.1 PDMS(比无负样本基线 +1.3%),DeepAccident 碰撞率 3.36%,语言准确率 84.2%,风险预测准确率 85.8%。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 7,
-      "popularity": 5.5,
-      "quality": 7.0,
-      "recommendation": 6.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.19587",
-    "summary": "做仿真场景生成时常见问题:网格能渲染但没法交互。SceneCode 让 LLM 当 agent,把自然语言 prompt 编译成可执行的 Blender Python,生成带 articulation 的可交互资产,再导成 SDF 给物理仿真。整个流程有 planner-designer-critic 循环和 execution-guided 修复。",
-    "highlights": {
-      "contribution": "SceneCode 把室内场景生成形式化为代码生成,直接输出可在物理仿真器加载的、含 articulation 的可交互资产。",
-      "innovation": "不是从 asset library 拼,而是 LLM 写 Blender Python 程序合成 part-wise 资产,可执行、可编辑、可追溯。",
-      "method": "Room-level agent 把 prompt 拆成 house layout 和每物体 AssetRequest;每个 request 走五种代码生成策略之一,合成 part-wise Blender Python,经执行修复循环验证;最终编译成可仿真资产并导出 SDF;持久化 scene-state registry 串联 request/code/geometry/asset。",
-      "results": "在场景级合成、资产质量、人评和下游机器人交互上都有提升;具体数字论文未列。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 7,
-      "popularity": 6.5,
-      "quality": 7.0,
-      "recommendation": 7.2
-    },
-    "affiliations": [
-      "CUHK",
-      "Microsoft",
-      "NUS"
-    ]
-  },
-  {
-    "arxiv_id": "2605.19678",
-    "summary": "VLA 对视觉/语言扰动鲁棒性差。RoVLA 在训练里直接加三种不变性约束:指令重述、轨迹演化、观测扰动,让策略学到更稳定的耦合。在 LIBERO-Plus、RoboTwin 2.0 和真机上都比 baseline 稳。代码会放出。",
-    "highlights": {
-      "contribution": "RoVLA — 在 VLA 训练中同时引入指令、轨迹、观测三方面的一致性约束,提升鲁棒性。",
-      "innovation": "把鲁棒性内化为 end-to-end 训练目标,而不是靠更大数据或后处理。",
-      "method": "三个一致性损失:Instructional Consistency(指令同义重写下输出一致)、Evolutionary Consistency(动作生成过程的意图连贯)、Observational Consistency(扰动前后预测一致),共同训练 VLA。",
-      "results": "在 LIBERO-Plus、RoboTwin 2.0、真机任务上一致优于 baseline,具体数值论文未给汇总。"
-    },
-    "scores": {
-      "relevance": 9.0,
-      "recency": 7,
-      "popularity": 6.0,
-      "quality": 7.5,
-      "recommendation": 7.6
-    },
-    "affiliations": [
-      "Sun Yat-sen University (HCP Lab)"
     ]
   },
   {
@@ -201,88 +105,6 @@
     ]
   },
   {
-    "arxiv_id": "2605.19319",
-    "summary": "Dense video world model 算得太贵,其实 manipulation 的关键就那几帧。SWEET 把 image editing 模型(FLUX-Kontext)当稀疏视觉世界模型用,只生成任务关键 keyframe,再用 goal-conditioned diffusion 把相邻 keyframe 转成 action chunk。对比 Wan2.2 视频生成,image editing 在机器人数据下更可靠、推理更便宜。",
-    "highlights": {
-      "contribution": "SWEET — 一个用 image editing 替代 video generation 做稀疏视觉世界模型的 manipulation 框架。",
-      "innovation": "首次系统对比 image editing vs video generation 当 world model,提出关键 keyframe 加 diffusion action 两段式 sparse planning。",
-      "method": "FLUX-Kontext 按语言加可选箭头 prompt 顺序编辑出 keyframe 序列;goal-conditioned diffusion 把相邻 keyframe 转 action chunk;混合训练用 filtered edited targets 缩小 real 与 edited 的 gap。",
-      "results": "在 DROID 和 RoboMimic 上 keyframe 预测在见过/未见场景都更好,完整 keyframe→action pipeline 可执行;具体数字未列。"
-    },
-    "scores": {
-      "relevance": 8.0,
-      "recency": 7,
-      "popularity": 7.0,
-      "quality": 7.5,
-      "recommendation": 7.8
-    },
-    "affiliations": [
-      "NUS Show Lab"
-    ]
-  },
-  {
-    "arxiv_id": "2605.19341",
-    "summary": "LLM 幻觉评测各家口径不一致,这篇造了个能完全控制 reference world 的 benchmark HalluWorld:在 gridworld、chess 和真实 terminal 任务里完全知道真实世界长什么样、模型能看到什么,因此可以自动标 hallucination 标签。结论是 frontier model 直接观测的事实几乎解决了,但多步状态跟踪和 forward simulation 仍然是硬伤。",
-    "highlights": {
-      "contribution": "HalluWorld — 一个用显式 reference world 自动标注 hallucination 的可扩展 benchmark。",
-      "innovation": "把 hallucination 定义为对显式 reference world 可观测的错误声明,从而合成或半合成场景下完全可控、可复现。",
-      "method": "构造 gridworld/chess/terminal 三类合成与半合成环境,控制 world 复杂度、可观测性、时变性、source 冲突;细粒度分类 hallucination 类型,自动生成标签;在多 frontier/open 模型上评测。",
-      "results": "直接观测信息上的感知幻觉对 frontier model 接近 solved;但多步状态跟踪、因果前向仿真、何时 abstain 仍很难,extended thinking 也救不了。"
-    },
-    "scores": {
-      "relevance": 4.0,
-      "recency": 7,
-      "popularity": 6.5,
-      "quality": 7.5,
-      "recommendation": 5.8
-    },
-    "affiliations": [
-      "CMU",
-      "Ohio State University",
-      "Stanford"
-    ]
-  },
-  {
-    "arxiv_id": "2605.24004",
-    "summary": "LLM 当自动驾驶 planner 容易语义对但物理不安全。RIA 把 LLM reasoner 和 action-conditioned world model 拼成闭环:LLM 出动作模板和候选,world model 做短时 rollout,再由 safety scorer 选最安全的执行,反馈进下一轮。CARLA 1000 个 episode 下 80.05% route completion、51.10% arrival、0.20% collision rate。",
-    "highlights": {
-      "contribution": "RIA — 把 LLM 推理和 world model 物理 rollout 在线耦合做安全决策,而不是事后验证或离线训练。",
-      "innovation": "每一步都用 world model 做短时 rollout 给 LLM 候选打分,实现语义意图加物理可行的在线对齐。",
-      "method": "Reason(LLM 出动作模板和候选)→ Imagine(action-conditioned world model 短时 rollout)→ Act(safety scorer 选最安全候选 + 反馈给下一步 reasoning);CARLA point-goal 协议下 1000 episode 评测。",
-      "results": "RC 80.05%,arrival 51.10%,collision 0.20%;在同一闭环接口下一致优于 CARLA TM、MADA 等 training-free baseline。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 7,
-      "popularity": 6.0,
-      "quality": 7.2,
-      "recommendation": 7.0
-    },
-    "affiliations": [
-      "Peking University"
-    ]
-  },
-  {
-    "arxiv_id": "2605.19631",
-    "summary": "现有 end-to-end 自动驾驶在单数据集上很强,跨域联合训练就崩。HEAT 用轨迹驱动的训练范式和一个 world model 预测 ego 动作条件下的 future latent,提升跨域不变性。nuScenes、NAVSIM、Waymo 三个 benchmark 都大幅提升。",
-    "highlights": {
-      "contribution": "HEAT — 用 trajectory-guided 训练加 world model 让 end-to-end 自驾在多个异质数据集联合训练而不掉点。",
-      "innovation": "围绕 planning trajectory 组织训练学到 domain-invariant 表征;同时 world model 强约束 ego-conditioned future latent 一致性。",
-      "method": "Trajectory-driven 学习范式让训练目标对齐 driving intent;附加 world model 预测 ego action 条件下未来 latent feature;在 nuScenes/NAVSIM/Waymo 三 benchmark 联合训练评测。",
-      "results": "单个模型联合训练后在三个 benchmark 都显著优于现有方法,具体数字未列;声称将开源。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 7,
-      "popularity": 6.0,
-      "quality": 7.5,
-      "recommendation": 7.3
-    },
-    "affiliations": [
-      "KAIST"
-    ]
-  },
-  {
     "arxiv_id": "2605.19950",
     "summary": "情感识别多数把多模态融合当静态分类。AffectVerse 给 Qwen2.5-Omni 加了个 Emotion World Module:用过去 token 预测短时未来的视频/音频 latent,聚合成 belief token 再注入 LLM。9 个 benchmark 上比其他模型至少 +2.57%。",
     "highlights": {
@@ -325,44 +147,6 @@
     ]
   },
   {
-    "arxiv_id": "2605.19600",
-    "summary": "无人机 VLN 数据集要么真但贵,要么虚拟但视觉太假。FlyMirage 让 LLM 当环境设计师,生成多样场景后用生成式世界模型实例化成 3DGS,再用动力学可行 planner 给无人机做轨迹,最终自动产出大规模真实感的 aerial VLN 数据。",
-    "highlights": {
-      "contribution": "FlyMirage — 一个全自动 aerial VLN 数据生成 pipeline,生成大规模、多样、photorealistic 且动力学可行的飞行数据。",
-      "innovation": "LLM 当 environment designer 加生成式 world model 实例化 3DGS 场景加 UAV-feasible planner 一体的数据生成 toolchain。",
-      "method": "LLM 设计场景多样性 → 生成式世界模型实例化为 3DGS 场景 → 自动 scene exploration 与语义采集 → 动力学可行 planner 生成 UAV 轨迹;批量产 VLN 数据。",
-      "results": "产出大规模、多样、真实感的 aerial VLN 数据集用于下一代 embodied navigation,具体训练效果数字未列。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 7,
-      "popularity": 5.5,
-      "quality": 6.8,
-      "recommendation": 6.5
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.19539",
-    "summary": "Feed-forward 3D 重建(MASt3R 这类)的 confidence map 都是启发式的,没法当真概率信号。Trust3R 给 pointmap 加了一个 evidential 头,输出 Normal-Inverse-Wishart,从而得到 closed-form multivariate Student-t 每点不确定度。在 ScanNet++ 上 AURC -25%、AUSE -41%。",
-    "highlights": {
-      "contribution": "Trust3R — 把 feed-forward 3D reconstruction 的 confidence 换成概率严谨的 evidential uncertainty。",
-      "innovation": "Normal-Inverse-Wishart evidential 头加 gated residual mean refinement,给 pointmap 出 closed-form Student-t 不确定度。",
-      "method": "在 MASt3R 风格 pipeline 上加 evidential head 和 gated residual 优化 mean;推断时输出 multivariate Student-t,实现每点不确定度;与 MASt3R confidence、MC dropout、deep ensembles 对比。",
-      "results": "ScanNet++ AURC -25%、AUSE -41%;risk-coverage 和 sparsification 一致更好,几何精度也总体提升。"
-    },
-    "scores": {
-      "relevance": 8.5,
-      "recency": 7,
-      "popularity": 6.0,
-      "quality": 8.0,
-      "recommendation": 7.9
-    },
-    "affiliations": [
-      "UT Austin"
-    ]
-  },
-  {
     "arxiv_id": "2605.19949",
     "summary": "用稀疏俯视 aerial view 重建城市场景时,直接回归 3DGS 容易出现墙融、楼立面糊。AnyCity 先预测 observation-supported 几何 latent 作锚,再用 scaffold-conditioned 完成 token 出 gated residual,弥补未被多视图覆盖的部分;dense→sparse 蒸馏加 aerial 视频 diffusion prior 做 appearance。",
     "highlights": {
@@ -379,65 +163,6 @@
       "recommendation": 7.3
     },
     "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.19304",
-    "summary": "3DGS primitive 太冗余,压缩方法要么局部采样要么固定剪枝阈值,常常牺牲质量。MMGS 用 multi-view 几何一致性给 primitive 排名,再用 Optimal Transport 全局聚合冗余 Gaussian,还设计了 OT-based densification。只用 10% primitive 就能达到 SOTA,训练快 10×。",
-    "highlights": {
-      "contribution": "MMGS — 把 3DGS 压缩重新形式化为全局几何分布匹配,10× 压缩仍保 SOTA 渲染质量。",
-      "innovation": "用 multi-view 几何一致 ranking 替代局部启发式;Optimal Transport 全局聚合加 densification 保持分布性质。",
-      "method": "(1)Multi-view 3D Gaussian contribution ranking 按几何一致性筛 primitive;(2)OT-based aggregation 全局合并冗余;(3)OT-based densification operator 保 distributional properties。",
-      "results": "只用 10% primitive 达到 SOTA 渲染质量,训练加速 10×。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 7,
-      "popularity": 6.0,
-      "quality": 7.5,
-      "recommendation": 7.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.19649",
-    "summary": "训航天器位姿估计网络通常要几万张 CAD 渲染图,可不少航天器根本拿不到 CAD。这篇用 NeRF 学目标外观,再做几何一致的视角/光照增强,只需 25-400 张真实图就能训出准的 pose estimator,且在轨条件下泛化更好。",
-    "highlights": {
-      "contribution": "用 NeRF-based 增强让航天器 pose estimator 在无 CAD 模型、少量真实图下也能训得动。",
-      "innovation": "几何一致的 NeRF 视角加外观增强可在 25-400 张图上替代上万张 CAD 渲染,且改善 sim2real。",
-      "method": "学目标的 NeRF → 生成多视角/多光照一致的增强数据集 → 训练 target-specific pose estimator;同时也可作为 CAD 合成数据集的 out-of-domain 增强。",
-      "results": "25-400 张真实图即可训出准 pose estimator,严重光照变化下仍稳;用在 CAD 合成数据增强时显著改进真实在轨泛化。"
-    },
-    "scores": {
-      "relevance": 4.0,
-      "recency": 7,
-      "popularity": 4.5,
-      "quality": 6.5,
-      "recommendation": 5.4
-    },
-    "affiliations": [
-      "UCLouvain"
-    ]
-  },
-  {
-    "arxiv_id": "2605.19727",
-    "summary": "3D 基础模型常把点云对齐到 CLIP 的全局向量空间,做检索 OK,但没法做 pixel-to-point 对应。Tango3D 用 geometry-aware 2D backbone 加预训练 3D VAE 把图像 patch 和点云 token 都映到同一空间,既做局部稠密对齐也做全局检索;三阶段渐进训练稳住联合目标。",
-    "highlights": {
-      "contribution": "Tango3D — 一个同时支持 pixel-to-point dense correspondence 和全局检索的 3D 基础模型。",
-      "innovation": "在共享空间里联合学局部加全局对齐,而不是只塞进 CLIP 全局向量;三阶段渐进训练稳定联合目标。",
-      "method": "Geometry-aware 2D backbone 编图像 patch,预训练 3D VAE 编点云 token,映入共享空间;三阶段渐进训练联合稠密加全局目标。",
-      "results": "实现了对象级 pixel-to-point 对齐(现有 3D 基础模型没的能力)且全局检索保持竞争力,具体数字未列。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 7,
-      "popularity": 6.0,
-      "quality": 7.0,
-      "recommendation": 6.8
-    },
-    "affiliations": [
-      "Tencent Hunyuan",
-      "HKUST"
-    ]
   },
   {
     "arxiv_id": "2605.20044",
@@ -498,6 +223,288 @@
     },
     "affiliations": [
       "Lehigh University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.20315",
+    "summary": "Agent 工作流里 prefilling 阶段动辄几万 token，是推理瓶颈。作者发现整段都量化掉性能掉太多，但 prefilling 本身对量化很鲁棒。于是他们把 NVFP4 只用在 prefilling，decoding 仍然保持 BF16，叫 Mix-Quant。结果在长上下文和 agent benchmark 上几乎不掉点，prefilling 最高加速 3 倍。",
+    "highlights": {
+      "contribution": "针对 agentic LLM 的长上下文推理，提出 prefilling-only 的 FP4 量化方案，把算力瓶颈砍掉而不伤 decoding 质量。",
+      "innovation": "把量化做成 phase-aware：观察到 prefilling 对量化更冗余，所以只量它；这跟以前要么整段 INT8/FP8 要么不量的做法很不同。",
+      "method": "prefilling 用 NVFP4 高吞吐执行，decoding 切回 BF16；不需要重新训练，部署时按阶段切 kernel。",
+      "results": "多个长上下文/agentic benchmark 几乎保持原 accuracy，prefilling 阶段最高 3x speedup。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": [
+      "NUS"
+    ]
+  },
+  {
+    "arxiv_id": "2605.20425",
+    "summary": "在科学场景里搭多 agent 工作流很痛苦——没有训练集、没有统一指标、agent 接口也不一样。AgentCo-op 提出用检索式合成的办法，把已有 agent/工具按 typed artifact 拼起来，遇到失败就做局部修复，不重新搜全图。在 genomics 案例和 6 个 coding/math/QA benchmark 上都跑赢了多 agent baseline，还更便宜。",
+    "highlights": {
+      "contribution": "提出一个不靠全局拓扑搜索的多 agent 工作流合成框架，能把独立开发的科学 agent 拼成可审计的 pipeline。",
+      "innovation": "走 retrieval-based synthesis + bounded local repair 路线，跟主流靠 RL/search 全图优化的 agent graph 工作划清界限。",
+      "method": "用 typed artifact 做 handoff，把可重用 skill/tool/agent 按检索结果组合；执行失败时只对涉及的组件做有边界的 self-guided 局部修复。",
+      "results": "在 6 个 coding/math/QA benchmark 上 4 个最优，统一 backbone 下平均分第一，per-task 成本明显低于多 agent baseline；两个 genomics 案例展示了真实科研可用性。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": [
+      "CMU"
+    ]
+  },
+  {
+    "arxiv_id": "2605.19988",
+    "summary": "数据库调参传统是看文档，但文档不更新、不顾 workload、忽略参数间耦合。PerfEvolve 把专家调参方法论变成可执行 skill，让 LLM agent 自己做版本核对、workload profiling、多参联合优化。在 PostgreSQL 上跑 TPC-C/TPC-H，比 SOTA 文档驱动调参高出 35.2%。",
+    "highlights": {
+      "contribution": "把 PostgreSQL 这种复杂系统的参数调优做成 agent 任务，专家流程用 skill 形式注入。",
+      "innovation": "区别于以前以静态文档为知识源的 LLM 调参，PerfEvolve 关心『专家怎么推理』而不是『专家给了哪个值』。",
+      "method": "为 LLM agent 准备版本一致性验证、workload 描述/profiling、多参联合优化三类可执行 skill，agent 调用后直接产生新配置。",
+      "results": "PostgreSQL 在 TPC-C 和 TPC-H 上比 SOTA 文档驱动 baseline 提升最高 35.2%。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.6
+    },
+    "affiliations": [
+      "ISCAS",
+      "SJTU"
+    ]
+  },
+  {
+    "arxiv_id": "2605.20342",
+    "summary": "用 RL 训 LMM 自己调用视频工具去理解长视频很火，但现有都是一次一个 tool call，错了没救还慢。ParaVT 是第一个让 agent 一回合并行发多个 crop 工具调用的 RL 框架。直接套 GRPO 会撞上『tool prior paradox』——模型一探索工具就格式崩、还会偷懒不调工具。作者提了 PARA-GRPO 解决这两个问题，6 个长视频 benchmark 上比 Qwen3-VL 平均 +7.9%。",
+    "highlights": {
+      "contribution": "在 agentic 视频理解里把串行 tool call 改成并行，并搭配新的 GRPO 变种解决 RL 训练塌掉的问题。",
+      "innovation": "首次提出并实证『Tool Prior Paradox』——预训练 tool prior 越强越会让 cold-start RL 格式崩溃；PARA-GRPO 用结构化格式 reward + 帧预算随机化两条腿来稳住。",
+      "method": "多 agent end-to-end RL，一回合并行发多个 time-window crop；PARA-GRPO 只在最易塌的结构 token 上加格式 reward，并随机化 per-prompt 的帧预算让 skip-tool 不再是 free reward。",
+      "results": "6 个长视频 benchmark 平均比 Qwen3-VL +7.9%，训练期 format compliance 从 0.13 抬到 0.64，代码权重已开源。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 7,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.6
+    },
+    "affiliations": [
+      "NTU",
+      "HKU"
+    ]
+  },
+  {
+    "arxiv_id": "2605.20442",
+    "summary": "作者搭了一个叫 Moltbook 的虚拟社交网络，让一群 agent 互发帖评论，研究它们的情绪互动。用细粒度情感分类把对话映射到情绪向量，再提出 Persona-Stimulus-Reaction 框架衡量情感回应一致性。发现不同 agent 有可区分的情绪签名，行为稳定性差异挺大。偏 HCI/社会模拟。",
+    "highlights": {
+      "contribution": "给 agent-to-agent 社交互动场景搭了一个情绪可观测、可对比的分析框架。",
+      "innovation": "提出 PSR 分析协议——衡量同一 persona 在相似刺激下情绪回应的一致性，而不是只看单条输出情绪。",
+      "method": "在 Moltbook 模拟社交网络上跑多 agent 交互，把每条文本打 fine-grained emotion label，再聚合成 agent 级别的 emotion profile 做对比分析。",
+      "results": "实证发现 agent 有可区分的 emotion signature，行为稳定性受互动上下文影响明显；无传统 benchmark 数字。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 7,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2605.20485",
+    "summary": "现在 agent 任务普遍带固定预算，但怎么把钱分到 pipeline 各阶段没人正经研究过。ZEBRA 把多阶段预算分配建模成连续非线性背包，让 LLM 估每阶段 utility 曲线，再用 Lagrange 水填解。在 APPS 编码任务上预算只给一半还能保住 94.4% 的无约束质量，HotpotQA 上比 LLM 直接分配高 14.3 个点。",
+    "highlights": {
+      "contribution": "首次系统讨论多 agent pipeline 在推理时如何把固定预算分配给不同阶段。",
+      "innovation": "把预算分配规约成 continuous nonlinear knapsack 用水填求解，加性/乘性目标统一处理；zero-shot，没有 RL 训练。",
+      "method": "LLM controller 估计每个 phase 的 utility 曲线，对 Lagrange 乘子做 water-filling 搜索得到 per-phase 预算切分。",
+      "results": "APPS 150 任务在 α=0.5 预算下保住 94.4% 质量，LLM-direct 只 88.1%；HotpotQA 三阶段比 LLM-direct 高 14.3pp，分配模式随 pipeline 自动适配。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": [
+      "Technion"
+    ]
+  },
+  {
+    "arxiv_id": "2605.20530",
+    "summary": "现有 agent benchmark 几乎只看最终 task success，看不到 agent 中途决策烂在哪。AgentAtlas 提出一个六态决策分类 (Act/Ask/Refuse/Stop/Confirm/Recover)、一套 trajectory failure 词表，外加对 15 个 agent benchmark 的覆盖审计。还有一个 1342 题的 protocol 示例，揭示『去掉显式标签菜单后排名会变』的测量风险。",
+    "highlights": {
+      "contribution": "给 agent 评测提供一套诊断词汇 + 审计协议，把 outcome、决策质量、trajectory 质量三件事拆开评。",
+      "innovation": "强调测量风险——同样的模型在 taxonomy-aware vs taxonomy-blind prompt 下 mapped label 一致性会变；轴的选择会改变排名。",
+      "method": "定义 6 类控制决策标签 + 失败词表 → 对 15 个公开 agent benchmark 做 0/1/2 覆盖审计 → 在 1342 题合成集上跑 8 个模型做 protocol 示例。",
+      "results": "没有刷榜数字；主要结论是同一模型在两种 prompt 格式下排名会反转，提醒社区不要把合成示例当 benchmark release 解读。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.00065",
+    "summary": "材料文献提取 pipeline 现在基本只能扒文字和表格，可大量数据其实在图里。作者把 ComProScanner 多 agent 框架加了一个 VLM 的图表解析模块，专门把成分-性质对从科研图里抠出来。用 50 篇 piezo 陶瓷文章评测，Gemini-3-Flash-Preview 拿到 0.97 准确率和 0.97 normalised F1，而且是几个 VLM 里最便宜的。",
+    "highlights": {
+      "contribution": "把多 agent 材料文献挖掘 pipeline 扩展到图表模态，做出第一个能从文本/表/图统一抽 composition-property 的系统。",
+      "innovation": "在原有 multi-agent 框架上加 FigureExtractor（按 caption 关键词过滤图）+ GraphExtractorTool（可配置 VLM 解析），同时引入 range-based value error 阈值给数值评估一个物理意义。",
+      "method": "Pipeline：按出版商过滤图 → 调用 VLM 抽 composition-property → 用范围误差阈值评分；评测 4 个 LMArena Diagram 榜单上的 VLM。",
+      "results": "在 d33 测试集 50 篇 piezo 文章上 Gemini-3-Flash-Preview 拿到 composition accuracy 0.97、normalised F1 0.97，并且是最便宜的可选项。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.2
+    },
+    "affiliations": [
+      "London South Bank University"
+    ]
+  },
+  {
+    "arxiv_id": "2605.19932",
+    "summary": "agent 总要在同一份代码库/文档上跑很多次，每次都要重新看是浪费。PEEK 把『这份 context 长啥样、有哪些有用的实体常量』缓存成一个常数大小的 context map 塞进 prompt。它有 Distiller/Cartographer/Evictor 三个模块维护这张图。长上下文推理 +6.3 到 +34%，迭代次数还少 93-145 次，成本只有 SOTA 的 1/5 到 1/2。",
+    "highlights": {
+      "contribution": "提出一种针对重复 context 的『方位感知缓存』，让长上下文 agent 第二次起就能直奔重点。",
+      "innovation": "传统方法缓存的是轨迹或 raw context 或任务策略，PEEK 缓存的是 reusable orientation knowledge——context 内部结构本身的元信息，定位很新。",
+      "method": "在 prompt 里维护一个固定 token 预算的 context map，由 Distiller 抽取可迁移知识、Cartographer 转成结构化编辑、Evictor 按优先级淘汰；策略可编程。",
+      "results": "长上下文推理 +6.3~34.0%，迭代次数减少 93-145，成本比 SOTA ACE 低 1.7-5.8x；context learning 上 solve rate +6-14%、rubric +7.8-12.1%；在 OpenAI Codex 这种生产级 coding agent 上也有效。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 7,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": [
+      "MIT",
+      "Stanford"
+    ]
+  },
+  {
+    "arxiv_id": "2605.19952",
+    "summary": "现在 LLM agent 的长期记忆都把对话压成 atomic fact 存起来，导致细节没了、跨 fact 推理也吃力。TriMem 同时维护三种粒度：原始对话片段、atomic fact、聚合 profile。用 TextGrad 优化提取/profile 的 prompt，整套不调参。在 LoCoMo 和 PerLTQA 上稳超 baseline。",
+    "highlights": {
+      "contribution": "重新设计 lifelong LLM agent 的记忆表征，反对当前 atomic-fact-only 的范式。",
+      "innovation": "三种共存粒度（原始片段+atomic fact+合成 profile）+ TextGrad 提示优化做 prompt-only 终身演化，不更新参数。",
+      "method": "原始对话按 source identifier 入库，抽 atomic fact 做检索索引，把分散 fact 合成 holistic profile 供深推理；提取和 profile 的 prompt 用 TextGrad 按响应质量反馈迭代优化。",
+      "results": "LoCoMo 和 PerLTQA 上跨多个 LLM backbone 一致优于强 memory baseline，代码已开源。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": [
+      "HKBU",
+      "USyd"
+    ]
+  },
+  {
+    "arxiv_id": "2605.20023",
+    "summary": "Agent Skills 据说能给 LLM agent 平均加 16 个点，但有些任务反而掉点没人解释清楚。作者重分析了一个 180 run 的 CTF 安全任务实验，发现在攻击型网络安全里 Skills 的边际收益基本消失（差距 8.9pp，p=0.71），有时候还掉。他们提出关键变量是『环境反馈带宽』——如果 tool 层本身就给严格 schema 反馈，Skills 就多余了。",
+    "highlights": {
+      "contribution": "给 Agent Skills 的有效性边界提出一个可证伪的负面结果——在 offensive cybersecurity 里 Skills 几乎不顶用。",
+      "innovation": "提出 environment-feedback bandwidth 假设：当工具反馈强信号（schema、低延迟、严格），Skills 这层人工流程就变冗余。",
+      "method": "对 180 run 的 MCP-grounded CTF agent 做四档文档量（591/12865/17253/36001 token）重分析，对应 No/Experiential/Curated/Comprehensive Skills 四组消融，跑 χ² 与 Cochran-Armitage 趋势检验。",
+      "results": "Skills 满档与 No-Skills 仅差 8.9pp 且统计不显著，6 个两两 Cohen's h 里 5 个小于 0.2 的小效应阈值；timing side-channel 设置下 Skills 甚至会降分。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.4
+    },
+    "affiliations": [
+      "FSU"
+    ]
+  },
+  {
+    "arxiv_id": "2605.20025",
+    "summary": "现在的自主科研 agent 基本是单 agent 线性流水线，一失败就停、不积累经验。AutoResearchClaw 是个多 agent pipeline，靠结构化辩论生成假设、自愈执行器把失败转成信息、可验证的结果上报防止编造数字、加上跨 run 进化。ARC-Bench 25 题上比 AI Scientist v2 高 54.7%。还做了 human-in-the-loop 的细致消融，发现『精确的高杠杆点干预』比全自主或步步监督都更好。",
+    "highlights": {
+      "contribution": "把自主科研做成有反思、有自愈、有跨 run 学习的多 agent pipeline，明确反对线性 AI Scientist 模式。",
+      "innovation": "五个机制合一：multi-agent debate + Pivot/Refine 自愈执行 + 可验证报告 + 7 档 human-in-the-loop + 跨 run safeguard 演化，前三条是反『幻觉结果』的硬约束。",
+      "method": "结构化多 agent 辩论做 hypothesis/结果分析；执行器遇错走 Pivot 或 Refine；结果上报必须可验证；与人协作有 7 个介入模式可切换；跨 run 把失败教训沉淀成 safeguard。",
+      "results": "ARC-Bench 25 题上比 AI Scientist v2 高 54.7%；human-in-the-loop 消融表明精准 high-leverage 干预最优。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 7,
+      "popularity": 7.5,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": [
+      "UNC",
+      "Stanford",
+      "Salesforce"
+    ]
+  },
+  {
+    "arxiv_id": "2605.20072",
+    "summary": "把 LLM 直接当机器人脑子用，行为上有点神秘。作者用一个机械锁盒 Lockbox 做实验，对比 RGB、RGB-D、ground-truth 符号三种观测下 LLM 的表现。反直觉的是：观测越完美反而越差。仿真里随机翻转 40% 的动作结果，成功率竟然涨到 2.85 倍——因为减少了重复动作循环。提示成功率不足以衡量具身 LLM 的真实能力。",
+    "highlights": {
+      "contribution": "实证了一个反直觉现象：embodied LLM agent 在更高 fidelity 的观测下反而表现更差。",
+      "innovation": "用对照实验把『观测 fidelity』作为自变量来 probe LLM agent 的行为，并用动作翻转噪声做因果定位，方法论比纯 benchmark 评测更解释性。",
+      "method": "在真实和仿真两套 Lockbox 任务下分别给 LLM RGB / RGB-D / 符号三种观测，再在仿真里以一定概率随机翻转 agent 感知到的动作结果，统计成功率和行为模式。",
+      "results": "RGB 最好，ground-truth 最差；40% 翻转概率下成功率是无噪声 baseline 的 2.85 倍，进一步分析指向重复动作循环减少。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": [
+      "TU Berlin"
+    ]
+  },
+  {
+    "arxiv_id": "2605.20075",
+    "summary": "CoT 默认是先想再答，浪费 token、有时候模型其实早就能直接答。CopT 把顺序反过来：先出 draft answer，再用 on-policy thinking 去反思修正。判断 draft 靠不靠谱时，用『离散 token 输入 vs 连续 embedding 输入』下模型对同一 token 的支持度对比来做 reverse KL 估计。跨数学/coding/agentic 任务上 peak accuracy +23%，token 用量 -57%，不需要训练。",
+    "highlights": {
+      "contribution": "提出『先答后想』的 CoT 范式，并用连续 embedding 做 inference-time 答案可靠性验证。",
+      "innovation": "把连续 embedding 重新利用为 contrastive verifier；理论上证明该估计等于未解决 latent 状态与答案 token 的互信息，捕捉的是答案相关的不确定性。",
+      "method": "先生成 draft answer → 用同一 token 在离散/连续输入下的 logit 对比算 reverse KL 当 reliability 分数 → 不够可靠就再走 on-policy thinking，第二个 KL 估计动态控制 draft 可见性。",
+      "results": "数学/代码/agentic 推理任务上 peak accuracy 最高 +23%，相同或更高准确率下 token -57%，全程 train-free。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": [
+      "Georgia Tech"
     ]
   }
 ]
