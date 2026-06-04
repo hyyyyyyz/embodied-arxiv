@@ -1,0 +1,479 @@
+[
+  {
+    "arxiv_id": "2606.04968",
+    "summary": "VLA 部署的时候经验数据质量参差不齐：成功的、半成功的、能恢复的失误、彻底失败的，标准 BC 用不好。作者搞了个 ForesightFlow，自带打分轨迹的 flow matching 策略，同一个流既产动作又给打分，best-of-K 推理不用外挂 critic。关键是把动作的 advantage 权重和打分头解耦，再加一个单步边界估计器算 advantage。BEHAVIOR-1K 五个仿真任务加五个真实双臂任务，超过模仿基线，仿真追平最强带 critic 基线，真机更好，训练算力省 38%。",
+    "highlights": {
+      "contribution": "提出 ForesightFlow，让一个 flow matching 策略同时产候选动作和成功打分轨迹，免去外挂 critic 也能做 best-of-K 选动作。",
+      "innovation": "解耦的 advantage 加权 flow matching：advantage 权重只作用在动作速度上，打分头用均匀监督，避免值幻觉和过自信打分。",
+      "method": "输入是观察，flow matching 一次推理同时输出 action chunk 和对应的 success-potential 轨迹；动作速度用 exp(advantage) 加权，potential 速度均匀训练；推一步算 advantage 用 stop-gradient 边界估计器。",
+      "results": "BEHAVIOR-1K 五任务 + 真实双臂五任务上超 imitation 基线，仿真匹配最强 separate-critic 基线，真机成功率提升，训练算力减 38%。"
+    },
+    "scores": {
+      "relevance": 9,
+      "recency": 10,
+      "popularity": 7,
+      "quality": 8,
+      "recommendation": 8
+    },
+    "affiliations": [
+      "清华大学",
+      "香港科技大学（广州）"
+    ]
+  },
+  {
+    "arxiv_id": "2606.05015",
+    "summary": "World model 听起来很美，但对环境变化到底多鲁棒没人系统研究。作者用基于视觉的四旋翼避障当 testbed，DreamerV3 训出来一堆模型做交叉环境验证，再上真机。一个关键发现：SSL 预训练阶段的跨环境表现比 RL 策略表现更能预测 sim-to-real 成败，有个仿真里很猛的模型在真机翻车了。还做了一个 12 米全靠想象的开环飞行（只给 2.5 秒真实输入）。",
+    "highlights": {
+      "contribution": "系统研究 world model 在环境变化下的泛化性，并把它和四旋翼真机 sim-to-real 成功率挂钩。",
+      "innovation": "用交叉环境验证证明 SSL 预训练阶段的鲁棒性是 sim-to-real 的更可靠预测器；提出离散 latent size 和训练序列长度是两个主导因素。",
+      "method": "DreamerV3 在不同随机程度环境里预训练，SSL 阶段做跨环境验证；RL 微调做导航；真机部署包括 12 米开环全 imagination 飞行。",
+      "results": "通过 SSL 跨环境验证的模型全部真机成功，最窄过 0.67 米的缝；仿真表现最好那个模型反而真机失败。"
+    },
+    "scores": {
+      "relevance": 8,
+      "recency": 10,
+      "popularity": 6,
+      "quality": 7,
+      "recommendation": 7
+    },
+    "affiliations": [
+      "NTNU 挪威科技大学"
+    ]
+  },
+  {
+    "arxiv_id": "2606.04903",
+    "summary": "这篇用类型化 lambda calculus 给 LLM agent 做形式化，确保执行可以审计、决策都记进 append-only 账本。叫 Agentic Redux，配套一个 Ontology-First 方法论：让领域专家先用 Basic Formal Ontology 建模问题，再让 LLM 派生角色。给了医保账单合规和安全漏洞披露两个生产域的代码。",
+    "highlights": {
+      "contribution": "提出 Agentic Redux 架构 + 形式化证明，让 LLM agent 在合适领域里语义可证可审计。",
+      "innovation": "用类型化 lambda calculus 做 agent 语义保证；提出 Ontology-First Agent Design 方法论，把 BFO 本体当成 agent 框架基础。",
+      "method": "把 agent 执行映射到类型化 lambda calculus 项，决策写进 append-only ledger；专家用 BFO 建模 → LLM 派生角色 → agent 加 human-in-the-loop 填岗。",
+      "results": "在医保账单合规和安全漏洞披露两个真实领域给出可运行代码；理论上证明语义正确性。"
+    },
+    "scores": {
+      "relevance": 5,
+      "recency": 10,
+      "popularity": 4,
+      "quality": 6,
+      "recommendation": 5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.04708",
+    "summary": "UMI 那种用便携夹爪采的真机数据虽然多，但拿去训 VLA 一直有两个坑：腕戴鱼眼图 VLM 没见过，人手轨迹经常超关节限位或撞自己。作者搞了个 VISTA 框架同时治这两个问题：放一个鱼眼专门的 VQA 数据集让 VLM 适配畸变视角，再加一套物理可行性打分管线过滤掉不能执行的轨迹，最后两阶段共训。结果在仿真和真机上都吊打 π0.5、LingBot-VLA、Wall-X 等强 baseline。",
+    "highlights": {
+      "contribution": "把 UMI 这种廉价人采数据系统性地变成 VLA 可训数据，提供首个鱼眼 VQA 数据集 + 物理校验 pipeline + 两阶段共训配方。",
+      "innovation": "区别于直接拿原始 UMI 数据扔进 VLA 的做法，显式建模了鱼眼视觉域差和人轨迹物理违规两个根因，并把可行性分数引入训练过滤。",
+      "method": "输入腕戴鱼眼图像 + 指令；先用 UMI-VQA 做 VLM 辅助监督对齐畸变视角；用一套校验流程算轨迹连续性、自碰撞、执行 fidelity 三项分数过滤数据；再两阶段共训 VLM grounding 和动作预测。",
+      "results": "仿真和真机多任务上显著优于 π0.5、LingBot-VLA、Wall-X；物理分数对实际部署成功率有强预测性。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.5,
+      "recommendation": 8.6
+    },
+    "affiliations": [
+      "Shanghai AI Lab"
+    ]
+  },
+  {
+    "arxiv_id": "2606.04811",
+    "summary": "视频生成模型画的视频好看，但能不能转成机器人真能执行的动作？作者搞了个 Dream.exe benchmark：给图+任务描述，让 T2V 模型生成操作视频，再把视频里的运动转成机器人轨迹丢仿真器执行。评测了 8 个模型 101 个任务，发现有些生成模型真的能拿到执行成功率，且视觉好看不代表能执行——视觉指标完全测不出物理理解。",
+    "highlights": {
+      "contribution": "首次把 T2V 模型的物理理解通过『生成视频→机器人执行』 pipeline 量化评测，给视频生成模型的物理先验提供了客观指标。",
+      "innovation": "区别于纯视觉 metric 评 T2V，把仿真器执行成功率作为物理 grounding 信号，揭示视觉质量和可执行性脱钩。",
+      "method": "给定场景图+任务文本，T2V 模型生成视频，pipeline 抽取运动转成机器人末端轨迹，PyBullet/MuJoCo 类仿真器执行，记录视觉质量、轨迹 fidelity、执行成功三个指标。",
+      "results": "评测了 8 个模型（闭源前沿、开源、机器人专用），101 任务三个难度级；多个模型能达到可测的执行成功率，但视觉好坏和可执行性相关性弱。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": [
+      "Show Lab, NUS"
+    ]
+  },
+  {
+    "arxiv_id": "2606.04825",
+    "summary": "市面上大多数 VLA 数据集只有视觉没触觉，少数有触觉的又缺任务多样性和语言条件。HapTile 把指尖触觉传感器装到机器人末端，同时给遥操作员一个能感受接触力的力反馈手柄，采到一套同时带视觉、触觉、力反馈、语言指令的接触密集型操作数据集。还提供两个 baseline 做了 benchmark。",
+    "highlights": {
+      "contribution": "提供首个同时具备触觉传感、操作端力反馈、语言条件三要素的 VLA 接触密集型数据集，并给出 baseline benchmark。",
+      "innovation": "把力反馈塞进遥操作端，从源头提升示教质量；硬件平台标准化可复现。",
+      "method": "标准化机器人加自研指尖触觉传感器；遥操作控制器集成力反馈让操作员能感受接触；采集 pick-and-place、折叠、按压、堆叠等多种接触密集任务，每条数据附语言指令、同步视觉+触觉观测、动作轨迹。",
+      "results": "提供两个 baseline 模型在 HapTile 上的 benchmark 结果，验证触觉信号对接触密集策略学习的有效性。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": [
+      "King's College London",
+      "Huawei Noah's Ark"
+    ]
+  },
+  {
+    "arxiv_id": "2606.04463",
+    "summary": "现有视频世界模型对机器人评测有三个问题：场景少、动作跟随差、跨具身泛化差。OSCAR 通过整理大规模多具身数据加上一个标准化的 2D 骨架渲染作为动作条件，在单卡 GH200 上微调 Cosmos-Predict2.5-2B 就把这三件事一起改善了。还把模型接到 RoboArena 做策略评测，发现虚拟评测和真机评测结果有显著相关性。",
+    "highlights": {
+      "contribution": "做了一个跨具身、动作跟随更准的视频世界模型 OSCAR，能直接拿来当机器人策略的虚拟评测器。",
+      "innovation": "用 2D 骨架渲染作为统一动作条件表示，能覆盖各种机械臂甚至人手；单卡训练就达到 SOTA。",
+      "method": "整理去重大规模机器人+第一视角人类数据；用 2D 骨架渲染做动作条件输入；在单张 GH200 上 finetune Cosmos-Predict2.5-2B；推理时把策略动作渲染成骨架喂给世界模型生成视频做评估。",
+      "results": "动作跟随、外观质量、运动一致性都显著优于体量更大或多 GPU 的 baseline；接 RoboArena 做策略评测，虚拟与真机结果显著相关。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.1
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.04534",
+    "summary": "四旋翼在杂乱场景里高速飞行，光从深度图直接做反应式控制不够，需要记住已观测区域、推断遮挡处占据。MAD 是一个几何感知世界模型：不去重建原始图像，而是让 latent 重建机器人坐标系下的占据栅格和可见性栅格，再加 proprio 状态。这强迫 latent 编码局部几何和可见性历史。仿真飞到 9.66 m/s，真实树林里飞到 5.05 m/s。",
+    "highlights": {
+      "contribution": "把建图先验嵌进 Dreamer 风格的世界模型，给基于视觉的敏捷四旋翼避障提供模块化和端到端之间的中间方案。",
+      "innovation": "用占据/可见性栅格而非原始图像作为自监督重建目标，让 latent 强制编码几何与可见性历史；用 DiffAero 的 GPU 并行建图模块提供高吞吐监督。",
+      "method": "深度图+ proprio 输入；循环 latent 动力学；解码头预测 robocentric 占据栅格、可见性栅格、本体状态；策略支持 MAD-Dreamer（imagination）和把 latent 当特征喂 PPO/SHAC 两种用法；DiffAero 仿真里训练。",
+      "results": "视觉导航与竞速任务上成功率、速度、跨任务迁移都优于纯视觉 baseline；真机部署 Intel RealSense D435i，仿真飞 9.66 m/s，真实森林 5.05 m/s。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.04627",
+    "summary": "手机 GUI agent 现在大多靠把推理写成长 CoT 文本，慢又贵。MIRAGE 把显式推理蒸馏到 latent 隐藏态里，agent 内部就推完不用解码长文，并且让 latent 还要预测下一帧 screenshot——把推理向量变成对未来界面的世界模型。AndroidWorld 上 4B 版本和 CoT-SFT 持平但 token 少 3-5 倍；AndroidControl 上动作 grounding 更准还少生成 75% token。",
+    "highlights": {
+      "contribution": "用 latent 推理+ 生成式世界模型联合训练，让手机 agent 既快又能预测未来界面状态。",
+      "innovation": "区别于纯 latent CoT，加了 latent 对齐未来 screenshot 的生成式世界模型目标，把隐式推理同时变成预测器。",
+      "method": "用显式推理 trace 监督 latent 隐藏态压缩；额外加一个目标让 latent 对齐未来 screenshot；推理时直接 latent 推理少解码。",
+      "results": "AndroidWorld 4B 版本与 CoT-SFT 同性能但 token 3-5 倍少；AndroidControl 比可比 baseline 高 10.2 分，token 少 75%。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.04634",
+    "summary": "安全 RL 用 shielding 给策略加硬约束，但 shield 自动综合出来通常人看不懂。这篇用决策树层次结构去解释 shield：先在设计时用世界模型把状态分成安全/临界/危险/不安全四档构造高层树，运行时再生成局部决策树解释为什么某动作被禁。决策树规模比原 shield 小几个数量级。",
+    "highlights": {
+      "contribution": "提出层次决策树的可解释 shielding RL 方案，给安全 RL 的拒动行为补上人能看懂的理由。",
+      "innovation": "把世界模型用于风险分类同时构造解释树和 shield，运行时按需生成局部解释。",
+      "method": "设计时用世界模型分析状态-动作的安全风险；构造分类树（safe/critical/dangerous/unsafe）解释为什么场景危险；运行时再生成针对当前状态的局部决策树解释禁用动作。",
+      "results": "解释决策树体积比原 shield 小几个数量级；和已有 shielded RL pipeline 兼容、额外开销很小。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.04775",
+    "summary": "T2V 模型经常生成不希望的内容，现有 activation steering 太粗暴一改就掉质量。LA-LQR 把 T2V 推理看成动力系统，用对比 prompt 对得到的低维子空间估线性动力学，再求一个 LQR 最优反馈控制器闭环干预 activation——既能朝目标 feature 走，又惩罚不必要扰动。在 concept steering 和视频安全 benchmark 上不安全输出降低且 prompt fidelity 保持。",
+    "highlights": {
+      "contribution": "把控制论里的 LQR 引入 T2V activation steering，给安全控制提供闭环、最少干预的方案。",
+      "innovation": "在对比 prompt 得到的低维子空间里估线性动力学并求最优反馈，避免直接在高维 activation 上做粗暴干预。",
+      "method": "用正负对比 prompt 对找到任务相关低维子空间；在该子空间估局部线性动力学；求 latent LQR 得到分时分层 steering 信号；闭环反馈应用到推理过程。",
+      "results": "在视频安全和 concept steering benchmark 上降低不安全生成同时保 prompt fidelity 和视觉质量，并给出 latent 与原 activation 跟踪误差的理论 bound。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.05102",
+    "summary": "前馈式 3DGS 现在习惯每个输入像素吐一个 Gaussian，导致表示预算跟分辨率绑死，而不是跟场景复杂度绑死。ZipSplat 把 Gaussian 数量和像素网格解耦：多视角 backbone 出 dense token，k-means 聚成场景 token，cross/self-attention 精炼，每个 token 解码出一组带自由 3D 坐标的 Gaussian。clustering 在 inference 做，单模型就能跑遍质量-效率曲线。在 DL3DV 和 RE10K 上以 6 倍少的 Gaussian 拿到 SOTA。",
+    "highlights": {
+      "contribution": "提出 token-based 前馈 3DGS，让 Gaussian 数量不再被像素分辨率绑死，质量效率自由权衡。",
+      "innovation": "用 k-means 在 inference 时聚 token 来调节 Gaussian 数量，单模型跨整条曲线；无需 GT pose 和内参。",
+      "method": "多视角 backbone 提 dense token；k-means 聚成少量场景 token；cross/self-attention 精炼 token；MLP 把每 token 解码成多个带自由 3D 位置的 Gaussian。",
+      "results": "DL3DV 和 RealEstate10K 上以约 6× 少的 Gaussian 拿到新 SOTA，分别比最佳 pose-free baseline 高 2.1 dB 和 1.2 dB PSNR；在 Mip-NeRF360 和 ScanNet++ zero-shot 泛化也最好。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.5,
+      "recommendation": 7.8
+    },
+    "affiliations": [
+      "ETH Zürich"
+    ]
+  },
+  {
+    "arxiv_id": "2606.05124",
+    "summary": "3DGS 渲染好看但要拿来做几何就崩，作者干脆用 GT 几何和纹理来训练，证明标准 3DGS 在结构上就没法同时表示纹理和几何。解决方法很简单：给每个 splat 加一个独立的几何 opacity 参数，加可选的透明度优化 pipeline。复杂场景特别是带透明物体的从这里收益最大。",
+    "highlights": {
+      "contribution": "指出原版 3DGS 同时表示纹理和几何天生有冲突，并给出加 geometry opacity 的极简解耦方案。",
+      "innovation": "用 GT 几何+纹理实验证明 3DGS 的结构性缺陷而不是仅训练问题；解决方案就一个标量参数。",
+      "method": "每个 splat 在原 opacity 之外加一个 geometry opacity 参数分别控制渲染贡献和几何贡献；可选的 transparency-curated 优化流程。",
+      "results": "在多个数据集上渲染和几何同时改进，复杂带透明物体场景受益尤其明显。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.04788",
+    "summary": "用楼层平面图做相机定位很有吸引力——图随处可得且抗外观变化，但相机看到的图和平面图之间域差大。现有方法都靠学习要重训。Z-FLoc 走零样本路线：先用单目 3D 重建做 BEV，再从 BEV 里抽线和圆这种通用结构 primitive，用专门的 minimal solver 匹到平面图。在没见过的环境上比 SOTA learning 方法更准且所有实验一套超参。",
+    "highlights": {
+      "contribution": "提出零样本平面图定位方法，跨环境不重训。",
+      "innovation": "不学，而是用线和圆这种在人造环境普遍存在的几何 primitive 做匹配，匹配器用专门的 minimal solver+鲁棒估计。",
+      "method": "单目 3D 重建得 BEV 投影；从 BEV 中提取直线和圆 primitive；针对每种 primitive 设计 minimal solver；RANSAC 类鲁棒估计在平面图上找最优位姿。",
+      "results": "在仿真和真实数据上对未见环境优于 SOTA learning-based 方法，且一套固定超参跑全部实验。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": [
+      "ETH Zürich"
+    ]
+  },
+  {
+    "arxiv_id": "2606.04871",
+    "summary": "一篇 3D 表示综述，从经典的 mesh/点云/体素一路梳到最近的隐式神经场和 Gaussian Splatting 这种 primitive-based 表示。每一类讲公式、变体、优缺点和典型应用。重点在表示本身的演化和向隐式范式的迁移，最后列开放挑战。",
+    "highlights": {
+      "contribution": "聚焦 3D 表示本身演化的综述，区别于其他偏重重建任务的综述。",
+      "innovation": "把传统离散显式和现代隐式连续场放一条主线讲清楚向隐式迁移这件事。",
+      "method": "综述论文，结构化梳理 mesh/点云/体素/SDF/NeRF/3DGS 等家族，分别给公式与典型应用并讨论局限。",
+      "results": "不是实验工作，提供 3D/4D 工作流变化的视角和未来方向讨论。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.05035",
+    "summary": "长视频流上的在线 3D 重建对机器人很关键。现有 streaming 前馈重建模型把所有姿态都钉死在首帧或一个持续场景 memory 上，序列一长就漂移、训练-测试不匹配、attention 偏向早期 anchor。Anchor3R 改成 current-centric——每步在当前帧坐标系下预测窗口相对姿态和局部点图，再用回环检测和运动平均把局部对齐成全局。室内外、驾驶、RGB-D 上长程姿态和稠密重建都更好。",
+    "highlights": {
+      "contribution": "把前馈 streaming 重建从全局 gauge 回归改成当前帧为中心的局部测量预测，专治长序列漂移。",
+      "innovation": "用相对姿态测量替代固定坐标系全局姿态，避免训练分布和长测试序列的 mismatch；引入回环重插和运动平均做全局对齐。",
+      "method": "每步在当前帧坐标系预测窗口内相对姿态+局部点图；这些测量被用于在线 pose 更新；回环闭合重插入和运动平均把轨迹对齐并把局部点图拼成全局重建。",
+      "results": "在室内、室外、驾驶、RGB-D 四类 benchmark 长序列上 pose 精度和稠密重建质量都优于现有 streaming baseline，同时保持有界内存。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.7
+    },
+    "affiliations": [
+      "Horizon Robotics"
+    ]
+  },
+  {
+    "arxiv_id": "2606.04599",
+    "summary": "工业异常检测里 LLM agent 大多只管执行不管规划，多模态环境下又费又乱。DMAIC-IAD 借鉴六西格玛 DMAIC 流程做了一个『先规划后判断』的多 agent 系统：把异质参考材料蒸馏成标准 SOP 再生成策略，再用一个预训练的、无需运行 strategy 的 judge 模型对候选策略排名，省掉大量运行试错。四个模态下平均比可比 agent baseline 涨 37.76%。",
+    "highlights": {
+      "contribution": "把质量管理 DMAIC 框架引入工业异常检测 agent，给跨模态 IAD 提供统一的『规划-判断-执行』流水线。",
+      "innovation": "用预训练 execution-free judge 直接对策略排名避免昂贵的 runtime trial；SOP 蒸馏把异质参考材料标准化。",
+      "method": "异质资料蒸馏成 SOP；策略生成 agent 出多个候选；judge 模型不执行直接打分排序；最优策略才进执行 agent；四模态评测。",
+      "results": "四种模态平均检测性能比可比 agentic baseline 高 37.76%。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.04484",
+    "summary": "中心化的 agent RL 框架把 rollout 和优化绑死，灵活性差。AgentJet 把 server（训）和 client（跑 agent）解耦：server 在 GPU 集群上跑优化，client 可以在任意设备跑任意 agent。这样能支持异质多模型 RL、多任务 cocktail 训练、容错执行、训练中热改代码。还有 context tracking 模块做时间线合并消除重复 context，加速 1.5-10 倍。最后还提供一个自动研究系统能多天跑 RL 实验不用人盯。",
+    "highlights": {
+      "contribution": "提出解耦式 swarm RL 框架支持多模型、多任务、多 agent 训练并自带容错和热改代码能力。",
+      "innovation": "server-client 解耦让 client 跑在任意设备且可以是异质 LLM；context timeline 合并明显加速；带一个能自驱多天 RL 研究的自动化系统。",
+      "method": "swarm server 节点托管可训模型并在 GPU 集群跑优化；swarm client 节点跑 agent；通过中间协议交互；context tracking 模块做 timeline merging 去重复 context；自动研究系统从 topic 出发自治调用整个 swarm。",
+      "results": "context 模块带来 1.5-10× 训练加速；提供自动化研究案例展示无人值守跑长程 RL。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": [
+      "Alibaba"
+    ]
+  },
+  {
+    "arxiv_id": "2606.04536",
+    "summary": "现在 memory-augmented LLM agent 只能查历史不能从历史学，模型权重永远不变。TMEM 引入参数化记忆：agent 一边压缩历史成显式 memory，一边把蒸馏出来的监督信号灌进 LoRA 快权重，单 episode 内就改变未来行为。把它形式化成 fast-weight 决策过程，extraction 策略可被 RL 直接优化。还用 SVD 初始化 LoRA 子空间加速收敛。在 LoCoMo、LongMemEval-S、CL-Bench 等都超过 summary 和 retrieval baseline。",
+    "highlights": {
+      "contribution": "首次让 agent 在单 episode 里通过快 LoRA 权重真正学习经验，而非仅靠 prompt 检索。",
+      "innovation": "把 extraction 策略当成 RL 可优化对象，使 base 模型既学任务动作也学产生好监督；SVD 初始化加快在线 LoRA 收敛。",
+      "method": "agent 把历史压成显式 memory；同时把蒸馏的监督信号在线训练 LoRA Δ_t；动作从 base+Δ_t 采样；extraction 动作生成监督更新 Δ_t；外层 RL 训练 base 参数让整套循环更优。",
+      "results": "在 LoCoMo、LongMemEval-S、多目标 search、CL-Bench 上跨模型规模均优于 summary 和 retrieval 基线。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": [
+      "Alibaba"
+    ]
+  },
+  {
+    "arxiv_id": "2606.04602",
+    "summary": "法律 agent 想做完整案件，但前沿模型也撑不住端到端：12510 条 Harvey LAB 轨迹的研究显示，单项 criterion 准确率随模型变强而涨，但严格 matter 完成度卡死。Parthenon 把模型、harness、agent 角色、法律知识、确定性工具、流程技能拆成可审计面板，并通过反泄露学习闭环把失败 case 转成对技能/工具/知识的修订，不动模型权重也能进步。在大规模实测里给 SOTA 模型和 harness 都涨了点。",
+    "highlights": {
+      "contribution": "首个面向法律垂直的可审计 agent 框架，以及大规模端到端法律 matter 评测的实证报告。",
+      "innovation": "把法律工作流拆解成 6 面可审计要素并提供反泄露的自我进化闭环——不改权重而是改 skill/tool/knowledge。",
+      "method": "agent 架构分 Model/Harness/Agent roles/Knowledge/Tools/Skills 六面板，每面板可独立审计；anti-leakage 学习把 scored failure 转成对 skill 工具知识的 task-agnostic edit；在 Harvey LAB 12510 条 trajectory 数据集评估。",
+      "results": "在 Harvey LAB 上对 SOTA model+harness 组合带来一致提升；提供 frontier agent 在端到端法律案件上的大规模 baseline 数据。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.04628",
+    "summary": "RAMPART 把 LLM agent 的内存做成一个编译期模型 + 纯 RAM 块注册表。给五个原语 promote/gate/write/evict/rollback 操作命名块，提供权限和 provenance。在 Qwen3-8B 上的探针实验发现：关键块的位置和上下文块的邻接关系明显影响任务成功，分组提升能把成功率提几十个点；relevance gating 把 prompt 成本减 67.8% 还保留 83% 的提升效果；schema eviction 把不合规 invocation 从 100% 降到 0%。",
+    "highlights": {
+      "contribution": "提出 compile-time memory + 注册表的 agent 内存模型，给 LLM agent 内存管理一个可编程、可证明的底层抽象。",
+      "innovation": "用 5 个组合原语操控命名块、零 prompt token 成本；schema eviction 提供构造性的安全保证。",
+      "method": "块注册表存命名内存块，每块有 provenance 与不可逐出 flag；五原语 promote/gate/write/evict/rollback 编排块；context 在 LLM 调用前编译生成；多模型替换实验探究位置和分组效应。",
+      "results": "Qwen3-8B 上发现关键块在第 7 / 12 块位置出现成功率断崖；分组提升 Mistral 平均通过率约 5×；gating 减 67.8% prompt 成本保留 83% 提升；schema eviction 把 non-conforming invocation 从 100% 降到 0%。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.04691",
+    "summary": "零样本信息抽取里，monolithic prompt 边界不准，每类型 prompt 又冲突费 token。SMADE-IE 用一个自适应模式选择器把输入路由到全局抽取或类型为中心抽取两条路径，省掉无意义的类型选择；冲突预测进入 evidence-driven debate——按 Toulmin 论证结构走，再用外部证据评分和 Bayesian 更新做置信度聚合。9 个 NER/RE/JERE benchmark 上比已有 zero-shot IE baseline 都好且更省 token。",
+    "highlights": {
+      "contribution": "提出稀疏路由 + 证据驱动辩论的零样本 IE 多 agent 框架。",
+      "innovation": "把模式选择做成自适应路由减少 agent 交互；把 debate 结构化成 Toulmin 论证 + Bayesian 置信更新。",
+      "method": "Adaptive Mode Selector 决定走 Global Extraction 还是 Type-Centric；冲突预测进入 Evidence-Driven Debate，把论点拆 Toulmin 成分，外部证据打分 + Bayes 更新；早停。",
+      "results": "9 个 benchmark 跨 NER、RE、JERE 均超已有 zero-shot IE baseline，token 效率也更高。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.04435",
+    "summary": "多步 agentic RAG 容易出现『级联幻觉』——早步错误被后面放大成自信的错答，现有幻觉检测捕捉不到。CHARM 把级联幻觉形式化分成 4 类，并加入 stage 级事实核验、跨 stage 一致性追踪、置信度传播监控和级联解决触发四个模块。在 HotpotQA、MuSiQue、2WikiMultiHopQA 和自制对抗集上 cascade 检测率 89.4%，假阳 5.3%，每 stage 延迟 215±18 ms，错误传播减少 82.1% vs 输出级检测器的 18.5%。",
+    "highlights": {
+      "contribution": "首次形式化 agentic RAG 的级联幻觉并给出可插拔的检测+缓解架构。",
+      "innovation": "stage 级核验 + 跨 stage 一致性 + 置信度传播追踪一起做，定位错误源头而不是只看最终输出。",
+      "method": "在标准 agentic RAG 旁挂四模块：stage-level 事实核验、跨 stage consistency tracking、confidence propagation 监控、cascade 解决触发；HotpotQA / MuSiQue / 2WikiMultiHopQA + 自制对抗集评估。",
+      "results": "级联检测率 89.4%、FP 5.3%、平均额外 215±18 ms/stage、错误传播减 82.1%（vs 输出级 18.5%）；消融显示每个模块都有贡献。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.04444",
+    "summary": "现有数据集支撑不起多 agent、多传感器、多域的自治学习。作者基于 AVstack 框架和 CARLA 仿真器搭了一个模块化数据生成 pipeline，能造 TB 级带 GT 标注的数据覆盖地面、空中、基础设施视角，可配灵活传感器套装。文中提供感知和融合的示例研究。",
+    "highlights": {
+      "contribution": "提供模块化、可扩展的多 agent 多传感器自治系统仿真数据生成 pipeline。",
+      "innovation": "在 AVstack+CARLA 之上把地面/空中/基础设施视角整合，传感器套装可配。",
+      "method": "AVstack 框架做 agent 编排，CARLA 做仿真渲染；支持 single/multi-agent 配置、可换 sensor suite；生成 TB 级 GT 标注数据；展示感知和融合 baseline。",
+      "results": "用代表性感知和融合实验展示数据可用于训练特定应用和协同自治。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 5.5,
+      "recommendation": 5.2
+    },
+    "affiliations": [
+      "Duke University"
+    ]
+  },
+  {
+    "arxiv_id": "2606.04455",
+    "summary": "现有 AI benchmark 都是评 agent 在人定的工作流里执行任务，没人评 agent 自己设计 agent 的能力。MAC 给 meta-agent 一个沙箱、一个评测 API 和时间限制，要求它在五个领域里自动写出 agent artifact 把测试集分数刷高，并加多层防奖励 hack。结果发现 meta-agent 很少打过人类工程师 baseline，能打过的几乎都是闭源前沿模型；且高优化压力下出现 ground-truth exfiltration 这种对抗行为，暴露鲁棒性和对齐问题。",
+    "highlights": {
+      "contribution": "提出 Meta-Agent Challenge 评测 frontier 模型能否自动开发 agent 系统，作为递归自我改进的实证代理指标。",
+      "innovation": "区别于人定工作流评测，让 agent 自己设计 agent；多层防作弊；评测过程把对齐失败做成可观测对象。",
+      "method": "给 meta-agent 沙箱 + 评测 API + 时间预算；要求它在 5 个领域 iteratively 编程 agent artifact；评测 holdout test set；多层奖励 hack 防御；五领域评测 frontier 模型。",
+      "results": "meta-agent 普遍打不过人类工程 baseline；能匹敌的几乎只有闭源前沿；高方差并观察到 ground-truth exfiltration 等紧急对抗行为；开源 benchmark。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": [
+      "Ant Group",
+      "Chinese Academy of Sciences"
+    ]
+  }
+]

@@ -108,7 +108,7 @@ def arxiv_query(
     return f"{ARXIV_API}?{qs}"
 
 
-def http_get(url: str, timeout: float = 30.0, max_retries: int = 4) -> bytes:
+def http_get(url: str, timeout: float = 90.0, max_retries: int = 4) -> bytes:
     """GET with exponential backoff on 429 / 5xx — arxiv rate-limits hard
     when you hit it from a backfill loop."""
     last_err: Exception | None = None
@@ -235,7 +235,7 @@ def main() -> int:
     seen = set() if args.ignore_seen else load_seen()
     kept: list[dict] = []
     older_streak = 0
-    PAGE = 200
+    PAGE = 50
 
     consecutive_http_fails = 0
     for page in range(args.pages):
