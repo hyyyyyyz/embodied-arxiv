@@ -1,0 +1,1068 @@
+{
+  "date": "2026-06-04",
+  "papers": [
+    {
+      "arxiv_id": "2606.05979",
+      "title": "World-Language-Action Model for Unified World Modeling, Language Reasoning, and Action Synthesis",
+      "authors": [
+        "Yi Yang",
+        "Zhihong Liu",
+        "Siqi Kou",
+        "Yiyang Chen",
+        "Yanzhe Hu",
+        "Jianbo Zhou",
+        "Boyuan Zhao",
+        "Zhijie Wei",
+        "Xiao Xia",
+        "Xueqi Li",
+        "Pengfei Liu",
+        "Zhijie Deng"
+      ],
+      "affiliations": [],
+      "summary": "把 WAM(世界-动作模型)和 VLA(视觉-语言-动作)统一成 WLA:同时预测子任务文本、子目标图像和动作。骨干换成自回归 Transformer,世界专家负责物理动态、动作专家用 meta-query 隐式接收世界预测,推理时世界分支可关可开做 test-time scaling。2B 参数 5090 上 40ms/步,RoboTwin2.0 Clean 92.94%、RMBench 56.5% SOTA,还能从无动作的跨本体视频学新任务。",
+      "original_abstract": "We propose world-language-action (WLA) models as a new class of embodied foundation models. WLA takes textual instructions, images, and robot states as inputs to jointly predict textual subtasks, subgoal images, and robot actions, conjoining the \\emph{world modeling interface} to learn from extensive egocentric videos as in the world-action model (WAM) and the \\emph{language reasoning} capacities to solve complex long-horizon tasks as in vision-language-action (VLA) models. At the core of WLA lies an \\emph{autoregressive (AR)} Transformer backbone, instead of a bidirectional diffusion Transformer as in WAMs, to predict the \\emph{next state}, comprising the \\emph{semantic-level} textual intention and complementary \\emph{fine-grained} physical dynamics. The physical dynamics are supervised by the world modeling objective based on a dedicated World Expert, and are leveraged to ease the characterization of the state-action correlation for the Action Expert. WLA leverages meta-queries to make the world prediction \\emph{implicitly} impact the action generation so that the former can be disabled during inference. The world prediction can also be activated to enable test-time scaling for improved robot control. Our WLA-0 prototype, with 2B active parameters, achieves 40 ms per inference on an NVIDIA RTX 5090. Evaluations across simulated and real-world environments demonstrate that WLA-0 achieves state-of-the-art multi-task and long-horizon learning abilities, e.g., 92.94\\% success rate on RoboTwin2.0 Clean and 56.5\\% success rate on RMBench. WLA-0 also holds the promise to learn novel tasks directly from \\emph{cross-embodiment robot videos} without action annotations.",
+      "highlights": {
+        "contribution": "提出 World-Language-Action 这个新范式,把世界建模、语言推理、动作合成统一进一个 AR Transformer。",
+        "innovation": "相对 WAM 用扩散、VLA 用语言,这里改成 AR 预测下一个状态(语义意图 + 物理动态),并用 meta-query 让世界预测隐式驱动动作。",
+        "method": "AR Transformer 主干 + World Expert + Action Expert,用 meta-query 桥接;世界预测可在推理时打开做 test-time scaling;支持从无标动作的跨本体视频学。",
+        "results": "WLA-0 2B 激活参数,40ms/帧;RoboTwin2.0 Clean 92.94% 成功率,RMBench 56.5% 成功率,声称 SOTA。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T10:23:01Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 9.8,
+        "recency": 10.0,
+        "popularity": 8.0,
+        "quality": 8.5,
+        "recommendation": 9.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.05979v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.05979v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06155",
+      "title": "AffordanceVLA: A Vision-Language-Action Model Empowering Action Generation through Affordance-Aware Understanding",
+      "authors": [
+        "Qize Yu",
+        "Jiadi You",
+        "Yuran Wang",
+        "Jiaqi Liang",
+        "Bowen Ping",
+        "Yang Tian",
+        "Yue Chen",
+        "Minghong Cai",
+        "Zeying Gong",
+        "Ruihai Wu",
+        "Yinchuan Li",
+        "Junwei Liang",
+        "Yingcong Chen"
+      ],
+      "affiliations": [],
+      "summary": "VLM 的语义空间和机器人控制之间一直有结构错配,作者通过加入 affordance（可操作性）作为中间表征来桥接两者。具体拆成三个子任务:Which2Act 找物体、Where2Act 找 2D 接触点、How2Act 推 3D 几何,塞进 Mixture-of-Transformer 用三阶段课程训练。仿真和真机上各种抓取任务表现都不错,还做了自动 affordance 标注的数据增广来缓解标签稀缺。",
+      "original_abstract": "Vision-Language-Action (VLA) models leverage the rich world knowledge of pretrained vision-language models (VLMs) to enable instruction-following robotic manipulation. However, the structural mismatch between VLM semantic spaces and embodied control policies often hinders the learning of precise perception--action mappings. To address this challenge, we propose \\textbf{AffordanceVLA}, a unified framework that introduces structured affordance forecasting as a task-oriented intermediate representation to establish a more precise and robust perception--action mapping. Specifically, we progressively model manipulation priors through three complementary components: 1) \\textbf{Which2Act} for object-centric grounding via visual latent prediction to suppress distractions; 2) \\textbf{Where2Act} for 2D interaction localization via affordance map estimation; and 3) \\textbf{How2Act} for 3D geometric reasoning to guide manipulation policies. These affordance cues provide spatially grounded, semantically conditioned, and action-coupled intermediate representations, thereby naturally bridging vision, language and action. We integrate these modules into a Mixture-of-Transformer (MoT) architecture with specialized experts and train the model using a three-stage training strategy with a progressive data curriculum. To overcome the scarcity of dense affordance labels in robotic datasets, we also develop a robust automated data augmentation pipeline. Extensive experiments on simulation and real-world demonstrate that AffordanceVLA achieves strong performance across diverse manipulation scenarios.",
+      "highlights": {
+        "contribution": "提出 AffordanceVLA,用结构化 affordance 预测作为感知到动作的中间表征,统一三种可操作性先验来提升 VLA 操作精度。",
+        "innovation": "不像以往 VLA 直接从 VLM 特征预测动作,而是显式把物体定位、2D 交互点、3D 几何拆开建模,并配以 MoT 多专家结构。",
+        "method": "Which2Act 做物体中心潜在预测,Where2Act 做 2D affordance map,How2Act 做 3D 几何推理,三个模块由 MoT 多专家承载,三阶段课程 + 自动数据增广解决标签稀缺。",
+        "results": "在仿真和真机多场景下取得 strong performance,但摘要没给具体数字,自称跨任务都很稳。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T13:28:51Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV",
+        "cs.MM"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 10.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06155v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06155v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06245",
+      "title": "MPCoT: Reward-Guided Multi-Path Latent Reasoning for Test-Time Scalable Vision-Language-Action",
+      "authors": [
+        "Boyang Zhang",
+        "Lianlei Shan"
+      ],
+      "affiliations": [],
+      "summary": "VLA 一次性出动作在长程任务里太脆,显式 CoT 又慢又拗口。MPCoT 初始化 M 条潜在推理路径,做 K 步权重共享精炼后软聚合再解码动作;训练阶段用奖励信号(专家一致性、世界模型/VLM 进度、成功反馈)对齐路径打分器。保留原 8 步动作接口,不产生推理 token,LIBERO 和 CALVIN 长程任务上提升,ablation 验证深度宽度和奖励引导都有用。",
+      "original_abstract": "Vision-Language-Action (VLA) policies remain brittle in long-horizon and high-uncertainty control, where one-pass action decoding provides limited inference-time deliberation. Explicit chain-of-thought can increase reasoning depth, but introduces token latency and an indirect text-to-action interface. We propose MPCoT, a reward-guided multi-path latent reasoning framework that initializes $M$ hypotheses, refines them for K weight-tied steps, and softly aggregates them before action decoding. A training-only path-preference objective evaluates candidate action branches with expert-action consistency, world-model/VLM-based progress, and success feedback to align the latent path scorer with downstream execution quality. MPCoT preserves the original 8-step action interface, generates zero reasoning tokens, and exposes configurable inference controls (K,M). Under matched protocols on LIBERO and CALVIN, MPCoT improves long-horizon performance, with ablations confirming depth-width effects, confidence-weighted aggregation, and reward-guided path supervision.",
+      "highlights": {
+        "contribution": "提出 MPCoT 在 VLA 中做多路径潜在推理 + 奖励引导聚合,既不增加 token 又能 test-time scaling 长程控制。",
+        "innovation": "把 latent CoT 做成多路径并行 + 软聚合,而不是单链;训练阶段用执行奖励对齐路径偏好,与文字 CoT 完全分离。",
+        "method": "M 条潜在推理初始化 → K 步权重共享精炼 → 软聚合 → 动作解码;训练用 path-preference 损失结合专家一致性 / 世界模型进度 / 成功反馈打分。",
+        "results": "LIBERO 和 CALVIN 上长程任务提升,ablation 确认深度宽度、置信加权聚合、奖励引导监督各自有效,具体提升幅度摘要没给。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T14:48:44Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 10.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06245v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06245v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06281",
+      "title": "Multi-Resolution Tactile Imitation Learning for Contact-Rich Robotic Manipulation",
+      "authors": [
+        "Rickmer Krohn",
+        "Erik Helmut",
+        "Niklas Funk",
+        "Jan Peters",
+        "Vignesh Prasad",
+        "Georgia Chalvatzaki"
+      ],
+      "affiliations": [
+        "TU Darmstadt"
+      ],
+      "summary": "想用触觉做接触密集型操作，但不同触觉传感器频率差异大融合很难。作者把 RGB 相机、GelSight Mini 视觉触觉、Evetac 事件触觉用各自的 conv stem 编码再 transformer 融合，喂给 flow-matching 策略。5 个接触密集任务平均成功率 80%，纯视觉只有 31%，视觉+单触觉 54%；推理时即使没有 Evetac，多触觉共训练也能涨 10%+。",
+      "original_abstract": "Touch sensing is beneficial for solving a wide variety of manipulation tasks. While there exists a wide range of tactile sensors with different properties, exploiting the fusion of multiple heterogeneous tactile sensors to improve manipulation learning remains underexplored. We present Multi-Resolution Tactile Sensing (MiTaS), a representation framework that leverages multiple tactile sensors operating at different temporal resolutions in order to solve complex contact-rich manipulation tasks. We propose a novel architecture using modality-specific convolutional stems and transformer-based fusion that effectively fuses information from an RGB camera stream, a vision-based GelSight Mini sensor and a high-frequency event-based Evetac sensor. This multi-sensor representation then conditions a flow-matching policy for solving downstream tasks. Experimental results across five contact-rich manipulation tasks demonstrate the effectiveness of multi-resolution tactile features in imitation learning. MiTaS achieves an average success rate of 80 %, while vision-only (31 %) and visual-tactile (54 %) baselines cannot solve the task reliably. Co-training a visuo-tactile model with multi-tactile data boosts performance by over 10 \\% in certain tasks, without having access to the Evetac sensor during policy evaluation. A detailed sensor-reading and attention analysis reveals the importance of different sensors throughout task execution, validating our multi-resolution tactile sensing approach. Project Page: http://mitas-touch.github.io.",
+      "highlights": {
+        "contribution": "提出 MiTaS，把三种不同时间分辨率的视触觉传感器融进 flow-matching 模仿学习策略，解决接触密集任务。",
+        "innovation": "首次系统性融合 RGB+慢速视触觉+高频事件触觉，并证明多触觉共训练能在推理时不需要事件传感器也涨点。",
+        "method": "每个模态走自己的 conv stem，再用 transformer 融合为统一表征；下游 flow-matching policy 输出动作；分析注意力看不同传感器何时起作用。",
+        "results": "5 个接触任务平均 80% 成功率，远高于视觉基线 31% 和视触觉基线 54%；多触觉共训练带来 10%+ 增益。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T15:23:03Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 10.0,
+        "popularity": 6.5,
+        "quality": 8.0,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06281v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06281v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06491",
+      "title": "TempoVLA: Learning Speed-Controllable Vision-Language-Action Policies",
+      "authors": [
+        "Dong Jing",
+        "Jingchen Nie",
+        "Tianqi Zhang",
+        "Jiaqi Liu",
+        "Huaxiu Yao",
+        "Zhiwu Lu",
+        "Mingyu Ding"
+      ],
+      "affiliations": [],
+      "summary": "现有 VLA 只能按演示里的固定速度跑,转移阶段该快不快、接触阶段该慢不慢。作者发现动作幅度本身就控制速度,于是做了两件事:数据侧 VSTA 把演示重新计时(合并/拆分动作),模型侧把速度作为条件输入。仿真和真机都能双向控速,还能配大模型动态加减速,默认 1x 也因更好的数据利用率而涨点。",
+      "original_abstract": "Robot manipulation alternates between low-risk transit phases that call for fast execution and high-risk contact stages that demand slow, precise motion. Yet existing Vision-Language-Action models (VLAs) only inherit a single fixed speed from training demonstrations. Prior efforts to accelerate VLAs through model compression, KV-cache reuse, or reinforcement learning only shift the policy from one fixed speed to another, and leave deceleration almost unexplored. We observe that the magnitude of each predicted action already governs how fast the robot moves, opening a direct route to controllable execution speed. We turn this observation into TempoVLA, a single VLA whose execution speed is controlled by an explicit condition. TempoVLA combines two coupled components. (1) A data-side Variable-Speed Trajectory Augmentation (VSTA) that re-times demonstration to any target speed by merging or splitting actions while preserving its motion semantics. (2) A model-side conditioning mechanism that feeds the speed to the policy. Statistics show that VSTA reaches the requested speed with negligible motion error. Experiments in simulation and on real-world tasks demonstrate that TempoVLA achieves flexible speed control in both directions, while VSTA additionally boosts the default $1\\times$ performance via better data utilization. Furthermore, by cooperating with a large multimodal model, TempoVLA realizes dynamic speed control, accelerating through low-risk phases and decelerating for high-risk ones.",
+      "highlights": {
+        "contribution": "TempoVLA 让 VLA 的执行速度变成可显式控制的条件,实现快/慢双向调节。",
+        "innovation": "首次系统处理 VLA 减速问题(之前都只关注加速),发现动作幅度直接对应速度并配套数据增广。",
+        "method": "VSTA:合并/拆分演示动作重定时得到不同速度数据;模型侧加速度条件输入;真机+仿真测;再接大模型动态决定速度。",
+        "results": "VSTA 重定时基本无误差,默认 1x 性能也涨,真机和仿真都能双向控速,具体数字摘要没给。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T17:59:40Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 10.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06491v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06491v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06418",
+      "title": "Double Preconditioning (DoPr): Optimization for Test-Time Performance, not Validation Loss",
+      "authors": [
+        "Thomas T. Zhang",
+        "Alok Shah",
+        "Yifei Zhang",
+        "Vincent Zhang",
+        "Nikolai Matni",
+        "Max Simchowitz"
+      ],
+      "affiliations": [],
+      "summary": "训练用一步预测损失但部署要自回归 rollout 的场景(AR LM、流式生成、机器人策略)普遍有 train-test feedback 问题。作者提出 DoPr——把 Adam/Muon 的梯度预条件和 KFAC 的激活预条件合在一起,直接 drop-in 替换优化器就能提升下游任务表现,有意思的是 validation loss 不一定降。属于优化器方向的工作但被 robot policy 关键词捞到。",
+      "original_abstract": "Many modern applications of deep learning involve training a neural network via a one-step prediction loss (e.g., $L^2$ regression, cross-entropy), but deploy the network by rolling out along its own predictions. Key examples include autoregressive language modeling, flow-based generative modeling, and robot policy learning. It is well-documented that these settings induce a phenomenon we call test-time feedback (TTF): the mismatch between the training/validation loss and downstream metrics of interest, such as task success rate and generation quality, which grows with task length. While data curation, architecture, and objective design have been proposed to combat train-test shift in TTF settings, this paper proposes optimization as a new design axis to mitigate error accumulation. Specifically, we introduce a new optimization paradigm called double-preconditioning (DoPr) uniquely tailored to the challenges of TTF. DoPr combines gradient-wise preconditioning, as in Adam and Muon, with activation-wise preconditioning (AP), such as in KFAC. We show that the addition of AP yields a drop-in intervention for increasing downstream model performance across a range of TTF settings. Interestingly, these gains in test-time performance do not consistently accompany improvements in validation loss, opening new questions about how to properly evaluate models trained with one-step supervised objectives.",
+      "highlights": {
+        "contribution": "提出 DoPr 双预条件优化器,作为新设计轴专门缓解 test-time feedback 误差累积。",
+        "innovation": "把梯度预条件(Adam/Muon)和激活预条件(KFAC)结合,定位 TTF 问题而非通用收敛,挑战了 validation loss 的评价标准。",
+        "method": "在标准 Adam/Muon 之上叠加 activation-wise preconditioning,作为 drop-in 优化器干预;在 AR 语言建模、流生成、机器人策略学习等场景测。",
+        "results": "多种 TTF 场景下下游性能提升,但 validation loss 不一定降,具体数字摘要没给。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T17:22:58Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "eess.SY"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robot policy"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 10.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06418v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06418v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06292",
+      "title": "Synthetic Data Generation and Vision-based Wrinkle and Keypoint Detection for Bimanual Cloth Manipulation",
+      "authors": [
+        "Ariel Herrera",
+        "Xueyang Kang",
+        "Atal Anil Kumar"
+      ],
+      "affiliations": [],
+      "summary": "机器人叠/熨布料因为褶皱遮挡看不清状态。作者用 Blender 生成自动标注的合成数据加少量真实数据训练褶皱+关键点检测器，再写了一套先扯褶皱、出角后再熨平的双手算法。关键点 MPE 1.76 像素，且不微调就能迁移到真实布料，在严重遮挡时比基线稳。",
+      "original_abstract": "Robotic manipulation of textiles remains challenging because continuous deformation and self-occlusions hinder the robust visual perception required to estimate the cloth's state. To address the lack of annotated real-world data, we developed a Blender-based synthetic pipeline exporting auto-annotated keypoints, and combined manually labeled renders with real-world data to train a wrinkle detector. We present a perception framework integrating a CNN for permutation-invariant keypoint detection and a YOLOv8-OpenCV pipeline to extract grasping points from structural wrinkles. A proposed bimanual algorithm uses this system to stretch fully folded garments via wrinkles, transitioning to keypoint-based ironing once corners emerge. The keypoint model achieves a Mean Position Error (MPE) of 1.7615 pixels. The perception system transfers to physical fabrics without fine-tuning, outperforming baselines that fail in high-occlusion states or yield false positives on severe folds.",
+      "highlights": {
+        "contribution": "用合成数据训练的视觉系统驱动双手机器人完成折叠布料的展开和熨烫。",
+        "innovation": "Blender 自动标注合成管线 + 一套从褶皱抓点到角点抓点的状态机切换策略。",
+        "method": "CNN 做置换不变的关键点检测，YOLOv8+OpenCV 提褶皱抓点；双手机器人先沿褶皱拉伸，等角点露出来再切到关键点熨烫。",
+        "results": "关键点 MPE 1.7615 像素；零微调迁移到真实布料，遮挡和重折场景下优于基线。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T15:30:49Z",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06292v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06292v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06041",
+      "title": "Sample-efficient Low-level Motion Planning for Robotic Manipulation Tasks via Zero-shot Transfer Learning",
+      "authors": [
+        "Yuanzhi He",
+        "Victor Romero-Cano",
+        "José J. Patiño",
+        "Juan David Hernández",
+        "William Sawtell",
+        "Gualtiero Colombo"
+      ],
+      "affiliations": [],
+      "summary": "经典 iCEM 采样规划算法在堆叠、滑动这种复杂操作上扛不住,作者加了一层迁移学习,把简单上游任务里学到的 iCEM 参数迁到下游复杂任务,再用任务分解重设计奖励。仿真里成功率最高提 23%,Franka 真机堆叠也跑通了。整体是个比较传统的规划工程性改进。",
+      "original_abstract": "As robotic systems become more sophisticated, the growing complexity of their motion planning models and the longer training times pose substantial challenges. Evolutionary algorithms such as the Sample-efficient Cross-Entropy Method (iCEM) have recently demonstrated promising potential for low-level real-time planning by leveraging efficient knowledge reuse strategies to improve performance. Although effective in many control tasks, iCEM's performance can be constrained in more complex scenarios, particularly those requiring stacking, sliding, and shelf placement. In this work, we propose a novel iCEM+TL framework that explicitly leverages Transfer Learning (TL), where key iCEM parameters are transferred from simpler upstream tasks to guide more complex downstream tasks. Additionally, we applied Reward Redesign (RR) through task decomposition for stacking objects and shelf placement to optimize task-specific performance. Results from the simulation show that our framework achieves success rate improvements of up to 23%. The framework is further validated on a real Franka Emika robot in a stacking task, demonstrating its practical feasibility for real-world deployment.",
+      "highlights": {
+        "contribution": "提出 iCEM+TL 框架,通过参数迁移让采样规划在复杂操作任务上更高效。",
+        "innovation": "把进化算法 iCEM 跟迁移学习耦合,加 Reward Redesign 做任务分解,与纯学习类策略相比更轻量。",
+        "method": "上游任务训出 iCEM 关键参数,再迁到下游堆叠/滑动/上架任务;复杂任务再用 RR 拆奖励;Franka 真机验证。",
+        "results": "仿真成功率最高提 23%,Franka 堆叠真机验证可部署。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T11:34:50Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.NE"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 10.0,
+        "popularity": 4.5,
+        "quality": 6.0,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06041v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06041v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06049",
+      "title": "L-SDPPO: Policy Optimization of Spiking Diffusion Policy for Intra-vehicular Robotic Manipulation",
+      "authors": [
+        "Liwen Zhang",
+        "Dong Zhou",
+        "Guanghui Sun",
+        "Yifei Zheng",
+        "Yuhui Hu",
+        "Kaihong Ouyang",
+        "Zuoquan Zhao"
+      ],
+      "affiliations": [],
+      "summary": "航天器舱内机器人受能源约束严,扩散策略效果好但太耗电。作者把脉冲神经网络版的扩散策略(SDP)用 RL 优化,加了状态相关的延迟注入机制模拟生物神经延迟来处理微重力下的时空感知。在五个舱内任务上比 SOTA 成功率高、能耗低。比较细分的应用方向。",
+      "original_abstract": "Intra-vehicular robots in spacecraft help reduce astronaut workload and improve mission efficiency. Recent research focuses on using deep learning methods to achieve the acute control required for operations in these complex environments. However, objects exhibit unpredictable, unconstrained drift without gravitational damping. These factors demand robustness against complex multimodal action distributions. Diffusion policies (DP) can model these complex actions, but their iterative sampling process consumes too much energy for the limited power budgets of spacecraft. We therefore propose a low-energy intra-vehicular robotic manipulation framework, L-SDPPO, in which the Spiking Diffusion Policy (SDP) is optimized with a reinforcement learning (RL) algorithm. Furthermore, to address the insufficient perception of dynamic spatiotemporal features in microgravity, we propose the statedependent latency injection (SDLI) mechanism, which mimics biological neural delays to dynamically regulate the timing of input information. Evaluation on five representative intra-vehicular daily tasks (e.g., hatch opening and precision container capping) shows that our method consistently achieves higher success rates and lower energy consumption, compared to the state-of-the-art robotic manipulation methods. These results demonstrate our method is a viable intra-vehicular robotic manipulation method.",
+      "highlights": {
+        "contribution": "面向航天器舱内机器人,提出 L-SDPPO 让脉冲扩散策略在低能耗下达到高成功率。",
+        "innovation": "RL 直接优化 SDP,加 SDLI 状态依赖延迟注入针对微重力时空特征,这是脉冲 + 扩散 + RL 的少见组合。",
+        "method": "脉冲神经网络扩散策略 SDP,用 RL 算法做 policy optimization,SDLI 模块动态调节输入时序;在五个舱内日常任务上评测。",
+        "results": "舱门开启、容器封盖等五个任务上成功率和能耗都比 SOTA 操作方法好,具体数字摘要没给。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T11:45:37Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 10.0,
+        "popularity": 4.0,
+        "quality": 6.0,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06049v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06049v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06147",
+      "title": "WorldFly: A World-Model-Based Vision-Language-Action Model for UAV Navigation",
+      "authors": [
+        "Shengtao Zheng",
+        "Kai Li",
+        "Weichen Zhang",
+        "Yu Meng",
+        "Chen Gao",
+        "Xinlei Chen",
+        "Yong Li",
+        "Xiao-Ping Zhang"
+      ],
+      "affiliations": [],
+      "summary": "无人机城市峡谷飞行时遮挡严重、视角突变,纯历史观测 VLA 容易翻车。作者搞了个 Urban Canyon Traversal Benchmark,又提了 WorldFly 用双分支耦合 flow matching 同时生成未来视频和导航动作,让 world model 的想象力显式引导策略。在新基准上比 baselines 强,尤其在未见过的环境里。",
+      "original_abstract": "End-to-end Vision-Language-Action (VLA) models have shown promise in UAV navigation. However, existing approaches typically rely on historical observations to directly predict actions, often struggling in dense urban environments where severe occlusions and sharp turns result in drastic viewpoint transitions. We argue that the ability to \"imagine\" future states -- inherent in World Models -- is critical for robust decision-making under such partial observability. To address this, we construct a challenging Urban Canyon Traversal Benchmark, specifically designed to evaluate spatial understanding in scenarios characterized by severe occlusions and drastic viewpoint transitions. To this end, we propose WorldFly, a novel world-model-based VLA framework that employs a dual-branch coupled flow matching mechanism to jointly generate future video predictions and navigation actions, thereby explicitly guiding the agent's policy via spatial imagination. Extensive evaluations on our benchmark demonstrate that WorldFly outperforms other baselines, particularly in unseen environments, validating the effectiveness of integrating world models into embodied aerial agents.",
+      "highlights": {
+        "contribution": "提出 WorldFly:UAV 导航的 world-model-based VLA,搭配新的城市峡谷穿越基准评测空间理解。",
+        "innovation": "在 UAV VLA 里显式做未来视频预测来对抗遮挡和视角突变;双分支 flow matching 把视频生成与动作生成耦合。",
+        "method": "双分支耦合 flow matching 同时输出未来视频和动作;在自建 Urban Canyon Traversal Benchmark 上训练和评测。",
+        "results": "在新基准上超过其他 baselines,在 unseen 环境里优势更明显,具体数字摘要没给。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T13:23:05Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "video prediction"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 10.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06147v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06147v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06014",
+      "title": "PLAN-S: Bridging Planning with Latent Style Dynamics for Autonomous Driving World Models",
+      "authors": [
+        "Xiaoyun Qiu",
+        "Jingtao He",
+        "Yijie Chen",
+        "Yusong Huang",
+        "Haotian Wang",
+        "Yixuan Wang",
+        "Xinhu Zheng"
+      ],
+      "affiliations": [],
+      "summary": "自动驾驶 latent world model 直接从纠缠潜在变量出轨迹,风险、可驾驶性、风格都不显式。PLAN-S 在 LWM 和 planner 之间塞一层 style-conditioned 四通道语义代价图,用 attention-level 或 reward-level 接到 host planner 上。nuScenes 上 3s 碰撞率降 42%,L2 0.55m;NAVSIM 上 PDMS 89.4,各 host 都涨。",
+      "original_abstract": "Latent world models (LWMs) have strengthened end-to-end autonomous driving by forecasting compact scene dynamics for downstream planning. However, existing LWM-based planners usually generate trajectories directly from entangled latent representations. This compact latent-to-planner pathway lacks explicit modeling of risk, drivability, and diverse style preferences, making driving-style dynamics difficult to supervise, inspect, or modulate before a final trajectory is selected. We propose PLAN-S (PLANning with latent Style dynamics), a planner-facing bridge that addresses this compactness-controllability dilemma by decoding a style-conditioned, four-channel semantic cost map from the latent representation. The cost map is conditioned on ego state and driving style and is consumed up-stream of the planning decision through two host-side interfaces: attention-level fusion for regression planners and reward-level fusion for anchor-score planners. We validate PLAN-S on two architecturally distinct hosts, ResWorld on nuScenes and WoTE on NAVSIM, while keeping the host backbones frozen to isolate the contribution of the proposed bridge. On nuScenes, PLAN-S reduces L2 at every horizon over the baseline, with 0.55 m average L2 and a 42% relative reduction in the 3 s collision rate. On NAVSIM, the rule-cost variant reaches 89.4 Predictive Driver Model Score (PDMS), while the learned cost variant provides complementary gains on baseline-challenging scenes. Ablations show that the cost pathway contributes most directly to safer trajectory selection. Qualitative results further show that PLAN-S can produce diverse cost maps, with spatially consistent variations aligned to different driving styles.",
+      "highlights": {
+        "contribution": "提出 PLAN-S 在 LWM 和 planner 之间架一层 style-conditioned 语义代价图来解决紧凑潜变量难解释、难调控的问题。",
+        "innovation": "把驾驶风格、风险、可驾驶性显式解耦成 4 通道 cost map,而非全靠潜变量;兼容回归式和锚点式两类 planner。",
+        "method": "从 latent 解码 4 通道 cost map(条件:ego state + style),attention-level 接回归 planner、reward-level 接锚点 planner;在 ResWorld(nuScenes)和 WoTE(NAVSIM)冻结主干评测。",
+        "results": "nuScenes 平均 L2 0.55m,3s 碰撞率降 42%;NAVSIM 上 rule-cost 版 89.4 PDMS,learned cost 在挑战场景有互补提升。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T11:03:20Z",
+      "categories": [
+        "cs.AI",
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 10.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06014v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06014v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.05960",
+      "title": "Towards a Data Flywheel for Embodied Intelligence in Logistics",
+      "authors": [
+        "Anlan Yu",
+        "Zaishu Chen",
+        "Zhiqing Hong",
+        "Daqing Zhang"
+      ],
+      "affiliations": [],
+      "summary": "物流场景下的具身智能数据飞轮设想:把日常操作转成可复用数据,用世界模型给长尾包裹操作生成监督,部署反馈再回灌策略改进。初步成果 WM-DAgger 用世界模型合成 OOD 恢复数据来稳健化模仿学习。还在 ongoing,偏 framework 描述,实质实验少。",
+      "original_abstract": "Embodied intelligence is moving from laboratory demonstrations toward industrial deployment, with the logistics industry serving as a key application scenario. Learning-based policies offer a promising path beyond traditional perception-planning-control pipelines, but their scalability depends on how embodied data can be collected, organized, and reused. This research studies a data-centric framework for industrial embodied intelligence by constructing a logistics data flywheel. Our framework converts daily operations into reusable data assets, uses World Models to generate reliable supervision for long-tail parcel manipulation, and feeds deployment feedback back into policy improvement. As an initial result, \\textit{WM-DAgger} introduces a World-Model-based data aggregation framework that synthesizes out-of-distribution recovery data for robust imitation learning. Building on this result, ongoing work explores how large-scale in-the-wild multimodal data, including labeled human demonstrations, unlabeled operational videos, and system-level robot logs, can be aligned for policy learning and transformed into feedback for continual system improvement.",
+      "highlights": {
+        "contribution": "提出物流场景的具身数据飞轮框架,初步给出基于世界模型的数据聚合方法 WM-DAgger。",
+        "innovation": "把世界模型当作长尾包裹操作的数据生成器,而不是预测器或规划器;聚焦工业部署的数据闭环。",
+        "method": "WM-DAgger:用世界模型合成 OOD 恢复轨迹增强模仿学习;计划进一步对齐人类演示视频和系统日志做策略反馈。",
+        "results": "ongoing work,只给出 WM-DAgger 作为初步结果,没具体数字。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T09:58:55Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 5.5,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.05960v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.05960v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.05925",
+      "title": "Towards World Models in Biomedical Research",
+      "authors": [
+        "Guangyu Wang",
+        "Jingkun Yue",
+        "Siqi Zhang",
+        "Yu Liu",
+        "Xiaoyu Wang",
+        "Mingyuan Meng",
+        "Changwei Ji",
+        "Zongbo Han",
+        "Yulin Wang",
+        "Yang Yue",
+        "Frank Fu",
+        "Ting Chen",
+        "Song Wu",
+        "Ziwei Liu",
+        "Jiangning Song",
+        "Ming Li",
+        "Gao Huang",
+        "Xiaohong Liu",
+        "Athanasios Vasilakos",
+        "Xingcai Zhang",
+        "Ping Zhang",
+        "Yong Li"
+      ],
+      "affiliations": [],
+      "summary": "这是一篇 perspective/position 文章,主张把世界模型范式带进生物医学:学分子-细胞-组织-临床状态的潜在表征,加上干预条件下的动态预测,从而做虚拟细胞、虚拟病人、手术仿真。内容偏倡议,讨论了数据基建、评测基准、安全治理等需求。没有实验,跟 embodied 主线相关度有限但思想可借鉴。",
+      "original_abstract": "A central goal of biomedicine is to understand, predict and ultimately control the dynamic mechanisms by which biological systems respond to perturbations, disease progression and therapeutic intervention. Although foundation models and large language models have accelerated biomedical data interpretation, most current systems remain focused on static pattern recognition rather than prospective simulation of biological futures. Here we propose biomedical world models as a paradigm for AI-driven discovery. These models learn latent representations of molecular, cellular, tissue and clinical states, together with intervention-conditioned dynamics that allow future trajectories to be simulated before actions are taken. We discuss how biomedical world models could function as data engines, environment simulators and scientific planning substrates across applications including virtual cells, organoids, virtual patients and surgical simulation. We outline the data infrastructure, evaluation benchmarks, safety constraints and governance frameworks required. Biomedical world models may provide a foundation for simulation-guided, closed-loop and experimentally actionable biomedical discovery.",
+      "highlights": {
+        "contribution": "提出 biomedical world models 概念,把世界模型范式引入生物医学发现流程。",
+        "innovation": "把世界模型从机器人/视频领域拓展到分子-细胞-组织-临床这种多尺度生物医学状态。",
+        "method": "概念性框架:潜在生物状态表征 + 干预条件下的动态预测,讨论数据引擎、环境模拟器、规划基底三种角色。",
+        "results": "无实验,纯立论文章,讨论虚拟细胞、虚拟病人、手术仿真等应用蓝图。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T09:28:54Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 10.0,
+        "popularity": 5.5,
+        "quality": 5.5,
+        "recommendation": 5.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.05925v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.05925v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06473",
+      "title": "MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery",
+      "authors": [
+        "Shangheng Du",
+        "Xiangchao Yan",
+        "Jinxin Shi",
+        "Zongsheng Cao",
+        "Shiyang Feng",
+        "Zichen Liang",
+        "Boyuan Sun",
+        "Tianshuo Peng",
+        "Yifan Zhou",
+        "Xin Li",
+        "Jie Zhou",
+        "Liang He",
+        "Bo Zhang",
+        "Lei Bai"
+      ],
+      "affiliations": [],
+      "summary": "针对 LLM 自动 ML 工程的长程优化问题,MLEvolve 用 Progressive MCGS 扩展树搜索做跨分支信息共享,熵驱动调度从探索到 exploitation;Retrospective Memory 把冷启动知识库和动态全局记忆结合,再把策略规划和代码生成解耦。MLE-Bench 上 12h 预算就拿到平均奖牌率 SOTA;在数学算法发现任务上还超过 AlphaEvolve。",
+      "original_abstract": "Large language model (LLM) agents are increasingly applied to long-horizon tasks such as scientific discovery and machine learning engineering (MLE), where sustained self-evolution becomes a key capability. However, existing MLE agents suffer from inter-branch information isolation, memoryless search, and lack of hierarchical control, which together hinder long-horizon optimization. We present MLEvolve, an LLM-based self-evolving multi-agent framework for end-to-end machine learning algorithm discovery. By extending tree search to Progressive MCGS, MLEvolve enables cross-branch information flow through graph-based reference edges and gradually shifts the search from broad exploration to focused exploitation with an entropy-inspired progressive schedule. To allow the agent to evolve with accumulated experience, we introduce Retrospective Memory, which combines a cold-start domain knowledge base with a dynamic global memory for task-specific experience retrieval and reuse. For stable long-horizon iteration, we further decouple strategic planning from code generation with adaptive coding modes. Evaluation on MLE-Bench shows that MLEvolve achieves state-of-the-art performance across multiple dimensions including average medal rate and valid submission rate under a 12-hour budget (half the standard runtime). Moreover, MLEvolve also outperforms specialized algorithm discovery methods including AlphaEvolve on mathematical algorithm optimization tasks, demonstrating strong cross-domain generalization. Our code is available at https://github.com/InternScience/MLEvolve.",
+      "highlights": {
+        "contribution": "提出 MLEvolve 自进化多智能体框架解决 MLE agent 的跨分支隔离、无记忆搜索、缺乏层级控制问题。",
+        "innovation": "Progressive MCGS 让树搜索分支间共享信息;Retrospective Memory 让 agent 跨任务累积经验;策略规划与代码生成解耦。",
+        "method": "Progressive MCGS 跨分支图引用 + 熵驱动 explore→exploit 调度;冷启动知识库 + 动态全局 memory;adaptive coding mode 解耦规划与代码。",
+        "results": "MLE-Bench 在 12h(标准一半)预算下平均 medal rate 和 valid submission rate SOTA;在数学算法优化上还胜 AlphaEvolve;开源。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T17:55:59Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 10.0,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06473v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06473v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.05922",
+      "title": "Retrospective Harness Optimization: Improving LLM Agents via Self-Preference over Trajectory Rollouts",
+      "authors": [
+        "Wenbo Pan",
+        "Shujie Liu",
+        "Chin-Yew Lin",
+        "Jingying Zeng",
+        "Xianfeng Tang",
+        "Xiangyang Zhou",
+        "Yan Lu",
+        "Xiaohua Jia"
+      ],
+      "affiliations": [],
+      "summary": "现有 agent harness 优化都需要 ground-truth 验证集,实际部署里拿不到。RHO 只用历史轨迹做自监督优化:挑出一批难任务并行重做,通过 self-validation 和 self-consistency 分析,生成 harness 改动候选,用自我成对偏好选最好的。SWE-Bench Pro 上一轮就从 59% 涨到 78%,完全无外部 grading;还有效针对先前的失败模式。Agent 自我优化方向的实在工作。",
+      "original_abstract": "AI agents rely on a harness of skills, tools, and workflows to solve complex problems. Continually improving this harness is essential for adapting to new tasks. However, existing optimization methods typically require ground-truth validation sets, yet such labeled data is difficult to acquire in practical deployment settings. To address this problem, we introduce Retrospective Harness Optimization (RHO), a self-supervised method that optimizes the agent harness using only past trajectories. Specifically, RHO selects a diverse coreset of challenging tasks from past trajectories and re-solves them in parallel. The agent analyzes these rollouts using self-validation and self-consistency, then generates candidate harness updates and selects the most effective one by its own pairwise self-preference. We evaluate RHO across three diverse domains, spanning software engineering, technical work, and knowledge work. Notably, a single optimization round improves the pass rate on SWE-Bench Pro from 59% to 78% without any external grading. Furthermore, our analysis demonstrates that RHO effectively targets prior failure modes. As a result, the optimized harness alters the agent's behavior patterns and sustains higher accuracy during long-horizon sessions.",
+      "highlights": {
+        "contribution": "提出 Retrospective Harness Optimization,纯用历史轨迹无 ground-truth 优化 agent harness。",
+        "innovation": "用 self-validation + self-consistency + self-preference 三件套替代标注;把 harness 优化变成自监督闭环。",
+        "method": "从历史轨迹挑 diverse 难任务 coreset 并行 re-solve;self-validation/self-consistency 分析 rollouts;agent 自己生成 harness 改动并用 pairwise self-preference 选最优。",
+        "results": "SWE-Bench Pro 一轮从 59% 涨到 78%(无外部打分),长程任务保持高准确率,有效对症先前失败模式。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T09:26:00Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 10.0,
+        "popularity": 8.0,
+        "quality": 8.0,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.05922v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.05922v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06448",
+      "title": "Agent Memory: Characterization and System Implications of Stateful Long-Horizon Workloads",
+      "authors": [
+        "Yasmine Omri",
+        "Ziyu Gan",
+        "Zachary Broveak",
+        "Robin Geens",
+        "Zexue He",
+        "Alex Pentland",
+        "Marian Verhelst",
+        "Tsachy Weissman",
+        "Thierry Tambe"
+      ],
+      "affiliations": [],
+      "summary": "首篇系统性刻画 LLM 智能体 memory 系统的工作。提出四轴分类法,搭了 phase-aware profiler 把成本拆到 construction / retrieval / generation 三阶段,刻画了 10 个代表性 memory 系统在两个 benchmark suite 上的行为,给出 10 条系统设计建议。偏 system / infrastructure,对 agent memory 研究是个很好的参考。",
+      "original_abstract": "LLM agents are increasingly deployed on long-horizon tasks requiring sustained reasoning over extended interaction histories. Realizing this at scale requires agents to persistently store, retrieve, and update their own memory across sessions. A rich ecosystem of agent memory systems has emerged spanning flat retrieval, LLM-mediated extraction, consolidating fact stores, and agentic control flows. Yet, their system-level behavior remains uncharacterized. We present the first systems characterization of agent memory. First, we introduce a system-oriented taxonomy classifying agent memory systems along four axes. Second, we build a phase-aware profiling harness attributing cost to construction, retrieval, and generation. Third, we characterize ten representative systems across two benchmark suites, uncovering how design choices shift cost across the write and read paths. Finally, we derive 10 system recommendations covering construction scheduling, capability floors, amortization via query volume, freshness-latency tradeoffs, and fleet-scale management.",
+      "highlights": {
+        "contribution": "首次给 agent memory 系统做了系统级 characterization,包含分类法、profiler 和 10 条设计建议。",
+        "innovation": "从 system / cost 角度而非 NLP 性能角度看 memory,提出 write-path 和 read-path 的成本分摊视角。",
+        "method": "提出四轴分类法;phase-aware profiling harness 把成本归到 construction / retrieval / generation;在 10 个系统 + 2 个 benchmark suite 上测。",
+        "results": "给出 10 条覆盖 construction 调度、容量、查询摊销、新鲜度-延迟权衡、fleet 级管理的系统建议。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T17:44:18Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 10.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06448v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06448v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.05976",
+      "title": "The Self-Correction Illusion: LLMs Correct Others but Not Themselves",
+      "authors": [
+        "Kuan-Yen Chen",
+        "Fang-Yi Su",
+        "Jung-Hsien Chiang"
+      ],
+      "affiliations": [],
+      "summary": "很有意思的发现:LLM agent 不愿自我纠错其实是 chat template role label 的工件而非能力缺陷。同一段错话只要换个 role(从 thought 换成 user/tool/system memory),纠错率提升 23-93 个百分点,13 个 model-domain cell 里 10 个 p<0.001。作者据此设计了 prompt 结构干预,数学领域 memory role 最强、逻辑推理 user role 最强,不用训练不用改模型。",
+      "original_abstract": "Recent work shows that LLM agents struggle to correct errors in their own reasoning traces yet show markedly higher correction rates when identical claims appear under external sources. We ask whether this asymmetry reflects a capability deficit or a role-label artifact: does an agent's willingness to correct a wrong claim depend causally on the chat-template role that carries it, rather than on the claim's content? Our setup keeps the erroneous claim byte-identical across all conditions (SHA-256 verified) and varies only its wrapping role: the agent's own \\role{<thought>}, a \\role{user} message, a \\role{tool} response, or a \\role{system <memory>} block. Across 13 model-domain cells covering seven model families and three domains ($n{=}30$ paired tasks per cell), relabeling the claim from \\role{<thought>} to an external role lifts the explicit-correction rate by 23 to 93 percentage points, with 10 of 13 cells reaching $p{<}0.001$. Further experiments confirm that the effect is asymmetric, mechanistically decomposable, and robust across domains. The failure to self-correct is not a cognitive deficit; it is a chat-template artifact. We exploit this artifact by designing a prompt-structure-only intervention that requires no training and no model modification, with its strongest role label being domain-dependent: \\role{<memory>} dominates on math, while a plain \\role{user} message dominates on logical deduction.",
+      "highlights": {
+        "contribution": "证明 LLM agent 自我纠错失败是 chat template role label 的工件而非认知缺陷,并给出零训练干预方案。",
+        "innovation": "用 SHA-256 验证保持错误内容字节相同,只换 role 标签,清晰隔离 role 因素;首次把自纠错失败归因到 template artifact。",
+        "method": "保持错误声明字节恒同,改变其 role(<thought>/user/tool/<memory>);7 个模型族、3 个领域、13 个 cell、每 cell 30 对任务;再做 prompt-structure-only 干预。",
+        "results": "外置 role 让显式纠错率提升 23-93 个百分点,10/13 cell 达 p<0.001;干预效果有领域差异,数学靠 memory,逻辑靠 user。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T10:17:00Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 10.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.05976v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.05976v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06223",
+      "title": "From Reward-Hack Activations to Agentic Risk States: Context-Calibrated Mechanistic Monitoring in LLM Agents",
+      "authors": [
+        "Patrick Wilhelm",
+        "Odej Kao"
+      ],
+      "affiliations": [],
+      "summary": "研究 ReAct 智能体里的 reward hacking 监控。在 Gameable ALFWorld 和 WebShop 里用激活分数 + token 熵 + 决策上下文做联合监控。发现单看激活方向不行,光有 hack 激活不代表立刻会做坏事;熵和上下文特征联合估计风险更准,还能用 activation steering 减少 proxy exploit。属于 LLM agent safety/可解释方向。",
+      "original_abstract": "Language-model agents act through repeated cycles of observation, reasoning, and action selection, making safety monitoring depend on both internal model state and environment context. We study reward-hacking monitors in ReAct-style agents acting in Gameable ALFWorld and WebShop. Agents are instrumented with activation-based reward-hack scores, token-level entropy, and decision-context features. We find that adapters fine-tuned on \\textit{School-of-Reward-Hacks} dataset can transfer reward-hack tendencies into agentic action selection, especially when the environment exposes proxy-reward affordances. However, mitigating such behavior cannot rely on activation dynamics alone. High reward-hack activation identifies a latent policy state, but does not necessarily imply an immediate exploit action. Across next-step prediction tasks, entropy and context-calibrated internal features improve risk estimation over reward-hack activation alone. Activation-direction steering further reduces proxy-exploit behavior in selected mixed-adapter regimes. Overall, our results support context-calibrated internal monitoring for agents: reward-hack activation identifies a latent policy state, while entropy and decision context help determine when that state becomes risky action.",
+      "highlights": {
+        "contribution": "证明 reward-hack 监控不能只靠激活,必须用 context-calibrated 内部特征联合判断什么时候会真出问题。",
+        "innovation": "把 mechanistic interpretability 工具(激活方向 / token 熵)和 agent 决策上下文绑在一起做风险预测,而非单纯做激活探测。",
+        "method": "在 ReAct 智能体里植入激活分数 + token 熵 + 决策上下文特征;Gameable ALFWorld 和 WebShop 评测;用 School-of-Reward-Hacks 数据集 adapter 注入 hack 倾向;activation steering 做缓解。",
+        "results": "联合特征比单纯 activation 更好估风险;activation steering 在 mixed-adapter 设置下确实降 proxy exploit,具体数字摘要没给。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T14:34:31Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 10.0,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06223v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06223v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06462",
+      "title": "Benchmark Everything Everywhere All at Once",
+      "authors": [
+        "Shiyun Xiong",
+        "Dongming Wu",
+        "Peiwen Sun",
+        "Yuang Ai",
+        "Bokang Yang",
+        "Wencheng Han",
+        "Xiao-Hui Li",
+        "Xiangyu Yue"
+      ],
+      "affiliations": [],
+      "summary": "构建 benchmark 的 agent。Benchmark Agent 是一个全自主的 agentic 系统,自动跑完用户 query 分析、子任务设计、数据标注、质量控制全流程,产出 15 个跨文本、多模态、领域推理的 benchmark。用人评、LLM-as-judge、一致性检查证明质量,还顺手发现当前模型在某些领域推理上挂。",
+      "original_abstract": "Benchmarks are fundamental for evaluating and advancing LLMs and MLLMs by providing standardized and explicit measures of performance. However, their construction is labor-intensive and hard to reuse, raising concerns about sustainability and scalability. Moreover, existing benchmarks often quickly reach performance saturation after their release, resulting in insufficient discrimination among state-of-the-art models. To address these challenges, we introduce Benchmark Agent, a fully autonomous agentic system designed for benchmark building. Our framework orchestrates the complete benchmark construction pipeline, from user query analysis and subtask design to data annotation and quality control. To assess Benchmark Agent, we implement it to produce 15 representative benchmarks, spanning diverse evaluation scenarios, including text understanding, multimodal understanding, and domain-specific reasoning. Extensive experiments, including human evaluation, LLM-as-a-judge assessment, and consistency checks, demonstrate Benchmark Agent can generate high-quality benchmark samples with minimal human involvement. More importantly, through continual evaluation, we observe several insightful findings, including that current models struggle with certain domain-specific reasoning tasks. We believe that rapidly evolving benchmarks can contribute significantly to the research community. The preview and code will be publicly available at the demo page and code repository.",
+      "highlights": {
+        "contribution": "提出 Benchmark Agent 让 LLM/MLLM benchmark 的构建本身自动化,降低人力 + 持续刷新。",
+        "innovation": "把 benchmark construction 当 agentic 任务做端到端自动化,而非单纯做 question 生成。",
+        "method": "全自主 agent 流水线:query 分析 → 子任务设计 → 数据标注 → 质量控制;构建 15 个 benchmark 覆盖文本/多模态/领域推理。",
+        "results": "人评、LLM-as-judge、一致性检查显示样本质量好,发现现有模型在部分领域推理任务上吃力,代码 demo 公开。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T17:52:04Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 10.0,
+        "popularity": 6.5,
+        "quality": 6.5,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06462v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06462v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06011",
+      "title": "Merging model-based control with multi-agent reinforcement learning for multi-agent cooperative teaming strategies",
+      "authors": [
+        "Christian Llanes",
+        "Spencer W. Jensen",
+        "Samuel Coogan"
+      ],
+      "affiliations": [],
+      "summary": "把多智能体强化学习和模型预测控制(MPC)缝在一起:MARL 学合作策略处理离散稀疏奖励的长程规划,MPC 在短程提供安全可行动作。MA-AC-MPC 在追逃任务里用 evader 队 MPC vs MLP 对比,又做了无人机 + 全向轮车协同降落,真机硬件成功率 100% vs MLP 60%。机器人 / MARL 方向。",
+      "original_abstract": "In this work, we propose a framework that combines multi-agent reinforcement learning (MARL) with model-based control to achieve safe, dynamically feasible actions in cooperative multi-agent tasks. Multi-agent reinforcement learning provides the advantage of learning cooperative policies for multi-agent teams from discrete non-differentiable rewards in a long planning horizon. Model-predictive control is robust and offers safe, dynamically feasible actions in a fast replanning framework for short horizons. We propose an algorithm that extends actor-critic model predictive control for MARL which we refer to as multi-agent actor-critic model predictive control (MA-AC-MPC). We demonstrate the capabilities of this algorithm by applying it to a multi-agent pursuit-evasion scenario. Specifically, we compare the evader team's strategy using the MA-AC-MPC model and a multi-layer perceptron model (MA-AC-MLP). The pursuer team uses augmented proportional navigation as it is accepted as an advanced adversarial control law. We also provide an example with a heterogeneous environment where a drone and omni-wheeled rover cooperate to achieve repeatable and successful landing with 100% success rate in hardware for MA-AC-MPC compared to 60% for MA-AC-MLP. We demonstrate the robustness of the proposed MA-AC-MPC algorithm in hardware for both environments.",
+      "highlights": {
+        "contribution": "提出 MA-AC-MPC 把 actor-critic MPC 扩展到多智能体,实现安全可行又能学合作的长程策略。",
+        "innovation": "在 MARL 里直接嵌入 MPC 作 actor 内核,而不仅外置安全过滤;在异构多机器人任务上做硬件验证。",
+        "method": "actor-critic 框架中用 MPC 做策略表征;追逃场景中 evader 队比 MPC vs MLP,pursuer 用 PNG 律;无人机+全向轮车异构协同降落硬件实验。",
+        "results": "硬件实验上 MA-AC-MPC 协同降落 100% 成功率,MA-AC-MLP 60%,验证 MPC 嵌入的鲁棒性。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T11:01:00Z",
+      "categories": [
+        "cs.RO",
+        "cs.LG",
+        "cs.MA"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06011v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06011v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06025",
+      "title": "EGTR-Review: Efficient Evidence-Grounded Scientific Peer Review Generation via Multi-Agent Teacher Distillation",
+      "authors": [
+        "Xinpeng Qiu",
+        "Wang Yihu",
+        "Zhifeng Liu",
+        "Xiaochen Wang",
+        "Jimin Wang"
+      ],
+      "affiliations": [],
+      "summary": "做学术同行评审生成的 LLM 工作:多智能体老师做证据检索、结构化分解、验证推理,然后把推理轨迹和最终评审蒸馏给一个轻量学生模型,任务前缀做多任务学习,证据加权目标抑制弱监督。比 prompt、SFT、agentic baseline 都强,token 和推理时间也更低。属于 LLM 应用层。",
+      "original_abstract": "Scientific peer review generation has attracted increasing attention for reducing reviewing burdens and providing timely feedback. However, existing Large Language Model (LLM)-based methods often produce generic comments with insufficient evidence support and weak source traceability, while complex multi-agent systems incur high inference costs. To address these challenges, we propose EGTR-Review, an Evidence-Grounded and Traceable Review Generation framework via Multi-Agent Teacher Distillation. EGTR-Review first constructs a multi-agent teacher that performs structure-aware paper decomposition, key-element extraction, external scholarly evidence retrieval, evidence-state labeling, verification reasoning, and review synthesis. It then distills both intermediate reasoning trajectories and final review comments into a lightweight student model through task-prefix-driven multi-task learning. An evidence-weighted objective further reduces the influence of weak, missing, or non-verifiable supervision. Experiments on public peer-review datasets show that EGTR-Review (Student) outperforms strong prompt-based, fine-tuned, and structured/agentic baselines across automatic metrics, LLM-as-Judge evaluation, and human evaluation, while maintaining strong factual grounding and source traceability with substantially lower token consumption and inference time. Our code, prompts, configurations, and sample data are available on GitHub.",
+      "highlights": {
+        "contribution": "提出 EGTR-Review 把多智能体老师评审蒸馏成轻量学生,兼顾证据 grounding 和推理成本。",
+        "innovation": "把复杂多智能体评审 pipeline 蒸馏到单模型,并加 evidence-weighted 损失过滤弱监督;同时蒸馏中间推理轨迹。",
+        "method": "多智能体老师做结构分解、关键元素抽取、外部检索、证据标注、验证推理、评审合成;任务前缀多任务学习把全过程蒸到学生模型。",
+        "results": "在公开同行评审数据集上自动指标、LLM-as-Judge、人评全面优于 prompt/SFT/agentic baselines,token 和推理时间更低。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T11:17:40Z",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06025v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06025v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06399",
+      "title": "CollabSim: A CSCW-Grounded Methodology for Investigating Collaborative Competence of LLM Agents through Controlled Multi-Agent Experiments",
+      "authors": [
+        "Jiaju Chen",
+        "Bo Sun",
+        "Yuxuan Lu",
+        "Yun Wang",
+        "Dakuo Wang",
+        "Bingsheng Yao"
+      ],
+      "affiliations": [],
+      "summary": "用 CSCW(计算机支持的协同工作)理论做 LLM 多智能体协作能力的实证研究框架。CollabSim 提供可控的交互条件、动作级内部状态探针,把协作能力拆成建立 common ground、维持共享理解等几类。在四个 LLM 上跑实验,能区分条件效应和模型差异。偏 HCI/评测方向。",
+      "original_abstract": "Multi-agent systems (MAS) built on large language models have shown growing promise, with their effectiveness resting on agents' ability to coordinate through text-based channels much as human teams do. Yet recent study suggests that MAS often falter not because agents lack individual task-solving ability, but because they lack collaborative competence: the capacity to establish common ground, maintain shared task understanding, balance individual and collective incentives, and repair misalignment as interaction unfolds. Decades of research in Computer-Supported Cooperative Work have characterized these requirements for human teams coordinating under constrained communication, yet existing MAS evaluations focus mainly on task outcomes or single-agent proficiency in reasoning, planning, and tool use. To enable a systematic analysis of agents' collaborative competence in MAS, we introduce CollabSim, a configurable simulation framework that combines a theory-grounded definition of collaborative capabilities, controlled manipulation of interaction conditions, and action-level probing of agents' internal states. Experiments across four LLMs show that CollabSim can capture condition effects, separate model performance patterns, and reveal task-dependent effects of agent design.",
+      "highlights": {
+        "contribution": "提出 CollabSim 用 CSCW 理论作基础对 LLM 多智能体的协作能力做系统实证评测。",
+        "innovation": "首次把人类团队协作研究的 CSCW 框架移植到 MAS 评测,而非只看任务结果或单体能力。",
+        "method": "可配置仿真平台 + 理论驱动的协作能力定义 + 交互条件控制 + 动作级内部状态探针;在 4 个 LLM 上跑对比实验。",
+        "results": "能捕捉条件效应、分离模型表现模式、揭示任务依赖的设计效应,无 SOTA 类指标。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T17:06:22Z",
+      "categories": [
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 10.0,
+        "popularity": 5.0,
+        "quality": 6.0,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06399v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06399v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.05985",
+      "title": "Beyond Alignment: Value Diversity as a Collective Property in Multicultural Agent Systems",
+      "authors": [
+        "Shaoyang Xu",
+        "Jingshen Zhang",
+        "Long P. Hoang",
+        "Jinyuan Li",
+        "Wenxuan Zhang"
+      ],
+      "affiliations": [],
+      "summary": "提出 value diversity 作为多文化 multi-agent 系统的系统级评价轴,跟单体 alignment 互补。在 World Values Survey 上评 19 种文化 18 个 backbone,发现多样性跟 alignment 几乎无关、当前系统的多样性远低于人类社会、混合 backbone 能缩小差距但不消除;社交互动还会进一步驱动 consensus 同质化,在参与式预算案例上窄化决策广度。",
+      "original_abstract": "Multicultural multi-agent systems are increasingly deployed in globally diverse settings, where different agents are grounded in different cultural backgrounds. Existing cultural evaluation focuses on value alignment: how closely a single agent matches a target culture. Yet alignment is a per-agent property and cannot reveal whether a system, taken as a whole, preserves the cultural plurality it is meant to represent. We propose value diversity as a system-level evaluation axis for multicultural agent systems, defined through the dissimilarity between culturally conditioned agents' responses on a shared value survey. Using the World Values Survey, we evaluate 19 cultures and 18 backbone models across a wide range of system configurations. We find that diversity is largely uncorrelated with alignment, indicating that the two capture complementary system properties, and that current multicultural agent systems fall substantially below human societies in value diversity. Mixed-backbone systems narrow this gap but do not close it, and the gap persists across culture compositions and agent scales. Social interaction further erodes diversity by driving agents toward consensus, and a participatory budgeting case study shows that this homogenization narrows the breadth of collective decision-making. Together, our results establish value diversity as a distinct evaluation axis for multicultural multi-agent systems and reveal a persistent homogenization tendency in current LLM-based societies. Our code and data are publicly available at https://github.com/iNLP-Lab/MultiAgent-Diversity.",
+      "highlights": {
+        "contribution": "把 value diversity 立为多文化 MAS 的系统级评价轴,跟单体 alignment 互补。",
+        "innovation": "之前只看 per-agent alignment,这里转到 system-level 多样性度量,并实证发现两者不相关。",
+        "method": "在 World Values Survey 上对 19 个文化 × 18 个 backbone 模型做条件化打分;计算响应间不相似度作为多样性;参与式预算案例研究看社交互动后果。",
+        "results": "多样性与 alignment 几乎无关;当前系统远低于人类多样性;mixed-backbone 缩小差距但未消除;社交交互导致同质化窄化决策。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T10:26:33Z",
+      "categories": [
+        "cs.CL",
+        "cs.CY"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 3.5,
+        "recency": 10.0,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.05985v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.05985v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06261",
+      "title": "DAST: A VLM-LLM Framework for Cross-Interface Anomaly Detection in O-RAN",
+      "authors": [
+        "Francesco Spinelli",
+        "Esteban Municio",
+        "Pau Baguer",
+        "Gines Garcia-Aviles",
+        "Xavier Costa-Perez"
+      ],
+      "affiliations": [],
+      "summary": "O-RAN 网络的跨接口异常检测:把 KPI 时序转成可视化图,先 VLM 描述,再 LLM 对照 O-RAN 领域知识打分,最后 VLM 在高分辨率热图上验证可疑接口。在真实 O-RAN testbed 上 F1 0.910、Acc 0.843,超过 SOTA TSAD。属于网络/电信领域的 multi-agent 应用,跟 embodied 主线不相关。",
+      "original_abstract": "O-RAN enables a disaggregated baseband stack with programmable functions that communicate over standardized open interfaces. The same openness that enables multi-vendor composition also expands the attack surface across logically decoupled tiers that make up the compute continuum. Among these threats, Denial-of-Service and performance-degradation attacks, which account for the majority of catalogued O-RAN threats, are particularly difficult to detect. Traditional Time-Series Anomaly Detection (TSAD) methods fail in this new regime where labelled baselines are scarce, threats evolve faster than detectors can be retrained, and the high-dimensional multivariate telemetry overwhelms monolithic inference models. To address these challenges, we present DAST, a zero-shot multi-agent framework for cross-interface anomaly detection in O-RAN that chains a three-stage VLM $\\rightarrow$ LLM $\\rightarrow$ VLM pipeline. DAST converts multivariate KPI streams into visual representations, scores textual per-interface descriptions against O-RAN domain knowledge, and verifies suspects on high-resolution heatmaps to output the problematic interfaces, the anomalous time intervals, an indicative O-RAN WG11-aligned operational impact rating and the decision rationale. We evaluate DAST on real network traces collected from an O-RAN testbed under representative performance degradation scenarios, achieving 0.910 F1-Score and 0.843 Accuracy, outperforming state-of-the-art TSAD baselines.",
+      "highlights": {
+        "contribution": "提出 DAST 零样本多智能体框架,把 VLM-LLM-VLM 三段流水线用来做 O-RAN 跨接口异常检测。",
+        "innovation": "用 VLM 把多变量时序变成可视化让 LLM 看 + 领域知识 + 高分辨率热图复核,避开传统 TSAD 需要标注 baseline 的痛点。",
+        "method": "三段:VLM 把 KPI 流转成视觉表征 → LLM 用 O-RAN 领域知识打分 → VLM 在高分辨率热图上复核;输出问题接口、时段、影响等级。",
+        "results": "真实 O-RAN testbed 性能退化场景 F1 0.910、Accuracy 0.843,超过 SOTA TSAD baseline。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T15:05:04Z",
+      "categories": [
+        "cs.NI",
+        "cs.AI",
+        "cs.ET",
+        "cs.MA"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 2.5,
+        "recency": 10.0,
+        "popularity": 4.5,
+        "quality": 6.5,
+        "recommendation": 4.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06261v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06261v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.05952",
+      "title": "Learning of Robot Safety Policies via Adversarial Synthetic Scenarios",
+      "authors": [
+        "Nikolai Dorofeev",
+        "Alexey Odinokov",
+        "Rostislav Yavorskiy"
+      ],
+      "affiliations": [],
+      "summary": "构想阶段的位置文章:用 agentic gamification 框架做机器人安全策略学习。Red Team 构造危险场景,Blue Team 迭代加固安全策略,博弈式发掘高风险边界 case。把经典风险建模、对抗场景生成、现代学习结合起来。只有问题表述和架构提案,没有实验。",
+      "original_abstract": "In this work, we propose an agentic gamification framework for hazard-informed learning of robot safety policies through synthetic scenarios. We model scenario generation as an adversarial game between two agents: a Red Team that explores the space of potential failures by constructing hazardous situations, and a Blue Team that incrementally refines safety policies to prevent them. This iterative process enables efficient discovery of high-risk edge cases that are unlikely to be captured through random simulation or manual enumeration. By combining classical risk modeling with adversarial scenario generation and modern learning paradigms, this work provides a scalable pathway for embedding safety into Physical AI systems operating in complex real-world environments. The paper describes ongoing work. The contribution is a problem formulation and a proposed solution architecture.",
+      "highlights": {
+        "contribution": "提出红蓝队对抗式 agentic 框架来高效合成机器人安全训练场景。",
+        "innovation": "把对抗场景生成 + 风险建模 + 学习闭环组合,显式找 edge case 而非随机模拟。",
+        "method": "Red Team 智能体构造危险情境,Blue Team 智能体精炼安全策略;只给出框架,没具体模型实现。",
+        "results": "无实验,纯 ongoing work 的问题表述 + 架构提案。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T09:51:57Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 10.0,
+        "popularity": 4.0,
+        "quality": 4.5,
+        "recommendation": 4.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.05952v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.05952v1",
+      "venue": null
+    }
+  ],
+  "total": 25
+}

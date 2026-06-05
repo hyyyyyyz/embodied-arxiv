@@ -1,0 +1,454 @@
+[
+  {
+    "arxiv_id": "2606.06281",
+    "summary": "想用触觉做接触密集型操作，但不同触觉传感器频率差异大融合很难。作者把 RGB 相机、GelSight Mini 视觉触觉、Evetac 事件触觉用各自的 conv stem 编码再 transformer 融合，喂给 flow-matching 策略。5 个接触密集任务平均成功率 80%，纯视觉只有 31%，视觉+单触觉 54%；推理时即使没有 Evetac，多触觉共训练也能涨 10%+。",
+    "highlights": {
+      "contribution": "提出 MiTaS，把三种不同时间分辨率的视触觉传感器融进 flow-matching 模仿学习策略，解决接触密集任务。",
+      "innovation": "首次系统性融合 RGB+慢速视触觉+高频事件触觉，并证明多触觉共训练能在推理时不需要事件传感器也涨点。",
+      "method": "每个模态走自己的 conv stem，再用 transformer 融合为统一表征；下游 flow-matching policy 输出动作；分析注意力看不同传感器何时起作用。",
+      "results": "5 个接触任务平均 80% 成功率，远高于视觉基线 31% 和视触觉基线 54%；多触觉共训练带来 10%+ 增益。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": [
+      "TU Darmstadt"
+    ]
+  },
+  {
+    "arxiv_id": "2606.06292",
+    "summary": "机器人叠/熨布料因为褶皱遮挡看不清状态。作者用 Blender 生成自动标注的合成数据加少量真实数据训练褶皱+关键点检测器，再写了一套先扯褶皱、出角后再熨平的双手算法。关键点 MPE 1.76 像素，且不微调就能迁移到真实布料，在严重遮挡时比基线稳。",
+    "highlights": {
+      "contribution": "用合成数据训练的视觉系统驱动双手机器人完成折叠布料的展开和熨烫。",
+      "innovation": "Blender 自动标注合成管线 + 一套从褶皱抓点到角点抓点的状态机切换策略。",
+      "method": "CNN 做置换不变的关键点检测，YOLOv8+OpenCV 提褶皱抓点；双手机器人先沿褶皱拉伸，等角点露出来再切到关键点熨烫。",
+      "results": "关键点 MPE 1.7615 像素；零微调迁移到真实布料，遮挡和重折场景下优于基线。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06155",
+    "summary": "VLM 的语义空间和机器人控制之间一直有结构错配,作者通过加入 affordance（可操作性）作为中间表征来桥接两者。具体拆成三个子任务:Which2Act 找物体、Where2Act 找 2D 接触点、How2Act 推 3D 几何,塞进 Mixture-of-Transformer 用三阶段课程训练。仿真和真机上各种抓取任务表现都不错,还做了自动 affordance 标注的数据增广来缓解标签稀缺。",
+    "highlights": {
+      "contribution": "提出 AffordanceVLA,用结构化 affordance 预测作为感知到动作的中间表征,统一三种可操作性先验来提升 VLA 操作精度。",
+      "innovation": "不像以往 VLA 直接从 VLM 特征预测动作,而是显式把物体定位、2D 交互点、3D 几何拆开建模,并配以 MoT 多专家结构。",
+      "method": "Which2Act 做物体中心潜在预测,Where2Act 做 2D affordance map,How2Act 做 3D 几何推理,三个模块由 MoT 多专家承载,三阶段课程 + 自动数据增广解决标签稀缺。",
+      "results": "在仿真和真机多场景下取得 strong performance,但摘要没给具体数字,自称跨任务都很稳。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.05979",
+    "summary": "把 WAM(世界-动作模型)和 VLA(视觉-语言-动作)统一成 WLA:同时预测子任务文本、子目标图像和动作。骨干换成自回归 Transformer,世界专家负责物理动态、动作专家用 meta-query 隐式接收世界预测,推理时世界分支可关可开做 test-time scaling。2B 参数 5090 上 40ms/步,RoboTwin2.0 Clean 92.94%、RMBench 56.5% SOTA,还能从无动作的跨本体视频学新任务。",
+    "highlights": {
+      "contribution": "提出 World-Language-Action 这个新范式,把世界建模、语言推理、动作合成统一进一个 AR Transformer。",
+      "innovation": "相对 WAM 用扩散、VLA 用语言,这里改成 AR 预测下一个状态(语义意图 + 物理动态),并用 meta-query 让世界预测隐式驱动动作。",
+      "method": "AR Transformer 主干 + World Expert + Action Expert,用 meta-query 桥接;世界预测可在推理时打开做 test-time scaling;支持从无标动作的跨本体视频学。",
+      "results": "WLA-0 2B 激活参数,40ms/帧;RoboTwin2.0 Clean 92.94% 成功率,RMBench 56.5% 成功率,声称 SOTA。"
+    },
+    "scores": {
+      "relevance": 9.8,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.5,
+      "recommendation": 9.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06041",
+    "summary": "经典 iCEM 采样规划算法在堆叠、滑动这种复杂操作上扛不住,作者加了一层迁移学习,把简单上游任务里学到的 iCEM 参数迁到下游复杂任务,再用任务分解重设计奖励。仿真里成功率最高提 23%,Franka 真机堆叠也跑通了。整体是个比较传统的规划工程性改进。",
+    "highlights": {
+      "contribution": "提出 iCEM+TL 框架,通过参数迁移让采样规划在复杂操作任务上更高效。",
+      "innovation": "把进化算法 iCEM 跟迁移学习耦合,加 Reward Redesign 做任务分解,与纯学习类策略相比更轻量。",
+      "method": "上游任务训出 iCEM 关键参数,再迁到下游堆叠/滑动/上架任务;复杂任务再用 RR 拆奖励;Franka 真机验证。",
+      "results": "仿真成功率最高提 23%,Franka 堆叠真机验证可部署。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 4.5,
+      "quality": 6.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06049",
+    "summary": "航天器舱内机器人受能源约束严,扩散策略效果好但太耗电。作者把脉冲神经网络版的扩散策略(SDP)用 RL 优化,加了状态相关的延迟注入机制模拟生物神经延迟来处理微重力下的时空感知。在五个舱内任务上比 SOTA 成功率高、能耗低。比较细分的应用方向。",
+    "highlights": {
+      "contribution": "面向航天器舱内机器人,提出 L-SDPPO 让脉冲扩散策略在低能耗下达到高成功率。",
+      "innovation": "RL 直接优化 SDP,加 SDLI 状态依赖延迟注入针对微重力时空特征,这是脉冲 + 扩散 + RL 的少见组合。",
+      "method": "脉冲神经网络扩散策略 SDP,用 RL 算法做 policy optimization,SDLI 模块动态调节输入时序;在五个舱内日常任务上评测。",
+      "results": "舱门开启、容器封盖等五个任务上成功率和能耗都比 SOTA 操作方法好,具体数字摘要没给。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 4.0,
+      "quality": 6.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06245",
+    "summary": "VLA 一次性出动作在长程任务里太脆,显式 CoT 又慢又拗口。MPCoT 初始化 M 条潜在推理路径,做 K 步权重共享精炼后软聚合再解码动作;训练阶段用奖励信号(专家一致性、世界模型/VLM 进度、成功反馈)对齐路径打分器。保留原 8 步动作接口,不产生推理 token,LIBERO 和 CALVIN 长程任务上提升,ablation 验证深度宽度和奖励引导都有用。",
+    "highlights": {
+      "contribution": "提出 MPCoT 在 VLA 中做多路径潜在推理 + 奖励引导聚合,既不增加 token 又能 test-time scaling 长程控制。",
+      "innovation": "把 latent CoT 做成多路径并行 + 软聚合,而不是单链;训练阶段用执行奖励对齐路径偏好,与文字 CoT 完全分离。",
+      "method": "M 条潜在推理初始化 → K 步权重共享精炼 → 软聚合 → 动作解码;训练用 path-preference 损失结合专家一致性 / 世界模型进度 / 成功反馈打分。",
+      "results": "LIBERO 和 CALVIN 上长程任务提升,ablation 确认深度宽度、置信加权聚合、奖励引导监督各自有效,具体提升幅度摘要没给。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06418",
+    "summary": "训练用一步预测损失但部署要自回归 rollout 的场景(AR LM、流式生成、机器人策略)普遍有 train-test feedback 问题。作者提出 DoPr——把 Adam/Muon 的梯度预条件和 KFAC 的激活预条件合在一起,直接 drop-in 替换优化器就能提升下游任务表现,有意思的是 validation loss 不一定降。属于优化器方向的工作但被 robot policy 关键词捞到。",
+    "highlights": {
+      "contribution": "提出 DoPr 双预条件优化器,作为新设计轴专门缓解 test-time feedback 误差累积。",
+      "innovation": "把梯度预条件(Adam/Muon)和激活预条件(KFAC)结合,定位 TTF 问题而非通用收敛,挑战了 validation loss 的评价标准。",
+      "method": "在标准 Adam/Muon 之上叠加 activation-wise preconditioning,作为 drop-in 优化器干预;在 AR 语言建模、流生成、机器人策略学习等场景测。",
+      "results": "多种 TTF 场景下下游性能提升,但 validation loss 不一定降,具体数字摘要没给。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06491",
+    "summary": "现有 VLA 只能按演示里的固定速度跑,转移阶段该快不快、接触阶段该慢不慢。作者发现动作幅度本身就控制速度,于是做了两件事:数据侧 VSTA 把演示重新计时(合并/拆分动作),模型侧把速度作为条件输入。仿真和真机都能双向控速,还能配大模型动态加减速,默认 1x 也因更好的数据利用率而涨点。",
+    "highlights": {
+      "contribution": "TempoVLA 让 VLA 的执行速度变成可显式控制的条件,实现快/慢双向调节。",
+      "innovation": "首次系统处理 VLA 减速问题(之前都只关注加速),发现动作幅度直接对应速度并配套数据增广。",
+      "method": "VSTA:合并/拆分演示动作重定时得到不同速度数据;模型侧加速度条件输入;真机+仿真测;再接大模型动态决定速度。",
+      "results": "VSTA 重定时基本无误差,默认 1x 性能也涨,真机和仿真都能双向控速,具体数字摘要没给。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06147",
+    "summary": "无人机城市峡谷飞行时遮挡严重、视角突变,纯历史观测 VLA 容易翻车。作者搞了个 Urban Canyon Traversal Benchmark,又提了 WorldFly 用双分支耦合 flow matching 同时生成未来视频和导航动作,让 world model 的想象力显式引导策略。在新基准上比 baselines 强,尤其在未见过的环境里。",
+    "highlights": {
+      "contribution": "提出 WorldFly:UAV 导航的 world-model-based VLA,搭配新的城市峡谷穿越基准评测空间理解。",
+      "innovation": "在 UAV VLA 里显式做未来视频预测来对抗遮挡和视角突变;双分支 flow matching 把视频生成与动作生成耦合。",
+      "method": "双分支耦合 flow matching 同时输出未来视频和动作;在自建 Urban Canyon Traversal Benchmark 上训练和评测。",
+      "results": "在新基准上超过其他 baselines,在 unseen 环境里优势更明显,具体数字摘要没给。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.05925",
+    "summary": "这是一篇 perspective/position 文章,主张把世界模型范式带进生物医学:学分子-细胞-组织-临床状态的潜在表征,加上干预条件下的动态预测,从而做虚拟细胞、虚拟病人、手术仿真。内容偏倡议,讨论了数据基建、评测基准、安全治理等需求。没有实验,跟 embodied 主线相关度有限但思想可借鉴。",
+    "highlights": {
+      "contribution": "提出 biomedical world models 概念,把世界模型范式引入生物医学发现流程。",
+      "innovation": "把世界模型从机器人/视频领域拓展到分子-细胞-组织-临床这种多尺度生物医学状态。",
+      "method": "概念性框架:潜在生物状态表征 + 干预条件下的动态预测,讨论数据引擎、环境模拟器、规划基底三种角色。",
+      "results": "无实验,纯立论文章,讨论虚拟细胞、虚拟病人、手术仿真等应用蓝图。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 5.5,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.05960",
+    "summary": "物流场景下的具身智能数据飞轮设想:把日常操作转成可复用数据,用世界模型给长尾包裹操作生成监督,部署反馈再回灌策略改进。初步成果 WM-DAgger 用世界模型合成 OOD 恢复数据来稳健化模仿学习。还在 ongoing,偏 framework 描述,实质实验少。",
+    "highlights": {
+      "contribution": "提出物流场景的具身数据飞轮框架,初步给出基于世界模型的数据聚合方法 WM-DAgger。",
+      "innovation": "把世界模型当作长尾包裹操作的数据生成器,而不是预测器或规划器;聚焦工业部署的数据闭环。",
+      "method": "WM-DAgger:用世界模型合成 OOD 恢复轨迹增强模仿学习;计划进一步对齐人类演示视频和系统日志做策略反馈。",
+      "results": "ongoing work,只给出 WM-DAgger 作为初步结果,没具体数字。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 5.5,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06014",
+    "summary": "自动驾驶 latent world model 直接从纠缠潜在变量出轨迹,风险、可驾驶性、风格都不显式。PLAN-S 在 LWM 和 planner 之间塞一层 style-conditioned 四通道语义代价图,用 attention-level 或 reward-level 接到 host planner 上。nuScenes 上 3s 碰撞率降 42%,L2 0.55m;NAVSIM 上 PDMS 89.4,各 host 都涨。",
+    "highlights": {
+      "contribution": "提出 PLAN-S 在 LWM 和 planner 之间架一层 style-conditioned 语义代价图来解决紧凑潜变量难解释、难调控的问题。",
+      "innovation": "把驾驶风格、风险、可驾驶性显式解耦成 4 通道 cost map,而非全靠潜变量;兼容回归式和锚点式两类 planner。",
+      "method": "从 latent 解码 4 通道 cost map(条件:ego state + style),attention-level 接回归 planner、reward-level 接锚点 planner;在 ResWorld(nuScenes)和 WoTE(NAVSIM)冻结主干评测。",
+      "results": "nuScenes 平均 L2 0.55m,3s 碰撞率降 42%;NAVSIM 上 rule-cost 版 89.4 PDMS,learned cost 在挑战场景有互补提升。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06025",
+    "summary": "做学术同行评审生成的 LLM 工作:多智能体老师做证据检索、结构化分解、验证推理,然后把推理轨迹和最终评审蒸馏给一个轻量学生模型,任务前缀做多任务学习,证据加权目标抑制弱监督。比 prompt、SFT、agentic baseline 都强,token 和推理时间也更低。属于 LLM 应用层。",
+    "highlights": {
+      "contribution": "提出 EGTR-Review 把多智能体老师评审蒸馏成轻量学生,兼顾证据 grounding 和推理成本。",
+      "innovation": "把复杂多智能体评审 pipeline 蒸馏到单模型,并加 evidence-weighted 损失过滤弱监督;同时蒸馏中间推理轨迹。",
+      "method": "多智能体老师做结构分解、关键元素抽取、外部检索、证据标注、验证推理、评审合成;任务前缀多任务学习把全过程蒸到学生模型。",
+      "results": "在公开同行评审数据集上自动指标、LLM-as-Judge、人评全面优于 prompt/SFT/agentic baselines,token 和推理时间更低。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06223",
+    "summary": "研究 ReAct 智能体里的 reward hacking 监控。在 Gameable ALFWorld 和 WebShop 里用激活分数 + token 熵 + 决策上下文做联合监控。发现单看激活方向不行,光有 hack 激活不代表立刻会做坏事;熵和上下文特征联合估计风险更准,还能用 activation steering 减少 proxy exploit。属于 LLM agent safety/可解释方向。",
+    "highlights": {
+      "contribution": "证明 reward-hack 监控不能只靠激活,必须用 context-calibrated 内部特征联合判断什么时候会真出问题。",
+      "innovation": "把 mechanistic interpretability 工具(激活方向 / token 熵)和 agent 决策上下文绑在一起做风险预测,而非单纯做激活探测。",
+      "method": "在 ReAct 智能体里植入激活分数 + token 熵 + 决策上下文特征;Gameable ALFWorld 和 WebShop 评测;用 School-of-Reward-Hacks 数据集 adapter 注入 hack 倾向;activation steering 做缓解。",
+      "results": "联合特征比单纯 activation 更好估风险;activation steering 在 mixed-adapter 设置下确实降 proxy exploit,具体数字摘要没给。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06261",
+    "summary": "O-RAN 网络的跨接口异常检测:把 KPI 时序转成可视化图,先 VLM 描述,再 LLM 对照 O-RAN 领域知识打分,最后 VLM 在高分辨率热图上验证可疑接口。在真实 O-RAN testbed 上 F1 0.910、Acc 0.843,超过 SOTA TSAD。属于网络/电信领域的 multi-agent 应用,跟 embodied 主线不相关。",
+    "highlights": {
+      "contribution": "提出 DAST 零样本多智能体框架,把 VLM-LLM-VLM 三段流水线用来做 O-RAN 跨接口异常检测。",
+      "innovation": "用 VLM 把多变量时序变成可视化让 LLM 看 + 领域知识 + 高分辨率热图复核,避开传统 TSAD 需要标注 baseline 的痛点。",
+      "method": "三段:VLM 把 KPI 流转成视觉表征 → LLM 用 O-RAN 领域知识打分 → VLM 在高分辨率热图上复核;输出问题接口、时段、影响等级。",
+      "results": "真实 O-RAN testbed 性能退化场景 F1 0.910、Accuracy 0.843,超过 SOTA TSAD baseline。"
+    },
+    "scores": {
+      "relevance": 2.5,
+      "recency": 10,
+      "popularity": 4.5,
+      "quality": 6.5,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06399",
+    "summary": "用 CSCW(计算机支持的协同工作)理论做 LLM 多智能体协作能力的实证研究框架。CollabSim 提供可控的交互条件、动作级内部状态探针,把协作能力拆成建立 common ground、维持共享理解等几类。在四个 LLM 上跑实验,能区分条件效应和模型差异。偏 HCI/评测方向。",
+    "highlights": {
+      "contribution": "提出 CollabSim 用 CSCW 理论作基础对 LLM 多智能体的协作能力做系统实证评测。",
+      "innovation": "首次把人类团队协作研究的 CSCW 框架移植到 MAS 评测,而非只看任务结果或单体能力。",
+      "method": "可配置仿真平台 + 理论驱动的协作能力定义 + 交互条件控制 + 动作级内部状态探针;在 4 个 LLM 上跑对比实验。",
+      "results": "能捕捉条件效应、分离模型表现模式、揭示任务依赖的设计效应,无 SOTA 类指标。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06448",
+    "summary": "首篇系统性刻画 LLM 智能体 memory 系统的工作。提出四轴分类法,搭了 phase-aware profiler 把成本拆到 construction / retrieval / generation 三阶段,刻画了 10 个代表性 memory 系统在两个 benchmark suite 上的行为,给出 10 条系统设计建议。偏 system / infrastructure,对 agent memory 研究是个很好的参考。",
+    "highlights": {
+      "contribution": "首次给 agent memory 系统做了系统级 characterization,包含分类法、profiler 和 10 条设计建议。",
+      "innovation": "从 system / cost 角度而非 NLP 性能角度看 memory,提出 write-path 和 read-path 的成本分摊视角。",
+      "method": "提出四轴分类法;phase-aware profiling harness 把成本归到 construction / retrieval / generation;在 10 个系统 + 2 个 benchmark suite 上测。",
+      "results": "给出 10 条覆盖 construction 调度、容量、查询摊销、新鲜度-延迟权衡、fleet 级管理的系统建议。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06462",
+    "summary": "构建 benchmark 的 agent。Benchmark Agent 是一个全自主的 agentic 系统,自动跑完用户 query 分析、子任务设计、数据标注、质量控制全流程,产出 15 个跨文本、多模态、领域推理的 benchmark。用人评、LLM-as-judge、一致性检查证明质量,还顺手发现当前模型在某些领域推理上挂。",
+    "highlights": {
+      "contribution": "提出 Benchmark Agent 让 LLM/MLLM benchmark 的构建本身自动化,降低人力 + 持续刷新。",
+      "innovation": "把 benchmark construction 当 agentic 任务做端到端自动化,而非单纯做 question 生成。",
+      "method": "全自主 agent 流水线:query 分析 → 子任务设计 → 数据标注 → 质量控制;构建 15 个 benchmark 覆盖文本/多模态/领域推理。",
+      "results": "人评、LLM-as-judge、一致性检查显示样本质量好,发现现有模型在部分领域推理任务上吃力,代码 demo 公开。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 6.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06473",
+    "summary": "针对 LLM 自动 ML 工程的长程优化问题,MLEvolve 用 Progressive MCGS 扩展树搜索做跨分支信息共享,熵驱动调度从探索到 exploitation;Retrospective Memory 把冷启动知识库和动态全局记忆结合,再把策略规划和代码生成解耦。MLE-Bench 上 12h 预算就拿到平均奖牌率 SOTA;在数学算法发现任务上还超过 AlphaEvolve。",
+    "highlights": {
+      "contribution": "提出 MLEvolve 自进化多智能体框架解决 MLE agent 的跨分支隔离、无记忆搜索、缺乏层级控制问题。",
+      "innovation": "Progressive MCGS 让树搜索分支间共享信息;Retrospective Memory 让 agent 跨任务累积经验;策略规划与代码生成解耦。",
+      "method": "Progressive MCGS 跨分支图引用 + 熵驱动 explore→exploit 调度;冷启动知识库 + 动态全局 memory;adaptive coding mode 解耦规划与代码。",
+      "results": "MLE-Bench 在 12h(标准一半)预算下平均 medal rate 和 valid submission rate SOTA;在数学算法优化上还胜 AlphaEvolve;开源。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.05922",
+    "summary": "现有 agent harness 优化都需要 ground-truth 验证集,实际部署里拿不到。RHO 只用历史轨迹做自监督优化:挑出一批难任务并行重做,通过 self-validation 和 self-consistency 分析,生成 harness 改动候选,用自我成对偏好选最好的。SWE-Bench Pro 上一轮就从 59% 涨到 78%,完全无外部 grading;还有效针对先前的失败模式。Agent 自我优化方向的实在工作。",
+    "highlights": {
+      "contribution": "提出 Retrospective Harness Optimization,纯用历史轨迹无 ground-truth 优化 agent harness。",
+      "innovation": "用 self-validation + self-consistency + self-preference 三件套替代标注;把 harness 优化变成自监督闭环。",
+      "method": "从历史轨迹挑 diverse 难任务 coreset 并行 re-solve;self-validation/self-consistency 分析 rollouts;agent 自己生成 harness 改动并用 pairwise self-preference 选最优。",
+      "results": "SWE-Bench Pro 一轮从 59% 涨到 78%(无外部打分),长程任务保持高准确率,有效对症先前失败模式。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.05952",
+    "summary": "构想阶段的位置文章:用 agentic gamification 框架做机器人安全策略学习。Red Team 构造危险场景,Blue Team 迭代加固安全策略,博弈式发掘高风险边界 case。把经典风险建模、对抗场景生成、现代学习结合起来。只有问题表述和架构提案,没有实验。",
+    "highlights": {
+      "contribution": "提出红蓝队对抗式 agentic 框架来高效合成机器人安全训练场景。",
+      "innovation": "把对抗场景生成 + 风险建模 + 学习闭环组合,显式找 edge case 而非随机模拟。",
+      "method": "Red Team 智能体构造危险情境,Blue Team 智能体精炼安全策略;只给出框架,没具体模型实现。",
+      "results": "无实验,纯 ongoing work 的问题表述 + 架构提案。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 10,
+      "popularity": 4.0,
+      "quality": 4.5,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.05976",
+    "summary": "很有意思的发现:LLM agent 不愿自我纠错其实是 chat template role label 的工件而非能力缺陷。同一段错话只要换个 role(从 thought 换成 user/tool/system memory),纠错率提升 23-93 个百分点,13 个 model-domain cell 里 10 个 p<0.001。作者据此设计了 prompt 结构干预,数学领域 memory role 最强、逻辑推理 user role 最强,不用训练不用改模型。",
+    "highlights": {
+      "contribution": "证明 LLM agent 自我纠错失败是 chat template role label 的工件而非认知缺陷,并给出零训练干预方案。",
+      "innovation": "用 SHA-256 验证保持错误内容字节相同,只换 role 标签,清晰隔离 role 因素;首次把自纠错失败归因到 template artifact。",
+      "method": "保持错误声明字节恒同,改变其 role(<thought>/user/tool/<memory>);7 个模型族、3 个领域、13 个 cell、每 cell 30 对任务;再做 prompt-structure-only 干预。",
+      "results": "外置 role 让显式纠错率提升 23-93 个百分点,10/13 cell 达 p<0.001;干预效果有领域差异,数学靠 memory,逻辑靠 user。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.05985",
+    "summary": "提出 value diversity 作为多文化 multi-agent 系统的系统级评价轴,跟单体 alignment 互补。在 World Values Survey 上评 19 种文化 18 个 backbone,发现多样性跟 alignment 几乎无关、当前系统的多样性远低于人类社会、混合 backbone 能缩小差距但不消除;社交互动还会进一步驱动 consensus 同质化,在参与式预算案例上窄化决策广度。",
+    "highlights": {
+      "contribution": "把 value diversity 立为多文化 MAS 的系统级评价轴,跟单体 alignment 互补。",
+      "innovation": "之前只看 per-agent alignment,这里转到 system-level 多样性度量,并实证发现两者不相关。",
+      "method": "在 World Values Survey 上对 19 个文化 × 18 个 backbone 模型做条件化打分;计算响应间不相似度作为多样性;参与式预算案例研究看社交互动后果。",
+      "results": "多样性与 alignment 几乎无关;当前系统远低于人类多样性;mixed-backbone 缩小差距但未消除;社交交互导致同质化窄化决策。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06011",
+    "summary": "把多智能体强化学习和模型预测控制(MPC)缝在一起:MARL 学合作策略处理离散稀疏奖励的长程规划,MPC 在短程提供安全可行动作。MA-AC-MPC 在追逃任务里用 evader 队 MPC vs MLP 对比,又做了无人机 + 全向轮车协同降落,真机硬件成功率 100% vs MLP 60%。机器人 / MARL 方向。",
+    "highlights": {
+      "contribution": "提出 MA-AC-MPC 把 actor-critic MPC 扩展到多智能体,实现安全可行又能学合作的长程策略。",
+      "innovation": "在 MARL 里直接嵌入 MPC 作 actor 内核,而不仅外置安全过滤;在异构多机器人任务上做硬件验证。",
+      "method": "actor-critic 框架中用 MPC 做策略表征;追逃场景中 evader 队比 MPC vs MLP,pursuer 用 PNG 律;无人机+全向轮车异构协同降落硬件实验。",
+      "results": "硬件实验上 MA-AC-MPC 协同降落 100% 成功率,MA-AC-MLP 60%,验证 MPC 嵌入的鲁棒性。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  }
+]
