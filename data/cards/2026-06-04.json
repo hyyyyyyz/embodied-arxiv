@@ -362,92 +362,92 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.05922",
-    "summary": "现有 agent harness 优化都需要 ground-truth 验证集,实际部署里拿不到。RHO 只用历史轨迹做自监督优化:挑出一批难任务并行重做,通过 self-validation 和 self-consistency 分析,生成 harness 改动候选,用自我成对偏好选最好的。SWE-Bench Pro 上一轮就从 59% 涨到 78%,完全无外部 grading;还有效针对先前的失败模式。Agent 自我优化方向的实在工作。",
+    "arxiv_id": "2606.05873",
+    "summary": "人形机器人爬梯子一直是难题——脚踏点稀疏、要全身协调、还对感知敏感。LadderMan 用两阶段流水线：先从单条参考动作里训出多个爬梯专家，再蒸馏成统一的深度视觉运动策略，并借视觉基础模型弥合 sim-to-real 深度差距。还额外训了一个双 agent 操作策略，可以在梯上做遥操作操控。实测零样本迁移真机，能爬各种几何形状的梯子并完成梯上操作任务。",
     "highlights": {
-      "contribution": "提出 Retrospective Harness Optimization,纯用历史轨迹无 ground-truth 优化 agent harness。",
-      "innovation": "用 self-validation + self-consistency + self-preference 三件套替代标注;把 harness 优化变成自监督闭环。",
-      "method": "从历史轨迹挑 diverse 难任务 coreset 并行 re-solve;self-validation/self-consistency 分析 rollouts;agent 自己生成 harness 改动并用 pairwise self-preference 选最优。",
-      "results": "SWE-Bench Pro 一轮从 59% 涨到 78%(无外部打分),长程任务保持高准确率,有效对症先前失败模式。"
+      "contribution": "首个统一的人形机器人感知式爬梯+梯上操控系统",
+      "innovation": "混合运动跟踪学多专家 → 蒸馏成深度视觉运动策略；双 agent 同时管爬梯和操控",
+      "method": "两阶段：阶段1多专家混合运动跟踪；阶段2 hybrid IL+RL 蒸馏为深度策略；视觉基础模型做 sim2real;双 agent 形式训操控策略",
+      "results": "零样本真机迁移，跨多种梯子几何形状鲁棒爬升，并能完成多种梯上操控任务"
     },
     "scores": {
-      "relevance": 7.0,
-      "recency": 10,
-      "popularity": 8.0,
-      "quality": 8.0,
-      "recommendation": 8.0
+      "relevance": 9,
+      "recency": 9.5,
+      "popularity": 8,
+      "quality": 9,
+      "recommendation": 9
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.05952",
-    "summary": "构想阶段的位置文章:用 agentic gamification 框架做机器人安全策略学习。Red Team 构造危险场景,Blue Team 迭代加固安全策略,博弈式发掘高风险边界 case。把经典风险建模、对抗场景生成、现代学习结合起来。只有问题表述和架构提案,没有实验。",
+    "arxiv_id": "2606.05847",
+    "summary": "LLM 文本生成分子时常给出无效 SMILES。作者认为不该只追求「语法合法」而应「身份保真」——既恢复化学合法性又保留描述里隐含的结构线索。提出 AMREC：用分子感知的不匹配追踪 + 扩展候选探索 + 轨迹级选择，避免贪心单候选弯路。在 ChEBI-20 三个 backbone 的无效草稿上，结构、精确匹配、字符串级指标都最优。",
     "highlights": {
-      "contribution": "提出红蓝队对抗式 agentic 框架来高效合成机器人安全训练场景。",
-      "innovation": "把对抗场景生成 + 风险建模 + 学习闭环组合,显式找 edge case 而非随机模拟。",
-      "method": "Red Team 智能体构造危险情境,Blue Team 智能体精炼安全策略;只给出框架,没具体模型实现。",
-      "results": "无实验,纯 ongoing work 的问题表述 + 架构提案。"
+      "contribution": "把无效 SMILES 修复重新定义为「身份保真的分子恢复」任务",
+      "innovation": "分子感知的不匹配追踪 + 多候选轨迹级选择，跳出贪心单候选",
+      "method": "agentic RDKit 编辑工具 + 候选扩展 + 轨迹级排序，识别描述里的关键结构线索",
+      "results": "ChEBI-20 三种 backbone 上结构/精确/字符串指标全面领先现有修复方法"
     },
     "scores": {
-      "relevance": 4.5,
-      "recency": 10,
-      "popularity": 4.0,
-      "quality": 4.5,
-      "recommendation": 4.5
+      "relevance": 6,
+      "recency": 9.5,
+      "popularity": 5,
+      "quality": 7,
+      "recommendation": 6
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.05976",
-    "summary": "很有意思的发现:LLM agent 不愿自我纠错其实是 chat template role label 的工件而非能力缺陷。同一段错话只要换个 role(从 thought 换成 user/tool/system memory),纠错率提升 23-93 个百分点,13 个 model-domain cell 里 10 个 p<0.001。作者据此设计了 prompt 结构干预,数学领域 memory role 最强、逻辑推理 user role 最强,不用训练不用改模型。",
+    "arxiv_id": "2606.05860",
+    "summary": "传统 AutoML 搜索空间预定义、难以适配多样数据。GenAutoML 让 LLM 当神经架构师，把自然语言需求映射成可执行 PyTorch 实现。框架带沙箱反思循环和签名感知运行时保证一致性与安全，还配 Dyn-RevIN 应对非平稳数据。ETTh1/ETTm1/Weather 上能动态生成针对数据特征的架构，生成的 WaveInterferenceNet 推理延迟 < 0.01ms/样本同时保持竞争力，适合边缘部署。",
     "highlights": {
-      "contribution": "证明 LLM agent 自我纠错失败是 chat template role label 的工件而非认知缺陷,并给出零训练干预方案。",
-      "innovation": "用 SHA-256 验证保持错误内容字节相同,只换 role 标签,清晰隔离 role 因素;首次把自纠错失败归因到 template artifact。",
-      "method": "保持错误声明字节恒同,改变其 role(<thought>/user/tool/<memory>);7 个模型族、3 个领域、13 个 cell、每 cell 30 对任务;再做 prompt-structure-only 干预。",
-      "results": "外置 role 让显式纠错率提升 23-93 个百分点,10/13 cell 达 p<0.001;干预效果有领域差异,数学靠 memory,逻辑靠 user。"
+      "contribution": "LLM 驱动的时序 AutoML agent 框架，自动生成超轻量边缘模型",
+      "innovation": "沙箱反思循环 + 签名感知运行时 + 动态可逆实例归一化",
+      "method": "LLM 作架构师→PyTorch 实现→沙箱反思迭代修正→Dyn-RevIN 处理非平稳",
+      "results": "ETTh1/ETTm1/Weather 上生成 WaveInterferenceNet，<0.01ms/样本推理延迟"
     },
     "scores": {
-      "relevance": 5.5,
-      "recency": 10,
-      "popularity": 7.0,
-      "quality": 7.5,
-      "recommendation": 7.0
+      "relevance": 5,
+      "recency": 9.5,
+      "popularity": 5,
+      "quality": 6,
+      "recommendation": 5
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.05985",
-    "summary": "提出 value diversity 作为多文化 multi-agent 系统的系统级评价轴,跟单体 alignment 互补。在 World Values Survey 上评 19 种文化 18 个 backbone,发现多样性跟 alignment 几乎无关、当前系统的多样性远低于人类社会、混合 backbone 能缩小差距但不消除;社交互动还会进一步驱动 consensus 同质化,在参与式预算案例上窄化决策广度。",
+    "arxiv_id": "2606.05872",
+    "summary": "传统 agent 评估只看任务成功率/奖励/延迟/成本，忽略了 agent 行为本身——是探索过度还是重复僵化、工具用得怎样、不确定性是否随时间下降。EEA 框架用熵来度量 agent 决策过程结构：动作熵、轨迹熵、工具熵、信息增益、探索效率、鲁棒性熵六个指标。配套 Python 实现可接 LangChain、Google ADK、自定义 agent loop 和观测追踪。",
     "highlights": {
-      "contribution": "把 value diversity 立为多文化 MAS 的系统级评价轴,跟单体 alignment 互补。",
-      "innovation": "之前只看 per-agent alignment,这里转到 system-level 多样性度量,并实证发现两者不相关。",
-      "method": "在 World Values Survey 上对 19 个文化 × 18 个 backbone 模型做条件化打分;计算响应间不相似度作为多样性;参与式预算案例研究看社交互动后果。",
-      "results": "多样性与 alignment 几乎无关;当前系统远低于人类多样性;mixed-backbone 缩小差距但未消除;社交交互导致同质化窄化决策。"
+      "contribution": "用熵刻画 agent 行为模式的轻量级补充评估框架",
+      "innovation": "六维熵指标体系（动作/轨迹/工具/信息增益/探索效率/鲁棒性熵）",
+      "method": "对 agent 决策轨迹计算各类熵；提供与 LangChain/ADK 集成的 Python 库",
+      "results": "提出指标体系并给出可用实现，作为传统指标的补充而非替代"
     },
     "scores": {
-      "relevance": 3.5,
-      "recency": 10,
-      "popularity": 5.5,
-      "quality": 6.5,
-      "recommendation": 5.5
+      "relevance": 6,
+      "recency": 9.5,
+      "popularity": 5,
+      "quality": 5,
+      "recommendation": 5
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.06011",
-    "summary": "把多智能体强化学习和模型预测控制(MPC)缝在一起:MARL 学合作策略处理离散稀疏奖励的长程规划,MPC 在短程提供安全可行动作。MA-AC-MPC 在追逃任务里用 evader 队 MPC vs MLP 对比,又做了无人机 + 全向轮车协同降落,真机硬件成功率 100% vs MLP 60%。机器人 / MARL 方向。",
+    "arxiv_id": "2606.05885",
+    "summary": "长时序 LLM agent 在稀疏延迟奖励下难做信用分配。GiGPO 用 anchor 状态做 step-level advantage，但作者指出 rollout 有限时罕见幸运动作会拿到过大 advantage，导致 anchor 偏差和后期震荡。提出 ECPO：用 Evidence-Calibrated Action Advantage 按 canonical action 分组并缩小低计数估计，加 Variance-Gated Credit Weighting 抑制 within-action 噪声主导的 anchor。ALFWorld/WebShop 上 Qwen2.5-1.5B 比 GiGPO 提 +5.2/+7.3 成功分，开销仅 +0.1%。",
     "highlights": {
-      "contribution": "提出 MA-AC-MPC 把 actor-critic MPC 扩展到多智能体,实现安全可行又能学合作的长程策略。",
-      "innovation": "在 MARL 里直接嵌入 MPC 作 actor 内核,而不仅外置安全过滤;在异构多机器人任务上做硬件验证。",
-      "method": "actor-critic 框架中用 MPC 做策略表征;追逃场景中 evader 队比 MPC vs MLP,pursuer 用 PNG 律;无人机+全向轮车异构协同降落硬件实验。",
-      "results": "硬件实验上 MA-AC-MPC 协同降落 100% 成功率,MA-AC-MLP 60%,验证 MPC 嵌入的鲁棒性。"
+      "contribution": "为长时序 LLM agent RL 提出无 critic 的证据校准 step 级信用分配方法",
+      "innovation": "Evidence-Calibrated Action Advantage + Variance-Gated Credit Weighting 抑制 anchor 偏差",
+      "method": "按 canonical action 分组 rollout 收缩低计数 advantage；按 within-action 方差加权抑制噪声 anchor",
+      "results": "ALFWorld/WebShop Qwen2.5-1.5B 比 GiGPO 提 +5.2/+7.3 成功分，仅 +0.1% 开销"
     },
     "scores": {
-      "relevance": 5.0,
-      "recency": 10,
-      "popularity": 5.0,
-      "quality": 7.0,
-      "recommendation": 6.0
+      "relevance": 9,
+      "recency": 9.5,
+      "popularity": 7,
+      "quality": 8,
+      "recommendation": 8
     },
     "affiliations": []
   }

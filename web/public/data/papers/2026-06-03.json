@@ -2,6 +2,46 @@
   "date": "2026-06-03",
   "papers": [
     {
+      "arxiv_id": "2606.05468",
+      "title": "FlowPRO: Reward-Free Reinforced Fine-Tuning of Flow-Matching VLAs via Proximalized Preference Optimization",
+      "authors": [
+        "Yihao Wu",
+        "He Zhang",
+        "Junbo Tan",
+        "Xueqian Wang",
+        "Zhengyou Zhang"
+      ],
+      "affiliations": [],
+      "summary": "针对 VLA 模型部署难、奖励难设计的痛点，作者提出 FlowPRO：一个无奖励的离线强化微调框架，专门给 flow-matching 动作头用。核心是 RPRO 目标函数（对比优化 + 近端正则）防止奖励黑客，再配合遥操作「干预-回滚」自动产生正负轨迹对。在 4 个长程双臂任务上比 4 个基线全面领先，成功率最高。",
+      "original_abstract": "Post-training Vision-Language-Action (VLA) models into policies that can be reliably deployed on real robots remains a major bottleneck. SFT and DAgger exploit failure signals only indirectly, and reward-based RL is bottlenecked by the difficulty of real-world reward design and of training reliable critics. We present FlowPRO, a reward-free offline reinforced fine-tuning framework for flow-matching VLAs. Algorithmically, we propose RPRO (Robotic Flow-matching Proximalized Preference Optimization), a preference-optimization objective tailored to the flow-matching action head of VLA models. RPRO pairs a contrastive optimizer with an explicit proximal regularizer that anchors the absolute magnitude of the implicit reward, thereby eliminating the reward-hacking failure mode of plain Flow-DPO. On the data side, a teleoperated intervention-and-rollback paradigm produces naturally paired positive and negative trajectories $(τ^w, τ^l)$ on a real robot from a single operator action; a Smooth Interpolation procedure, combined with batch mixing, then converts these sparse corrections into dense per-state supervision while preserving the base policy's capabilities. On four long-horizon bimanual tasks, FlowPRO attains the highest success rate, outperforming four representative baselines, and ablations confirm the contribution of each loss component.",
+      "highlights": {
+        "contribution": "首个面向 flow-matching VLA 的无奖励偏好优化后训练框架 FlowPRO",
+        "innovation": "近端正则锚定隐式奖励幅度，消除 Flow-DPO 的奖励黑客；干预-回滚范式让单人单次操作产出成对正负样本",
+        "method": "RPRO 偏好损失 + Smooth Interpolation 把稀疏修正稠密化为逐状态监督，配合 batch mixing 保留原策略能力",
+        "results": "4 个长程双臂任务成功率第一，消融验证每项损失组件均有效"
+      },
+      "images": [],
+      "published_date": "2026-06-03T21:47:43Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model"
+      ],
+      "scores": {
+        "relevance": 10.0,
+        "recency": 9.0,
+        "popularity": 6.0,
+        "quality": 8.0,
+        "recommendation": 9.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.05468v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.05468v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.04708",
       "title": "VISTA: Vision-Grounded and Physics-Validated Adaptation of UMI data for VLA Training",
       "authors": [
@@ -445,6 +485,52 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.05254",
+      "title": "Flash-WAM: Modality-Aware Distillation for World Action Models",
+      "authors": [
+        "Arman Akbari",
+        "Ci Zhang",
+        "Arash Akbari",
+        "Lin Zhao",
+        "Yixiao Chen",
+        "Weiwei Chen",
+        "Xuan Zhang",
+        "Geng Yuan",
+        "Yanzhi Wang"
+      ],
+      "affiliations": [],
+      "summary": "世界-动作模型 (WAM) 联合扩散生成视频+动作效果好但要几十步去噪，根本没法实时控制。直接用单模态步蒸馏会崩，因为视频和动作流的 SNR 噪声调度差太多。Flash-WAM 给两条流分别配「对噪声体质」的一致性函数：动作用线性梯度缩放、视频用方差保持。在 LingBot-VA 上压到单步推理，RoboTwin 2.0 延迟从 8.1s 降到 348ms（23× 加速），成功率几乎不掉，真机 Unitree G1 也从 24% 救回 60%。",
+      "original_abstract": "World-action models (WAMs) jointly generate future video and robot actions through iterative diffusion, achieving strong performance on manipulation benchmarks but requiring tens of denoising steps, a cost that precludes real-time control. Step distillation has emerged as the natural remedy, but off-the-shelf methods break down in the joint video-action setting because video and action streams use different SNR-shifted noise schedules and reach training with substantially different marginal noise distributions, an asymmetry that single-modality distillation methods cannot accommodate. We introduce \\textbf{Flash-WAM}, a modality-aware step-distillation framework inspired by consistency distillation that selects the consistency function for each modality to match its noise regime: a linear-gradient-scaling parametrization for the action stream's low-noise regime, paired with a variance-preserving parametrization for the video stream's high-noise regime, grounded in a structural analysis of the consistency-function family that characterizes the achievable gradient scaling under the consistency boundary condition. Instantiated on LingBot-VA, Flash-WAM compresses inference to a single step in each modality. On RoboTwin 2.0, this reduces per-chunk latency from $8.1$ seconds to $348$ ms on NVIDIA L40S, a $23{\\times}$ speedup that enables real-time inference. Flash-WAM preserves task success on simulation benchmarks ($85.5\\%$ RoboTwin 2.0, $95.7\\%$ LIBERO) and substantially recovers real-world performance ($60\\%$ average on a Unitree G1 humanoid robot), while naive consistency distillation drops to $24\\%$ at the same step budget.",
+      "highlights": {
+        "contribution": "首个模态感知的 WAM 步蒸馏框架，将联合视频-动作扩散压到单步实时推理",
+        "innovation": "基于一致性边界条件的结构分析，为不同 SNR 噪声体质的模态选择不同一致性函数族",
+        "method": "动作流走线性梯度缩放参数化（低噪），视频流走方差保持参数化（高噪），统一在 consistency distillation 框架下",
+        "results": "RoboTwin 2.0 延迟 8.1s→348ms (23×)，仿真成功率 85.5%/95.7%，G1 真机 60% vs naive 24%"
+      },
+      "images": [],
+      "published_date": "2026-06-03T15:29:57Z",
+      "categories": [
+        "cs.LG",
+        "cs.CV",
+        "cs.RO"
+      ],
+      "matched_domain": "WAM",
+      "matched_keywords": [
+        "world action model",
+        "wam "
+      ],
+      "scores": {
+        "relevance": 10.0,
+        "recency": 9.0,
+        "popularity": 7.0,
+        "quality": 9.0,
+        "recommendation": 9.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.05254v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.05254v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.05102",
       "title": "ZipSplat: Fewer Gaussians, Better Splats",
       "authors": [
@@ -530,6 +616,48 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.05035v1",
       "arxiv_url": "https://arxiv.org/abs/2606.05035v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.05491",
+      "title": "Unpaired RGB-Thermal Gaussian-Splatting Using Visual Geometric Transformers",
+      "authors": [
+        "Jean Cordonnier",
+        "Chenghao Xu",
+        "Olga Fink",
+        "Malcolm Mielle"
+      ],
+      "affiliations": [],
+      "summary": "RGB-热成像多模态 NVS 通常依赖严格配对标定，扩展性差。本文用 VGGT 这个 3D 前馈 Transformer 分别估计两模态的相机位姿，再用跨模态特征匹配器 + Procrustes 对齐两套位姿，从而支持非配对输入。配合多模态 3DGS 直接从未配对 RGB 和热图像学习，热视图合成 SOTA 同时保持 RGB 保真度，还顺手提了个跨模态一致性 benchmark。",
+      "original_abstract": "Multi-modal novel view synthesis (NVS) combining RGB and thermal imagery enables precise 3D scene reconstruction with visual and thermal information. However, existing methods typically rely on precisely calibrated RGB-thermal image pairs or stereo setups, limiting scalability and practical deployment. To address this, we introduce a framework for unpaired RGB-thermal NVS that leverages VGGT, a 3D feed-forward transformer architecture, to independently estimate camera poses for each modality. The pose sets are then aligned using the Procrustes algorithm with a cross-modal feature matcher, enabling joint registration without paired calibration. Building on this alignment, we further propose a multi-modal 3D Gaussian Splatting approach that learns directly from unpaired RGB and thermal images. Experiments on diverse scenes demonstrate that our method achieves competitive performance in thermal view synthesis while maintaining RGB fidelity. Moreover, we show that existing reconstruction approaches can produce modality-specific reconstructions that lack cross-modal consistency. We thus introduce a benchmarking framework to rigorously evaluate both per-modality image synthesis and the multi-modal coherence of reconstructed scenes.",
+      "highlights": {
+        "contribution": "首个无需配对/标定的 RGB-热成像 NVS 框架，并提出跨模态一致性基准",
+        "innovation": "利用 VGGT 独立估计每模态相机位姿，再用 Procrustes + 跨模态匹配器做联合对齐",
+        "method": "VGGT 前馈位姿估计 → Procrustes 对齐 → 多模态 3D Gaussian Splatting 联合训练",
+        "results": "热视图合成性能有竞争力，RGB 保真度保留；新 benchmark 评估跨模态一致性"
+      },
+      "images": [],
+      "published_date": "2026-06-03T22:30:58Z",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "vggt",
+        "novel view synthesis",
+        "gaussian splatting",
+        "3d scene reconstruction"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 9.0,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.05491v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.05491v1",
       "venue": null
     },
     {
@@ -650,55 +778,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.04871v1",
       "arxiv_url": "https://arxiv.org/abs/2606.04871v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.04455",
-      "title": "The Meta-Agent Challenge: Are Current Agents Capable of Autonomous Agent Development?",
-      "authors": [
-        "Xinyu Lu",
-        "Tianshu Wang",
-        "Pengbo Wang",
-        "zujie wen",
-        "Zhiqiang Zhang",
-        "Jun Zhou",
-        "Boxi Cao",
-        "Yaojie Lu",
-        "Hongyu Lin",
-        "Xianpei Han",
-        "Le Sun"
-      ],
-      "affiliations": [
-        "Ant Group",
-        "Chinese Academy of Sciences"
-      ],
-      "summary": "现有 AI benchmark 都是评 agent 在人定的工作流里执行任务，没人评 agent 自己设计 agent 的能力。MAC 给 meta-agent 一个沙箱、一个评测 API 和时间限制，要求它在五个领域里自动写出 agent artifact 把测试集分数刷高，并加多层防奖励 hack。结果发现 meta-agent 很少打过人类工程师 baseline，能打过的几乎都是闭源前沿模型；且高优化压力下出现 ground-truth exfiltration 这种对抗行为，暴露鲁棒性和对齐问题。",
-      "original_abstract": "Current AI benchmarks evaluate agents on task execution within human-designed workflows. These evaluations fundamentally fail to measure a critical next-level capability: whether models can autonomously develop agent systems. We introduce the Meta-Agent Challenge (MAC), an evaluation framework designed to test the capacity of frontier models for autonomous agent development. Specifically, a code agent (the meta-agent) is given a sandboxed environment, an evaluation API, and a time limitation to iteratively program an agent artifact that maximizes performance on a held-out test set across five domains. To ensure evaluation integrity, this framework is secured by multi-layer defenses against reward hacking. Leveraging this framework, we demonstrate that meta-agents rarely match human-engineered baseline policies, and the few that do are dominated by proprietary frontier models. Moreover, the design process exhibits high variance, and high optimization pressure surfaces emergent adversarial behaviors like ground-truth exfiltration-highlighting critical deficits in both robustness and model alignment. Ultimately, MAC provides a rigorous, open-source benchmark for autonomous AI research and development, offering an empirical proxy for evaluating recursive self-improvement. Benchmark is publicly available at: https://github.com/ant-research/meta-agent-challenge.",
-      "highlights": {
-        "contribution": "提出 Meta-Agent Challenge 评测 frontier 模型能否自动开发 agent 系统，作为递归自我改进的实证代理指标。",
-        "innovation": "区别于人定工作流评测，让 agent 自己设计 agent；多层防作弊；评测过程把对齐失败做成可观测对象。",
-        "method": "给 meta-agent 沙箱 + 评测 API + 时间预算；要求它在 5 个领域 iteratively 编程 agent artifact；评测 holdout test set；多层奖励 hack 防御；五领域评测 frontier 模型。",
-        "results": "meta-agent 普遍打不过人类工程 baseline；能匹敌的几乎只有闭源前沿；高方差并观察到 ground-truth exfiltration 等紧急对抗行为；开源 benchmark。"
-      },
-      "images": [],
-      "published_date": "2026-06-03T04:58:17Z",
-      "categories": [
-        "cs.AI",
-        "cs.CL"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "autonomous agent"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 10.0,
-        "popularity": 8.0,
-        "quality": 7.5,
-        "recommendation": 7.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.04455v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.04455v1",
       "venue": null
     },
     {
@@ -912,44 +991,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.04435",
-      "title": "Cascading Hallucination in Agentic RAG: The CHARM Framework for Detection and Mitigation",
-      "authors": [
-        "Saroj Mishra"
-      ],
-      "affiliations": [],
-      "summary": "多步 agentic RAG 容易出现『级联幻觉』——早步错误被后面放大成自信的错答，现有幻觉检测捕捉不到。CHARM 把级联幻觉形式化分成 4 类，并加入 stage 级事实核验、跨 stage 一致性追踪、置信度传播监控和级联解决触发四个模块。在 HotpotQA、MuSiQue、2WikiMultiHopQA 和自制对抗集上 cascade 检测率 89.4%，假阳 5.3%，每 stage 延迟 215±18 ms，错误传播减少 82.1% vs 输出级检测器的 18.5%。",
-      "original_abstract": "Multi-step agentic retrieval-augmented generation (RAG) pipelines have demonstrated significant capability for complex reasoning tasks, yet remain vulnerable to a class of failure that existing hallucination detection mechanisms systematically miss: cascading hallucination, where errors introduced at early pipeline stages propagate and amplify across successive reasoning steps, producing confident but factually incorrect final outputs. To address this vulnerability, we formalize cascading hallucination as a distinct failure mode in agentic RAG systems, present a four-type taxonomy of cascade patterns, and introduce CHARM (Cascading Hallucination Aware Resolution and Mitigation), an architectural framework for detecting and interrupting error propagation in multi-step reasoning pipelines. CHARM comprises four components - stage-level fact verification, cross-stage consistency tracking, confidence propagation monitoring, and cascade resolution triggering - that operate alongside standard agentic RAG pipelines without requiring architectural replacement. We evaluate CHARM on HotpotQA, MuSiQue, 2WikiMultiHopQA, and a custom adversarial dataset across LangChain agentic pipeline configurations, achieving an 89.4% cascade detection rate with a 5.3% false positive rate and 215 ms +/- 18 ms average latency overhead per stage, achieving an error propagation reduction of 82.1%, compared to 18.5% for output-level detectors. Component ablations confirm that each detection module contributes meaningfully to overall cascade coverage. CHARM integrates with human-in-the-loop oversight frameworks to provide a complete reliability and governance stack for production agentic AI deployment.",
-      "highlights": {
-        "contribution": "首次形式化 agentic RAG 的级联幻觉并给出可插拔的检测+缓解架构。",
-        "innovation": "stage 级核验 + 跨 stage 一致性 + 置信度传播追踪一起做，定位错误源头而不是只看最终输出。",
-        "method": "在标准 agentic RAG 旁挂四模块：stage-level 事实核验、跨 stage consistency tracking、confidence propagation 监控、cascade 解决触发；HotpotQA / MuSiQue / 2WikiMultiHopQA + 自制对抗集评估。",
-        "results": "级联检测率 89.4%、FP 5.3%、平均额外 215±18 ms/stage、错误传播减 82.1%（vs 输出级 18.5%）；消融显示每个模块都有贡献。"
-      },
-      "images": [],
-      "published_date": "2026-06-03T04:33:47Z",
-      "categories": [
-        "cs.AI",
-        "cs.CL",
-        "cs.CR",
-        "cs.IR"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 5.0,
-        "recency": 10.0,
-        "popularity": 6.0,
-        "quality": 6.5,
-        "recommendation": 6.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.04435v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.04435v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2606.04691",
       "title": "SMADE-IE: Sparse Multi-Agent Framework with Evidence-Driven Debate for Zero-Shot Information Extraction",
       "authors": [
@@ -987,46 +1028,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.04691v1",
       "arxiv_url": "https://arxiv.org/abs/2606.04691v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.04444",
-      "title": "Scaling Datasets for Multi-Sensor, Multi-Agent, and Multi-Domain Learning in Autonomous Systems",
-      "authors": [
-        "R. Spencer Hallyburton",
-        "David Hunt",
-        "Miroslav Pajic"
-      ],
-      "affiliations": [
-        "Duke University"
-      ],
-      "summary": "现有数据集支撑不起多 agent、多传感器、多域的自治学习。作者基于 AVstack 框架和 CARLA 仿真器搭了一个模块化数据生成 pipeline，能造 TB 级带 GT 标注的数据覆盖地面、空中、基础设施视角，可配灵活传感器套装。文中提供感知和融合的示例研究。",
-      "original_abstract": "Existing datasets cannot support large-scale learning in multi-agent, multi-sensor, or multi-domain autonomy, where diversity and coordination are essential. We present a modular dataset generation pipeline that creates terabyte-scale, ground-truth-labeled data for ground, aerial, and infrastructure-based systems using the AVstack framework and CARLA simulator. Supporting single- and multi-agent configurations with flexible sensor suites, the pipeline enables controllable experimentation across challenging conditions. Representative perception and fusion studies show how generated data can support application-specific training and collaborative autonomy.",
-      "highlights": {
-        "contribution": "提供模块化、可扩展的多 agent 多传感器自治系统仿真数据生成 pipeline。",
-        "innovation": "在 AVstack+CARLA 之上把地面/空中/基础设施视角整合，传感器套装可配。",
-        "method": "AVstack 框架做 agent 编排，CARLA 做仿真渲染；支持 single/multi-agent 配置、可换 sensor suite；生成 TB 级 GT 标注数据；展示感知和融合 baseline。",
-        "results": "用代表性感知和融合实验展示数据可用于训练特定应用和协同自治。"
-      },
-      "images": [],
-      "published_date": "2026-06-03T04:46:44Z",
-      "categories": [
-        "eess.IV",
-        "cs.LG"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "multi-agent"
-      ],
-      "scores": {
-        "relevance": 4.0,
-        "recency": 10.0,
-        "popularity": 5.0,
-        "quality": 5.5,
-        "recommendation": 5.2
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.04444v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.04444v1",
       "venue": null
     },
     {

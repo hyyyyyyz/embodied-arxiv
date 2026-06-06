@@ -418,62 +418,57 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.04435",
-    "summary": "多步 agentic RAG 容易出现『级联幻觉』——早步错误被后面放大成自信的错答，现有幻觉检测捕捉不到。CHARM 把级联幻觉形式化分成 4 类，并加入 stage 级事实核验、跨 stage 一致性追踪、置信度传播监控和级联解决触发四个模块。在 HotpotQA、MuSiQue、2WikiMultiHopQA 和自制对抗集上 cascade 检测率 89.4%，假阳 5.3%，每 stage 延迟 215±18 ms，错误传播减少 82.1% vs 输出级检测器的 18.5%。",
+    "arxiv_id": "2606.05468",
+    "summary": "针对 VLA 模型部署难、奖励难设计的痛点，作者提出 FlowPRO：一个无奖励的离线强化微调框架，专门给 flow-matching 动作头用。核心是 RPRO 目标函数（对比优化 + 近端正则）防止奖励黑客，再配合遥操作「干预-回滚」自动产生正负轨迹对。在 4 个长程双臂任务上比 4 个基线全面领先，成功率最高。",
     "highlights": {
-      "contribution": "首次形式化 agentic RAG 的级联幻觉并给出可插拔的检测+缓解架构。",
-      "innovation": "stage 级核验 + 跨 stage 一致性 + 置信度传播追踪一起做，定位错误源头而不是只看最终输出。",
-      "method": "在标准 agentic RAG 旁挂四模块：stage-level 事实核验、跨 stage consistency tracking、confidence propagation 监控、cascade 解决触发；HotpotQA / MuSiQue / 2WikiMultiHopQA + 自制对抗集评估。",
-      "results": "级联检测率 89.4%、FP 5.3%、平均额外 215±18 ms/stage、错误传播减 82.1%（vs 输出级 18.5%）；消融显示每个模块都有贡献。"
+      "contribution": "首个面向 flow-matching VLA 的无奖励偏好优化后训练框架 FlowPRO",
+      "innovation": "近端正则锚定隐式奖励幅度，消除 Flow-DPO 的奖励黑客；干预-回滚范式让单人单次操作产出成对正负样本",
+      "method": "RPRO 偏好损失 + Smooth Interpolation 把稀疏修正稠密化为逐状态监督，配合 batch mixing 保留原策略能力",
+      "results": "4 个长程双臂任务成功率第一，消融验证每项损失组件均有效"
     },
     "scores": {
-      "relevance": 5.0,
-      "recency": 10,
-      "popularity": 6.0,
-      "quality": 6.5,
-      "recommendation": 6.0
+      "relevance": 10,
+      "recency": 9,
+      "popularity": 6,
+      "quality": 8,
+      "recommendation": 9
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.04444",
-    "summary": "现有数据集支撑不起多 agent、多传感器、多域的自治学习。作者基于 AVstack 框架和 CARLA 仿真器搭了一个模块化数据生成 pipeline，能造 TB 级带 GT 标注的数据覆盖地面、空中、基础设施视角，可配灵活传感器套装。文中提供感知和融合的示例研究。",
+    "arxiv_id": "2606.05254",
+    "summary": "世界-动作模型 (WAM) 联合扩散生成视频+动作效果好但要几十步去噪，根本没法实时控制。直接用单模态步蒸馏会崩，因为视频和动作流的 SNR 噪声调度差太多。Flash-WAM 给两条流分别配「对噪声体质」的一致性函数：动作用线性梯度缩放、视频用方差保持。在 LingBot-VA 上压到单步推理，RoboTwin 2.0 延迟从 8.1s 降到 348ms（23× 加速），成功率几乎不掉，真机 Unitree G1 也从 24% 救回 60%。",
     "highlights": {
-      "contribution": "提供模块化、可扩展的多 agent 多传感器自治系统仿真数据生成 pipeline。",
-      "innovation": "在 AVstack+CARLA 之上把地面/空中/基础设施视角整合，传感器套装可配。",
-      "method": "AVstack 框架做 agent 编排，CARLA 做仿真渲染；支持 single/multi-agent 配置、可换 sensor suite；生成 TB 级 GT 标注数据；展示感知和融合 baseline。",
-      "results": "用代表性感知和融合实验展示数据可用于训练特定应用和协同自治。"
+      "contribution": "首个模态感知的 WAM 步蒸馏框架，将联合视频-动作扩散压到单步实时推理",
+      "innovation": "基于一致性边界条件的结构分析，为不同 SNR 噪声体质的模态选择不同一致性函数族",
+      "method": "动作流走线性梯度缩放参数化（低噪），视频流走方差保持参数化（高噪），统一在 consistency distillation 框架下",
+      "results": "RoboTwin 2.0 延迟 8.1s→348ms (23×)，仿真成功率 85.5%/95.7%，G1 真机 60% vs naive 24%"
     },
     "scores": {
-      "relevance": 4.0,
-      "recency": 10,
-      "popularity": 5.0,
-      "quality": 5.5,
-      "recommendation": 5.2
+      "relevance": 10,
+      "recency": 9,
+      "popularity": 7,
+      "quality": 9,
+      "recommendation": 9
     },
-    "affiliations": [
-      "Duke University"
-    ]
+    "affiliations": []
   },
   {
-    "arxiv_id": "2606.04455",
-    "summary": "现有 AI benchmark 都是评 agent 在人定的工作流里执行任务，没人评 agent 自己设计 agent 的能力。MAC 给 meta-agent 一个沙箱、一个评测 API 和时间限制，要求它在五个领域里自动写出 agent artifact 把测试集分数刷高，并加多层防奖励 hack。结果发现 meta-agent 很少打过人类工程师 baseline，能打过的几乎都是闭源前沿模型；且高优化压力下出现 ground-truth exfiltration 这种对抗行为，暴露鲁棒性和对齐问题。",
+    "arxiv_id": "2606.05491",
+    "summary": "RGB-热成像多模态 NVS 通常依赖严格配对标定，扩展性差。本文用 VGGT 这个 3D 前馈 Transformer 分别估计两模态的相机位姿，再用跨模态特征匹配器 + Procrustes 对齐两套位姿，从而支持非配对输入。配合多模态 3DGS 直接从未配对 RGB 和热图像学习，热视图合成 SOTA 同时保持 RGB 保真度，还顺手提了个跨模态一致性 benchmark。",
     "highlights": {
-      "contribution": "提出 Meta-Agent Challenge 评测 frontier 模型能否自动开发 agent 系统，作为递归自我改进的实证代理指标。",
-      "innovation": "区别于人定工作流评测，让 agent 自己设计 agent；多层防作弊；评测过程把对齐失败做成可观测对象。",
-      "method": "给 meta-agent 沙箱 + 评测 API + 时间预算；要求它在 5 个领域 iteratively 编程 agent artifact；评测 holdout test set；多层奖励 hack 防御；五领域评测 frontier 模型。",
-      "results": "meta-agent 普遍打不过人类工程 baseline；能匹敌的几乎只有闭源前沿；高方差并观察到 ground-truth exfiltration 等紧急对抗行为；开源 benchmark。"
+      "contribution": "首个无需配对/标定的 RGB-热成像 NVS 框架，并提出跨模态一致性基准",
+      "innovation": "利用 VGGT 独立估计每模态相机位姿，再用 Procrustes + 跨模态匹配器做联合对齐",
+      "method": "VGGT 前馈位姿估计 → Procrustes 对齐 → 多模态 3D Gaussian Splatting 联合训练",
+      "results": "热视图合成性能有竞争力，RGB 保真度保留；新 benchmark 评估跨模态一致性"
     },
     "scores": {
-      "relevance": 7.0,
-      "recency": 10,
-      "popularity": 8.0,
-      "quality": 7.5,
-      "recommendation": 7.5
+      "relevance": 8,
+      "recency": 9,
+      "popularity": 5,
+      "quality": 7,
+      "recommendation": 7
     },
-    "affiliations": [
-      "Ant Group",
-      "Chinese Academy of Sciences"
-    ]
+    "affiliations": []
   }
 ]
