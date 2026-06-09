@@ -316,178 +316,165 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.02302",
-    "summary": "现在 autonomous LLM agent 能读文件、用工具、操外部服务，安全问题没人系统测过。作者做了 SeClaw：用结构化风险 spec 自动合成安全测试任务，再放进 docker 化测试床做执行级评估，关注轨迹不只关心结果。覆盖资源、用户任务、环境、agent 内在四类风险。",
+    "arxiv_id": "2606.02735",
+    "summary": "VLA 泛化老是被干扰物和模糊指令拖累。作者提出 S2 框架：一边把原始指令拆成轨迹级和子任务级的细化语言（Specify More），一边给执行器加一个显式的「视觉证据预算」（See Less），逼它只用任务必需的信息做决策。在 TX-G2 和 HSR 两台真机的 8 个任务上，子任务成功率从 pi0.5 的 54.2% 提升到 79.0%。",
     "highlights": {
-      "contribution": "提出 SeClaw 框架，把 spec 驱动的安全任务合成与执行级安全评估结合到一起，覆盖 autonomous agent 的多种风险场景。",
-      "innovation": "用结构化 risk spec 自动合成而不是人工策划任务；评估关注 trajectory 而不是只看最终输出。",
-      "method": "spec-driven 任务合成模块把风险类别转成具体测试用例；SeClaw docker 提供统一沙盒；评估器对 agent 行为轨迹按 unsafe action 打分；开源在 GitHub。",
-      "results": "论文未给出具体数字，主要是框架和基准设计的工作；提供可复现的 docker 评估管线。"
+      "contribution": "提出 S2 框架，通过更细化的语言指令 + 视觉证据预算双管齐下，显著提升 VLA 在干扰场景下的泛化能力。",
+      "innovation": "不同于以往单纯改 attention 或加 mask 标注，S2 在不需任何区域标注的前提下用显式预算约束执行器，并把指令做成「高层目标 + 局部细化语言」的双层结构。",
+      "method": "保留原始指令作为稳定 high-level goal，再为每条轨迹重新打上轨迹级和子任务级语言；同时训练执行器在受限视觉证据预算下行动；规划器可以即插即用任何 VLM。",
+      "results": "8 个真机任务平均子任务成功率从 pi0.5 的 54.2% 涨到 79.0%，消融显示局部语言细化优于直接换指令，视觉预算独立带来增益。"
     },
     "scores": {
-      "relevance": 6.0,
-      "recency": 10,
-      "popularity": 6,
-      "quality": 6.5,
-      "recommendation": 6.4
-    },
-    "affiliations": [
-      "Oxford",
-      "Drexel"
-    ]
-  },
-  {
-    "arxiv_id": "2606.02304",
-    "summary": "LLM agent 一个 episode 学到的经验做完就丢，作者把经验外置成可演化的 ECU 单元，分 Memory/Strategy/Workflow/Skill 四类，retrieval 时按类取，使用结果打分，没用就剪掉，再加一个 schedule 模块决定下个周期补哪类。ALFWorld 从 75.4% 提到 96.3%，WebShop 45.1 提到 61.3。",
-    "highlights": {
-      "contribution": "提出 UCE，一个 gradient-free 的 agent 经验外置框架，让多类型经验单元可生成、检索、打分、剪枝。",
-      "innovation": "区分 Memory/Strategy/Workflow/Skill 四种异质经验单元而不是塞到一个 memory store；schedule 模块按 library 短板分配生成预算。",
-      "method": "从轨迹按类型抽取 ECU 入库；决策时 type-conditioned 检索；使用结果更新打分；scheduler 动态分配 generation budget；不更新模型参数。",
-      "results": "ALFWorld 成功率 75.4% → 96.3%，WebShop 分数 45.1 → 61.3；学到的 library 可迁移到不同 backbone 无需重训。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 10,
-      "popularity": 6.5,
-      "quality": 7.5,
-      "recommendation": 7.4
+      "relevance": 9.0,
+      "recency": 7.5,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 8.2
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.02320",
-    "summary": "Deep Research Agent 现在写报告基本只看文本，图表是否可靠没人测。作者发了 TVIR-Bench（100 道专家精选的多模态深度研究题）和 TVIR-Agent（层次化多 agent 写 outline、取图、生成可溯源图表、按上下文写正文），还配了文本+视觉双路评估框架。",
+    "arxiv_id": "2606.02745",
+    "summary": "为了避免每个新任务都重新采集遥操作数据，作者研究单段演示视频条件下的 VLA。发现端到端方法难以精准定位小目标，于是提出 SeeTraceAct：用可视性感知的方式预测未来末端轨迹来做空间锚定。还发布了 RoboCasa-DC 基准。仿真四个设定全部 SOTA，真机 Franka 任务平均成功率提升 12.5 个百分点。",
     "highlights": {
-      "contribution": "提出 TVIR 任务和 benchmark：文本-视觉交错的研究报告生成，并给出多 agent 基线 TVIR-Agent 和双路评估。",
-      "innovation": "明确把视觉元素是否服务于具体分析子目标作为评测点，而不是把图当装饰；图表来源可追溯。",
-      "method": "TVIR-Agent 层次化多 agent：先建 outline，再检索图像、生成图表（带 source）、按上下文顺序写正文；评估同时做 Textual Assessment 和 Visual Assessment。",
-      "results": "9 个 deep research 系统对比，TVIR-Agent 在整体表现上最强，凸显多模态显式设计的重要性；具体数值需看论文。"
+      "contribution": "提出 SeeTraceAct，让单段演示视频驱动的 VLA 能精准锚定小目标，并发布跨形态评测基准 RoboCasa-DC。",
+      "innovation": "把可视性感知 + 末端轨迹预测当作显式中间表征，解决了 demo-conditioned VLA 在精细定位上的痛点。",
+      "method": "输入为单段示范视频和当前观测，先预测末端执行器未来轨迹（带可见性），再据此输出动作；用 RoboCasa-DC 的人-机配对数据训练。",
+      "results": "RoboCasa-DC 四个设定全部最佳；真机 Franka 在人类演示条件下平均成功率提升 12.5 个百分点。"
     },
     "scores": {
-      "relevance": 6.0,
-      "recency": 10,
-      "popularity": 6.5,
-      "quality": 7,
-      "recommendation": 6.8
-    },
-    "affiliations": [
-      "Alibaba"
-    ]
-  },
-  {
-    "arxiv_id": "2606.02388",
-    "summary": "RL 教 agent 哪步动作有 reward，但没教动作对环境的物理后果。作者发现 on-policy RL rollout 里本身就有 (action, next obs) 对，可以顺手做 world model。PaW 给同一个 policy 加 WM 辅助 loss，三件事保稳定：按 action entropy 选 WM 数据、噪声鲁棒 WM loss、reward 自适应权重平衡。三类 agent benchmark 上一致提升。",
-    "highlights": {
-      "contribution": "提出 PaW，让 LLM agent 在 RL 训练中顺带做 world modeling，不增加 inference 成本，不需要单独 simulator。",
-      "innovation": "看出 RL rollout 自带 WM 监督信号；用三个组件（数据选择、噪声鲁棒 loss、reward 自适应平衡）解决 WM 辅助监督本来不稳的问题。",
-      "method": "在标准 RL pipeline 上加 WM 辅助 loss，用同一份 policy；按 action entropy 筛选哪些 transition 进 WM 监督；用噪声鲁棒 loss 处理 WM 误差；reward 自适应权重调 WM/RL 损失比。",
-      "results": "三个 agentic 任务 benchmark 上，多个模型多个 RL 算法都对强 RL baseline 一致提升；具体数字看论文。"
-    },
-    "scores": {
-      "relevance": 8.0,
-      "recency": 10,
-      "popularity": 6.5,
-      "quality": 7.5,
-      "recommendation": 7.8
-    },
-    "affiliations": [
-      "HKUST(GZ)"
-    ]
-  },
-  {
-    "arxiv_id": "2606.02404",
-    "summary": "韩语 agent benchmark 太少，作者搞了 K-BrowseComp，400 道韩语 web browsing 任务，其中 300 道由韩语母语者精挑细选过。GPT-5.5、DeepSeek-V4-Pro、GLM-5.1 在这上只能拿到 30-45.67%，韩国本土 LLM 只有 0-10.33%。还合成了 100 道对抗硬题，最强模型也只有 26%。",
-    "highlights": {
-      "contribution": "推出第一个真正韩语场景的 web browsing agent benchmark K-BrowseComp，并提供一个对抗合成 stress test 子集。",
-      "innovation": "针对性地暴露韩语模型与英文 frontier 模型之间的 agentic 能力差距；用 hard few-shot exemplar + failure-mode-targeted 合成对抗题，利用解题和出题的不对称性。",
-      "method": "母语者手工构造 300 道核对题；另外用难例 few-shot 和失败模式定向生成 100 道合成题；在多家 frontier 和韩国本土 LLM 上跑统一 web browsing agent 框架评测。",
-      "results": "Verified 子集上 frontier LLM 30-45.67%，韩国 PAIF LLM 仅 0-10.33%；对抗合成子集最强模型 26%。"
-    },
-    "scores": {
-      "relevance": 6.0,
-      "recency": 10,
-      "popularity": 6,
-      "quality": 7,
-      "recommendation": 6.7
-    },
-    "affiliations": [
-      "KAIST"
-    ]
-  },
-  {
-    "arxiv_id": "2606.02494",
-    "summary": "Agent 系统上线时常常不是任务级 bug，而是结构性缺陷主导失败。作者提出一个监控+分诊方法论：三维度（质量/适用/效率）× 三尺度（run 内/run 间/结构），用 variance 当信号，配 FMEA 严重度分级。在 220 个合成 run 上跑下来：跨 run 监控变异系数 1.25，结构监控能稳定捞出集成 gap，注入的任务级错误被结构缺陷淹没看不出来。",
-    "highlights": {
-      "contribution": "针对未成熟期 agentic 系统给出一套监控与分诊方法论，强调结构性缺陷而不是任务级错误才是主要失败模式。",
-      "innovation": "用 variance（CV）作为不同 scope 的可比信号；引入分级路由让 97% 自动 track、只 2% 进人工排查；提出按成熟度阶段切换监控目标的 staging 模型。",
-      "method": "三维度 × 三尺度构造监控指标；用变异系数 CV 描述各 scope 失败类型；按 FMEA 严重度分级分诊；在 120 文档 220 个合成 run 上注入受控错误验证。",
-      "results": "run 内 CV=0.02 抓确定性 stage 缺陷，跨 run CV=1.25 抓随机集成后果，结构监控 CV=0.00 抓集成 gap；分诊 97% 自动 track，2% 进人工。"
-    },
-    "scores": {
-      "relevance": 5.5,
-      "recency": 10,
-      "popularity": 5,
-      "quality": 6.5,
-      "recommendation": 6.0
+      "relevance": 9.0,
+      "recency": 7.5,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 8.0
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.02497",
-    "summary": "工业里用 forecasting 不是出个数字就完事，得结合节假日、活动、专家反馈再改一刀。作者把这一步定成 last-mile forecasting 问题，用 LLM agent 框架做在 backbone 之上：维护统一 forecast workspace、调用工具取证据、把推理轨迹转成带安全约束的 revision action，还支持 map-reduce 长程预测和 memory 反思。",
+    "arxiv_id": "2606.02775",
+    "summary": "数据中心用的 KV-cache 不适合机器人：episode 长、边缘内存带宽紧。作者提出 AURA-Mem，给冻结的 VLA backbone 套一个恒定大小的循环记忆，并用一个动作误差驱动的门控决定要不要写入。推理状态固定 4224 字节，而 100K 步的 KV-cache 要大 6061 倍。在 LIBERO-Long 上写入次数少 7 倍，成功率不掉。",
     "highlights": {
-      "contribution": "明确提出 last-mile forecasting 问题：把统计预测改写成业务可用预测，并用 LLM agent 框架解决。",
-      "innovation": "工业里少见有人形式化这一步；引入 structural safety constraints 让 LLM 不能随便改坏预测；用 memory bank 做长期反思。",
-      "method": "在 forecasting backbone 之上加 LLM agent：统一 forecast workspace 状态；工具调用查 holiday/campaign 等外部证据；reasoning trajectory 翻译成显式 revision action 且受结构安全约束；长程任务 map-reduce 分解；memory bank 做 post-hoc 反思。",
-      "results": "通过真实工业 case study 展示能桥接统计预测和业务预测，文中未给统一 benchmark 数字。"
+      "contribution": "为边缘部署的 VLA 设计了写入次数极少、显存恒定的循环记忆 AURA-Mem。",
+      "innovation": "用动作误差信号直接监督记忆门控（而不是重建损失），告诉网络何时该「闭嘴」。",
+      "method": "冻结 OpenVLA-OFT 7B 等 backbone，外挂一个固定大小的循环状态 + 学习门控；门控以 closed-loop action-error 训练，只在能改变下一步动作时才写入。",
+      "results": "合成基准下写入次数减少 5.19-6.13 倍；LIBERO-Long 上成功率 0.233（持平 base、超越 always-write KV 的 0.217），写入次数减少 7 倍。"
     },
     "scores": {
-      "relevance": 5.0,
-      "recency": 10,
-      "popularity": 5.5,
-      "quality": 6.5,
-      "recommendation": 6.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.02107",
-    "summary": "多无人机一致性控制要么集中规划要么完全分布式，作者把通信图直接塞进策略里。每个 quadcopter 只看两个邻居，用 MASAC 学一个高层一致性 planner 输出参考位置，下层跟踪控制器跟。在 3 个 agent 上训完，直接拉到 250 个 agent 还能稳定收敛，不用 retrain。",
-    "highlights": {
-      "contribution": "提出 ND-MARL，把网络通信拓扑嵌入多 quadcopter 一致性控制的 MARL 策略中，并展示 zero-shot 扩规模能力。",
-      "innovation": "在 2-Neighbor 通信约束下做分布式高层 planner + 低层跟踪两层结构；3 个 agent 上训练的策略不改参数直接部署 250 个 agent。",
-      "method": "用 MASAC 学高层分布式一致性 planner，每个 agent 只观察两个邻居信息输出动作；该动作作为参考位置喂给低层 quadcopter 控制器；做层次化控制栈。",
-      "results": "3 agent 训练的策略 zero-shot 部署到最多 250 agent 全部收敛，相同 2-Neighbor 拓扑下；轨迹平滑，与集中 MARL 控制器可比；大群体下稳态扩散略增。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 10,
-      "popularity": 5.5,
-      "quality": 6.5,
-      "recommendation": 6.5
-    },
-    "affiliations": [
-      "Stuttgart"
-    ]
-  },
-  {
-    "arxiv_id": "2606.02132",
-    "summary": "Agentic RL 训出来的模型有 tool abuse 毛病——简单题也乱调工具。一刀切罚或硬限制又会压制有用的探索。作者搞了 EAPO：rollout 组里塞无工具轨迹，按题目难度做 reward shaping（容易题才重罚冗余调用），再加置信度感知 token 重加权。9 个推理 benchmark 上比 GRPO 平均涨 7-10%，工具调用降 18-24%。",
-    "highlights": {
-      "contribution": "提出 EAPO，让 agentic RL 学会什么时候不要调工具，同时提高准确率并降低调用次数。",
-      "innovation": "每个 rollout group 内塞无工具轨迹做对照；难度感知 reward shaping 只在容易题强惩罚冗余工具；置信度感知 token 重加权改进 policy 学习。",
-      "method": "在 GRPO 类 agentic RL 框架里：每组 rollout 强制包含 tool-free 轨迹；按题目难度调节工具调用的 reward 惩罚；按 token 置信度重加权 policy loss；在 Qwen2.5-3B/7B、Llama3.1-8B 上训。",
-      "results": "9 个数学+知识推理 benchmark，对 GRPO 平均提升 10.45%/7.27%/9.69%，工具调用平均减少 18.33%/18.33%/24.59%。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 10,
-      "popularity": 7,
+      "relevance": 8.5,
+      "recency": 7.5,
+      "popularity": 6.5,
       "quality": 7.5,
       "recommendation": 7.6
     },
-    "affiliations": [
-      "CASIA"
-    ]
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.02753",
+    "summary": "视频世界模型一般只能从单视角单 agent 生成。作者提出 MetaWorld 从单视角网络视频里拆出共享 3D 空间下的多 agent 运动数据：先用 MWSU 分解相机自运动和被拍主体的轨迹，再用 Subject-Aware 生成器做身份条件控制，最后通过 World-State Alignment 跨分支注意力保证两个视角共享的物理事件一致。",
+    "highlights": {
+      "contribution": "在没有同步多机位采集的前提下，扩展视频世界模型到多 agent / 多视角，并保证物理事件跨视角对齐。",
+      "innovation": "用单目轨迹分解（MWSU）合成多 agent 训练数据；DiT 每一层插入 World-State Alignment 跨分支 cross-attention 做几何 + 运动一致性约束。",
+      "method": "对单目视频做相机自运动与被摄主体轨迹解耦获得「伪多视角」；视频 DiT 双分支同步去噪，每层做 inter-branch cross-attention；身份图条件控制外观。",
+      "results": "在跨视角一致性和身份保真度两个指标上优于现有方法（具体数字未给），定性展示多 agent 共享 3D 物理世界。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 7.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.02800",
+    "summary": "NVIDIA 推出 Cosmos 3 全模态世界模型家族：一个 mixture-of-transformers 同时处理语言、图像、视频、音频、动作。统一了 VLM、视频生成、世界模拟和 world-action 模型。Artificial Analysis 把它们排为最佳开源 T2I / I2V 模型，RoboArena 上 policy 也是榜首。代码、权重、合成数据全部按 OpenMDW-1.1 开源。",
+    "highlights": {
+      "contribution": "用一个 mixture-of-transformers 统一了 Physical AI 所需的语言/图像/视频/音频/动作五种模态，覆盖理解、生成、世界模拟与策略。",
+      "innovation": "把 VLM、视频生成器、世界模拟器、世界-动作模型彻底融合在一个 backbone 下，支持高度灵活的输入输出组合。",
+      "method": "Mixture-of-transformers omnimodal 架构，预训练 + post-training；评测覆盖理解、生成和机器人策略多个赛道。",
+      "results": "Artificial Analysis 排名 T2I 与 I2V 第一开源，RoboArena policy 第一，多个理解/生成基准 SOTA；checkpoints 全部公开。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 7.5,
+      "popularity": 9.5,
+      "quality": 9.0,
+      "recommendation": 9.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.02778",
+    "summary": "天文版「世界模型」：用 Transformer 学习恒星正常亮度曲线，残差里抓凌日信号。在 Kepler 16,499 条光变上自监督训练，AUC 0.938。1000 ppm 深度的单次凌日召回 32%（分类法是 0%），还在 3737 颗 Kepler 恒星上发现 179 个新候选；零样本迁移到 TESS 47 颗确认行星 100% 召回。",
+    "highlights": {
+      "contribution": "把世界模型思路搬到系外行星探测，能从原始光变曲线检出单次凌日，这是分类方法做不到的。",
+      "innovation": "Transformer 世界模型 + 匹配滤波 + XGBoost 三段式，并首次把 conformal prediction 用于凌日检测。",
+      "method": "Transformer 自监督预测恒星亮度，方差加权 matched filter 从残差提取信号，XGBoost 判定真伪。",
+      "results": "Kepler DR25 AUC 0.938；单次凌日 1000 ppm 召回 32%；3737 颗恒星新发现 179 个信号（46 个单凌日候选）；TESS 零样本 100% 召回。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 7.5,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.02937",
+    "summary": "实验室里多视角拍摄动物的视频很常用，但稀疏视角下做 3D 重建很难。BEAST3D 用 ViT 预测 3D 高斯 splats，借助已知相机内参直接做可微渲染的 held-out view 自监督，并同时分割动物。只要 4 个视角就能重建，跨四种物种验证，下游能做新视角合成、姿态估计和神经编码。",
+    "highlights": {
+      "contribution": "提出针对实验室动物多视角视频的自监督 3D 表征预训练框架，少量视角下也能跑通。",
+      "innovation": "直接条件于已知相机参数（而不是估计相机几何），针对稀疏视角 + 专业实验室图像优化；联合 3D 重建与前背景分割。",
+      "method": "ViT 输入多视角图像 + 相机参数，预测 3D Gaussian splats；通过 differentiable rendering 重建留出视角作为自监督；同时输出动物 mask。",
+      "results": "在四个物种上验证；下游新视角合成、多视角姿态估计、3D 行为特征与神经活动编码三个任务都有效（无具体数字）。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.02956",
+    "summary": "新的欧洲自动驾驶数据集 KITScenes Multimodal：高分辨率全局快门相机、超过 400m 的长程激光雷达、4D 成像雷达、冗余 GNSS/INS，外加号称最完整的 HD 地图（所有交通灯都做了 3D 重投影对齐和拓扑连接）。在不规则街道和混合交通的欧洲城市采集，并配套四个 benchmark：HD 地图构建、长程深度、新视角合成、端到端驾驶。",
+    "highlights": {
+      "contribution": "发布一个传感器和地图保真度都明显高于现有自动驾驶数据集的欧洲多模态数据集，并配套四个 embodied AI 相关 benchmark。",
+      "innovation": "首次把所有驾驶相关交通要素（含交通灯）做成 3D 重投影精度 + 全拓扑连接的 HD 地图；超长程 lidar 与 4D 雷达组合。",
+      "method": "全同步传感器套件采集 + 完整 HD 地图标注；通过开源自动驾驶栈实证地图可用性；设计 4 个空间学习基准。",
+      "results": "数据集本身的贡献，没有横评模型成绩；提供 4 个 benchmark 留给社区。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7.5,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.02963",
+    "summary": "异构推理 pipeline 要在多种加速器上跑不同算子，手写 kernel 不现实。KForge 用两个 LLM agent 协作：生成 agent 根据编译/正确性反馈迭代写 kernel，性能分析 agent 解读 profiling 数据给优化建议。在 NVIDIA B200 上 gpt-oss-20b 推理比 TensorRT-LLM 快 2.12%，Intel Arc B580 上 Triton kernel 比 torch.compile 快 5.13 倍。",
+    "highlights": {
+      "contribution": "用多 agent LLM 迭代为不同 AI 加速器生成高性能 kernel，省掉跨平台手写的人力。",
+      "innovation": "把生成与性能分析拆成两个 agent，性能 agent 能解析 GUI/programmatic profiling 工具的数据反馈给生成 agent。",
+      "method": "迭代循环：generation agent 写 kernel，编译/正确性反馈做 functional pass；性能 agent 解读 profiling 做 optimization pass。",
+      "results": "B200 上 gpt-oss-20b 端到端吞吐比 TensorRT-LLM 高 2.12%；Intel Arc B580 上 37 个 KernelBench L2 工作负载几何平均 5.13× 加速。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 7.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
   }
 ]

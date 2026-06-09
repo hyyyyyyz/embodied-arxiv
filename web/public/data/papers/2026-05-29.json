@@ -677,6 +677,46 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.07595",
+      "title": "VisualLeakBench: Reproducible Action-Boundary Propagation Failures in Vision-Language Agents",
+      "authors": [
+        "Youting Wang",
+        "Yuan Tang",
+        "Yitian Qian",
+        "Chen Zhao"
+      ],
+      "affiliations": [],
+      "summary": "视觉-语言 Agent 看到截图后经常把图里出现的敏感文字直接抄进工具调用参数，作者搞了个 500 张图的 VisualLeakBench 专门量化这种「视觉到工具」的泄漏。在基线下 PII 泄漏率高达 78.8%、不安全文本泄漏 85.5%；加防御性 system prompt 后 PII 降到 2.0%，但代价是干脆不调工具，而图像里的不安全文本仍有 52.6% 会越过工具边界。结论是：当前 VLM Agent 在视觉输入面前的安全护栏基本不顶用，且修复多半靠「不动」而非「保留可用性」。",
+      "original_abstract": "Vision-language agents increasingly consume screenshots, documents, and user interfaces before writing to memory, sending messages, or invoking external tools. We study a concrete failure mode in this setting: action-boundary propagation, where sensitive or unsafe visible text is copied from an image into downstream tool arguments. We present VisualLeakBench, a diversified 500-image benchmark spanning UI, chat, document, form, and dashboard scenes, and evaluate a stratified 100-image agent subset with four production VLM systems under two workflows: note capture and external handoff. At baseline, target strings are propagated into tool arguments in 78.8% of PII cases and 85.5% of rendered unsafe-text cases. Under a defensive system prompt, rendered unsafe-text propagation remains high at 52.6%, while PII tool propagation falls to 2.0%, largely by suppressing tool use rather than preserving utility. Rates are tool-surface dependent: search-like tools suppress PII propagation, but rendered unsafe text still crosses tool boundaries. We measure visual-to-tool propagation rather than downstream instruction execution. We additionally provide a labeled-target oracle upper-bound diagnostic that localizes most failures at the tool boundary while leaving response-side leakage as residual risk.",
+      "highlights": {
+        "contribution": "提出 VisualLeakBench，第一次把 VLM Agent「看到图就抄给工具」这个失败模式做成可复现 benchmark，并区分了 PII 和不安全渲染文本两类泄漏。",
+        "innovation": "不评测下游指令执行，而是专门盯「视觉输入到工具参数」这一段传播，并附带一个 labeled-target oracle 用来定位失败发生在工具边界还是回复里。",
+        "method": "500 张涵盖 UI、聊天、文档、表单、仪表盘的图，挑出 100 张做 agent 子集，跑四个生产 VLM，分别测「记笔记」和「外发」两个工作流，对比无防御 vs 防御 system prompt 下的工具调用参数里的目标字符串泄漏率。",
+        "results": "基线：PII 泄漏 78.8%、不安全文本 85.5%；加防御 prompt 后 PII 降到 2.0% 但主要靠拒调工具，不安全文本仍 52.6% 泄漏；search 类工具能抑制 PII，但图里渲染的不安全文本仍可越界。"
+      },
+      "images": [],
+      "published_date": "2026-05-29T05:17:03Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.IR"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "language agent"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.07595v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.07595v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.00408",
       "title": "Masking Stale Observations Helps Search Agents -- Until It Doesn't: A Regime Map and Its Mechanism",
       "authors": [
@@ -768,47 +808,42 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.00183",
-      "title": "Agentic Transformers Provably Learn to Search via Reinforcement Learning",
+      "arxiv_id": "2606.07603",
+      "title": "MetaEvo: A Meta-Optimization Framework for Experience-Driven Agent Evolution",
       "authors": [
-        "Tong Yang",
-        "Yu Huang",
-        "Yingbin Liang",
-        "Yuejie Chi"
+        "Bowen Ren",
+        "Heyan Huang",
+        "Yinghao Li",
+        "Yang Gao"
       ],
-      "affiliations": [
-        "CMU",
-        "Ohio State University"
-      ],
-      "summary": "一篇理论 paper：作者证明 agentic transformer 通过 RL 可以涌现出真正的搜索行为。在 stochastic k-ary 树环境里，构造了一个 two-head transformer 实现随机 DFS，再分析 policy gradient 在 depth-wise curriculum 下如何从稀疏 reward 自动学出该 DFS 机制。学到的 policy 还能 depth 泛化：只在 depth 1-2 训练，能解更深的树。",
-      "original_abstract": "Tree search is a central abstraction behind many language-agent reasoning and decision-making tasks: agents must explore actions, remember failures, and backtrack toward promising alternatives. Yet, we lack a theoretical understanding of how transformer-based policies acquire such search capabilities from the training dynamics of reinforcement learning (RL). We study this question in a stochastic $k$-ary tree environment, where an agentic transformer observes only its trajectory history through interaction and receives a terminal reward for reaching a hidden leaf goal node. We first construct a two-head transformer that implements randomized depth-first search (DFS): one head tracks previous actions, while the other detects failure outcomes and triggers backtracking. We then analyze the training dynamics of policy gradient under a depth-wise curriculum, showing that this same DFS mechanism emerges in stages from sparse reinforcement feedback without expert demonstrations. The resulting policy exhibits depth generalization: after training only on depth-$1$ and depth-$2$ trees, it succeeds on deeper full trees. We further show that, under imbalanced goal distributions, discounting the return leads to a ranked DFS policy that prioritizes higher-probability branches. Overall, our results identify a mechanistic normal form for transformer-based search, in which attention heads specialize and cooperate to extract decision-relevant traces from context and convert them into agentic action selection via RL training.",
+      "affiliations": [],
+      "summary": "现有 LLM Agent 大多靠记忆或启发式攒经验，模型本身并没真的「学会怎么学」，所以很快遇到天花板。MetaEvo 提出两阶段框架：先用偏好优化训模型抽象「原则」的能力，再在模块化 Agent 架构里把这些原则反复积累和复用。多个推理 benchmark 上稳定超越强基线，并且能跨迭代持续提升，说明 meta-optimization 思路在 Agent 持续进化里有效。",
+      "original_abstract": "Large language models (LLMs) exhibit strong reasoning capabilities, yet most LLM-based agents are statically deployed and unable to improve through task interactions. Existing experience-driven methods often rely on memory or heuristics without enhancing the model's ability to learn, treating it as a passive executor and leading to early performance plateaus and limited long-term improvement. To address this issue, we propose MetaEvo, a two-stage framework for continual agent evolution that focuses on improving how the model learns from tasks experience, rather than solely on what it stores. MetaEvo first applies preference-based optimization to enhance the model's ability of principle abstraction, then enables the accumulation and reuse of these principles within a modular agent architecture. Experimental results on diverse reasoning benchmarks demonstrate that MetaEvo consistently outperforms strong baselines, maintains reliable improvement across iterations. These findings validate the effectiveness of meta-optimization in enabling agents to learn from experience and continually enhance their reasoning capabilities.",
       "highlights": {
-        "contribution": "给 agentic transformer 学搜索这件事提供首个机理性理论解释：RL 训练下 DFS-like 机制如何从稀疏奖励涌现。",
-        "innovation": "构造性证明 + 训练动力学分析：two-head transformer 自然实现随机 DFS（一头追轨迹、一头检测失败触发回溯），并在 depth-wise curriculum 下 policy gradient 收敛到该机制。",
-        "method": "在 stochastic k-ary tree 环境中刻画 agentic transformer 的轨迹观测与稀疏 reward；构造解 + 训练动力学分析 + curriculum 学习；考察不平衡 goal 分布下 discount 的影响。",
-        "results": "证明在 depth-wise curriculum 下 DFS 机制分阶段涌现；只在 depth-1/2 训练即可泛化到更深的树；discount 在不平衡 goal 下导出 ranked DFS。"
+        "contribution": "把 Agent 进化的重点从「存什么经验」改成「怎么从经验里学」，提出 MetaEvo 实现真正可持续提升的 LLM Agent。",
+        "innovation": "用 preference-based optimization 强化「原则抽象」能力本身，而不是只往 memory 里塞 trajectory，让模型从被动执行者变成主动学习者。",
+        "method": "两阶段：阶段一用偏好数据训模型把经验抽象成可复用原则；阶段二把这些原则放进模块化 Agent 架构中按需检索和复用；在多种推理任务上迭代式训练评估。",
+        "results": "在多个推理 benchmark 上一致超过强基线，并随迭代轮次稳定提升，验证 meta-optimization 比纯记忆型经验积累更耐用，但论文里没给具体数字。"
       },
       "images": [],
-      "published_date": "2026-05-29T14:58:03Z",
+      "published_date": "2026-05-29T09:31:39Z",
       "categories": [
         "cs.LG",
-        "cs.AI",
-        "math.OC",
-        "stat.ML"
+        "cs.AI"
       ],
       "matched_domain": "Agent",
       "matched_keywords": [
-        "agentic"
+        "llm-based agent"
       ],
       "scores": {
-        "relevance": 5.0,
-        "recency": 9.5,
-        "popularity": 6.5,
-        "quality": 8.2,
+        "relevance": 7.0,
+        "recency": 7.0,
+        "popularity": 6.0,
+        "quality": 6.5,
         "recommendation": 6.8
       },
-      "pdf_url": "https://arxiv.org/pdf/2606.00183v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.00183v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.07603v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.07603v1",
       "venue": null
     },
     {
@@ -868,48 +903,47 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.31377",
-      "title": "DynaTree: Dynamic Agentic Retrieval Tree for Time-Sensitive News Retrieval",
+      "arxiv_id": "2606.02624",
+      "title": "TadA-Bench: A Million-Variant Benchmark for Future-Round Discovery Toward Agentic Protein Engineering",
       "authors": [
-        "Siyuan Qi",
-        "Xinyuan Wang",
-        "Yingxuan Yang",
-        "Haochuan Guo",
-        "Jianghao Lin",
-        "Weiwen Liu",
-        "Yong Yu",
-        "Weinan Zhang"
+        "Jin Gao",
+        "Juntu Zhao",
+        "Zirui Zeng",
+        "Jiaqi Shen",
+        "Junhao Shi",
+        "Dukun Zhao",
+        "Yuming Lu",
+        "Dequan Wang"
       ],
-      "affiliations": [
-        "Shanghai Jiao Tong University"
-      ],
-      "summary": "Agentic RAG 在新闻这种时效场景下推理开销太大。DynaTree 分两段：离线用多 agent 给一个 topic 物化一棵可复用的语义检索树，在线每天只做轻量子树选择，不再做新一轮 agentic 推理。多日 Syft 新闻 benchmark + BEIR 上 SOTA；A/B 在线把 survival rate 从 0.32-0.53 抬到 0.59-0.73。",
-      "original_abstract": "Agentic Retrieval-Augmented Generation improves retrieval by integrating planning, tool use, and iterative reasoning, but existing agentic RAG methods often couple semantic expansion with retrieval decisions in short-horizon inference loops, leading to high inference cost and limited suitability for time-sensitive news retrieval. We propose DynaTree, a two-stage framework for efficient and adaptive news retrieval. In the offline stage, DynaTree uses coordinated agents to construct a reusable retrieval tree that materializes the semantic space of a query topic. In the online stage, DynaTree performs lightweight daily subtree selection over a time-localized evaluation proxy, without further agentic reasoning, tree modification, or retraining. Experiments on a multi-day Syft news benchmark and multiple BEIR datasets show that DynaTree achieves strong recall and ranking performance, consistently outperforming standard RAG and prior agentic baselines. We further deploy DynaTree in the Syft production system and evaluate it through online A/B testing from Jan. 28 to Feb. 6, 2026. The dynamically adapted variant improves survival rate from 0.32-0.53 to 0.59-0.73 over a fixed offline-selected subtree and outperforms existing production recallers on every evaluation day. These results show that persistent, structure-aware semantic expansion can translate offline agentic reasoning into practical improvements in coverage, freshness, and relevance for real-world news retrieval.",
+      "affiliations": [],
+      "summary": "蛋白质工程进入 agentic 时代，模型不该只是去拟合静态数据，而是要决定下一轮该做哪些湿实验。作者从 31 轮 TadA 定向进化里整理出百万级变体的 wet-lab replay benchmark：TadA-Bench，要求模型在只见到早期实验数据时，预测后续轮次才出现的变体排名。结果显示随机划分时模型很会插值，但真到「未来轮次排名」和「有限预算候选筛选」两项就明显拉胯，evolutionary coverage 比局部数据密度更能预测好坏。",
+      "original_abstract": "AI for scientific discovery is entering an agentic era, where protein-engineering systems are expected to prioritize future wet-lab experiments rather than merely fit static measurements. We introduce TadA-Bench, a million-variant wet-lab replay benchmark from 31 TadA directed-evolution rounds for future-round discovery toward agentic protein engineering. TadA-Bench preserves the campaign chronology and defines a fixed-data replay task: given earlier experimental rounds, models rank variants that appear only in later rounds. It provides aligned DNA, RNA, and protein views, and uses Seq2Graph, a graph-based label-unification pipeline, to reconcile noisy enrichment measurements into consistent cross-round activity labels. Random-split controls show strong interpolation, but future-round ranking and finite-budget candidate selection are much weaker. Controlled analyses suggest that evolutionary coverage is more informative than local data density, positioning TadA-Bench as a reproducible wet-lab replay substrate for future-round discovery toward agentic protein engineering; the data and code are released on Hugging Face and GitHub.",
       "highlights": {
-        "contribution": "针对时效性新闻检索提出 DynaTree：把昂贵的 agentic 推理压到离线，在线只做日级 lightweight 子树选择。",
-        "innovation": "把 agentic 语义扩展物化成一棵可复用的检索树，避免每次查询都重新跑 agentic loop，从而兼顾覆盖 / freshness / 推理成本。",
-        "method": "离线多 agent 协作构造 topic 检索树；在线每日通过 time-localized 评估代理在子树上做选择，不再修改树和不再调用 agent。",
-        "results": "Syft 多日新闻和多个 BEIR 数据集上 recall 和排序均超 RAG 和 agentic baseline；Syft 生产 A/B (2026-01-28 至 02-06) 把 survival rate 由 0.32-0.53 提到 0.59-0.73。"
+        "contribution": "推出 TadA-Bench，把 31 轮 TadA 定向进化的百万变体湿实验整理成可复现的「未来轮次发现」 benchmark，专门测 agentic 蛋白工程能力。",
+        "innovation": "不再做随机切分的回归 benchmark，而是保留 campaign 时间线、强制模型从早期轮预测晚期轮新出现的变体排名，更贴近真实 agentic 决策场景。",
+        "method": "整理 31 轮 TadA 定向进化数据，提供 DNA/RNA/蛋白三视图；用 Seq2Graph 这个图式 label 统一管线把不同轮次的噪声 enrichment 测量对齐成跨轮一致活性标签；定义 fixed-data replay 任务测 future-round ranking 和 finite-budget candidate selection。",
+        "results": "随机划分下模型插值很强，但 future-round ranking 和有限预算候选选择显著弱于插值结果；分析发现进化覆盖度比局部数据密度更能解释表现；数据和代码已在 HuggingFace 与 GitHub 公开。"
       },
       "images": [],
-      "published_date": "2026-05-29T14:45:58Z",
+      "published_date": "2026-05-29T12:12:08Z",
       "categories": [
-        "cs.IR",
-        "cs.AI"
+        "q-bio.QM",
+        "cs.AI",
+        "cs.LG"
       ],
       "matched_domain": "Agent",
       "matched_keywords": [
         "agentic"
       ],
       "scores": {
-        "relevance": 5.0,
-        "recency": 9.5,
-        "popularity": 6.5,
+        "relevance": 5.5,
+        "recency": 7.0,
+        "popularity": 6.0,
         "quality": 7.5,
         "recommendation": 6.5
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.31377v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.31377v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.02624v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02624v1",
       "venue": null
     },
     {
@@ -947,47 +981,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.00288v1",
       "arxiv_url": "https://arxiv.org/abs/2606.00288v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.31370",
-      "title": "HypoAgent: An Agentic Framework for Interactive Abductive Hypothesis Generation over Knowledge Graphs",
-      "authors": [
-        "Yisen Gao",
-        "Yixi Cai",
-        "Tianshi Zheng",
-        "Jiaxin Bai",
-        "Yangqiu Song"
-      ],
-      "affiliations": [
-        "HKUST"
-      ],
-      "summary": "知识图谱上做溯因推理，现有方法在多轮对话里抓不准 evolving intent，hypothesis 失败也讲不清原因。HypoAgent 用三 agent：Intent Recognition 把对话 ground 到 KG 条件，Hypothesis Generation 按条件生成假设，Root Cause Analysis 诊断不可靠片段并通过 KG 邻域 probing 修。常识和生物医学 KG 上单轮多轮无条件设置都 SOTA。",
-      "original_abstract": "Abductive reasoning over knowledge graphs aims to generate logical hypotheses that explain observed entities or facts. Existing controllable hypothesis generation methods allow users to guide this process with explicit conditions, but they remain limited in interactive settings: they struggle to ground evolving natural-language intents across multi-turn dialogues and provide little fine-grained diagnosis when generated hypotheses fail. To address these limitations, we propose HypoAgent, an Agentic framework for interactive abductive Hypothesis Generation over knowledge graphs. HypoAgent integrates three agents: an Intent Recognition Agent that grounds user utterances and dialogue history into executable KG conditions, a Hypothesis Generation Agent that performs controllable hypothesis generation according to the extracted user intention, and a Root Cause Analysis Agent that diagnoses unreliable hypothesis fragments and leverages KG neighborhood probing to identify supported refinements. Experiments on commonsense and biomedical domain-specific knowledge graphs demonstrate that HypoAgent achieves state-of-the-art semantic similarity under single-turn, multi-turn, and unconditional settings. Our code is available at https://github.com/HKUST-KnowComp/HypoAgent.",
-      "highlights": {
-        "contribution": "提出 KG 上交互式溯因假设生成的 agentic 框架，把意图理解、假设生成和根因分析显式分工。",
-        "innovation": "在传统 controllable hypothesis generation 之上加 Root Cause Analysis agent，用 KG 邻域 probing 定位失败假设片段并定向修正，支持多轮 intent 演变。",
-        "method": "三 agent 协同：Intent Recognition Agent 把 utterance + 历史 ground 成 KG executable 条件；Hypothesis Generation Agent 按意图做可控假设；Root Cause Analysis Agent 诊断片段、邻域 probing、refine。",
-        "results": "在常识 KG 和生物医学 KG 上，单轮 / 多轮 / 无条件三种设置下 semantic similarity 均 SOTA。"
-      },
-      "images": [],
-      "published_date": "2026-05-29T14:40:37Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 4.5,
-        "recency": 9.5,
-        "popularity": 5.5,
-        "quality": 7.0,
-        "recommendation": 5.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.31370v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.31370v1",
       "venue": null
     },
     {

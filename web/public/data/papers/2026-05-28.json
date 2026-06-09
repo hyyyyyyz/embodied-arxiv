@@ -229,6 +229,45 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.07593",
+      "title": "A Mechanistic Analysis of Adversarial Fine-tuning of Vision Transformers",
+      "authors": [
+        "Hannah Gao",
+        "Isha Agarwal",
+        "Dylan Hadfield-Menell",
+        "Rachel Ma"
+      ],
+      "affiliations": [],
+      "summary": "ViT 是 VLM/VLA 的视觉骨干，但它在图像扰动下到底稳不稳一直没人细看。作者拿低频和高频两类图像损坏做对抗微调，再用注意力、内部表征、知识演化三个角度去机理性地拆解模型变化。结论比较扎心：对训过的损坏类别确实更鲁棒，但完全不迁移到没见过的损坏；而且尽管注意力和层间知识有变化，ViT 学到的稀疏表征本质上没动。",
+      "original_abstract": "The widespread use of image classification models in high-risk, real-world situations necessitates making these models robust to slight disturbances or perturbations, such as blurring or sharpening, in the input images. While vision transformers (ViTs) play an integral role in many modern-day multi-modal models like Vision-Language-Models (VLMs) and Vision-Language-Action (VLA) models, they have received a lack of attention in the setting of robustness. In this work, we analyze the effects of adversarial fine-tuning, a popular method for improving model robustness to image perturbations, on a ViT's performance on perturbed and regular images through a mechanistic lens. We adversarially train a ViT on low-frequency and high-frequency image corruptions, and attempt to explain changes in downstream model performance through an examination of the model's attention mechanisms, internal representations, and knowledge evolution. Overall, our results suggest that, while fine-tuning on inputs with common corruptions improves model performance and certainty on new instances of corrupted data, these improvements do not transfer to other classes of corruptions not seen in the training. Additionally, despite observing changes in visual attention and knowledge evolution across layers, we found that adversarial training did not lead to fundamental changes in the sparse representations learned by ViTs.",
+      "highlights": {
+        "contribution": "从机理可解释性角度,系统分析了对抗微调对 ViT 的影响,指出鲁棒性提升不会跨损坏类别迁移,且不改变底层稀疏表征。",
+        "innovation": "已有工作多在评测层面报数字,本文换成「机理透镜」——同时看 attention、内部表征、跨层知识演化,把 ViT 鲁棒性是否真的「变了」拆得更细。",
+        "method": "在 ViT 上分别用低频损坏(模糊)和高频损坏(锐化等)做对抗微调,然后在 in-distribution 和 out-of-distribution 损坏上评测,辅以注意力图分析、表征探针、跨层 knowledge evolution 追踪。",
+        "results": "对训过的损坏类别准确率和置信度都升,但换一类没见过的损坏就不再迁移;注意力和层间知识有可观察变化,但稀疏表征结构基本没变,提示鲁棒性提升是「表层」而非「根本」的。"
+      },
+      "images": [],
+      "published_date": "2026-05-28T17:30:49Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.0,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.07593v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.07593v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2605.30263",
       "title": "minWM: A Full-Stack Open-Source Framework for Real-Time Interactive Video World Models",
       "authors": [
@@ -1095,46 +1134,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2605.30169v2",
       "arxiv_url": "https://arxiv.org/abs/2605.30169v2",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.30160",
-      "title": "On Distributional Reinforcement Learning in Chaotic Dynamical Systems",
-      "authors": [
-        "James Rudd-Jones",
-        "Mirco Musolesi",
-        "María Pérez-Ortiz"
-      ],
-      "affiliations": [
-        "UCL"
-      ],
-      "summary": "混沌系统对初值敏感，标准 RL 的 bootstrap target 方差爆炸、梯度难调。作者证明在温和稳定性假设下，return 分布在 1-Wasserstein 度量下比单条轨迹「演化得更规则」，所以 distributional RL 在混沌动力系统里天然给出更光滑的 Bellman 目标。",
-      "original_abstract": "Chaotic dynamical systems pose a fundamental challenge for Reinforcement Learning (RL): exponential sensitivity to initial conditions induces high-variance bootstrap targets and poorly conditioned gradient updates. Chaotic dynamics arise across scientific and engineering domains, from fluid flows and climate systems to multi-agent systems, where reliable learning is highly desirable. Standard RL methods optimise expected returns through scalar value functions, implicitly averaging over diverging trajectories and entangling trajectory level instability with the learning objective. We show that under mild statistical stability assumptions, the return distribution evolves more regularly than individual trajectories when measured under the $1$-Wasserstein metric, yielding a smoother distributional Bellman objective. By aligning optimisation with this measure level structure, distributional RL provides better conditioned learning. We offer a principled explanation for the advantages of distributional methods in chaotic systems and the geometries of RL objectives under chaos.",
-      "highlights": {
-        "contribution": "理论解释了为什么 distributional RL 在混沌动力系统里比 expected-return RL 表现更好。",
-        "innovation": "用 1-Wasserstein 度量分析 return distribution 的演化规则性，把混沌不稳定性和 RL 目标几何挂钩。",
-        "method": "理论分析：在 mild statistical stability 假设下，证明 return 分布的 Bellman 算子在 1-Wasserstein 下比逐轨迹更光滑；从而 distributional RL 的优化条件更好。",
-        "results": "无大规模实验，主要是理论结果加上 chaotic system 的解释性 case。"
-      },
-      "images": [],
-      "published_date": "2026-05-28T16:17:32Z",
-      "categories": [
-        "cs.LG",
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "multi-agent"
-      ],
-      "scores": {
-        "relevance": 4.0,
-        "recency": 9.0,
-        "popularity": 5.5,
-        "quality": 7.0,
-        "recommendation": 5.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.30160v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.30160v1",
       "venue": null
     }
   ],

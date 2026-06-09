@@ -426,64 +426,57 @@
     ]
   },
   {
-    "arxiv_id": "2605.31370",
-    "summary": "知识图谱上做溯因推理，现有方法在多轮对话里抓不准 evolving intent，hypothesis 失败也讲不清原因。HypoAgent 用三 agent：Intent Recognition 把对话 ground 到 KG 条件，Hypothesis Generation 按条件生成假设，Root Cause Analysis 诊断不可靠片段并通过 KG 邻域 probing 修。常识和生物医学 KG 上单轮多轮无条件设置都 SOTA。",
+    "arxiv_id": "2606.07595",
+    "summary": "视觉-语言 Agent 看到截图后经常把图里出现的敏感文字直接抄进工具调用参数，作者搞了个 500 张图的 VisualLeakBench 专门量化这种「视觉到工具」的泄漏。在基线下 PII 泄漏率高达 78.8%、不安全文本泄漏 85.5%；加防御性 system prompt 后 PII 降到 2.0%，但代价是干脆不调工具，而图像里的不安全文本仍有 52.6% 会越过工具边界。结论是：当前 VLM Agent 在视觉输入面前的安全护栏基本不顶用，且修复多半靠「不动」而非「保留可用性」。",
     "highlights": {
-      "contribution": "提出 KG 上交互式溯因假设生成的 agentic 框架，把意图理解、假设生成和根因分析显式分工。",
-      "innovation": "在传统 controllable hypothesis generation 之上加 Root Cause Analysis agent，用 KG 邻域 probing 定位失败假设片段并定向修正，支持多轮 intent 演变。",
-      "method": "三 agent 协同：Intent Recognition Agent 把 utterance + 历史 ground 成 KG executable 条件；Hypothesis Generation Agent 按意图做可控假设；Root Cause Analysis Agent 诊断片段、邻域 probing、refine。",
-      "results": "在常识 KG 和生物医学 KG 上，单轮 / 多轮 / 无条件三种设置下 semantic similarity 均 SOTA。"
+      "contribution": "提出 VisualLeakBench，第一次把 VLM Agent「看到图就抄给工具」这个失败模式做成可复现 benchmark，并区分了 PII 和不安全渲染文本两类泄漏。",
+      "innovation": "不评测下游指令执行，而是专门盯「视觉输入到工具参数」这一段传播，并附带一个 labeled-target oracle 用来定位失败发生在工具边界还是回复里。",
+      "method": "500 张涵盖 UI、聊天、文档、表单、仪表盘的图，挑出 100 张做 agent 子集，跑四个生产 VLM，分别测「记笔记」和「外发」两个工作流，对比无防御 vs 防御 system prompt 下的工具调用参数里的目标字符串泄漏率。",
+      "results": "基线：PII 泄漏 78.8%、不安全文本 85.5%；加防御 prompt 后 PII 降到 2.0% 但主要靠拒调工具，不安全文本仍 52.6% 泄漏；search 类工具能抑制 PII，但图里渲染的不安全文本仍可越界。"
     },
     "scores": {
-      "relevance": 4.5,
-      "recency": 9.5,
-      "popularity": 5.5,
-      "quality": 7.0,
-      "recommendation": 5.8
+      "relevance": 7.0,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.2
     },
-    "affiliations": [
-      "HKUST"
-    ]
+    "affiliations": []
   },
   {
-    "arxiv_id": "2605.31377",
-    "summary": "Agentic RAG 在新闻这种时效场景下推理开销太大。DynaTree 分两段：离线用多 agent 给一个 topic 物化一棵可复用的语义检索树，在线每天只做轻量子树选择，不再做新一轮 agentic 推理。多日 Syft 新闻 benchmark + BEIR 上 SOTA；A/B 在线把 survival rate 从 0.32-0.53 抬到 0.59-0.73。",
+    "arxiv_id": "2606.07603",
+    "summary": "现有 LLM Agent 大多靠记忆或启发式攒经验，模型本身并没真的「学会怎么学」，所以很快遇到天花板。MetaEvo 提出两阶段框架：先用偏好优化训模型抽象「原则」的能力，再在模块化 Agent 架构里把这些原则反复积累和复用。多个推理 benchmark 上稳定超越强基线，并且能跨迭代持续提升，说明 meta-optimization 思路在 Agent 持续进化里有效。",
     "highlights": {
-      "contribution": "针对时效性新闻检索提出 DynaTree：把昂贵的 agentic 推理压到离线，在线只做日级 lightweight 子树选择。",
-      "innovation": "把 agentic 语义扩展物化成一棵可复用的检索树，避免每次查询都重新跑 agentic loop，从而兼顾覆盖 / freshness / 推理成本。",
-      "method": "离线多 agent 协作构造 topic 检索树；在线每日通过 time-localized 评估代理在子树上做选择，不再修改树和不再调用 agent。",
-      "results": "Syft 多日新闻和多个 BEIR 数据集上 recall 和排序均超 RAG 和 agentic baseline；Syft 生产 A/B (2026-01-28 至 02-06) 把 survival rate 由 0.32-0.53 提到 0.59-0.73。"
+      "contribution": "把 Agent 进化的重点从「存什么经验」改成「怎么从经验里学」，提出 MetaEvo 实现真正可持续提升的 LLM Agent。",
+      "innovation": "用 preference-based optimization 强化「原则抽象」能力本身，而不是只往 memory 里塞 trajectory，让模型从被动执行者变成主动学习者。",
+      "method": "两阶段：阶段一用偏好数据训模型把经验抽象成可复用原则；阶段二把这些原则放进模块化 Agent 架构中按需检索和复用；在多种推理任务上迭代式训练评估。",
+      "results": "在多个推理 benchmark 上一致超过强基线，并随迭代轮次稳定提升，验证 meta-optimization 比纯记忆型经验积累更耐用，但论文里没给具体数字。"
     },
     "scores": {
-      "relevance": 5.0,
-      "recency": 9.5,
-      "popularity": 6.5,
+      "relevance": 7.0,
+      "recency": 7,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.02624",
+    "summary": "蛋白质工程进入 agentic 时代，模型不该只是去拟合静态数据，而是要决定下一轮该做哪些湿实验。作者从 31 轮 TadA 定向进化里整理出百万级变体的 wet-lab replay benchmark：TadA-Bench，要求模型在只见到早期实验数据时，预测后续轮次才出现的变体排名。结果显示随机划分时模型很会插值，但真到「未来轮次排名」和「有限预算候选筛选」两项就明显拉胯，evolutionary coverage 比局部数据密度更能预测好坏。",
+    "highlights": {
+      "contribution": "推出 TadA-Bench，把 31 轮 TadA 定向进化的百万变体湿实验整理成可复现的「未来轮次发现」 benchmark，专门测 agentic 蛋白工程能力。",
+      "innovation": "不再做随机切分的回归 benchmark，而是保留 campaign 时间线、强制模型从早期轮预测晚期轮新出现的变体排名，更贴近真实 agentic 决策场景。",
+      "method": "整理 31 轮 TadA 定向进化数据，提供 DNA/RNA/蛋白三视图；用 Seq2Graph 这个图式 label 统一管线把不同轮次的噪声 enrichment 测量对齐成跨轮一致活性标签；定义 fixed-data replay 任务测 future-round ranking 和 finite-budget candidate selection。",
+      "results": "随机划分下模型插值很强，但 future-round ranking 和有限预算候选选择显著弱于插值结果；分析发现进化覆盖度比局部数据密度更能解释表现；数据和代码已在 HuggingFace 与 GitHub 公开。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7,
+      "popularity": 6.0,
       "quality": 7.5,
       "recommendation": 6.5
     },
-    "affiliations": [
-      "Shanghai Jiao Tong University"
-    ]
-  },
-  {
-    "arxiv_id": "2606.00183",
-    "summary": "一篇理论 paper：作者证明 agentic transformer 通过 RL 可以涌现出真正的搜索行为。在 stochastic k-ary 树环境里，构造了一个 two-head transformer 实现随机 DFS，再分析 policy gradient 在 depth-wise curriculum 下如何从稀疏 reward 自动学出该 DFS 机制。学到的 policy 还能 depth 泛化：只在 depth 1-2 训练，能解更深的树。",
-    "highlights": {
-      "contribution": "给 agentic transformer 学搜索这件事提供首个机理性理论解释：RL 训练下 DFS-like 机制如何从稀疏奖励涌现。",
-      "innovation": "构造性证明 + 训练动力学分析：two-head transformer 自然实现随机 DFS（一头追轨迹、一头检测失败触发回溯），并在 depth-wise curriculum 下 policy gradient 收敛到该机制。",
-      "method": "在 stochastic k-ary tree 环境中刻画 agentic transformer 的轨迹观测与稀疏 reward；构造解 + 训练动力学分析 + curriculum 学习；考察不平衡 goal 分布下 discount 的影响。",
-      "results": "证明在 depth-wise curriculum 下 DFS 机制分阶段涌现；只在 depth-1/2 训练即可泛化到更深的树；discount 在不平衡 goal 下导出 ranked DFS。"
-    },
-    "scores": {
-      "relevance": 5.0,
-      "recency": 9.5,
-      "popularity": 6.5,
-      "quality": 8.2,
-      "recommendation": 6.8
-    },
-    "affiliations": [
-      "CMU",
-      "Ohio State University"
-    ]
+    "affiliations": []
   }
 ]

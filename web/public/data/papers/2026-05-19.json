@@ -316,6 +316,48 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.07550",
+      "title": "Offline Reinforcement Learning for Plasma Control in Nuclear Fusion: Codebase and Benchmark",
+      "authors": [
+        "Yang Fu",
+        "Haomin Bao",
+        "Rohit Sonker",
+        "Xiaoyan Hu",
+        "Aravind Venugopal",
+        "Jeff Schneider",
+        "Jiayu Chen"
+      ],
+      "affiliations": [],
+      "summary": "核聚变托卡马克上做在线 RL 试错太贵也太危险，作者就想用历史放电数据搞离线 RL 来训等离子体控制器。问题是这领域一直没有一个统一的离线 RL benchmark，所以他们基于 DIII-D 真实托卡马克的历史数据建了个动力学模型，搭出 RL4F 基准，覆盖转速、密度、温度、压强四个全剖面跟踪任务，并把一堆模仿学习和离线 RL 方法在同一协议下跑了一遍。结论是基于模型的离线 RL 平均表现最好，但没有单一方法能横扫所有任务，说明动力学建模在长 horizon 等离子体控制里很关键。代码、数据集和评估框架全开源。",
+      "original_abstract": "Offline reinforcement learning (RL) offers a promising route for developing plasma controllers from historical tokamak data, since online trial-and-error on real devices is costly and risky. However, progress in this direction remains difficult to measure due to the lack of a standardized offline RL benchmark for realistic multi-actuator, long-horizon plasma control problems in nuclear fusion. We introduce RL4F, an Offline Reinforcement Learning Benchmark for Plasma Control in Nuclear Fusion, providing closed-loop evaluation environments and baseline comparisons across four full-profile tracking tasks: rotation, density, temperature, and pressure. The dynamics function underlying the evaluation environment is built from historical discharge data from DIII-D, a real-world Tokamak. We evaluate a broad set of imitation learning and offline RL baselines under a unified protocol. We find that offline model-based RL methods obtain the best average performance on most objectives, although no single method dominates all tasks, highlighting the importance of dynamics modeling in complex, long-horizon plasma control tasks. To foster further research, we open-source the codebase, datasets, and evaluation framework, providing a benchmark not only for the fusion community but also for algorithm development in offline RL.",
+      "highlights": {
+        "contribution": "提出 RL4F：首个针对核聚变等离子体控制的离线 RL 标准 benchmark，含闭环评估环境、四个全剖面跟踪任务和一整套基线对比。",
+        "innovation": "把真实 DIII-D 托卡马克历史放电数据做成可复用的动力学评估环境，填补了多执行器、长 horizon 聚变控制任务上没有统一离线 RL benchmark 的空白。",
+        "method": "输入是历史放电数据；用真实 DIII-D 数据训一个动力学函数当作闭环评估器；在该环境下测一系列模仿学习和离线 RL 方法（包括 model-based 离线 RL），统一协议跑转速/密度/温度/压强四个全剖面跟踪任务。",
+        "results": "Model-based 离线 RL 在多数任务上拿到最好平均成绩，但没有单一方法在所有任务上都最强；具体提升幅度未在摘要披露；代码、数据集、评估框架全部开源。"
+      },
+      "images": [],
+      "published_date": "2026-05-19T14:09:29Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "dynamics model"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 6.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.07550v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.07550v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2605.20150",
       "title": "TideGS: Scalable Training of Over One Billion 3D Gaussian Splatting Primitives via Out-of-Core Optimization",
       "authors": [
@@ -813,50 +855,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2605.20425v1",
       "arxiv_url": "https://arxiv.org/abs/2605.20425v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.20075",
-      "title": "CopT: Contrastive On-Policy Thinking with Continuous Spaces for General and Agentic Reasoning",
-      "authors": [
-        "Dachuan Shi",
-        "Hanlin Zhu",
-        "Xiangchi Yuan",
-        "Wanjia Zhao",
-        "Kejing Xia",
-        "Wen Xiao",
-        "Wenke Lee"
-      ],
-      "affiliations": [
-        "Georgia Tech"
-      ],
-      "summary": "CoT 默认是先想再答，浪费 token、有时候模型其实早就能直接答。CopT 把顺序反过来：先出 draft answer，再用 on-policy thinking 去反思修正。判断 draft 靠不靠谱时，用『离散 token 输入 vs 连续 embedding 输入』下模型对同一 token 的支持度对比来做 reverse KL 估计。跨数学/coding/agentic 任务上 peak accuracy +23%，token 用量 -57%，不需要训练。",
-      "original_abstract": "Chain-of-thought (CoT) is a standard approach for eliciting reasoning capabilities from large language models (LLMs). However, the common CoT paradigm treats thinking as a prerequisite for answering, which can delay access to plausible answers and incur unnecessary token costs even when the model is able to identify an answer before extended thinking, a behavior known as performative reasoning. In this paper, we introduce CopT, a reformulated reasoning pipeline that reverses the usual order of thinking and answering. Instead of thinking before answering, CopT first elicits a draft answer and then invokes subsequent on-policy thinking conditioned on its own draft answer for reflection and correction. To assess whether the draft answer should be trusted, CopT recasts continuous embeddings as inference-time contrastive verifiers. Specifically, it contrasts the model's support for the same generated tokens under discrete-token inputs and continuous-embedding inputs, yielding a sequence-level reverse KL estimator for answer reliability. Our analysis shows that under certain assumptions, the expected estimate equals the mutual information between the unresolved latent state and the emitted answer token, explaining why it captures answer-relevant uncertainty rather than arbitrary uncertainty in the latent state. When the answer is deemed insufficiently reliable, CopT performs further on-policy thinking, where a second KL estimator dynamically controls draft-answer visibility, preserving useful partial information while reducing the risk of being misled by unreliable content. Across mathematics, coding, and agentic reasoning tasks, CopT improves peak accuracy by up to 23% and reduces token usage by up to 57% at comparable or higher accuracy, without any additional training. The code is available at https://github.com/sdc17/CopT.",
-      "highlights": {
-        "contribution": "提出『先答后想』的 CoT 范式，并用连续 embedding 做 inference-time 答案可靠性验证。",
-        "innovation": "把连续 embedding 重新利用为 contrastive verifier；理论上证明该估计等于未解决 latent 状态与答案 token 的互信息，捕捉的是答案相关的不确定性。",
-        "method": "先生成 draft answer → 用同一 token 在离散/连续输入下的 logit 对比算 reverse KL 当 reliability 分数 → 不够可靠就再走 on-policy thinking，第二个 KL 估计动态控制 draft 可见性。",
-        "results": "数学/代码/agentic 推理任务上 peak accuracy 最高 +23%，相同或更高准确率下 token -57%，全程 train-free。"
-      },
-      "images": [],
-      "published_date": "2026-05-19T16:28:53Z",
-      "categories": [
-        "cs.CL",
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 6.0,
-        "recency": 7.0,
-        "popularity": 6.5,
-        "quality": 7.5,
-        "recommendation": 7.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.20075v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.20075v1",
       "venue": null
     },
     {

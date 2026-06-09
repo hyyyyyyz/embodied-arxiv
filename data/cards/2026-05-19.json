@@ -488,23 +488,21 @@
     ]
   },
   {
-    "arxiv_id": "2605.20075",
-    "summary": "CoT 默认是先想再答，浪费 token、有时候模型其实早就能直接答。CopT 把顺序反过来：先出 draft answer，再用 on-policy thinking 去反思修正。判断 draft 靠不靠谱时，用『离散 token 输入 vs 连续 embedding 输入』下模型对同一 token 的支持度对比来做 reverse KL 估计。跨数学/coding/agentic 任务上 peak accuracy +23%，token 用量 -57%，不需要训练。",
+    "arxiv_id": "2606.07550",
+    "summary": "核聚变托卡马克上做在线 RL 试错太贵也太危险，作者就想用历史放电数据搞离线 RL 来训等离子体控制器。问题是这领域一直没有一个统一的离线 RL benchmark，所以他们基于 DIII-D 真实托卡马克的历史数据建了个动力学模型，搭出 RL4F 基准，覆盖转速、密度、温度、压强四个全剖面跟踪任务，并把一堆模仿学习和离线 RL 方法在同一协议下跑了一遍。结论是基于模型的离线 RL 平均表现最好，但没有单一方法能横扫所有任务，说明动力学建模在长 horizon 等离子体控制里很关键。代码、数据集和评估框架全开源。",
     "highlights": {
-      "contribution": "提出『先答后想』的 CoT 范式，并用连续 embedding 做 inference-time 答案可靠性验证。",
-      "innovation": "把连续 embedding 重新利用为 contrastive verifier；理论上证明该估计等于未解决 latent 状态与答案 token 的互信息，捕捉的是答案相关的不确定性。",
-      "method": "先生成 draft answer → 用同一 token 在离散/连续输入下的 logit 对比算 reverse KL 当 reliability 分数 → 不够可靠就再走 on-policy thinking，第二个 KL 估计动态控制 draft 可见性。",
-      "results": "数学/代码/agentic 推理任务上 peak accuracy 最高 +23%，相同或更高准确率下 token -57%，全程 train-free。"
+      "contribution": "提出 RL4F：首个针对核聚变等离子体控制的离线 RL 标准 benchmark，含闭环评估环境、四个全剖面跟踪任务和一整套基线对比。",
+      "innovation": "把真实 DIII-D 托卡马克历史放电数据做成可复用的动力学评估环境，填补了多执行器、长 horizon 聚变控制任务上没有统一离线 RL benchmark 的空白。",
+      "method": "输入是历史放电数据；用真实 DIII-D 数据训一个动力学函数当作闭环评估器；在该环境下测一系列模仿学习和离线 RL 方法（包括 model-based 离线 RL），统一协议跑转速/密度/温度/压强四个全剖面跟踪任务。",
+      "results": "Model-based 离线 RL 在多数任务上拿到最好平均成绩，但没有单一方法在所有任务上都最强；具体提升幅度未在摘要披露；代码、数据集、评估框架全部开源。"
     },
     "scores": {
-      "relevance": 6.0,
-      "recency": 7,
-      "popularity": 6.5,
-      "quality": 7.5,
-      "recommendation": 7.0
+      "relevance": 4.5,
+      "recency": 6,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 5.8
     },
-    "affiliations": [
-      "Georgia Tech"
-    ]
+    "affiliations": []
   }
 ]

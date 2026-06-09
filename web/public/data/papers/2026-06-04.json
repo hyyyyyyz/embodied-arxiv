@@ -429,6 +429,50 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.06556",
+      "title": "Robots Need More than VLA and World Models",
+      "authors": [
+        "Elis Karcini",
+        "Faisal Mehrban",
+        "Quang Nguyen",
+        "Mac Schwager",
+        "Arash Ajoudani",
+        "Cesar Cadena",
+        "Jan Peters",
+        "Marco Hutter",
+        "Haitham Bou-Ammar"
+      ],
+      "affiliations": [],
+      "summary": "这是一篇立场文，作者认为现在做通用机器人只盯着「堆数据训大 VLA」是不够的。真正的瓶颈在于：人类视频、仿真 rollout、互动演示里都藏着大量行为信息，但缺少把它们转成机器人能用的监督信号的接口。文章梳理了机器人基础模型、跨本体数据集、视频学习、世界模型、奖励建模的进展，提出四类需要补齐的接口（数据、本体、世界模型、奖励），呼吁社区把研究议程从「政策扩展」转向「监督信号生成」。",
+      "original_abstract": "Generalist robot intelligence is often framed as a policy-scaling problem: collect more robot demonstrations, train larger Vision-Language-Action (VLA) models, and expect broader generalisation. In this position paper, we argue that this framing is incomplete. The central bottleneck is not only policy learning, but the absence of mechanisms that convert the world's abundant unstructured behavioural data into grounded robot supervision. Human motion, internet video, simulation rollouts, and interactive demonstrations contain rich information about tasks, goals, contacts, failures, and physical constraints, yet most of this information is not directly usable by robot policies because it lacks embodiment-specific action labels, task semantics, and reward structure. We identify four missing components for the next generation of robotics: data interfaces for autolabelling unstructured behaviour, embodiment interfaces for retargeting human motion to robot actions, world-model interfaces for physics-grounded 3D reasoning, and reward interfaces for inferring task progress and success from video and language. We survey recent progress in robot foundation models, cross-embodiment datasets, learning from video, world models, and reward modelling, and propose a research agenda for building robotics systems that can learn not only from robot demonstrations, but from the broader physical world.",
+      "highlights": {
+        "contribution": "提出 VLA + World Model 还不够，机器人通用智能需要补齐数据、本体、世界模型、奖励这四类「接口」来吸收人类视频、仿真、互动等非结构化行为数据。",
+        "innovation": "不同于一般综述按方法分类，本文从「监督信号从哪儿来」的角度切入，强调把不可用的人类/视频数据转成 embodiment-specific 标签的桥接组件，跳出单纯堆数据训大模型的叙事。",
+        "method": "立场+综述类工作：梳理 robot foundation model、跨本体数据集、video learning、world model、reward model 的最新进展，再总结成四个 interface 抽象，并给出研究议程。没有训练实验。",
+        "results": "无量化基准，是 position paper；贡献在于研究议程和接口定义，方便后续工作对号入座，作者阵容包含 Stanford、ETH、TU Darmstadt、华为 Noah 等多个一线机器人 lab。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T10:43:14Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 8.0,
+        "popularity": 7.5,
+        "quality": 7.8,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06556v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06556v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.06147",
       "title": "WorldFly: A World-Model-Based Vision-Language-Action Model for UAV Navigation",
       "authors": [
@@ -612,6 +656,82 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.07670",
+      "title": "Liquid Neural Networks as a Drop-in Continuous-Time Deformation Field for Dynamic 3D Gaussian Splatting",
+      "authors": [
+        "Mingzhao Li",
+        "Arghya Pal",
+        "Guan Yuan Tan"
+      ],
+      "affiliations": [],
+      "summary": "Deformable 3DGS 用一个 MLP 预测每帧 Gaussian 的偏移，但 MLP 其实只是在「对每个时间 t 独立查表」，时间平滑全靠优化自己凑出来。作者用 Liquid Neural Network 里的 Closed-form Continuous-time cell 替换这个 MLP，等价于把 Liquid Time-constant ODE 的闭式解嵌进 deformation field，让网络结构本身就对 t 连续平滑。在 D-NeRF 8 个场景和 NeRF-DS 7 个场景上整体追平或超过 MLP baseline，高频铰接运动的场景提升最明显，几乎零代价替换。",
+      "original_abstract": "Deformable 3D Gaussian Splatting (D-3DGS) re-constructs dynamic scenes from monocular video by deforming a canonical set of 3D Gaussians through a positional-encoded MLP of frame time t. Although fitted to a continuous variable, the MLP couples no two values of t in its architecture and effectively predicts discrete per-frame offsets, leaving temporal smoothness to emerge only as a byproduct of optimisation. We redesign the deformation field as a stack of Closed-form Continuous-time (CfC) cells, a Liquid Neural Network (LNN), that is the closed-form solution of the Liquid Time-constant ODE while preserving every other part of the D-3DGS pipeline. Each cell exposes a sigmoidal time gate that interpolates between two candidate hidden states, baking a learned smooth response to t into the loss landscape without invoking any numerical solver. On the eight D-NeRF and seven NeRF-DS scenes the liquid field matches or exceeds the MLP baseline in aggregate, with its largest gains concentrated on the scenes with the most high-frequency articulated motion. The result is a near-zero-friction architectural design that turns the discrete MLP deformation field into an explicit continuous-time function of t.",
+      "highlights": {
+        "contribution": "把 Deformable 3DGS 里的 MLP 形变场换成 Liquid NN 的 CfC cell，让时间维度的连续性从架构里自然得到，而不是靠损失逼出来。",
+        "innovation": "首次把 LNN/CfC 闭式解搬进动态 Gaussian Splatting，引入一个 sigmoid 时间门在两个候选 hidden state 间插值，不用调任何数值求解器，是个 drop-in 模块。",
+        "method": "保留 D-3DGS 整套 pipeline，只把 positional-encoded MLP 形变场换成一摞 CfC cell；每个 cell 暴露时间门函数对 t 做平滑插值；其它训练、loss、canonical Gaussians 全不动。",
+        "results": "在 D-NeRF 8 场景 + NeRF-DS 7 场景上整体匹配或超过 MLP baseline，高频铰接运动的场景增益最大；作者强调是近零摩擦的架构替换。论文没有声明 SOTA。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T08:43:44Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 8.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.07670v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.07670v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.06690",
+      "title": "RPC-GS: Gaussian Splatting with native RPC Rendering for Satellite Imagery",
+      "authors": [
+        "Valentin Wagner",
+        "Sebastian Bullinger",
+        "Christoph Bodensteiner",
+        "Michael Arens"
+      ],
+      "affiliations": [],
+      "summary": "卫星图像用的相机模型是 Rational Polynomial Camera (RPC)，但之前的卫星版 Gaussian Splatting 都会先用透视或仿射近似来代替 RPC，导致几何误差。RPC-GS 第一次让 splatting 直接在 RPC 模型下渲染：把 Gaussian 的均值和协方差通过一串 geo-coordinate 变换投到图像坐标，再推导一个数值稳定的 Jacobian-based 协方差投影，还补了一个 metric ray-based depth 用来填 RPC 里没有的深度概念。在 DFC2019 上平均高程误差比透视/仿射近似分别降低 29.6% / 63.8%，在 IARPA2016 上降 9.9% / 37.9%，代码开源。",
+      "original_abstract": "We present RPC-GS, the first Gaussian Splatting framework for satellite imagery that operates natively with Rational Polynomial Camera (RPC) models. The RPC model is the de facto standard for representing the complex imaging geometry of modern pushbroom satellite sensors. To simplify rendering, prior satellite Gaussian Splatting methods replace the RPC model with perspective or affine camera approximations, leading to geometric errors during reconstruction. RPC-GS avoids these approximations by projecting Gaussian means and covariances directly through the RPC model during the splatting process. We embed the RPC model in a chain of carefully selected geo-coordinate transformations representing a mapping from splatting-suitable scene coordinates to image coordinates. To map the Gaussian covariance matrices, we derive a numerically robust Jacobian-based covariance projection for the (partially nonlinear) coordinate transformations. Since RPCs lack an explicit notion of camera depth, we integrate a metric ray-based depth formulation. We benchmark RPC, perspective, and affine camera models in a unified framework, with our native RPC renderer consistently achieving the lowest reconstruction error on leading satellite benchmark datasets, improving mean altitude error over perspective and affine approximations by 29.6% and 63.8% on DFC2019, and by 9.9% and 37.9% on IARPA2016. We release our code to support future research of Gaussian Splatting in the satellite imaging domain.",
+      "highlights": {
+        "contribution": "提出首个原生支持 RPC 相机模型的 Gaussian Splatting 框架 RPC-GS，专为卫星推扫成像几何设计，避免传统透视/仿射近似带来的几何误差。",
+        "innovation": "关键差异是把 Gaussian 协方差通过非线性 geo-coordinate 变换链做 Jacobian 投影，并引入 ray-based metric depth 补齐 RPC 没有显式 camera depth 的短板。",
+        "method": "在 splatting 阶段把 Gaussian 均值和协方差通过一串精心选好的 geo-coordinate 变换投影到图像坐标，对协方差用数值稳定的 Jacobian 近似传播，再用 metric ray 来定义深度；在统一框架里同时对比 RPC、透视、仿射三种相机模型。",
+        "results": "在 DFC2019 上平均高程误差相对透视/仿射近似降低 29.6% / 63.8%，在 IARPA2016 上降低 9.9% / 37.9%，作者声称是这两个卫星基准上最低的重建误差，开源代码。"
+      },
+      "images": [],
+      "published_date": "2026-06-04T20:12:31Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 8.0,
+        "popularity": 5.5,
+        "quality": 7.2,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.06690v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06690v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.06473",
       "title": "MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery",
       "authors": [
@@ -659,44 +779,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.06473v1",
       "arxiv_url": "https://arxiv.org/abs/2606.06473v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.05885",
-      "title": "When Denser Credit Is Not Enough: Evidence-Calibrated Policy Optimization for Long-Horizon LLM Agent Training",
-      "authors": [
-        "Yuanfan Li",
-        "Qi Zhou",
-        "Wenjing Duan",
-        "Lu Chen"
-      ],
-      "affiliations": [],
-      "summary": "长时序 LLM agent 在稀疏延迟奖励下难做信用分配。GiGPO 用 anchor 状态做 step-level advantage，但作者指出 rollout 有限时罕见幸运动作会拿到过大 advantage，导致 anchor 偏差和后期震荡。提出 ECPO：用 Evidence-Calibrated Action Advantage 按 canonical action 分组并缩小低计数估计，加 Variance-Gated Credit Weighting 抑制 within-action 噪声主导的 anchor。ALFWorld/WebShop 上 Qwen2.5-1.5B 比 GiGPO 提 +5.2/+7.3 成功分，开销仅 +0.1%。",
-      "original_abstract": "Long-horizon LLM agents require reinforcement learning methods that can assign credit to intermediate decisions under sparse and delayed rewards. Recent group-based methods such as GiGPO improve over GRPO by constructing step-level advantages at repeated anchor states. However, we show that such dense credit can be statistically unreliable: under limited rollouts, rare but lucky actions may receive overly large advantages, producing divergent anchor bias and late-stage training oscillation. We propose Evidence-Calibrated Policy Optimization (ECPO), a critic-free policy optimization algorithm that calibrates step-level credit before policy updates. ECPO combines Evidence-Calibrated Action Advantage, which groups rollouts by canonical actions and shrinks low-count estimates, with Variance-Gated Credit Weighting, which suppresses anchor states dominated by within-action noise. Experiments on ALFWorld and WebShop with Qwen2.5-1.5B/7B show that ECPO consistently outperforms strong baselines, improving GiGPO by +5.2/+7.3 success points on ALFWorld/WebShop with Qwen2.5-1.5B while adding only 0.1% additional advantage-computation overhead.",
-      "highlights": {
-        "contribution": "为长时序 LLM agent RL 提出无 critic 的证据校准 step 级信用分配方法",
-        "innovation": "Evidence-Calibrated Action Advantage + Variance-Gated Credit Weighting 抑制 anchor 偏差",
-        "method": "按 canonical action 分组 rollout 收缩低计数 advantage；按 within-action 方差加权抑制噪声 anchor",
-        "results": "ALFWorld/WebShop Qwen2.5-1.5B 比 GiGPO 提 +5.2/+7.3 成功分，仅 +0.1% 开销"
-      },
-      "images": [],
-      "published_date": "2026-06-04T08:54:09Z",
-      "categories": [
-        "cs.LG"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent"
-      ],
-      "scores": {
-        "relevance": 9.0,
-        "recency": 9.5,
-        "popularity": 7.0,
-        "quality": 8.0,
-        "recommendation": 8.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.05885v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.05885v1",
       "venue": null
     },
     {
@@ -824,42 +906,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.05847",
-      "title": "Agentic Molecular Recovery via Molecule-Aware Exploration",
-      "authors": [
-        "Suwan Yoon",
-        "Changhee Lee"
-      ],
-      "affiliations": [],
-      "summary": "LLM 文本生成分子时常给出无效 SMILES。作者认为不该只追求「语法合法」而应「身份保真」——既恢复化学合法性又保留描述里隐含的结构线索。提出 AMREC：用分子感知的不匹配追踪 + 扩展候选探索 + 轨迹级选择，避免贪心单候选弯路。在 ChEBI-20 三个 backbone 的无效草稿上，结构、精确匹配、字符串级指标都最优。",
-      "original_abstract": "Text-guided molecular generation with LLMs often yields invalid SMILES. We argue that invalid drafts should be addressed through a shift from validity-oriented repair to identity-preserving molecular recovery: the objective is not only to restore chemical validity, but also to preserve target-relevant structural cues and recover the molecular identity implied by the description. This perspective reveals the limitations of existing correction strategies. Post-hoc repair can recover validity while distorting key structures, LLM-only correction can introduce unintended global drift, and generic agentic correction remains constrained by greedy single-candidate trajectories even when equipped with executable RDKit edit tools. To address these limitations, we propose AMREC, which couples molecule-aware mismatch tracking with expanded candidate exploration and trajectory-level selection. On invalid ChEBI-20 drafts from three backbone models, AMREC achieves the strongest overall recovery profile across structural, exact-match, and string-level metrics.",
-      "highlights": {
-        "contribution": "把无效 SMILES 修复重新定义为「身份保真的分子恢复」任务",
-        "innovation": "分子感知的不匹配追踪 + 多候选轨迹级选择，跳出贪心单候选",
-        "method": "agentic RDKit 编辑工具 + 候选扩展 + 轨迹级排序，识别描述里的关键结构线索",
-        "results": "ChEBI-20 三种 backbone 上结构/精确/字符串指标全面领先现有修复方法"
-      },
-      "images": [],
-      "published_date": "2026-06-04T08:23:01Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 6.0,
-        "recency": 9.5,
-        "popularity": 5.0,
-        "quality": 7.0,
-        "recommendation": 6.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.05847v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.05847v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2606.06025",
       "title": "EGTR-Review: Efficient Evidence-Grounded Scientific Peer Review Generation via Multi-Agent Teacher Distillation",
       "authors": [
@@ -942,79 +988,41 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.05860",
-      "title": "GenAutoML: An Agentic Framework for Dynamic Architecture Generation and Optimization in Time-Series Analysis",
+      "arxiv_id": "2606.06646",
+      "title": "CAF-Gen: A Multi-Agent System for Enriching Argumentation Structures",
       "authors": [
-        "Oleeviya Babu Poikarayil",
-        "Cédric Schockaert",
-        "Abdulrahman Nahhas",
-        "Christian Daase",
-        "Mursal Dawodi",
-        "Jawid Ahmad Baktash"
+        "Jakub Bąba",
+        "Jarosław Chudziak"
       ],
       "affiliations": [],
-      "summary": "传统 AutoML 搜索空间预定义、难以适配多样数据。GenAutoML 让 LLM 当神经架构师，把自然语言需求映射成可执行 PyTorch 实现。框架带沙箱反思循环和签名感知运行时保证一致性与安全，还配 Dyn-RevIN 应对非平稳数据。ETTh1/ETTm1/Weather 上能动态生成针对数据特征的架构，生成的 WaveInterferenceNet 推理延迟 < 0.01ms/样本同时保持竞争力，适合边缘部署。",
-      "original_abstract": "Designing neural architectures for time-series forecasting and anomaly detection remains a resource-intensive task that often requires substantial domain expertise. Traditional Automated Machine Learning (AutoML) systems typically rely on static, predefined search spaces, limiting their ability to adapt to diverse data characteristics. We present GenAutoML, an agentic framework that leverages Large Language Models (LLMs) as neural architects to bridge natural-language requirements and executable PyTorch implementations. The framework incorporates a Sandboxed Reflection Loop for autonomous code refinement and a Signature-Aware Runtime that enforces architectural consistency and execution safety. To improve robustness under non-stationary conditions, we further introduce a Dynamic Reversible Instance Normalization (Dyn-RevIN) wrapper. Experiments on the ETTh1, ETTm1, and Weather benchmarks demonstrate that GenAutoML can dynamically generate task-specific neural architectures tailored to dataset characteristics. Among the generated models, WaveInterferenceNet achieves inference latency below 0.01 ms per sample while maintaining competitive predictive performance. By emphasizing computational efficiency, architectural adaptability, and stable optimization behavior, GenAutoML enables the creation of ultra-lightweight neural networks suitable for resource-constrained and latency-sensitive Edge AI deployments.",
+      "summary": "Argument Mining 一般只能抽出「论点-前提」骨架，对 Carneades 这种带前提类型、证明标准、论证图式的复杂框架就力不从心了。CAF-Gen 用一个 Creator-Reviewer 多智能体迭代流水线，Creator 生成 CAF 结构、Reviewer 检查结构完整性，反复修正，把浅层 argument 结构补成 CAF-compliant 的丰富模型。实验显示多智能体迭代比单次生成的稳定性高，结构更丰富，同时和原始标注对齐良好。",
+      "original_abstract": "Formalizing complex reasoning from natural text is one of the central challenges in computational linguistics. It requires systems to understand not just keywords but also the context and complex reasoning embedded in a text. Current Argument Mining (AM) techniques identify basic claims and premises, yet they often struggle to capture the richer structural information required by advanced schemas such as the Carneades Argumentation Framework (CAF), which incorporates features such as premise types, proof standards, and argument schemes. We address this limitation by introducing CAF-Gen, an automated multi-agent framework designed to enrich shallow argument structures into CAF-compliant argument models. By employing an iterative Creator-Reviewer pipeline, a creator agent's output is validated by a critical agent to ensure structural integrity. This multi-agent collaboration is crucial for mitigating the structural instability typical of single-pass generative models. Our experiments demonstrate that the iterative feedback loop improves the quality of the resulting data and achieves strong alignment with the original annotations, while producing structurally richer models. Our findings show that the multi-agent system can overcome the limitations of single-pass generation, providing a robust methodology for the automated modeling of formal argumentation.",
       "highlights": {
-        "contribution": "LLM 驱动的时序 AutoML agent 框架，自动生成超轻量边缘模型",
-        "innovation": "沙箱反思循环 + 签名感知运行时 + 动态可逆实例归一化",
-        "method": "LLM 作架构师→PyTorch 实现→沙箱反思迭代修正→Dyn-RevIN 处理非平稳",
-        "results": "ETTh1/ETTm1/Weather 上生成 WaveInterferenceNet，<0.01ms/样本推理延迟"
+        "contribution": "提出 CAF-Gen 多智能体框架，把浅层 argument mining 结果自动扩充为符合 Carneades Argumentation Framework 的丰富结构（含前提类型、证明标准、论证图式）。",
+        "innovation": "相比单次 LLM 生成，引入 Creator-Reviewer 迭代回路：Reviewer 专门校验 CAF 的结构完整性，缓解单 pass 生成在复杂图式上的结构性不稳定。",
+        "method": "Creator agent 基于浅层 argument 结构生成 CAF 模型，Reviewer agent 检查结构是否符合 CAF 规范并反馈修正，循环若干轮直到收敛；评估比较和原始 CAF 标注的一致性以及结构丰富度。",
+        "results": "实验显示迭代反馈确实比单次生成质量好，与原标注的对齐度高、结构更丰富，但论文没有报具体的 benchmark 数值和 SOTA 对比，更多是方法学结果。"
       },
       "images": [],
-      "published_date": "2026-06-04T08:35:40Z",
+      "published_date": "2026-06-04T18:51:58Z",
       "categories": [
-        "cs.LG"
+        "cs.CL",
+        "cs.AI"
       ],
       "matched_domain": "Agent",
       "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 5.0,
-        "recency": 9.5,
-        "popularity": 5.0,
-        "quality": 6.0,
-        "recommendation": 5.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.05860v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.05860v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.05872",
-      "title": "Entropy-Based Evaluation of AI Agents: A Lightweight Framework for Measuring Behavioral Patterns",
-      "authors": [
-        "Olasimbo Ayodeji Arigbabu"
-      ],
-      "affiliations": [],
-      "summary": "传统 agent 评估只看任务成功率/奖励/延迟/成本，忽略了 agent 行为本身——是探索过度还是重复僵化、工具用得怎样、不确定性是否随时间下降。EEA 框架用熵来度量 agent 决策过程结构：动作熵、轨迹熵、工具熵、信息增益、探索效率、鲁棒性熵六个指标。配套 Python 实现可接 LangChain、Google ADK、自定义 agent loop 和观测追踪。",
-      "original_abstract": "AI agents are commonly evaluated using task success, reward, latency, and cost. These metrics are useful, but they often miss important aspects of agent behavior: whether an agent explores too much, repeats itself too rigidly, uses tools effectively, reduces uncertainty over time, or remains robust across repeated runs. This paper proposes Entropy-Based Evaluation of AI Agents (EEA), a lightweight framework for measuring agent behavior through entropy. Rather than treating intelligence as only final task completion, EEA studies the structure of the agents decision process. The framework introduces action entropy, trajectory entropy, tool entropy, information gain, exploration efficiency, and robustness entropy. These metrics are intended to complement, not replace, traditional evaluation methods. We also present a practical Python implementation designed to integrate with agent frameworks such as LangChain, Google ADK, custom agent loops, and stored observability traces.",
-      "highlights": {
-        "contribution": "用熵刻画 agent 行为模式的轻量级补充评估框架",
-        "innovation": "六维熵指标体系（动作/轨迹/工具/信息增益/探索效率/鲁棒性熵）",
-        "method": "对 agent 决策轨迹计算各类熵；提供与 LangChain/ADK 集成的 Python 库",
-        "results": "提出指标体系并给出可用实现，作为传统指标的补充而非替代"
-      },
-      "images": [],
-      "published_date": "2026-06-04T08:46:43Z",
-      "categories": [
-        "cs.AI",
-        "cs.CV"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
+        "multi-agent",
         "agent framework"
       ],
       "scores": {
-        "relevance": 6.0,
-        "recency": 9.5,
-        "popularity": 5.0,
-        "quality": 5.0,
-        "recommendation": 5.0
+        "relevance": 4.5,
+        "recency": 8.0,
+        "popularity": 4.5,
+        "quality": 6.0,
+        "recommendation": 5.2
       },
-      "pdf_url": "https://arxiv.org/pdf/2606.05872v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.05872v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.06646v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.06646v1",
       "venue": null
     },
     {

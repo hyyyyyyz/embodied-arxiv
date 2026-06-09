@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.07100",
+    "summary": "VLA 模型很依赖真实机器人动作数据，而潜动作模型（LAM）可以从人类视频里学到伪动作但和 VLA 训练是分开的，互相不通气。作者提出 LARA，把 LAM 和 VLA 的表示对齐起来联合训练，让 LAM 学到的动力学约束 VLA 的预测，VLA 的真动作又反过来给 LAM 提供监督。三个模拟基准和一个真机基准上分别平均提升约 10%/5%/15%。",
+    "highlights": {
+      "contribution": "提出一个即插即用的表示对齐框架 LARA，让潜动作模型和 VLA 互相提升，缓解人类视频伪监督和 VLA 训练脱节的问题。",
+      "innovation": "不再把 LAM 当成冻结的预训练上游，而是和 VLA 联合优化做双向对齐，LAM 能学到真动作语义、VLA 能拿到正向动力学正则。",
+      "method": "输入图像和语言指令，LAM 从视觉变化抽出潜动作，VLA 预测真实动作；训练时两边表示空间做对齐损失，加上原本的动作监督一起优化；可用于预训练、后训练增强和 LAM 精调。",
+      "results": "在 3 个仿真 + 1 个真机操作基准上分别拿到约 10%、5%、15% 的平均提升，覆盖三种使用场景。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 8.5,
+      "popularity": 7.5,
+      "quality": 8.2,
+      "recommendation": 8.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07217",
+    "summary": "VLA 适配新任务往往要重新采数据再微调，作者提出 WIZARD：在权重空间做元学习，给定语言指令加一段示范视频，一次前向就预测出针对该任务的 LoRA 参数，省掉了动作标注和测试时优化。LIBERO 上未见任务提升最高 14 倍，真机 Franka 上也稳定优于基线。",
+    "highlights": {
+      "contribution": "用权重空间元学习实现 VLA 的零标注快速任务适配，单次前向生成 LoRA 适配器。",
+      "innovation": "不在数据/动作层面做 few-shot，而是直接学一个把任务证据映射到专家 LoRA 权重的网络，省去了测试时梯度更新。",
+      "method": "输入语言指令和短示范视频，元训练阶段以专家 LoRA 为目标学一个权重生成器；推理时把生成的 LoRA 装到冻结的 VLA 主干上直接执行。",
+      "results": "LIBERO 未见数据集合提升约 2 倍、未见任务最高 14 倍；真机 Franka Panda 上稳定超过 real-domain adapted 基线。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8.5,
+      "popularity": 7.4,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07383",
+    "summary": "VLA 在边缘端部署延迟主要被视觉/上下文 token 数量拖累。RhinoVLA 和慧曦 R1 SoC 协同设计，用 Token 高效的 Qwen3-VL 主干配连续 Action Expert，统一接口支持跨机器人，并做了硬件感知编译、混精和并行视觉编码。性能和 π0.5 相当，边缘端推理达到 11.69 Hz，超过 10 Hz 实时闭环目标。",
+    "highlights": {
+      "contribution": "提出一个面向边缘 SoC 部署的 VLA 技术报告 RhinoVLA，在 Huixi R1 上做到实时闭环。",
+      "innovation": "把 VLM 端 token 数量看作部署延迟瓶颈，从 token-efficient 主干、72D 统一状态/动作空间到硬件感知编译做软硬协同设计。",
+      "method": "Qwen3-VL 作为视觉语言主干，连续 Action Expert 出动作；用 View Registry + 72D 状态动作槽 + per-robot LoRA 统一跨机体接口；部署侧混精、并行视觉编码。",
+      "results": "下游性能接近同量级 π0.5，在 Huixi R1 边缘 SoC 上端到端推理达 11.69 Hz，达到 10 Hz 实时控制要求，将开源。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 8.5,
+      "popularity": 7.6,
+      "quality": 7.5,
+      "recommendation": 7.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07895",
+    "summary": "离散 token VLA 通常一个 token 一个 token autoregressive 出动作，慢且没显式建模时间结构。TBD-VLA 把动作序列切成时间块，块内做 masked 离散扩散并行解码、块间继续 autoregressive，兼顾时间一致性和速度，还能支持 Real-Time Chunking 这种异步执行。仿真和真机都显著超过先前 VLA。",
+    "highlights": {
+      "contribution": "把块级离散扩散引入离散 token VLA，统一了 autoregressive 和并行解码两种范式。",
+      "innovation": "在时间维度上分块，块内并行扩散建模 token 依赖，块间 autoregressive，比纯并行解码多了显式时间依赖建模。",
+      "method": "动作序列切 temporal block；块内 masked discrete diffusion 训练，块间 autoregressive 条件化；推理时支持时间 in-painting 做异步动作块执行。",
+      "results": "在仿真和真机操作任务上显著超过先前 VLA 方法，同时推理速度更快，支持 Real-Time Chunking 的异步执行。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8.5,
+      "popularity": 7.4,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06967",
+    "summary": "Flow-based 生成策略表达能力强，但 on-policy RL 里很难精确算执行动作的概率，只能用近似或扩动作维度的 hack。GenPO++ 用历史状态当辅助记忆，结合高阶可逆 ODE solver 做精确可逆映射，似然比只取决于 solver 系数、无需算 Jacobian。大规模控制和真机操作里达到或超过 SOTA on-policy RL。",
+    "highlights": {
+      "contribution": "提出一个无需 Jacobian、不扩动作维度就能精确计算似然比的生成式 on-policy RL 框架。",
+      "innovation": "用高阶可逆 ODE solver 把生成策略变成可逆映射，似然比由固定 solver 系数决定，避免了 surrogate ratio 偏差和 dummy-action 的代价。",
+      "method": "用历史状态当辅助内存进入高阶可逆 ODE solver，把 flow policy 写成可逆变换；on-policy 训练里直接用解析似然比算 policy gradient。",
+      "results": "在大规模仿真控制、微调和真机操作上达到或超过 SOTA on-policy RL，训练稳定性和效率都更好。"
+    },
+    "scores": {
+      "relevance": 7.6,
+      "recency": 8.5,
+      "popularity": 6.8,
+      "quality": 8.2,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07012",
+    "summary": "3D 视觉运动策略想跑长程任务需要大量真机数据，传统 demo 增广只是改物体姿态/尺度，场景和技能序列结构没变。Task-Edit 把任务拆成场景、技能、物体三部分自由重组合，生成更丰富的轨迹。真机实验显示在不同机体上都能显著提升泛化，还能处理干扰、避障和未见杂乱场景。",
+    "highlights": {
+      "contribution": "提出任务中心的 demo 生成框架 Task-Edit，从场景/技能/物体三轴重组生成轨迹，提升 3D 视觉运动策略的泛化。",
+      "innovation": "不再只做 object-centric 局部变换，而是显式解耦并重组场景-技能-物体，能合成完全新的长程组合任务。",
+      "method": "把每条人类示范分解成场景、技能、物体三块；通过组合不同元素和重新排序生成新轨迹；再拿这些扩增轨迹训练 3D 视觉运动策略。",
+      "results": "真机多任务多机体上都显著提升基础策略表现，并能处理干扰抗扰、避障和未见杂乱场景。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 8.5,
+      "popularity": 6.8,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07107",
+    "summary": "VLA 直接输出动作，长程任务一旦早期出错会一直累积。Coarse-to-Control 让策略先在 action-token 空间里出一份粗规划，再 condition 在这份计划上生成可执行动作 token，规划和执行共享同一套离散动作词表，所以计划本身就贴近控制流形。LIBERO、SimplerEnv-WidowX 和真机上长程多阶段任务提升最明显。",
+    "highlights": {
+      "contribution": "在 VLA 的动作 token 空间里原生引入规划-执行两阶段，专治长程任务的早期误差累积。",
+      "innovation": "规划和执行共用同一个离散动作词汇，计划不是抽象 hint 而是直接可控的粗动作 token，比额外文本规划更贴近运动空间。",
+      "method": "先预测一串粗 action token 描述未来轨迹，再 condition 在这串粗 token 上生成精确的可执行 action token，统一在 VLA token 空间里做。",
+      "results": "在 LIBERO、SimplerEnv-WidowX 和真机操作任务上稳定超过直接动作生成，长程多阶段任务上提升最明显。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 8.5,
+      "popularity": 7.4,
+      "quality": 7.8,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07386",
+    "summary": "模仿学习策略常以固定步长动作块作为输出，缺乏几何和时序结构。Spline Policy 用样条参数替代 action chunk，主干不变就能得到连续轨迹、支持时间重采样、参数空间编辑、不确定性传播，还能解析地构造距离场做局部修正。和 diffusion、flow matching、VLA 主干都兼容，在多种操作任务上展示了实用性。",
+    "highlights": {
+      "contribution": "提出一种结构化的策略输出表示 Spline Policy，把动作块换成样条参数，让策略和经典控制更友好。",
+      "innovation": "在不改动策略主干的前提下，输出层从动作块换成样条参数，附带可解析的距离场和不确定性传播，便于和经典控制 / 零空间避障耦合。",
+      "method": "策略主干输出样条参数（如二次样条），解码为连续轨迹或解析距离场向量场；可加 null-space 控制器、用不确定性传播评估风险；兼容 diffusion/flow/transformer/VLA 主干。",
+      "results": "在低维运动学习、仿真操作、灵巧操作和真机实验上均与现代策略学习兼容，并展示紧凑解码、时间重采样、局部修正和控制器兼容等优势。"
+    },
+    "scores": {
+      "relevance": 7.6,
+      "recency": 8.5,
+      "popularity": 6.6,
+      "quality": 7.6,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07303",
+    "summary": "这是一篇理论性文章，提出 Bootstrap 表示涌现理论（TBER），把表示学习的转折点解释为现有表示对观测的「解释力不足」。作者把这一过程形式化为五阶段循环，并把它套到表示学习、基础模型、world model、digital twin 等场景，给未来 AI 系统检测自身表示极限提供思路。",
+    "highlights": {
+      "contribution": "提出一个用「解释力不足」驱动新表示涌现的理论框架 TBER，统一解释表示学习、world model、基础模型的转折。",
+      "innovation": "把表示涌现归因于现有框架的解释缺口而非单纯算力或数据增量，并给出五阶段递归动力学描述。",
+      "method": "纯理论建模：从观测稳定化、异常检测、解释力不足识别、新表示涌现到临时稳定五阶段刻画 bootstrap 循环，再对照各种 AI 系统案例讨论。",
+      "results": "无定量基准，主要给出概念框架并讨论在多个研究范式中的应用，提出未来系统应有自检表示极限的机制。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 8.5,
+      "popularity": 5.0,
+      "quality": 5.5,
+      "recommendation": 5.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07304",
+    "summary": "传统视觉动力学模型靠重建未来画面学，结果学习容量被画面背景吃掉，关键的动作相关变化反而不强。CAPE 改用对比目标：给定初始观测和候选动作序列，一次前向解码出完整未来潜轨迹，并用 Goal-Convergent 对比损失把不同动作导致的不同结果拉开。DROID 训练、zero-shot 到 RoboCasa 上检索/匹配/闭环规划都显著超基线。",
+    "highlights": {
+      "contribution": "提出 CAPE，用对比的方式建模动作条件下的未来轨迹，规避了重建型动力学被无关画面分心的问题。",
+      "innovation": "不再做帧重建或稠密 latent rollout，而是用「相同未来结果对齐、不同结果分开」的对比目标，并且一次前向解出全部未来 latent。",
+      "method": "输入初始观测和候选动作序列，并行编码出完整未来 latent 轨迹；用 Goal-Convergent 对比损失同结果对齐、异结果分离；用于未来检索、动作匹配和闭环规划。",
+      "results": "在真实 DROID 训练、zero-shot 迁移到 RoboCasa 上，未来状态检索、离线动作匹配、闭环规划上都大幅超基线，长程预测时规划推理成本也明显降低。"
+    },
+    "scores": {
+      "relevance": 8.6,
+      "recency": 8.5,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07326",
+    "summary": "现有 ego-centric world model 在交互完整性和可控演化上都比较弱。AnchorWorld 用 3D 人体运动作为主要交互模态，并辅以第三人称视角监督来补全画外身体，又通过定义 anchor view + 文本描述实现场景的局部可控演化。实验显著超过 SOTA，定制方案的时空一致性也得到了验证。",
+    "highlights": {
+      "contribution": "做出一个 ego-centric 互动世界模拟器 AnchorWorld，强化人-世界交互完整性并支持局部演化的灵活定制。",
+      "innovation": "用 3D 人体运动当交互单位、加第三人称辅助监督补全画外身体，又用 anchor view + 文本描述的机制做局部场景演化定制。",
+      "method": "输入 ego-centric 视频和 3D 人体运动；训练时引入第三人称辅助视角监督全身定位；推理时在统一世界坐标系下放 anchor view，用文字描述驱动局部场景演化。",
+      "results": "显著超过 SOTA 基线，消融验证关键设计有效，定制方案在时空几何一致性和遵循指定演化方面表现良好。"
+    },
+    "scores": {
+      "relevance": 8.4,
+      "recency": 8.5,
+      "popularity": 7.4,
+      "quality": 7.8,
+      "recommendation": 7.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07089",
+    "summary": "现有 World Action Model 多用视频预测当动作先验，多模态推理是固定的、长程任务上吃亏。作者观察到任务转换更需要文本推理、精细操作更需要视觉推理，于是设计 AdaWAM：一个轻量动态路由器，按需触发文本或视觉推理。仿真和真机上推理效率和表现都超过 SOTA 具身策略。",
+    "highlights": {
+      "contribution": "提出 AdaWAM，给 WAM 加上按需切换文本/视觉推理的自适应机制，兼顾长程规划和精细控制。",
+      "innovation": "把多模态推理拆分成「任务转换走文本、精细操作走视觉」两种模式，并训练一个轻量路由器自动决策。",
+      "method": "在 WAM 主干上接一个动态路由器，根据当前执行上下文判断该走文本推理还是视觉推理；在仿真和真机数据上联合训练。",
+      "results": "在仿真和真机具身任务上同时提升推理效率和成功率，超过 SOTA 具身策略；项目已开源 demo。"
+    },
+    "scores": {
+      "relevance": 8.6,
+      "recency": 8.5,
+      "popularity": 7.0,
+      "quality": 7.6,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07723",
+    "summary": "开放词汇长程操作需要机器人既能规划又能监督失败和恢复。VoLoAgent 用 VLM 作为「物理编排器」：把 VLA/WAM 当作可中断工具来调度，配合视觉模型和动作原语形成闭环。同时作者发布 RoboVoLo 基准评测常识、状态跟踪、复杂指代和世界知识等长程能力，VoLoAgent 在仿真和真机上都显著超过单 VLA/VLM 或工具型系统。",
+    "highlights": {
+      "contribution": "提出物理编排范式 VoLoAgent，把 VLA/WAM 当成可中断工具让 VLM 在 rollout 中实时调度；并发布开放词汇长程操作基准 RoboVoLo。",
+      "innovation": "把 VLA/WAM 视为可中断工具，VLM 在物理时间约束下随时打断、监控并恢复，比纯虚拟 agent 更强调时序约束。",
+      "method": "VLM 充当 orchestrator，闭环里调用 VLA/WAM 这类策略工具、视觉模型和动作原语，并能在 rollout 中根据观察打断和重规划；在 RoboVoLo 基准上联合评测和诊断失败模式。",
+      "results": "在 RoboVoLo 和真机上的开放词汇长程操作显著超过单 VLA/VLM 或常规工具型系统，并提供失败模式诊断。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8.5,
+      "popularity": 8.0,
+      "quality": 8.3,
+      "recommendation": 8.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07118",
+    "summary": "四足机器人仿真到真实迁移要同时弥合视觉和动力学 gap，但二者通常分开处理。QuadVerse 用 3D Gaussian Splatting 重建场景作为校准基底，从 RGB 视频里得几何约束的逼真 ego 渲染和带语义的碰撞网格，再做摩擦先验校准和残差动力学补偿。重建质量和运动跟踪都超基线，并实现了零样本视觉导航部署。",
+    "highlights": {
+      "contribution": "提出 QuadVerse 一个把视觉、接触、执行器三种 sim-to-real 误差统一在 3DGS 重建场景里联合校准的四足仿真框架。",
+      "innovation": "把重建场景同时当渲染基底和碰撞网格基底，再加上轨迹后验估摩擦先验和残差动力学补偿，把三类误差耦合解开。",
+      "method": "RGB 视频→几何约束 3DGS 重建→批量 ego 渲染 + 语义碰撞网格；用轨迹后验搜索校准空间变化摩擦；最后用真实轨迹回放训练残差动力学补偿器。",
+      "results": "重建质量和 locomotion 轨迹跟踪都超基线，并能零样本部署视觉导航策略而不用任务特定真机 rollout。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8.5,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07179",
+    "summary": "3DGS 流式传输需要逐级渐进表示，但现有离散分层方法层间独立、误差累积、splat 冗余高、质量切换不平滑。EvoGS 第一次做连续分层：用 Evolution Tree 像 wavelet 那样靠 parent-child 增量产生更细节点，子节点能修正祖先误差并产生稀疏可压的层间信号。冗余从 65% 降到 25% 以下，传输和显存最高分别降 2.4×、5.5×。",
+    "highlights": {
+      "contribution": "提出第一个连续分层的 3DGS 流式表示 EvoGS，让 LOD 之间不再独立，能传输得更省、切换更平滑。",
+      "innovation": "用 wavelet 思想的 Evolution Tree 表达 parent-child 增量，让子节点修正祖先误差，把分层之间的耦合明确建模。",
+      "method": "用 Evolution Tree 组织 splat：父节点存粗 splat，子节点存对父的稀疏增量；训练时通过这种树结构产生 LOD 序列；推理时按需取层做流式渲染。",
+      "results": "splat 冗余从 65%+ 降到 25% 以下；与 SOTA 相比传输带宽和 GPU 显存分别最高降 2.4× 和 5.5×，质量切换平滑适合自适应流式。"
+    },
+    "scores": {
+      "relevance": 5.8,
+      "recency": 8.5,
+      "popularity": 6.5,
+      "quality": 7.6,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07697",
+    "summary": "大气化学的机理验证至今高度依赖专家拍脑袋。TianJi-Environ 把 WRF-Chem 数值模式塞进多 agent 框架里，让 agent 自动把机理假设转成可执行配置、跑实验、生成证据。在北方平原夏季臭氧响应和关中盆地冬季 PM2.5 反馈两个案例里给出了可审计的判断结论，证明 LLM agent 能在大气化学里跑得通。",
+    "highlights": {
+      "contribution": "提出首个基于 WRF-Chem 的多 agent 大气化学机理验证框架 TianJi-Environ，让机理验证流程显式、可审计、可重复。",
+      "innovation": "把可执行的 WRF-Chem 仿真和 multi-agent 决策耦合到一起，agent 不只是写代码，还要按机理假设构造证据并判断证据是否充分。",
+      "method": "多 agent 把机理假设翻成 WRF-Chem 可执行配置、运行仿真、整理结果、对照证据准则做判断；通过两个真实案例 demo 流程。",
+      "results": "两个案例显示系统能识别哪些机理证据充分、哪些不足，给出方向一致的物理信号判断，验证了「可审计 AI 科学家」范式。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 8.5,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 5.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07119",
+    "summary": "这是一篇治理/架构 position paper，提出 Three-Ring Architecture：第 1 环是现有生产架构、第 2 环是基于策略的 agentic 联邦层、第 3 环是 LLM 前沿智能层。作者强调第 2 环是确定性可审计的「组织操作系统」，没有它 LLM agent 这种非确定性 actor 就缺少约束，论点结合了在金融、政府、采购等场景的部署经验。",
+    "highlights": {
+      "contribution": "为企业级 agentic AI 部署提出 Three-Ring Architecture，论证策略型 agent 联邦层是必须的治理基础设施。",
+      "innovation": "明确把策略型 agent（确定性）和 LLM agent（非确定性）的风险分开建模，并把治理层视为类操作系统的存在。",
+      "method": "概念架构论述：定义 Ring 1/2/3 的职责差异，结合金融、政府、采购等十年部署经验阐述风险传播和合规需求。",
+      "results": "无定量实验，主要给出架构主张及若干部署案例佐证，论点是「LLM 越强，对策略联邦层的依赖越强」。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 8.5,
+      "popularity": 5.0,
+      "quality": 5.5,
+      "recommendation": 4.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07299",
+    "summary": "DuMate-DeepResearch 是百度千帆 Agent Foundry 上的 Deep Research 多 agent 系统：把任务理解/规划/调度和工具生态解耦，用图式动态规划、递归两层执行（外层主 agent + 内层 search agent）、和基于 rubric 的测试时优化机制做长程开放任务。两个 DR 基准上都拿到 SOTA，分别 58.03% 和 61.95%。",
+    "highlights": {
+      "contribution": "提出可审计的 Deep Research 多 agent 框架 DuMate-DeepResearch，并在两个 DR 基准上拿到 SOTA。",
+      "innovation": "递归两层执行把噪声检索隔离在内层 search agent；rubric 在测试时动态生成并当作推理 scaffolding；图式规划支持反思和回溯。",
+      "method": "Agent Core 负责理解、规划、调度，工具生态做检索/证据/渲染；图式动态规划反复 reflection-replan-backtrack；内层 Search Agent 自带规划循环；用 rubric 做证据-grounded 合成与自适应停止。",
+      "results": "在 DeepResearch Bench 拿到 58.03% 总分、DeepResearch Bench II 拿到 61.95% 总分，均为 SOTA，信息召回和分析分项第一。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8.5,
+      "popularity": 7.4,
+      "quality": 7.8,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07436",
+    "summary": "MLLM agent 在 3D 场景做空间推理时常常用错工具或者偏好某些工具，结果 agentic 比非 agentic 强不了多少。Skill-3D 让 agent 学会场景感知的工具使用：把成功轨迹聚合成可复用的场景技能，失败案例作为教训挂在技能上，下次遇到相似场景就把技能注入指导。VSI-Bench 工具利用率从 39% 升到 78%，Gemini-3-Flash 在 MMSI-Bench 上提升 67%。",
+    "highlights": {
+      "contribution": "提出 Skill-3D 框架，让 3D 空间推理 agent 学会按场景挑工具，靠场景记忆和自我演化的技能库提升表现。",
+      "innovation": "把成功轨迹蒸馏成场景感知的可复用技能、失败轨迹挂为教训，技能和记忆库一起演化，明确针对 3D 场景异质性。",
+      "method": "识别任务场景并记录工具使用轨迹到 Scene Memory；相似场景成功轨迹聚合蒸馏出 scene-aware skill；遇到相似场景注入对应技能引导 agent；新轨迹反过来精化技能。",
+      "results": "VSI-Bench 工具利用率从 39% 提到 78%；Gemini-3-Flash 在 MMSI-Bench 上提升 67%；Qwen3-VL-8B 在 VSI-Bench 上提升 43%。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8.5,
+      "popularity": 7.6,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07513",
+    "summary": "现有 agent 社会模拟普遍只跑「天」级时长，社交深度不够。Agentopia 让 100 个 agent 在模拟世界里跑 10 年，能形成长期社会关系和个人成长。作者定义 life reward 模拟人类幸福感，用 rejection sampling 训练 LLM，结果 agent 涌现丰富社交行为，下游 role-playing 基准上也有 +15.6% 提升。",
+    "highlights": {
+      "contribution": "提出 Agentopia 长程 agent 社会模拟框架，并用「life reward」从模拟经验里训练 LLM 学社会智能。",
+      "innovation": "把模拟时长拉到 10 年级，让 long-term 社交关系真正能涌现；用 life reward 把模拟经验回灌给 LLM，不只是描述行为。",
+      "method": "100 个 agent 在模拟社会里自由追求成长、关系和需求；定义 life reward 反映幸福感；用 rejection sampling 拿高 reward 轨迹微调底层 LLM。",
+      "results": "agent 表现出丰富涌现社交行为；life reward 训练后 LLM 在下游 role-playing 基准上提升 +15.6%。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8.5,
+      "popularity": 7.0,
+      "quality": 7.4,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07808",
+    "summary": "推理型 agent 要遵守 instruction hierarchy，但端到端 benchmark 看不出失败到底是哪一步坏的。作者把失败拆成识别、冲突解决、生成三段做白盒诊断，并提出无需训练的并行输入监视器和串行输出监视器。GPT-5.3 上规则违规可降低 86%（静态攻击）和 45%（自适应攻击），整体 81-99%。",
+    "highlights": {
+      "contribution": "给 agent 的 instruction hierarchy 失败提出白盒诊断框架，并给出两种 training-free 的自监视修复机制。",
+      "innovation": "把违规细分成识别/冲突解决/生成三类失败做白盒定位，配合并行+串行两层 self-monitor，不动模型权重就能大幅降违规率。",
+      "method": "白盒诊断把端到端失败拆三段并定位主导失败模式；自监视：并行 input monitor 在生成前检测冲突，sequential output monitor 在生成后审查修复。",
+      "results": "在 Gemma-4-31B-IT、Claude Sonnet 4.6、GPT-5.3 上规则违规降低 81-99%，GPT-5.3 静态攻击降 86%、自适应攻击降 45%。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8.5,
+      "popularity": 7.0,
+      "quality": 7.6,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07837",
+    "summary": "线上看演唱会缺少集体氛围。作者做了一个 multi-agent 系统，让 10 个 LLM agent 给 K-pop 演出视频实时弹幕，对比带粉丝 persona 的版本和无 persona 的 baseline。N=11 的用户研究显示 persona 能让聊天质量和自然感变好，但社会连接、参与、情感反应没有显著差异——线上 K-pop chat 更像「集体独白」。",
+    "highlights": {
+      "contribution": "用 multi-agent LLM 模拟在线演唱会观众弹幕，做了一项以 K-pop 粉丝为样本的小规模 HCI 研究。",
+      "innovation": "把 persona-conditioned multi-agent 用在「在线集体观演」场景，并明确比较有无 persona 的体验差异。",
+      "method": "10 个 LLM agent 实时给演唱会视频写弹幕，对比 persona-conditioned 和 no-persona 两个版本；N=11 within-subjects 用户研究 + 访谈。",
+      "results": "persona 显著提高了 chat 质量和自然感，但没改善社会连接、参与度和情感反应；访谈提示这种场景更像集体独白，需要更深的粉丝身份对齐。"
+    },
+    "scores": {
+      "relevance": 2.5,
+      "recency": 8.5,
+      "popularity": 4.5,
+      "quality": 5.5,
+      "recommendation": 4.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07866",
+    "summary": "核电监管审查动辄三年和上亿美元。作者提出 Regulatory Context Protocol（RCP），一种 agent-to-agent 通信标准，用结构化可审计的 agentic 通道替代申请方和监管方之间的人对人流程，同时保留关键决策的人在环节点。在 1236 份 NRC 文档上校准并跑了 multi-agent 试点，相对重建基线节省 50-77% 成本、65% 时间。",
+    "highlights": {
+      "contribution": "提出 Agent-to-Agent 协议 RCP，把核电监管审查这种长周期跨机构流程结构化、可审计地压缩。",
+      "innovation": "强调瓶颈是「跨组织管线」而不是「单点算法」，所以解法是一套共享 A2A 协议而不是更强的单 agent。",
+      "method": "在 1236 份 NRC 先进堆文档上分析瓶颈、设计 RCP 协议；用 multi-agent 试点跑通流程；对照「重建基线」（89M USD、42 个月）做成本-时间估算。",
+      "results": "相对基线节省 21-44M USD（50-77%）和 15 个月（65%）；单独的 standalone agent 只能降到 54-74M USD、21 个月；外推到全美监管负担可省约 210-330B USD/年。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 8.5,
+      "popularity": 5.5,
+      "quality": 6.0,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.07867",
+    "summary": "作者发现工具调用 LLM agent 在对话开头最不安全，跑了若干正常 agentic 任务后会显著变安全，这叫 cold-start safety gap。SODA 基准支持最多 20 个前置任务的可控评测，7 个模型上看安全性能随前置任务增加提升 9-52%。建议部署前先让 agent 跑几个常规任务「热身」。",
+    "highlights": {
+      "contribution": "首次系统刻画 LLM agent 的 cold-start 安全间隙，并提出可控前置任务长度的 SODA 基准与简单部署建议。",
+      "innovation": "把「安全表现」当作 agent 历史深度的函数研究，发现是前置常规 agentic 任务而非 agent 自己的回答驱动了安全性提升。",
+      "method": "构建 SODA 基准控制 0-20 个前置常规任务后注入安全威胁；评测 7 个模型；做 representation 分析看隐藏状态是否漂向安全区；在 AgentHarm、Agent Safety Bench、BFCL、API-Bank 等基准上交叉验证。",
+      "results": "随前置任务数 0→20，安全性提升 9-52%；通过先跑几个常规任务可显著缓解 cold-start 风险，同时保留全部能力。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 8.5,
+      "popularity": 7.0,
+      "quality": 7.6,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.06976",
+    "summary": "LLM agent 的工具调用决策常常 hallucinate，而现有 decision-oriented RL 会削弱正确/错误动作之间的不确定性区分，造成自信犯错。TRUST 把不确定性量化变成 reward 设计里的「斥力」，配合关键 turn 的轻量标注做统一多轮后训练，在多种 tool-use 基准上同时提升决策质量、agent 表现和不确定性可靠性。",
+    "highlights": {
+      "contribution": "提出 TRUST，用 uncertainty-aligned RL 改善 agent 工具调用决策，避免 decision-oriented RL 抹平不确定性的副作用。",
+      "innovation": "把 uncertainty quantification 当作 reward 中的 repulsive force 维持不确定性分离，并用关键 turn 标注做多轮统一后训练。",
+      "method": "在工具调用 RL 训练里加入基于不确定性的奖励斥力项，使正确动作的不确定性低、错误动作的高；标注少量关键 turn 用于多轮联合后训练。",
+      "results": "在多个 tool-use 基准上一致提升决策质量和 agent 表现，同时优化期间不确定性估计也更可靠。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8.5,
+      "popularity": 6.6,
+      "quality": 7.4,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  }
+]

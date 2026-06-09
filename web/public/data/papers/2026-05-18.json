@@ -765,54 +765,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.18421",
-      "title": "EvoMemBench: Benchmarking Agent Memory from a Self-Evolving Perspective",
-      "authors": [
-        "Yuyao Wang",
-        "Zhongjian Zhang",
-        "Mo Chi",
-        "Kaichi Yu",
-        "Yuhan Li",
-        "Miao Peng",
-        "Bing Tong",
-        "Chen Zhang",
-        "Yan Zhou",
-        "Jia Li"
-      ],
-      "affiliations": [
-        "HKUST(GZ)"
-      ],
-      "summary": "现在 agent benchmark 主要看 reasoning/planning/execution，memory 这块缺系统化评测。EvoMemBench 从 self-evolving 视角切入，沿 memory scope（in-episode vs cross-episode）和 memory content（知识型 vs 执行型）两轴整理出统一基准，比较 15 种 memory 方法和强 long-context baseline。结论是 long-context 仍非常顶；memory 在上下文不够或任务难时才显优势；retrieval 适合知识型，procedural / long-term memory 适合执行型。",
-      "original_abstract": "Recent benchmarks for Large Language Model (LLM) agents mainly evaluate reasoning, planning, and execution. However, memory is also essential for agents, as it enables them to store, update, and retrieve information over time. This ability remains under-evaluated, largely because existing benchmarks do not provide a systematic way to assess memory mechanisms. In this paper, we study agent memory from a self-evolving perspective and introduce EvoMemBench, a unified benchmark organized along two axes: memory scope (in-episode vs. cross-episode) and memory content (knowledge-oriented vs. execution-oriented). We compare 15 representative memory methods with strong long-context baselines under a standardized protocol. Results show that current memory systems are still far from a general solution: long-context baselines remain highly competitive, memory helps most when the current context is insufficient or tasks are difficult, and no single memory form works consistently across all settings. Retrieval-based methods remain strong for knowledge-intensive settings, whereas procedural and long-term memory methods are more effective for execution-oriented tasks when their stored experience matches the task structure. We hope EvoMemBench facilitates future research on more effective memory systems for LLM-based agents. Our code is available at https://github.com/DSAIL-Memory/EvoMemBench.",
-      "highlights": {
-        "contribution": "首次按 self-evolving 视角搭一个系统的 agent memory benchmark EvoMemBench，覆盖 scope 和 content 两轴。",
-        "innovation": "把 memory 评估按 in-episode/cross-episode × knowledge/execution 拆成 2×2 网格，统一比较 15 种代表方法和 long-context baseline。",
-        "method": "标准化协议下用 15 种 memory 方法（检索/程序/长期等）和 long-context baseline 在多类任务上跑；按 scope × content 网格分析效果差异。",
-        "results": "long-context baseline 仍非常有竞争力；memory 在 context 不够或难任务上才显优；retrieval 强在知识型，procedural/long-term 强在执行型；没有单一 memory 通吃。"
-      },
-      "images": [],
-      "published_date": "2026-05-18T13:54:38Z",
-      "categories": [
-        "cs.CL",
-        "cs.AI",
-        "cs.LG"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm-based agent"
-      ],
-      "scores": {
-        "relevance": 6.5,
-        "recency": 7.0,
-        "popularity": 6.0,
-        "quality": 7.2,
-        "recommendation": 7.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.18421v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.18421v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.18747",
       "title": "Code as Agent Harness",
       "authors": [
@@ -976,6 +928,50 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2605.18414v1",
       "arxiv_url": "https://arxiv.org/abs/2605.18414v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.07549",
+      "title": "PathoSage: Towards Multi-Source Evidence Adjudication in Pathology via Experience-Aware Agentic Workflow",
+      "authors": [
+        "Chengyang Zhang",
+        "Wenchuan Zhang",
+        "Bo Li",
+        "Mengran Li",
+        "Bob Zhang",
+        "Yuhao Yi",
+        "Hong Bu",
+        "Jiancheng Lv"
+      ],
+      "affiliations": [],
+      "summary": "病理图像 patch 级推理这事儿，端到端 MLLM 容易凭空编造形态特征，而现有 agent 框架又把工具输出和检索知识塞进同一个上下文里，证据一冲突就翻车。作者提出 PathoSage，把知识检索、证据收集、证据裁决三步彻底拆开，并在新上下文里独立做最终判决避免锚定偏差。再加一个 training-free 的 Beta-Bernoulli 工具可靠性建模，长期跟踪每个工具的靠谱程度。实验上比强病理 MLLM 和 agent baseline 都好，VQA 幻觉和分类器分歧明显减少。",
+      "original_abstract": "Recent advances in Multimodal Large Language Models (MLLMs) and agent workflows have shown strong promise for computational pathology, yet reliable patch-level reasoning remains challenging. End-to-end pathology MLLMs often hallucinate morphological features, while recent agentic systems usually merge tool outputs and retrieved knowledge into a shared context, making decisions vulnerable to conflicting evidence and context contamination. We propose PathoSage, a three-stage framework that explicitly separates knowledge retrieval, evidence collection, and evidence adjudication for patch-level pathology multimodal reasoning. Its core component, Structured Evidence Deliberation, independently evaluates heterogeneous evidence from tools, performs conflict analysis, and generates the final judgment in a fresh context to reduce anchoring bias. We further introduce a training-free Beta-Bernoulli experience system with continuous credit assignment to model long-term tool reliability and construct similarity-weighted priors for future tool use. Experiments show that PathoSage effectively mitigates VQA hallucinations and classifier disagreement, outperforming strong pathology MLLM and agentic baselines. Our results highlight explicit evidence adjudication and reliability-aware tool modeling as key ingredients for robust pathology agents.",
+      "highlights": {
+        "contribution": "提出 PathoSage 三阶段框架，把病理 patch 级多模态推理中的「知识检索 / 证据收集 / 证据裁决」显式解耦，缓解 MLLM 幻觉和 agent 上下文污染。",
+        "innovation": "和把工具输出一锅炖的 agentic 系统不同，它在干净上下文里做证据裁决避免锚定偏差，还引入 Beta-Bernoulli 经验系统对工具长期可靠性做连续信用分配。",
+        "method": "三阶段流水线：先检索病理知识，再调用工具收集异质证据，最后在 fresh context 里做 Structured Evidence Deliberation 进行冲突分析与最终判决；同时用 Beta-Bernoulli 后验维护每个工具的可靠性，并用相似度加权得到未来调用的先验。整个工具可靠性建模 training-free。",
+        "results": "在病理 VQA 与分类任务上击败强病理 MLLM 与 agentic baseline，幻觉与分类器分歧显著减少；论文未给单一 SOTA 数字，更强调机制层面收益。"
+      },
+      "images": [],
+      "published_date": "2026-05-18T12:30:03Z",
+      "categories": [
+        "cs.AI",
+        "cs.MA"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agentic workflow"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 6.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.07549v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.07549v1",
       "venue": null
     },
     {

@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.09740",
+    "summary": "VLA 在光照、视角、初始状态变化时容易抓取或放置失败。作者提出 ProbeAct，无需训练在运行时介入：用一个轻量探针从 VLA 隐状态预测物体 3D 位置，用基于夹爪信号的状态机检测抓取/搬运/放置阶段失败，再用控制屏障函数把反复失败的位置编码成软安全约束，最小幅度修正动作。在 LIBERO-plus 上把 OpenVLA-OFT 成功率从 69.6% 提到 74.1%。",
+    "highlights": {
+      "contribution": "提出 ProbeAct，一个不动 VLA 权重、不需要额外数据的训练自由失败恢复框架。",
+      "innovation": "把隐状态探针 + 夹爪运动学状态机 + CBF 安全过滤组合成即插即用的恢复回路，与各种 VLA 正交。",
+      "method": "隐状态多目标探针预测物体 3D 位置并用匈牙利匹配跟踪，状态机检测失败阶段，分层 CBF 软约束修正动作。",
+      "results": "LIBERO-plus 上 OpenVLA-OFT 成功率 69.6%→74.1%，对 base 和微调 VLA 都适用。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09749",
+    "summary": "VLA 不能保证不撞场景里无关物体，已有 VLM 安全过滤太慢只能在 episode 开头跑一次。作者发现 VLA 内部有少数注意力头能稳定定位策略当前想接近的目标物，于是把这些 head 当作免费的目标提示，其他物体当障碍喂给 CBF 过滤器配合轻量实时物体跟踪。在 SafeLIBERO 静态场景与 oracle 持平，动态障碍场景平均超过 oracle 43%。",
+    "highlights": {
+      "contribution": "提出训练自由的 VLA 安全过滤，利用模型内部注意力实现实时碰撞回避。",
+      "innovation": "首次指出 VLA 的注意力头本身就含有目标定位信号，无需额外 VLM 调用就能区分目标和障碍。",
+      "method": "每步从 VLA 注意力头取 active target 位置，剩余物体视为障碍并用实时跟踪器更新，再用 CBF 修正动作。",
+      "results": "SafeLIBERO 静态版与 oracle 相当，动态障碍版本平均超 oracle 43%。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09827",
+    "summary": "现有 VLA 主要看当前观测，长时序任务搞不定。MemoryVLA++ 借鉴人脑工作记忆+海马+内部模型的分工，把感知-认知 token 当工作记忆，去查一个会自我去冗余的记忆库取历史，再用 world model 在去噪潜空间想象未来，融合后喂给 diffusion 动作专家。在 LIBERO、SimplerEnv、Mikasa-Robo、Calvin 等多个仿真和真机上都拿到强结果，真机记忆型任务+26%、想象型任务+28%。",
+    "highlights": {
+      "contribution": "把工作记忆、长期记忆和未来想象三件套同时装进 VLA，做完整时序建模。",
+      "innovation": "Perceptual-Cognitive 双层记忆库带去冗余合并，加上潜空间未来想象+记忆引导融合的全套设计。",
+      "method": "VLM 编码现在观测产生 token，查记忆库取历史，world model 在 latent 想象未来，融合后 diffusion 动作头输出动作序列。",
+      "results": "5 仿真 benchmark + 3 真机类别全面验证，真机记忆/想象/通用任务分别 +26%/+28%/+9%。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.5,
+      "recommendation": 8.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09215",
+    "summary": "WAM 在桌面操作上不错，但视频-动作 latent 迭代去噪太慢做不了实时人形 loco-manipulation；而且传统上下半身分开控会让两边动作空间不一致。MotionWAM 用单目自我视角，把视频世界模型的中间去噪特征喂给策略，用统一 motion latent 一次预测整身（脚、躯干、手）动作 token，三阶段训练逐步迁移。Unitree G1 九个真实任务上实时跑通，比同样 demo 微调的 VLA 基线总体成功率高 30%+。",
+    "highlights": {
+      "contribution": "把 WAM 从桌面操作拓展到实时人形全身 loco-manipulation。",
+      "innovation": "用 video world model 的去噪中间特征做条件 + 统一 motion latent，取代上下身分开的策略架构。",
+      "method": "单目自我视角输入，video WM 提供中间特征条件，policy 输出覆盖移动、躯干、脚、手的 whole-body motion token，三阶段渐进训练。",
+      "results": "Unitree G1 九个真实任务实时跑，比同样 demo 微调的 VLA baseline 整体成功率超出 30% 以上。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 10,
+      "popularity": 8.5,
+      "quality": 8.5,
+      "recommendation": 9.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09337",
+    "summary": "VLA 接触式任务遇到分布外环境就死板：力没控好、反复试错。TORL-VLA 在 wrench 感知的 VLA 之上挂一个轻量在线 RL 模块来细化动作，并解决人工干预导致 critic 错误归因的问题，引入 intervention-censored critic。真机门栓、咖啡杯放置、鸡蛋夹取等长时序接触任务上，子任务和全任务成功率以及限时效率都比强 baseline 高。",
+    "highlights": {
+      "contribution": "把触觉反馈 + 在线 RL 接到 VLA 上做接触式任务的实时适配。",
+      "innovation": "Wrench-aware VLA 预测参考动作和未来力序列，再加 intervention-censored critic 处理人工介入数据归因。",
+      "method": "VLA 输出参考动作和未来 wrench 序列，在线 RL 细化动作；critic 避免把人工干预后的成功归功于干预前的策略动作。",
+      "results": "门栓、咖啡杯、鸡蛋等长时序接触式任务在真机上子任务、全任务成功率和限时执行效率均超 baseline。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09572",
+    "summary": "作者觉得 VLA 在高频底层执行时不该一直处理原始语言，借小脑-丘脑的分工提出 CT-VAM：把语言只当任务条件，让 68M 小模型负责本地高频闭环。核心是 TARS 解码器，把 action/视觉/任务流分别独立路由防止视觉 token 把任务条件淹没，并用 flow-consistent inpainting 支持异步 chunk 执行。LIBERO 成功率追上更大 VLA 同时降低延迟，能在资源受限平台真机部署。",
+    "highlights": {
+      "contribution": "提出 68M 参数的小型 vision-action 模型，适合边缘高频控制。",
+      "innovation": "TARS 流分离条件注意力解码器 + flow-consistent inpainting 支持异步动作块。",
+      "method": "双视角图像 + 本体感知 + 轻量任务条件输入，TARS 分流路由后预测动作块，flow inpainting 衔接异步执行。",
+      "results": "LIBERO 成功率与大模型 VLA 持平，推理延迟显著降低，真机部署可用。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09630",
+    "summary": "VLA 在非正常状态下需要针对性恢复。ReCoVLA 不动 VLA 主体，用外部 VLM 推理失败模式和恢复阶段，再把任务相关组件编成结构化奖励，去训残差恢复策略。VLM 不直接给动作或奖励，而是当语义奖励选择器：预测恢复描述符和 mask，仿真里训残差策略后零样本 sim2real。仿真上把 $π_{0.5}$ 微调基线平均成功率从 36.7% 提到 66.7%，真机 sim2real 平均 61.7%。",
+    "highlights": {
+      "contribution": "提出 VLM 当奖励编译器、VLA 主体冻结的残差失败恢复框架。",
+      "innovation": "VLM 输出失败描述符 + 奖励掩码，而不是直接生成动作或开放奖励，让恢复策略稳定且与不同 VLA 解耦。",
+      "method": "VLM 推断失败模式与阶段并选择奖励组件，在仿真里训残差策略,再零样本部署到真机。",
+      "results": "仿真 $π_{0.5}$ baseline 36.7% → 66.7%，真机零样本 sim2real 平均成功率 61.7%。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09243",
+    "summary": "从自我视角视频里估计整手的抓握压力对 VR 和操作都很重要，但已有方法多只能搞平面或指尖。作者出 EgoTactile benchmark，配对自我视角视频和整手压力监督，含裸手迁移子集。Baseline EgoPressureFormer 之外，作者提出 EgoPressureDiff：用大规模预训练视频 diffusion 当 backbone，加 Physically-Informed Feature Rectification 注入物理语义约束，处理部分观测的不确定性。在 benchmark 和 in-the-wild 都拿到 SOTA 表现。",
+    "highlights": {
+      "contribution": "建了首个面向日常物体整手抓握压力估计的 egocentric benchmark，并给出强 baseline 与 diffusion 模型。",
+      "innovation": "用视频 diffusion 大模型当 backbone 来生成压力图，并引入物理约束特征整流层处理不确定性。",
+      "method": "EgoPressureFormer 做判别 baseline；EgoPressureDiff 改造视频 diffusion，加物理约束层条件化生成压力分布。",
+      "results": "EgoTactile benchmark 上超越基线，并能稳定迁移到野外裸手视频场景。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09258",
+    "summary": "VLA 偏离正常轨迹后直接重新规划往往把动作打乱。B2FF 让支持未来视觉条件的 VLA 在执行前先生成一组「熟悉未来」里程碑当 milestone bank，恢复时 selector 选一个当固定视觉目标，把偏离状态拉回熟悉的未来。在注入失败的 LIBERO 上把 baseline VLA 平均成功率从 56.3% 提到 74.0%，且不需要微调动作生成器。",
+    "highlights": {
+      "contribution": "提出基于预想象 milestone 的 VLA 失败恢复框架。",
+      "innovation": "把未来视觉条件用成「回到熟悉未来」的恢复接口，而不是即时重生成新的目标图像。",
+      "method": "执行前由 VLA 在干净初始观测上生成 milestone bank，恢复时 recoverability-aware selector 选一个 milestone 作为固定视觉目标。",
+      "results": "LIBERO 失败注入版本上 baseline VLA 平均成功率 56.3% → 74.0%。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09381",
+    "summary": "单 demo 学操作策略很难，偏一点就崩，但又拿不到大量在线数据。ReGIL 把这唯一的 demo 当外存：训练时反复检索它来同时指导探索、产生正则缓冲、构建 reward；reward 是当前轨迹和检索段的局部时序对齐分数，给出有信息量的逐步反馈。LIBERO 和 Meta-World 上比基线在成功率和效率都更高，真机 1 个 demo 不到 1 小时在线训练就能在 3 个任务上拿 75%+ 成功率。",
+    "highlights": {
+      "contribution": "提出 retrieval-guided 单 demo 模仿学习，把 demo 当持久外存反复用。",
+      "innovation": "用局部时序对齐做密集 reward，同时把 retrieval 用于探索引导、正则化和奖励构造。",
+      "method": "策略学 k-近邻检索段及对齐方式，reward = 当前轨迹和检索段的 local temporal alignment 得分。",
+      "results": "LIBERO/Meta-World 比 baseline 强，真机 3 任务 1 demo + <1h 在线训练得 75%+ 成功率。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09416",
+    "summary": "这是一篇立场文：作者认为机器人 middleware 在 Physical AI 时代实际上扮演 LLM agent 那种 harness 的角色。和软件 harness 只在工具调用边界做仲裁不同，机器人 harness 必须同时管控制、计算、通信三轴。作者把缺失功能命名为 Projection（出口门控）、Isolation（执行与传输隔离）、Transfer（失败回退到 baseline），并草拟了 ROS 2 Harness Profile 在 DDS/Zenoh 上落地。",
+    "highlights": {
+      "contribution": "把机器人 middleware 重新命名为 Physical AI 的 harness 层，并指出需要补的三类强制机制。",
+      "innovation": "首次把 agent harness 的概念系统地搬到机器人，并跨控制/计算/通信三轴定义 Projection/Isolation/Transfer。",
+      "method": "立场分析 + 设计草案：基于 ROS 2/DDS/Zenoh 提出 Harness Profile 部署 artifact，携带模型的输出区域、推理预算、运行域。",
+      "results": "无定量实验，给出概念框架与 ROS 2 落地草图，作为 community 讨论起点。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09758",
+    "summary": "Behavior cloning 在分布外状态容易复合误差。DARP 把任务重参数化成局部邻域结构，不学全局映射，而是基于 k 近邻 demo 状态及其动作、再加邻居和 query 的差向量预测动作。不需要额外数据、专家反馈或先验知识，是半参数检索式模仿学习。在连续控制和操作任务上比标准 BC 一致提升 15-46%，包括高维视觉特征下也成立。",
+    "highlights": {
+      "contribution": "提出 difference-aware 检索式模仿学习，普适改进 behavior cloning。",
+      "innovation": "把策略学习重新参数化成「基于邻居差向量预测残差动作」，而不是全局状态-动作映射。",
+      "method": "训练时用 k 近邻 demo + 状态差向量喂模型，模型在邻域中预测动作；推理时同样做检索后预测。",
+      "results": "连续控制和机器人操作上比标准 BC 高 15-46%，对视觉特征也适用。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09311",
+    "summary": "JEPA 类世界模型用 CEM 在 latent 里规划，但长时序贵且效果差，还往往要 goal image。FF-JEPA 做层次化方案：在动作条件 forward model 之外加一个无动作的 latent planner，从当前状态预测下一个子目标，把长任务切成短时优化。PushT 初步结果显示能避开扁平世界模型在长 horizon 上的崩坏，且去掉了对目标图像的依赖。",
+    "highlights": {
+      "contribution": "面向 JEPA 世界模型的层次化长时序规划方案，无需目标图像。",
+      "innovation": "用动作无关 latent planner 预测下一子目标，配合动作条件的 forward 模型分解长任务。",
+      "method": "两个 forward 模型：动作条件动力学 + 动作无关 subgoal planner，规划时层次推子目标再细化短时动作。",
+      "results": "PushT 初步实验显示克服 flat WM 的长 horizon collapse，结果偏 proof-of-concept。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09312",
+    "summary": "Tensor 程序优化的 cost model 通常只看代码静态快照，忽略调度轨迹。作者把调度过程看成 action-conditioned latent dynamics，做了个 world-model 启发的轻量 transition 模型，在 latent 里 roll out 调度动作，再结合动作和硬件特征排序候选，避开重 AST 变换和代码编码。集成进 TVM AutoScheduler，同 64-trial 预算下 GPU/CPU 子图延迟比 Ansor 提升 1.37x/1.54x，比 Ansor-10K 用 10x 更少测量达到几何均值 2.2% 以内。",
+    "highlights": {
+      "contribution": "把世界模型思想引入编译器自动调度的 cost model。",
+      "innovation": "用 latent transition 模型在调度动作空间里 roll out，取代静态代码快照评估。",
+      "method": "起始程序入 latent 空间，按调度动作做 latent transition；最终表征 + 动作 + 硬件特征排序候选。",
+      "results": "TVM 实测：同 64 trial GPU 1.37x、CPU 1.54x；用 10x 更少测量逼近 Ansor-10K 2.2% 以内；全模型推理 4.61x/3.67x。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09457",
+    "summary": "已有策略大都直接输出动作，把候选动作的后果留为隐式；世界模型也常只给监督或外部模拟。ω-EVA 把世界模型变成 Envision-Verify-Act 的内回路：先学动作条件的 latent dynamics，再训一个语言条件 flow policy 在动力学感知特征上输出提案，最后 tri-branch refiner 同时看现在、提案条件下的未来 latent 和提案动作输出最终动作块。所有推理都在 latent 里，无需生成未来视频。约 1.2B 参数、不额外预训练机器人数据，在单臂、双臂、长时序和扰动等多种仿真场景都提升。",
+    "highlights": {
+      "contribution": "提出 latent 交互式世界模型，让 policy 提案过 WM 验证后再动手。",
+      "innovation": "三阶段 Envision-Verify-Act 框架，配 tri-branch refiner 在 latent 空间联合推理现在、未来和提案。",
+      "method": "Stage1 学动作条件 latent dynamics；Stage2 训 flow policy；Stage3 把 policy 提案过 WM 反馈，refiner 输出最终动作块。",
+      "results": "约 1.2B 参数、不加额外机器人预训练数据，在单臂、双臂、长时序、扰动场景一致提升 baseline。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09507",
+    "summary": "多 agent 视频生成最大的坑是各 agent 独立预测的话相同区域会跑出不同版本。Prisma-World 把所有 agent 视频塞进一段 full-attention 序列，用 multi-agent RoPE 区分 agent 身份但共享时间坐标，再把相对相机几何注入注意力让重叠视角偏向共享场景。还加了 overlap-decaying curriculum 和 minimap 引导。配套放出了 UE5 的 PrismaDataset。单一模型能生成不同数量 agent 的高保真、可控相机、跨视角一致的视频。",
+    "highlights": {
+      "contribution": "做出首个相机可控的多 agent 视频世界模型，并放出大规模 UE5 数据集。",
+      "innovation": "把多 agent 视频生成形式化成几何感知的联合去噪，用 multi-agent RoPE + 相机几何注入注意力。",
+      "method": "全 agent 视频在一段 full-attention 序列里联合去噪，multi-agent RoPE + 相机几何 bias，外加 overlap-decaying 课程和 minimap 引导。",
+      "results": "PrismaDataset 上演示多 agent 视频跨视角一致、相机可控、生成数量灵活，未给出明确数值与既有 baseline 全面对比。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09828",
+    "summary": "保持 3D 一致性的视频世界模型多用显式 RGB 点云缓存，渲染+VAE 编码贵又有损。Mirage 改用 latent spatial memory：直接在 diffusion latent 空间里维护 3D 缓存，通过深度引导把 latent token 抬到 3D，查询时用 latent warping 合成新视角，省去像素往返。比显式 3D baseline 端到端生成快 10.57x、显存少 55x，WorldScore SOTA，RealEstate10K 重建强。",
+    "highlights": {
+      "contribution": "提出 latent 空间持久 3D 缓存的视频世界模型框架 Mirage。",
+      "innovation": "把 spatial memory 完全留在 diffusion latent 空间，深度引导回投 + latent warping，省渲染和 VAE 来回。",
+      "method": "把 latent token 用深度回投到 3D 形成缓存，新视角查询时直接 latent warping，统一在 diffusion 内闭环。",
+      "results": "端到端 10.57x 速度、55x 显存节省；WorldScore SOTA，RealEstate10K 重建质量强。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.5,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09499",
+    "summary": "作者警告：World Model 看着好用，但能成为机器人学习供应链里一个独特而隐蔽的数据投毒入口。攻击者在表面安全的遥操数据里注入恶意 prompt 或扰动动力学，只有过 world model 后才会被激活，生成危险的合成训练轨迹。论文展示了对动作条件和文本条件两类 WM 的攻击，对下游 DRL 政策做出端到端后门，对 VLA 设定也给出 PoC。呼吁重新评估 WM 在供应链中的位置。",
+    "highlights": {
+      "contribution": "首次系统揭示 world model 作为机器人学习数据供应链投毒入口的安全风险。",
+      "innovation": "把恶意内容藏在「无害」遥操数据里，等 world model 生成训练数据时才激活，绕过现有过滤。",
+      "method": "向 action-conditioned 和 text-conditioned WM 注入恶意 prompt/动力学触发器，用其生成的合成轨迹训练下游 DRL/VLA。",
+      "results": "对下游 DRL 政策实现端到端后门攻击，对 VLA 给出 PoC，证明 WM 是有效投毒入口。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09640",
+    "summary": "Euler-Lagrange 模型在负载变化、未建模耦合、摩擦、气动等下会失真，常见加单残差又破坏机械结构。本文把模型偏差拆成惯性修正、对应诱导的科氏项和广义力残差，机械部分按物理约束学，扰动部分用稀疏历史依赖 latent 交互模型 + Bayesian 线性回归在线适应。在移动、空中、机械臂等多平台上提高动力学预测和轨迹跟踪。",
+    "highlights": {
+      "contribution": "提出保结构的残差学习 + 选择性在线适配的机器人动力学建模框架。",
+      "innovation": "把模型失配拆成机械结构残差和扰动敏感残差两类，分别用物理约束和稀疏 latent + Bayesian 处理。",
+      "method": "机械部分受物理约束训练保持 SPD/科氏耦合等结构；扰动部分用 sparse history latent + 在线 Bayesian linear regression。",
+      "results": "移动、空中、机械臂多平台动力学预测和轨迹跟踪都有提升，未给单一标志性数字。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09803",
+    "summary": "动作条件视频世界模型的常见失败是镜头转一圈回来场景悄悄变了——记忆崩了。Echo-Memory 把 backbone、训练、相机动作表示、采样、评估都固定，只换「历史怎么存怎么读」，比较 raw context、压缩 memory、空间摘要、状态空间递归等。评估也用 replay、in-domain loop revisit、open-domain return 三个分支，发现它们经常打架：replay 好不代表能记住世界。结论是 raw context 是强基线，压缩不能免费替代容量，block-wise SSM 递归 open-domain return 最强。",
+    "highlights": {
+      "contribution": "首次在统一 setup 下对比 action-conditioned 视频世界模型的多种记忆机制。",
+      "innovation": "把容量、压缩、读出、递归四个轴解耦，再用三分支评估暴露 replay 与记忆的差异。",
+      "method": "固定 backbone 和 pipeline，仅替换 memory 组件；用 replay、in-domain revisit、open-domain return 三分支评估。",
+      "results": "Raw context 是强基线；压缩不能免费替代容量；block-wise SSM 递归在 open-domain return 上最好。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 8.5,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09813",
+    "summary": "传统具身世界模型用关节角/末端位姿这种低维动作向量，表达力弱、跨本体差。iMaC 提出把原始图像当动作 token：用 image-action 编码器把目标视觉图像压成动作 embedding，再让动态预测器条件在 image-action 上学环境转移规则，做高保真未来预测和闭环控制。在公开操作 benchmark 和真机上都比向量动作 baseline 在预测精度、成功率、跨场景泛化更好，并消除对人为定义动作空间的依赖。",
+    "highlights": {
+      "contribution": "提出图像即动作的统一控制范式，让世界模型摆脱低维结构化动作向量。",
+      "innovation": "用 image-action token 取代关节角/末端位姿，把空间运动意图、几何约束和细微物理一并编码。",
+      "method": "双分支：image-action 编码器把目标图像压成动作 embedding；动态世界预测器以 image-action 为条件预测未来。",
+      "results": "公开操作 benchmark 和真机上比向量动作 baseline 在预测精度、成功率和跨场景泛化都更好。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.1
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09268",
+    "summary": "纯视觉单目导航既想全局定位又想致密、尺度一致的障碍感知，向来矛盾。VGP-Nav 用单目 RGB 把视觉几何锚在物理可解释的地面尺度约束上，在线解决单目尺度歧义，得到带定位的 metric 障碍表示，直接给下游 planner。多场景实验和真机部署证明可在低成本下做安全导航。",
+    "highlights": {
+      "contribution": "纯单目 RGB 的统一定位+致密 metric 障碍感知框架。",
+      "innovation": "把视觉几何锚到地面平面派生的尺度约束上来解决单目 metric 歧义。",
+      "method": "单目 RGB 输入，地面几何约束在线锁尺度，输出带定位的致密障碍表示喂给 planner。",
+      "results": "在多种环境泛化好，并在真实移动机器人上部署成功，未给统一数值表。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 6.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09641",
+    "summary": "传统视频检索靠嵌入扫全库，又慢又不解决视频和文本语义粒度不匹配。MAVIS 把检索改造成多 agent 协作推理：先把视频解析成结构化语义库做属性级索引，planner 把复杂查询拆成原子子任务派 specialized agent 各自提名候选，再用带 veto 协议的逻辑感知辩论裁剪、对一小撮有争议候选做细粒度验证。MSR-VTT、MSVD、ActivityNet 上不微调也能打。",
+    "highlights": {
+      "contribution": "把视频检索重塑成多 agent 协作推理框架。",
+      "innovation": "Structured Semantic Library + Logic-aware Debate + veto 协议替代嵌入全扫描。",
+      "method": "视频解析成属性级语义库；planner 拆子任务派 agent 提名候选；辩论 + veto 收敛到争议候选做细粒度验证。",
+      "results": "MSR-VTT、MSVD、ActivityNet 无任务微调下取得 competitive 表现。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09227",
+    "summary": "面对 2026 欧盟 SSbD、CSDDD、CBAM 三重监管压力，半导体智能 fab 手工合规吃不消、又要兼顾隐私。作者提出零信任社会-技术编排框架，把六层 SSbD 架构落到可信工业数据空间，引入「Professional Proxies」——角色化 agentic workflow 跑在硬件隔离的可信执行环境里，按 5 步「接力赛」把设施、工艺、财务团队串起来。Virtual Metrology 和联邦学习都在 TEE 内做，对外只导出加密合规 token。",
+    "highlights": {
+      "contribution": "提出半导体智能工厂的可信 agentic 合规编排框架。",
+      "innovation": "用硬件 TEE 隔离的 Professional Proxies + 国际数据空间连接器化解数据主权悖论。",
+      "method": "六层 SSbD 架构 + 角色化 agentic workflow，VM/FML 在 TEE 内运行，对外导出加密签名 token。",
+      "results": "概念框架与协议栈层级设计，无具体性能数字。"
+    },
+    "scores": {
+      "relevance": 2.5,
+      "recency": 10,
+      "popularity": 3.0,
+      "quality": 5.0,
+      "recommendation": 3.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.09290",
+    "summary": "单链视觉推理容易过早承诺感知证据然后幻觉。Visual Para-Thinker++ 用一个共享 MLLM policy，按 role 条件化变成 Main / Worker / Summary 三类 agent：Main 用固定分配拆任务，多个 Worker 在上下文隔离下并行推理，Summary 合 worker 的完整推理轨迹而不是只投票。训练上用 Multi-Agent Capability Injection 和 role 解耦优化避免梯度冲突，并造了原生推理引擎共享视觉前缀和 KV cache。V*、CountBench、RefCOCO、HallusionBench 上都超单轨迹和并行 baseline。",
+    "highlights": {
+      "contribution": "用单一 policy 实例化多 agent 来做视觉推理，减少幻觉和早期承诺。",
+      "innovation": "Role-decoupled 多 agent 优化 + 推理引擎层共享 KV cache，把多 agent 成本压下来。",
+      "method": "共享 MLLM 按 role 实例化 Main/Worker/Summary，多 worker 并行隔离推理，Summary 合并轨迹；训练分段 reward 避免梯度冲突。",
+      "results": "V*、CountBench、RefCOCO 系列、HallusionBench 全部超单轨和 inference-time 并行 baseline，幻觉敏感任务尤显著。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  }
+]

@@ -43,6 +43,46 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.02735",
+      "title": "See Less, Specify More: Visual Evidence Budgets for Generalizable VLAs",
+      "authors": [
+        "Yueh-Hua Wu",
+        "Tatsuya Matsushima",
+        "Kei Ota"
+      ],
+      "affiliations": [],
+      "summary": "VLA 泛化老是被干扰物和模糊指令拖累。作者提出 S2 框架：一边把原始指令拆成轨迹级和子任务级的细化语言（Specify More），一边给执行器加一个显式的「视觉证据预算」（See Less），逼它只用任务必需的信息做决策。在 TX-G2 和 HSR 两台真机的 8 个任务上，子任务成功率从 pi0.5 的 54.2% 提升到 79.0%。",
+      "original_abstract": "Generalization remains a central bottleneck for vision-language-action (VLA) models: under distractors, appearance shifts, and semantically similar tasks, the policy must often infer local execution details from coarse instructions while also deciding which parts of the image matter for control. We present S2 (See Less, Specify More), a framework for improving VLA generalization by training the executor under a cleaner interface.   Specify More preserves the original instruction as a stable high-level goal while relabeling each trajectory into refined trajectory- and subtask-level language that disambiguates the current execution mode. Unlike native attention, See Less imposes an explicit visual evidence budget, training the executor to act from task-sufficient evidence rather than unconstrained visual context, without any region or mask annotation.   This interface lets the executor follow detailed guidance without relying on distracting visual patches or resolving avoidable ambiguity on its own, and it remains compatible with off-the-shelf VLM planners through in-context learning. Across our main evaluation settings, S2 improves overall generalization metrics by changing the executor's learning problem: coarse instructions induce avoidable supervision aliasing, goal-preserving local guidance outperforms instruction replacement in our main ablations, and explicit evidence budgeting reduces dependence on broad visual context beyond efficiency considerations.   Across eight real-robot tasks on TX-G2 (an AgiBot G2-compatible variant) and HSR, S2 raises mean subtask success from 54.2% to 79.0% over pi0.5. Together, these results suggest that VLA generalization improves when the executor is trained to act from informative local guidance and task-sufficient visual evidence, rather than recovering both from weak supervision.",
+      "highlights": {
+        "contribution": "提出 S2 框架，通过更细化的语言指令 + 视觉证据预算双管齐下，显著提升 VLA 在干扰场景下的泛化能力。",
+        "innovation": "不同于以往单纯改 attention 或加 mask 标注，S2 在不需任何区域标注的前提下用显式预算约束执行器，并把指令做成「高层目标 + 局部细化语言」的双层结构。",
+        "method": "保留原始指令作为稳定 high-level goal，再为每条轨迹重新打上轨迹级和子任务级语言；同时训练执行器在受限视觉证据预算下行动；规划器可以即插即用任何 VLM。",
+        "results": "8 个真机任务平均子任务成功率从 pi0.5 的 54.2% 涨到 79.0%，消融显示局部语言细化优于直接换指令，视觉预算独立带来增益。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T18:02:07Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "pi0"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.5,
+        "popularity": 7.0,
+        "quality": 8.0,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02735v2",
+      "arxiv_url": "https://arxiv.org/abs/2606.02735v2",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.02277",
       "title": "RoboSemanticBench: Diagnosing Semantic Grounding in Action Prediction for VLA Models",
       "authors": [
@@ -87,6 +127,92 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.02277v1",
       "arxiv_url": "https://arxiv.org/abs/2606.02277v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02745",
+      "title": "SeeTraceAct: Visibility-Aware Latent Planning from Cross-Embodiment Demonstration Videos",
+      "authors": [
+        "Jaehyeon Son",
+        "Junhyun Kim",
+        "Kyle Kam",
+        "Jeremiah Coholich",
+        "Seok Joon Kim",
+        "Jinhoo Kim",
+        "Chris Dongjoo Kim",
+        "Jaemin Cho",
+        "Dieter Fox",
+        "Zsolt Kira"
+      ],
+      "affiliations": [],
+      "summary": "为了避免每个新任务都重新采集遥操作数据，作者研究单段演示视频条件下的 VLA。发现端到端方法难以精准定位小目标，于是提出 SeeTraceAct：用可视性感知的方式预测未来末端轨迹来做空间锚定。还发布了 RoboCasa-DC 基准。仿真四个设定全部 SOTA，真机 Franka 任务平均成功率提升 12.5 个百分点。",
+      "original_abstract": "Vision-language-action models (VLAs) are promising general-purpose robot policies, but adapting them to new tasks typically requires costly task-specific teleoperation data. As an alternative, we study one-shot demo-conditioned VLAs, where a robot policy is conditioned on a single demonstration video of an unseen task. We find that existing end-to-end approaches often struggle when successful execution requires precisely localizing small target regions. To address this limitation, we propose SeeTraceAct, a demo-conditioned VLA framework that encourages precise spatial grounding through visibility-aware prediction of future end-effector traces. To enable reproducible evaluation with cross-embodiment demonstrations, we introduce and release RoboCasa-DC, a demo-conditioned extension of RoboCasa with episode-paired humanoid videos. Experiments on RoboCasa-DC and a real-world benchmark, where a Franka Panda arm is conditioned on human demonstrations, show that SeeTraceAct outperforms baselines, achieving the best success rate across all four RoboCasa-DC settings and improving real-world average success by 12.5 percentage points.",
+      "highlights": {
+        "contribution": "提出 SeeTraceAct，让单段演示视频驱动的 VLA 能精准锚定小目标，并发布跨形态评测基准 RoboCasa-DC。",
+        "innovation": "把可视性感知 + 末端轨迹预测当作显式中间表征，解决了 demo-conditioned VLA 在精细定位上的痛点。",
+        "method": "输入为单段示范视频和当前观测，先预测末端执行器未来轨迹（带可见性），再据此输出动作；用 RoboCasa-DC 的人-机配对数据训练。",
+        "results": "RoboCasa-DC 四个设定全部最佳；真机 Franka 在人类演示条件下平均成功率提升 12.5 个百分点。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T18:09:31Z",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "robot policy"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.5,
+        "popularity": 7.0,
+        "quality": 8.0,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02745v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02745v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02775",
+      "title": "AURA: Action-Gated Memory for Robot Policies at Constant VRAM",
+      "authors": [
+        "Josef Chen"
+      ],
+      "affiliations": [],
+      "summary": "数据中心用的 KV-cache 不适合机器人：episode 长、边缘内存带宽紧。作者提出 AURA-Mem，给冻结的 VLA backbone 套一个恒定大小的循环记忆，并用一个动作误差驱动的门控决定要不要写入。推理状态固定 4224 字节，而 100K 步的 KV-cache 要大 6061 倍。在 LIBERO-Long 上写入次数少 7 倍，成功率不掉。",
+      "original_abstract": "The KV-cache is the right memory for datacenters but the wrong memory for robots. Datacenter inference batches many short requests and resets them, amortizing an attention cache across a crowd. Embodied agents instead run one long, non-resetting episode on bandwidth-limited edge hardware, where high-bandwidth memory and flash are scarce, flash has finite write endurance, and memory writes rather than compute can become the binding constraint.   AURA-Mem (Action-Utility Recurrent Adaptive Memory) targets this regime. It wraps a frozen vision-language-action backbone with a constant-size recurrent memory and a learned gate that writes only when the current observation would change the next action: memory that knows when to stay silent. Unlike reconstruction-based memory, the gate is trained directly against a closed-loop action-error signal. Its inference state is fixed at 4,224 bytes regardless of horizon, while a KV-cache grows to 6,061 times larger at 100,000 steps.   On a controlled synthetic benchmark, AURA-Mem matches the best O(1) baseline in accuracy while using 5.19-6.13 times fewer writes, and up to 9.19 times fewer writes on easier configurations. Budget-matched random and periodic schedules do not recover this gain, isolating the benefit to the action-surprise signal. On a trained closed-loop OpenVLA-OFT 7B panel on LIBERO-Long (n=60 episodes per arm), the gate does not hurt success: AURA-Mem matches the ungated base policy (0.233) and slightly exceeds an always-write KV arm (0.217), while using 7.0 times fewer writes and constant memory. We also instantiate an approximate-information-state value-loss bound as a methodology demonstration; at this scale, the bound is vacuous rather than a guarantee.",
+      "highlights": {
+        "contribution": "为边缘部署的 VLA 设计了写入次数极少、显存恒定的循环记忆 AURA-Mem。",
+        "innovation": "用动作误差信号直接监督记忆门控（而不是重建损失），告诉网络何时该「闭嘴」。",
+        "method": "冻结 OpenVLA-OFT 7B 等 backbone，外挂一个固定大小的循环状态 + 学习门控；门控以 closed-loop action-error 训练，只在能改变下一步动作时才写入。",
+        "results": "合成基准下写入次数减少 5.19-6.13 倍；LIBERO-Long 上成功率 0.233（持平 base、超越 always-write KV 的 0.217），写入次数减少 7 倍。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T18:38:21Z",
+      "categories": [
+        "cs.AI",
+        "cs.AR",
+        "cs.DC",
+        "cs.PF",
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "openvla"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 7.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02775v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02775v1",
       "venue": null
     },
     {
@@ -213,6 +339,341 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.02800",
+      "title": "Cosmos 3: Omnimodal World Models for Physical AI",
+      "authors": [
+        "NVIDIA",
+        ":",
+        "Aditi",
+        "Niket Agarwal",
+        "Arslan Ali",
+        "Jon Allen",
+        "Martin Antolini",
+        "Adeline Aubame",
+        "Alisson Azzolini",
+        "Junjie Bai",
+        "Maciej Bala",
+        "Yogesh Balaji",
+        "Josh Bapst",
+        "Aarti Basant",
+        "Mukesh Beladiya",
+        "Mohammad Qazim Bhat",
+        "Zaid Pervaiz Bhat",
+        "Dan Blick",
+        "Vanni Brighella",
+        "Han Cai",
+        "Tiffany Cai",
+        "Eric Cameracci",
+        "Jiaxin Cao",
+        "Yulong Cao",
+        "Mark Carlson",
+        "Carlos Casanova",
+        "Ting-Yun Chang",
+        "Yan Chang",
+        "Yu-Wei Chao",
+        "Prithvijit Chattopadhyay",
+        "Roshan Chaudhari",
+        "Chieh-Yun Chen",
+        "Junyu Chen",
+        "Ke Chen",
+        "Qizhi Chen",
+        "Wenkai Chen",
+        "Xiaotong Chen",
+        "Yu Chen",
+        "An-Chieh Cheng",
+        "Click Cheng",
+        "Xiu Chia",
+        "Jeana Choi",
+        "Chaeyeon Chung",
+        "Wenyan Cong",
+        "Yin Cui",
+        "Magdalena Dadela",
+        "Nalin Dadhich",
+        "Wenliang Dai",
+        "Joyjit Daw",
+        "Alperen Degirmenci",
+        "Rodrigo Vieira Del Monte",
+        "Robert Denomme",
+        "Sameer Dharur",
+        "Marco Di Lucca",
+        "Ke Ding",
+        "Wenhao Ding",
+        "Yifan Ding",
+        "Yuzhu Dong",
+        "Nicole Drumheller",
+        "Yilun Du",
+        "Aigul Dzhumamuratova",
+        "Aleksandr Efitorov",
+        "Hamid Eghbalzadeh",
+        "Naomi Eigbe",
+        "Imad El Hanafi",
+        "Hassan Eslami",
+        "Benedikt Falk",
+        "Jiaojiao Fan",
+        "Jim Fan",
+        "Amol Fasale",
+        "Sergiy Fefilatyev",
+        "Liang Feng",
+        "Francesco Ferroni",
+        "Sanja Fidler",
+        "Xiao Fu",
+        "Vikram Fugro",
+        "Prashant Gaikwad",
+        "TJ Galda",
+        "Katelyn Gao",
+        "Yihuai Gao",
+        "Wenhang Ge",
+        "Sreyan Ghosh",
+        "Arushi Goel",
+        "Vivek Goel",
+        "Akash Gokul",
+        "Rama Govindaraju",
+        "Jinwei Gu",
+        "Miguel Guerrero",
+        "Elfie Guo",
+        "Aryaman Gupta",
+        "Siddharth Gururani",
+        "Hugo Hadfield",
+        "Song Han",
+        "Ankur Handa",
+        "Zekun Hao",
+        "Mohammad Harrim",
+        "Ali Hassani",
+        "Nathan Hayes-Roth",
+        "Yufan He",
+        "Chris Helvig",
+        "Cyrus Hogg",
+        "Madison Huang",
+        "Michael Huang",
+        "Sophia Huang",
+        "Yufan Huang",
+        "Jacob Huffman",
+        "DeLesley Hutchins",
+        "Suneel Indupuru",
+        "Boris Ivanovic",
+        "Arihant Jain",
+        "Joel Jang",
+        "Ryan Ji",
+        "Yanan Jian",
+        "Dongfu Jiang",
+        "Jingyi Jin",
+        "Atharva Joshi",
+        "Nikhilesh Joshi",
+        "Pranjali Joshi",
+        "Andy Ju",
+        "Jaehun Jung",
+        "Weiwei Kang",
+        "Scott Kassekert",
+        "Jan Kautz",
+        "Ashna Khetan",
+        "Julia Kiczka",
+        "Slawek Kierat",
+        "Gwanghyun Kim",
+        "Kuno Kim",
+        "Sunny Kim",
+        "Kezhi Kong",
+        "Xin Kong",
+        "Zhifeng Kong",
+        "Tomasz Kornuta",
+        "Egor Krivov",
+        "Hui Kuang",
+        "Saurav Kumar",
+        "Chia-Wen Kuo",
+        "George Kurian",
+        "Wojciech Kutak",
+        "JF Lafleche",
+        "Himangshu Lahkar",
+        "Omar Laymoun",
+        "Jayjun Lee",
+        "Sanggil Lee",
+        "Gabriele Leone",
+        "Boyi Li",
+        "Freya Li",
+        "Jiajun Li",
+        "Jinfeng Li",
+        "Ling Li",
+        "Pengcheng Li",
+        "Shangru Li",
+        "Tingle Li",
+        "Xiaolong Li",
+        "Xuan Li",
+        "Zhaoshuo Li",
+        "Zhiqi Li",
+        "Hao Liang",
+        "Maosheng Liao",
+        "Chen-Hsuan Lin",
+        "Tsung-Yi Lin",
+        "Ming-Yu Liu",
+        "Sifei Liu",
+        "Zihan Liu",
+        "Hai Loc Lu",
+        "Xiangyu Lu",
+        "Alice Luo",
+        "Ruipu Luo",
+        "Wenjie Luo",
+        "Jiangran Lyu",
+        "Martin Ding Ma",
+        "Nic Ma",
+        "Qianli Ma",
+        "Dawid Majchrowski",
+        "Louis Marcoux",
+        "Miguel Martin",
+        "Qing Miao",
+        "Ashkan Mirzaei",
+        "Shreyas Misra",
+        "Kaichun Mo",
+        "Durra Mohsin",
+        "Hyejin Moon",
+        "Pawel Morkisz",
+        "Saeid Motiian",
+        "Kirill Motkov",
+        "Seungjun Nah",
+        "Yashraj Narang",
+        "Deepak Narayanan",
+        "Thabang Ngazimbi",
+        "Julian Ouyang",
+        "Shubham Pachori",
+        "David Page",
+        "Yatian Pang",
+        "Sehwi Park",
+        "Mahesh Patekar",
+        "Mostofa Patwary",
+        "Marco Pavone",
+        "Trung Pham",
+        "Wei Ping",
+        "Soha Pouya",
+        "Shrimai Prabhumoye",
+        "Varun Praveen",
+        "Delin Qu",
+        "Hesam Rabeti",
+        "Morteza Ramezanali",
+        "Marilyn Reeb",
+        "Xuanchi Ren",
+        "Kristen Rumley",
+        "Wojciech Rymer",
+        "Jun Saito",
+        "Yeongho Seol",
+        "John Shao",
+        "Piyush Shekdar",
+        "Tianwei Shen",
+        "Humphrey Shi",
+        "Min Shi",
+        "Stella Shi",
+        "Kevin Shih",
+        "Mohammad Shoeybi",
+        "Mateusz Sieniawski",
+        "Shuran Song",
+        "Alexander Sotelo",
+        "Amir Sotoodeh",
+        "Sunil Srinivasa",
+        "Vignesh Srinivasakumar",
+        "Bartosz Stefaniak",
+        "Rahul Heinrich Steiger",
+        "Shangkun Sun",
+        "Jiaxiang Tang",
+        "Shitao Tang",
+        "Yangyang Tang",
+        "Yue Tang",
+        "Tolou Tavakkoli",
+        "Kayley Ting",
+        "Krzysztof Tomala",
+        "Wei-Cheng Tseng",
+        "Jibin Varghese",
+        "Sergei Vasilev",
+        "Thomas Volk",
+        "Raju Wagwani",
+        "Roger Waleffe",
+        "Andrew Z. Wang",
+        "Boxiang Wang",
+        "Haoxiang Wang",
+        "Qiao Wang",
+        "Shihao Wang",
+        "Shijie Wang",
+        "Ting-Chun Wang",
+        "Yan Wang",
+        "Yu Wang",
+        "Rohit Watve",
+        "David Wehr",
+        "Fangyin Wei",
+        "Xinshuo Weng",
+        "Jay Zhangjie Wu",
+        "Kedi Wu",
+        "Hongchi Xia",
+        "Summer Xiao",
+        "Tianjun Xiao",
+        "Kevin Xie",
+        "Daguang Xu",
+        "Jiashu Xu",
+        "Mengyao Xu",
+        "Ruqing Xu",
+        "Xingqian Xu",
+        "Yao Xu",
+        "Dinghao Yang",
+        "Dong Yang",
+        "Hans Yang",
+        "Xiaodong Yang",
+        "Xuning Yang",
+        "Yichu Yang",
+        "Yurong You",
+        "Zhiding Yu",
+        "Hao Yuan",
+        "Simon Yuen",
+        "Xiaohui Zeng",
+        "Pengcuo Zeren",
+        "Cindy Zha",
+        "Haotian Zhang",
+        "Jenny Zhang",
+        "Jing Zhang",
+        "Liangkai Zhang",
+        "Paris Zhang",
+        "Shun Zhang",
+        "Xuanmeng Zhang",
+        "Zhizheng Zhang",
+        "Ann Zhao",
+        "Yilin Zhao",
+        "Yuliya Zhautouskaya",
+        "Charles Zhou",
+        "Fengzhe Zhou",
+        "Shilin Zhu",
+        "Yuke Zhu",
+        "Dima Zhylko",
+        "Artur Zolkowski"
+      ],
+      "affiliations": [],
+      "summary": "NVIDIA 推出 Cosmos 3 全模态世界模型家族：一个 mixture-of-transformers 同时处理语言、图像、视频、音频、动作。统一了 VLM、视频生成、世界模拟和 world-action 模型。Artificial Analysis 把它们排为最佳开源 T2I / I2V 模型，RoboArena 上 policy 也是榜首。代码、权重、合成数据全部按 OpenMDW-1.1 开源。",
+      "original_abstract": "We introduce Cosmos 3, a family of omnimodal world models designed to jointly process and generate language, image, video, audio, and action sequences within a unified mixture-of-transformers architecture. By supporting highly flexible input-output configurations, Cosmos 3 seamlessly unifies critical modalities for Physical AI -- effectively subsuming vision-language models, video generators, world simulators, and world-action models into a single framework. Our evaluation demonstrates that Cosmos 3 establishes a new state-of-the-art across a diverse suite of understanding and generation tasks, demonstrating omnimodal world models as scalable, general-purpose backbones for embodied agents. Our post-trained Cosmos 3 models were ranked as the best open-source Text-to-Image and Image-to-Video models by Artificial Analysis, and the best policy model by RoboArena at the time the technical report was written. To accelerate open research and deployment in Physical AI, we make our code, model checkpoints, curated synthetic datasets, and evaluation benchmark available under the Linux Foundation's OpenMDW-1.1 License at https://github.com/nvidia/cosmos and https://huggingface.co/collections/nvidia/cosmos3. The project website is available at https://research.nvidia.com/labs/cosmos-lab/cosmos3.",
+      "highlights": {
+        "contribution": "用一个 mixture-of-transformers 统一了 Physical AI 所需的语言/图像/视频/音频/动作五种模态，覆盖理解、生成、世界模拟与策略。",
+        "innovation": "把 VLM、视频生成器、世界模拟器、世界-动作模型彻底融合在一个 backbone 下，支持高度灵活的输入输出组合。",
+        "method": "Mixture-of-transformers omnimodal 架构，预训练 + post-training；评测覆盖理解、生成和机器人策略多个赛道。",
+        "results": "Artificial Analysis 排名 T2I 与 I2V 第一开源，RoboArena policy 第一，多个理解/生成基准 SOTA；checkpoints 全部公开。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T19:12:30Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.LG",
+        "cs.MM",
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 7.5,
+        "popularity": 9.5,
+        "quality": 9.0,
+        "recommendation": 9.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02800v2",
+      "arxiv_url": "https://arxiv.org/abs/2606.02800v2",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.02577",
       "title": "RoboDream: Compositional World Models for Scalable Robot Data Synthesis",
       "authors": [
@@ -307,6 +768,52 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.02436v1",
       "arxiv_url": "https://arxiv.org/abs/2606.02436v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02753",
+      "title": "MetaWorld: Scaling Multi-Agent Video World Model from Single-view Video Data",
+      "authors": [
+        "Teng Hu",
+        "Mingchun Lu",
+        "Yating Wang",
+        "Jiangning Zhang",
+        "Jinkun Hao",
+        "Ye Pan",
+        "Ran Yi",
+        "Lizhuang Ma",
+        "Dacheng Tao"
+      ],
+      "affiliations": [],
+      "summary": "视频世界模型一般只能从单视角单 agent 生成。作者提出 MetaWorld 从单视角网络视频里拆出共享 3D 空间下的多 agent 运动数据：先用 MWSU 分解相机自运动和被拍主体的轨迹，再用 Subject-Aware 生成器做身份条件控制，最后通过 World-State Alignment 跨分支注意力保证两个视角共享的物理事件一致。",
+      "original_abstract": "Video world models are a foundational generative technology for embodied AI and the Metaverse, yet existing approaches are inherently limited to a single agent observing from a single perspective. Extending these models to multi-agent settings introduces two critical challenges: data scarcity (coordinated multi-view recordings are prohibitively expensive to collect for general open-domain scenarios) and world state alignment (independently generated video streams cannot ensure that shared physical environments and events evolve consistently across views). To address these challenges, we propose MetaWorld, a novel framework that scales multi-agent video world models to open-domain environments directly from single-view videos. First, we introduce Monocular World-State Unrolling (MWSU) to explicitly decompose monocular footage into the camera operator's ego-motion and the visible subject's spatial trajectory. This camera-trajectory decomposition naturally extracts synchronized multi-agent motion data within a shared 3D space, completely bypassing the need for multi-camera setups. Second, for precise visual control, we develop the Subject-Aware World Generator to enable appearance-driven simulation conditioned on per-agent identity images. Finally, to ensure both views are grounded in the identical physical reality, we propose World-State Alignment, a per-frame inter-branch cross-attention mechanism inserted at every transformer layer of the video DiT. By jointly synchronizing the denoising process, WSA enforces both static geometric consistency and dynamic motion consistency, encouraging that the shared 3D environment and physical events remain well-aligned across both egocentric views. Extensive experiments demonstrate that MetaWorld achieves superior cross-view consistency and identity fidelity, establishing a highly scalable, physics-driven paradigm for multi-agent video world modeling.",
+      "highlights": {
+        "contribution": "在没有同步多机位采集的前提下，扩展视频世界模型到多 agent / 多视角，并保证物理事件跨视角对齐。",
+        "innovation": "用单目轨迹分解（MWSU）合成多 agent 训练数据；DiT 每一层插入 World-State Alignment 跨分支 cross-attention 做几何 + 运动一致性约束。",
+        "method": "对单目视频做相机自运动与被摄主体轨迹解耦获得「伪多视角」；视频 DiT 双分支同步去噪，每层做 inter-branch cross-attention；身份图条件控制外观。",
+        "results": "在跨视角一致性和身份保真度两个指标上优于现有方法（具体数字未给），定性展示多 agent 共享 3D 物理世界。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T18:20:20Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "video world model"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 7.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02753v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02753v1",
       "venue": null
     },
     {
@@ -431,6 +938,43 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.02280v1",
       "arxiv_url": "https://arxiv.org/abs/2606.02280v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02778",
+      "title": "One Transit Is All You Need: Detecting Exoplanets Through Learned Stellar Behaviour with EXOVEIL",
+      "authors": [
+        "Pratik Priyanshu"
+      ],
+      "affiliations": [],
+      "summary": "天文版「世界模型」：用 Transformer 学习恒星正常亮度曲线，残差里抓凌日信号。在 Kepler 16,499 条光变上自监督训练，AUC 0.938。1000 ppm 深度的单次凌日召回 32%（分类法是 0%），还在 3737 颗 Kepler 恒星上发现 179 个新候选；零样本迁移到 TESS 47 颗确认行星 100% 召回。",
+      "original_abstract": "I present EXOVEIL, a transit detection system that learns what a star's brightness should look like and flags when reality disagrees. Unlike existing systems that require phase-folded input, EXOVEIL operates on raw flux time series and can detect planets that transit only once.A Transformer world model, trained on 16,499 Kepler light curves with transit-masked self-supervised learning, predicts expected stellar flux. A matched-filter detector with variance weighting extracts transit signals from the prediction residuals. A learned classifier (XGBoost) separates planets from false positives, achieving AUC 0.938 on Kepler DR25. Applied to single-transit injection-recovery, EXOVEIL recovers 32% of transits at 1000 ppm depth a task where all classification-based systems score 0% by construction. A blind search of 3,737 Kepler stars yields 179 new transit-like signals not present in the DR25 TCE catalogue, including 46 monotransit candidates. Applied withoutretraining to 47 confirmed TESS planets in the PLATO LOPS2 field, EXOVEIL achieves 100% recovery, demonstrating zero-shot cross-mission transfer. At PLATO's 25-second cadence, detection reaches 100 ppm -- approaching the Earth-analog regime. I provide the first application of conformal prediction to transit detection (95.9% empirical coverage) and release the system as pip install exoveil with pretrained weights and a candidate catalogue.",
+      "highlights": {
+        "contribution": "把世界模型思路搬到系外行星探测，能从原始光变曲线检出单次凌日，这是分类方法做不到的。",
+        "innovation": "Transformer 世界模型 + 匹配滤波 + XGBoost 三段式，并首次把 conformal prediction 用于凌日检测。",
+        "method": "Transformer 自监督预测恒星亮度，方差加权 matched filter 从残差提取信号，XGBoost 判定真伪。",
+        "results": "Kepler DR25 AUC 0.938；单次凌日 1000 ppm 召回 32%；3737 颗恒星新发现 179 个信号（46 个单凌日候选）；TESS 零样本 100% 召回。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T18:41:10Z",
+      "categories": [
+        "astro-ph.EP",
+        "astro-ph.IM",
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 3.0,
+        "recency": 7.5,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 5.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02778v2",
+      "arxiv_url": "https://arxiv.org/abs/2606.02778v2",
       "venue": null
     },
     {
@@ -559,138 +1103,109 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.02388",
-      "title": "Policy and World Modeling Co-Training for Language Agents",
+      "arxiv_id": "2606.02956",
+      "title": "The Road Ahead in Autonomous Driving: The KITScenes Multimodal Dataset",
       "authors": [
-        "Ning Lu",
-        "Baijiong Lin",
-        "Shengcai Liu",
-        "Jiahao Wu",
-        "Haoze Lv",
-        "Yanbin Wei",
-        "Lingting Zhu",
-        "Shengju Qian",
-        "Xin Wang",
-        "Ying-Cong Chen",
-        "Qi Wang",
-        "Ke Tang"
-      ],
-      "affiliations": [
-        "HKUST(GZ)"
-      ],
-      "summary": "RL 教 agent 哪步动作有 reward，但没教动作对环境的物理后果。作者发现 on-policy RL rollout 里本身就有 (action, next obs) 对，可以顺手做 world model。PaW 给同一个 policy 加 WM 辅助 loss，三件事保稳定：按 action entropy 选 WM 数据、噪声鲁棒 WM loss、reward 自适应权重平衡。三类 agent benchmark 上一致提升。",
-      "original_abstract": "Reinforcement learning (RL) improves large language model (LLM) agents by teaching them which actions lead to high rewards, but provides little supervision on what those actions do to the environment. World modeling (WM) can fill this gap, yet existing approaches often require separate simulators, extra training stages, or additional inference-time computation. We observe that on-policy RL rollouts already contain the needed signal: each transition pairs an action with its resulting next observation. Based on this observation, we propose PaW, a Policy and World modeling co-training framework that adds auxiliary WM supervision to the same policy during RL, without changing the inference paradigm. To make auxiliary WM supervision informative and stable, PaW introduces three components: action-entropy-based WM data selection, noise-tolerant WM loss, and reward-adaptive loss balancing. Experiments on three agentic task benchmarks show consistent improvements over strong RL baselines across models and RL algorithms. These results suggest that standard RL rollouts are a practical source of WM supervision for language-agent training.",
-      "highlights": {
-        "contribution": "提出 PaW，让 LLM agent 在 RL 训练中顺带做 world modeling，不增加 inference 成本，不需要单独 simulator。",
-        "innovation": "看出 RL rollout 自带 WM 监督信号；用三个组件（数据选择、噪声鲁棒 loss、reward 自适应平衡）解决 WM 辅助监督本来不稳的问题。",
-        "method": "在标准 RL pipeline 上加 WM 辅助 loss，用同一份 policy；按 action entropy 筛选哪些 transition 进 WM 监督；用噪声鲁棒 loss 处理 WM 误差；reward 自适应权重调 WM/RL 损失比。",
-        "results": "三个 agentic 任务 benchmark 上，多个模型多个 RL 算法都对强 RL baseline 一致提升；具体数字看论文。"
-      },
-      "images": [],
-      "published_date": "2026-06-01T15:35:40Z",
-      "categories": [
-        "cs.LG",
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic",
-        "language agent"
-      ],
-      "scores": {
-        "relevance": 8.0,
-        "recency": 10.0,
-        "popularity": 6.5,
-        "quality": 7.5,
-        "recommendation": 7.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.02388v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.02388v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.02132",
-      "title": "Learning When Not to Act: Mitigating Tool Abuse in Agentic Reinforcement Learning",
-      "authors": [
-        "Liuji Chen",
-        "Dianxing Tang",
-        "Xing Shi",
-        "Dingshuo Chen",
-        "Qiang Liu",
-        "Shu Wu",
-        "Liang Wang"
-      ],
-      "affiliations": [
-        "CASIA"
-      ],
-      "summary": "Agentic RL 训出来的模型有 tool abuse 毛病——简单题也乱调工具。一刀切罚或硬限制又会压制有用的探索。作者搞了 EAPO：rollout 组里塞无工具轨迹，按题目难度做 reward shaping（容易题才重罚冗余调用），再加置信度感知 token 重加权。9 个推理 benchmark 上比 GRPO 平均涨 7-10%，工具调用降 18-24%。",
-      "original_abstract": "Agentic reinforcement learning can induce tool abuse, where models overuse external tools even for queries solvable by internal reasoning. Existing approaches mitigate this issue with uniform tool-use penalties or hard limits, which reduce tool frequency but may also suppress useful tool-assisted exploration. We propose EAPO, an Efficient Agentic Policy Optimization framework that learns selective tool use. EAPO introduces tool-free trajectories into each rollout group, applies difficulty-aware reward shaping to penalize redundant tool calls mainly on easier queries, and uses confidence-aware token reweighting to improve policy learning. Across nine mathematical and knowledge-intensive reasoning benchmarks, EAPO consistently improves the accuracy efficiency trade-off on Qwen2.5-3B, Qwen2.5-7B, and Llama3.1-8B. Compared with GRPO, EAPO improves average performance by 10.45%, 7.27%, and 9.69%, while reducing average tool calls by 18.33%, 18.33%, and 24.59%, respectively. These results show that agents can learn when not to use tools without compromising tool-integrated reasoning.",
-      "highlights": {
-        "contribution": "提出 EAPO，让 agentic RL 学会什么时候不要调工具，同时提高准确率并降低调用次数。",
-        "innovation": "每个 rollout group 内塞无工具轨迹做对照；难度感知 reward shaping 只在容易题强惩罚冗余工具；置信度感知 token 重加权改进 policy 学习。",
-        "method": "在 GRPO 类 agentic RL 框架里：每组 rollout 强制包含 tool-free 轨迹；按题目难度调节工具调用的 reward 惩罚；按 token 置信度重加权 policy loss；在 Qwen2.5-3B/7B、Llama3.1-8B 上训。",
-        "results": "9 个数学+知识推理 benchmark，对 GRPO 平均提升 10.45%/7.27%/9.69%，工具调用平均减少 18.33%/18.33%/24.59%。"
-      },
-      "images": [],
-      "published_date": "2026-06-01T11:58:55Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 7.5,
-        "recency": 10.0,
-        "popularity": 7.0,
-        "quality": 7.5,
-        "recommendation": 7.6
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.02132v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.02132v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.02304",
-      "title": "Unified Context Evolution for LLM Agents",
-      "authors": [
-        "Zixuan Zhu",
-        "Yitong Hu",
-        "Yong Dai",
-        "Junfeng Fang",
-        "Chunyang Jiang",
-        "Senkang Hu",
-        "Yuzhi Zhao"
+        "Richard Schwarzkopf",
+        "Fabian Immel",
+        "Alexander Blumberg",
+        "Jonas Merkert",
+        "Nils Rack",
+        "Kaiwen Wang",
+        "Fabian Konstantinidis",
+        "Julian Truetsch",
+        "Carlos Fernandez",
+        "Annika Bätz",
+        "Kevin Rösch",
+        "Marlon Steiner",
+        "Willi Poh",
+        "Yinzhe Shen",
+        "Royden Wagner",
+        "Felix Hauser",
+        "Dominik Strutz",
+        "Jaime Villa",
+        "Gleb Stepanov",
+        "Holger Caesar",
+        "Ömer Şahin Taş",
+        "Frank Bieder",
+        "Jan-Hendrik Pauls",
+        "Christoph Stiller"
       ],
       "affiliations": [],
-      "summary": "LLM agent 一个 episode 学到的经验做完就丢，作者把经验外置成可演化的 ECU 单元，分 Memory/Strategy/Workflow/Skill 四类，retrieval 时按类取，使用结果打分，没用就剪掉，再加一个 schedule 模块决定下个周期补哪类。ALFWorld 从 75.4% 提到 96.3%，WebShop 45.1 提到 61.3。",
-      "original_abstract": "LLM-based agents can solve multi-step interactive tasks by combining reasoning with environment feedback, yet each episode starts from the same fixed context and any useful strategy discovered along the way is lost once the task ends. Existing approaches either limit learning to the current task or pool all experience into a single untyped store, without distinguishing knowledge types, tracking quality through use, or balancing what the library still lacks. We introduce Unified Context Evolution (UCE), a gradient-free framework that externalizes agent experience into an evolving library of typed Evolvable Context Units (ECUs). UCE decomposes experience into four complementary types (Memory, Strategy, Workflow, and Skill), each generated from trajectories under type-specific conditions, retrieved at decision time, scored through repeated usage outcomes, and pruned when no longer valuable. A scheduling module allocates each cycle's generation budget toward the types where the library is weakest. Across two interactive benchmarks, UCE raises ALFWorld success from 75.4% to 96.3% and WebShop task score from 45.1% to 61.3%, and the accumulated library transfers to alternative actor backbones without retraining.",
+      "summary": "新的欧洲自动驾驶数据集 KITScenes Multimodal：高分辨率全局快门相机、超过 400m 的长程激光雷达、4D 成像雷达、冗余 GNSS/INS，外加号称最完整的 HD 地图（所有交通灯都做了 3D 重投影对齐和拓扑连接）。在不规则街道和混合交通的欧洲城市采集，并配套四个 benchmark：HD 地图构建、长程深度、新视角合成、端到端驾驶。",
+      "original_abstract": "Existing autonomous driving datasets have enabled major progress, but fall short in sensor fidelity, map completeness, or geographic diversity. We present KITScenes Multimodal, a European dataset built around high-fidelity sensors and maps. Our fully synchronized sensor suite combines high-resolution global-shutter cameras, long-range lidar beyond 400m, 4D imaging radar, and redundant GNSS/INS localization. Our HD maps are, to our knowledge, the most complete of any sensor dataset, validated through autonomous driving trials on open-source software. For the first time in a public dataset, all driving-relevant traffic elements, such as traffic lights, are mapped in 3D to a reprojection-accurate level with full topological connectivity. Recorded in cities with irregular street layouts and mixed traffic modes, our dataset complements existing datasets by broadening the available geographic diversity. We also introduce four benchmarks, each advancing spatial learning for embodied AI: online HD map construction, long-range depth estimation, novel view synthesis, and end-to-end driving. Project page: https://kitscenes.com/",
       "highlights": {
-        "contribution": "提出 UCE，一个 gradient-free 的 agent 经验外置框架，让多类型经验单元可生成、检索、打分、剪枝。",
-        "innovation": "区分 Memory/Strategy/Workflow/Skill 四种异质经验单元而不是塞到一个 memory store；schedule 模块按 library 短板分配生成预算。",
-        "method": "从轨迹按类型抽取 ECU 入库；决策时 type-conditioned 检索；使用结果更新打分；scheduler 动态分配 generation budget；不更新模型参数。",
-        "results": "ALFWorld 成功率 75.4% → 96.3%，WebShop 分数 45.1 → 61.3；学到的 library 可迁移到不同 backbone 无需重训。"
+        "contribution": "发布一个传感器和地图保真度都明显高于现有自动驾驶数据集的欧洲多模态数据集，并配套四个 embodied AI 相关 benchmark。",
+        "innovation": "首次把所有驾驶相关交通要素（含交通灯）做成 3D 重投影精度 + 全拓扑连接的 HD 地图；超长程 lidar 与 4D 雷达组合。",
+        "method": "全同步传感器套件采集 + 完整 HD 地图标注；通过开源自动驾驶栈实证地图可用性；设计 4 个空间学习基准。",
+        "results": "数据集本身的贡献，没有横评模型成绩；提供 4 个 benchmark 留给社区。"
       },
       "images": [],
-      "published_date": "2026-06-01T14:25:29Z",
+      "published_date": "2026-06-01T23:23:14Z",
       "categories": [
-        "cs.CL"
+        "cs.CV",
+        "cs.LG",
+        "cs.RO"
       ],
-      "matched_domain": "Agent",
+      "matched_domain": "VGGT",
       "matched_keywords": [
-        "llm agent",
-        "llm-based agent"
+        "novel view synthesis"
       ],
       "scores": {
-        "relevance": 7.0,
-        "recency": 10.0,
-        "popularity": 6.5,
+        "relevance": 5.5,
+        "recency": 7.5,
+        "popularity": 7.0,
         "quality": 7.5,
-        "recommendation": 7.4
+        "recommendation": 6.8
       },
-      "pdf_url": "https://arxiv.org/pdf/2606.02304v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.02304v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.02956v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02956v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.02937",
+      "title": "BEAST3D: Animal behavioral analysis and neural encoding from multi-view video via Gaussian splatting",
+      "authors": [
+        "Yanchen Wang",
+        "Lenny Aharon",
+        "Wangshu Zhu",
+        "Kyle Daruwalla",
+        "Linghua Zhang",
+        "Jiaru Zou",
+        "Selmaan Chettih",
+        "Helen Hou",
+        "Liam Paninski",
+        "Matthew R Whiteway"
+      ],
+      "affiliations": [],
+      "summary": "实验室里多视角拍摄动物的视频很常用，但稀疏视角下做 3D 重建很难。BEAST3D 用 ViT 预测 3D 高斯 splats，借助已知相机内参直接做可微渲染的 held-out view 自监督，并同时分割动物。只要 4 个视角就能重建，跨四种物种验证，下游能做新视角合成、姿态估计和神经编码。",
+      "original_abstract": "Multi-view video recordings are increasingly used to capture the 3D movements of animals in experimental settings, yet extracting rich 3D representations from these recordings remains challenging. Supervised pose estimation requires extensive manual annotation, while general-purpose 3D reconstruction models trained on generic scene datasets fail on the specialized imagery and sparse-view setting of laboratory experiments. We address these limitations with BEAST3D, a self-supervised pretraining framework that learns 3D visual representations from unlabeled, calibrated multi-view video. BEAST3D uses a vision transformer to predict 3D Gaussian splats that reconstruct held-out views through differentiable rendering, while simultaneously segmenting the animal from the background. BEAST3D reconstructs 3D structure with as few as four views by conditioning directly on known camera parameters--unlike general-purpose models, which must estimate camera geometry from dense overlapping viewpoints that are seldom available in lab settings. Through comprehensive evaluation across four species, we demonstrate that BEAST3D produces rich, viewpoint-invariant features that transfer effectively to three downstream tasks: novel view synthesis, which validates the quality of the learned 3D representations; multi-view pose estimation, which provides the sparse keypoint trajectories widely used in behavioral analysis; and neural encoding, which relates 3D behavioral features to simultaneously recorded neural activity. BEAST3D thus establishes a versatile framework for behavioral analysis that leverages 3D structure in modern multi-view laboratory recordings.",
+      "highlights": {
+        "contribution": "提出针对实验室动物多视角视频的自监督 3D 表征预训练框架，少量视角下也能跑通。",
+        "innovation": "直接条件于已知相机参数（而不是估计相机几何），针对稀疏视角 + 专业实验室图像优化；联合 3D 重建与前背景分割。",
+        "method": "ViT 输入多视角图像 + 相机参数，预测 3D Gaussian splats；通过 differentiable rendering 重建留出视角作为自监督；同时输出动物 mask。",
+        "results": "在四个物种上验证；下游新视角合成、多视角姿态估计、3D 行为特征与神经活动编码三个任务都有效（无具体数字）。"
+      },
+      "images": [],
+      "published_date": "2026-06-01T22:34:14Z",
+      "categories": [
+        "q-bio.NC",
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "novel view synthesis",
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.5,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.02937v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02937v1",
       "venue": null
     },
     {
@@ -781,221 +1296,45 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.02320",
-      "title": "TVIR: Building Deep Research Agents Towards Text--Visual Interleaved Report Generation",
+      "arxiv_id": "2606.02963",
+      "title": "KForge: LLM-Driven Cross-Platform Kernel Generation for AI Accelerators",
       "authors": [
-        "Xinkai Ma",
-        "Zhiqi Bai",
-        "Dingling Zhang",
-        "Pei Liu",
-        "Yishuo Yuan",
-        "He Zhu",
-        "Jiakai Wang",
-        "Qianqian Xie",
-        "Yifan Zhao",
-        "Xinlong Yang",
-        "Hao Cong",
-        "Zhiheng Yao",
-        "Fengxia Xie",
-        "Zihao Xu",
-        "Haoran Xu",
-        "Zhaohui Wang",
-        "Minghao Liu",
-        "Shirong Lin",
-        "Yingshui Tan",
-        "Yuchi Xu",
-        "Wenbo Su",
-        "Zhaoxiang Zhang",
-        "Bo Zheng",
-        "Jiaheng Liu"
+        "Taras Sereda",
+        "Burak Bartan",
+        "Ankita Nayak",
+        "Tom St. John",
+        "Natalie Serrino",
+        "Zain Asgar"
       ],
-      "affiliations": [
-        "Alibaba"
-      ],
-      "summary": "Deep Research Agent 现在写报告基本只看文本，图表是否可靠没人测。作者发了 TVIR-Bench（100 道专家精选的多模态深度研究题）和 TVIR-Agent（层次化多 agent 写 outline、取图、生成可溯源图表、按上下文写正文），还配了文本+视觉双路评估框架。",
-      "original_abstract": "Deep Research Agents have shown strong capability in multi-step information retrieval, reasoning, and long-form report generation, but existing benchmarks and systems remain predominantly text-centric, with limited evaluation of whether visual elements are factually reliable and well aligned with the surrounding analysis. To address this gap, we introduce TVIR (Text--Visual Interleaved Report Generation), which includes TVIR-Bench, a benchmark of 100 expert-curated multimodal deep research tasks that require visual elements to serve specific analytical sub-goals, and TVIR-Agent, a hierarchical multi-agent framework that serves as a strong baseline for constructing outlines, retrieving images, generating charts with traceable sources, and composing reports through context-aware sequential writing. We further develop a dual-path evaluation framework that combines Textual Assessment and Visual Assessment. Experiments across nine deep research systems show that TVIR-Agent achieves strong overall performance, underscoring the importance of explicit multimodal design and evaluation for evidence-driven report generation.",
+      "affiliations": [],
+      "summary": "异构推理 pipeline 要在多种加速器上跑不同算子，手写 kernel 不现实。KForge 用两个 LLM agent 协作：生成 agent 根据编译/正确性反馈迭代写 kernel，性能分析 agent 解读 profiling 数据给优化建议。在 NVIDIA B200 上 gpt-oss-20b 推理比 TensorRT-LLM 快 2.12%，Intel Arc B580 上 Triton kernel 比 torch.compile 快 5.13 倍。",
+      "original_abstract": "Production inference increasingly targets a heterogeneous mix of accelerators. Agentic pipelines interleave reasoning, tool calls, and multi-agent coordination, each with distinct compute and memory profiles. For optimal efficiency, each stage should run on the accelerator best suited to it. This creates a systems challenge: each pipeline now requires high-performance kernels across a growing set of hardware backends and programming models. Writing these kernels by hand is time-consuming, demands deep low-level expertise, and does not scale as kernel complexity grows. Recently, Large Language Models (LLMs) have been leveraged for automatic kernel generation, but challenges in low-level code generation and cross-backend generalization persist. We present KForge, a cross-platform framework built around an iterative refinement loop driven by two collaborating LLM-based agents: a generation agent that produces and progressively refines kernels using compilation and correctness feedback, and a performance-analysis agent that interprets profiling data, from programmatic APIs to GUI-based tools, and emits recommendations that steer the next round of synthesis. The loop alternates between functional passes, which drive a candidate to correctness, and optimization passes, which close the performance gap to hand-tuned baselines. We evaluate KForge on two backends with very different baseline reference availability. On NVIDIA B200, KForge achieves a 2.12$\\%$ improvement in end-to-end throughput compared to TensorRT-LLM on the gpt-oss-20b inference speed benchmark. On Intel Arc B580, KForge generates Triton kernels achieving a 5.13$\\times$ geometric mean speedup over the faster of PyTorch eager and torch.compile on 37 GEMM + tail-ops workloads from KernelBench Level 2, primarily via operator fusion and mixed-precision execution.",
       "highlights": {
-        "contribution": "提出 TVIR 任务和 benchmark：文本-视觉交错的研究报告生成，并给出多 agent 基线 TVIR-Agent 和双路评估。",
-        "innovation": "明确把视觉元素是否服务于具体分析子目标作为评测点，而不是把图当装饰；图表来源可追溯。",
-        "method": "TVIR-Agent 层次化多 agent：先建 outline，再检索图像、生成图表（带 source）、按上下文顺序写正文；评估同时做 Textual Assessment 和 Visual Assessment。",
-        "results": "9 个 deep research 系统对比，TVIR-Agent 在整体表现上最强，凸显多模态显式设计的重要性；具体数值需看论文。"
+        "contribution": "用多 agent LLM 迭代为不同 AI 加速器生成高性能 kernel，省掉跨平台手写的人力。",
+        "innovation": "把生成与性能分析拆成两个 agent，性能 agent 能解析 GUI/programmatic profiling 工具的数据反馈给生成 agent。",
+        "method": "迭代循环：generation agent 写 kernel，编译/正确性反馈做 functional pass；性能 agent 解读 profiling 做 optimization pass。",
+        "results": "B200 上 gpt-oss-20b 端到端吞吐比 TensorRT-LLM 高 2.12%；Intel Arc B580 上 37 个 KernelBench L2 工作负载几何平均 5.13× 加速。"
       },
       "images": [],
-      "published_date": "2026-06-01T14:35:14Z",
+      "published_date": "2026-06-01T23:48:55Z",
       "categories": [
-        "cs.CL"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "multi-agent",
-        "agent framework"
-      ],
-      "scores": {
-        "relevance": 6.0,
-        "recency": 10.0,
-        "popularity": 6.5,
-        "quality": 7.0,
-        "recommendation": 6.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.02320v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.02320v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.02404",
-      "title": "K-BrowseComp: A Web Browsing Agent Benchmark Grounded in Korean Contexts",
-      "authors": [
-        "Nahyun Lee",
-        "Dongkeun Yoon",
-        "Guijin Son",
-        "Geewook Kim",
-        "Dayoon Ko",
-        "Jeonghun Park",
-        "Haneul Yoo",
-        "Jaewon Cho",
-        "Junghun Park",
-        "Changyoon Lee",
-        "Kyochul Jang",
-        "Jaeyeon Kim",
-        "Eunsu Kim",
-        "Woojin Cho",
-        "Seungone Kim"
-      ],
-      "affiliations": [
-        "KAIST"
-      ],
-      "summary": "韩语 agent benchmark 太少，作者搞了 K-BrowseComp，400 道韩语 web browsing 任务，其中 300 道由韩语母语者精挑细选过。GPT-5.5、DeepSeek-V4-Pro、GLM-5.1 在这上只能拿到 30-45.67%，韩国本土 LLM 只有 0-10.33%。还合成了 100 道对抗硬题，最强模型也只有 26%。",
-      "original_abstract": "Frontier model evaluations are shifting from foundational capabilities (e.g., instruction following and reasoning) toward compositional, agentic ones, but Korean agentic benchmarks remain scarce. We introduce K-BrowseComp, a web-browsing agent benchmark grounded in Korean contexts, consisting of 400 problems. The 300-problem K-BrowseComp-Verified subset is manually constructed and validated by native Korean speakers. On this subset, frontier LLMs, including GPT-5.5, DeepSeek-V4-Pro, and GLM-5.1, reach only 30.00--45.67\\%, a substantial drop from BrowseComp, while Korean LLMs released through Korea's Proprietary AI Foundation Model program obtain only 0.00--10.33\\%. We further construct a 100-problem synthetic split using hard few-shot exemplars and failure-mode-targeted generation to exploit the asymmetry between solving and creating web browsing problems. On the adversarially filtered synthetic diagnostic split, the strongest model reaches only 26.00\\%, and we report this split separately as a targeted stress test. We publicly release our data and code.",
-      "highlights": {
-        "contribution": "推出第一个真正韩语场景的 web browsing agent benchmark K-BrowseComp，并提供一个对抗合成 stress test 子集。",
-        "innovation": "针对性地暴露韩语模型与英文 frontier 模型之间的 agentic 能力差距；用 hard few-shot exemplar + failure-mode-targeted 合成对抗题，利用解题和出题的不对称性。",
-        "method": "母语者手工构造 300 道核对题；另外用难例 few-shot 和失败模式定向生成 100 道合成题；在多家 frontier 和韩国本土 LLM 上跑统一 web browsing agent 框架评测。",
-        "results": "Verified 子集上 frontier LLM 30-45.67%，韩国 PAIF LLM 仅 0-10.33%；对抗合成子集最强模型 26%。"
-      },
-      "images": [],
-      "published_date": "2026-06-01T15:50:03Z",
-      "categories": [
-        "cs.CL"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic",
-        "agent benchmark"
-      ],
-      "scores": {
-        "relevance": 6.0,
-        "recency": 10.0,
-        "popularity": 6.0,
-        "quality": 7.0,
-        "recommendation": 6.7
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.02404v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.02404v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.02107",
-      "title": "Network Distributed Multi-Agent Reinforcement Learning for Consensus Control of Quadcopters",
-      "authors": [
-        "Youssef Mahran",
-        "Zeyad Gamal",
-        "Aamir Ahmad",
-        "Ayman El-Badawy"
-      ],
-      "affiliations": [
-        "Stuttgart"
-      ],
-      "summary": "多无人机一致性控制要么集中规划要么完全分布式，作者把通信图直接塞进策略里。每个 quadcopter 只看两个邻居，用 MASAC 学一个高层一致性 planner 输出参考位置，下层跟踪控制器跟。在 3 个 agent 上训完，直接拉到 250 个 agent 还能稳定收敛，不用 retrain。",
-      "original_abstract": "This paper proposes a Network Distributed Multi-Agent Reinforcement Learning (ND-MARL) framework for quadcopter consensus control. Compared to conventional multi-agent MARL formulations that rely on centralized planning or fully decentralized execution, ND-MARL incorporates the swarm communication graph into the decision process. Under a 2-Neighbor communication topology, each agent observes information of only two neighbors and outputs an action through a distributed policy. A high-level distributed consensus planner is trained using Multi-Agent Soft Actor-Critic (MASAC) and embedded in a hierarchical stack to generate reference target positions tracked by a low-level quadcopter controller. Results demonstrate smooth consensus trajectories and planner-tracker integration when compared to a centralized MARL controller. Most notably, the learned controller exhibits zero-shot scalability, as policies trained on a three-agent system are deployed to swarms of up to 250 agents under the same 2-Neighbor communication topology without retraining or fine-tuning, achieving consistent convergence with increasing steady-state spread at large team sizes due to sparse information propagation. These findings highlight ND-MARL as a stable framework for distributed, communication-aware quadcopter consensus control.",
-      "highlights": {
-        "contribution": "提出 ND-MARL，把网络通信拓扑嵌入多 quadcopter 一致性控制的 MARL 策略中，并展示 zero-shot 扩规模能力。",
-        "innovation": "在 2-Neighbor 通信约束下做分布式高层 planner + 低层跟踪两层结构；3 个 agent 上训练的策略不改参数直接部署 250 个 agent。",
-        "method": "用 MASAC 学高层分布式一致性 planner，每个 agent 只观察两个邻居信息输出动作；该动作作为参考位置喂给低层 quadcopter 控制器；做层次化控制栈。",
-        "results": "3 agent 训练的策略 zero-shot 部署到最多 250 agent 全部收敛，相同 2-Neighbor 拓扑下；轨迹平滑，与集中 MARL 控制器可比；大群体下稳态扩散略增。"
-      },
-      "images": [],
-      "published_date": "2026-06-01T11:39:40Z",
-      "categories": [
-        "cs.RO",
-        "cs.AI",
         "cs.LG"
       ],
       "matched_domain": "Agent",
       "matched_keywords": [
-        "multi-agent"
+        "llm-based agent",
+        "multi-agent",
+        "agentic"
       ],
       "scores": {
-        "relevance": 6.5,
-        "recency": 10.0,
-        "popularity": 5.5,
-        "quality": 6.5,
+        "relevance": 5.0,
+        "recency": 7.5,
+        "popularity": 6.5,
+        "quality": 7.5,
         "recommendation": 6.5
       },
-      "pdf_url": "https://arxiv.org/pdf/2606.02107v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.02107v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.02302",
-      "title": "SeClaw: Spec-Driven Security Task Synthesis for Evaluating Autonomous Agents",
-      "authors": [
-        "Hao Cheng",
-        "Changtao Miao",
-        "Tianle Song",
-        "Yin Wu",
-        "He Liu",
-        "Erjia Xiao",
-        "Junchi Chen",
-        "Xiaoyu Shi",
-        "Yichi Wang",
-        "Jing Yang",
-        "Taowen Wang",
-        "Jinhao Duan",
-        "Mengshu Sun",
-        "Peiyan Dong",
-        "Xuan Shen",
-        "Yang Cao",
-        "Renjing Xu",
-        "Kaidi Xu",
-        "Jindong Gu",
-        "Bo Zhang",
-        "Jize Zhang",
-        "Chenhao Lin",
-        "Philip Torr",
-        "Chao Shen"
-      ],
-      "affiliations": [
-        "Oxford",
-        "Drexel"
-      ],
-      "summary": "现在 autonomous LLM agent 能读文件、用工具、操外部服务，安全问题没人系统测过。作者做了 SeClaw：用结构化风险 spec 自动合成安全测试任务，再放进 docker 化测试床做执行级评估，关注轨迹不只关心结果。覆盖资源、用户任务、环境、agent 内在四类风险。",
-      "original_abstract": "Autonomous LLM agents increasingly operate in stateful environments where they access tools, files, memory, and external services. While such capabilities enable complex real-world workflows, they also introduce security risks that are difficult to capture with existing evaluations. Current agent security benchmarks often rely on manually curated tasks, provide limited coverage of emerging threats, and focus primarily on final outcomes rather than the execution processes that lead to unsafe behavior. We introduce SeClaw, a framework that combines specification-driven security task synthesis with execution-based security evaluation for Autonomous agents. Spec-driven security task synthesis enables scalable and controllable construction of security tasks from structured risk specifications, while SeClaw docker provides a standardized testbed for evaluating agent behavior under diverse safety-risk scenarios. The benchmark covers risks arising from resources, user tasks, environments, and intrinsic agent behaviors, and supports trajectory-aware assessment of unsafe actions beyond final responses. By bridging systematic task synthesis and reproducible security evaluation, SeClaw provides a practical foundation for measuring, diagnosing, and comparing security failures in autonomous LLM agents. The code is available at https://github.com/seclaw-eval/seclaw-eval.",
-      "highlights": {
-        "contribution": "提出 SeClaw 框架，把 spec 驱动的安全任务合成与执行级安全评估结合到一起，覆盖 autonomous agent 的多种风险场景。",
-        "innovation": "用结构化 risk spec 自动合成而不是人工策划任务；评估关注 trajectory 而不是只看最终输出。",
-        "method": "spec-driven 任务合成模块把风险类别转成具体测试用例；SeClaw docker 提供统一沙盒；评估器对 agent 行为轨迹按 unsafe action 打分；开源在 GitHub。",
-        "results": "论文未给出具体数字，主要是框架和基准设计的工作；提供可复现的 docker 评估管线。"
-      },
-      "images": [],
-      "published_date": "2026-06-01T14:23:42Z",
-      "categories": [
-        "cs.CR",
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent",
-        "autonomous agent"
-      ],
-      "scores": {
-        "relevance": 6.0,
-        "recency": 10.0,
-        "popularity": 6.0,
-        "quality": 6.5,
-        "recommendation": 6.4
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.02302v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.02302v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.02963v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.02963v1",
       "venue": null
     },
     {
@@ -1038,86 +1377,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.02109v1",
       "arxiv_url": "https://arxiv.org/abs/2606.02109v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.02494",
-      "title": "Monitoring Agentic Systems Before They're Reliable",
-      "authors": [
-        "Marisa Ferrara Boston",
-        "Glen Hanson",
-        "Effi Georgala",
-        "JD Hudgens",
-        "Heather Frase"
-      ],
-      "affiliations": [],
-      "summary": "Agent 系统上线时常常不是任务级 bug，而是结构性缺陷主导失败。作者提出一个监控+分诊方法论：三维度（质量/适用/效率）× 三尺度（run 内/run 间/结构），用 variance 当信号，配 FMEA 严重度分级。在 220 个合成 run 上跑下来：跨 run 监控变异系数 1.25，结构监控能稳定捞出集成 gap，注入的任务级错误被结构缺陷淹没看不出来。",
-      "original_abstract": "Agentic systems entering production typically operate as partially integrated assemblies where structural defects, not task-level errors, dominate the failure landscape. At this maturity level, task-level error detection may be infeasible: structural failure modes mask the signal that task-level monitors are designed to detect.We present a monitoring and triage methodology that decomposes agentic system evaluation into three dimensions (quality, suitability, efficiency) at three monitoring scopes (within-run, cross-run, structural), using variance as a characterization signal. Findings are routed through severity classification adapted from FMEA, concentrating human attention on the subset that warrants investigation. We evaluate on a synthetic testbed of 220 runs across 120 document bundles with controlled error injection.Three results emerge. Monitor scope determines failure type: within-run monitors surface deterministic stage defects (CV = 0.02), cross-run monitors surface stochastic integration consequences (CV = 1.25, 24% at L2), and a structural monitor identifies an integration gap with perfect consistency (CV = 0.00). Injected task-level errors are indistinguishable from clean baselines, confirming structural defects mask task-level signal. Deterministic triage routes 97% of findings to automated tracking, leaving the 2% reflecting variable behavior for human investigation.We propose, on Stage 1 evidence, a maturity-staging model in which monitoring transitions from structural characterization to error detection to reliability tracking as integration defects resolve. The taxonomy, CV-based scope characterization, and severity model transfer architecturally to document-driven, multi-stage agentic workflows in regulated industries; specific calibrations are domain-specific. Deploy monitoring early: the first thing it finds is the most important thing to fix.",
-      "highlights": {
-        "contribution": "针对未成熟期 agentic 系统给出一套监控与分诊方法论，强调结构性缺陷而不是任务级错误才是主要失败模式。",
-        "innovation": "用 variance（CV）作为不同 scope 的可比信号；引入分级路由让 97% 自动 track、只 2% 进人工排查；提出按成熟度阶段切换监控目标的 staging 模型。",
-        "method": "三维度 × 三尺度构造监控指标；用变异系数 CV 描述各 scope 失败类型；按 FMEA 严重度分级分诊；在 120 文档 220 个合成 run 上注入受控错误验证。",
-        "results": "run 内 CV=0.02 抓确定性 stage 缺陷，跨 run CV=1.25 抓随机集成后果，结构监控 CV=0.00 抓集成 gap；分诊 97% 自动 track，2% 进人工。"
-      },
-      "images": [],
-      "published_date": "2026-06-01T17:01:53Z",
-      "categories": [
-        "cs.SE",
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic",
-        "agentic workflow"
-      ],
-      "scores": {
-        "relevance": 5.5,
-        "recency": 10.0,
-        "popularity": 5.0,
-        "quality": 6.5,
-        "recommendation": 6.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.02494v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.02494v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.02497",
-      "title": "Bridging the Last Mile of Time Series Forecasting with LLM Agents",
-      "authors": [
-        "Yuhua Liao",
-        "Zetian Wang",
-        "Qiangqiang Nie",
-        "Zhenhua Zhang"
-      ],
-      "affiliations": [],
-      "summary": "工业里用 forecasting 不是出个数字就完事，得结合节假日、活动、专家反馈再改一刀。作者把这一步定成 last-mile forecasting 问题，用 LLM agent 框架做在 backbone 之上：维护统一 forecast workspace、调用工具取证据、把推理轨迹转成带安全约束的 revision action，还支持 map-reduce 长程预测和 memory 反思。",
-      "original_abstract": "Time series forecasting has advanced rapidly, especially with the emergence of foundation models that show strong zero-shot performance on numerical extrapolation. However, in real-world forecasting settings, a statistically plausible baseline is rarely the final forecast used in practice. Before a forecast becomes decision-ready, it often needs to be revised using weakly structured business context such as holiday effects, campaign plans, external events, historical analogs, and expert feedback. This practical stage remains underexplored in the forecasting literature. In this paper, we formulate this stage as the \\textbf{last-mile forecasting} problem and present an LLM-agent framework that sits on top of a forecasting backbone. Our system maintains a unified forecast workspace, invokes tools to retrieve contextual evidence, and converts reasoning trajectories into explicit forecast revision actions under structural safety constraints. It also supports long-horizon forecasting through map-reduce-style decomposition and post-hoc reflection through a memory bank. The resulting system is designed to be controllable and auditable. Through real-world case studies, we show how LLM agents can bridge the gap between statistical prediction and business-ready forecasting.",
-      "highlights": {
-        "contribution": "明确提出 last-mile forecasting 问题：把统计预测改写成业务可用预测，并用 LLM agent 框架解决。",
-        "innovation": "工业里少见有人形式化这一步；引入 structural safety constraints 让 LLM 不能随便改坏预测；用 memory bank 做长期反思。",
-        "method": "在 forecasting backbone 之上加 LLM agent：统一 forecast workspace 状态；工具调用查 holiday/campaign 等外部证据；reasoning trajectory 翻译成显式 revision action 且受结构安全约束；长程任务 map-reduce 分解；memory bank 做 post-hoc 反思。",
-        "results": "通过真实工业 case study 展示能桥接统计预测和业务预测，文中未给统一 benchmark 数字。"
-      },
-      "images": [],
-      "published_date": "2026-06-01T17:03:40Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent",
-        "agent framework"
-      ],
-      "scores": {
-        "relevance": 5.0,
-        "recency": 10.0,
-        "popularity": 5.5,
-        "quality": 6.5,
-        "recommendation": 6.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.02497v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.02497v1",
       "venue": null
     }
   ],

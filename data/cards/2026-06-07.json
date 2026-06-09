@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.08530",
+    "summary": "现有 VLA 在真实部署面对新物体、背景变化和不同机器人本体时泛化能力差。作者认为根因是缺乏统一的几何感知动作表示，于是提出 GEAR-VLA，用粗到细的动作学习、3D 空间分支对齐以及本体规范化把动作语义和几何统一起来。在 LIBERO、LIBERO-Plus、RoboTwin 2.0 上达到 SOTA，AgileX 真机 85.9%、未见本体 LDT-01 81.0%，6360 次抓取测试达 90.1%。",
+    "highlights": {
+      "contribution": "提出一个统一的几何感知 VLA 框架 GEAR-VLA，把 3D 几何先验和本体规范化引入动作表示，显著提升跨物体跨本体泛化。",
+      "innovation": "区别于纯 2D 视觉或后接 3D 编码的做法，GEAR-VLA 把 VLM 视觉通路冻结、单独训练 3D 空间分支并与之对齐，并通过本体规范化把机器人差异限制在底层接口。",
+      "method": "先做多源具身预训练得到带动作理解的 VLM，再用 latent action token 桥接到去耦梯度的 DiT 连续动作专家；同时对齐一条可训练 3D 空间通路；状态做本体感知、动作做本体不变。",
+      "results": "LIBERO/LIBERO-Plus/RoboTwin 2.0 拿到 SOTA；AgileX 真机 85.9%，未见本体 LDT-01 81.0%；6360 次、212 类未见物体的抓取 benchmark 上 90.1%。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 9.5,
+      "popularity": 7.8,
+      "quality": 8.5,
+      "recommendation": 8.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08653",
+    "summary": "作者发现 VLA 微调时只约束影响动作的方向，视觉结构沿动作等价方向会塌缩。提出 FiberTune：在线学一个动作探针估出预测动作的视觉方向，把它从中间视觉 token 中过滤掉，再把残差对齐到冻结的视觉教师并约束有效秩。在六个仿真设置和真机 SO-101 上一致提升，CALVIN ABC→D 长程 SR(5) 提了 10.7 个点。",
+    "highlights": {
+      "contribution": "形式化了 VLA 微调中的「动作纤维残差视觉塌缩」并给出训练期解决方案 FiberTune，不增加推理开销。",
+      "innovation": "不是简单蒸馏视觉特征，而是先用动作探针过滤掉动作相关方向，再让正交残差对齐教师，并显式约束残差有效秩。",
+      "method": "在中间视觉特征上挂一个在线动作探针，估出动作预测方向；从特征里减去这些方向得到残差；残差和冻结视觉教师对齐，同时加有效秩正则；与原任务损失同时优化。",
+      "results": "在 pi_0.5、OpenVLA-OFT 两架构 × 两个 benchmark 共 6 个设置都赢；CALVIN ABC→D SR(5) +10.7pp；真机 SO-101 pick-place 由 72.7% 提到 78.1%。"
+    },
+    "scores": {
+      "relevance": 9.2,
+      "recency": 9.5,
+      "popularity": 7.2,
+      "quality": 8.2,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08684",
+    "summary": "自动驾驶 VLA 每帧都生成语言其实是浪费，因为只在少量路段语言才真正起作用。作者训了一个 0.11M 的轻量 gate 在冻结的 VLA 隐状态上判断「这帧要不要走语言路径」。在 Bench2Drive 上拿到 76.2% 成功率、Longest6 v2 36 driving score 的 SOTA，推理加速 2.54 倍。",
+    "highlights": {
+      "contribution": "提出 BLUE，用极轻量 gate 决定 VLA 何时启用语言生成，在自动驾驶上做到「保留语言收益、砍掉无用算力」。",
+      "innovation": "首次定量揭示语言在驾驶 VLA 中只对少量帧有用，并证明冻结 VLA 隐状态已经隐式编码了「这帧需不需要语言」。",
+      "method": "冻住 VLA 主干，加 0.11M 参数 gate 接在 VLA 隐状态上，输出 per-frame 决策：要语言就走 token 生成路径，否则直接预测动作；不需要额外人标。",
+      "results": "Bench2Drive 76.2% SR、Longest6 v2 36 DS 同时拿 SOTA；推理 2.54× 加速，成功率比 backbone +8.9pp。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08881",
+    "summary": "现有 VLA 评测大多在仿真或昂贵机器人上做，低成本平台的真实表现没人系统看过。作者在低成本 SO-101 上搭了一个标准 benchmark，跑 π0.5、SmolVLA、Wall-X、ACT 四个策略，引入失败分类和恢复指标。结论是预训练 VLA 一般优于 IL，但执行不稳定是主要失败源，恢复能力差异巨大。",
+    "highlights": {
+      "contribution": "建立了首个面向低成本机器人（SO-101）的 VLA/IL 真机 benchmark，并配上失败-恢复结构化分析协议。",
+      "innovation": "评测指标超越二元成功率，引入语义/执行层失败分解和 recovery-aware metric，把硬件不确定性变成一等问题。",
+      "method": "用真人遥操作数据在 SO-101 上微调四种代表性策略，跑 4 个任务的统一协议；除了成功率，还分类失败、量化恢复行为。",
+      "results": "预训练 VLA 普遍强于 ACT，但任务依赖强；执行不稳定是主要失败源，不同架构的恢复能力差异很大（无统一 SOTA 数字）。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.4,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08414",
+    "summary": "Diffusion policy 表现强但常常违反物理安全约束。作者提出 PACT：后训练阶段直接把约束梯度蒸馏进 diffusion 策略，用 reverse-KL 在所有时间步上做密集监督，再用 curriculum 慢慢收紧约束。不用 demo 不用 reward，安全违规平均减少 31%，任务成功率反而 +30.7%。",
+    "highlights": {
+      "contribution": "提出自演化的 diffusion policy 安全对齐框架 PACT，无需 demo 或 reward 就能把策略投影到约束可行域。",
+      "innovation": "不像现有方法在训练期硬塞约束或推理期外挂 guardrail，PACT 在后训练阶段用 reverse-KL + curriculum 做温和对齐，理论上保证策略偏移有界且单调改进。",
+      "method": "拿预训练 diffusion 策略，对每个去噪步施加约束梯度，用 reverse-KL 把策略推向约束可行；课程逐步收紧约束防灾难性遗忘；不读 demo 不读 reward。",
+      "results": "在仿真和真机 manipulation 上安全违规平均 −31%，任务成功率 +30.7%。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 9.5,
+      "popularity": 7.4,
+      "quality": 8.2,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08440",
+    "summary": "现有几何感知抓取把重建当中间产物而不是可复用的物体先验。作者基于 SAM3D 搭了 GraspFoM：共享一个 3D 物体 latent 同时做重建和抓取姿态预测，再加锚点初始化的截断 pose 扩散器。重建和抓取互相受益，参数加得不多，两个任务都拿 SOTA。",
+    "highlights": {
+      "contribution": "提出统一的 3D 基础模型驱动框架 GraspFoM，把高保真重建和抓取姿态预测耦合在一个共享 latent 上。",
+      "innovation": "用 SAM3D 作为 3D foundation prior 提取共享物体 latent，并设计 reconstruction-aware scorer + residual latent updater 让两个任务互相喂梯度。",
+      "method": "输入部分观测，用 SAM3D 编码出 3D 物体 latent；一头解码出 mesh/3DGS 重建，一头通过锚点初始化的截断扩散器预测多模态抓取姿态；scorer 和 updater 让两任务联合优化。",
+      "results": "重建和抓取两边都拿 SOTA；额外可训练参数很少（具体数字未给）。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08495",
+    "summary": "人形机器人需要适应场景、任务和用户意图的全身动作，但 motion tracking 和 VLA 都不算可交互的全身行为先验。作者用第一视角人类示范学了一个 EgoPriMo：基于 SMPL，文字作为高层控制信号，单 checkpoint 同时做重建、生成、预测。在 Nymeria 和 EgoExo4D 上超过 UniEgoMotion，生成的动作可被宇树人形执行。",
+    "highlights": {
+      "contribution": "提出 EgoPriMo，从第一视角人类示范学到可交互的人形全身动作先验，单 checkpoint 同时做重建、生成、预测。",
+      "innovation": "三流 DiT 同时建模身体动力学、第一视角视觉和文本，并用 task-conditioning mask 在同一模型里路由不同任务和缺失模态。",
+      "method": "输入第一视角观测和文字 prompt，输出 SMPL 全身动作；Triple-stream DiT 三路融合，任务/缺失模态由 mask 控制；生成结果可丢给 Unitree 控制器执行。",
+      "results": "Nymeria、EgoExo4D 上 ego-motion 生成超过 UniEgoMotion；同 checkpoint 兼顾重建/预测；动作可在真人形机器人执行。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.6,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08564",
+    "summary": "作者认为 sim 训出来的策略不 robust 是因为物理保真度不够，于是做了 Real-IKEA：1079 个铰接资产配置，源自 83 个真实 IKEA 把手和旋钮，经过六步物理工作流处理。用 RL 训出来的策略学到了 hooking、levering 这种依赖机械优势的鲁棒策略，而不是脆弱的摩擦拉拽。",
+    "highlights": {
+      "contribution": "提出 Real-IKEA 数据集和仿真框架，把物理保真度作为一等公民，专为铰接物体操作打造。",
+      "innovation": "引入双向表面偏差度量衡量碰撞 mesh 准确度，并提供阻尼/摩擦校准的多套动力学配置，让 sim 真的「像真的」。",
+      "method": "对 83 个真实 IKEA 把手/旋钮跑六步物理工作流（建模、表面校准、动力学校准等），得到 1079 个铰接配置；在 Isaac/Sim 类环境里用 RL 训操作策略。",
+      "results": "RL 策略学到机械优势主导的 hooking 和 levering 策略，在铰接物体任务上表现远稳于摩擦依赖策略（具体提升数字未列）。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 6.8,
+      "quality": 7.4,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08737",
+    "summary": "World action model 主要靠视觉，碰到接触丰富的任务时手感缺失就翻车。作者提出 Dream-Tac：联合建模动作、未来视觉观察和触觉动态，用 contact-gated 视触觉融合和 contact-aware attention bias 调控跨模态。还设计了双层加速：训练 2.9× 快、推理 1.8× 快，6 个接触密集任务动作精度平均提 31.7%。",
+    "highlights": {
+      "contribution": "提出统一的 Tactile-World Action Model Dream-Tac，把视觉、触觉、动作和未来观测一起建模，专攻接触密集操作。",
+      "innovation": "用 contact-gated visuotactile fusion 选择性引入触觉，并把 contact-aware bias 重构进 attention 路径，使其在训练加速时仍可保留融合通路。",
+      "method": "输入历史视觉+力/触觉，预测未来动作、未来视觉以及触觉动态；融合用门控开关，attention 加 contact-aware bias；推理用 cache-based diffusion 加速。",
+      "results": "6 个接触密集任务上动作精度平均 +31.7%，训练加速 2.9×，推理加速 1.8×。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9.5,
+      "popularity": 7.4,
+      "quality": 8.2,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08775",
+    "summary": "视觉 world model 在单阶段抓取/到达任务可以做 MPC，但多阶段长程任务搞不动。LeCun 组提出 WorldDP：高层用以物体为中心的 world model 优化可行子目标，底层用 Diffusion Policy 执行。物体级表征解耦实体，能按物体顺序规划，在多个机器人 benchmark 上一致超基线。",
+    "highlights": {
+      "contribution": "提出层级化的 WorldDP，把 object-centric world model 和 Diffusion Policy 合体来处理多阶段操作。",
+      "innovation": "用物体级表征解耦场景实体，让 world model 能按物体逐个规划子目标，再由底层 diffusion policy 物理执行，弥补单一 world model 在长程任务的不足。",
+      "method": "高层 object-centric world model 在 MPC 里搜可行 subgoal；底层 Diffusion Policy 接收 subgoal 直接生成动作；两层都用物体槽位表征。",
+      "results": "多个机器人 benchmark 上一致超越基线（具体数字未列），多阶段任务收益最明显。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 9.5,
+      "popularity": 7.6,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08555",
+    "summary": "力/触觉常被当作额外观测，没真正喂进动力学预测和闭环纠错。FAWAM 把力信号分三层用：编码历史 6 轴力矩调制动作生成、联合预测未来动作和末端力矩、最后用预测力矩作参考做在线残差纠错。多个接触密集任务上比 vision-only 高 36.25%，比已有力感方法高 21.25%。",
+    "highlights": {
+      "contribution": "提出 FAWAM，第一次把力信号同时用在感知、未来预测、闭环执行三个层级，做接触密集操作的力感 WAM。",
+      "innovation": "提出 wrench-aware future prediction + residual correction，用预测的力矩轨迹作为执行期参考来在线修正动作，而不是只把力当输入。",
+      "method": "编码历史 6 轴力/力矩调制动作生成；模型联合预测未来动作和未来 end-effector wrench；执行时用预测 wrench 与实测力比较，残差模块在线修动作。",
+      "results": "真机多个接触密集任务平均成功率比 vision-only +36.25pp、比已有力感方法 +21.25pp。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9.5,
+      "popularity": 7.2,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08688",
+    "summary": "4D 物理动作合成里材质优化已有不少工作，但外力场全靠人手配。PhysAgent 是一个 simulator-in-the-loop 多智能体框架：语义 Agent 配带力场技能模块给出初始化，Refine Agents 用 vision foundation model 从渲染帧抽取点轨迹再翻成文字反馈，靠 LLM 常识跳出局部最优、动态切换离散力场。",
+    "highlights": {
+      "contribution": "提出首个把外力场自动化的多智能体 4D 合成框架 PhysAgent，让物理仿真摆脱手配力场。",
+      "innovation": "把物质属性和外部动力学解耦，并引入 Trajectory-Grounded Multi-Agent Feedback：把渲染轨迹翻成文字让 LLM 做宏观跳跃式优化，绕开 SDS 局部最优。",
+      "method": "Semantic Agent 用力场技能模块给出初始化；模拟器跑出渲染帧；Refine Agents 用视觉基础模型抽点轨迹，转成结构化文本描述，LLM 据此修正参数或切换力场类型；循环到收敛。",
+      "results": "在多模态 prompt 上生成稳定多样物理场景，生成多样性和物理准确性显著超过基线（具体数字未列）。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 9.5,
+      "popularity": 6.6,
+      "quality": 7.4,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08790",
+    "summary": "Agent 经济里支付、授权、LLM-as-judge 都不算「清算」。RAILS 提出 agentic 商务的清算原语，定义 7 个核心对象和形式化「可采信度分级验证」模型，保证任何对实际结算有影响的判定都不会基于低于义务门槛的证据。是个协议规范向论文，不是 ML 工作。",
+    "highlights": {
+      "contribution": "提出 agentic 商务的清算协议 RAILS，把「智能体是否履约」变成可验证可裁定的原语。",
+      "innovation": "首次给出 agent-commerce 验证机制的形式化可证伪属性（可采信度门槛下的 soundness），区别于 pass / 投递保证 / 评分。",
+      "method": "定义 7 个原语：Obligation Object、Evidence Envelope、Verification Mesh、Clearing Decision、Settlement Instruction、Clearing Passport、Finality Rules；用 admissibility-graded verification 形式化模型证明 soundness。",
+      "results": "无实验，只给出可证伪的协议规范和 soundness 性质。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 6.6,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08402",
+    "summary": "单图生成完整 3D 场景需要全局几何一致性。SceneConductor 把任务拆三阶段：先做对象级初始化和粗布局，再构建支撑面/房间边界/材质/光照的环境支架，最后多智能体精修。还引入几何感知 layout 预测器，只用稀疏点云监督就能泛化到真实场景，几何精度、空间一致性、感知真实性都超之前方法。",
+    "highlights": {
+      "contribution": "提出多智能体 orchestration 单图 3D 场景生成框架 SceneConductor，把布局、环境、精修分阶段处理。",
+      "innovation": "用 planner agent 找问题、自己改简单的、调用专家 agent 改复杂局部并整合回全局；layout 预测器靠点云稀疏先验监督，不靠场景级标注。",
+      "method": "Stage1：分割 + 物体级 3D 表征 + 初始布局；Stage2：用 point map 构建支撑面/房间边界/材质/光照支架；Stage3：planner agent + specialist agents 多轮局部精修。",
+      "results": "在 benchmark 数据集上几何精度、空间一致性、感知真实性都一致超过 prior（无具体数字）。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9.5,
+      "popularity": 6.6,
+      "quality": 7.2,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08470",
+    "summary": "把 LLM 塞进自驾会面临推理多样性低、算力高、学习方式静态的问题。LUNA-AD 用三系统架构：多智能体生成不确定性感知的决策示范、用 dual-head 轻量模型同时蒸馏决策分布和文字解释、再加 reflection 驱动的终身学习闭环。在 nuPlan 反应/非反应模式都达 SOTA，推理延迟显著降低。",
+    "highlights": {
+      "contribution": "提出轻量、不确定性感知、可终身学习的自驾 LLM 框架 LUNA-AD，平衡推理多样性、效率和持续改进。",
+      "innovation": "三系统设计：分析-蒸馏-反思；多智能体在线生成多样化决策示范，dual-head 把决策分布和文字解释统一蒸馏，闭环 reflection 用于增量改进。",
+      "method": "多智能体系统跑多假设推理生成带不确定性的决策示范；蒸馏到 dual-head 轻量模型一头出决策一头出文字；反思机制基于闭环反馈细化候选决策。",
+      "results": "nuPlan 非反应和反应模式都拿 SOTA 成功率；推理延迟相比知识驱动 AD 大幅下降（具体数字未列）。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9.5,
+      "popularity": 6.6,
+      "quality": 7.2,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08529",
+    "summary": "你看到的 agent 排行榜其实是 scaffold + 模型的混合分。作者预注册做了一组对照实验：3 种 scaffold × 5 个模型（Claude 4.7/4.6/4.5、Gemini 3.1 Pro、GPT-5.5）在 GAIA Level 1/2 上各 3 次。结论：scaffold 单独就能把同一模型的准确率拉开 28pp；更强的模型未必更不依赖 scaffold，多智能体优势只在 Anthropic 家族出现。",
+    "highlights": {
+      "contribution": "首次在预注册严控条件下系统量化 agent scaffold 的 elicitation gap，证明单 scaffold 的能力分都是 scaffold 条件估计。",
+      "innovation": "预注册假设对照 + 跨厂商 5 模型 × 3 scaffold × 2 难度 × 3 attempt，引入「scaffold 效应是否随能力缩小」可证伪检验。",
+      "method": "GAIA validation L1/L2 固定任务集；ReAct、Planner-Actor-Rater、Planner-then-Executor 三 scaffold；五模型每题 3 次；统计 scaffold × model × level 交互。",
+      "results": "Opus 在 L2 robust slice 上 scaffold 单独移动准确率 28pp；多智能体优势仅在 Anthropic 家族存在；planner-executor 在 file-reading 上未现优势；Gemini + planner-then-executor 在 L2 既最便宜又最准。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9.5,
+      "popularity": 7.2,
+      "quality": 7.6,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08531",
+    "summary": "现有 agent 安全评测多靠手写场景和静态 prompt，看不到执行过程中的真实风险。VESTA 把五大类风险实例化成 1072 个可量化执行场景，自动跑了 12 个 LLM agent 在两种权限设置下的过程级行为安全。结论：平均 ASR 47.1%，多个模型超 70%，agent 在执行过程中的安全问题远比想象严重。",
+    "highlights": {
+      "contribution": "提出全自动 agent 安全场景生成与评估框架 VESTA，量化执行过程中的过程级安全风险。",
+      "innovation": "把五维抽象风险实例化为 1072 个可执行评测场景，再自动跑过程级评估，不再依赖静态 prompt 和最终输出判断。",
+      "method": "按五大风险维度合成场景；自动评估管线跑 12 个 LLM agent 在两种权限上下文下完整任务执行；用 ASR 这种过程级指标统计。",
+      "results": "平均 ASR 47.1%，多个模型超 70%，揭示执行期安全风险普遍。"
+    },
+    "scores": {
+      "relevance": 6.2,
+      "recency": 9.5,
+      "popularity": 6.8,
+      "quality": 7.0,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08552",
+    "summary": "本文是一篇综述性观点文，讨论如何用贝叶斯概率和信息论优化（含 active inference）配合 Promise Theory 描述自主智能体，包括边界条件、对齐意图、群体超智能体行为等。没有实验，偏理论 / 工程框架反思。",
+    "highlights": {
+      "contribution": "把 Promise Theory 与贝叶斯概率、Active Inference 结合，给自主智能体的意图建模和对齐提出语义级补充。",
+      "innovation": "用 promise semantics 解决概率框架在非局部协调、标定、归一化上的痛点；把 agent alignment 当作可扩展的意图定义。",
+      "method": "理论分析：描述 promise 与 Bayesian/info-theoretic 优化的耦合方式；讨论边界条件如何充当 promise 来约束允许状态和决策阈值。",
+      "results": "无实验。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 9.5,
+      "popularity": 4.5,
+      "quality": 5.5,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08596",
+    "summary": "人机协作里 MARL 黑盒不安全、查 LLM 又慢又贵。Co-pi-tree 把 LLM 推理蒸馏成一棵可执行的策略树（搭档行为预测树 + 自身动作选择树），交互后用自然语言反馈修剪问题分支。Overcooked-AI 上平均奖励比基线高 35.4%，LLM 查询少 77.7%，推理延迟少 97.1%。",
+    "highlights": {
+      "contribution": "提出 Co-pi-tree，把 LLM 推理蒸馏成可解释、可执行、可在线改的策略树，用于人机协作。",
+      "innovation": "区别于每步查 LLM 或纯 MARL 黑盒，Co-pi-tree 离线蒸馏后只在闭环反馈中用自然语言修剪问题分支，兼顾解释性和效率。",
+      "method": "两棵树：搭档行为预测树 + 自身动作选择树；初始结构由 LLM 推理蒸馏成代码；与搭档交互拿反馈，再用自然语言总结去改问题分支。",
+      "results": "Overcooked-AI 平均奖励 +35.4%，LLM 查询数减少 77.7%，测试时延迟减少 97.1%。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 9.5,
+      "popularity": 6.8,
+      "quality": 7.2,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08610",
+    "summary": "机器人 RL 慢的不是算法是工程链：任务、奖励、超参全要专家调。HARBOR 把这套流程定义成「线束工程」问题，由专门 agent 通过标准命令、可执行 gate、可复用知识把环境搭建到策略训练全自动化。在 6 个 benchmark、16 个任务上端到端跑通，策略可迁到真机。",
+    "highlights": {
+      "contribution": "提出 HARBOR，把机器人 RL 工程链 (env 搭建、奖励设计、超参调优) 当作 harness 自动化问题用 agentic 框架解决。",
+      "innovation": "把高层目标分解成有限阶段，由专门 agent 通过标准命令、持久工件和可执行 gate 推进，并支持去中心化并行试验与经验复用。",
+      "method": "输入 simulator codebase + 任务规范；agents 按阶段依次设置环境、设计奖励、调超参、训策略；多 trial 并行；策略最终可迁真机。",
+      "results": "6 个 benchmark、16 个任务（操作/移动/双手灵巧）端到端跑通，奖励和算法配置自动得出且匹配或优于默认设置；token 和 wall-clock 成本可控。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9.5,
+      "popularity": 7.2,
+      "quality": 7.8,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08625",
+    "summary": "本文是一篇综述：把「rubric」当作贯穿 LLM 评测、强化学习训练、安全对齐的统一框架。作者梳理 rubric 在评价层（分解整体判断）、训练层（dense 反馈）、内生层（模型自生成 rubric 驱动自改进）三层作用，并讨论可靠性和威胁模型。",
+    "highlights": {
+      "contribution": "把 rubric 抽象为 LLM 评测/训练/对齐三大领域的统一框架，并系统综述其使用方式。",
+      "innovation": "首次把跨方向看似独立的 rubric 用法归一到一个框架，并区分评价 / 训练 / 内生三层级。",
+      "method": "综述：系统整理 rubric 构造与优化方法，分析其在不同任务的角色，并从生成质量、执行保真度、理论约束、安全威胁四个维度评估可靠性。",
+      "results": "无新实验，给出综合性 taxonomy 与 benchmark 整理。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 9.5,
+      "popularity": 5.8,
+      "quality": 6.4,
+      "recommendation": 5.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08656",
+    "summary": "LLM agent 在长任务里靠 memory 改进，但更新规则多半手写。MemoPilot 把 memory 更新当成多轮决策问题，用 multi-turn GRPO 端到端训：每轮一个奖励 + 上下文无关的轮级 advantage 估计，让 credit assignment 更细。在 RPS 和德州扑克上把冻结的 LLM 玩家拉到 Elo 第一（LHE 1762、RPS 1590），超过 DeepSeek-V3.2。",
+    "highlights": {
+      "contribution": "提出 MemoPilot，把 memory 更新作为可训对象，用多轮 RL 让冻结 LLM 在长任务中持续改进。",
+      "innovation": "把 memory update 公式化成 multi-turn decision，用 turn-wise reward + context-independent turn-level advantage 做更稳的多轮 credit assignment。",
+      "method": "冻结主 LLM，挂一个 memory copilot 控制 memory 更新；用 multi-turn GRPO 训练；每轮单独给奖励，再做轮级 advantage 估计。",
+      "results": "RPS Elo 1590、LHE Elo 1762，都排第一，超过所有 memory baseline 与 DeepSeek-V3.2。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 9.5,
+      "popularity": 7.4,
+      "quality": 7.6,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08696",
+    "summary": "反事实解释需要给用户多个备选方案，但靠 LLM prompt 会有算力上限。作者把问题定义成「固定 LLM 调用预算下找最多 oracle 合格反事实」的搜索问题，提出 Comp-MCTS：用 MCTS 框架，LLM 出方案、oracle 验证、用压缩引导剪枝。四个真实表格数据集上明显赢 LATS 类 baseline，质量-数量-代价权衡更好。",
+    "highlights": {
+      "contribution": "把反事实推荐重新定义为固定 LLM 调用预算下的搜索问题，并提出 agentic 树搜索 Comp-MCTS。",
+      "innovation": "训练 free，仅靠 oracle 与压缩引导剪枝；显式优化「单位 LLM 调用获得的唯一合规反事实数」，而不是单点最优解释。",
+      "method": "MCTS 框架里 LLM 提议新干预方向，oracle 验证可行性，压缩信号引导剪枝避免重复探索；无需训练。",
+      "results": "四个真实表格数据集，比单候选 LATS 强；3/4 数据集上同等 oracle 成本下获得相当或更多 unique 合规反事实，且 proximity/sparsity/novelty 有竞争力。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 6.8,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08702",
+    "summary": "现有多智能体 memory/skill 方法常被噪声轨迹和稀薄关系建模拖累，还得训练。ConMem 把历史轨迹蒸成结构化 memory card 组成关系图，运行时按需检索并通过 card 图协调，免训练免高质监督。在多 benchmark、多主流 MAS 架构上稳定提升，剪枝 50%+ 候选、规划 overhead 减少 80%+。",
+    "highlights": {
+      "contribution": "提出训练-free、关系感知的多智能体 memory 框架 ConMem，用结构化 memory card 和关系图协调跨经验。",
+      "innovation": "把 memory 抽象为带关系的 card 图（不只是检索条目），运行时通过 card 图解决策略冲突和依赖恢复。",
+      "method": "把历史轨迹蒸成 memory card 抓可复用策略；按关系组织成 graph；推理时按任务检索 card，再通过 graph 协调消歧；无需训练。",
+      "results": "多 benchmark 多 MAS 架构上一致超过现有 memory；剪枝候选 50%+，规划 overhead 减少 80%+。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 6.6,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.08710",
+    "summary": "把一份 6 万行 Fortran 单线程 MPI 求解器 NMAP-RKPM 现代化成 OpenMP 并行 C++ MPI。作者发现裸 LLM 不够用，于是建了一套高度结构化的「手把手」agentic 方法：手写示例引导、保持持续可构建、限定会话作用域，几个月就完成迁移。是经验报告。",
+    "highlights": {
+      "contribution": "给出一个把工业级 6 万行 Fortran 物理求解器迁移到 C++ OpenMP 的可复用 agentic AI 方法论。",
+      "innovation": "提出「hand-holding」结构化 agentic 方法（手写示例、连续可构建约束、会话作用域限制），缓解纯 LLM 在大型科学代码上的失败模式。",
+      "method": "两阶段迁移：先 Fortran→C++ 再并行化；每步限定 LLM 会话作用域、用手写示例对齐风格、保证编译可构建、人工把关问题样例。",
+      "results": "成功把 NMAP-RKPM (≈6 万行) 在几个月内迁成 OpenMP C++ MPI 版，且持续可构建可运行（无定量加速数字）。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 9.5,
+      "popularity": 5.0,
+      "quality": 5.8,
+      "recommendation": 4.8
+    },
+    "affiliations": []
+  }
+]

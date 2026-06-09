@@ -52,6 +52,89 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.04226",
+      "title": "PerceptTwin: Semantic Scene Reconstruction for Iterative LLM Planning and Verification",
+      "authors": [
+        "Charlie Gauthier",
+        "Sacha Morin",
+        "Liam Paull"
+      ],
+      "affiliations": [],
+      "summary": "想让 LLM 规划器在真机执行前先在仿真里验证一遍，但人工搭仿真太贵。PerceptTwin 从机器人感知栈拿到的语义场景出发，自动生成可交互仿真：开放词表物体图 + 3D 资产生成 + affordance 预测 + 常识检查，再用 LLM judge 验证计划是否符合人类偏好。结果让 GPT5 系列规划成功率平均提升约 39%，还能抗 prompt 注入攻击。",
+      "original_abstract": "Simulation environments are useful for both robot policy learning and planning verification and validation. Traditionally, the process of creating a simulation was onerous. Creating a bespoke simulation environment for each individual environment that a robot would operate in was simply infeasible. In this work, we introduce PerceptTwin, a fully automatic pipeline that constructs interactive simulations directly from semantic scene representations produced by a robot's perception stack. PerceptTwin combines open-vocabulary object maps with 3D asset generation, affordance prediction, and commonsense condition checking. These interactive simulations can be used to validate and refine plans before they are executed on the robot hardware. Borrowing from the AI alignment literature, we also introduce an LLM judge that verifies plan correctness and alignment with human preferences. Experiments show that PerceptTwin feedback allows LLM planners to refine plans, enhance safety, and resist harmful black-box prompting attacks. In our suite of tasks, PerceptTwin improves plan success by an average of approximately 39% for GPT5, GPT5Mini, and GPT5Nano planners. Additionally, PerceptTwin also improves human plan verification by up to 18% on average for plans that fail due to unfilled skill preconditions. Our results demonstrate the potential of open-vocabulary scene simulation from robot perception as a foundation for safer, more reliable robot planning.",
+      "highlights": {
+        "contribution": "提出全自动从感知到可交互仿真的 PerceptTwin 流水线，让 LLM 规划器在执行前先仿真验证并精修计划。",
+        "innovation": "把开放词表场景图、3D 资产合成、affordance 与常识检查整合成一条自动管线，并引入 LLM judge 做对齐评判而不是只看任务成功。",
+        "method": "感知栈输出语义场景 → 自动拼装 3D 资产、预测 affordance、做常识条件检查 → 形成可交互仿真 → LLM 规划器在仿真里执行 → LLM judge 评估并反馈精修。",
+        "results": "在自建任务集上让 GPT5/GPT5Mini/GPT5Nano 的规划成功率平均提升约 39%，对因前置条件未满足导致失败的计划，人类验证准确率平均提升最多 18%。"
+      },
+      "images": [],
+      "published_date": "2026-06-02T21:25:49Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robot policy"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 7.5,
+        "popularity": 7.0,
+        "quality": 7.8,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.04226v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.04226v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.04046",
+      "title": "Dive into the Scene: Breaking the Perceptual Bottleneck in Vision-Language Decision Making via Focus Plan Generation",
+      "authors": [
+        "Boyuan Xiao",
+        "Bohong Chen",
+        "Yumeng Li",
+        "Ji Feng",
+        "Yao-Xiang Ding",
+        "Kun Zhou"
+      ],
+      "affiliations": [],
+      "summary": "VLM 和 VLA 都受困于「看不准关键物体」的感知瓶颈，作者认为一步到位地聚焦不靠谱，必须先理解场景再逐步聚焦。SceneDiver 先建一张整体场景图打底，再循环「识别—理解—分析」一步步把任务拆细，最后用轻量 adapter 把这种聚焦能力蒸馏给 VLA。在标准具身基准上幻觉显著减少，而且不拖慢实时控制。",
+      "original_abstract": "In embodied vision-language decision making tasks such as robotic manipulation and navigation, Vision-Language and Vision-Language-Action Models (VLMs & VLAs) are powerful tools with different benefits: VLMs are better at long-term planning, while VLAs are better at reactive control. However, their performance is limited by the same perceptual bottleneck: visual hallucinations arise due to the models' inability to distinguish task-relevant objects from distractors. In principle, accurate identification and focus on critical objects while filtering out irrelevant ones is the key to break this limitation. A straightforward solution is one-step focus: directly attending to essential objects. However, this approach proves ineffective because effective focus inherently requires deep scene understanding. To this end, we propose SceneDiver, a coarse-to-fine focus plan generation method for VLMs leveraging their long-term planning abilities, that first constructs a holistic scene graph to establish initial comprehension, then progressively decomposes the task into simpler sub-problems through an iterative cycle of recognition, understanding, and analysis. To enable reactive control, we also design a lightweight adapter for distilling the deliberate focus ability into VLAs. Evaluations on standard embodied AI benchmarks confirm that our method substantially reduces visual hallucinations for both VLMs and VLAs, while preserving computational efficiency in tasks requiring fast execution. Our code and data are released at: https://future-item.github.io/SceneDiver.",
+      "highlights": {
+        "contribution": "提出 SceneDiver，用粗到细的聚焦规划缓解 VLM/VLA 在具身决策中的视觉幻觉问题。",
+        "innovation": "不再一步到位锁定物体，而是先建场景图再迭代分解任务，并通过 adapter 把规划侧的聚焦能力迁移到反应式 VLA。",
+        "method": "输入图像和指令，VLM 先生成全局场景图，然后循环递进地识别关键物体并拆解子任务形成聚焦计划；再训练一个轻量 adapter，把这种 attention 蒸馏到 VLA 用于实时控制。",
+        "results": "在标准具身 AI 基准上对 VLM 和 VLA 都明显降低视觉幻觉，并保持快速执行所需的计算效率，具体数字未在摘要给出。"
+      },
+      "images": [],
+      "published_date": "2026-06-02T07:50:56Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.CL",
+        "cs.LG",
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.04046v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.04046v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.03598",
       "title": "PHASER: Phase-Aware and Semantic Experience Replay for Vision-Language-Action Models",
       "authors": [
@@ -262,6 +345,49 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.04130",
+      "title": "CLAW: Learning Continuous Latent Action World Models via Adversarial Latent Regularization",
+      "authors": [
+        "Tewodros Ayalew",
+        "Matthew Jeung",
+        "Samuel Wheeler",
+        "Xiao Zhang",
+        "Andre de la Cruz Arce",
+        "Kaylene Stocking",
+        "Michael Maire",
+        "Matthew R. Walter"
+      ],
+      "affiliations": [],
+      "summary": "从没有动作标签的视频里同时学世界模型和连续潜动作。CLAW 用对抗式潜空间正则加 diffusion 视频生成，让模型自己挖掘有语义的动作表征，并预测环境如何因这些动作而变。学完后既能做 observation-only 模仿学习，也能在潜空间里规划动作再映射回真实控制。多任务多本体的实验显示动作表征语义清晰，效果优于已有方法。",
+      "original_abstract": "We introduce CLAW, a fully end-to-end self-supervised framework for learning a world model jointly with continuous latent action representations directly from action-free videos. Our approach leverages adversarial latent regularization and diffusion-based video generation to capture structured and semantically meaningful action representations while modeling rich, predictive environment dynamics, without relying on any action labels or annotations. By simultaneously training the Latent Action Model and world model, CLAW learns to reason about how inferred actions induce environment transitions from visual observations alone. We show that the resulting latent action world model supports both imitation learning from observation and goal-directed planning. In imitation learning, latent actions extracted from raw videos enable behavior cloning. For planning, CLAW generates sequences of latent actions and maps them to executable actions to reach desired goals. Extensive experiments across diverse tasks and embodiments demonstrate that CLAW produces semantically meaningful latent action representations, supports effective action transfer, and enables planning and imitation from observation, outperforming existing methods.",
+      "highlights": {
+        "contribution": "提出 CLAW，端到端自监督地从无动作视频里联合学习世界模型和连续潜动作表征。",
+        "innovation": "把对抗式潜空间正则和 diffusion 视频生成结合起来约束潜动作，让动作既语义清晰又能驱动世界模型预测，全程不需要动作标签。",
+        "method": "输入纯视频，潜动作模型推断每步连续潜动作，世界模型用 diffusion 预测下一帧；对潜动作施加对抗正则保持结构化；下游用潜动作做行为克隆，或在潜空间规划再映射到可执行动作。",
+        "results": "在多任务多本体的模仿和规划任务上,CLAW 学到的潜动作语义清晰、支持动作迁移,并在 imitation-from-observation 和目标驱动规划上超过现有方法，具体数字未给。"
+      },
+      "images": [],
+      "published_date": "2026-06-02T18:40:24Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.5,
+        "popularity": 7.0,
+        "quality": 8.0,
+        "recommendation": 8.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.04130v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.04130v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.03603",
       "title": "World Models Meet Language Models: On the Complementarity of Concrete and Abstract Reasoning",
       "authors": [
@@ -387,6 +513,94 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.04264",
+      "title": "UniCanvas: A Diffusion-base Unified Model for Text-in-Image Joint Generation",
+      "authors": [
+        "Zeyuan Yang",
+        "Hao-Wei Chen",
+        "Xueyang Yu",
+        "Yuncong Yang",
+        "Haoyu Zhen",
+        "Ziqiao Ma",
+        "Maohao Shen",
+        "Chuang Gan"
+      ],
+      "affiliations": [],
+      "summary": "统一多模态模型里图文很难兼得：自回归会画但画不清楚，diffusion 画得好却写不对字。UniCanvas 干脆让 diffusion 直接在像素画布上「画字」，把语言当成视觉模式而不是离散 token 输出。这样图和文都在同一张画布上协调生成，作者声称在统一多模态生成上超过之前方法。和具身关系不大但提到 diffusion 是视觉变化的世界模型。",
+      "original_abstract": "Recent years have seen remarkable progress in unified vision-language models handling both multimodal understanding and generation within a single architecture. While autoregressive VLMs can reason across modalities, they fail to generate high-quality images. In contrast, diffusion models produce photorealistic visuals yet struggle to generate coherent text, making it challenging to develop a single unified model that can seamlessly handle both visual and text generation. Recent advances suggest that language can be effectively embedded within visual representations, allowing models to reason about textual semantics directly from images. To this end, we propose UniCanvas, a first attempt that unifies diffusion models to generate interleaved multimodal contents through text-in-image generation. Diffusion models naturally capture transformations on a shared pixel canvas, which can be viewed as world models of visual change. Instead of producing discrete text tokens, the model learns to represent language as visual patterns inside images, leveraging its inherent multimodal embedding space. This design allows the model to \"draw\" text naturally within a single pixel canvas during image synthesis, achieving seamless multimodal generation. Experiments demonstrate that UniCanvas improves performance over previous unified models, positioning text-in-image generation with diffusion models as a promising unified multimodal generation paradigm.",
+      "highlights": {
+        "contribution": "提出 UniCanvas，把文本-在-图中作为统一多模态生成范式，让 diffusion 同时画图和写字。",
+        "innovation": "不再走「diffusion 出图 + 自回归出文」的混合路线，而是把语言嵌进视觉表征，让 diffusion 直接在像素画布里渲染文字。",
+        "method": "把 diffusion 模型当作共享像素画布上的世界模型，训练它把文本表示为图像内部的视觉 pattern，从而在一次去噪过程中同时合成图和文。",
+        "results": "在统一多模态生成基准上优于此前 unified 模型，把 text-in-image diffusion 推为有前景的统一生成范式，具体数字未在摘要给出。"
+      },
+      "images": [],
+      "published_date": "2026-06-02T22:30:46Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.5,
+        "popularity": 7.0,
+        "quality": 7.0,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.04264v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.04264v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.04291",
+      "title": "A Cookbook of 3D Vision: Data, Learning Paradigms, and Application",
+      "authors": [
+        "Hongyang Du",
+        "Zongxia Li",
+        "Dawei Liu",
+        "Runhao Li",
+        "Haoyuan Song",
+        "Qingyu Zhang",
+        "Yubo Wang",
+        "Jingcheng Ni",
+        "Shihang Gui",
+        "Congchao Dong",
+        "Tao Hu"
+      ],
+      "affiliations": [],
+      "summary": "一篇 3D 视觉 cookbook 综述,把点云、网格、体素、3D Gaussians 这些表征以及数据采集、数据集设计、监督范式串成一张统一概念图。覆盖了 2D 监督的 3D 学习、隐式神经表示、4D 世界建模等方向，希望帮助读者梳理效率与保真度的权衡。属于综述材料而非新方法。",
+      "original_abstract": "3D vision has rapidly evolved, driven by increasingly diverse data representations, learning paradigms, and modeling strategies. Yet the field remains fragmented across representations and benchmarks, making it difficult to develop unified perspectives on efficiency, fidelity, and scalability. This work provides a data-centric taxonomy of 3D vision that connects geometric representations, datasets, learning frameworks, and applications within a single conceptual map. We begin by analysing the principal structural representations of 3D data--point clouds, meshes, voxels, and 3D Gaussians--along with their acquisition pipelines. We then examine how dataset design, benchmark construction, and supervision regimes shape recent advances, spanning 2D-supervised 3D learning, implicit neural representations, and 4D world modeling. Through this integrative lens, we clarify the relationships among representations, learning paradigms, and downstream tasks in reconstruction, generation, and video modeling, offering a consolidated view of emerging trends toward balancing efficiency and fidelity and toward multimodal geometric grounding.",
+      "highlights": {
+        "contribution": "给出一份数据为中心的 3D 视觉分类法,把表征、数据集、学习框架和应用整合在一个概念地图里。",
+        "innovation": "强调以数据视角串联碎片化的 3D 视觉子领域,把 4D 世界建模等新方向也纳入统一坐标系。",
+        "method": "综述梳理,分别分析点云/网格/体素/3D Gaussians 的结构与采集,然后比较 2D 监督的 3D 学习、隐式神经表示和 4D 世界建模等学习范式以及对应任务。",
+        "results": "无实验性结果,提供对效率-保真度权衡和多模态几何 grounding 趋势的综合视角,可作为入门或选题参考。"
+      },
+      "images": [],
+      "published_date": "2026-06-02T23:41:52Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 7.5,
+        "popularity": 6.0,
+        "quality": 6.5,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.04291v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.04291v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.03453",
       "title": "FORGE: Multi-Agent Graduated Exploitation and Detection Engineering",
       "authors": [
@@ -506,6 +720,46 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.03877v1",
       "arxiv_url": "https://arxiv.org/abs/2606.03877v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.04158",
+      "title": "Multi-Agent Next-Best-View Optimization for Risk-Averse Planning",
+      "authors": [
+        "Amirhossein Mollaei Khass",
+        "Vivek Pandey",
+        "Guangyi Liu",
+        "Athanasios Cosse",
+        "Emrah Bayrak",
+        "Nader Motee"
+      ],
+      "affiliations": [],
+      "summary": "多机器人协同探未知环境时,集中式 NBV 通信开销大、不太可扩展。这篇让每个机器人各自维护一份私有 3DGS 地图,只交换候选视点、轨迹描述和标量 EIG,用 Consensus ADMM 联合最大化沿轨迹的信息增益。同时用 Average Value-at-Risk 对 3DGS 上的碰撞风险建模,既影响 mask 半径又用来打分。Gibson 实验显示通信量降几个数量级,但建图和安全性接近集中式。",
+      "original_abstract": "Multi-agent Next-Best-View (NBV) selection for safe path planning in uncertain and unknown environments requires informative, safety-aware, and efficient coordination. Centralized approaches rely on sharing raw sensor data or significant communication overhead, resulting in limited scalability. We propose a distributed, risk-aware multi-agent NBV framework in which each robot maintains a private local 3D Gaussian Splatting map and the team jointly maximizes expected information gain (EIG) restricted to masked zones along planned trajectories. The resulting distributed objective is solved by Consensus ADMM (C-ADMM) over a communication graph, with each robot exchanging only candidate viewpoints, planned trajectory descriptors, and scalar EIG contributions. Collision risk along each trajectory is modeled via Average Value-at-Risk (AV@R) over the local 3DGS map and used both to shape the masking radius and to score planned paths. Experiments in Gibson environments at multiple team sizes show that the distributed formulation approaches the centralized baseline in mapping quality and trajectory safety while reducing communication by orders of magnitude.",
+      "highlights": {
+        "contribution": "提出分布式风险感知的多机器人 NBV 框架,只交换少量信息就接近集中式的建图和安全性能。",
+        "innovation": "每个机器人保持私有 3DGS 地图,用 C-ADMM 求解掩码区域内的期望信息增益,并把 AV@R 风险耦合进 mask 半径与轨迹打分。",
+        "method": "输入各机器人的本地 3DGS 地图,产生候选视点和规划轨迹,沿轨迹算 EIG 并用 C-ADMM 跨机器人达成共识,通信只传视点/轨迹描述/标量 EIG;轨迹安全用 AV@R 在 3DGS 上量化并影响掩码与评分。",
+        "results": "在 Gibson 多种团队规模下,分布式方案的建图质量和轨迹安全接近集中式 baseline,同时把通信量降低数个数量级,具体数值未在摘要列出。"
+      },
+      "images": [],
+      "published_date": "2026-06-02T19:23:23Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 7.5,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.04158v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.04158v1",
       "venue": null
     },
     {
@@ -680,57 +934,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.03461",
-      "title": "What Makes Interaction Trajectories Effective for Training Terminal Agents?",
-      "authors": [
-        "Sidi Yang",
-        "Chaofan Tao",
-        "Jierun Chen",
-        "Tiezheng Yu",
-        "Ruoyu Wang",
-        "Yuxin Jiang",
-        "Yiming Du",
-        "Wendong Xu",
-        "Jing Xiong",
-        "Taiqiang Wu",
-        "Lifeng Shang",
-        "Xiaohui Li",
-        "Ngai Wong",
-        "Haoli Bai"
-      ],
-      "affiliations": [
-        "Huawei",
-        "HKU"
-      ],
-      "summary": "都说更强的 code agent 是更好的老师,但作者发现不一定。用 Terminal-Lego 把多领域 issue 转成可验证 agentic 任务做训练,结果 Claude Opus 4.6 单独跑分高,但用 DeepSeek-V3.2 轨迹 fine-tune 的学生反而泛化更好。原因是 EGS:轨迹里显式的 inspect-act-verify 行为让学生学到鲁棒套路。只用 15.3k 轨迹就让 Qwen3-32B 在 Terminal-Bench 2.0 拿 24.3%。",
-      "original_abstract": "Stronger code agents are commonly assumed to be superior teachers for post-training, yet this assumption remains poorly disentangled from task difficulty, harness design, and student capacity. We investigate this pedagogical link using Terminal-Lego, a scalable pipeline that transforms multi-domain real-world issues into environment-verified agentic tasks. Surprisingly, standalone performance does not dictate teaching efficacy: while Claude Opus 4.6 achieves higher scores on Terminal-Bench 2.0, students fine-tuned on trajectories from DeepSeek-V3.2, a lower-scoring agent, exhibit significantly stronger generalization. We attribute this \"pedagogical paradox\" to Environment-Grounded Supervision (EGS): trajectories that explicitly expose inspect-act-verify behaviors through harness-visible interactions allow students to internalize robust problem-solving routines rather than fragile action sequences. Scaling analysis reveals exceptional data efficiency: with only 15.3k Terminal-Lego trajectories, for example, Qwen3-32B achieves a 24.3% score on Terminal-Bench 2.0, rivaling previous SOTA performance established with over 30x the data volume. Our results suggest that the frontier of agent post-training lies beyond mere outcome-matching, shifting the focus toward \"Harness Engineering\", where the systematic design of environment-grounded interaction structures serves as the primary catalyst for reproducible and generalizable agentic intelligence.",
-      "highlights": {
-        "contribution": "揭示 code agent 强不代表当老师好,数据效率主要看 harness 暴露的 inspect-act-verify 行为。",
-        "innovation": "提出 Environment-Grounded Supervision (EGS) 概念和「Harness Engineering」议程,把焦点从结果匹配转到环境交互结构设计。",
-        "method": "用 Terminal-Lego 将多领域真实 issue 转成环境可验证 agentic 任务,采集不同教师 agent 的轨迹微调学生,系统对比教师强度 vs 学生泛化能力。",
-        "results": "DeepSeek-V3.2 轨迹训出的学生比 Claude Opus 4.6 教的更泛化;15.3k 轨迹的 Qwen3-32B 拿到 Terminal-Bench 2.0 24.3%,数据效率提 30 倍。"
-      },
-      "images": [],
-      "published_date": "2026-06-02T10:37:47Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 5.0,
-        "recency": 10.0,
-        "popularity": 7.0,
-        "quality": 7.5,
-        "recommendation": 7.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.03461v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.03461v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2606.03678",
       "title": "EvoDrive: Pareto Evolution for Safety-Critical Autonomous Driving via Self-Improving LLM Agents",
       "authors": [
@@ -817,251 +1020,52 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.03841",
-      "title": "EvoDS: Self-Evolving Autonomous Data Science Agent with Skill Learning and Context Management",
+      "arxiv_id": "2606.04155",
+      "title": "SocialCoach: Personalized Social Skill Learning with RL-based Agentic Tutoring and Practice",
       "authors": [
-        "Zherui Yang",
-        "Fan Liu",
-        "Yansong Ning",
-        "Hao Liu"
-      ],
-      "affiliations": [
-        "HKUST"
-      ],
-      "summary": "数据科学 agent 受静态动作集和上下文管理拖累。EvoDS 提出自演化数据科学 agent:Autonomous Skill Acquisition 让 agent 自己合成/验证/复用可执行 skill,Adaptive Context Compression 把上下文管理当作可学的控制问题。两阶段多 agent 训练。四个 benchmark 上比开源 SOTA 平均 +28.9%,而且不会 token 溢出。",
-      "original_abstract": "Recent progress in Large Language Model (LLM) agents has enabled promising advances in automated data science. However, existing approaches remain fundamentally limited by their static action sets and lack of principled long-horizon context management, hindering their ability to accumulate reusable experience across tasks and operate reliably in multi-stage, iterative data science pipelines. To address these challenges, we introduce EvoDS, a self-evolving autonomous data science agent that learns to expand its skills and adaptively managing long-term context through agentic reinforcement learning. Specifically, EvoDS introduces two key strategies: (1) Autonomous Skill Acquisition (ASA) mechanism, which enables agents to synthesize, validate, and reuse executable skills; and (2) Adaptive Context Compression (ACC) strategy, which treats context management as a learned control problem rather than passive truncation. These strategies are orchestrated within a two-stage multi-agent training scheme, enabling EvoDS to autonomously improve over time. Theoretically, we prove that EvoDS's hierarchical design reduces tool-selection error, and its optimization objective aligns with an information bottleneck principle, ensuring efficient context use. Empirically, EvoDS outperforms state-of-the-art open-source data science agents by an average of 28.9% across four diverse benchmarks while eliminating out-of-token failures. Our code and data are available at https://github.com/usail-hkust/EvoDS.",
-      "highlights": {
-        "contribution": "提出 EvoDS 自演化数据科学 agent,在 skill 学习和长程上下文管理两方面同时改进。",
-        "innovation": "ASA 让 agent 自己合成/验证/复用可执行 skill,ACC 把 context 管理建模成 learned control problem,而不是被动截断。",
-        "method": "agentic RL 训练 EvoDS,两阶段多 agent 训练 scheme 串联 ASA 和 ACC;理论上分层降低 tool 选择误差且对齐 information bottleneck 目标。",
-        "results": "四个 benchmark 上平均较开源 SOTA +28.9%,完全消除 out-of-token 失败。"
-      },
-      "images": [],
-      "published_date": "2026-06-02T16:20:58Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "multi-agent",
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 4.5,
-        "recency": 10.0,
-        "popularity": 6.0,
-        "quality": 7.5,
-        "recommendation": 6.4
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.03841v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.03841v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.03544",
-      "title": "SAGE: A Quantitative Evaluation of Socialized Evolution in Agent Ecosystems",
-      "authors": [
-        "Linyue Pan",
-        "Yaoming Zhu",
-        "Lin Qiu",
-        "Xuezhi Cao",
-        "Xunliang Cai"
-      ],
-      "affiliations": [
-        "Meituan"
-      ],
-      "summary": "现有自改进 agent 都是孤立评估,但实际中 agent 边上有同伴。SAGE 框架对比 SocialEvo(看所有同伴历史)和 SelfEvo(只看自己)在等算力下的差别。三个 arena 实验发现:最强 agent 没法靠 group history 突破自己的 self-evo 上限,但平台期的弱 agent 能突破;经过过滤/反思的同伴 trace 比原始日志更有用——社会增益靠抽象而不是曝光量。",
-      "original_abstract": "Self-improving language agents are typically evaluated in isolation: an agent attempts a task, receives feedback, and iteratively refines its own behavior. Yet agents increasingly operate alongside peers whose strategies and outcomes are publicly visible. This raises an under-studied question: when does shared experience produce improvements that self-improvement alone cannot achieve? We introduce SAGE (Social Agent Group Evolution),an evaluation framework that compares two compute-matched conditions: SocialEvo, where agents from five distinct model families co-evolve with access to all peers' histories; and SelfEvo, where each agent receives the same number of task attempts but sees only its own past, which is conventional in self-improving agent studies. We instantiate SAGE in three arenas: open-ended ML research, long-horizon economic planning, and strategic multiplayer play, evaluated across multiple evolutionary rounds. We find that group history is not a universal amplifier: the strongest agent does not exceed its self-evolution ceiling. However, agents that plateau under self-improvement can achieve significant breakthroughs when peer experience is available. In competitive settings, counterfactual controls reveal that agents improve generally rather than developing opponent-specific strategies. Across different forms of shared history, filtered peer traces and reflective summaries often outperform raw logs, indicating that social gains depend on abstraction rather than exposure volume. These findings reveal that peer-history gains are agent-specific, arena-dependent, and contingent on the capacity to abstract transferable knowledge from public traces.",
-      "highlights": {
-        "contribution": "提出 SAGE 框架,系统量化「共享同伴经验」相对于纯自改进对 agent 进化的额外增益。",
-        "innovation": "在 compute-matched 条件下严格对比 SocialEvo vs SelfEvo,而不是简单声称多 agent 协作更好;还区分 raw log/filtered/reflective 三种共享形式。",
-        "method": "构建三个 arena(开放式 ML 研究、长程经济规划、策略多人博弈),在多轮进化下对比 SocialEvo(全部同伴历史可见)与 SelfEvo(只看自己)。",
-        "results": "强 agent 没能突破自改进上限;弱 agent 通过同伴经验破平台;反思/过滤后的 trace 比原始日志效果更好。"
-      },
-      "images": [],
-      "published_date": "2026-06-02T12:08:38Z",
-      "categories": [
-        "cs.AI",
-        "cs.CL"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "language agent"
-      ],
-      "scores": {
-        "relevance": 4.5,
-        "recency": 10.0,
-        "popularity": 6.0,
-        "quality": 7.5,
-        "recommendation": 6.4
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.03544v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.03544v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.03467",
-      "title": "StepFinder: A Temporal Semantic Framework for Failure Attribution in Multi-Agent Systems",
-      "authors": [
-        "Taiyu Zhu",
-        "Yifan Wu",
-        "Weilin Jin",
-        "Ying Li",
-        "Gang Huang"
-      ],
-      "affiliations": [
-        "Peking University"
-      ],
-      "summary": "多 agent 系统里某一步出错会级联崩,故障归因任务就是找根因步骤。现有方法都靠 LLM 在原始 trajectory 上推理,既贵又被噪声日志干扰。StepFinder 只在特征构造阶段用 LLM 把日志编成时序语义序列,后面用时序建模+attention 抓步骤依赖,加多尺度差异和位置偏置定位根因。在 Who&When 上推理时间少 79%,准确率反超 LLM 方法。",
-      "original_abstract": "LLM-based multi-agent systems exhibit remarkable collaborative capabilities in complex multi-step tasks. However, these systems are highly sensitive to single-step execution errors that can propagate through agent interactions and lead to cascading failures. To understand the causes of failure and improve system reliability, failure attribution has been introduced as a task that aims to automatically identify the root cause step responsible for a failure. Existing failure attribution methods mainly rely on LLMs to reason over original execution trajectories, which not only incur high inference costs and latency, but also suffer from interference caused by redundant and noisy execution logs, causing LLMs to struggle in accurately identifying the true root cause step. To address this, we propose StepFinder, a lightweight failure attribution framework. We use LLMs solely during the feature construction phase to encode execution logs into temporal semantic sequences. Subsequently, a parameter-efficient combination of temporal modeling and attention modules is applied to capture the sequential evolution and cross-step dependencies of the trajectories. Finally, the step-level error score is refined through multi-scale differences and position bias, enabling precise root cause identification. Experimental results on the Who&When benchmark demonstrate that StepFinder outperforms LLM-based methods in step-level failure attribution while achieving substantially higher inference efficiency, reducing inference time by 79% compared with the fastest LLM-based method, with no text generation overhead. Our code is available at https://github.com/taiyu-zhu/StepFinder.",
-      "highlights": {
-        "contribution": "提出 StepFinder 轻量化多 agent 故障归因框架,大幅压低推理成本同时提升根因识别精度。",
-        "innovation": "把 LLM 只用在特征构造阶段做时序语义编码,后续用参数高效的时序+attention 模块替代全程 LLM 推理,避开噪声日志干扰。",
-        "method": "用 LLM 把执行日志编成时序语义序列;接时序模块+attention 捕跨步依赖;最后用多尺度差异和位置偏置 refine 步骤错误评分。",
-        "results": "Who&When benchmark 上准确率超过 LLM-based 方法,推理时间比最快的 LLM 方法少 79%,无文本生成开销。"
-      },
-      "images": [],
-      "published_date": "2026-06-02T10:45:49Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "multi-agent"
-      ],
-      "scores": {
-        "relevance": 4.5,
-        "recency": 10.0,
-        "popularity": 5.0,
-        "quality": 7.0,
-        "recommendation": 6.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.03467v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.03467v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.03629",
-      "title": "TSQAgent: Rating Time Series Data Quality via Dedicated Agentic Reasoning",
-      "authors": [
-        "Shunyu Wu",
-        "Dan Li",
-        "Haozheng Ye",
-        "Weibin Feng",
-        "Jian Lou",
-        "Bo Zhang",
-        "Wenjie Feng",
-        "Chenjuan Guo",
-        "See-Kiong Ng"
-      ],
-      "affiliations": [
-        "NUS"
-      ],
-      "summary": "现有 LLM 时间序列质量评估都靠预定义维度+纯文本推理,不知道 LLM 能不能自己识别相关维度、做定量比较。作者建了 TSQBench 发现 LLM 两方面都不行,然后提出 TSQAgent:Perceiver 选维度,Inspector 用外部工具做定量分析,Adjudicator 聚合裁决。能显著提升质量评估能力并转化为更好的下游数据选择。",
-      "original_abstract": "Assessing the quality of time series (TS) data is fundamental yet inherently challenging due to the multifaceted nature of quality dimensions. Recently, large language models (LLMs) have emerged as a promising paradigm for TS quality assessment via pairwise comparison and per-dimension evaluation. However, existing approaches rely on manually predefined quality dimensions and purely text-based reasoning, leaving it unknown whether LLMs can identify truly relevant quality dimensions or perform grounded and quantitative quality comparisons. To investigate this, we construct TSQBench, a dedicated benchmark for evaluating LLMs on two progressive capabilities: (i) understanding and identifying relevant quality dimensions, and (ii) performing quality comparison under specific dimensions. Our analysis reveals that current LLMs consistently struggle with both dimension identification and evidence-grounded quality comparison. To address these limitations, we propose TSQAgent, a novel agentic reasoning framework for TS quality rating consisting of three collaborative roles: Perceiver for focused dimension selection, Inspector for dimension-wise quantitative analysis, and Adjudicator that aggregates and refines the final judgment. In particular, we introduce an agentic reasoning strategy that instills the ability to identify and prioritize the most relevant quality dimensions, and further propose an agent workflow equipped with external analytical tools to enable precise quantitative comparisons over selected dimensions. Experiments on both the proposed benchmark and eleven real-world datasets demonstrate that our framework not only substantially improves LLMs' capabilities in quality understanding and quantitative comparison but also effectively translates these improvements into better quality-aware data selection, leading to enhanced downstream performance and data efficiency.",
-      "highlights": {
-        "contribution": "提出 TSQBench 揭示 LLM 在时间序列质量评估上的两大短板,并提出 TSQAgent 框架解决。",
-        "innovation": "把质量评估拆成「维度识别」和「维度内定量比较」两个 progressive 能力,并用三个 agent 角色 + 外部分析工具替代纯文本推理。",
-        "method": "Perceiver 聚焦选维度,Inspector 用外部分析工具做维度内定量比较,Adjudicator 聚合裁决;在 TSQBench 和 11 个真实数据集上评估。",
-        "results": "TSQAgent 在质量理解和定量比较上大幅超 LLM baseline,数据选择质量也提升,带动下游性能。"
-      },
-      "images": [],
-      "published_date": "2026-06-02T13:28:17Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 3.5,
-        "recency": 10.0,
-        "popularity": 5.0,
-        "quality": 7.0,
-        "recommendation": 5.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.03629v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.03629v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.03812",
-      "title": "Enhancing Operational Safety via Agentic Dialogue Hazard Identification Analysis",
-      "authors": [
-        "Sanjay Das",
-        "Ran Elgedawy",
-        "Ethan Seefried",
-        "Ryan Burchfield",
-        "Tirthankar Ghosal"
-      ],
-      "affiliations": [
-        "Oak Ridge National Laboratory"
-      ],
-      "summary": "工业流程控制等高风险领域要做 hazard 识别,单轮 LLM 推理太脆。HAZDIAL 研究多 agent 多轮 agentic dialogue 能不能更好,对比对抗辩论和建设性讨论两种模态,加一个算法化的交互优化。在 curated golden 数据集上用分类 + 对话指标比较了配置。和具身 AI 关系一般。",
-      "original_abstract": "Operational safety in high-stakes domains such as industrial process control, autonomous, and safety-critical systems, demand reliable hazard identification. While large language models (LLMs) have shown promise in automating safety analysis tasks, single-turn, monolithic inference is brittle: it lacks the self-correction, deliberation, and contextual refinement that safety engineers apply iteratively. In this paper, we introduce HAZDIAL, a framework that investigates whether structured agentic dialogue-multi-agent, multi-turn interactions improves the quality of NLP- based hazard identification over single-pass baselines. We systematically compare two dialogue modalities: adversarial debate and constructive discussion, and propose an algorithm-based agentic interaction optimization. We evaluate all configurations against a curated golden dataset using standard classification metrics (accuracy, precision, recall, F1) and novel dialogue metrics. This work advances the intersection of dialogue systems, multi-agent reasoning, and AI safety, providing an empirical evidence for dialogue-driven hazard analysis.",
-      "highlights": {
-        "contribution": "提出 HAZDIAL,系统比较结构化 agentic dialogue 在 hazard 识别任务上的效果。",
-        "innovation": "对比对抗辩论 vs 建设性讨论两种多轮多 agent 模态,并提出算法驱动的 agentic 交互优化策略。",
-        "method": "构建 hazard 识别 LLM 多 agent 框架,实现 adversarial debate 和 constructive discussion 两种对话模态,用 algorithm-based optimization 调优;在 golden 数据集上评估。",
-        "results": "在分类指标(accuracy/precision/recall/F1)和新对话指标上,结构化 agentic dialogue 优于单轮 baseline。"
-      },
-      "images": [],
-      "published_date": "2026-06-02T15:54:51Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "multi-agent",
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 3.5,
-        "recency": 10.0,
-        "popularity": 4.0,
-        "quality": 6.0,
-        "recommendation": 5.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.03812v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.03812v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.03518",
-      "title": "Overlaying Governance: A Compositional Authorization Framework for Delegation and Scope in Agentic AI",
-      "authors": [
-        "Amjad Ibrahim",
-        "Yong Li"
+        "Tianfu Wang",
+        "Max Xiong",
+        "Jianxun Lian",
+        "Hongyuan Zhu",
+        "Zhengyu Hu",
+        "Yuxuan Lei",
+        "Linxiao Gong",
+        "Xiaofang Li",
+        "Peiting Tsai",
+        "Nicholas Jing Yuan",
+        "Qi Zhang"
       ],
       "affiliations": [],
-      "summary": "AI 系统从被动模型变成主动 agent,传统 IAM 没法处理递归委托、有时限的代理权限、动态 scope。作者提出 compositional governance framework,把委托当成契约项而不是 OAuth 那种静态 token,定义 resource scope attenuation 边界,并给个 compositional 算子能把 agentic 语义叠加到现有关系策略上而不重写。和具身 AI 关系很小。",
-      "original_abstract": "As AI systems evolve from passive models into autonomous active agents capable of initiating actions, collaborating, and delegating tasks, the traditional boundaries of software systems blur. Traditional authorization and delegation frameworks, built around fixed principals, explicit requests, and static scopes, are insufficient to govern agentic systems. Agentic AI demands richer authorization semantics: agents must inherit and delegate permissions, act under time-limited authority, and coordinate through shared protocols. Existing Identity and Access Management (IAM) systems fail to fully capture this notion of agency, lacking mechanisms for recursive delegation, contextual boundaries, and dynamic scoping as executable governance primitives. Unlike access delegation standards such as OAuth 2.0, we treat delegation as a contractual term rather than merely a static token-based consent credential. This paper proposes a compositional governance framework that introduces primitives indispensable for agentic AI. We define types of delegation and their permissions and accountability implications, and we introduce a notion of resource scope attenuation to bound agentic access envelopes. These concepts are expressed as general relational definitions that can be composed into existing authorization domains (e.g., financial systems). To operationalize this composition, we define a compositional operator that overlays new agentic semantics, such as recursive delegation chains, onto existing relational policies without rewriting them. We substantiate this framework through formal proofs and empirical evaluation, showing that it provides a formal yet practical foundation for accountable authorization in agentic AI systems.",
+      "summary": "想让 AI 当社交技能教练但缺专家语料,SocialCoach 用多 agent 流水线从专家资源里自动构建一份「理论到实践」的知识库,再做自适应练习排程。排程策略走「开方—检索—调整」流程,用 RL 在模拟学员环境里训练以解决冷启动。还集成沉浸式练习、因果导向的能力评估和反思式讲解,最终落到 EQoach 产品。实验显示通路质量和教学质量都优于 baseline。",
+      "original_abstract": "Social skills such as negotiation and leadership are crucial for personal and professional success in today's interconnected world. However, scalable and effective training remains a significant challenge due to the scarcity of expert coaching. In this paper, we introduce SocialCoach, a holistic LLM-powered agentic tutoring system for personalized social skill development at scale. First, SocialCoach automatically constructs a pedagogically-grounded, theory-to-practice knowledge corpus from diverse expert sources, leveraging a multi-agent pipeline. Second, to personalize the learning journey, it employs an adaptive practice scheduling module that follows a prescription-retrieval-adaptation process. To maximize the long-term learning experience while overcoming the cold-start problem, this policy is optimized within a learner simulation environment through reinforcement learning. Finally, SocialCoach integrates immersive, goal-driven practice, causality-driven proficiency assessment and knowledge-grounded, reflective tutoring to help address the knowing-doing gap. We deploy it in our product, EQoach, and conduct extensive experiments. The results show that SocialCoach improves simulated pathway quality and judge-rated tutoring quality over baseline approaches, while early user feedback indicates strong perceived engagement and usefulness. These findings suggest a practical architecture for personalized and gamified pedagogical platforms on soft skill learning.",
       "highlights": {
-        "contribution": "为 agentic AI 提出可组合的授权治理框架,把递归委托和动态 scope 作为可执行治理原语。",
-        "innovation": "把 delegation 视为契约项而非静态 token 同意凭证;提出 compositional operator 把 agentic 语义叠加在已有授权关系策略上而不需要重写。",
-        "method": "定义 delegation 类型及其权限/问责语义,引入 resource scope attenuation 限制 agent 访问 envelope,用关系定义形式表达,并以 compositional 算子覆盖到现有授权域(如金融系统)。",
-        "results": "通过形式化证明和实证评估证明框架在保留原授权语义的同时为 agentic AI 提供可问责的授权基础。"
+        "contribution": "提出 SocialCoach,一套面向社交技能学习的 LLM agentic 个性化辅导系统,并落地到 EQoach 产品。",
+        "innovation": "把教学知识库自动构建、自适应练习排程的 RL 优化、和反思式讲解整合在一个闭环里,用学习者模拟环境解决冷启动。",
+        "method": "多 agent 管线从专家资料抽取教学知识 → 「开方-检索-调整」式自适应练习排程 → 在学员仿真环境里用 RL 训练排程策略 → 配合目标驱动练习、因果型能力评估和知识 grounded 反思讲解形成回路。",
+        "results": "实验显示模拟学习通路质量和裁判评分的教学质量都优于 baseline,早期用户反馈在参与度和实用性上反响良好,但摘要没给具体数字。"
       },
       "images": [],
-      "published_date": "2026-06-02T11:39:39Z",
+      "published_date": "2026-06-02T19:20:54Z",
       "categories": [
-        "cs.AI",
-        "cs.CR"
+        "cs.HC",
+        "cs.CL",
+        "cs.CY"
       ],
       "matched_domain": "Agent",
       "matched_keywords": [
+        "llm-powered agent",
+        "multi-agent",
         "agentic"
       ],
       "scores": {
-        "relevance": 2.5,
-        "recency": 10.0,
-        "popularity": 4.0,
-        "quality": 6.5,
-        "recommendation": 4.5
+        "relevance": 5.0,
+        "recency": 7.5,
+        "popularity": 6.5,
+        "quality": 6.8,
+        "recommendation": 6.0
       },
-      "pdf_url": "https://arxiv.org/pdf/2606.03518v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.03518v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.04155v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.04155v1",
       "venue": null
     }
   ],
