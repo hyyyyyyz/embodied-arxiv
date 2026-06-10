@@ -428,6 +428,52 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.09936",
+      "title": "One Lens, Many Worlds : A Capability-Typed Interface for World-Model Interpretability",
+      "authors": [
+        "Bhavith Chandra Challagundla",
+        "Sanskar Pandey",
+        "Param Thakkar",
+        "Rishikesh Mallagundla",
+        "Yugandhar Reddy Gogireddy",
+        "Wenhao Lu",
+        "Hindol Roy Choudhury",
+        "Shravani Challagundla",
+        "Mohamed Deraz Nasr",
+        "Spursh Deshpande"
+      ],
+      "affiliations": [],
+      "summary": "现在的世界模型五花八门——有 Dreamer 这种潜空间 RSSM、有 IRIS 这种 token 化 transformer、还有 I-JEPA 这类纯潜空间预测的，每出一个新架构都要把探针、激活 patching、SAE 这些可解释性工具重写一遍，特别烦。作者觉得问题不在模型而在工具，于是搞了个叫 WorldModelLens 的开源框架，用一个能力类型化的适配器接口把所有世界模型统一起来：每个模型只要实现 encode/transition/initial_state/sample 四个必备方法，再按需声明 decode/reward/continue/actor/critic 等可选 head，就能复用同一套 hook 和 cache 层去做时间索引的激活分析、想象 rollout 和干预回放。结果是同一份分析代码可以跨 RL 世界模型和自监督世界模型跑，不用为每种架构重新造轮子。",
+      "original_abstract": "World models are now built on substantially different computational substrates. Latent recurrent state-space models such as PlaNet and the Dreamer family compress observations into recurrent states; token-based models such as IRIS quantize observations into a learned codebook and predict autoregressively with a transformer; and joint-embedding predictive architectures such as I-JEPA predict in a learned latent space with no pixel decoder. The interpretability methods applied to these models, including probing, activation patching, sparse autoencoders, and surprise analysis, share a common set of primitives, yet they are re-implemented from scratch for each architecture because existing hook-and-cache tooling assumes a transformer language model with no notion of actions, environment steps, or imagined rollouts. We argue that this fragmentation reflects the tooling rather than the models, and that the shared structure of world models is captured by a small typed interface. We present WorldModelLens, an open-source interpretability substrate organized around a capability-typed adapter: every model implements four required methods (encode, transition, initial state, sample) and declares a set of optional heads (decode, reward, continue, actor, critic) through an explicit capability descriptor, so that reinforcement-learning and self-supervised world models are first-class without either imitating the other. A single hook and cache layer exposes time-indexed activations, imagination rollouts, and intervention replay over this interface, allowing each analysis to be written once.",
+      "highlights": {
+        "contribution": "提出 WorldModelLens：一个能力类型化的可解释性基础设施，把 RSSM、token-based、JEPA 等不同世界模型统一到同一套 hook/cache/intervention 工具下。",
+        "innovation": "不同于现有 transformer LM 的 hook 工具假设固定结构，它显式建模 action、环境步进、想象 rollout，让 RL 和自监督世界模型都是一等公民，而不是互相模仿。",
+        "method": "定义一个 capability descriptor，模型实现 encode/transition/initial_state/sample 四个必备方法和若干可选 head；上层用统一的 hook-and-cache 层暴露时间索引激活、想象 rollout 和 intervention replay，让 probing、patching、SAE、surprise 分析各写一次即可跨模型复用。",
+        "results": "提供开源框架支持 PlaNet/Dreamer/IRIS/I-JEPA 等代表性世界模型，让同一份可解释性分析代码可跨架构运行；论文偏 infra/position 性质，未给出量化 benchmark 提升数字。"
+      },
+      "images": [],
+      "published_date": "2026-06-07T19:27:04Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 9.0,
+        "popularity": 5.5,
+        "quality": 6.8,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.09936v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.09936v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.08555",
       "title": "FAWAM: Force-Aware World Action Models for Closed-Loop Contact-Rich Manipulation",
       "authors": [
@@ -948,43 +994,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.08625v1",
       "arxiv_url": "https://arxiv.org/abs/2606.08625v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.08710",
-      "title": "Structuring agentic AI for HPC code modernization",
-      "authors": [
-        "Anthony Marinov",
-        "Igor Sfiligoi"
-      ],
-      "affiliations": [],
-      "summary": "把一份 6 万行 Fortran 单线程 MPI 求解器 NMAP-RKPM 现代化成 OpenMP 并行 C++ MPI。作者发现裸 LLM 不够用，于是建了一套高度结构化的「手把手」agentic 方法：手写示例引导、保持持续可构建、限定会话作用域，几个月就完成迁移。是经验报告。",
-      "original_abstract": "Modernization of legacy scientific codes is often necessary to keep up with the ever-evolving changes in the compute resource ecosystem. Parallelization and migration from poorly supported software ecosystems are two of the most time-consuming activities in the research software engineering field. This paper presents our experience in the successful, two-phase AI-assisted modernization of NMAP-RKPM, a roughly 60,000-line, 3D explicit solid mechanics physics engine based on the Reproducing Kernel Particle Method (RKPM). We converted this single-threaded, Fortran based MPI application into a OpenMP-parallel C++ based MPI tool in the span of a few months. While Large Language Model (LLM) based tools on their own proved inadequate, we developed a highly structured \"hand-holding\" agentic AI methodology, like providing manually created examples, ensuring continuous buildability and limiting session scope, that was instead highly effective. The paper provides both the AI-assisted steps that were successful and the problems that we had to overcome, alongside the reasoning behind the chosen path.",
-      "highlights": {
-        "contribution": "给出一个把工业级 6 万行 Fortran 物理求解器迁移到 C++ OpenMP 的可复用 agentic AI 方法论。",
-        "innovation": "提出「hand-holding」结构化 agentic 方法（手写示例、连续可构建约束、会话作用域限制），缓解纯 LLM 在大型科学代码上的失败模式。",
-        "method": "两阶段迁移：先 Fortran→C++ 再并行化；每步限定 LLM 会话作用域、用手写示例对齐风格、保证编译可构建、人工把关问题样例。",
-        "results": "成功把 NMAP-RKPM (≈6 万行) 在几个月内迁成 OpenMP C++ MPI 版，且持续可构建可运行（无定量加速数字）。"
-      },
-      "images": [],
-      "published_date": "2026-06-07T16:07:29Z",
-      "categories": [
-        "cs.SE",
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 3.5,
-        "recency": 9.5,
-        "popularity": 5.0,
-        "quality": 5.8,
-        "recommendation": 4.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.08710v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.08710v1",
       "venue": null
     },
     {

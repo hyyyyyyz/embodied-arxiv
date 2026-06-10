@@ -985,48 +985,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.21312",
-      "title": "Frontier: Towards Comprehensive and Accurate LLM Inference Simulation",
-      "authors": [
-        "Yicheng Feng",
-        "Xin Tan",
-        "Yangtao Deng",
-        "Yimin Jiang",
-        "Yibo Zhu",
-        "Hong Xu"
-      ],
-      "affiliations": [],
-      "summary": "现代 LLM 推理服务又分离又复杂——PD 拆开、注意力和 FFN 也拆开、还要管 RL rollout 和 agent 这种 stateful 请求。现有 simulator 用整体副本抽象 + 平均值代理建模，预测会偏差甚至搞反优化结论。Frontier 是个离散事件 simulator，把 PDD/AFD、CUDA Graph、speculative decoding 这些都建进去。16 卡 H800 上吞吐误差 < 4%，端到端 latency 误差从 SOTA 的 44.9% 降到 6.4%。",
-      "original_abstract": "Modern LLM serving is no longer homogeneous or monolithic. Production systems now combine disaggregated execution, complex parallelism, runtime optimizations, and stateful workloads such as reasoning, agents, and RL rollouts. Simulation is attractive for exploring this growing design space, yet existing simulators lack the architectural completeness and decision-grade fidelity it demands. Their monolithic-replica abstractions are ill-suited to disaggregated serving, while average-case analytical proxies can distort SLA predictions and even reverse optimization conclusions.   We present Frontier, a discrete-event simulator for modern LLM inference serving. Frontier features a disaggregated abstraction. It captures the structure and dynamics of modern serving systems by modeling co-location, Prefill-Decode Disaggregation (PDD), and Attention-FFN Disaggregation (AFD) with role-specific cluster workers, incorporating key runtime optimizations (e.g., CUDA Graphs, speculative decoding) within the scheduler-batch-engine loop, and supporting stateful requests for emerging workloads. It further provides accurate and generalizable predictions of computation, communication, and memory costs across diverse serving scenarios with complex workload compositions. On 16-H800 GPU testbed, Frontier achieves an average throughput error below 4%. Compared with state-of-the-art simulators, it reduces end-to-end latency error from 44.9% to 6.4% under co-location and from 51.7% to 2.6% under disaggregation. It scales to over 1K GPUs on commodity CPUs and enables new use cases such as SLA-dependent Pareto frontier exploration, heterogeneous disaggregated allocation, agentic reasoning scheduling validation, and RL post-training reconfiguration.",
-      "highlights": {
-        "contribution": "提出 Frontier 离散事件 simulator，对现代 LLM 服务（PDD/AFD/agentic/RL）做架构完整、决策级精度的仿真。",
-        "innovation": "disaggregated abstraction 替代 monolithic 副本，scheduler-batch-engine 循环里嵌入 CUDA Graph、speculative decoding 等运行时优化，并支持 stateful 请求。",
-        "method": "discrete-event 仿真器，按 role 区分 cluster worker；建模 PDD/AFD 与 co-location；建模计算/通信/内存代价；在 16-H800 实测验证。",
-        "results": "16-H800 上平均吞吐误差 < 4%；端到端 latency 误差在 co-location 下从 44.9% 降到 6.4%、disaggregation 下从 51.7% 降到 2.6%；可扩展到 1000+ GPU 仿真。"
-      },
-      "images": [],
-      "published_date": "2026-05-20T15:40:18Z",
-      "categories": [
-        "cs.DC",
-        "cs.AI",
-        "cs.LG"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 4.0,
-        "recency": 7.0,
-        "popularity": 6.5,
-        "quality": 7.5,
-        "recommendation": 6.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.21312v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.21312v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.21560",
       "title": "AutoMCU: Feasibility-First MCU Neural Network Customization via LLM-based Multi-Agent Systems",
       "authors": [
@@ -1064,6 +1022,44 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2605.21560v1",
       "arxiv_url": "https://arxiv.org/abs/2605.21560v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.09854",
+      "title": "Can Multi-Agent LLMs Identify Their Peers? Stylometric Fingerprinting in Role-Constrained Political Analysis",
+      "authors": [
+        "Juergen Dietrich"
+      ],
+      "affiliations": [],
+      "summary": "这篇论文关心的是多智能体 LLM 在做政治文本分析时，会不会「认出自家兄弟」——即便提示里已经匿名化，模型家族的写作风格还是会泄露身份，从而引发同伴互保偏置。作者用 Claude Sonnet 4.6、Llama-3.3-70B 做 zero/few-shot，以及微调一个 T5-base，在四个商业模型家族加一个 unknown 类上做归属分类，还提出了 statement-disjoint 交叉验证协议防止内容泄露。结果是 T5 在 SD-CV 下 Macro F1 = 0.991，留出 24 条新语句仍有 0.978，说明提示级匿名根本压不住身份指纹。",
+      "original_abstract": "Multi-agent large language model (LLM) pipelines for political statement analysis are vulnerable to peer-preservation bias: models tend to protect peer models from deactivation and show identity-dependent scoring distortions. Prompt-level anonymization was proposed as a mitigation, but prior work simultaneously documented that stylometric fingerprints survive anonymization in role-constrained outputs - raising the question of whether this mitigation is sufficient. This paper provides the first systematic investigation of whether LLMs can identify the model family behind political analysis texts under anonymization conditions. We evaluate three classifier approaches - LLM zero-shot and few-shot (Claude Sonnet 4.6 and Llama-3.3-70B) and a fine-tuned T5-base model - on a five-class attribution task covering four commercial LLM families and an open-world 'unknown' class. We introduce a statement-disjoint cross-validation protocol (SD-CV; defined in Section 3.5) that guarantees no content overlap between training and validation data, and contrast it with a run-disjoint baseline (RD-CV). T5 achieves Macro F1 = 0.991 (+-0.008) under SD-CV and F1 = 0.978 on 24 completely held-out statements - robust despite a 2.1x increase in train-test content distance versus RD-CV (0.767 vs. 0.366, p<0.001), demonstrating genuine stylometric generalization. A fractional SD-CV analysis identifies a performance knee at 40% of training data (~440 texts). Our findings confirm that prompt-level anonymization alone cannot neutralize model identity signals, with direct implications for EU AI Act compliance (Articles 13, 14, 26) and for computer system validation (CSV) in quality-critical multi-agent deployments.",
+      "highlights": {
+        "contribution": "首次系统验证「提示级匿名化」不足以消除 LLM 在角色受限输出中的身份指纹，并把它和 EU AI Act 合规连起来。",
+        "innovation": "提出 statement-disjoint 交叉验证（SD-CV），保证训练/验证语句完全不重叠，比以往 run-disjoint 设置更严格，能真正衡量风格泛化而不是内容记忆。",
+        "method": "输入是政治分析文本，分类目标是 5 类（4 个商业 LLM 家族 + unknown）。三条路线：Claude/Llama 做 zero-shot 与 few-shot 提示分类；微调 T5-base 做监督分类。用 SD-CV 与 RD-CV 对比，并做分数据量消融。",
+        "results": "T5 在 SD-CV 下 Macro F1 = 0.991 ± 0.008，24 条完全留出语句上 F1 = 0.978；尽管 SD-CV 的训练-测试内容距离比 RD-CV 大 2.1 倍（0.767 vs 0.366, p<0.001）仍保持高分；40% 训练数据（约 440 条）即达到性能拐点。"
+      },
+      "images": [],
+      "published_date": "2026-05-20T04:56:42Z",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.CY",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 3.5,
+        "recency": 6.0,
+        "popularity": 4.0,
+        "quality": 6.5,
+        "recommendation": 5.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.09854v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.09854v1",
       "venue": null
     }
   ],

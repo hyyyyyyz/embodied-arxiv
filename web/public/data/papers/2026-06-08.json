@@ -216,6 +216,45 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.10180",
+      "title": "Flow Control: Steering Vision-Language-Action Models with Simple Real-Time Inputs",
+      "authors": [
+        "Jonathan C. Kao",
+        "Jason Chan",
+        "Andy Wang"
+      ],
+      "affiliations": [],
+      "summary": "VLA 在执行过程中如果不符合用户意图就很难纠正，这篇文章提出 Flow Control，让用户用键盘这种粗糙输入实时引导 VLA 的动作。核心思路是把用户输入投射回 VLA 自身学到的动作分布里采样，所以既贴合用户意图又保持高质量。实验表明它能显著提升成功率和完成速度，而且用 Flow Control 轨迹再微调还能反过来提升自主策略。",
+      "original_abstract": "We introduce flow control of vision-language-action (VLA) models, a simple and effective way to steer VLA actions in real-time through generic inputs, such as a keyboard. This method can be used out-of-the-box and does not require retraining or fine-tuning VLAs. It enables relatively crude user inputs to steer a VLA to align with user intent. The VLA transforms these inputs into action samples drawn from the VLA expert action distribution learned during training, so that the generated actions are high quality (conformity to the action expert distribution) and high fidelity (reflecting the user's intent). We demonstrate that flow control has many desirable properties: (1) flow control accurately and responsively steers robot actions with user inputs, (2) it is robust to suboptimal user inputs, (3) it enables users to steer VLAs to achieve significantly higher success rates and faster task completion, and (4) fine-tuning a VLA on flow control trajectories improves the autonomous policy. Together, these results provide a simple and intuitive way for users to help steer VLA actions, increasing task performance.",
+      "highlights": {
+        "contribution": "提出一种无需重训 VLA 的实时引导机制，让用户用键盘等通用输入就能纠偏 VLA 行为。",
+        "innovation": "不靠 fine-tune 也不改架构，而是把用户输入当作引导信号从专家动作分布里采样，兼顾意图保真与动作质量。",
+        "method": "输入是 VLA 原本的观测加用户实时按键，模型不变，关键在推理时把按键转化为对动作分布的偏置采样；还可以用引导轨迹再微调策略。",
+        "results": "能准确响应用户输入，对劣质输入鲁棒，显著提高任务成功率和完成速度；在 Flow Control 轨迹上微调还能提升自主策略表现。"
+      },
+      "images": [],
+      "published_date": "2026-06-08T21:16:37Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.HC"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 9.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.10180v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.10180v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.09337",
       "title": "TORL-VLA: Tactile Guided Online Reinforcement Learning for Contact-Rich Manipulation",
       "authors": [
@@ -504,6 +543,97 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.09416v1",
       "arxiv_url": "https://arxiv.org/abs/2606.09416v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.10040",
+      "title": "Efficient-WAM: A 1B-Parameter World-Action Model with Low-Cost Future Imagination",
+      "authors": [
+        "Jiajun Li",
+        "Tiecheng Guo",
+        "Yifan Ye",
+        "Rongyu Zhang",
+        "Xiaowei Chi",
+        "Qianpu Sun",
+        "Ying Li",
+        "Yunfan Lou",
+        "Yan Huang",
+        "Zhihe Lu",
+        "Meng Guo",
+        "Shanghang Zhang"
+      ],
+      "affiliations": [],
+      "summary": "WAM 把未来视觉预测和动作生成耦合起来效果好，但跑得慢没法实时部署。Efficient-WAM 的想法是不再追求视觉保真度，而是把未来视频当作给动作的引导信号，于是大幅压缩视频分支算力。最终 1B 模型在 RoboTwin 2.0 和真机上保持有竞争力的操作性能，单 chunk 推理只要约 100ms，比现有 WAM 快 30 倍。",
+      "original_abstract": "World-Action Models (WAMs) have emerged as a promising paradigm for embodied control by coupling future visual prediction with action generation. However, most existing WAMs rely on photorealistic future prediction, which incurs high inference latency and makes real-time robot deployment difficult. This motivates a more efficient WAM design that preserves the control benefits of future visual prediction while reducing its inference cost. We introduce Efficient-WAM, a World-Action Model that reduces the cost of future imagination while preserving its control benefit. Efficient-WAM improves inference efficiency via a compact video expert transferred from WAN-2.2-5B, token-sparse video latents, and asymmetric video-action denoising that allocates fewer sampling steps to video than to actions. Instead of optimizing the future branch for visual fidelity, Efficient-WAM treats future video prediction as a compact guidance signal for action generation. Comprehensive experiments on RoboTwin 2.0 and real-world manipulation tasks show that Efficient-WAM maintains strong action performance despite visibly coarse future predictions. While maintaining competitive control capabilities, our 1B-parameter model can reduce per-chunk latency to around 100 ms during physical deployment, achieving a 30x speedup over existing WAMs.",
+      "highlights": {
+        "contribution": "提出 1B 参数的高效 WAM，把未来想象的算力开销大幅压低同时保住操作性能。",
+        "innovation": "不再优化未来视频的视觉保真度，而是当作动作生成的紧凑引导信号；视频和动作用非对称去噪步数。",
+        "method": "从 WAN-2.2-5B 蒸出紧凑 video expert，用 token 稀疏的视频 latent，video 分支去噪步数远少于动作分支，整体走 video-action 联合扩散。",
+        "results": "RoboTwin 2.0 和真机操作上保持竞争力，未来预测虽然模糊但不影响控制；单 chunk 延迟约 100ms，相比现有 WAM 提速约 30 倍。"
+      },
+      "images": [],
+      "published_date": "2026-06-08T18:14:08Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "video prediction"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 9.5,
+        "popularity": 8.0,
+        "quality": 8.5,
+        "recommendation": 8.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.10040v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.10040v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.10135",
+      "title": "BiWM: Advancing Open-Source Interactive Video World Models with Bidirectional Autoregression",
+      "authors": [
+        "Shaohao Rui",
+        "Xiaofeng Mao",
+        "Zhanyu Zhang",
+        "Peijia Lin",
+        "Yansong Zhu",
+        "Yibo Zhang",
+        "Haibin Wan",
+        "Weijie Ma"
+      ],
+      "affiliations": [],
+      "summary": "现在交互式视频世界模型要么走因果自回归路线但流程复杂、误差累积，要么走双向自回归路线效果好但没开源框架。BiWM 就是第一个把双向自回归 video world model 做成开源全栈的工作，只要两阶段训练就能拿到可控相机和动作的世界模型。它在 Wan2.1/2.2、HunyuanVideo、LTX 等多个 backbone 上跑通，还支持 4-bit 训练推理，长时序质量明显比 minWM 好。",
+      "original_abstract": "Transitioning bidirectional video diffusion models into an autoregressive paradigm improves the interactivity of video world models, but existing causal pipelines need many stages (control fine-tuning, autoregressive training, causal initialization, few-step distillation) and still trail bidirectional models in quality due to error accumulation. Recent world models such as Yume-1.5 and Matrix-Game-3.0 instead adopt a bidirectional autoregressive approach, gaining fidelity and stable long-horizon rollout from self-correcting error propagation, yet open-source frameworks (e.g., minWM) support only causal models. We present BiWM, the first full-stack framework for interactive video world models under the bidirectional autoregressive paradigm, jointly optimizing generation quality and inference speed. From a pretrained video backbone, BiWM injects camera control by fine-tuning, then runs a few-step Distribution Matching Distillation (DMD) stage that turns the backbone into an action/camera-controllable world model: just two training stages instead of four in minWM, converging in a few hundred steps on 8xH200 GPUs. A single recipe spans Wan2.1-1.3B, Wan2.2-5B, HunyuanVideo-1.5-8B, and LTX-2.3-22B, and also supports secondary fine-tuning of existing bidirectional models. BiWM enables real-world camera control where minWM loses controllability, integrates pluggable history compression (FramePack-style and PackForcing-style) for long rollouts, and offers an optional NVFP4 4-bit training/inference pipeline. To counter DMD's mode-seeking degradation, we add GAN and mass-covering forward-KL objectives that preserve scene dynamics. We open-source BiWM for resource-constrained research and high-fidelity environment simulation.",
+      "highlights": {
+        "contribution": "第一个开源的双向自回归交互式视频世界模型全栈框架，把训练流程从四阶段压到两阶段。",
+        "innovation": "用 DMD 蒸馏把预训练视频 backbone 直接变成动作/相机可控的世界模型，并加 GAN+forward-KL 来抗 DMD 的 mode-seeking。",
+        "method": "输入是预训练视频 backbone，先 fine-tune 注入相机控制，再用少步 DMD 蒸馏；可接 FramePack/PackForcing 的历史压缩，损失上加 GAN 和 mass-covering forward-KL。",
+        "results": "在 8xH200 上几百步就能收敛，单一 recipe 覆盖 Wan2.1-1.3B 到 LTX-2.3-22B；相比 minWM 真实相机控制更稳，长时序更高保真，还提供 NVFP4 4-bit 推理。"
+      },
+      "images": [],
+      "published_date": "2026-06-08T20:08:41Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "video world model"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 9.5,
+        "popularity": 8.0,
+        "quality": 8.5,
+        "recommendation": 8.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.10135v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.10135v1",
       "venue": null
     },
     {
@@ -907,171 +1037,40 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.09268",
-      "title": "VGP-Nav: Metric-Aware Visual Geometric Perception for Robot Navigation",
+      "arxiv_id": "2606.10044",
+      "title": "Business World Model",
       "authors": [
-        "Hewei Pan",
-        "Weiye Zhu",
-        "Zekai Zhang",
-        "Zitong Huang",
-        "Rongtao Xu",
-        "Jinbao Wang",
-        "Feng Zheng"
+        "Cecil Pang",
+        "Hiroki Sayama"
       ],
       "affiliations": [],
-      "summary": "纯视觉单目导航既想全局定位又想致密、尺度一致的障碍感知，向来矛盾。VGP-Nav 用单目 RGB 把视觉几何锚在物理可解释的地面尺度约束上，在线解决单目尺度歧义，得到带定位的 metric 障碍表示，直接给下游 planner。多场景实验和真机部署证明可在低成本下做安全导航。",
-      "original_abstract": "Reliable robotic navigation necessitates the seamless integration of accurate global localization and dense, metric-consistent obstacle perception. A common strategy to achieve these capabilities involves integrating diverse sensing modalities: cameras offer rich visual features for localization, while active sensors like LiDAR provide direct metric measurements. However, such multi-sensor configurations necessitate complex spatial-temporal calibration and increase deployment overhead. Although vision-only approaches offer a low-cost and scalable alternative, existing monocular visual systems typically struggle to simultaneously achieve efficient, globally consistent localization and dense, metric-consistent geometric perception. To bridge this gap, we propose \\textbf{VGP-Nav}, a unified framework for \\textit{Metric-Aware Visual Geometric Perception} that relies solely on monocular RGB input to jointly support metric localization and obstacle perception. Our key insight is to anchor localization-grounded visual geometry to physically meaningful scale constraints derived from ground-plane geometry, thereby providing a reliable metric reference for monocular perception. VGP-Nav resolves monocular scale ambiguity online and produces localization-grounded, metric obstacle representations that are directly applicable to downstream planning. Extensive experiments demonstrate strong generalization across diverse environments and successful deployment on real mobile robots, highlighting the practicality of our approach for scalable, low-cost, and safe autonomous navigation.",
+      "summary": "这篇是个偏概念性的工作，提出把世界模型搬进商业场景，做成「Business World Model」用来支持自动化商业决策。它把企业的状态、动态、约束、目标和可行动作都编码进一个语义中心的框架里，让 agent 能做反事实推理和方案模拟。论文主要给出架构和概念蓝图，没有具体实验。",
+      "original_abstract": "Businesses are increasingly adopting AI-enabled tools to improve productivity, reduce costs, and enhance products and services. However, the transformative potential of AI extends beyond automating predefined tasks: it lies in enabling intelligent systems to plan, optimize, and execute business initiatives from high-level strategic objectives. This paper introduces the concept and architecture of a business world model (BWM), a world model specialized for business and organizational environments. Inspired by world models in artificial intelligence, cognitive science, and control theory, a BWM encodes business states, dynamics, constraints, objectives, and feasible action space to support autonomous decision-making. We propose a business-semantics-centric formulation in which business states, dynamics and actions are linked to key business entities. Within this framework, agents can simulate alternative action sequences, estimate their effects on future business outcomes, and evaluate trade-offs under uncertainty. The proposed architecture integrates semantic data representations, probabilistic machine learning models, deterministic business rules, and explicit action space into a coherent structure for planning and counterfactual reasoning. Although its individual components are not new, the contribution of BWM lies in organizing them as an executable internal simulator for business initiatives. This work establishes a conceptual foundation for autonomous business systems capable of moving from instruction-based execution toward goal-driven planning and execution.",
       "highlights": {
-        "contribution": "纯单目 RGB 的统一定位+致密 metric 障碍感知框架。",
-        "innovation": "把视觉几何锚到地面平面派生的尺度约束上来解决单目 metric 歧义。",
-        "method": "单目 RGB 输入，地面几何约束在线锁尺度，输出带定位的致密障碍表示喂给 planner。",
-        "results": "在多种环境泛化好，并在真实移动机器人上部署成功，未给统一数值表。"
+        "contribution": "提出 Business World Model 的概念与架构，让 AI 能从执行指令升级到面向商业目标做规划。",
+        "innovation": "把世界模型思想迁移到商业语义环境，强调以业务实体为中心组织 state/dynamics/action，而不是通用感知世界。",
+        "method": "架构融合语义数据表示、概率 ML 模型、确定性业务规则和显式动作空间，让 agent 能模拟动作序列并评估未来后果。",
+        "results": "属于概念论文，没有量化基准，主要贡献是把这些已有组件组合成可执行的商业内部模拟器。"
       },
       "images": [],
-      "published_date": "2026-06-08T09:38:14Z",
+      "published_date": "2026-06-08T18:16:04Z",
       "categories": [
-        "cs.RO"
+        "cs.AI"
       ],
-      "matched_domain": "VGGT",
+      "matched_domain": "World Model",
       "matched_keywords": [
-        "visual geometry"
-      ],
-      "scores": {
-        "relevance": 6.5,
-        "recency": 10.0,
-        "popularity": 5.5,
-        "quality": 6.8,
-        "recommendation": 6.3
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.09268v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.09268v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.09290",
-      "title": "Visual Para-Thinker++: A Single-Policy Multi-Agent Framework for Visual Reasoning",
-      "authors": [
-        "Haoran Xu",
-        "Hongyu Wang",
-        "Yifei Gao",
-        "Jiaze Li",
-        "Zizhao Tong",
-        "Xiaofeng Zhang",
-        "Xiaosong Yuan"
-      ],
-      "affiliations": [],
-      "summary": "单链视觉推理容易过早承诺感知证据然后幻觉。Visual Para-Thinker++ 用一个共享 MLLM policy，按 role 条件化变成 Main / Worker / Summary 三类 agent：Main 用固定分配拆任务，多个 Worker 在上下文隔离下并行推理，Summary 合 worker 的完整推理轨迹而不是只投票。训练上用 Multi-Agent Capability Injection 和 role 解耦优化避免梯度冲突，并造了原生推理引擎共享视觉前缀和 KV cache。V*、CountBench、RefCOCO、HallusionBench 上都超单轨迹和并行 baseline。",
-      "original_abstract": "Visual reasoning requires integrating evidence distributed across regions, attributes, and relations, making single-chain reasoning prone to early perceptual commitment and hallucination. We propose Visual Para-Thinker++, a single-policy multi-agent framework in which one shared MLLM policy is instantiated as role-conditioned Main, Worker, and Summary Agents. The Main Agent decomposes the task with fixed allocation patterns; Worker Agents reason in parallel under context isolation; and the Summary Agent reconciles full Worker reasoning traces rather than majority-voting on final labels. The shared policy is trained by Multi-Agent Capability Injection and Role-Decoupled Multi-Agent Optimization, which assign role-specific rewards and advantages to corresponding token segments to reduce gradient conflict among collaborative roles. A native inference engine enables efficient multi-agent rollout through shared visual prefix and KV cache reuse. Across V*, CountBench, the RefCOCO family, and HallusionBench, Visual Para-Thinker++ consistently outperforms single-trajectory and inference-time parallel baselines, with especially strong gains on hallucination-sensitive visual reasoning.",
-      "highlights": {
-        "contribution": "用单一 policy 实例化多 agent 来做视觉推理，减少幻觉和早期承诺。",
-        "innovation": "Role-decoupled 多 agent 优化 + 推理引擎层共享 KV cache，把多 agent 成本压下来。",
-        "method": "共享 MLLM 按 role 实例化 Main/Worker/Summary，多 worker 并行隔离推理，Summary 合并轨迹；训练分段 reward 避免梯度冲突。",
-        "results": "V*、CountBench、RefCOCO 系列、HallusionBench 全部超单轨和 inference-time 并行 baseline，幻觉敏感任务尤显著。"
-      },
-      "images": [],
-      "published_date": "2026-06-08T09:57:48Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "multi-agent",
-        "agent framework"
-      ],
-      "scores": {
-        "relevance": 6.5,
-        "recency": 10.0,
-        "popularity": 6.5,
-        "quality": 7.5,
-        "recommendation": 6.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.09290v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.09290v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.09641",
-      "title": "MAVIS: Multi-Agent Video Retrieval via Structured Video Understanding",
-      "authors": [
-        "Jie Zhang",
-        "Qilang Ye",
-        "Hao Zhou",
-        "Haochen Liang",
-        "Fei Luo"
-      ],
-      "affiliations": [],
-      "summary": "传统视频检索靠嵌入扫全库，又慢又不解决视频和文本语义粒度不匹配。MAVIS 把检索改造成多 agent 协作推理：先把视频解析成结构化语义库做属性级索引，planner 把复杂查询拆成原子子任务派 specialized agent 各自提名候选，再用带 veto 协议的逻辑感知辩论裁剪、对一小撮有争议候选做细粒度验证。MSR-VTT、MSVD、ActivityNet 上不微调也能打。",
-      "original_abstract": "The dominant paradigm in video retrieval relies on embedding-based full-corpus scanning, which suffers from inherent computational inefficiency and the semantic asymmetry between information-dense videos and sparse textual queries. To bridge this gap, we introduce \\textbf{MAVIS}, a novel multi-agent framework that rethinks retrieval as cooperative reasoning rather than brute-force search. MAVIS first bridges the granularity mismatch by parsing raw videos into a \\textbf{Structured Semantic Library}, enabling explicit attribute-level indexing. During retrieval, a planner decomposes complex user intents into atomic sub-tasks, dispatching specialized agents to independently nominate candidates. Crucially, MAVIS employs a \\textbf{Logic-aware Debate} mechanism with a strict veto protocol, where agents collaboratively prune logical mismatches to identify a compact set of ``controversial'' candidates for fine-grained verification. This agentic workflow effectively bypasses the inefficiency of full-library traversal. Extensive experiments on MSR-VTT, MSVD, and ActivityNet demonstrate that MAVIS achieves competitive performance without task-specific fine-tuning, offering a scalable and interpretable alternative to traditional dual-encoder approaches.",
-      "highlights": {
-        "contribution": "把视频检索重塑成多 agent 协作推理框架。",
-        "innovation": "Structured Semantic Library + Logic-aware Debate + veto 协议替代嵌入全扫描。",
-        "method": "视频解析成属性级语义库；planner 拆子任务派 agent 提名候选；辩论 + veto 收敛到争议候选做细粒度验证。",
-        "results": "MSR-VTT、MSVD、ActivityNet 无任务微调下取得 competitive 表现。"
-      },
-      "images": [],
-      "published_date": "2026-06-08T15:36:15Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "multi-agent",
-        "agentic",
-        "agent framework",
-        "agentic workflow"
+        "world model",
+        "world models"
       ],
       "scores": {
         "relevance": 5.0,
-        "recency": 10.0,
-        "popularity": 5.5,
-        "quality": 6.5,
-        "recommendation": 5.5
+        "recency": 9.5,
+        "popularity": 4.5,
+        "quality": 5.5,
+        "recommendation": 5.2
       },
-      "pdf_url": "https://arxiv.org/pdf/2606.09641v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.09641v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.09227",
-      "title": "Trustworthy Smart Fabs via Professional Proxies: Scaling Safe and Sustainable by Design (SSbD) through Industrial Data Spaces",
-      "authors": [
-        "Han-Teng Liao",
-        "Chang-Yi Kao",
-        "Karen Ang"
-      ],
-      "affiliations": [],
-      "summary": "面对 2026 欧盟 SSbD、CSDDD、CBAM 三重监管压力，半导体智能 fab 手工合规吃不消、又要兼顾隐私。作者提出零信任社会-技术编排框架，把六层 SSbD 架构落到可信工业数据空间，引入「Professional Proxies」——角色化 agentic workflow 跑在硬件隔离的可信执行环境里，按 5 步「接力赛」把设施、工艺、财务团队串起来。Virtual Metrology 和联邦学习都在 TEE 内做，对外只导出加密合规 token。",
-      "original_abstract": "The convergence of the 2026 European Union Safe and Sustainable by Design (SSbD) framework, Corporate Sustainability Due Diligence Directive (CSDDD), and Carbon Border Adjustment Mechanism (CBAM) introduce a severe governance bottleneck for advanced semiconductor manufacturing facilities (\"Smart Fabs\"). Regulatory compliance demands have surpassed the capacity of manual corporate reporting, creating a direct conflict between multi-stakeholder transparency and corporate data privacy. This paper addresses this challenge by introducing a zero-trust socio-technical orchestration framework that operationalizes a six-layer SSbD reference architecture within trustworthy industrial data spaces. We propose a shift from reactive automation to autonomous governance through \"Professional Proxies\"-role-based agentic workflows executing within hardware-isolated trust zones. Structured as an interoperable network protocol stack, the framework coordinates an automated, five-step \"relay race\" between Facility, Process Engineering, and Finance proxy teams to align factory-floor yield models with macro-level sustainability mandates. By executing Virtual Metrology (VM) predictions and Federated Machine Learning (FML) inside hardware-rooted Trusted Execution Environments (TEEs), this architecture resolves the Data Sovereignty Paradox, demonstrating how fabs can export cryptographically signed compliance tokens via International Data Spaces (IDS) connectors without exposing proprietary process recipes. Ultimately, this framework provides technology managers with a verifiable, evidence-based pathway toward resilient, net-zero Industry 5.0 ecosystems.",
-      "highlights": {
-        "contribution": "提出半导体智能工厂的可信 agentic 合规编排框架。",
-        "innovation": "用硬件 TEE 隔离的 Professional Proxies + 国际数据空间连接器化解数据主权悖论。",
-        "method": "六层 SSbD 架构 + 角色化 agentic workflow，VM/FML 在 TEE 内运行，对外导出加密签名 token。",
-        "results": "概念框架与协议栈层级设计，无具体性能数字。"
-      },
-      "images": [],
-      "published_date": "2026-06-08T09:02:02Z",
-      "categories": [
-        "cs.CR",
-        "cs.AI",
-        "cs.CE",
-        "cs.CY",
-        "cs.HC",
-        "cs.SI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic",
-        "agentic workflow"
-      ],
-      "scores": {
-        "relevance": 2.5,
-        "recency": 10.0,
-        "popularity": 3.0,
-        "quality": 5.0,
-        "recommendation": 3.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.09227v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.09227v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.10044v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.10044v1",
       "venue": null
     }
   ],

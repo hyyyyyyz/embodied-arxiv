@@ -560,6 +560,44 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.09902",
+      "title": "The Whale That Outswam Evolution: Swarm Intelligence Maximises Memory in Connectome Reservoirs",
+      "authors": [
+        "Anmol Guragain",
+        "Savvas Kakalis",
+        "Juan Ignacio Godino-Llorente"
+      ],
+      "affiliations": [],
+      "summary": "这篇论文研究的是把生物大脑连接组当作储备池计算（reservoir computing）的固定动力学网络，看看能不能用群体智能算法进一步优化边权重。作者拿了线虫、果蝇、小鼠、大鼠、猕猴和人类六个物种的连接组，用粒子群、差分进化、灰狼、鲸鱼四种无梯度优化器去调权重，然后在记忆容量、Lorenz、NARMA-10、Mackey-Glass 四个经典任务上测。结果鲸鱼算法（WOA）效果最猛，线虫的记忆容量从 1.39 拉到 23.91，提升 17 倍，跨任务平均提升 214%。同时随机初始化打不过生物权重，说明生物权重本身就是个不可替代的归纳偏置。",
+      "original_abstract": "Reservoir computing exploits the fixed dynamics of a recurrent network for temporal processing, requiring only a trained linear readout. Biological neural connectomes, shaped by millions of years of evolution, may encode computational structure beyond what random reservoirs provide, yet whether that structure can be further enhanced by principled optimisation remains an open question. We address it by applying four gradient-free, bio-inspired optimisers (Particle Swarm Optimisation, Differential Evolution, Grey Wolf Optimiser, and Whale Optimisation Algorithm) to the edge weights of connectome-based echo-state networks across six species spanning six orders of magnitude in neural complexity: C. elegans (279 neurons), Drosophila (49 nodes), mouse (112), rat (73), macaque (29 regions, continuous FLNe synaptic strengths), and human structural MRI connectivity (83 parcels). Each connectome is evaluated on four canonical reservoir computing benchmarks: Memory Capacity (MC), Lorenz attractor prediction, NARMA-10 system identification, and Mackey-Glass chaotic time-series prediction. All four optimisers consistently outperform unoptimised biological baselines across every task and species when initialised from biological weights. WOA achieves the largest gains on every task: up to a 17x MC improvement (C. elegans: 1.39 to 23.91) and up to 89% NRMSE reduction (Mackey-Glass, human), corresponding to an average 214% improvement across all species and tasks. Crucially, random initialisation on the same topology reliably underperforms biology, establishing biological weight values as an essential inductive bias that topology alone cannot recover. These results position bio-inspired, biologically-initialised optimisation as a principled and broadly effective strategy for connectome reservoir computing across the animal kingdom.",
+      "highlights": {
+        "contribution": "证明了生物连接组的权重本身就是好的初始化先验，并且用群体智能优化器还能在它基础上进一步显著提升储备池计算性能。",
+        "innovation": "以往储备池计算要么用随机权重，要么直接套生物连接组不动；这篇第一次系统地把四种生物启发优化器作用在六个物种连接组上做横向对比，并把生物初始化和随机初始化在同拓扑下对照。",
+        "method": "输入是六个物种的连接组拓扑+生物权重，构成 echo-state 网络；用 PSO、DE、GWO、WOA 四种无梯度优化器搜边权重；以 MC、Lorenz、NARMA-10、Mackey-Glass 任务上的预测误差作为适应度，不训练内部权重只训练线性读出。",
+        "results": "WOA 在所有物种和任务上都领先，线虫 MC 从 1.39 提到 23.91（17 倍），Mackey-Glass 在人类连接组上 NRMSE 降 89%，跨物种跨任务平均提升 214%；随机初始化在同拓扑下普遍不如生物权重。"
+      },
+      "images": [],
+      "published_date": "2026-06-05T13:59:23Z",
+      "categories": [
+        "cs.NE",
+        "cs.AI"
+      ],
+      "matched_domain": "WAM",
+      "matched_keywords": [
+        "wam "
+      ],
+      "scores": {
+        "relevance": 1.5,
+        "recency": 8.0,
+        "popularity": 3.0,
+        "quality": 6.5,
+        "recommendation": 3.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.09902v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.09902v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.07118",
       "title": "QuadVerse: An Integrated Framework Aligning Visual-Physical Reality for Quadruped Simulation",
       "authors": [
@@ -806,47 +844,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.07867v1",
       "arxiv_url": "https://arxiv.org/abs/2606.07867v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.06976",
-      "title": "Exploring Agentic Tool-Calling Decisions via Uncertainty-Aligned Reinforcement Learning",
-      "authors": [
-        "Yijin Zhou",
-        "Linqian Zeng",
-        "Xiaoya Lu",
-        "Wenyuan Xie",
-        "Dongrui Liu",
-        "Junchi Yan",
-        "Jing Shao"
-      ],
-      "affiliations": [],
-      "summary": "LLM agent 的工具调用决策常常 hallucinate，而现有 decision-oriented RL 会削弱正确/错误动作之间的不确定性区分，造成自信犯错。TRUST 把不确定性量化变成 reward 设计里的「斥力」，配合关键 turn 的轻量标注做统一多轮后训练，在多种 tool-use 基准上同时提升决策质量、agent 表现和不确定性可靠性。",
-      "original_abstract": "Large language model (LLM)-based agents often make suboptimal tool-use decisions, including unsupported tool invocation and hallucinated direct responses, which may accumulate errors throughout multi-step interactions. Existing approaches mainly improve these behaviors through inference-time correction or coarse-grained reward signals based on decision outcomes and structured checklists, leaving the uncertainty characteristics of agent decisions underexplored. We observe that decision-oriented reinforcement learning tends to weaken the uncertainty separation between correct and incorrect actions, resulting in overconfident mistakes and weaker exploration signals. Therefore, we propose TRUST, which incorporates uncertainty quantification into reward design as a repulsive force for maintaining uncertainty separation, and labels lightweight key-turn annotations for unified post-training of multi-turn trajectories. Experimental results across diverse tool-use benchmarks show that TRUST consistently enhances both decision quality and agent performance while maintaining more reliable uncertainty estimates during optimization.",
-      "highlights": {
-        "contribution": "提出 TRUST，用 uncertainty-aligned RL 改善 agent 工具调用决策，避免 decision-oriented RL 抹平不确定性的副作用。",
-        "innovation": "把 uncertainty quantification 当作 reward 中的 repulsive force 维持不确定性分离，并用关键 turn 标注做多轮统一后训练。",
-        "method": "在工具调用 RL 训练里加入基于不确定性的奖励斥力项，使正确动作的不确定性低、错误动作的高；标注少量关键 turn 用于多轮联合后训练。",
-        "results": "在多个 tool-use 基准上一致提升决策质量和 agent 表现，同时优化期间不确定性估计也更可靠。"
-      },
-      "images": [],
-      "published_date": "2026-06-05T07:08:34Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 6.5,
-        "recency": 8.5,
-        "popularity": 6.6,
-        "quality": 7.4,
-        "recommendation": 6.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.06976v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.06976v1",
       "venue": null
     },
     {

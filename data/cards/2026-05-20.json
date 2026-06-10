@@ -466,20 +466,20 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2605.21312",
-    "summary": "现代 LLM 推理服务又分离又复杂——PD 拆开、注意力和 FFN 也拆开、还要管 RL rollout 和 agent 这种 stateful 请求。现有 simulator 用整体副本抽象 + 平均值代理建模，预测会偏差甚至搞反优化结论。Frontier 是个离散事件 simulator，把 PDD/AFD、CUDA Graph、speculative decoding 这些都建进去。16 卡 H800 上吞吐误差 < 4%，端到端 latency 误差从 SOTA 的 44.9% 降到 6.4%。",
+    "arxiv_id": "2606.09854",
+    "summary": "这篇论文关心的是多智能体 LLM 在做政治文本分析时，会不会「认出自家兄弟」——即便提示里已经匿名化，模型家族的写作风格还是会泄露身份，从而引发同伴互保偏置。作者用 Claude Sonnet 4.6、Llama-3.3-70B 做 zero/few-shot，以及微调一个 T5-base，在四个商业模型家族加一个 unknown 类上做归属分类，还提出了 statement-disjoint 交叉验证协议防止内容泄露。结果是 T5 在 SD-CV 下 Macro F1 = 0.991，留出 24 条新语句仍有 0.978，说明提示级匿名根本压不住身份指纹。",
     "highlights": {
-      "contribution": "提出 Frontier 离散事件 simulator，对现代 LLM 服务（PDD/AFD/agentic/RL）做架构完整、决策级精度的仿真。",
-      "innovation": "disaggregated abstraction 替代 monolithic 副本，scheduler-batch-engine 循环里嵌入 CUDA Graph、speculative decoding 等运行时优化，并支持 stateful 请求。",
-      "method": "discrete-event 仿真器，按 role 区分 cluster worker；建模 PDD/AFD 与 co-location；建模计算/通信/内存代价；在 16-H800 实测验证。",
-      "results": "16-H800 上平均吞吐误差 < 4%；端到端 latency 误差在 co-location 下从 44.9% 降到 6.4%、disaggregation 下从 51.7% 降到 2.6%；可扩展到 1000+ GPU 仿真。"
+      "contribution": "首次系统验证「提示级匿名化」不足以消除 LLM 在角色受限输出中的身份指纹，并把它和 EU AI Act 合规连起来。",
+      "innovation": "提出 statement-disjoint 交叉验证（SD-CV），保证训练/验证语句完全不重叠，比以往 run-disjoint 设置更严格，能真正衡量风格泛化而不是内容记忆。",
+      "method": "输入是政治分析文本，分类目标是 5 类（4 个商业 LLM 家族 + unknown）。三条路线：Claude/Llama 做 zero-shot 与 few-shot 提示分类；微调 T5-base 做监督分类。用 SD-CV 与 RD-CV 对比，并做分数据量消融。",
+      "results": "T5 在 SD-CV 下 Macro F1 = 0.991 ± 0.008，24 条完全留出语句上 F1 = 0.978；尽管 SD-CV 的训练-测试内容距离比 RD-CV 大 2.1 倍（0.767 vs 0.366, p<0.001）仍保持高分；40% 训练数据（约 440 条）即达到性能拐点。"
     },
     "scores": {
-      "relevance": 4.0,
-      "recency": 7,
-      "popularity": 6.5,
-      "quality": 7.5,
-      "recommendation": 6.0
+      "relevance": 3.5,
+      "recency": 6,
+      "popularity": 4.0,
+      "quality": 6.5,
+      "recommendation": 5.0
     },
     "affiliations": []
   }

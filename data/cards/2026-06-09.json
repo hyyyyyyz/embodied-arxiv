@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.10501",
+    "summary": "这篇关心一个挺现实的问题：真机部署时关节会因磨损、碰撞、安全限位出现物理故障，VLA 学到的「指令到运动」闭环就被打乱了。作者系统量化了关节级故障对 VLA 成功率的破坏，并发现就算物理上仍可行（比如摩擦变大）成功率也掉得很厉害。于是提出 J-PARC，一个挂在冻结 VLA 之上的轻量残差校准器，从近期关节动力学里推断故障状态，再做自适应动作修正。",
+    "highlights": {
+      "contribution": "首次系统刻画关节级物理故障对 VLA 闭环的破坏，并给出一个不动原策略的残差校准方案。",
+      "innovation": "区别于鲁棒训练或重训，他们把故障当成潜在 regime 推断，再用共享残差头条件化地修正动作。",
+      "method": "输入近期关节动力学，先推断潜在故障状态，再用一个共享残差校准器叠加在冻结 VLA 的动作输出上做修正。",
+      "results": "在多种关节故障下显著提高成功率，同时无故障环境下性能基本无损。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.8,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10305",
+    "summary": "想用 RL 微调 VLA 就需要稠密奖励，但任务特化的 stage 模型贵、通用 VLM 奖励又太粗。作者做了一个多任务 stage-aware 奖励模型 SARM2，用动作基元判定阶段，MMoE 价值头给每步打稠密分。配上他们的 SPIRAL 自策略改进流程，从便宜的自主 rollout 里把 VLA 越练越好。",
+    "highlights": {
+      "contribution": "用一个多任务 stage-aware 奖励模型驱动 VLA 的自我改进飞轮，摆脱昂贵示范依赖。",
+      "innovation": "动作基元阶段估计 + MMoE 价值头的组合，比通用 VLM reward 细粒度，又比任务特化模型通用。",
+      "method": "输入观测和阶段，stage 模型识别动作基元阶段，MMoE 头输出每步价值；SPIRAL 用它对自主 rollout 做 reward-aligned 在线策略改进。",
+      "results": "10 任务上价值估计 MSE 比最强基线降 80%；SPIRAL 把 Folding Shorts 从 58% 拉到 100%，Cleaning Whiteboard 从 50% 到 90%。"
+    },
+    "scores": {
+      "relevance": 9.2,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.3,
+      "recommendation": 8.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10568",
+    "summary": "VLA 一次性预测动作很脆弱，小误差就抓不住或撞到。作者提出 VeriSpace，一个 3D 感知的动作验证器：在执行前对多个候选动作打分，看几何上靠不靠谱、是不是真朝目标推进。验证器和现有 VLA 完全兼容，测试时挑出更靠谱的动作。",
+    "highlights": {
+      "contribution": "给 VLA 加一个 3D 感知的测试时动作验证器，提升执行可靠度。",
+      "innovation": "把视觉语义和显式 3D 几何放在双路径编码里，再在动作上做空间关系和目标进度推理。",
+      "method": "Dual-Path 3D-Injected 场景编码同时保留语义和几何；Spatially-Grounded Action Reasoning 对候选动作评估空间关系、几何有效性和目标进度。",
+      "results": "在公开 benchmark 和真机操作上稳定优于底层 VLA 和已有 verifier，分布内外都有提升。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.8,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10862",
+    "summary": "现有 VLA 评测都假设目标物体全部可见，可现实里经常被遮挡。作者建了 LIBERO-Occ 这个遮挡评测扩展，发现 SOTA VLA 在遮挡下掉得很厉害。然后提出 Viewpoint Imagination：从被遮挡的主视角想象一个补充视角，再用观测+想象联合预测动作。",
+    "highlights": {
+      "contribution": "提出 scene-induced occlusion 的 VLA 评测扩展和「想象一个新视角」的鲁棒方法。",
+      "innovation": "遮挡场景下不靠加相机，而是让模型自己生成补充视角，从感知补全角度修复 VLA。",
+      "method": "从被遮挡主视图生成一个互补视角图像，把原观测和想象视角一起喂给动作头预测。",
+      "results": "在多种任务、遮挡类型、严重度下都改善鲁棒性，且部署时无需额外相机。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10366",
+    "summary": "做 VLA 评测大家越来越依赖仿真，但仿真和真机的相关性到底有多高没人系统答过。这篇跨多个仿真平台、多个 VLA 策略、多种扰动做了系统对比，看仿真能不能保留真实排名、相关性和失败模式。同时给出仿真后训练什么时候有用、需要多少数据等实操指南。",
+    "highlights": {
+      "contribution": "系统评测多个仿真平台对 VLA 真机结果的预测力，给出 sim-and-real 相关性的实证框架。",
+      "innovation": "不是再造一个仿真器，而是用 ranking 一致性、相关性、扰动失败模式三视角去诊断现有仿真。",
+      "method": "在多平台、多策略、多任务、多扰动下做配对评测，对比仿真和真机的策略排名与失败模式。",
+      "results": "刻画了现有仿真器的局限并指出哪些信号最对得上真机，还分析了 sim-finetune 的有效区间。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10382",
+    "summary": "UMI 风格的策略性能严重依赖手腕视角、动作表示、数据采集和部署的耦合，但现有真机 benchmark 没专门评估这条链。作者推出 UMI-Bench 1.0，把数据采集、场景复位、策略执行、结果记录、任务因素分析统一成一套可复现协议。",
+    "highlights": {
+      "contribution": "面向 UMI 数据-部署链路的首个开放可复现真机操作 benchmark。",
+      "innovation": "强调本地优先、协议统一化，把 UMI 的数据-部署耦合作为一等评测对象。",
+      "method": "在一套 tabletop 任务上规范化数据收集、复位、执行、日志和任务因素分析流程。",
+      "results": "提供可审计的真机评测平台，便于衡量 UMI 训练策略的物理泛化。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10495",
+    "summary": "VLA 做社交导航最大问题是会把人当普通障碍。作者发现预训练 VLA 内部其实已经编码了行人区分和未来碰撞信号，但行为克隆没把它们映射成合理动作。于是提出 SALSA：两阶段无标注后训练，把中间层的社交特征接到动作头，并用自动生成的未来风险监督促前瞻避碰。",
+    "highlights": {
+      "contribution": "把 VLA 已经具备的社交语义对齐到动作头，让导航策略真正会避人。",
+      "innovation": "无需新标注，靠 counterfactual 人-物配对打破视觉显著性捷径，再加时间安全对齐。",
+      "method": "阶段一对中间层社交特征做行为对齐并用 human-object 反事实场景训练；阶段二用自动生成的未来风险监督训练前瞻避碰。",
+      "results": "SCAND 与真机部署上近碰撞降 86.4%，社交反事实准确率从 53% 升到 93%。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10818",
+    "summary": "现实抓握、擦桌子这种受力任务里，模仿学习要么靠跟踪误差隐式给力，要么靠腕力传感器显式命令，前者不泛化、后者太复杂。IMPACT 把这类任务拆成任务规划 + 基于内部模型的预测控制，结合两边的好处。",
+    "highlights": {
+      "contribution": "为接触/受力丰富的操作任务提供一个解耦任务规划和内部模型 MPC 的学习框架。",
+      "innovation": "不用专门的力觉硬件，而是把动力学放进 internal model，让 MPC 适配不同负载。",
+      "method": "高层做任务规划，低层用内部模型预测控制跟踪并显式建模力学交互。",
+      "results": "仿真和真机上对未见物体重量泛化更好，成功率、能效和安全性也都改善。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10899",
+    "summary": "双臂操作有多个摄像头，但现有多视图策略要么各编各的，要么浅融合，语义和空间感知都不够。MV-Actor 把多视图语义共享、语义-空间 token 交互、可靠深度修复串起来做统一表示。",
+    "highlights": {
+      "contribution": "面向双臂操作的多视图统一语义-空间表示框架。",
+      "innovation": "把多视图语义共享、前馈重建特征对齐和度量深度修复三件事打包，做出靠谱的空间感知。",
+      "method": "多视图语义交互模块共享语义；语义-空间 token 模块用前馈 3D 重建特征做对齐；Guided Metric Depth Repair 修消费级深度噪声。",
+      "results": "PerAct2 上平均成功率 87.8% SOTA，真机视角变化与噪声深度下也优于 RGB 与 RGB-D 基线。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10359",
+    "summary": "供应链里 LLM 看得懂政策但没物理感，RL 优化得了流量但看不懂自然语言约束。ReflectiChain 训一个生成式供应链世界模型，把异构网络压到 6 维图潜空间并加守恒律，再用 Double-Loop 学习把认知不确定性和随机不确定性分开。",
+    "highlights": {
+      "contribution": "给供应链韧性问题搭一个 LLM 驱动的世界模型 + 双环路学习框架。",
+      "innovation": "区分认知不确定（KL trust region 自适应）和随机不确定（潜在 rollout），并把物理守恒嵌入潜空间。",
+      "method": "用图潜空间编码供应网络并加守恒约束；Double-Loop 分离两类不确定性以更新策略。",
+      "results": "10 节点半导体仿真上 Rationale Consistency 提 33%，对抗扰动下保持 82.3% 可运营，并显示 anti-fragile 行为。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 10,
+      "popularity": 4.5,
+      "quality": 6.5,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10376",
+    "summary": "癌症治疗本质是部分可观测、潜在异质、带测量预算的序列决策问题，且治疗会永久改变病人的动力学。作者用 active inference 把它建成信念空间规划，推导一个 expected free energy 目标统一目标导向控制和信息获取。",
+    "highlights": {
+      "contribution": "用 active inference 把个性化癌症治疗建成 belief-space 控制问题。",
+      "innovation": "区别于 RL 控制状态轨迹，他们承认治疗会改变病人动力学，并把测量预算显式纳入目标。",
+      "method": "在信念空间上推 expected free energy 目标，把目标驱动控制和信息获取统一；用 GENIE 临床数据落地。",
+      "results": "在真实临床数据上同时实现患者分群和较高治疗有效性。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 10,
+      "popularity": 4.0,
+      "quality": 6.0,
+      "recommendation": 4.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10530",
+    "summary": "脑活动越录越大，怎么用机器学习解读这些神经元的潜在结构？这篇综述把潜变量模型按单脑区动力学、多脑区通信和行为对齐三类组织起来，从经典状态空间一直梳到基于 Transformer 和扩散的神经基础模型。",
+    "highlights": {
+      "contribution": "把神经活动潜动力学的 ML 方法学整理成系统性综述。",
+      "innovation": "按三个研究域（单区动力学/多区通信/行为对齐）组织，并把神经基础模型纳入框架。",
+      "method": "综述类，整理 LDS、RNN、Neural ODE、概率/子空间方法、对比学习和大规模预训练。",
+      "results": "给出 benchmark、评测准则和开放挑战，如因果方向识别。"
+    },
+    "scores": {
+      "relevance": 2.5,
+      "recency": 10,
+      "popularity": 4.0,
+      "quality": 6.0,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10620",
+    "summary": "图像生成模型画单帧很强，但能不能想象一个视觉世界随时间演变？ImageTime 用 spatiotemporal consistency 作为探针，让模型在一张图里生成四个有序关键状态：初始→动作开始→过渡→终态。再用结构化 VLM-as-judge 去打分。",
+    "highlights": {
+      "contribution": "提出一个用 4 关键帧考察图像模型「视觉世界建模」能力的诊断 benchmark。",
+      "innovation": "比单图评估更严格，又避开视频密集动态的混淆；并把场景拆成阶段谓词、时间约束和禁止违反。",
+      "method": "给指令和可选起始图像，模型在一图内画出 4 个有序状态；GPT-5.5 按结构化 protocol 评分。",
+      "results": "多家模型对比显示现有图像系统在哪些阶段成功、失败和漂移。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10825",
+    "summary": "扩散策略很表达力但 RL 微调难，因为动作要多步去噪。MODIP 不直接对扩散策略做 RL，而是用世界模型 + MPC 在想象里规划，再把高质量轨迹当监督回灌给扩散策略做 BC 风格微调。",
+    "highlights": {
+      "contribution": "通过世界模型 MPC 想象出监督信号给扩散策略，做稳定的 offline-to-online 微调。",
+      "innovation": "用终态价值代替策略相关的 Q 函数让 MPC 更快，又用 policy-independent TD 目标让 critic 更便宜。",
+      "method": "在世界模型里跑 MPC 生成高质量轨迹，作为目标对扩散策略做监督微调；critic 用 policy-independent TD 训练。",
+      "results": "在 D4RL（MuJoCo、Kitchen）和 RoboMimic 上优于或匹配扩散策略 RL 微调和 TD-MPC2 等强基线。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10934",
+    "summary": "这篇是偏理论的：作者论证「数据再多 + 模型再强」也救不了反事实耦合这件事。他把世界模型刻画成一个跨可允许世界的耦合核 K(T,T')，对角是普通后验，离对角是反事实耦合，正定性能 partial-identify 反事实区间。",
+    "highlights": {
+      "contribution": "用一个 PSD 耦合核框架刻画世界模型对反事实耦合的不可识别性和可部分识别性。",
+      "innovation": "明确指出预测器在反事实耦合上必然崩成点估，并用 PSD + ontology 约束做多项式时间的部分识别。",
+      "method": "把世界模型形式化成 PSD 耦合核，借 PSD 约束与本体公理收紧反事实区间；进一步分析 scar 学习的样本效率。",
+      "results": "在数百个结构因果模型上展示，预测器 28% 模型上给出无效估计，而耦合核框架能给出有效区间。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 10,
+      "popularity": 4.5,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10363",
+    "summary": "WAM 在长时操作里还不擅长任务相关记忆。HiMem-WAM 给 WAM 加了层级潜动作（低层运动 + 高层技能）、边界触发的内存门，能在技能切换处压缩任务状态，不用测试时再生成未来视频或光流。",
+    "highlights": {
+      "contribution": "在 WAM 框架里加层级潜动作和边界感知记忆门，解决长时操作的记忆问题。",
+      "innovation": "用预测的技能边界来触发记忆写入，把内存和层级潜动作绑在一起做因果推断。",
+      "method": "层级潜动作框架同时学低层运动和高层技能 latent；边界感知 gate 在技能转换处写入紧凑任务状态。",
+      "results": "在 LIBERO、LIBERO-PLUS、RMBench 和真机上展示部署扰动下更鲁棒，长时记忆相关任务上获益明显。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.8,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10612",
+    "summary": "3DGS 模型被到处分享和改动，怎么追溯它们的「家谱」？GaussTrace 把溯源当作证据驱动的推理：统计 3DGS 参数特性，再模拟常见编辑操作产生假设证据，让 LLM 用 CoT 推理出有向溯源图。",
+    "highlights": {
+      "contribution": "给 3DGS 模型搭一个不需要训练或编辑历史的可解释溯源框架。",
+      "innovation": "把统计画像和编辑模拟两类证据一起塞给 LLM 做 CoT 推理，输出有向边和推理理由。",
+      "method": "属性级统计 profiling + 假设驱动编辑模拟 → 结构化 CoT → 有向溯源图与边解释。",
+      "results": "在多样 3DGS 模型间构建演化关系，溯源准确、可解释、鲁棒。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10645",
+    "summary": "从单目机器人第一人称视频里重建带交互的 3D 场景挺难，机器人、物体、背景缠在一起。ManiSplat 用图结构解耦表示把它们拆进各自的高斯子场，并用任务阶段（Motion/Skill）对齐生成伪 GT 轨迹来稳定优化。",
+    "highlights": {
+      "contribution": "从单目 ego-view 机器人视频重建可控、解耦的高斯数字孪生场景。",
+      "innovation": "用 Graph-Structured Disentangled Representation 把机器人/物体/背景分到独立可优化子场，并借任务阶段先验做时空对齐。",
+      "method": "图结构解耦 3DGS + Task-Oriented 时空对齐生成伪 GT 轨迹 + 联合光度-几何优化。",
+      "results": "重建高保真、可控、仿真就绪的动态交互场景，并支持下游机器人任务与策略学习。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10656",
+    "summary": "自驾的前馈视图合成做插值还行，做未来外推就 ghost 严重还得依赖未来位姿。Envision4D 自监督做无位姿的未来外推：先预测未来相机参数，再用层内时间注意力和条件运动 lifting 把不确定外推变成稳健映射。",
+    "highlights": {
+      "contribution": "自驾场景下首个完全自监督、无未来位姿先验的前馈 4D 高斯外推框架。",
+      "innovation": "把未来位姿当作 denoising 任务预测，再用 Conditioned Motion Lifting 把外推转成关系映射。",
+      "method": "Future Pose Prediction 模块用迭代去噪估未来相机；层内时间注意力捕捉非线性动力学；渐进训练稳定无监督学习。",
+      "results": "在未来视图合成上显著优于现有方法，达到 SOTA。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.3,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10423",
+    "summary": "现在的强 web agent 都靠贵的闭源推理模型。WebChallenger 不靠模型规模，而是补人类的三种认知优势：选择性注意、网站结构记忆、对常见交互的「程序化熟练」。一切建在 PageMem 这个由 DOM 确定性构造的层级页面表示上。",
+    "highlights": {
+      "contribution": "用架构而不是更大模型来做高性价比通用 web agent。",
+      "innovation": "PageMem 提供共享子结构，再叠加分治观察、轻量探索记忆和复合动作三条机制对应三种认知优势。",
+      "method": "PageMem 把 DOM 拆成带摘要的语义段；分治 pipeline 只在相关段抽细节；探索一次构建可复用站点地图；复合动作把常见多步交互压成单步。",
+      "results": "用开源权重无微调在 WebArena 56.3%、VisualWebArena 48.7%、Online-Mind2Web 51.0%、WorkArena 70.9%，接近闭源系统但成本低很多。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10507",
+    "summary": "长时多轮任务里 LLM agent 历史越积越长，全局状态跟不住、推理也变差。HIPIF 模仿人类做法：分解子目标、把已完成子目标的历史「折叠」掉，同时用层级反思和过程奖励稳定训练，不需要昂贵的辅助模型或专家轨迹。",
+    "highlights": {
+      "contribution": "面向长时 LLM agent 学习的层级规划 + 信息折叠端到端训练方法。",
+      "innovation": "把「子目标历史折叠」当成显式机制处理长上下文干扰，并用层级反思 + 子目标过程奖励稳定训练。",
+      "method": "端到端训练 agent 围绕显式子目标组织执行；折叠完成子目标的历史；用层级反思与 subgoal-oriented 过程奖励引导生成、转移、执行。",
+      "results": "在三个公开 agent benchmark 上验证有效。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.3,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10684",
+    "summary": "现在的检索-推理 agent 把搜索和生成压在同一个策略里，credit 算不清——搜得对但写错了搜索就背锅。DAC 把它拆成 searcher + generator 两个 LoRA agent，generator 还兼证据充分性裁判，搜索 agent 用这个信号当 reward。",
+    "highlights": {
+      "contribution": "提出角色分解的多 agent LLM 训练框架，干净解决检索-生成耦合下的 credit 分配。",
+      "innovation": "generator 兼任证据充分性 verifier 并把 abstention 信号回传给 searcher；searcher 给 generator 提供 hard-positive 训练环境。",
+      "method": "共享 backbone + 两个 LoRA agent，generator 输出答案或弃权，searcher 用弃权信号当奖励；用 hard-positive evidence augmentation 训 generator。",
+      "results": "在通用 QA 与 multi-hop QA 上超过单体全参微调基线。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.3,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10749",
+    "summary": "LLM agent 不再只生成文本，还会规划、调工具、维护记忆、对外执行，安全风险也变了。这篇综述梳理了 247 篇文章，从信息流、授权和持久状态的交互角度搭一个生命周期框架，回答威胁面、攻防、评测四问。",
+    "highlights": {
+      "contribution": "系统化 LLM agent 安全的生命周期框架与文献综合。",
+      "innovation": "围绕信息流 / 委派权限 / 持久状态三轴组织安全问题，强调持久状态污染和多 agent 传播等新兴风险。",
+      "method": "综述类，归纳威胁、攻击、防御与评测，对 247 篇做主题与差距分析。",
+      "results": "指出 prompt injection 与工具劫持仍主导，现有防御弱组合，benchmark 对长时/有状态/部署敏感风险覆盖不足。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10401",
+    "summary": "MLLM 想做空间智能就得在长上下文里维持认知地图，但上下文窗口有限。CoCoSI 不动模型权重，做一个即插即用的多 agent 框架：协同构建栅格化认知地图当作结构化空间记忆，靠局部-全局 agent 协调、原子提交和跨 agent 验证保证一致。",
+    "highlights": {
+      "contribution": "无需训练的多 agent 框架把空间认知地图作为外部记忆，增强任意预训练 MLLM 的空间理解。",
+      "innovation": "局部-全局协调 + 原子提交 + 跨 agent 验证，让认知地图的构建既增量又一致。",
+      "method": "多 agent 协作维护栅格化认知地图，原子提交更新结构化空间记忆，跨 agent 验证一致性。",
+      "results": "在空间理解任务上超过基线且全程无训练。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.10525",
+    "summary": "Indirect prompt injection 对 LLM agent 是个真威胁，但自动化攻击方法在 agentic 场景里其实没系统试过。作者把 GCG（白盒）和 TAP（黑盒）迁到 AgentDojo，在 80 任务对上比较，发现黑盒优化明显比梯度法稳。",
+    "highlights": {
+      "contribution": "把自动化 prompt injection 攻击在 agentic 环境下做了系统性实证评估。",
+      "innovation": "首次在 AgentDojo 里把白盒 GCG 与黑盒 TAP 适配到 agent 场景并跨域比较。",
+      "method": "在 4 域 80 任务对上跑 GCG 与 TAP，研究攻击者模型能力、安全微调和迁移性。",
+      "results": "黑盒优化显著优于梯度法；任务通用攻击能跨域迁移，但小开源模型上优化的攻击迁不到 GPT-5。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  }
+]
