@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.11906",
+    "summary": "这篇做的是VLA模型对多语种指令的鲁棒性问题。作者把LIBERO翻译成十种语言,发现非英语指令下成功率掉30-50%,而且影响是分步的——有的步骤极度依赖语言,有的几乎无关。基于这个观察提出按步骤敏感度做推理时表征对齐,显著提升非英语指令下的成功率。",
+    "highlights": {
+      "contribution": "首次对VLA模型做系统的多语种评测,并指出语言影响在执行轨迹中是步骤异质的。",
+      "innovation": "把语言鲁棒性建模成步骤级控制问题,而不是整段输入的统一对齐。",
+      "method": "构建10语LIBERO翻译基准、做步骤细粒度失败分析、在推理时按各步语言敏感度对表征做针对性对齐,无需重新训练。",
+      "results": "非英语指令下原本掉30-50%成功率,新方法在多语种条件下显著回升(具体每语种数值见原文)。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12109",
+    "summary": "把预训练VLA从平行夹爪迁到多指灵巧手的工作。直接端到端微调会出现灾难性遗忘和动作流形坍缩,作者提出InDex,把原来1自由度的夹爪输出当作连续的「抓取意图」信号,然后用两阶段解耦训练:先让VLA骨干预测手臂轨迹和意图标量,再冻结骨干用扩散头解码手指关节。仿真上少量演示即学会复杂接触任务。",
+    "highlights": {
+      "contribution": "提出跨形态语义继承范式,把VLA的低自由度先验迁移到高自由度灵巧手。",
+      "innovation": "把原本的标量抓取输出重新解读为连续的「抓取意图」中介,以此桥接形态差距。",
+      "method": "两阶段:第一阶段PEFT微调VLA骨干预测臂轨迹和意图,第二阶段冻结骨干用意图条件扩散头预测手指关节;数据高效。",
+      "results": "多个多阶段接触丰富的灵巧操作任务上,比直接端到端微调显著高,具体数值见原文。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12105",
+    "summary": "现有VLA各模态同步采样,但物理交互中本体感受高频、视觉慢、语言基本不变,同步会拖慢动作生成。DAM-VLA给每个模态开独立潜在缓冲,按各自传感器频率刷新,动作头连续读取,新高频模态通过门控交叉注意力接入而不动预训练骨干。结果7个接触丰富任务平均成功率从40.95%飙到95.2%,100Hz反应控制。",
+    "highlights": {
+      "contribution": "提出按模态解耦异步采样的VLA架构,打破同步时钟瓶颈。",
+      "innovation": "每个模态维护独立潜在缓冲,各自按传感器频率更新;高频模态用门控注意力插入而不破坏预训练。",
+      "method": "输入是视觉+本体感受+语言三路异步流;骨干冻结,高频模态通过gated cross-attention并入,动作头在100Hz持续读取潜在状态。",
+      "results": "7个真实接触丰富任务平均成功率95.2% vs 同步baseline 40.95%,翻倍以上,且能稳定100Hz控制。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 10,
+      "popularity": 8.5,
+      "quality": 8.8,
+      "recommendation": 8.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12299",
+    "summary": "VLA对指令很脆,语义相似的话能引出完全不同的行为。这篇做的是给冻结的VLA加一层「学会说什么」的策略:交互式搜索能改善闭环表现的语言序列,蒸馏成测试时语言反馈策略,再训一个「什么时候该改语言」的改善头并做共形预测以避免帮倒忙。已知环境下sim提升24.7%、真机提升65.0%。",
+    "highlights": {
+      "contribution": "把指令工程问题转成自动化的、对冻结VLA的语言反馈干预,且带有不变差的安全保证。",
+      "innovation": "共形预测的「改善头」决定是否触发语言干预,避免对OOD场景的反向破坏。",
+      "method": "交互搜索找有效语言→蒸馏为测试时反馈策略LFP→训改善头预测增益→共形化以保证harmlessness;整个过程不动VLA权重。",
+      "results": "sim已知场景+24.7%,真机+65.0%;在视觉/语义扰动下做到无害,同时出现开环prompting看不到的恢复行为。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.5,
+      "recommendation": 8.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12352",
+    "summary": "用一个VLA骨干做去中心化多机器人协作。每台机器人跑同一份CHORUS,只看自己的观测、加一个机器人身份prompt,推理时无需通信、无需对齐。在移动测距、图书馆传书、合抬洗衣篮等真实任务上,比从头训的去中心化模型高64个百分点、对队友反应性高40个百分点,还超过集中式基线。",
+    "highlights": {
+      "contribution": "证明单一预训练VLA骨干能驱动去中心化多机协作,无需通信或显式对齐。",
+      "innovation": "用机器人身份prompt和共享VLA视觉运动先验,让每台机器只看局部观测就能涌现协作行为。",
+      "method": "单一VLA骨干微调适配多机团队;推理时每个机器人独立运行同一权重,只用自身观测+身份提示;无中心协调、无通信。",
+      "results": "三个真实任务上比去中心化from-scratch基线提升64个百分点,反应性+40个百分点,超过集中式基线。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 10,
+      "popularity": 8.5,
+      "quality": 8.8,
+      "recommendation": 8.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11743",
+    "summary": "给VLA加触觉的工作。光靠视觉抓不到局部接触状态,作者TacCoRL用真实对齐的仿真器做闭环训练:先用sim和real混合轨迹warm-start触觉条件动作,再用仿真RL+可验证奖励强化触觉条件下成功的动作,同时用真实轨迹的监督锚定分布。无需大规模触觉预训练,直接部署到真机。",
+    "highlights": {
+      "contribution": "把触觉模态注入VLA并通过sim-RL在低成本下打磨近失败状态的触觉条件行为。",
+      "innovation": "不需要大规模触觉预训练,也不需要真机RL探索,用真实对齐仿真器+可验证奖励微调触觉响应。",
+      "method": "sim/real混合预热触觉条件策略→仿真器闭环RL优化触觉条件动作→真实轨迹监督锚定分布;直接部署不依赖特权信息。",
+      "results": "四个双臂接触丰富任务上,视-触策略平均成功率72.5% vs 基线50.0%。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11891",
+    "summary": "对人形机器人loco-manipulation,作者控制变量地比较了单critic和双critic架构:Unitree G1上跑13级课程,从原地够到走动够。双critic比单critic到达目标速度快3.5倍、吞吐2倍、有效到达率65.2% vs 53.8%。还发现加anti-gaming奖励没用,critic架构比奖励工程影响更大。",
+    "highlights": {
+      "contribution": "系统比较了人形多目标RL中单critic与双critic架构的影响,得出critic架构比奖励工程更关键的结论。",
+      "innovation": "在23自由度真实人形上做了控制良好的对比实验,揭示双critic在RL微调模仿策略时不被locomotion梯度淹没。",
+      "method": "在Isaac Lab上Unitree G1做13级课程的loco-manipulation;对比单critic vs 双critic(动作和移动reward分开),其余设定全部固定。",
+      "results": "双critic到达快3.5倍(6.5 vs 22.6 sim步)、吞吐2倍(14.3 vs 7.0/千步)、成功率65.2% vs 53.8%。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11901",
+    "summary": "推一个新的双臂操作基准DuoBench。基于FR3 Duo平台、覆盖4类协调和11个任务,有仿真也有部分真机复现,并提供阶段化失败分析和遥操作数据集。在该基准上跑了多个双臂模仿学习和VLA策略,发现现有方法在早期交互、并行执行和sim2real上仍弱。",
+    "highlights": {
+      "contribution": "提出可复现、可扩展的双臂操作基准,带阶段化语义失败分析与公开遥操作数据。",
+      "innovation": "覆盖4个协调类别11任务,3D打印资产+任务recipe保证真实复现性;阶段评估超越二值成功。",
+      "method": "FR3 Duo双臂平台搭11个仿真任务并部分real复现;采集人类遥操作数据;在多个IL和VLA策略上benchmark。",
+      "results": "现有双臂IL与VLA策略在协调任务上仍未饱和,尤其在早期交互、并行执行、sim2real转移上掉链子(具体数值见论文)。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11982",
+    "summary": "Preference-based RL的训练-推理不匹配问题:utility在段级训,但策略优化时用的是逐步效用,引入分布偏移。PAWS直接用段级advantage做策略更新,把效用训练与策略优化对齐,保留轨迹级偏好信息。在机器人操作和locomotion仿真上稳定超越现有PbRL方法。",
+    "highlights": {
+      "contribution": "指出PbRL中段级偏好训练与逐步策略更新的分布不一致,并提出一致的段级优化方案。",
+      "innovation": "把策略梯度直接挂在段级advantage上,而不是把段级效用拆成逐步信号。",
+      "method": "训练段级utility/advantage→策略优化直接消费段级advantage→避免per-step效用估计的不可靠信号;在仿真操作和locomotion任务上验证。",
+      "results": "在多种仿真机器人操作和locomotion任务上稳定优于现有PbRL方法(具体数字见论文)。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12334",
+    "summary": "高精度操作里RGB会深度模糊、点云策略好不好看任务。作者怀疑神经网络的低频偏置在拖后腿——尤其对慢变笛卡尔特征。于是把点云从笛卡尔映到高维Fourier空间,让点云编码器直接拿到高频特征。在RoboCasa、ManiSkill3和真机上跨多种encoder和benchmark都明显涨点,且对超参鲁棒。",
+    "highlights": {
+      "contribution": "把Fourier特征作为通用工具引入点云模仿学习,缓解高精度任务中神经网络的频谱偏置。",
+      "innovation": "极简改动——只是把点云坐标映到Fourier空间——就能稳定提升多种点云策略encoder。",
+      "method": "点云Cartesian坐标做Fourier特征映射喂给点云encoder;其余imitation learning pipeline不变;在RoboCasa+ManiSkill3+真机评测。",
+      "results": "在多个高精度操作任务上跨encoder一致涨点,对超参鲁棒(具体数字见论文)。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 6.8,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12372",
+    "summary": "HiL-RL里人类干预太频繁,扩展性差。UniIntervene是个智能体干预模型:用未来条件的动作价值估计+时间价值-风险critic自动发现徒劳探索,触发干预时从过往干预记忆里取高价值恢复目标,目标条件策略生成纠错动作。最终把成功率提了8.6%同时减少57%人类干预。",
+    "highlights": {
+      "contribution": "把HiL-RL中的人类干预自动化,用价值感知的恢复过程取代被动人工纠正。",
+      "innovation": "未来条件价值估计+时间价值-风险critic+干预记忆库构成的「自动干预」闭环。",
+      "method": "预测当前动作的潜在后果与诱导价值→时间critic判断价值是否长期停滞退化→从干预记忆检索高价值目标→目标条件恢复策略生成纠错动作。",
+      "results": "多个真实操作任务上平均成功率+8.6%,同时人类干预-57%。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12396",
+    "summary": "做自动驾驶VLA,作者主张把几何作为第四模态显式监督。VLGA给VLA加一个几何专家,用LiDAR的逐像素pointmap回归损失把稠密3D世界注入模型。在nuScenes开环上不带ego status拿到SOTA(L2均值0.50m、3秒碰撞率0.18%);Bench2Drive闭环driving score 79.08,比此前最强VLA高0.71。",
+    "highlights": {
+      "contribution": "首个把几何作为第四模态显式监督的自动驾驶VLA。",
+      "innovation": "用LiDAR pointmap回归做稠密3D监督,而不是稀疏box/map损失,把几何信号真正灌进策略。",
+      "method": "VLA主干+几何专家分支,几何专家由LiDAR pointmap的per-pixel回归监督;开环nuScenes/闭环Bench2Drive做评测。",
+      "results": "nuScenes无ego status开环SOTA(L2 0.50m,碰撞率0.18%);Bench2Drive闭环driving score 79.08,+0.71。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.5,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12403",
+    "summary": "World Pilot把WAM的先验通过两条路径注入VLA:Latent Steering把场景演化潜变量挂到感知层,Action Steering把预期轨迹作为运动先验喂给动作生成器。LIBERO-Plus zero-shot OOD上Total成功率84.7%达SOTA,真机四任务在视角/几何/形变/位姿扰动下也最优。场景演化先验即便由视频预训练的WM提供(没经过动作后训)也仍然有效。",
+    "highlights": {
+      "contribution": "提出双路径的WAM-VLA融合方案,系统地把世界-动作先验灌入策略并拿到SOTA OOD表现。",
+      "innovation": "Latent Steering(感知层场景演化潜变量)+ Action Steering(动作生成器轨迹先验)两条互补路径;视频预训练WM不需动作后训也能贡献场景先验。",
+      "method": "WAM输出场景演化潜变量与预期轨迹→Latent Steering条件化VLA感知层→Action Steering给动作头提供轨迹先验→端到端在LIBERO-Plus和真机微调。",
+      "results": "LIBERO-Plus zero-shot OOD Total 84.7% SOTA;真机四任务在视角/几何/形变/位姿扰动下全部最高,差距最大。"
+    },
+    "scores": {
+      "relevance": 9.8,
+      "recency": 10,
+      "popularity": 9.0,
+      "quality": 9.0,
+      "recommendation": 9.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12072",
+    "summary": "预训练视频生成器看着能模拟世界,但要靠详细文字描述才能解任务。作者把self-distillation和RL结合:VLM对未标注场景生成任务+步骤解,该解作为条件喂给预训练视频扩散模型(Demonstrator),再蒸馏给只看图像+短prompt的Executor;再用VLM反馈做RL进一步提升。在WorldTasks-Benchmark和DreamGen机器人benchmark上Executor超过了它的老师。",
+    "highlights": {
+      "contribution": "用自蒸馏+VLM反馈RL把视频世界模型从「需要长描述」推进到「只看图+短prompt就能解任务」。",
+      "innovation": "VLM出题+长解→Demonstrator执行→蒸馏到短prompt Executor,再用「评判比生成更容易」做RLAIF。",
+      "method": "VLM对未标图像生成任务+详细解→视频扩散模型(Demonstrator)按解生成→蒸馏到Executor(只看图+短指令)→VLM反馈RL优化Executor。",
+      "results": "在新提出的WorldTasks-Benchmark和DreamGen上,Executor在VLM评估下超过Demonstrator并在机器人任务上有竞争力的迁移。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.2,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12316",
+    "summary": "在ARC上用对象中心的世界模型做规则归纳。Loop-OWM把ARC规则学成可组合的结构化状态转移:颜色原型槽位+示范条件任务摘要+带稠密传播和槽位条件修正的循环转移模型。ARC-1和ARC-2上以同等或更少参数超过非循环和循环基线,表明ARC规则可以学成视觉-符号世界状态的转移,而不仅是语言或代码描述。",
+    "highlights": {
+      "contribution": "把ARC规则归纳重述为对象中心的视觉-符号世界状态转移问题,而非语言/程序合成。",
+      "innovation": "颜色原型槽位+示范条件任务摘要+循环转移结构,实现可组合的规则学习。",
+      "method": "颜色原型槽位作为对象表征;示范用语言摘要;循环转移模型做稠密状态传播+槽位条件修正;端到端训练在ARC-1/ARC-2。",
+      "results": "ARC-1和ARC-2上比非循环和循环基线都强,且参数量持平或更少。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12217",
+    "summary": "做WAM时发现一个怪现象:能生成合理的未来视频不代表能抽出准确动作。作者用注意力分析和因果干预发现动作头并不盯着任务相关区域,对无关区域扰动反而敏感。提出AGRA,用foundation视觉编码器的语义表征对视频扩散中间特征做空间对齐,让世界模型的表征更action-grounded。最终ID和OOD都稳定提升。",
+    "highlights": {
+      "contribution": "诊断了WAM中「未来生成准≠动作准」的表征不匹配,并提出动作锚定的表征对齐目标。",
+      "innovation": "通过对齐视频扩散中间特征与foundation视觉encoder的语义,把世界模型表征重定向到action-grounded形式。",
+      "method": "在视频扩散中间层加AGRA对齐损失,把特征拉向基础视觉编码器的空间一致语义;其余world-action架构不变。",
+      "results": "真实操作任务上对象定位与affordance理解更准,对无关区域扰动更鲁棒,ID和OOD泛化都比baseline强。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.5,
+      "recommendation": 8.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11841",
+    "summary": "低光novel view synthesis里,3DGS常用线性增益生成伪GT,会切掉亮区、暗区又增强不够。作者把2D低光增强里的非线性tone curve搬过来做伪GT:加百分位归一化、自适应黑电平偏移,再用两种互补曲线ASE和AP3。在LOM上+4.34dB,在RealX3D上+3.25dB,曲线形式不敏感。",
+    "highlights": {
+      "contribution": "把非线性tone curve引入低光3DGS的pseudo-GT生成,替代之前的线性增益。",
+      "innovation": "百分位归一化做场景无关化、自适应黑电平偏移、两种互补曲线(指数型ASE和三次AP3)。",
+      "method": "在3DGS pipeline中只替换pseudo-GT生成模块;不改backbone;对低光多视图先做百分位归一化和黑电平校正,再过非线性曲线得到伪GT训练3DGS。",
+      "results": "LOM上PSNR最高+4.34dB,RealX3D上+3.25dB;两种曲线效果接近,说明改进对曲线形式不敏感。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11894",
+    "summary": "Wild3R做无约束稀疏照片集的feed-forward 3DGS:既要应对多种光照,也要去掉transient物体。瓶颈是缺训练数据,作者搞了WildCity数据集:200场景、170种光照、含transient,合计337,500张图。模型基于此学到跨视角外观一致性(条件于参考图)并能去transient,效果超过现有feed-forward,逼近per-scene优化方法。",
+    "highlights": {
+      "contribution": "推出第一个真正面向无约束照片集的feed-forward 3DGS模型和大型训练数据集。",
+      "innovation": "WildCity数据集覆盖光照与transient变化,使feed-forward模型学到外观一致性和transient抑制。",
+      "method": "构建WildCity(200场景×170光照×transient,337,500图);训练feed-forward 3DGS,以参考视图为外观条件,显式抑制transient。",
+      "results": "在无约束照片集上超越现有feed-forward 3DGS,接近per-scene优化方法。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11782",
+    "summary": "3DGS在内存约束和RDO压缩管线里高频纹理常糊。作者搞了个通用的2D perceptual wrapper,只在渲染输出后接一个轻量合成网络,条件于伪随机噪声合成感知上合理的纹理,用Wasserstein Distortion监督。即插即用,在vanilla/内存受限/RDO三种3DGS上都明显提感知质量并降文件/模型大小。",
+    "highlights": {
+      "contribution": "提出一个不动3DGS骨干的通用2D感知包装器,用Wasserstein Distortion补回高频纹理。",
+      "innovation": "用伪随机噪声+轻量合成网络做内容-视角相关的纹理合成,不再追求逐像素重建保真。",
+      "method": "3DGS渲染后过一个噪声条件的轻量合成网络生成最终图像;用Wasserstein Distortion监督局部特征统计而非像素;可插入vanilla/低存/RDO 3DGS。",
+      "results": "主观+客观实验都显著强于baseline,在更小文件/模型尺寸下取得更高感知质量。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12340",
+    "summary": "这是一篇偏艺术装置的工作。作者把Feed-Forward 3D重建模型当作「神经原型大脑」,人为诱导其突触衰减来视觉化遗忘过程,把神经网络当做认知代理而非工具。展示遗忘下世界感知的崩塌,呼吁社区探索neuromorphic美学。",
+    "highlights": {
+      "contribution": "把feed-forward 3D重建模型作为认知现象学的视觉化媒介,提出一种neuromorphic美学叙事。",
+      "innovation": "在3D重建模型里诱导受控的突触衰减,以艺术装置形式呈现遗忘。",
+      "method": "在前馈3D重建模型中诱导突触衰减→渲染遗忘过程→交互式装置展示;没有定量benchmark。",
+      "results": "提供交互式demo,没有量化实验。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 10,
+      "popularity": 4.5,
+      "quality": 5.5,
+      "recommendation": 4.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11909",
+    "summary": "造embodied空间智能benchmark又贵又难维护、做出来还很快被刷爆。Embodied-BenchClaw是个自治多智能体系统:用户给评测意图,五阶段流水线(意图蓝图→数据采集→结构化→benchmark合成→评测报告)由规划/构造/评估三个agent协调,带Skill Library和过程质量控制,实现可组合、可校验、可修复的benchmark生产。覆盖室内外推理、操作、四足导航、UAV等多类。",
+    "highlights": {
+      "contribution": "把embodied benchmark的构建本身做成自治agentic pipeline,可持续更新且可重用。",
+      "innovation": "意图驱动的五阶段流水线+三agent协调+Skill Library和过程质控,实现可组合可修复的benchmark生产。",
+      "method": "三agent(plan/build/eval)协作五阶段流水线;用户指定意图后自动采集→清洗→合成→评估;实例化多个具身空间任务benchmark。",
+      "results": "多种实例化benchmark上人评、judge评、一致性检查、成本和消融均显示构造质量好且省人力。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11976",
+    "summary": "代码agent定位多文件修改时大多线性逐目录看,作者觉得这跟跨子系统变更结构不匹配。提出按领域并行派发子agent的方法,在SWE Bench Pro及自建扩展集上对比线性RLM、外部CLI(Codex 5.5 High)等。小Haiku级模型用这个方法在Haiku级里大幅领先,在扩展集上仅次于Codex 5.5 High。还发现文档演化是隐性依赖、文件系统访问反而拖累。",
+    "highlights": {
+      "contribution": "提出非线性、领域并行的agentic代码探索范式,在多文件变更定位上显著超越线性探索。",
+      "innovation": "把仓库按子系统切片并并行派发子agent;还指出文档隐性依赖与文件系统访问的副作用。",
+      "method": "持久session下从GitHub issue和基commit开始;领域切片→并行agent探索→聚合预测要改的文件;与RLM/Codex 5.5 High对比。",
+      "results": "Haiku级模型micro F1领先同级一大截,扩展集上仅次于Codex 5.5 High;并给出三个有意思的次级发现。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12040",
+    "summary": "用多agent设计混凝土护栏,要满足AASHTO-LRFD规范的非线性约束。基于AutoGen搭了「生成-评估-优化」闭环,设计准确率超过98%,远超单一LLM。还发现性能和模型规模并非线性相关——8B轻量模型能赢过631B旗舰,提示工程领域里多agent编排更重要。",
+    "highlights": {
+      "contribution": "把多agent编排引入受规范严约束的结构工程设计,实现>98%准确率。",
+      "innovation": "「生成-评估-优化」闭环把物理约束验证嵌进多agent协作,缓解LLM幻觉。",
+      "method": "基于AutoGen的多agent闭环:生成方案→规范评估→优化迭代;在混凝土护栏设计任务上做对比实验。",
+      "results": "设计准确率>98%大幅超单LLM;8B模型在该框架下能赢631B旗舰。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12191",
+    "summary": "一篇关于「智能体环境工程」的综述。围绕环境生命周期(建模/合成/评估/应用)梳理现有agentic环境,八属性八领域分类,介绍符号合成和神经合成两种范式以及对应评估方法,并讨论memory/orchestration/trajectory/exploration四视角的agent进化路径与三种环境演化范式,最后展望Environment-as-a-Service、多agent环境、神经符号环境等方向。",
+    "highlights": {
+      "contribution": "首次系统性地按环境工程生命周期梳理agentic环境研究,给出分类、范式和应用路径。",
+      "innovation": "把「环境」本身视为可工程化对象,从建模到演化分阶段拆解。",
+      "method": "调研类工作:按八属性八领域分类→对比符号vs神经合成→引入agent-环境共演化视角→总结三种环境演化范式;无独立实验。",
+      "results": "全面分类和未来方向梳理,无定量benchmark结果。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.0,
+      "recommendation": 6.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12320",
+    "summary": "讨论生产级AI agent的运行时治理。作者指出企业安全设计是围绕「数据边界」的,但agent的风险跑到了工作流内部——一连串各自合规的动作可能拼出没人授权的业务变更。提出五平面参考架构(推理平面裁决意图+四个执行平面:网络/身份/端点/数据),配合stop-anywhere仲裁、能力衰减的复合主体、结构化审计基底,并给出六类中断原语和四个正确性不变量。参考实现里仲裁微秒级,审计可追溯性100%。",
+    "highlights": {
+      "contribution": "提出面向生产agent的运行时治理参考架构,把「委派动作的安全治理」从data-centric扩展到workflow-centric。",
+      "innovation": "五平面分解+stop-anywhere仲裁+复合主体能力衰减+结构化审计;六类中断原语超越allow/deny二元。",
+      "method": "形式化定义五平面和不变量→给出六类中断原语→构造能力衰减的委派链评估→实现一个policy引擎核心做测量评估。",
+      "results": "在每次试验中能力衰减和证据可重构都成立,仲裁微秒级,审计基底tamper-evidence按设计成立;承认未在live agent benchmark全系统评估。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  }
+]

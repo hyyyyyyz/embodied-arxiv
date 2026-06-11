@@ -270,182 +270,182 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.10363",
-    "summary": "WAM 在长时操作里还不擅长任务相关记忆。HiMem-WAM 给 WAM 加了层级潜动作（低层运动 + 高层技能）、边界触发的内存门，能在技能切换处压缩任务状态，不用测试时再生成未来视频或光流。",
+    "arxiv_id": "2606.11372",
+    "summary": "针对压阻式触觉传感器「易复现」和「高保真」难兼得的痛点，作者把整套硬件栈重新设计了一遍。新系统叫 HiPi，PCB 直接走商业代工，MCU 换成更便宜的 STM32，FPCB 导电层让传感器组装和叠层都简化了。双手 4 阵列 2048 点能稳跑 220 Hz，接触几何还原显著提升。",
     "highlights": {
-      "contribution": "在 WAM 框架里加层级潜动作和边界感知记忆门，解决长时操作的记忆问题。",
-      "innovation": "用预测的技能边界来触发记忆写入，把内存和层级潜动作绑在一起做因果推断。",
-      "method": "层级潜动作框架同时学低层运动和高层技能 latent；边界感知 gate 在技能转换处写入紧凑任务状态。",
-      "results": "在 LIBERO、LIBERO-PLUS、RMBench 和真机上展示部署扰动下更鲁棒，长时记忆相关任务上获益明显。"
+      "contribution": "提出一套可复现且高保真的压阻触觉感知系统 HiPi，覆盖 PCB、MCU、通信、FPCB 全栈。",
+      "innovation": "在低串扰读出原理上重新做工程化设计，让大面积、双手 2048 点的密集触觉变得真正可量产部署。",
+      "method": "输入是密集压阻阵列电压；硬件层用商用 PCB 工艺免手焊，STM32 做主控，FPCB 简化叠层；软件层走优化的通信流水线，220 Hz 同时读 4 个阵列。",
+      "results": "在 3D 打印结构接触图案测试中，平均 IoU 由 0.428 提到 0.797，Dice 由 0.539 提到 0.886。"
     },
     "scores": {
-      "relevance": 9.0,
-      "recency": 10,
+      "relevance": 7.0,
+      "recency": 9,
       "popularity": 6.5,
-      "quality": 7.8,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11408",
+    "summary": "现在 diffusion/flow policy 和 VLA 都流行 action chunking，但执行步数是固定的、得手调。作者提出 DEHP：冻结预训练 chunk 策略，只用在线 RL 训一个轻量的执行步长预测头，自动判断什么时候该提早收手。结果在高精度和长程任务上成功率明显涨，定性看精细阶段步长短、自由运动阶段步长长。",
+    "highlights": {
+      "contribution": "把 action chunking 的执行步长从「拍脑袋调」变成在线学习预测，兼容任意黑盒 chunk 策略。",
+      "innovation": "冻结底层策略只训预测分支，纯净隔离「执行步长」这一变量的影响，方法可直接套到 diffusion policy 和 VLA 上。",
+      "method": "输入观测和 chunk 策略产生的动作序列，加一个轻量预测头输出本轮该执行多少步，用在线 RL 训这个头，底层 chunk 策略全程冻结。",
+      "results": "在多项高精度和长程操作任务上成功率大幅提升，自适应步长在精细阶段短、空中转移阶段长。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 9,
+      "popularity": 7.8,
+      "quality": 8.2,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11129",
+    "summary": "现有 world model 评测大多看画质和语义对齐，看不出模型懂不懂物理。WorldOlympiad 把视频世界模型评测拆成三关：物理、几何、交互，分别用 MLLM 判物理规则、用 Gaussian Splatting 重建判几何、用长程动作序列判交互。覆盖游戏、机器人、真实视频三大场景，结果显示 SOTA 模型在物理推理和长程交互上都有明显坑。",
+    "highlights": {
+      "contribution": "首个把生成式世界模型「物理 + 几何 + 交互」三维度系统化打分的基准。",
+      "innovation": "把 Gaussian Splatting 重建结果作为 3D 几何一致性的客观度量，配合 MLLM-as-judge 评物理合理性，比单看 FVD 更可解释。",
+      "method": "输入是世界模型生成的视频；物理赛道做对象分割并让 MLLM 当裁判，几何赛道做 GS 重建并比较跨视角与相机轨迹，交互赛道用复杂动作 prompt 检查跨 chunk 连贯性。",
+      "results": "对当前 SOTA 视频/世界模型实测，在物理推理、3D 一致性、长程交互上均暴露明显失效模式，给出可定位的失败维度。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 9,
+      "popularity": 7.5,
+      "quality": 8.0,
       "recommendation": 8.0
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.10612",
-    "summary": "3DGS 模型被到处分享和改动，怎么追溯它们的「家谱」？GaussTrace 把溯源当作证据驱动的推理：统计 3DGS 参数特性，再模拟常见编辑操作产生假设证据，让 LLM 用 CoT 推理出有向溯源图。",
+    "arxiv_id": "2606.11184",
+    "summary": "接触富集的操作里，全局力和局部触觉的时空作用其实不对称，但模仿学习一般都混一起用。TacForeSight 把两者分开建：力/力矩做高频条件，触觉在 latent 空间里预测短程未来，再用 cross-attention 把当前到未来的演化告诉策略。实机五个任务、三种扰动设置下都打过基线，尤其在动态接触扰动下更稳。",
     "highlights": {
-      "contribution": "给 3DGS 模型搭一个不需要训练或编辑历史的可解释溯源框架。",
-      "innovation": "把统计画像和编辑模拟两类证据一起塞给 LLM 做 CoT 推理，输出有向边和推理理由。",
-      "method": "属性级统计 profiling + 假设驱动编辑模拟 → 结构化 CoT → 有向溯源图与边解释。",
-      "results": "在多样 3DGS 模型间构建演化关系，溯源准确、可解释、鲁棒。"
+      "contribution": "提出力条件驱动的触觉 world model TacForeSight，把短程触觉预测变成接触先验喂给策略。",
+      "innovation": "显式区分全局力/力矩与局部触觉的作用——力做条件、触觉做预测目标，并通过 tactile-guided gating 自适应融合视触特征。",
+      "method": "输入双指触觉 + 高频腕部力/力矩；TacForceWM 在 latent 空间预测短期触觉演化；策略用 cross-attention 看「现在到未来」的触觉变化并门控融合视触。",
+      "results": "实机 5 个代表任务 + 3 种过程扰动设置下持续超越基线，动态接触扰动下优势尤其明显。"
     },
     "scores": {
-      "relevance": 4.0,
-      "recency": 10,
-      "popularity": 5.0,
-      "quality": 6.5,
-      "recommendation": 5.5
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.10645",
-    "summary": "从单目机器人第一人称视频里重建带交互的 3D 场景挺难，机器人、物体、背景缠在一起。ManiSplat 用图结构解耦表示把它们拆进各自的高斯子场，并用任务阶段（Motion/Skill）对齐生成伪 GT 轨迹来稳定优化。",
-    "highlights": {
-      "contribution": "从单目 ego-view 机器人视频重建可控、解耦的高斯数字孪生场景。",
-      "innovation": "用 Graph-Structured Disentangled Representation 把机器人/物体/背景分到独立可优化子场，并借任务阶段先验做时空对齐。",
-      "method": "图结构解耦 3DGS + Task-Oriented 时空对齐生成伪 GT 轨迹 + 联合光度-几何优化。",
-      "results": "重建高保真、可控、仿真就绪的动态交互场景，并支持下游机器人任务与策略学习。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 10,
-      "popularity": 6.0,
-      "quality": 7.5,
-      "recommendation": 7.3
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.10656",
-    "summary": "自驾的前馈视图合成做插值还行，做未来外推就 ghost 严重还得依赖未来位姿。Envision4D 自监督做无位姿的未来外推：先预测未来相机参数，再用层内时间注意力和条件运动 lifting 把不确定外推变成稳健映射。",
-    "highlights": {
-      "contribution": "自驾场景下首个完全自监督、无未来位姿先验的前馈 4D 高斯外推框架。",
-      "innovation": "把未来位姿当作 denoising 任务预测，再用 Conditioned Motion Lifting 把外推转成关系映射。",
-      "method": "Future Pose Prediction 模块用迭代去噪估未来相机；层内时间注意力捕捉非线性动力学；渐进训练稳定无监督学习。",
-      "results": "在未来视图合成上显著优于现有方法，达到 SOTA。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 10,
-      "popularity": 6.0,
-      "quality": 7.3,
-      "recommendation": 7.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.10423",
-    "summary": "现在的强 web agent 都靠贵的闭源推理模型。WebChallenger 不靠模型规模，而是补人类的三种认知优势：选择性注意、网站结构记忆、对常见交互的「程序化熟练」。一切建在 PageMem 这个由 DOM 确定性构造的层级页面表示上。",
-    "highlights": {
-      "contribution": "用架构而不是更大模型来做高性价比通用 web agent。",
-      "innovation": "PageMem 提供共享子结构，再叠加分治观察、轻量探索记忆和复合动作三条机制对应三种认知优势。",
-      "method": "PageMem 把 DOM 拆成带摘要的语义段；分治 pipeline 只在相关段抽细节；探索一次构建可复用站点地图；复合动作把常见多步交互压成单步。",
-      "results": "用开源权重无微调在 WebArena 56.3%、VisualWebArena 48.7%、Online-Mind2Web 51.0%、WorkArena 70.9%，接近闭源系统但成本低很多。"
-    },
-    "scores": {
-      "relevance": 8.5,
-      "recency": 10,
+      "relevance": 8.6,
+      "recency": 9,
       "popularity": 7.5,
-      "quality": 8.0,
+      "quality": 8.2,
       "recommendation": 8.2
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.10507",
-    "summary": "长时多轮任务里 LLM agent 历史越积越长，全局状态跟不住、推理也变差。HIPIF 模仿人类做法：分解子目标、把已完成子目标的历史「折叠」掉，同时用层级反思和过程奖励稳定训练，不需要昂贵的辅助模型或专家轨迹。",
+    "arxiv_id": "2606.11482",
+    "summary": "作者把「社会信念演化」当成一个 world model 问题来建。SWM 不依赖人标注事件—信念映射，也不要昂贵的人口普查数据，靠时序模式和 ELBO 学状态转移。基准 SWM-bench 从 Kalshi 和 Polymarket 拿到 1.2 万+ 个预测点，覆盖政治、金融、加密货币。SWM 在 Kalshi 拿到 SOTA，Polymarket 上也具有竞争力，还可解释。",
     "highlights": {
-      "contribution": "面向长时 LLM agent 学习的层级规划 + 信息折叠端到端训练方法。",
-      "innovation": "把「子目标历史折叠」当成显式机制处理长上下文干扰，并用层级反思 + 子目标过程奖励稳定训练。",
-      "method": "端到端训练 agent 围绕显式子目标组织执行；折叠完成子目标的历史；用层级反思与 subgoal-oriented 过程奖励引导生成、转移、执行。",
-      "results": "在三个公开 agent benchmark 上验证有效。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 10,
-      "popularity": 6.5,
-      "quality": 7.3,
-      "recommendation": 7.4
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.10684",
-    "summary": "现在的检索-推理 agent 把搜索和生成压在同一个策略里，credit 算不清——搜得对但写错了搜索就背锅。DAC 把它拆成 searcher + generator 两个 LoRA agent，generator 还兼证据充分性裁判，搜索 agent 用这个信号当 reward。",
-    "highlights": {
-      "contribution": "提出角色分解的多 agent LLM 训练框架，干净解决检索-生成耦合下的 credit 分配。",
-      "innovation": "generator 兼任证据充分性 verifier 并把 abstention 信号回传给 searcher；searcher 给 generator 提供 hard-positive 训练环境。",
-      "method": "共享 backbone + 两个 LoRA agent，generator 输出答案或弃权，searcher 用弃权信号当奖励；用 hard-positive evidence augmentation 训 generator。",
-      "results": "在通用 QA 与 multi-hop QA 上超过单体全参微调基线。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 10,
-      "popularity": 6.5,
-      "quality": 7.3,
-      "recommendation": 7.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.10749",
-    "summary": "LLM agent 不再只生成文本，还会规划、调工具、维护记忆、对外执行，安全风险也变了。这篇综述梳理了 247 篇文章，从信息流、授权和持久状态的交互角度搭一个生命周期框架，回答威胁面、攻防、评测四问。",
-    "highlights": {
-      "contribution": "系统化 LLM agent 安全的生命周期框架与文献综合。",
-      "innovation": "围绕信息流 / 委派权限 / 持久状态三轴组织安全问题，强调持久状态污染和多 agent 传播等新兴风险。",
-      "method": "综述类，归纳威胁、攻击、防御与评测，对 247 篇做主题与差距分析。",
-      "results": "指出 prompt injection 与工具劫持仍主导，现有防御弱组合，benchmark 对长时/有状态/部署敏感风险覆盖不足。"
-    },
-    "scores": {
-      "relevance": 6.0,
-      "recency": 10,
-      "popularity": 6.5,
-      "quality": 7.0,
-      "recommendation": 6.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.10401",
-    "summary": "MLLM 想做空间智能就得在长上下文里维持认知地图，但上下文窗口有限。CoCoSI 不动模型权重，做一个即插即用的多 agent 框架：协同构建栅格化认知地图当作结构化空间记忆，靠局部-全局 agent 协调、原子提交和跨 agent 验证保证一致。",
-    "highlights": {
-      "contribution": "无需训练的多 agent 框架把空间认知地图作为外部记忆，增强任意预训练 MLLM 的空间理解。",
-      "innovation": "局部-全局协调 + 原子提交 + 跨 agent 验证，让认知地图的构建既增量又一致。",
-      "method": "多 agent 协作维护栅格化认知地图，原子提交更新结构化空间记忆，跨 agent 验证一致性。",
-      "results": "在空间理解任务上超过基线且全程无训练。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 10,
-      "popularity": 6.0,
-      "quality": 7.0,
-      "recommendation": 6.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.10525",
-    "summary": "Indirect prompt injection 对 LLM agent 是个真威胁，但自动化攻击方法在 agentic 场景里其实没系统试过。作者把 GCG（白盒）和 TAP（黑盒）迁到 AgentDojo，在 80 任务对上比较，发现黑盒优化明显比梯度法稳。",
-    "highlights": {
-      "contribution": "把自动化 prompt injection 攻击在 agentic 环境下做了系统性实证评估。",
-      "innovation": "首次在 AgentDojo 里把白盒 GCG 与黑盒 TAP 适配到 agent 场景并跨域比较。",
-      "method": "在 4 域 80 任务对上跑 GCG 与 TAP，研究攻击者模型能力、安全微调和迁移性。",
-      "results": "黑盒优化显著优于梯度法；任务通用攻击能跨域迁移，但小开源模型上优化的攻击迁不到 GPT-5。"
+      "contribution": "提出社会世界模型 SWM 概念，并发布 SWM-bench 基准，把「事件后社会信念怎么变」做成可量化任务。",
+      "innovation": "不需要事件—信念配对标注，靠 LLM 的常识 + 时序模式优化 ELBO 学转移函数，用预测市场作为真实信念信号。",
+      "method": "输入是社会事件文本流与预测市场时序信号；模型学一个 latent 信念状态及其转移函数，用 ELBO 训练，LLM 提供常识先验。",
+      "results": "SWM-bench 含 12k+ 数据点；在 Kalshi 上拿到 SOTA，Polymarket 上和强基线竞争，超越多种时间序列基础模型。"
     },
     "scores": {
       "relevance": 5.5,
-      "recency": 10,
-      "popularity": 6.0,
+      "recency": 9,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11120",
+    "summary": "作者把足球传球评估变成一个 MCTS 风格问题：价值模型、世界模型、反事实策略三件套都有现成对应物。基于德甲首个公开 3D 球轨数据，MCPS 对每次传球反推踢球参数，采样执行变体和选项变体，用以球为条件的世界模型 rollout 到下次球权交换，再用价值模型打分。世界模型借鉴了自驾的 SMART 自回归 token 生成器，best-of-20 预测显著强于基线。",
+    "highlights": {
+      "contribution": "首次把传球评估形式化成 MCTS 风格问题，并在公开 3D 球轨数据上落地 MCPS。",
+      "innovation": "把自驾领域的离散 token 自回归轨迹生成器 SMART 迁移到足球多智能体 + 球交互预测，做完全反事实 rollout。",
+      "method": "输入观测轨迹，先反推踢球参数；按执行噪声和候选选项采样变体，用球条件世界模型滚动到下一次球权变更，用学到的价值模型给结果打分，得到价值分布。",
+      "results": "在公开高保真 3D 球轨数据上，世界模型的 best-of-20 预测精度明显强于基线；并给出 mean 和分位两种 surplus 分数。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 9,
+      "popularity": 5.5,
       "quality": 7.0,
-      "recommendation": 6.5
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11144",
+    "summary": "EGFR 突变非小细胞肺癌对一线 osimertinib 耐药是个教科书级问题，但缺公开 benchmark。OncoTraj 汇总 MSK-CHORD、GENIE BPC、FLAURA 三个来源共 813 例患者，定义三个任务：12 个月进展二分类、进展时间回归、6 类耐药机制分类。六个基线（含 LSTM、多任务 transformer）在单时间点特征下都打不过随机基线，揭示瓶颈在「单次组织 NGS」这个输入模态，而不是算法。",
+    "highlights": {
+      "contribution": "首个 osimertinib 耐药纵向预测公开基准 OncoTraj，提供数据、切分、评测、6 个基线。",
+      "innovation": "用「所有基线都不过 chance」的天花板把限制定位到输入模态（单时间点 NGS），为未来 v2 引入 serial-ctDNA 给出明确目标。",
+      "method": "调和三个真实临床基因组数据集，做病人级 train/val/test 划分并审计无泄漏；评测多数类、逻辑回归、随机森林、XGBoost、LSTM、多任务 transformer 六个基线。",
+      "results": "813 例患者，3 个锁定任务下无算法超过 chance；定性复现了 TP53 共突变把 12 个月进展率从 29% 拉到 59% 这一文献结论。"
+    },
+    "scores": {
+      "relevance": 2.5,
+      "recency": 9,
+      "popularity": 4.5,
+      "quality": 7.0,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11162",
+    "summary": "COGENT 把不规则地理网格上的长程物理预测建成连续时间的图神经 ODE。历史状态先编码成节点 context，再去初始化和条件化一个 latent ODE，外部驱动力按时间插值进来。这样能在任意未来时刻查询状态，配合 rollout-horizon 采样和渐进调度稳定长程训练。在冰盖模拟上比自回归图基线长程预测更稳。",
+    "highlights": {
+      "contribution": "在不规则地理网格上的长程物理模拟仿真器，把图表示 + latent ODE 统一起来。",
+      "innovation": "用连续时间 latent ODE 替代固定步长自回归，能任意时刻查询状态；提出 rollout-horizon 渐进调度稳定长程训练。",
+      "method": "输入历史状态 + 外强迫场；图历史编码器产生节点 context，初始化 latent ODE；ODE 由插值后的未来驱动力推进；残差解码器映回物理状态做多步预测。",
+      "results": "在 ISSM 生成的瞬态冰盖模拟上长程稳定性优于自回归图基线，且支持任意时间点查询。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 9,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11187",
+    "summary": "自回归视频生成做 World Action Model 收敛慢、推理慢。Next Forcing 把 LLM 的多 token 预测搬到 chunk 视频生成上：主模型旁挂轻量 MCP 模块同时去噪 next¹/next²/next³ 多个未来 chunk，形成因果链给主模型回传多尺度监督。50fps 下 5k 步训练就比 LingBot-VA 提升 93.1%、收敛快 2.3 倍；推理时 MCP 模块还能并行预测下一个 chunk，提速 2 倍。RoboTwin 上 Clean/Random 拿到 94.1/93.5% 新 SOTA。",
+    "highlights": {
+      "contribution": "把多 token 预测思想推广到因果视频世界建模——多 chunk 预测 MCP——显著提升训练效率、精度和推理速度。",
+      "innovation": "MCP 模块形成跨预测深度的因果链，近未来预测帮远未来预测，反向给主模型注入多尺度时序监督，并能在推理时复用做并行解码。",
+      "method": "主模型逐 chunk 自回归生成视频；挂多个轻量 MCP 头同时在不同未来深度上做去噪；训练目标是这些深度的联合去噪；推理可保留 MCP 并行出下一 chunk。",
+      "results": "50fps 下相对 LingBot-VA 提升 93.1%（5k 步），收敛 2.3×；RoboTwin Clean/Random 94.1/93.5% 创新 SOTA；推理 2× 加速；PhyWorld 提升明显，通用视频预训练 FVD 降低 50%+。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9,
+      "popularity": 8.5,
+      "quality": 8.5,
+      "recommendation": 8.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.11396",
+    "summary": "灵巧手任务对物体形状、姿态、摩擦超敏感，光靠 domain randomization 不够，因为不同参数下最优策略可能就不一样。PLUME 让 world model 同时学「参数分布的信念」和「条件在该参数下的系统动力学」，在 latent 空间统一表示参数和奖励。部署时不用 fine-tune，靠在线参数推断对齐真实动力学。仿真四个任务 + 真机拧螺丝刀都做到了零样本迁移，超越离线 RL 和 world-model BC 基线。",
+    "highlights": {
+      "contribution": "提出参数估计与世界建模联合学习框架 PLUME，把「不知道的物理参数」做成可在线推断的信念。",
+      "innovation": "在同一个 latent 空间联合表示多类物理参数与奖励，部署时用在线推断直接对齐真实动力学，而不是 re-train 或 fine-tune。",
+      "method": "输入观测序列；world model 学一个 latent 状态，既滚动条件动力学又演化参数信念；联合训练动力学预测和奖励预测；部署时用在线推断更新参数信念，规划基于该信念。",
+      "results": "仿真拧螺丝刀、拧阀门、提桶、弹盘四任务和真机拧螺丝刀均成功零样本迁移，超越 SOTA 离线 RL 和 world-model-augmented BC 基线。"
+    },
+    "scores": {
+      "relevance": 8.7,
+      "recency": 9,
+      "popularity": 7.5,
+      "quality": 8.2,
+      "recommendation": 8.3
     },
     "affiliations": []
   }

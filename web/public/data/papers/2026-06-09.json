@@ -48,6 +48,48 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.11408",
+      "title": "Dynamic Execution Horizon Prediction for Chunk-based Robot Policies",
+      "authors": [
+        "Yuchi Zhao",
+        "Miroslav Bogdanovic",
+        "Arjun Sohal",
+        "Liyu Tao",
+        "Kourosh Darvish",
+        "Alán Aspuru-Guzik",
+        "Florian Shkurti",
+        "Animesh Garg"
+      ],
+      "affiliations": [],
+      "summary": "现在 diffusion/flow policy 和 VLA 都流行 action chunking，但执行步数是固定的、得手调。作者提出 DEHP：冻结预训练 chunk 策略，只用在线 RL 训一个轻量的执行步长预测头，自动判断什么时候该提早收手。结果在高精度和长程任务上成功率明显涨，定性看精细阶段步长短、自由运动阶段步长长。",
+      "original_abstract": "Action chunking has become a standard design in modern robot policies, from diffusion/flow policies to vision-language-action models, where the policy predicts a sequence of actions and executes a fixed number of them instead of acting one step at a time. However, this paradigm relies on a key assumption: a fixed execution horizon. During chunk execution, the policy operates open-loop, which is particularly problematic for fine-grained manipulation tasks that require frequent replanning. In practice, the execution horizon is typically chosen through empirical tuning and is highly task-dependent. To this end, we propose Dynamic Execution Horizon Prediction (DEHP), an effective method that trains a lightweight execution-horizon prediction branch using online reinforcement learning while keeping the pretrained chunk policy completely frozen. This makes the method compatible with black-box chunk policies and isolates the effect of adapting the execution horizon from changes to the underlying action generator. Across our evaluations, DEHP improves the success rate of different high-precision and long-horizon manipulation tasks by a large margin. Our qualitative analysis further shows that DEHP predicts shorter execution horizons during fine-grained stages of the task and longer horizons during free-space motion. In this way, DEHP balances the efficiency of open-loop chunk execution with the reactivity of closed-loop single-step control. Project page: https://dehp-chunking.github.io/",
+      "highlights": {
+        "contribution": "把 action chunking 的执行步长从「拍脑袋调」变成在线学习预测，兼容任意黑盒 chunk 策略。",
+        "innovation": "冻结底层策略只训预测分支，纯净隔离「执行步长」这一变量的影响，方法可直接套到 diffusion policy 和 VLA 上。",
+        "method": "输入观测和 chunk 策略产生的动作序列，加一个轻量预测头输出本轮该执行多少步，用在线 RL 训这个头，底层 chunk 策略全程冻结。",
+        "results": "在多项高精度和长程操作任务上成功率大幅提升，自适应步长在精细阶段短、空中转移阶段长。"
+      },
+      "images": [],
+      "published_date": "2026-06-09T19:58:31Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 8.8,
+        "recency": 9.0,
+        "popularity": 7.8,
+        "quality": 8.2,
+        "recommendation": 8.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.11408v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.11408v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.10501",
       "title": "Uncovering Vulnerability of Vision-Language-Action Models under Joint-Level Physical Faults",
       "authors": [
@@ -387,6 +429,214 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.11372",
+      "title": "HiPi: Reproducible High-Fidelity Piezoresistive Sensors for Robotic Manipulation",
+      "authors": [
+        "Changyi Lin",
+        "Raihan Haque",
+        "Hui-Ping Wang",
+        "Ding Zhao"
+      ],
+      "affiliations": [],
+      "summary": "针对压阻式触觉传感器「易复现」和「高保真」难兼得的痛点，作者把整套硬件栈重新设计了一遍。新系统叫 HiPi，PCB 直接走商业代工，MCU 换成更便宜的 STM32，FPCB 导电层让传感器组装和叠层都简化了。双手 4 阵列 2048 点能稳跑 220 Hz，接触几何还原显著提升。",
+      "original_abstract": "Piezoresistive tactile sensors are attractive for robotic manipulation because they are thin, lightweight, low-cost, and scalable to dense large-area sensing. However, existing systems still face a practical trade-off: recent reproducible designs emphasize accessibility and ease of reproduction, whereas high-fidelity readout architectures remain more difficult to fabricate, assemble, and deploy. We present HiPi, a reproducible high-fidelity piezoresistive sensing system for robotic manipulation. Building on a low-crosstalk readout principle, HiPi redesigns the complete hardware stack around reproducibility, deployability, and multi-sensor scalability. The system includes a compact readout PCB compatible with commercial PCB fabrication and assembly services, eliminating manual soldering; a smaller and lower-cost STM32-based MCU module; an optimized communication pipeline that achieves 220 Hz readout in a bimanual setup with four dense tactile arrays (2048 taxels in total); and FPCB-based conductive layers that simplify sensor fabrication and stacking. Experiments with structured 3D-printed contact patterns show that HiPi preserves contact geometry substantially better than a reproducible baseline, improving the average IoU from 0.428 to 0.797 and the average Dice score from 0.539 to 0.886. These results suggest that HiPi bridges an important gap between reproducible fabrication and high-fidelity readout, making dense piezoresistive tactile sensing more practical for bimanual manipulation and multi-fingered robotic systems.",
+      "highlights": {
+        "contribution": "提出一套可复现且高保真的压阻触觉感知系统 HiPi，覆盖 PCB、MCU、通信、FPCB 全栈。",
+        "innovation": "在低串扰读出原理上重新做工程化设计，让大面积、双手 2048 点的密集触觉变得真正可量产部署。",
+        "method": "输入是密集压阻阵列电压；硬件层用商用 PCB 工艺免手焊，STM32 做主控，FPCB 简化叠层；软件层走优化的通信流水线，220 Hz 同时读 4 个阵列。",
+        "results": "在 3D 打印结构接触图案测试中，平均 IoU 由 0.428 提到 0.797，Dice 由 0.539 提到 0.886。"
+      },
+      "images": [],
+      "published_date": "2026-06-09T18:54:35Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 9.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.11372v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.11372v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.11187",
+      "title": "Next Forcing: Causal World Modeling with Multi-Chunk Prediction",
+      "authors": [
+        "Gangwei Xu",
+        "Qihang Zhang",
+        "Jiaming Zhou",
+        "Xing Zhu",
+        "Yujun Shen",
+        "Xin Yang",
+        "Yinghao Xu"
+      ],
+      "affiliations": [],
+      "summary": "自回归视频生成做 World Action Model 收敛慢、推理慢。Next Forcing 把 LLM 的多 token 预测搬到 chunk 视频生成上：主模型旁挂轻量 MCP 模块同时去噪 next¹/next²/next³ 多个未来 chunk，形成因果链给主模型回传多尺度监督。50fps 下 5k 步训练就比 LingBot-VA 提升 93.1%、收敛快 2.3 倍；推理时 MCP 模块还能并行预测下一个 chunk，提速 2 倍。RoboTwin 上 Clean/Random 拿到 94.1/93.5% 新 SOTA。",
+      "original_abstract": "Autoregressive video generation has emerged as a powerful paradigm for World Action Models (WAMs). However, existing approaches suffer from slow training convergence and limited converged accuracy, particularly at high frame rates, as the training supervision is confined to the current chunk without explicit signals about future dynamics; they also suffer from slow inference due to iterative video denoising. In this paper, we present Next Forcing, a multi-chunk prediction (MCP) framework for causal world modeling that enables faster training, higher accuracy, and accelerated inference. Inspired by multi-token prediction in large language models, Next Forcing introduces an MCP training objective that augments the main model with lightweight auxiliary MCP modules to simultaneously denoise video chunks at multiple future temporal horizons (next$^1$, next$^2$, next$^3$ chunks). These MCP modules form a causal chain across prediction depths, where intermediate features fused from multiple layers of the main model are leveraged to predict future dynamics, allowing near-future predictions to inform farther-future ones and providing dense multi-scale temporal supervision back to the main model. During training, the MCP modules significantly accelerate convergence and improve converged accuracy, especially at high frame rates: at 50 fps, Next Forcing achieves a 93.1% relative improvement over LingBot-VA at 5k training steps and 2.3x faster convergence, and establishes new state-of-the-art results on the RoboTwin benchmark (94.1/93.5% on Clean/Random). At inference, the MCP modules can be retained to predict the next video chunk in parallel with the current one, achieving 2x inference acceleration. Next Forcing also demonstrates significant improvements on PhyWorld, a benchmark evaluating adherence to physical laws in video generation, and over 50% FVD reduction on general video pretraining.",
+      "highlights": {
+        "contribution": "把多 token 预测思想推广到因果视频世界建模——多 chunk 预测 MCP——显著提升训练效率、精度和推理速度。",
+        "innovation": "MCP 模块形成跨预测深度的因果链，近未来预测帮远未来预测，反向给主模型注入多尺度时序监督，并能在推理时复用做并行解码。",
+        "method": "主模型逐 chunk 自回归生成视频；挂多个轻量 MCP 头同时在不同未来深度上做去噪；训练目标是这些深度的联合去噪；推理可保留 MCP 并行出下一 chunk。",
+        "results": "50fps 下相对 LingBot-VA 提升 93.1%（5k 步），收敛 2.3×；RoboTwin Clean/Random 94.1/93.5% 创新 SOTA；推理 2× 加速；PhyWorld 提升明显，通用视频预训练 FVD 降低 50%+。"
+      },
+      "images": [],
+      "published_date": "2026-06-09T17:59:22Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 9.0,
+        "popularity": 8.5,
+        "quality": 8.5,
+        "recommendation": 8.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.11187v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.11187v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.11396",
+      "title": "PLUME: Probabilistic Latent Unified World Modeling and Parameter Estimation for Multi-Finger Manipulation",
+      "authors": [
+        "Abhinav Kumar",
+        "Soshi Iba",
+        "Rana Soltani Zarrin",
+        "Dmitry Berenson"
+      ],
+      "affiliations": [],
+      "summary": "灵巧手任务对物体形状、姿态、摩擦超敏感，光靠 domain randomization 不够，因为不同参数下最优策略可能就不一样。PLUME 让 world model 同时学「参数分布的信念」和「条件在该参数下的系统动力学」，在 latent 空间统一表示参数和奖励。部署时不用 fine-tune，靠在线参数推断对齐真实动力学。仿真四个任务 + 真机拧螺丝刀都做到了零样本迁移，超越离线 RL 和 world-model BC 基线。",
+      "original_abstract": "Dexterous manipulation with multi-finger hands can be sensitive to physical parameters such as object shape, pose, and friction coefficients. While simulation enables large-scale data collection with known parameter values, simulation-trained policies must still handle uncertainty at deployment, where the true parameters and therefore the true dynamics are unknown. Standard domain randomization strategies may be insufficient for precise tasks like screwdriver turning, as manipulation strategies may need to change depending on specific parameter values. To address this, we propose Probabilistic Latent Unified world Modeling and parameter Estimation (PLUME), a world model that jointly learns to evolve a belief over parameter values as well as the system dynamics conditioned on those parameters. We learn a latent space to jointly represent multiple qualitatively different physical parameters along with rewards, themselves functions of partially-observable variables, to inform planning. Our novel learning framework leads to efficient alignment of the world model to true dynamics through online parameter inference as opposed to re-training or fine-tuning. We evaluate our method on simulated screwdriver turning, valve turning, bucket lifting, and disk flicking tasks, as well as a hardware screwdriver turning task, where we achieve successful zero-shot transfer of our simulation-trained policy and outperform state-of-the-art offline reinforcement learning and world-model-augmented behavior cloning baselines. Please see our website at https://plume-world-model.github.io for videos.",
+      "highlights": {
+        "contribution": "提出参数估计与世界建模联合学习框架 PLUME，把「不知道的物理参数」做成可在线推断的信念。",
+        "innovation": "在同一个 latent 空间联合表示多类物理参数与奖励，部署时用在线推断直接对齐真实动力学，而不是 re-train 或 fine-tune。",
+        "method": "输入观测序列；world model 学一个 latent 状态，既滚动条件动力学又演化参数信念；联合训练动力学预测和奖励预测；部署时用在线推断更新参数信念，规划基于该信念。",
+        "results": "仿真拧螺丝刀、拧阀门、提桶、弹盘四任务和真机拧螺丝刀均成功零样本迁移，超越 SOTA 离线 RL 和 world-model-augmented BC 基线。"
+      },
+      "images": [],
+      "published_date": "2026-06-09T19:36:25Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 8.7,
+        "recency": 9.0,
+        "popularity": 7.5,
+        "quality": 8.2,
+        "recommendation": 8.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.11396v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.11396v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.11184",
+      "title": "TacForeSight: Force-Guided Tactile World Model for Contact-Rich Manipulation",
+      "authors": [
+        "Yujie Zang",
+        "Yuhang Zheng",
+        "Xian Nie",
+        "Yupeng Zheng",
+        "Shuai Tian",
+        "Songen Gu",
+        "Chen Gao",
+        "Zining Wang",
+        "Shuicheng Yan",
+        "Wenchao Ding"
+      ],
+      "affiliations": [],
+      "summary": "接触富集的操作里，全局力和局部触觉的时空作用其实不对称，但模仿学习一般都混一起用。TacForeSight 把两者分开建：力/力矩做高频条件，触觉在 latent 空间里预测短程未来，再用 cross-attention 把当前到未来的演化告诉策略。实机五个任务、三种扰动设置下都打过基线，尤其在动态接触扰动下更稳。",
+      "original_abstract": "Contact-rich manipulation requires robots to continuously perceive and regulate evolving physical interactions under dynamic contact transitions or complex surface geometries. Recent imitation learning methods improve contact-aware control by incorporating tactile or force feedback, but they rarely model the asymmetric spatiotemporal roles of global force and local tactile sensing. To address this, we propose TacForeSight, a lightweight force-conditioned tactile foresight framework for real-time manipulation. The core component is TacForceWM, a tactile world model that predicts short-horizon tactile latent dynamics from dual-finger tactile observations conditioned on high-frequency wrist force and torque signals. Another key component, the Predictive Tactile-Conditioned Policy, leverages the predicted latents as anticipatory contact priors, models the current-to-future tactile evolution via cross-attention, and adaptively fuses visuo-tactile features through a tactile-guided gating module. By forecasting purely within a compact latent space, TacForeSight enables proactive contact reasoning with efficient real-time inference suitable for high-frequency manipulation control. Real-robot experiments on five representative tasks and three in-process perturbation settings show that TacForeSight consistently outperforms existing baselines, particularly under dynamic contact disturbances. All models and datasets will be made publicly available on the project website at https://tacforesight.github.io/ProjectPage.",
+      "highlights": {
+        "contribution": "提出力条件驱动的触觉 world model TacForeSight，把短程触觉预测变成接触先验喂给策略。",
+        "innovation": "显式区分全局力/力矩与局部触觉的作用——力做条件、触觉做预测目标，并通过 tactile-guided gating 自适应融合视触特征。",
+        "method": "输入双指触觉 + 高频腕部力/力矩；TacForceWM 在 latent 空间预测短期触觉演化；策略用 cross-attention 看「现在到未来」的触觉变化并门控融合视触。",
+        "results": "实机 5 个代表任务 + 3 种过程扰动设置下持续超越基线，动态接触扰动下优势尤其明显。"
+      },
+      "images": [],
+      "published_date": "2026-06-09T17:59:03Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 8.6,
+        "recency": 9.0,
+        "popularity": 7.5,
+        "quality": 8.2,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.11184v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.11184v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.11129",
+      "title": "WorldOlympiad: Can Your World Model Survive a Triathlon?",
+      "authors": [
+        "Yuke Zhao",
+        "Wangbo Zhao",
+        "Weijie Wang",
+        "Zeyu Zhang",
+        "Dakai An",
+        "Akide Liu",
+        "Yinghao Yu",
+        "Jiasheng Tang",
+        "Fan Wang",
+        "Wei Wang",
+        "Bohan Zhuang"
+      ],
+      "affiliations": [],
+      "summary": "现有 world model 评测大多看画质和语义对齐，看不出模型懂不懂物理。WorldOlympiad 把视频世界模型评测拆成三关：物理、几何、交互，分别用 MLLM 判物理规则、用 Gaussian Splatting 重建判几何、用长程动作序列判交互。覆盖游戏、机器人、真实视频三大场景，结果显示 SOTA 模型在物理推理和长程交互上都有明显坑。",
+      "original_abstract": "We introduce WorldOlympiad, a benchmark for diagnosing video-based world models across physical faithfulness, geometric consistency, and interaction fidelity. While existing benchmarks often focus on visual quality, semantic alignment, or short-term temporal coherence, they provide limited insight into whether generated videos obey physical rules, preserve coherent 3D structure, and sustain controllable interactions over long horizons. To address this gap, WorldOlympiad decomposes world-model evaluation into three complementary dimensions. The physical track uses object segmentation and MLLM-as-judge to assess whether generated videos follow interpretable rules in mechanics, thermal phenomena, and material properties. The geometry track reconstructs generated videos with Gaussian splatting and evaluates structural consistency, cross-view coherence, and camera-trajectory alignment. The interaction track assesses whether generated rollouts follow complex action prompts and maintain smooth, coherent transitions across consecutive video chunks. WorldOlympiad further covers three major downstream scenarios, including gaming, robotics, and general real-world videos, capturing diverse challenges from interactive control and embodied manipulation to open-domain motion and camera dynamics. Together, these tracks and scenarios form a scalable and interpretable evaluation suite that exposes failure modes beyond generic video quality. Experiments on state-of-the-art models reveal substantial gaps in physical reasoning, 3D consistency, and long-horizon interaction, underscoring the need for more structured evaluation protocols for generative world models.",
+      "highlights": {
+        "contribution": "首个把生成式世界模型「物理 + 几何 + 交互」三维度系统化打分的基准。",
+        "innovation": "把 Gaussian Splatting 重建结果作为 3D 几何一致性的客观度量，配合 MLLM-as-judge 评物理合理性，比单看 FVD 更可解释。",
+        "method": "输入是世界模型生成的视频；物理赛道做对象分割并让 MLLM 当裁判，几何赛道做 GS 重建并比较跨视角与相机轨迹，交互赛道用复杂动作 prompt 检查跨 chunk 连贯性。",
+        "results": "对当前 SOTA 视频/世界模型实测，在物理推理、3D 一致性、长程交互上均暴露明显失效模式，给出可定位的失败维度。"
+      },
+      "images": [],
+      "published_date": "2026-06-09T17:24:36Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 9.0,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.11129v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.11129v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.10825",
       "title": "MODIP: Efficient Model-Based Optimization for Diffusion Policies",
       "authors": [
@@ -462,6 +712,46 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.11482",
+      "title": "Building Social World Models with Large Language Models",
+      "authors": [
+        "Haofei Yu",
+        "Yining Zhao",
+        "Guanyu Lin",
+        "Jiaxuan You"
+      ],
+      "affiliations": [],
+      "summary": "作者把「社会信念演化」当成一个 world model 问题来建。SWM 不依赖人标注事件—信念映射，也不要昂贵的人口普查数据，靠时序模式和 ELBO 学状态转移。基准 SWM-bench 从 Kalshi 和 Polymarket 拿到 1.2 万+ 个预测点，覆盖政治、金融、加密货币。SWM 在 Kalshi 拿到 SOTA，Polymarket 上也具有竞争力，还可解释。",
+      "original_abstract": "Understanding and predicting how social beliefs evolve in response to events -- from policy changes to scientific breakthroughs -- remains a fundamental challenge in social science. Given LLMs' commonsense knowledge and social intelligence, we ask: Can LLMs model the dynamics of social beliefs following social events? In this work, we introduce the concept of the Social World Model (SWM), a general framework designed to capture how social beliefs evolve in response to major events. SWM learns state-transition functions for social beliefs by mining temporal patterns in social data and optimizing the evidence lower bound, without the need for explicit human annotations linking events to belief shifts, or for expensive census data. To evaluate SWM, we introduce a benchmark, SWM-bench, derived from real-world prediction markets, specifically Kalshi and Polymarket. SWM-bench includes over 12k data points for social belief prediction tasks spanning diverse domains such as politics, finance, and cryptocurrency. Our experimental results show that SWM significantly outperforms time-series foundation models, achieving state-of-the-art results on Kalshi data and demonstrating competitive performance on Polymarket data, while offering interpretable insights into the underlying mechanisms of social belief dynamics.",
+      "highlights": {
+        "contribution": "提出社会世界模型 SWM 概念，并发布 SWM-bench 基准，把「事件后社会信念怎么变」做成可量化任务。",
+        "innovation": "不需要事件—信念配对标注，靠 LLM 的常识 + 时序模式优化 ELBO 学转移函数，用预测市场作为真实信念信号。",
+        "method": "输入是社会事件文本流与预测市场时序信号；模型学一个 latent 信念状态及其转移函数，用 ELBO 训练，LLM 提供常识先验。",
+        "results": "SWM-bench 含 12k+ 数据点；在 Kalshi 上拿到 SOTA，Polymarket 上和强基线竞争，超越多种时间序列基础模型。"
+      },
+      "images": [],
+      "published_date": "2026-06-09T22:15:51Z",
+      "categories": [
+        "cs.SI",
+        "cs.CL"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 9.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.11482v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.11482v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.10359",
       "title": "ReflectiChain: Epistemic Grounding in LLM-Driven World Models for Supply Chain Resilience",
       "authors": [
@@ -530,6 +820,79 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.10934v1",
       "arxiv_url": "https://arxiv.org/abs/2606.10934v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.11120",
+      "title": "Monte Carlo Pass Search: Using Trajectory Generation for 3D Counterfactual Pass Evaluation in Football",
+      "authors": [
+        "Andrew Kang",
+        "Priya Narasimhan"
+      ],
+      "affiliations": [],
+      "summary": "作者把足球传球评估变成一个 MCTS 风格问题：价值模型、世界模型、反事实策略三件套都有现成对应物。基于德甲首个公开 3D 球轨数据，MCPS 对每次传球反推踢球参数，采样执行变体和选项变体，用以球为条件的世界模型 rollout 到下次球权交换，再用价值模型打分。世界模型借鉴了自驾的 SMART 自回归 token 生成器，best-of-20 预测显著强于基线。",
+      "original_abstract": "We recast pass evaluation in football (soccer) as a Monte Carlo Tree Search (MCTS)-like evaluation problem whose components mostly exist in the literature under different names: a value model (possession value), a world model (multi-agent trajectories with ball interactions), and a policy over counterfactual actions (sampling pass variants with noise). Building on the first public high-fidelity tracking dataset with 3D ball trajectories from the Bundesliga, we introduce Monte Carlo Pass Search (MCPS), which infers kick parameters for each observed pass, samples execution variants and option variants, rolls each candidate forward with a ball-conditioned world model until the next ball interaction, and scores outcomes with a learned value model to obtain a distribution over gained value. This distribution enables distribution-aware attribution with two complementary execution-surplus scores used for analysis and ranking: mean-based and percentile-based scores. To make the world model sample-efficient under limited public data, we adapt a discrete-token, autoregressive trajectory generator from autonomous driving (SMART) and show it yields strong best-of-20 forecasting accuracy compared to baselines, while supporting fully hypothetical rollouts for downstream evaluation. We have released model checkpoints and code.",
+      "highlights": {
+        "contribution": "首次把传球评估形式化成 MCTS 风格问题，并在公开 3D 球轨数据上落地 MCPS。",
+        "innovation": "把自驾领域的离散 token 自回归轨迹生成器 SMART 迁移到足球多智能体 + 球交互预测，做完全反事实 rollout。",
+        "method": "输入观测轨迹，先反推踢球参数；按执行噪声和候选选项采样变体，用球条件世界模型滚动到下一次球权变更，用学到的价值模型给结果打分，得到价值分布。",
+        "results": "在公开高保真 3D 球轨数据上，世界模型的 best-of-20 预测精度明显强于基线；并给出 mean 和分位两种 surplus 分数。"
+      },
+      "images": [],
+      "published_date": "2026-06-09T17:16:30Z",
+      "categories": [
+        "cs.AI",
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 9.0,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.11120v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.11120v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.11162",
+      "title": "COGENT: Continuous Graph Emulators with Neural Ordinary Differential Equations for Long-Term Physical Forecasting",
+      "authors": [
+        "Zesheng Liu",
+        "Maryam Rahnemoonfar"
+      ],
+      "affiliations": [],
+      "summary": "COGENT 把不规则地理网格上的长程物理预测建成连续时间的图神经 ODE。历史状态先编码成节点 context，再去初始化和条件化一个 latent ODE，外部驱动力按时间插值进来。这样能在任意未来时刻查询状态，配合 rollout-horizon 采样和渐进调度稳定长程训练。在冰盖模拟上比自回归图基线长程预测更稳。",
+      "original_abstract": "In this work, we present COGENT, a continuous graph emulator with Neural Ordinary Differential Equations for long-term physical forecasting on irregular geospatial meshes. COGENT encodes a finite history of system states and associated forcing fields and external forcings with a graph-based history encoder, producing node-wise context vectors that capture both local spatial interactions and temporal evolution. These context vectors initialize and condition a latent Neural Ordinary Differential Equation whose dynamics are driven by interpolated future forcings and explicit relative rollout time. By modeling the forecast trajectory as a continuous latent dynamical system, COGENT can generate predictions at arbitrary future times rather than being restricted to a fixed temporal discretization. A residual decoder maps the resulting latent trajectories back to future physical states, enabling direct multi-step forecasting without repeatedly feeding predicted states back into the model. This formulation combines graph-based spatial representation, history-conditioned latent dynamics, and continuous-time rollout in a unified framework for mesh-based physical simulation emulation. In order to stabilize training with long-horizon supervision, we also propose effective rollout-horizon sampling and a progressive rollout-horizon scheduling strategy. We evaluate COGENT on transient ice-sheet simulations generated by the Ice-sheet and Sea-level System Model, demonstrating improved long-range stability over autoregressive graph baselines. These results suggest that continuous graph Neural ODEs provide a promising methodology for scalable physical forecasting on irregular geospatial meshes, particularly in applications that require stable long-horizon predictions and the ability to query system states at arbitrary times.",
+      "highlights": {
+        "contribution": "在不规则地理网格上的长程物理模拟仿真器，把图表示 + latent ODE 统一起来。",
+        "innovation": "用连续时间 latent ODE 替代固定步长自回归，能任意时刻查询状态；提出 rollout-horizon 渐进调度稳定长程训练。",
+        "method": "输入历史状态 + 外强迫场；图历史编码器产生节点 context，初始化 latent ODE；ODE 由插值后的未来驱动力推进；残差解码器映回物理状态做多步预测。",
+        "results": "在 ISSM 生成的瞬态冰盖模拟上长程稳定性优于自回归图基线，且支持任意时间点查询。"
+      },
+      "images": [],
+      "published_date": "2026-06-09T17:43:30Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 3.5,
+        "recency": 9.0,
+        "popularity": 5.0,
+        "quality": 7.0,
+        "recommendation": 5.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.11162v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.11162v1",
       "venue": null
     },
     {
@@ -615,417 +978,42 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.10363",
-      "title": "HiMem-WAM: Hierarchical Memory-Gated World Action Models for Robotic Manipulation",
+      "arxiv_id": "2606.11144",
+      "title": "OncoTraj: a public benchmark for longitudinal resistance prediction in EGFR-mutant non-small-cell lung cancer on osimertinib",
       "authors": [
-        "Xiaoquan Sun",
-        "Ruijian Zhang",
-        "Chen Cao",
-        "Yihan Sun",
-        "Jiahui Chen",
-        "Zetian Xu",
-        "Bo Chen",
-        "Haijier Chen",
-        "Zhen Yang",
-        "Jiarun Zhu",
-        "Yijun Hong",
-        "JingZhe Xu",
-        "Jingrui Pang",
-        "Mingqi Yuan",
-        "Jiayu Chen"
+        "Abhijoy Sarkar",
+        "Aarchi Singh Thakur"
       ],
       "affiliations": [],
-      "summary": "WAM 在长时操作里还不擅长任务相关记忆。HiMem-WAM 给 WAM 加了层级潜动作（低层运动 + 高层技能）、边界触发的内存门，能在技能切换处压缩任务状态，不用测试时再生成未来视频或光流。",
-      "original_abstract": "World Action Models (WAMs) have emerged as a new powerful paradigm for embodied intelligence, learning action-relevant visual dynamics that significantly enhance generalization and robustness. However, existing WAMs still struggle with task-relevant memory in long-horizon robotic manipulation. To address this, we present HiMem-WAM, a Hierarchical Memory-Gated WAM that integrates motion-centric latent actions, high-level skill latents, and boundary-triggered memory updates. Specifically, we develop a hierarchical latent action framework that jointly learns low-level motion and high-level skill latents, providing structured temporal abstraction. Meanwhile, a boundary-aware memory gate writes compact task states at predicted skill transitions, enabling causal inference without test-time generation of future video or optical flow estimation. Evaluated on LIBERO, LIBERO-PLUS, RMBench and real-world tasks, HiMem-WAM shows that hierarchical latents improve robustness under deployment perturbations, and the memory module substantially benefits memory-dependent long-horizon manipulation.",
+      "summary": "EGFR 突变非小细胞肺癌对一线 osimertinib 耐药是个教科书级问题，但缺公开 benchmark。OncoTraj 汇总 MSK-CHORD、GENIE BPC、FLAURA 三个来源共 813 例患者，定义三个任务：12 个月进展二分类、进展时间回归、6 类耐药机制分类。六个基线（含 LSTM、多任务 transformer）在单时间点特征下都打不过随机基线，揭示瓶颈在「单次组织 NGS」这个输入模态，而不是算法。",
+      "original_abstract": "Resistance to first-line osimertinib in EGFR-mutant non-small-cell lung cancer (NSCLC) is the canonical example of predictable clonal evolution under therapeutic pressure, yet no public benchmark exists for training or evaluating computational models on the corresponding longitudinal patient trajectories. We introduce OncoTraj, a public benchmark of 813 EGFR-mutant NSCLC patients receiving first-line osimertinib, harmonized from three real-world clinical-genomic sources: MSK-CHORD (672 patients), AACR Project GENIE BPC NSCLC (34 patients), and the FLAURA molecular-resistance supplement (107 patients). OncoTraj defines three locked tasks: (A) binary classification of progression by a fixed 12-month landmark, (B) regression of time-to-first-progression in days, and (C) six-class classification of the dominant resistance mechanism. We release the harmonized dataset, patient-level train/validation/test splits with an audited no-leakage guarantee, an open-source evaluation harness, and six reference baselines spanning a majority-class predictor, logistic regression, random forest, XGBoost, an LSTM, and a multi-task transformer. With v1's single-timepoint snapshot features, no task clears chance on clean within-source evaluation: the uniformity of this ceiling across every model class localizes the limit to the input modality (single-snapshot tissue NGS rather than serial ctDNA), not the algorithm. The benchmark does recover a reproducible literature-consistent association: TP53 co-mutation raises the 12-month progression rate from 29% to 59% cohort-wide. OncoTraj establishes a reproducible, leakage-audited baseline and converts the modality limit into concrete design requirements for a serial-ctDNA-enriched v2.",
       "highlights": {
-        "contribution": "在 WAM 框架里加层级潜动作和边界感知记忆门，解决长时操作的记忆问题。",
-        "innovation": "用预测的技能边界来触发记忆写入，把内存和层级潜动作绑在一起做因果推断。",
-        "method": "层级潜动作框架同时学低层运动和高层技能 latent；边界感知 gate 在技能转换处写入紧凑任务状态。",
-        "results": "在 LIBERO、LIBERO-PLUS、RMBench 和真机上展示部署扰动下更鲁棒，长时记忆相关任务上获益明显。"
+        "contribution": "首个 osimertinib 耐药纵向预测公开基准 OncoTraj，提供数据、切分、评测、6 个基线。",
+        "innovation": "用「所有基线都不过 chance」的天花板把限制定位到输入模态（单时间点 NGS），为未来 v2 引入 serial-ctDNA 给出明确目标。",
+        "method": "调和三个真实临床基因组数据集，做病人级 train/val/test 划分并审计无泄漏；评测多数类、逻辑回归、随机森林、XGBoost、LSTM、多任务 transformer 六个基线。",
+        "results": "813 例患者，3 个锁定任务下无算法超过 chance；定性复现了 TP53 共突变把 12 个月进展率从 29% 拉到 59% 这一文献结论。"
       },
       "images": [],
-      "published_date": "2026-06-09T03:22:34Z",
-      "categories": [
-        "cs.RO"
-      ],
-      "matched_domain": "WAM",
-      "matched_keywords": [
-        "world action model",
-        "wam "
-      ],
-      "scores": {
-        "relevance": 9.0,
-        "recency": 10.0,
-        "popularity": 6.5,
-        "quality": 7.8,
-        "recommendation": 8.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.10363v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.10363v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.10645",
-      "title": "ManiSplat: Manipulation Trajectory Synthesis from Monocular Video via Decoupled 3D Gaussian Splatting",
-      "authors": [
-        "Wenhao Hu",
-        "Haonan Zhou",
-        "Liu Liu",
-        "Yun Du",
-        "Xinjie Wang",
-        "Ziang Li",
-        "Zhizhong Su",
-        "Gaoang Wang"
-      ],
-      "affiliations": [],
-      "summary": "从单目机器人第一人称视频里重建带交互的 3D 场景挺难，机器人、物体、背景缠在一起。ManiSplat 用图结构解耦表示把它们拆进各自的高斯子场，并用任务阶段（Motion/Skill）对齐生成伪 GT 轨迹来稳定优化。",
-      "original_abstract": "Reconstructing dynamic and interactive 3D scenes from real-world observations remains a fundamental challenge in computer vision and robotics. While recent advances in 3D Gaussian Splatting have enabled high-fidelity static reconstruction, extending it to interactive environments with articulated robots and manipulable objects remains difficult due to complex contact interactions and abrupt pose changes. To address these challenges, we introduce ManiSplat, a unified framework that reconstructs controllable and decoupled Gaussian digital twins directly from monocular ego-view robotic videos. Our method introduces a Graph-Structured Disentangled Representation that separates the robot, objects, and background into independently optimizable Gaussian subfields organized within a scene graph. To ensure stability, we propose a Task-Oriented Spatio-Temporal Alignment module that leverages the inherent logic of manipulation tasks-alternating between Motion and Skill phases-to construct accurate pseudo-ground-truth trajectories. Finally, a joint photometric-geometric optimization ensures the reconstructed scenes are temporally coherent, physically consistent, and simulation-ready. Extensive experiments demonstrate that our approach reconstructs interaction-driven dynamic scenes with high fidelity and controllability, effectively supporting downstream robotic tasks and policy learning.",
-      "highlights": {
-        "contribution": "从单目 ego-view 机器人视频重建可控、解耦的高斯数字孪生场景。",
-        "innovation": "用 Graph-Structured Disentangled Representation 把机器人/物体/背景分到独立可优化子场，并借任务阶段先验做时空对齐。",
-        "method": "图结构解耦 3DGS + Task-Oriented 时空对齐生成伪 GT 轨迹 + 联合光度-几何优化。",
-        "results": "重建高保真、可控、仿真就绪的动态交互场景，并支持下游机器人任务与策略学习。"
-      },
-      "images": [],
-      "published_date": "2026-06-09T09:55:58Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "VGGT",
-      "matched_keywords": [
-        "gaussian splatting"
-      ],
-      "scores": {
-        "relevance": 7.5,
-        "recency": 10.0,
-        "popularity": 6.0,
-        "quality": 7.5,
-        "recommendation": 7.3
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.10645v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.10645v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.10656",
-      "title": "Envision4D: Envisioning Visual Futures via Feed-forward 4D Gaussian Splatting for Autonomous Driving",
-      "authors": [
-        "Qi Song",
-        "Yifei He",
-        "Chi Zhang",
-        "Zheng Fu",
-        "Xuhe Zhao",
-        "Mengmeng Yang",
-        "Kun Jiang",
-        "Rui Huang",
-        "Diange Yang"
-      ],
-      "affiliations": [],
-      "summary": "自驾的前馈视图合成做插值还行，做未来外推就 ghost 严重还得依赖未来位姿。Envision4D 自监督做无位姿的未来外推：先预测未来相机参数，再用层内时间注意力和条件运动 lifting 把不确定外推变成稳健映射。",
-      "original_abstract": "Forecasting the future evolution of dynamic scenes is crucial in autonomous driving. However, existing feed-forward paradigms are primarily designed for interpolation. When extended to future extrapolation, they suffer from ghosting artifacts under large displacements and are constrained by simplified motion assumptions or strict future priors. To overcome these challenges, we propose Envision4D, a fully self-supervised feed-forward framework for pose-free future extrapolation. Specifically, we introduce a Future Pose Prediction module that infers future camera parameters via an iterative denoising process. Furthermore, to capture non-linear dynamics, we propose In-layer Temporal Attention and employ Conditioned Motion Lifting, which transforms the highly uncertain extrapolation process into robust relational mappings. Finally, a Progressive Training Strategy is utilized to stabilize unsupervised motion learning against error accumulation. Extensive experiments demonstrate that Envision4D achieves state-of-the-art performance, significantly outperforming existing methods in future view synthesis.",
-      "highlights": {
-        "contribution": "自驾场景下首个完全自监督、无未来位姿先验的前馈 4D 高斯外推框架。",
-        "innovation": "把未来位姿当作 denoising 任务预测，再用 Conditioned Motion Lifting 把外推转成关系映射。",
-        "method": "Future Pose Prediction 模块用迭代去噪估未来相机；层内时间注意力捕捉非线性动力学；渐进训练稳定无监督学习。",
-        "results": "在未来视图合成上显著优于现有方法，达到 SOTA。"
-      },
-      "images": [],
-      "published_date": "2026-06-09T10:04:38Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "VGGT",
-      "matched_keywords": [
-        "gaussian splatting"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 10.0,
-        "popularity": 6.0,
-        "quality": 7.3,
-        "recommendation": 7.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.10656v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.10656v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.10612",
-      "title": "GaussTrace: Provenance Analysis of 3D Gaussian Splatting Models with Evidence-based LLM Reasoning",
-      "authors": [
-        "Haoliang Han",
-        "Ziyuan Luo",
-        "Renjie Wan"
-      ],
-      "affiliations": [],
-      "summary": "3DGS 模型被到处分享和改动，怎么追溯它们的「家谱」？GaussTrace 把溯源当作证据驱动的推理：统计 3DGS 参数特性，再模拟常见编辑操作产生假设证据，让 LLM 用 CoT 推理出有向溯源图。",
-      "original_abstract": "3D Gaussian Splatting (3DGS) is a powerful technique for creating high-fidelity 3D assets. However, the widespread sharing and iterative modification of 3DGS models across digital platforms create pressing challenges for intellectual property protection and forensic traceability. To address this, we propose GaussTrace, a novel framework for constructing directed provenance graphs for 3DGS models. GaussTrace formulates provenance analysis as an evidence-based reasoning problem. It builds upon attribute-wise statistical profiling of 3DGS parameters to capture intrinsic properties. Moreover, we introduce hypothesis-driven editing simulations of common operations to provide auxiliary evidence for plausible transformation pathways. These statistical and simulated cues jointly enable a Large Language Model (LLM) to perform structured Chain-of-Thought (CoT) reasoning, yielding directional provenance inferences and explainable edge reasons. Experimental results demonstrate that GaussTrace effectively constructs evolutionary relationships among diverse 3DGS models, delivering accurate, interpretable, and robust provenance graphs without requiring model training or access to editing histories. Project page: https://haolianghan.github.io/GaussTrace.",
-      "highlights": {
-        "contribution": "给 3DGS 模型搭一个不需要训练或编辑历史的可解释溯源框架。",
-        "innovation": "把统计画像和编辑模拟两类证据一起塞给 LLM 做 CoT 推理，输出有向边和推理理由。",
-        "method": "属性级统计 profiling + 假设驱动编辑模拟 → 结构化 CoT → 有向溯源图与边解释。",
-        "results": "在多样 3DGS 模型间构建演化关系，溯源准确、可解释、鲁棒。"
-      },
-      "images": [],
-      "published_date": "2026-06-09T09:11:57Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "VGGT",
-      "matched_keywords": [
-        "gaussian splatting"
-      ],
-      "scores": {
-        "relevance": 4.0,
-        "recency": 10.0,
-        "popularity": 5.0,
-        "quality": 6.5,
-        "recommendation": 5.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.10612v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.10612v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.10423",
-      "title": "WebChallenger: A Reliable and Efficient Generalist Web Agent",
-      "authors": [
-        "Jayoo Hwang",
-        "Xiaowen Zhang",
-        "Vedant Padwal"
-      ],
-      "affiliations": [],
-      "summary": "现在的强 web agent 都靠贵的闭源推理模型。WebChallenger 不靠模型规模，而是补人类的三种认知优势：选择性注意、网站结构记忆、对常见交互的「程序化熟练」。一切建在 PageMem 这个由 DOM 确定性构造的层级页面表示上。",
-      "original_abstract": "Autonomous web navigation remains challenging for LLM agents, and the strongest generalist systems rely on proprietary reasoning models whose inference cost is prohibitive for the repetitive tasks where such agents would be most useful. We argue this gap stems not from insufficient model capability but from agent architectures that fail to replicate three human cognitive advantages: selective attention to relevant page regions, persistent memory of website structure, and procedural fluency with common interaction patterns. We introduce WebChallenger, a web agent framework that addresses each gap through architecture design rather than model scale, built around PageMem: a structured page representation deterministically constructed from the DOM that exposes each page as a hierarchy of semantic sections with short summaries. On this shared substrate we build three mechanisms that mirror the three cognitive advantages: a divide-and-conquer observation pipeline that lets the agent skim section summaries and extract details only from task-relevant regions; a lightweight exploration and memory system that traverses each website once to build a reusable map of pages and element behaviors; and compound action workflows that collapse common multi-step interactions into single agent actions, handling partial state changes automatically. Because all three operate over PageMem, the framework generalizes across websites without site-specific adapters. Using off-the-shelf open-weight models without fine-tuning, our system achieves 56.3% on WebArena, 48.7% on VisualWebArena, 51.0% on Online-Mind2Web, and 70.9% on WorkArena, approaching frontier proprietary systems at a fraction of the cost. Our code is released at https://github.com/jayoohwang1/webchallenger",
-      "highlights": {
-        "contribution": "用架构而不是更大模型来做高性价比通用 web agent。",
-        "innovation": "PageMem 提供共享子结构，再叠加分治观察、轻量探索记忆和复合动作三条机制对应三种认知优势。",
-        "method": "PageMem 把 DOM 拆成带摘要的语义段；分治 pipeline 只在相关段抽细节；探索一次构建可复用站点地图；复合动作把常见多步交互压成单步。",
-        "results": "用开源权重无微调在 WebArena 56.3%、VisualWebArena 48.7%、Online-Mind2Web 51.0%、WorkArena 70.9%，接近闭源系统但成本低很多。"
-      },
-      "images": [],
-      "published_date": "2026-06-09T04:53:19Z",
-      "categories": [
-        "cs.CL"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent",
-        "agent framework",
-        "web agent"
-      ],
-      "scores": {
-        "relevance": 8.5,
-        "recency": 10.0,
-        "popularity": 7.5,
-        "quality": 8.0,
-        "recommendation": 8.2
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.10423v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.10423v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.10507",
-      "title": "HIPIF: Hierarchical Planning and Information Folding for Long-Horizon LLM Agent Learning",
-      "authors": [
-        "Juncheng Diao",
-        "Zhicong Lu",
-        "Peiguang Li",
-        "Yongwei Zhou",
-        "Changyuan Tian",
-        "Qingbin Li",
-        "Rongxiang Weng",
-        "Jingang Wang",
-        "Xunliang Cai"
-      ],
-      "affiliations": [],
-      "summary": "长时多轮任务里 LLM agent 历史越积越长，全局状态跟不住、推理也变差。HIPIF 模仿人类做法：分解子目标、把已完成子目标的历史「折叠」掉，同时用层级反思和过程奖励稳定训练，不需要昂贵的辅助模型或专家轨迹。",
-      "original_abstract": "While Large Language Models (LLMs) have demonstrated strong capabilities as autonomous agents across a wide range of tasks, their performance often degrades in multi-turn long-horizon agentic tasks. Existing methods have made progress through fine-grained credit assignment to alleviate long-horizon sparse rewards and hierarchical reinforcement learning to decompose tasks and reduce long-term dependency. However, these methods still do not directly address long-context interference, in which continuously growing histories weaken the agent's ability to track the global task state and impair subsequent reasoning and decision-making. Inspired by the way humans handle complex tasks through subgoal decomposition and completed progress summarization, we propose Hierarchical Planning and Information Folding (HIPIF) for long-horizon LLM agent learning. HIPIF trains the agent end-to-end to organize long-horizon execution around explicit subgoals while folding completed subgoal histories to reduce long-context interference. Furthermore, to stabilize subgoal-based planning and execution, HIPIF combines hierarchical reflection and subgoal-oriented process rewards to guide subgoal generation, transition, and execution, without relying on costly auxiliary models or task-specific expert trajectories. Extensive experiments on three publicly available agentic benchmarks demonstrate the validity of our method.",
-      "highlights": {
-        "contribution": "面向长时 LLM agent 学习的层级规划 + 信息折叠端到端训练方法。",
-        "innovation": "把「子目标历史折叠」当成显式机制处理长上下文干扰，并用层级反思 + 子目标过程奖励稳定训练。",
-        "method": "端到端训练 agent 围绕显式子目标组织执行；折叠完成子目标的历史；用层级反思与 subgoal-oriented 过程奖励引导生成、转移、执行。",
-        "results": "在三个公开 agent benchmark 上验证有效。"
-      },
-      "images": [],
-      "published_date": "2026-06-09T07:35:14Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent",
-        "agentic",
-        "autonomous agent"
-      ],
-      "scores": {
-        "relevance": 7.5,
-        "recency": 10.0,
-        "popularity": 6.5,
-        "quality": 7.3,
-        "recommendation": 7.4
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.10507v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.10507v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.10684",
-      "title": "Divide and Cooperate: Role-Decomposed Multi-Agent LLM Training with Cross-Agent Learning Signals",
-      "authors": [
-        "Jaewan Park",
-        "Solbee Cho",
-        "Jay-Yoon Lee"
-      ],
-      "affiliations": [],
-      "summary": "现在的检索-推理 agent 把搜索和生成压在同一个策略里，credit 算不清——搜得对但写错了搜索就背锅。DAC 把它拆成 searcher + generator 两个 LoRA agent，generator 还兼证据充分性裁判，搜索 agent 用这个信号当 reward。",
-      "original_abstract": "Modern language agents which perform multi-step reasoning have shown strong performance in knowledge-intensive question answering. However, existing approaches typically couple evidence acquisition and answer generation within a single policy. This forces a single model to play multiple potentially conflicting roles, inducing a combinatorial explosion in the policy space and hindering efficient exploration. It also introduces a credit assignment problem during training: a search action that retrieves sufficient evidence may still be penalized when generation fails, and vice versa. We propose DAC (Divide and Cooperate), a role-decomposed multi-agent training framework that divides agentic search into two cooperative subtasks, each handled by a dedicated agent trained with role-specific learning signals. The generator serves a dual role as both an answer producer and an evidence sufficiency verifier, abstaining when retrieved evidence is insufficient. This abstention signal is incorporated into the search agent's reward, providing structured cross-agent learning signals that improve credit assignment. Conversely, the searcher exposes the generator to diverse and challenging evidence environments by hard-positive evidence augmentation, improving its robustness. Experiments on general and multi-hop QA benchmarks show that DAC, implemented via parameter-efficient LoRA modules over a shared backbone, achieves strong performance against prior baselines that rely on full fine-tuning of monolithic models.",
-      "highlights": {
-        "contribution": "提出角色分解的多 agent LLM 训练框架，干净解决检索-生成耦合下的 credit 分配。",
-        "innovation": "generator 兼任证据充分性 verifier 并把 abstention 信号回传给 searcher；searcher 给 generator 提供 hard-positive 训练环境。",
-        "method": "共享 backbone + 两个 LoRA agent，generator 输出答案或弃权，searcher 用弃权信号当奖励；用 hard-positive evidence augmentation 训 generator。",
-        "results": "在通用 QA 与 multi-hop QA 上超过单体全参微调基线。"
-      },
-      "images": [],
-      "published_date": "2026-06-09T10:40:55Z",
+      "published_date": "2026-06-09T17:33:24Z",
       "categories": [
         "cs.LG",
-        "cs.AI"
+        "q-bio.GN",
+        "q-bio.QM",
+        "stat.AP"
       ],
-      "matched_domain": "Agent",
+      "matched_domain": "World Model",
       "matched_keywords": [
-        "multi-agent",
-        "agentic",
-        "language agent"
+        "genie"
       ],
       "scores": {
-        "relevance": 6.5,
-        "recency": 10.0,
-        "popularity": 6.5,
-        "quality": 7.3,
-        "recommendation": 7.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.10684v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.10684v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.10749",
-      "title": "Toward Secure LLM Agents: Threat Surfaces, Attacks, Defenses, and Evaluation",
-      "authors": [
-        "Yuchen Ling",
-        "Shengcheng Yu",
-        "Zhenyu Chen",
-        "Chunrong Fang"
-      ],
-      "affiliations": [],
-      "summary": "LLM agent 不再只生成文本，还会规划、调工具、维护记忆、对外执行，安全风险也变了。这篇综述梳理了 247 篇文章，从信息流、授权和持久状态的交互角度搭一个生命周期框架，回答威胁面、攻防、评测四问。",
-      "original_abstract": "Large language model (LLM) agents are rapidly moving from conversational interfaces to software components that plan, invoke tools, maintain memory, and act on external environments. This transition changes the nature of security risk. In agentic settings, failures are no longer limited to unsafe text generation. Untrusted content may redirect control flow, misuse tool privileges, corrupt persistent state, leak sensitive information, or trigger harmful external actions. At the same time, research on LLM agent security is expanding quickly but remains fragmented across attack families, defense layers, application domains, and evaluation settings. This paper synthesizes 247 papers through a lifecycle-based, systems-oriented framework that models agent security around the interaction of information flow, delegated authority, and persistent state. We organize the literature around four questions: how LLM agent security should be modeled, which threat surfaces and attack families dominate, what defenses have been proposed and with what tradeoffs, and how security claims are evaluated. We find that prompt injection and tool-mediated control-flow hijacking still dominate the field, while persistent state corruption and multi-agent propagation are becoming central emerging concerns. We further find that current defenses provide useful building blocks but remain weakly compositional, and that existing benchmarks still underrepresent long-horizon, stateful, and deployment-sensitive risks. We argue that secure LLM agents require explicit trust boundaries, principled privilege control, provenance-aware state management, and evaluation practices aligned with realistic operational settings.",
-      "highlights": {
-        "contribution": "系统化 LLM agent 安全的生命周期框架与文献综合。",
-        "innovation": "围绕信息流 / 委派权限 / 持久状态三轴组织安全问题，强调持久状态污染和多 agent 传播等新兴风险。",
-        "method": "综述类，归纳威胁、攻击、防御与评测，对 247 篇做主题与差距分析。",
-        "results": "指出 prompt injection 与工具劫持仍主导，现有防御弱组合，benchmark 对长时/有状态/部署敏感风险覆盖不足。"
-      },
-      "images": [],
-      "published_date": "2026-06-09T12:01:07Z",
-      "categories": [
-        "cs.CR",
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent",
-        "multi-agent",
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 6.0,
-        "recency": 10.0,
-        "popularity": 6.5,
+        "relevance": 2.5,
+        "recency": 9.0,
+        "popularity": 4.5,
         "quality": 7.0,
-        "recommendation": 6.8
+        "recommendation": 4.5
       },
-      "pdf_url": "https://arxiv.org/pdf/2606.10749v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.10749v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.10401",
-      "title": "CoCoSI: Collaborative Cognitive Map Construction for Spatial Intelligence",
-      "authors": [
-        "Yiming Zhang",
-        "Ruoxuan Cao",
-        "Zhihang Zhong"
-      ],
-      "affiliations": [],
-      "summary": "MLLM 想做空间智能就得在长上下文里维持认知地图，但上下文窗口有限。CoCoSI 不动模型权重，做一个即插即用的多 agent 框架：协同构建栅格化认知地图当作结构化空间记忆，靠局部-全局 agent 协调、原子提交和跨 agent 验证保证一致。",
-      "original_abstract": "Spatial intelligence is a key frontier for multimodal large language models (MLLMs), enabling them to reason about the physical world from visual experience. Inspired by human spatial cognition, recent approaches construct grid-based cognitive maps from multi-frame visual inputs to maintain coherent spatial representations over time. However, limited context lengths still challenge spatial understanding, while existing methods, such as long-context modeling and external memory, often require architectural changes, memory modules, or finetuning, limiting their applicability to off-the-shelf pretrained MLLMs. This motivates a lightweight, model-agnostic method for preserving spatial information beyond the native context window. To this end, we propose a plug-and-play multi-agent framework that collaboratively constructs cognitive maps as structured spatial memory, enhancing the spatial understanding of arbitrary pretrained MLLMs without architectural modification or additional training. Our framework features local-global agent coordination, cognitive map construction with atomic commits, and cross-agent verification. Extensive experiments demonstrate that our method achieves superior performance on spatial understanding tasks while remaining fully training-free. Code will be released.",
-      "highlights": {
-        "contribution": "无需训练的多 agent 框架把空间认知地图作为外部记忆，增强任意预训练 MLLM 的空间理解。",
-        "innovation": "局部-全局协调 + 原子提交 + 跨 agent 验证，让认知地图的构建既增量又一致。",
-        "method": "多 agent 协作维护栅格化认知地图，原子提交更新结构化空间记忆，跨 agent 验证一致性。",
-        "results": "在空间理解任务上超过基线且全程无训练。"
-      },
-      "images": [],
-      "published_date": "2026-06-09T04:20:08Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "multi-agent",
-        "agent framework"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 10.0,
-        "popularity": 6.0,
-        "quality": 7.0,
-        "recommendation": 6.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.10401v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.10401v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.10525",
-      "title": "Assessing Automated Prompt Injection Attacks in Agentic Environments",
-      "authors": [
-        "David Hofer",
-        "Edoardo Debenedetti",
-        "Florian Tramèr"
-      ],
-      "affiliations": [],
-      "summary": "Indirect prompt injection 对 LLM agent 是个真威胁，但自动化攻击方法在 agentic 场景里其实没系统试过。作者把 GCG（白盒）和 TAP（黑盒）迁到 AgentDojo，在 80 任务对上比较，发现黑盒优化明显比梯度法稳。",
-      "original_abstract": "Indirect prompt injection poses a critical threat to LLM agents that interact with untrusted external data, yet automated attack methods--proven effective for jailbreaking--remain underexplored in realistic agentic settings. We present a comprehensive empirical evaluation of automated prompt injection attacks against LLM agents, adapting both white-box (GCG) and black-box (TAP) methods to the agentic setting within the AgentDojo framework. We evaluate across 80 task pairs spanning four domains and multiple models, and find that black-box optimization substantially outperforms gradient-based methods, a gap we attribute to GCG's optimization instability under reasonable compute budgets. We also find that TAP's effectiveness depends on the attacker model, as both general capability and safety tuning affect attack success--stronger models produce more effective injections, while safety-tuned attackers can refuse to generate adversarial prompts. Task-universal attacks transfer effectively to unseen tasks and out-of-distribution domains, but attacks optimized on smaller open-source models do not transfer to frontier models like GPT-5. These findings highlight automated prompt injection as a credible but model-dependent threat, with significant barriers remaining for model-agnostic exploitation.",
-      "highlights": {
-        "contribution": "把自动化 prompt injection 攻击在 agentic 环境下做了系统性实证评估。",
-        "innovation": "首次在 AgentDojo 里把白盒 GCG 与黑盒 TAP 适配到 agent 场景并跨域比较。",
-        "method": "在 4 域 80 任务对上跑 GCG 与 TAP，研究攻击者模型能力、安全微调和迁移性。",
-        "results": "黑盒优化显著优于梯度法；任务通用攻击能跨域迁移，但小开源模型上优化的攻击迁不到 GPT-5。"
-      },
-      "images": [],
-      "published_date": "2026-06-09T07:54:58Z",
-      "categories": [
-        "cs.CR",
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent",
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 5.5,
-        "recency": 10.0,
-        "popularity": 6.0,
-        "quality": 7.0,
-        "recommendation": 6.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.10525v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.10525v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.11144v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.11144v1",
       "venue": null
     }
   ],
