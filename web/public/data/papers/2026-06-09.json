@@ -508,44 +508,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.11396",
-      "title": "PLUME: Probabilistic Latent Unified World Modeling and Parameter Estimation for Multi-Finger Manipulation",
-      "authors": [
-        "Abhinav Kumar",
-        "Soshi Iba",
-        "Rana Soltani Zarrin",
-        "Dmitry Berenson"
-      ],
-      "affiliations": [],
-      "summary": "灵巧手任务对物体形状、姿态、摩擦超敏感，光靠 domain randomization 不够，因为不同参数下最优策略可能就不一样。PLUME 让 world model 同时学「参数分布的信念」和「条件在该参数下的系统动力学」，在 latent 空间统一表示参数和奖励。部署时不用 fine-tune，靠在线参数推断对齐真实动力学。仿真四个任务 + 真机拧螺丝刀都做到了零样本迁移，超越离线 RL 和 world-model BC 基线。",
-      "original_abstract": "Dexterous manipulation with multi-finger hands can be sensitive to physical parameters such as object shape, pose, and friction coefficients. While simulation enables large-scale data collection with known parameter values, simulation-trained policies must still handle uncertainty at deployment, where the true parameters and therefore the true dynamics are unknown. Standard domain randomization strategies may be insufficient for precise tasks like screwdriver turning, as manipulation strategies may need to change depending on specific parameter values. To address this, we propose Probabilistic Latent Unified world Modeling and parameter Estimation (PLUME), a world model that jointly learns to evolve a belief over parameter values as well as the system dynamics conditioned on those parameters. We learn a latent space to jointly represent multiple qualitatively different physical parameters along with rewards, themselves functions of partially-observable variables, to inform planning. Our novel learning framework leads to efficient alignment of the world model to true dynamics through online parameter inference as opposed to re-training or fine-tuning. We evaluate our method on simulated screwdriver turning, valve turning, bucket lifting, and disk flicking tasks, as well as a hardware screwdriver turning task, where we achieve successful zero-shot transfer of our simulation-trained policy and outperform state-of-the-art offline reinforcement learning and world-model-augmented behavior cloning baselines. Please see our website at https://plume-world-model.github.io for videos.",
-      "highlights": {
-        "contribution": "提出参数估计与世界建模联合学习框架 PLUME，把「不知道的物理参数」做成可在线推断的信念。",
-        "innovation": "在同一个 latent 空间联合表示多类物理参数与奖励，部署时用在线推断直接对齐真实动力学，而不是 re-train 或 fine-tune。",
-        "method": "输入观测序列；world model 学一个 latent 状态，既滚动条件动力学又演化参数信念；联合训练动力学预测和奖励预测；部署时用在线推断更新参数信念，规划基于该信念。",
-        "results": "仿真拧螺丝刀、拧阀门、提桶、弹盘四任务和真机拧螺丝刀均成功零样本迁移，超越 SOTA 离线 RL 和 world-model-augmented BC 基线。"
-      },
-      "images": [],
-      "published_date": "2026-06-09T19:36:25Z",
-      "categories": [
-        "cs.RO"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model"
-      ],
-      "scores": {
-        "relevance": 8.7,
-        "recency": 9.0,
-        "popularity": 7.5,
-        "quality": 8.2,
-        "recommendation": 8.3
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.11396v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.11396v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2606.11184",
       "title": "TacForeSight: Force-Guided Tactile World Model for Contact-Rich Manipulation",
       "authors": [
@@ -672,6 +634,47 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.10825v1",
       "arxiv_url": "https://arxiv.org/abs/2606.10825v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.12471",
+      "title": "Identifiability Without Gaussianity: Symbolic World Models and Near-Infinite Temporal Consistency",
+      "authors": [
+        "Seth Dobrin",
+        "Łukasz Chmiel"
+      ],
+      "affiliations": [],
+      "summary": "这篇文章接着 Klindt/LeCun/Balestriero 关于 JEPA 线性可辨识性的工作往下推：他们证明了纯统计世界模型只有在隐动力学是高斯平稳过程时才能精确恢复隐变量，否则误差会随时间单调增长。作者认为这是「统计对齐」机制自身的缺陷，不是世界模型的本质限制。于是提出 Physics-Grounded Symbolic Architecture（PGSA），用符号方式把物理生成过程嵌进模型，并证明它对任意隐分布都能做到精确线性可辨识、每步误差只受数值精度限制，从而保持「近无限时间一致性」。四条核心定理的代数部分用 Lean 4 + Mathlib4 形式化通过、零 sorry。",
+      "original_abstract": "Klindt, LeCun, and Balestriero (arXiv:2605.26379) proved that Joint-Embedding Predictive Architectures (JEPAs) achieve linear identifiability, the linear recovery of the world's true latent variables, if and only if the world's latent dynamics follow a Gaussian, stationary process. This Gaussian boundary implies a fundamental limit on temporal consistency: for any non-Gaussian physical system, the representation error of a statistical World Model grows monotonically with time. We prove that this limit is an artifact of the statistical alignment mechanism, not a property of World Models in general. We introduce the Physics-Grounded Symbolic Architecture (PGSA) and prove three results: (1) a PGSA achieves exact linear identifiability for all physical regimes, regardless of the latent distribution; (2) the per-step error of a PGSA is bounded by numerical precision alone; and (3) as a direct consequence, a PGSA maintains temporal consistency for an unbounded number of transitions, a property we term near-infinite temporal consistency. We further prove that statistical World Models cannot achieve this property for any non-Gaussian system, regardless of model capacity or the volume of training data. The algebraic cores of four of the theorems are formalized in Lean 4 with Mathlib4 v4.31.0 (zero sorry placeholders); the Klindt et al. converse is taken as an external premise. The contrast establishes that symbolic grounding in the causal generator of the world's dynamics is the sufficient condition and, in non-Gaussian regimes, the only condition for near-infinite temporal consistency.",
+      "highlights": {
+        "contribution": "把 JEPA 的高斯可辨识性边界拆穿：证明这是统计对齐机制的产物而非世界模型固有限制，并给出一个符号化替代架构 PGSA，能在非高斯物理系统上保持近无限时间一致性。",
+        "innovation": "用符号化、物理因果生成器作为表征基底，绕开统计对齐对分布假设的依赖；同时把核心定理在 Lean 4 里形式化验证，提供机器可检查的证明。",
+        "method": "理论工作为主：构建 PGSA，把隐变量直接绑定到物理生成过程的符号表达，再分析其与统计 JEPA 在线性可辨识性、单步误差上界、长程一致性上的差异；用 Mathlib4 v4.31.0 形式化四个定理的代数核，Klindt 等人的反向结论作为外部前提引用。",
+        "results": "证明三件事：PGSA 对所有物理体制都达到精确线性可辨识；每步误差仅由数值精度决定；时间一致性可保持无界步数。同时证明统计世界模型在任何非高斯系统上都不可能达到这一性质，与模型容量和数据量无关。无实证数值。"
+      },
+      "images": [],
+      "published_date": "2026-06-09T23:00:48Z",
+      "categories": [
+        "stat.ML",
+        "cs.CL",
+        "cs.ET",
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 8.0,
+        "popularity": 5.0,
+        "quality": 7.5,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.12471v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.12471v1",
       "venue": null
     },
     {

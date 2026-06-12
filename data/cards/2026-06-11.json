@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.13435",
+    "summary": "VLA 模型基本只看文本指令,把手势这种人机交互里超重要的信号给忽视了。作者搞了 GIVE,不改原架构,一边把手骨架和指尖射线直接画到机器人观察图上做视觉锚定,一边让 VLM 生成手势的语义描述,两条路一起喂给 VLA。真实交互实验里目标识别准确率涨 40%,任务成功率涨 80%。",
+    "highlights": {
+      "contribution": "把人手势作为辅助模态嵌入预训练 VLA,解决指令歧义下的意图锚定问题。",
+      "innovation": "无需改架构,视觉路径(手骨架+指尖射线 overlay)与语义路径(手势描述)并行注入。",
+      "method": "输入是 RGB 观察叠加手骨架与指尖射线、外加 VLM 生成的手势语义描述,直接喂入预训练 VLA 做动作生成,无新损失。",
+      "results": "真实 HRI 实验目标物体识别准确率 +40%,整体任务成功率 +80%,对未见布局和不同被试都稳。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13279",
+    "summary": "双臂操作时不同阶段看的视角不一样,两条胳膊也得在独立和协同之间切换,一锅烩的 VLA 学起来很别扭。作者做了双层结构化分解:视角选择路由动态调腕部视角权重,动作 MoE 把动作生成拆成协同和单臂两条路。RoboTwin 仿真平均涨 27.7%,真实长时任务涨 43.3%。",
+    "highlights": {
+      "contribution": "针对双臂操作显式分解视觉相关性和交互模式,作为强归纳偏置。",
+      "innovation": "View-Selective Visual Router + Interaction-Aware Action MoE 的双层分解设计。",
+      "method": "输入多视角图像与语言指令,视觉路由动态选腕部视角,动作 MoE 分协同/单臂专家,端到端模仿学习训练。",
+      "results": "RoboTwin 2.0 六个仿真任务平均成功率 +27.7%,三个真实长时任务 +43.3%,各 ablation 都稳赢。"
+    },
+    "scores": {
+      "relevance": 8.7,
+      "recency": 10,
+      "popularity": 6.8,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13355",
+    "summary": "大家都在给 diffusion policy 做异步实时推理,但其实自回归策略更慢更需要这玩意儿。作者发现调整 tokenization horizon 加约束解码就能给自回归策略加上严格延迟界,并且做多轨迹解码拉性能。同档位实验里自回归比 flow-matching 强,且同步推理速度大幅提升。",
+    "highlights": {
+      "contribution": "证明自回归策略也能做到实时执行,并在同级别下打过 flow-matching 策略。",
+      "innovation": "用 tokenization horizon + constrained decoding 给自回归 VLA 提供延迟保证以支持多轨迹解码。",
+      "method": "在自回归 VLA 上调整动作 token 化粒度,推理时用约束解码限制时间窗,允许多轨迹并行评估选最优。",
+      "results": "仿真和真实环境上自回归一致优于同级 flow-matching,同步推理任务完成速度显著提升。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 7.2,
+      "quality": 7.8,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13053",
+    "summary": "视觉特征 world model 能展开未来,但光看像素/潜变量不知道这个未来是不是真的完成了任务。EA-WM 在冻结视觉动力学之上加了事件感知模块,把未来 rollout 解码成结构化事件状态,从任务进度/语义一致性/物理可行性/不确定性四个维度打分给规划器用。在导航、形变物体、墙体约束和语言指令操作上都验证了。",
+    "highlights": {
+      "contribution": "给 world model 加任务级事件验证,让视觉 rollout 真正可用于长时操作规划。",
+      "innovation": "把谓词级事件预测和多维评分挂在冻结视觉特征动力学上,作为采样规划的 verifier。",
+      "method": "冻结视觉特征 dynamics 做 rollout,解码事件状态后用四项分数加权打分,引导 sampling-based planner;在 LIBERO wine-rack 上还用来 gate PPO 候选动作。",
+      "results": "在导航、形变物体、墙体约束、语言操作四类研究上验证事件感知验证让特征 WM 更可解释更对齐任务进度。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13092",
+    "summary": "World model 平均误差啥都说明不了,你不知道单次预测能信多久。这篇论文给等变 latent world model 给出可计算的多步预测可信地平线证书:T 步误差在对称轨道上恒定,通道按 Lyapunov 谱分层。在 40 维 Lorenz-96 上 Z_N 等变网络完整恢复谱,Dense/Recurrent 都不行;还对 TD-MPC2 和 V-JEPA 2-AC 做了 training-free 审计。",
+    "highlights": {
+      "contribution": "给等变 world model 提供 multi-step 预测可信 horizon 的理论证书与可部署审计工具。",
+      "innovation": "对称轨道恒定误差是等变结构的专有签名,任何非等变模型规模再大都拿不到。",
+      "method": "理论证明 + Lyapunov 谱分层的 T_j(ε) 闭式;在 Lorenz-96 上比对等变/Dense/Recurrent;对 TD-MPC2 与 V-JEPA 2-AC 做零训练审计。",
+      "results": "等变网络 R^2=0.98 恢复全谱,基线失败;TD-MPC2 1M-317M ladder 上规模再大也不改善 calibration;V-JEPA 2-AC (1B) 上审计纠正了过于乐观的谱。"
+    },
+    "scores": {
+      "relevance": 7.2,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 8.2,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13376",
+    "summary": "给一张窄视角图就要做交互式漫游,挺难。MoVerse 把世界搭建和观察渲染分开:先用拓扑感知扩散补成 360 度全景,再升成持久 3D Gaussian scaffold 当空间记忆,最后用 Gaussian 条件视频渲染器沿用户相机轨迹生成视频。蒸馏成因果自回归学生模型后,4090 上能 8 FPS 实时漫游。",
+    "highlights": {
+      "contribution": "单图重建一个可交互、持久的实时视频世界模型。",
+      "innovation": "世界构建(全景→3DGS scaffold)与观察渲染(视频 diffusion)解耦,显式 3D + 生成视频两边好处都要。",
+      "method": "拓扑感知 diffusion 把窄视角补成 gravity-aligned 全景 → 全景几何感知 residual 升 3D Gaussian → bidirectional diffusion teacher 蒸馏成 causal AR 学生做流式视频渲染。",
+      "results": "单 RTX 4090 上达成 8 FPS 实时漫游,展示了一条单图→交互世界的可行路径。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13460",
+    "summary": "把 VLM 的 caption embedding 跟 3D voxel feature 拉对齐这个常见做法,提了 text 空间相似度但闭集 occupancy mIoU 几乎没动。VISA 改成 training-time 语义审计:VLM 离线查询每个物体实例 crop,给出类别假设/可能混淆/可靠性/属性/证据,蒸馏到语义 logits 里,推理时不调用 VLM。OccWorld 19.06→20.05,GaussianWorld 21.36→21.91。",
+    "highlights": {
+      "contribution": "提出把 VLM 当 reliability-aware 语义审计员而不是 caption embedding target 的范式。",
+      "innovation": "对每个 3D 物体实例查 VLM 拿结构化审计(类别/混淆/可靠度/证据),沿轨迹传播并蒸馏。",
+      "method": "离线 VLM 查 crop → 结构化审计沿物体轨迹传播 → 用 reliability-weighted taxonomy、attribute-factor、scene-level 三类损失蒸馏到 occupancy 模型,推理不变。",
+      "results": "nuScenes 三次平均:OccWorld 19.06→20.05 mIoU、GaussianWorld 21.36→21.91;GaussianWorld 物体 mIoU 18.18→19.16、稀有类 15.60→16.79。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13494",
+    "summary": "navigation world model 能预测未来视角但还得外挂规划器才能闭环。NavWAM 干脆把未来观察、目标进度值、动作 chunk 放进一个共享 latent 序列,用 diffusion-transformer 同时学预测和动作/价值,直接输出可执行动作,不需要 CEM 这种动作搜索。在 image-goal 导航上离线和真机部署都超过基于规划的 WM。",
+    "highlights": {
+      "contribution": "把 navigation world model 的视觉 foresight 直接转成闭环可执行控制策略。",
+      "innovation": "diffusion-transformer 把 future observation、goal-progress value、action chunk 联合建模成统一 latent 序列。",
+      "method": "仿真预训练 + 真机适配的 DiT 策略,联合预测未来观察 / 进度值 / 动作 chunk,推理用默认 policy mode 而非动作搜索。",
+      "results": "离线 image-goal 导航 benchmark 和真机闭环部署上均优于基于规划的 WM baseline 及代表性直接导航策略。"
+    },
+    "scores": {
+      "relevance": 8.4,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13607",
+    "summary": "大家常说 LLM 不会推理只是 pattern matching,而人是用 world model。作者拿 25 个 LLM 和真人比常识推理,发现犯的错很像;还找出驱动 LLM 反应的注意力头,定位是一种 pattern matching。这些 attention head 甚至能预测人因为无关 prompt 细节犯下的诡异错误。结论是人和 LLM 的日常因果推理都更像 pattern matching 而不是抽象 world model。",
+    "highlights": {
+      "contribution": "用统一实验质疑 \"人用 world model、LLM 只 pattern match\" 这个二分。",
+      "innovation": "通过 LLM 内 attention head 反过来预测人类推理错误,把两边机制连起来。",
+      "method": "招募人类被试 + 25 个 LLM 做常识因果推理任务,识别 LLM 内驱动反应的注意力头,反向预测人类被 prompt 细节带偏的错误。",
+      "results": "人和 LLM 错误模式高度相似;基于 attention head 的 pattern matching 能预测人的诡异推理错误。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13672",
+    "summary": "WEAVER 想把 world model 的保真度、长程一致性和效率三件事一次搞定。作者用 flow-matching loss 训了多视角 latent WM 联合预测未来 latent 和 reward,在硬件上把策略评估、策略改进、test-time planning 都跑通。和真机成功率相关性 ρ=0.870,把 π_0.5 真机成功率提了 38%,test-time planning 提 14% 且比之前 WM 快 5-10 倍。",
+    "highlights": {
+      "contribution": "一个同时满足保真度/一致性/效率的真机可用 world model,显著推 π_0.5。",
+      "innovation": "Flow-matching 联合预测未来 latent 与 reward,跨视角架构和记忆设计专门吃长时动态操作。",
+      "method": "多视角 latent world model,flow-matching loss 同时回归未来 latent 和奖励;用于 policy evaluation、improvement、test-time planning 三种下游;OOD 场景额外评估。",
+      "results": "评估相关 ρ=0.870;策略改进真机 +38% on π_0.5;test-time planning +14% 且比先前 WM 提速 5-10×;OOD 上也胜过先前 WM。"
+    },
+    "scores": {
+      "relevance": 9.2,
+      "recency": 10,
+      "popularity": 8.5,
+      "quality": 8.8,
+      "recommendation": 9.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12990",
+    "summary": "Recursive 多步预测的 exposure bias 一直被当成分布偏移问题。作者证明在部分可观或状态截断下,这其实还是个 epistemic underidentification 问题:一步 Bayes 监督只识别观察上下文,自生成状态的正确局部目标不被数值状态唯一决定。文章用 induced state Z 和 provenance 变量 P 形式化并给出误差分解,简单二进制 provenance 编码能小幅提升性能。",
+    "highlights": {
+      "contribution": "把 exposure bias 重塑为自诱导认知不确定下的推理问题,而非单纯分布偏移。",
+      "innovation": "用 induced state 和 provenance 变量给出多源误差分解的形式化框架。",
+      "method": "形式化 induced state Z 与 provenance 变量 P;理论证明并实验验证 fixed induced state 上的局部纠正与 provenance-aware 修正。",
+      "results": "结果显示 closed-loop 收益不仅来自局部适应也来自改变 rollout 访问的 induced state;provenance-aware 校正条件性提升性能。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13260",
+    "summary": "从噪声高维观察里发现 latent dynamical system 是表征学习/系统辨识/科学发现的老问题。DYSCO 用多视角时间对比学习,利用同一过程的多份独立含噪视图解耦信号与噪声,把动力学参数化在结构化函数基里就能符号化恢复方程。在混沌/振荡/亚稳态多种动力学和高斯/泊松噪声下都能准确恢复。",
+    "highlights": {
+      "contribution": "在噪声非线性观察下严格可辨识地联合恢复 latent 轨迹和控制方程。",
+      "innovation": "多视角时间对比学习 + 结构化函数基,把对比表征和符号回归连起来。",
+      "method": "把同一过程多份噪声视图作对比正样本拉近,latent 动力学参数化在符号基里联合优化,辨识至 affine 不确定性。",
+      "results": "在混沌、振荡、亚稳态以及高斯/泊松噪声下都准确恢复 latent 轨迹和流场。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13515",
+    "summary": "WAM 当前问题:文本输入在杂乱场景里有指代歧义,RGB 预测又缺语义、容易被无关背景带偏。MaskWAM 用 Mixture of Transformers 把 mask 既当输入提示又当预测目标,既给物体中心语义监督又用首帧 visual prompt 锚定空间。在 LIBERO、RoboTwin 和真实任务上明显超越基线。",
+    "highlights": {
+      "contribution": "物体中心 mask 提示+预测的世界动作模型,显著提升 WAM 在歧义语言下的鲁棒性。",
+      "innovation": "MoT 同时摄入和预测 mask,把首帧 mask prompt 和未来 mask 预测耦合成统一物体中心监督。",
+      "method": "Mixture of Transformers 联合建模 RGB 与 mask 输入/预测;以首帧目标物体 mask 做空间锚定,以未来 mask 预测做语义监督;沿用 WAM 训练流。",
+      "results": "在 LIBERO、RoboTwin 和真实任务上的清晰指令与歧义指令下都显著优于 baseline。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13674",
+    "summary": "现有 WAM 都从视频生成模型继承重建导向的 tokenizer,像素保真但对学指令跟随动力学帮不上忙。RepWAM 训了一个 representation visual-action tokenizer 把视觉映射成对齐的 visual 与 latent action token,然后联合建模未来视觉态和潜在动作,再在真机轨迹上做闭环操作适配。真机和仿真上都强,ablation 验证语义 tokenization 比重建导向更优。",
+    "highlights": {
+      "contribution": "提出表征中心的 visual-action tokenizer,作为 WAM 的语义基底替代重建 tokenizer。",
+      "innovation": "把视觉编码和潜在动作 token 对齐进一个语义 latent 空间,而非视频生成 pipeline 的像素重建空间。",
+      "method": "训练 representation visual-action tokenizer → 在语言指令下联合预训练未来视觉态与连接它们的 latent action → 在真机轨迹上闭环适配做操作。",
+      "results": "真实操作任务和仿真 benchmark 表现强,ablation 显示语义 visual-action tokenization 显著优于重建导向变体。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13345",
+    "summary": "3D 场景编辑要么 per-scene 优化,要么级联式 edit-then-reconstruct,成本高、3D 一致性差。JointEdit3D 在统一 RGB-几何重建生成 latent 空间上做 feed-forward 编辑:只看一份编辑后的 RGB reference latent,在源场景锚定下生成其他视角 RGB 和编辑几何 latent。还配了 SceneEdit3D-15K 数据集和 Bench。",
+    "highlights": {
+      "contribution": "Feed-forward 3D 场景编辑,一次拿到一致的多视角 RGB 和几何编辑结果。",
+      "innovation": "异步 latent inpainting + SceneAnchor branch + edit/background-aware loss 平衡编辑保真和未编辑保持。",
+      "method": "在统一 RGB-几何 latent 上做 asymmetric inpainting,SceneAnchor 注入源场景结构而不强制复制,edit/background-aware 双损失训练。",
+      "results": "在自建 SceneEdit3D-Bench 100 样本上,编辑区域质量和 3D 结构完整性优于先前 baseline,背景保留有竞争力。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.2,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13049",
+    "summary": "四足机器人能跑各种地形,本质是个移动智能平台。Y-BotFrame 把四足做成可扩展具身助手框架:语音/视觉/激光多模态感知,LLM 当认知核心做环境理解、上下文推理和任务规划,把自然语言指令翻成可执行的具身任务单元。卖点是模块化、即插即用、不需要遥控器。",
+    "highlights": {
+      "contribution": "提供四足机器人具身 agent 的可扩展工程框架,把 LLM 装进真实地面助手。",
+      "innovation": "把语音/视觉/激光多模态感知 + LLM 任务规划组装成模块化即插即用框架。",
+      "method": "多模态感知输入 → LLM 做场景理解与任务分解 → 映射为四足可执行的具身任务单元 → 语音/视觉交互闭环,模块插拔升级。",
+      "results": "提供参考实现与演示视频,定位为通用指令驱动具身 agent 的真实部署模板;无标准 benchmark 数字。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.0,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13196",
+    "summary": "这篇是哲学/方法论立场文,问机器在什么条件下才算真正有创造力。作者从 Designics 推出一个十项要求的框架,把创造力定义为 \"通过递归干预动态对不完整情境的结构性变换\"。文章拿 open-ended 系统、自动发现框架、自修改 agent、foundation model、agentic workflow 当压力测试,指出它们有强大生成手段但都不算真正创造。",
+    "highlights": {
+      "contribution": "用 Designics 框架给 \"机器真正创造\" 设了十项要求与三大律。",
+      "innovation": "把创造力定义为递归干预对不完整情境的结构性变换,而非新颖输出。",
+      "method": "理论框架阐述 + 数个 cyber-physical/biological 案例研究演示可计算性,无新模型。",
+      "results": "结论性立场文,argue agentic workflow 等仅是强生成手段不足以构成真正创造,需要价值导向 scoping 与人机共生。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 10,
+      "popularity": 4.0,
+      "quality": 5.5,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13317",
+    "summary": "LLM agent 的技能自演化通常每个任务只学一条轨迹、补丁合并前不验证、推理时一股脑加载所有技能。SkillCAT 把这事拆三步:对比因果抽取从同任务成败对里挖证据,评估增强演化在源任务上 replay 验证补丁,再编译成可路由的子技能拓扑,推理只加载相关节点。SpreadsheetBench、WikiTableQuestions、DocVQA 上平均分最高拉 40.40%。",
+    "highlights": {
+      "contribution": "免训练的 LLM agent 技能自演化三阶段框架,显著拉性能与跨模型/OOD 泛化。",
+      "innovation": "对比因果抽取 + 补丁回放评估 + 拓扑感知 sub-skill 路由,逐项把现有 pipeline 的痛点堵掉。",
+      "method": "三阶段:CCE 对同任务多轨迹做成败对比抽取证据 → AAE 在 source-task clone 上 replay 候选补丁后分层合并 → TTE 编译成 routable sub-skill topology 只加载相关能力节点。",
+      "results": "SpreadsheetBench/WikiTableQuestions/DocVQA 上比基线平均分提升最多 40.40%,跨模型 / OOD 泛化都验证。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13380",
+    "summary": "做高性能量子电路还得靠人。这篇拿 LLM 搭了个七组件 agentic 闭环:Exploration、Generation、Discussion、Validation、Storage、Evaluation、Review,结合 web 检索、文献批评、可执行代码生成和实验反馈,在量子机器学习的 feature map 和 VQE ansatz 两类任务上跑。图像分类上生成的 feature map 超过代表性 baseline,molecular ground state 估计上和经典化学/硬件高效构造能打。",
+    "highlights": {
+      "contribution": "把 LLM agentic 框架引入变分量子电路自动设计,打通发现-生成-验证-评估闭环。",
+      "innovation": "七组件闭环把 web 知识获取、文献批评、可执行代码生成与实验反馈串成完整科学优化 workflow。",
+      "method": "七组件 agent 框架闭环迭代,LLM 根据设计约束生成量子电路代码、外部检索/讨论批评、实验验证反馈,跑 feature map 和 VQE ansatz 两类任务。",
+      "results": "图像分类上最优 feature map 超代表性量子 feature map,大 qubit 数下超经典 RBF kernel;七种分子地态估计精度可比化学/硬件高效构造,且满足缩放约束。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13385",
+    "summary": "Web agent 跑在不可信网页上,prompt injection 风险很大。现有 benchmark 偏 attack-centric,只看技术可行性,看不到受害方差异。本文提出 stakeholder-centric benchmark,区分受影响实体(用户/卖家/平台),把攻击拆成具体目标,用 outcome/process 双指标评。结果:没有任何攻击目标被当前 agent 可靠抵抗,失败模式分散(隐形寄生、错位中断、双重失败)。",
+    "highlights": {
+      "contribution": "首个 stakeholder-centric 的 web agent prompt injection 基准,显式区分谁付代价。",
+      "innovation": "从受害方视角分解攻击目标,引入隐形寄生、错位中断、双重失败三类失败模式。",
+      "method": "构造区分用户/卖家/平台等利益方的 benchmark,把每条攻击拆成具体目标,outcome-level 与 process-level 双指标评估当前 web agent。",
+      "results": "实验显示无任何攻击目标被当前 agent 稳定抵抗,失败在 stealthy parasitism、misaligned disruption、compounded failure 三类质性失败间分散。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13392",
+    "summary": "Agentic workflow 和仓库级代码推理都要百万级上下文,softmax 二次成本撑不住。MiniMax Sparse Attention 在 GQA 上做 blockwise sparse:轻量 Index Branch 给 KV block 打分,各 GQA 组独立选 Top-k,Main Branch 只在选中块上做精确 sparse attention。配合 exp-free Top-k 和 KV-outer 内核,109B 多模态模型 1M 上下文下注意力计算降 28.4 倍,prefill 提速 14.2 倍、decoding 7.6 倍。",
+    "highlights": {
+      "contribution": "可部署、可扩展的 blockwise sparse attention,使百万级上下文 agentic 推理可行。",
+      "innovation": "GQA 组级独立 Top-k 块选择 + 与 GPU 内核协同设计(exp-free Top-k、KV-outer 内核)。",
+      "method": "GQA 之上加 Index Branch 给 KV block 打分,各组独立选 Top-k 子集,Main Branch 在选中块上做精确 block-sparse 注意力;配套自研内核。",
+      "results": "109B 原生多模态模型与 GQA 同档表现,1M 上下文每 token 注意力计算降 28.4×,H800 上 prefill 14.2× 提速、decoding 7.6× 提速;M3 已开源。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 8.5,
+      "quality": 8.5,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13572",
+    "summary": "多模态 LLM 在通用领域不错,但在印度农村这种印地语+医学影像场景里基本掉链子。作者搞了 ArogyaBodha 多语多模态医疗 QA 数据(英语+7 种印度语,31 个身体系统、6 种影像、21 个临床领域),再用 actor-critic 多 agent 框架 ArogyaSutra 做带工具锚定和双内存的逐步推理,actor-critic 轨迹还可用于蒸馏。各印度语上多模态医学推理精度都涨。",
+    "highlights": {
+      "contribution": "构建大规模印度多语多模态医疗 QA 数据 + actor-critic 多 agent 医学推理框架。",
+      "innovation": "actor-critic 多 agent 与 dual-memory + 工具锚定结合,用模拟轨迹做下游蒸馏。",
+      "method": "8 源汇聚的多语多模态医学 QA;actor-critic 多 agent 框架带工具锚定与短/长期双内存,用模拟轨迹做 distillation。",
+      "results": "在所有印度语上多语医学推理精度提升,ablation 验证各组件贡献。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13679",
+    "summary": "交错生成(图文混排)对视觉叙事、引导、具身操作都很重要,但现有 UMM 干不好。InterleaveThinker 用 planner agent 组织图文输入序列下达每步指令,critic agent 评估生成偏差并重写指令,再用 SFT + GRPO 的 step-wise reward 训 critic。在 4-step FLUX.2-klein 上和 Nano Banana、GPT-5 性能可比,还显著拉了 WISE/RISE。",
+    "highlights": {
+      "contribution": "首个把任意图像生成器拓展到交错生成的多 agent pipeline,效果接近 GPT-5/Nano Banana。",
+      "innovation": "planner + critic 多 agent + step-wise reward 让 RL 不必优化整条 25+ 步轨迹。",
+      "method": "planner agent 规划每步指令,critic agent 评估并修订;构造 SFT 80k/112k 数据冷启动,再用 13k 数据 GRPO 训 critic,设 accuracy reward 与 step-wise reward 单步引导整条轨迹。",
+      "results": "在交错生成 benchmark 上与 Nano Banana、GPT-5 可比;在 4-step FLUX.2-klein 上 WISE 与 RISE 推理 benchmark 显著提升。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.2,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13003",
+    "summary": "大家都默认 multi-agent 系统比 single-agent 强,但多数比较是用偏孤立推理任务的基准。这篇拿自动生成 MAS 和 CoT-SC 做严格对比,发现自动 MAS 在传统推理和 BrowseComp-Plus 这种交互式多步任务上一直输,还贵 10 倍。又造了一个适合 MAS 的诊断性合成数据集,显示专家手工 MAS 在性能和性价比都吊打自动 MAS。结论是当前自动 MAS 设计带来的是架构臃肿而非真正功能效用。",
+    "highlights": {
+      "contribution": "系统性证伪 \"自动生成 MAS 优于 SAS\" 的流行说法,并指出评估框架的盲点。",
+      "innovation": "提出诊断性合成数据集,显式构造任务分解、上下文分离、并行潜力,把 MAS 优势能不能兑现暴露出来。",
+      "method": "用传统推理与 BrowseComp-Plus 等交互式 benchmark 对自动 MAS vs CoT-SC 做严格成本对齐评估,再用自建诊断数据集对比专家手工 MAS;最后对自动 MAS 架构做反向解构分析。",
+      "results": "自动 MAS 即使贵 10 倍仍在多基准上输于 CoT-SC;专家 MAS 在诊断数据集上又显著超过自动 MAS,自动 MAS 倾向架构臃肿不带来实质效用。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13038",
+    "summary": "LLM agent 大量进入预测市场,共享 base model 让预测高度相关(r≈0.77),形成认知单一文化。Nous 想从真实 Polymarket 交易行为里抽 8 维结构化个性 profile 再用 prompt 注入回 agent。结果是抽取部分成功:8/14 个参数时间稳定,profile 能让钱包 top-1 命中 17-22%;但 prompt 注入失败,既不降低集成相关性也不改 Brier score,瓶颈在 prompt 之前。",
+    "highlights": {
+      "contribution": "测量并诊断 LLM agent 认知单一文化与 prompt-level 多样性注入失效。",
+      "innovation": "把 8 维行为 profile 从真实交易抽出来 + 跨多模型测试 prompt 注入是否真传递了认知多样性。",
+      "method": "从 100 个 Polymarket 钱包抽 8 维结构化 profile,做 split-half ICC、retrieval 命中和盈利相关性分析;再以 prompt 注入到多个 LLM agent,在语义 embedding 与集成误差/Brier 上对比。",
+      "results": "8/14 参数稳定、top-1 retrieval 17-22%(vs 1% 随机);prompt 注入在多模型上无显著优势,既不降低集成误差相关也不提升 Brier。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  }
+]

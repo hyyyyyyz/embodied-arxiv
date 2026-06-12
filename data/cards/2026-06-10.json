@@ -306,146 +306,146 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.11894",
-    "summary": "Wild3R做无约束稀疏照片集的feed-forward 3DGS:既要应对多种光照,也要去掉transient物体。瓶颈是缺训练数据,作者搞了WildCity数据集:200场景、170种光照、含transient,合计337,500张图。模型基于此学到跨视角外观一致性(条件于参考图)并能去transient,效果超过现有feed-forward,逼近per-scene优化方法。",
+    "arxiv_id": "2606.12497",
+    "summary": "现有 VLA 在「部分可观测」场景下会失灵，因为关键信息已经从视野里消失。作者想搞清楚：单纯加 recurrence 到 VLA 主干，到底能带来多少收益？于是在 OpenVLA-OFT 上挂了一组可学习的 memory token，跨步自注意力更新，用 TBPTT 端到端训练，不加任何辅助 loss 或结构改动。结果在 MIKASA-Robo 上五个训练任务平均成功率从 0.42 拉到 0.84，LIBERO 上完整可观测场景也没有掉点（96.2%）。",
     "highlights": {
-      "contribution": "推出第一个真正面向无约束照片集的feed-forward 3DGS模型和大型训练数据集。",
-      "innovation": "WildCity数据集覆盖光照与transient变化,使feed-forward模型学到外观一致性和transient抑制。",
-      "method": "构建WildCity(200场景×170光照×transient,337,500图);训练feed-forward 3DGS,以参考视图为外观条件,显式抑制transient。",
-      "results": "在无约束照片集上超越现有feed-forward 3DGS,接近per-scene优化方法。"
+      "contribution": "把「recurrence 本身」这一变量从一堆 memory-augmented VLA 的混杂机制里隔离出来，定量刻画了 in-backbone 循环记忆的能力边界。",
+      "innovation": "提出最小化的 μVLA 家族：只在 Transformer 主干里加一组 memory token，参数化 memory 宽度 m、TBPTT 长度 K、更新规则（跨步梯度 vs. EMA detach），实现「单变量消融」。",
+      "method": "输入是 OpenVLA-OFT 标准的视觉-语言观测，模型在主干内注入少量 memory token，跨时间步通过自注意力滚动更新，使用 truncated BPTT 端到端训练，没有辅助损失，没有结构改动。",
+      "results": "MIKASA-Robo 五任务平均成功率 0.42→0.84，held-out 任务 0.07→0.23；LIBERO 上最强 recurrent 变体 96.2%，全可观测无回退。"
     },
     "scores": {
-      "relevance": 7.5,
-      "recency": 10,
+      "relevance": 9.2,
+      "recency": 9,
       "popularity": 7.0,
-      "quality": 7.5,
-      "recommendation": 7.3
+      "quality": 8.2,
+      "recommendation": 8.4
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.11782",
-    "summary": "3DGS在内存约束和RDO压缩管线里高频纹理常糊。作者搞了个通用的2D perceptual wrapper,只在渲染输出后接一个轻量合成网络,条件于伪随机噪声合成感知上合理的纹理,用Wasserstein Distortion监督。即插即用,在vanilla/内存受限/RDO三种3DGS上都明显提感知质量并降文件/模型大小。",
+    "arxiv_id": "2606.12475",
+    "summary": "人机协作里现成系统大多靠手工流水线，扩展性差。作者想验证端到端模仿学习的 VLA 能不能直接做协作操控，并发现 action chunking 在隐式协作中会「越界」——chunk 跨过任务切换点导致机器人提前递工具。于是提出推理期 steering 来抑制这种过早辅助行为。16 人用户研究显示，steering 让长 horizon 策略既保住性能又减少了过早干预，整体协作更快、失败更少。",
     "highlights": {
-      "contribution": "提出一个不动3DGS骨干的通用2D感知包装器,用Wasserstein Distortion补回高频纹理。",
-      "innovation": "用伪随机噪声+轻量合成网络做内容-视角相关的纹理合成,不再追求逐像素重建保真。",
-      "method": "3DGS渲染后过一个噪声条件的轻量合成网络生成最终图像;用Wasserstein Distortion监督局部特征统计而非像素;可插入vanilla/低存/RDO 3DGS。",
-      "results": "主观+客观实验都显著强于baseline,在更小文件/模型尺寸下取得更高感知质量。"
+      "contribution": "首次系统分析 VLA 在隐式人机协作中的失败模式：demonstration action leakage 导致过早辅助。",
+      "innovation": "提出推理期 steering 机制，在不重训的前提下抑制跨任务切换的 action chunk 越界，同时保留长 horizon 收益。",
+      "method": "在两个 SOTA VLA 上做实证，识别 action chunk 跨越潜在任务切换点的现象；推理期通过 steering 干预动作生成；用 16 人长 horizon 装配任务用户研究做真实评估。",
+      "results": "16 人用户研究中相比短 horizon 策略实现更快协作和更少失败，缓解了过早递工具等错误辅助行为。"
     },
     "scores": {
-      "relevance": 6.5,
-      "recency": 10,
-      "popularity": 6.5,
-      "quality": 7.2,
-      "recommendation": 6.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.12340",
-    "summary": "这是一篇偏艺术装置的工作。作者把Feed-Forward 3D重建模型当作「神经原型大脑」,人为诱导其突触衰减来视觉化遗忘过程,把神经网络当做认知代理而非工具。展示遗忘下世界感知的崩塌,呼吁社区探索neuromorphic美学。",
-    "highlights": {
-      "contribution": "把feed-forward 3D重建模型作为认知现象学的视觉化媒介,提出一种neuromorphic美学叙事。",
-      "innovation": "在3D重建模型里诱导受控的突触衰减,以艺术装置形式呈现遗忘。",
-      "method": "在前馈3D重建模型中诱导突触衰减→渲染遗忘过程→交互式装置展示;没有定量benchmark。",
-      "results": "提供交互式demo,没有量化实验。"
-    },
-    "scores": {
-      "relevance": 4.0,
-      "recency": 10,
-      "popularity": 4.5,
-      "quality": 5.5,
-      "recommendation": 4.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.11909",
-    "summary": "造embodied空间智能benchmark又贵又难维护、做出来还很快被刷爆。Embodied-BenchClaw是个自治多智能体系统:用户给评测意图,五阶段流水线(意图蓝图→数据采集→结构化→benchmark合成→评测报告)由规划/构造/评估三个agent协调,带Skill Library和过程质量控制,实现可组合、可校验、可修复的benchmark生产。覆盖室内外推理、操作、四足导航、UAV等多类。",
-    "highlights": {
-      "contribution": "把embodied benchmark的构建本身做成自治agentic pipeline,可持续更新且可重用。",
-      "innovation": "意图驱动的五阶段流水线+三agent协调+Skill Library和过程质控,实现可组合可修复的benchmark生产。",
-      "method": "三agent(plan/build/eval)协作五阶段流水线;用户指定意图后自动采集→清洗→合成→评估;实例化多个具身空间任务benchmark。",
-      "results": "多种实例化benchmark上人评、judge评、一致性检查、成本和消融均显示构造质量好且省人力。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 10,
-      "popularity": 7.5,
+      "relevance": 8.0,
+      "recency": 9,
+      "popularity": 6.8,
       "quality": 7.5,
       "recommendation": 7.5
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.11976",
-    "summary": "代码agent定位多文件修改时大多线性逐目录看,作者觉得这跟跨子系统变更结构不匹配。提出按领域并行派发子agent的方法,在SWE Bench Pro及自建扩展集上对比线性RLM、外部CLI(Codex 5.5 High)等。小Haiku级模型用这个方法在Haiku级里大幅领先,在扩展集上仅次于Codex 5.5 High。还发现文档演化是隐性依赖、文件系统访问反而拖累。",
+    "arxiv_id": "2606.12616",
+    "summary": "闭环驾驶仿真里的 NPC 行为基本是一个模子，要么规则化要么单一行为模式。作者搞了 PersonaDrive：先在 driver-in-the-loop 平台上让真人按激进/中性/保守三种风格开 CARLA 路线收数据，再训一个轻量检索头把同风格示范喂给 VLA，作为「in-context 行为示范」做轨迹预测。推理时只需切换检索库就能切风格，不用重训。Bench2Drive 上裸跑比 SimLingo 高 4.6%，每种风格都拿最高分，速度/加速度也按风格平滑变化。",
     "highlights": {
-      "contribution": "提出非线性、领域并行的agentic代码探索范式,在多文件变更定位上显著超越线性探索。",
-      "innovation": "把仓库按子系统切片并并行派发子agent;还指出文档隐性依赖与文件系统访问的副作用。",
-      "method": "持久session下从GitHub issue和基commit开始;领域切片→并行agent探索→聚合预测要改的文件;与RLM/Codex 5.5 High对比。",
-      "results": "Haiku级模型micro F1领先同级一大截,扩展集上仅次于Codex 5.5 High;并给出三个有意思的次级发现。"
+      "contribution": "构造了一个真人按风格指令驾驶的数据集，并用检索增强让单个 VLA 主干无需重训即可生成多风格 NPC。",
+      "innovation": "用真人「按指令驾驶」的示范替代标签代理或 LLM 推断的 reward 权重；通过 per-style 数据库切换实现 zero-cost 风格调度。",
+      "method": "三阶段：(1) 离线用图像-文本相似度做 per-style triplet 挖掘；(2) 训轻量检索头融合冻结视觉特征与小型控制编码器；(3) 微调单个 VLA 主干把检索到的上下文当 in-context 行为示范用于 waypoint 预测。",
+      "results": "Bench2Drive 上无风格条件下 driving score 比 SimLingo 高 4.6%、比 HiP-AD 高 2.5%；每种风格都拿最高分，最弱风格还比最强基线 DMW 高 5.4%；从保守到激进平均速度+18%、加速度+25%。"
     },
     "scores": {
-      "relevance": 7.5,
-      "recency": 10,
-      "popularity": 7.5,
-      "quality": 7.8,
-      "recommendation": 7.6
+      "relevance": 8.4,
+      "recency": 9,
+      "popularity": 7.2,
+      "quality": 8.0,
+      "recommendation": 8.0
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.12040",
-    "summary": "用多agent设计混凝土护栏,要满足AASHTO-LRFD规范的非线性约束。基于AutoGen搭了「生成-评估-优化」闭环,设计准确率超过98%,远超单一LLM。还发现性能和模型规模并非线性相关——8B轻量模型能赢过631B旗舰,提示工程领域里多agent编排更重要。",
+    "arxiv_id": "2606.12706",
+    "summary": "现在自动驾驶 VLA 会同时生成 CoT 和轨迹，但 benchmark 只看轨迹质量，没人查 CoT 跟动作到底有没有因果关系。作者提出 VLADriveBench，把观测指标（提及/幻觉/矛盾/动作对齐）和 CoT 干预协议结合起来。在三个模型上发现两种分析会严重背离：ORION 观测对齐分最高但 CoT 其实是「附带现象」；Alpamayo v1.5 分数低但 CoT 是真有因果影响，且视觉显著性决定 CoT 影响力大小。",
     "highlights": {
-      "contribution": "把多agent编排引入受规范严约束的结构工程设计,实现>98%准确率。",
-      "innovation": "「生成-评估-优化」闭环把物理约束验证嵌进多agent协作,缓解LLM幻觉。",
-      "method": "基于AutoGen的多agent闭环:生成方案→规范评估→优化迭代;在混凝土护栏设计任务上做对比实验。",
-      "results": "设计准确率>98%大幅超单LLM;8B模型在该框架下能赢631B旗舰。"
+      "contribution": "首个专门评测驾驶 VLA 中 CoT-动作因果关系的 benchmark，揭示「CoT 看起来对≠真起作用」。",
+      "innovation": "把观测式对齐指标与 CoT 干预协议互补起来，能区分 epiphenomenal vs causal 的 CoT。",
+      "method": "构造四类观测指标（mentioning/hallucination/contradiction/action alignment）+ 一套 CoT 干预协议，对 3 个模型 2 种架构做对比分析。",
+      "results": "ORION 观测对齐最高但其 CoT 是 epiphenomenal；Alpamayo v1.5 分数较低但 CoT 强因果相关，并发现视觉显著性 gate 了 CoT 影响程度。"
     },
     "scores": {
-      "relevance": 5.5,
-      "recency": 10,
-      "popularity": 5.5,
-      "quality": 6.5,
-      "recommendation": 6.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.12191",
-    "summary": "一篇关于「智能体环境工程」的综述。围绕环境生命周期(建模/合成/评估/应用)梳理现有agentic环境,八属性八领域分类,介绍符号合成和神经合成两种范式以及对应评估方法,并讨论memory/orchestration/trajectory/exploration四视角的agent进化路径与三种环境演化范式,最后展望Environment-as-a-Service、多agent环境、神经符号环境等方向。",
-    "highlights": {
-      "contribution": "首次系统性地按环境工程生命周期梳理agentic环境研究,给出分类、范式和应用路径。",
-      "innovation": "把「环境」本身视为可工程化对象,从建模到演化分阶段拆解。",
-      "method": "调研类工作:按八属性八领域分类→对比符号vs神经合成→引入agent-环境共演化视角→总结三种环境演化范式;无独立实验。",
-      "results": "全面分类和未来方向梳理,无定量benchmark结果。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 10,
+      "relevance": 8.2,
+      "recency": 9,
       "popularity": 7.0,
-      "quality": 7.0,
-      "recommendation": 6.7
+      "quality": 7.8,
+      "recommendation": 7.8
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.12320",
-    "summary": "讨论生产级AI agent的运行时治理。作者指出企业安全设计是围绕「数据边界」的,但agent的风险跑到了工作流内部——一连串各自合规的动作可能拼出没人授权的业务变更。提出五平面参考架构(推理平面裁决意图+四个执行平面:网络/身份/端点/数据),配合stop-anywhere仲裁、能力衰减的复合主体、结构化审计基底,并给出六类中断原语和四个正确性不变量。参考实现里仲裁微秒级,审计可追溯性100%。",
+    "arxiv_id": "2606.12688",
+    "summary": "下一代多模态模型把视觉编码器、语言主干、扩散头、音频 codec、动作生成器、世界模型预测器拼在一起，但现有 serving 框架假设太窄根本接不住。作者提 M*：把模型抽象成数据流图（Walk Graph），请求是图遍历，支持任意组件组合与灵活的物理放置。BAGEL 文生图比 vLLM-Omni 端到端延迟低 20%；Qwen3-Omni TTS 实时因子降到 1/2.9、吞吐 2.7×；V-JEPA 2-AC 机器人规划 rollout 最高加速 12.5×。",
     "highlights": {
-      "contribution": "提出面向生产agent的运行时治理参考架构,把「委派动作的安全治理」从data-centric扩展到workflow-centric。",
-      "innovation": "五平面分解+stop-anywhere仲裁+复合主体能力衰减+结构化审计;六类中断原语超越allow/deny二元。",
-      "method": "形式化定义五平面和不变量→给出六类中断原语→构造能力衰减的委派链评估→实现一个policy引擎核心做测量评估。",
-      "results": "在每次试验中能力衰减和证据可重构都成立,仲裁微秒级,审计基底tamper-evidence按设计成立;承认未在live agent benchmark全系统评估。"
+      "contribution": "面向「composite AI 模型」（含 VLA、世界模型、omni 模型）提出统一 serving 系统 M*。",
+      "innovation": "Walk Graph 抽象把不同家族复合模型表达为数据流图，支持任意组件组合、跨集群灵活放置和模型无关的运行时优化。",
+      "method": "把模型表示成 dataflow graph，请求被建模为图遍历；模块化抽象支持组件任意组合；分布式运行时做 placement、调度、共享优化。",
+      "results": "BAGEL 文生图端到端延迟比 vLLM-Omni 低 20%；Qwen3-Omni TTS 实时因子降低最高 2.9×、吞吐提升 2.7×；V-JEPA 2-AC 机器人规划 rollout 最高加速 12.5×。"
     },
     "scores": {
-      "relevance": 6.0,
-      "recency": 10,
-      "popularity": 6.5,
+      "relevance": 7.6,
+      "recency": 9,
+      "popularity": 8.0,
+      "quality": 8.4,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12721",
+    "summary": "这篇做的是 Theory of Mind 的形式化：怎么算「谁告诉了谁什么、何时、可信度多大」。作者提出 ToM-U，用 Local Epistemic World Models（LEWM，有向类型图）来表征智能体、状态节点和知识关系，再枚举候选 LEWM 用观测行为评分直到置信度够。给出五个形式化定义、三种推断流程和一个失败 mentalizing 的残留函数。强调跟 Bayesian ToM、模拟理论的差异，并能给出可证伪预测。",
+    "highlights": {
+      "contribution": "在计算层面形式化 epistemic state inference，给 mentalizing 提供一套可证伪的规范定义。",
+      "innovation": "用 LEWM 有向类型图作为底层表示，并通过候选 LEWM 评估 + 残留函数显式刻画 mentalizing 失败的痕迹。",
+      "method": "五个形式定义：LEWM 结构、agent 节点的信息访问历史、有界递归 mentalizing、三种推断流程、失败残留函数；不绑定具体算法或神经实现。",
+      "results": "理论文，没有数值 benchmark；给出关于 mentalizing 失败模式的可证伪方向性预测，并和 Bayesian ToM、simulation theory、theory-theory 做了概念对比。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 9,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12579",
+    "summary": "杂乱场景里的反应式运动生成卡在感知-规划耦合不够快、世界表征太粗。作者把世界建模和向量场规划都搬到 GPU 上做，让感知-动作回路在动态环境里真正能闭环。在 7-DoF Franka 上的真机实验里 GPU 版比 CPU 版最高快 5×，简单到复杂场景都能避障成功。",
+    "highlights": {
+      "contribution": "提出 GPU 加速的多智能体感知+规划框架 G-MAPP，解决反应式运动在高保真世界表征下的实时性瓶颈。",
+      "innovation": "把世界建模和向量场规划同时 GPU 化，实现感知-动作回路紧耦合；用并行状态探索做拟全局轨迹规划。",
+      "method": "GPU 加速的世界建模 + 向量场规划；用现成深度传感器做感知；并行状态探索支持 quasi-global 轨迹生成；在 7-DoF Franka Emika 真机上验证。",
+      "results": "GPU 版相比 CPU 版最高 5× 加速；真实场景下 trivial 与 challenging 任务都成功避障，定性展示动态杂乱环境的可用性。"
+    },
+    "scores": {
+      "relevance": 6.2,
+      "recency": 9,
+      "popularity": 6.0,
       "quality": 7.0,
-      "recommendation": 6.5
+      "recommendation": 6.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.12690",
+    "summary": "EWAM 想在不动 Cosmos3 主干的前提下，让世界-动作模型在线适应新任务布局而且不需要新示范。做法是在冻结的 DiT 里插四个轻量神经层：经验记忆、异常检测、策略路由、动作修正，组成闭环 co-reasoning 链路。除了路由是离散监督，其它都可微地嵌进 Cosmos3 前向路径。整体走 zero-shot 协议，目标是大幅压缩部署期适应所需的额外数据量。",
+    "highlights": {
+      "contribution": "提出基于冻结 Cosmos3 的闭环在线适应架构 EWAM，把推理期 co-reasoning 作为新任务适应的主要手段。",
+      "innovation": "四个轻量层（经验记忆/异常检测/策略路由/动作修正）深度差分地嵌入 DiT 前向路径，主干完全冻结、不引入任何任务示范集。",
+      "method": "Neural Experience Memory 层在 DiT 中间层提供任务上下文；Neural Anomaly Detection 层监控预测-真实状态差异；Neural Policy Routing 层根据异常严重度选直接执行/保守重规划/回滚恢复；Neural Action Correction 层基于执行诊断细化动作 chunk。",
+      "results": "在 zero-shot 协议下评估，未公布具体数值 benchmark，性能提升完全来自推理期 co-reasoning，无需主干微调或额外任务示范。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9,
+      "popularity": 6.5,
+      "quality": 6.8,
+      "recommendation": 7.2
     },
     "affiliations": []
   }
