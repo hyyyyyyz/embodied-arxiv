@@ -90,6 +90,52 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.14772",
+      "title": "ScoutVLA: UAV-Centric Active Perception via a Dual-Expert VLA Model for Open-World Embodied Question Answering",
+      "authors": [
+        "Wenhao Lu",
+        "Zhengqiu Zhu",
+        "Xiaofeng Wang",
+        "Xiaoran Zhang",
+        "Yatai Ji",
+        "Yong Zhao",
+        "Yue Hu",
+        "Yingzhen Nie",
+        "Jinlong Zhu",
+        "Zheng Zhu"
+      ],
+      "affiliations": [],
+      "summary": "户外无人机做具身问答时，现有系统一旦目标进入视野就停下，结果细粒度的视角调整完全没做。作者搞了个 FG-EQA 基准（4 万条仿真 + 1 千条真实轨迹），并提出 ScoutVLA：模仿侦察蜂「摇摆舞」反复调整航线找证据。模型用双专家解耦架构，视觉语言专家推语义意图、动作专家用 flow matching 出连续视角调整轨迹，配合知识隔离训练。最终严格成功率高 10.48 倍，QA 正确率高 7.72 倍。",
+      "original_abstract": "Aerial Embodied Question Answering (EQA) requires Unmanned Aerial Vehicles (UAVs) to actively perceive the environment and answer natural language questions. Existing outdoor EQA systems usually stop once the target enters the UAV's field of view, leaving the fine-grained viewpoint adjustment needed for evidence-seeking questions largely unresolved. To address this issue, we introduce FG-EQA, a fine-grained active perception EQA benchmark with more than 40K simulated trajectories and 1K real-world trajectories. Drawing inspiration from the ``waggle dance'' of scout bees, which iteratively adjust their flight paths to verify target information, we propose ScoutVLA, an evidence-driven Vision-Language-Action model for outdoor EQA. To emulate this active exploration behavior, ScoutVLA features a decoupled dual-expert architecture: a vision-language expert infers the semantic intent to identify missing evidence, while an independent action expert employs high-DoF flow matching to generate continuous viewpoint-refinement trajectories. To balance the competing demands of continuous control and semantic reasoning, we devise a decoupled training strategy with a knowledge insulation mechanism that prevents the action gradients from erasing the model's multimodal reasoning ability. Extensive simulated experiments and a qualitative real-world field study both verify the superiority of ScoutVLA over the state-of-the-art baselines, demonstrating a 10.48$\\boldsymbol{\\times}$ higher average strict success rate and a 7.72$\\boldsymbol{\\times}$ higher average QA correctness.",
+      "highlights": {
+        "contribution": "把 UAV 户外 EQA 从「看到目标就停」推进到「主动找证据」，同时给出 FG-EQA 基准和 ScoutVLA 模型。",
+        "innovation": "灵感来自侦察蜂摇摆舞的证据驱动主动感知；视觉语言推理专家与高自由度动作专家解耦，并用知识隔离防止动作梯度冲刷多模态推理能力。",
+        "method": "输入为 UAV 第一视角图像和问题；双专家结构：VL 专家判断缺什么证据、动作专家用 flow matching 生成连续视角微调轨迹；解耦训练加知识隔离机制让两边互不干扰。",
+        "results": "在 FG-EQA 上严格成功率比 SOTA 高 10.48 倍、QA 正确率高 7.72 倍，并通过真实世界飞行试验定性验证。"
+      },
+      "images": [],
+      "published_date": "2026-06-09T10:40:52Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 9.0,
+        "popularity": 7.0,
+        "quality": 8.0,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.14772v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.14772v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.10501",
       "title": "Uncovering Vulnerability of Vision-Language-Action Models under Joint-Level Physical Faults",
       "authors": [
@@ -464,47 +510,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.11372v1",
       "arxiv_url": "https://arxiv.org/abs/2606.11372v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.11187",
-      "title": "Next Forcing: Causal World Modeling with Multi-Chunk Prediction",
-      "authors": [
-        "Gangwei Xu",
-        "Qihang Zhang",
-        "Jiaming Zhou",
-        "Xing Zhu",
-        "Yujun Shen",
-        "Xin Yang",
-        "Yinghao Xu"
-      ],
-      "affiliations": [],
-      "summary": "自回归视频生成做 World Action Model 收敛慢、推理慢。Next Forcing 把 LLM 的多 token 预测搬到 chunk 视频生成上：主模型旁挂轻量 MCP 模块同时去噪 next¹/next²/next³ 多个未来 chunk，形成因果链给主模型回传多尺度监督。50fps 下 5k 步训练就比 LingBot-VA 提升 93.1%、收敛快 2.3 倍；推理时 MCP 模块还能并行预测下一个 chunk，提速 2 倍。RoboTwin 上 Clean/Random 拿到 94.1/93.5% 新 SOTA。",
-      "original_abstract": "Autoregressive video generation has emerged as a powerful paradigm for World Action Models (WAMs). However, existing approaches suffer from slow training convergence and limited converged accuracy, particularly at high frame rates, as the training supervision is confined to the current chunk without explicit signals about future dynamics; they also suffer from slow inference due to iterative video denoising. In this paper, we present Next Forcing, a multi-chunk prediction (MCP) framework for causal world modeling that enables faster training, higher accuracy, and accelerated inference. Inspired by multi-token prediction in large language models, Next Forcing introduces an MCP training objective that augments the main model with lightweight auxiliary MCP modules to simultaneously denoise video chunks at multiple future temporal horizons (next$^1$, next$^2$, next$^3$ chunks). These MCP modules form a causal chain across prediction depths, where intermediate features fused from multiple layers of the main model are leveraged to predict future dynamics, allowing near-future predictions to inform farther-future ones and providing dense multi-scale temporal supervision back to the main model. During training, the MCP modules significantly accelerate convergence and improve converged accuracy, especially at high frame rates: at 50 fps, Next Forcing achieves a 93.1% relative improvement over LingBot-VA at 5k training steps and 2.3x faster convergence, and establishes new state-of-the-art results on the RoboTwin benchmark (94.1/93.5% on Clean/Random). At inference, the MCP modules can be retained to predict the next video chunk in parallel with the current one, achieving 2x inference acceleration. Next Forcing also demonstrates significant improvements on PhyWorld, a benchmark evaluating adherence to physical laws in video generation, and over 50% FVD reduction on general video pretraining.",
-      "highlights": {
-        "contribution": "把多 token 预测思想推广到因果视频世界建模——多 chunk 预测 MCP——显著提升训练效率、精度和推理速度。",
-        "innovation": "MCP 模块形成跨预测深度的因果链，近未来预测帮远未来预测，反向给主模型注入多尺度时序监督，并能在推理时复用做并行解码。",
-        "method": "主模型逐 chunk 自回归生成视频；挂多个轻量 MCP 头同时在不同未来深度上做去噪；训练目标是这些深度的联合去噪；推理可保留 MCP 并行出下一 chunk。",
-        "results": "50fps 下相对 LingBot-VA 提升 93.1%（5k 步），收敛 2.3×；RoboTwin Clean/Random 94.1/93.5% 创新 SOTA；推理 2× 加速；PhyWorld 提升明显，通用视频预训练 FVD 降低 50%+。"
-      },
-      "images": [],
-      "published_date": "2026-06-09T17:59:22Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "World Model",
-      "matched_keywords": [
-        "world model"
-      ],
-      "scores": {
-        "relevance": 9.0,
-        "recency": 9.0,
-        "popularity": 8.5,
-        "quality": 8.5,
-        "recommendation": 8.7
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.11187v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.11187v1",
       "venue": null
     },
     {

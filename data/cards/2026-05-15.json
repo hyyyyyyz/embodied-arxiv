@@ -477,23 +477,21 @@
     ]
   },
   {
-    "arxiv_id": "2605.21516",
-    "summary": "Harness 设计（任务分解 + 引导执行）不一定越精细越好。作者用 inference-time trajectory alignment 的视角分析 harness：分解切子目标 + 引导调动作分布，量化 workflow 颗粒度、retry budget、guidance 的作用，揭示 over-decomposition、over-pruning、hallucinated execution 这些 failure mode，并发现部分 harness（只规定前几步）反而更好。",
+    "arxiv_id": "2606.13692",
+    "summary": "数据质量评估一直依赖静态规则和人工策略，难以适配不同业务场景。作者提出一个 agentic-retrieval 框架，让多智能体读自然语言描述的「数据用途」，自动推导上下文感知的评估策略并生成可执行的校验逻辑。框架加了一个可行性校验阶段过滤不切实际或跑不动的规则，跑通后再确定性执行保证可复现。原型在同一数据集多种用途下评估，结果显示评估输出能跟着「意图」走，可行性门控也确实少生成胡来的规则。",
     "highlights": {
-      "contribution": "从 inference-time trajectory alignment 角度系统分析 LLM agent harness 的设计原则，揭示典型 failure mode 并提出 partial harness 设计。",
-      "innovation": "把 harness 拆成 task decomposition 与 guided execution 两个机制独立量化，给出何时 harness 反而有害的理论解释。",
-      "method": "建立分析框架把 workflow 颗粒度、retry budget、guidance 引发的 action reweighting 与 final success 关联 → 用合成实验 + 真实 terminal agent benchmark 验证 → 提出 partial harness（只指定开头几步）。",
-      "results": "合成与 terminal agent benchmark 上验证了理论预测：partial harness 的 pass rate 超过 fully structured workflow。"
+      "contribution": "提出一个面向数据质量评估的统一 agentic-retrieval 框架，让 LLM 多智能体根据数据用途自动生成可执行的校验逻辑。",
+      "innovation": "引入「可行性验证 + 迭代修正」环节，把 LLM 生成的评估规则在执行前先过一遍现实性和可执行性筛查，缓解 grounding 与执行安全问题。",
+      "method": "输入是自然语言描述的数据使用意图；多智能体工作流解析意图、检索上下文、产出评估策略和验证代码；可行性校验阶段判断规则是否真实可跑，不行就回炉重写；通过的规则确定性执行得到可审计结果。",
+      "results": "在同一数据集多种用途场景下做端到端原型评估，定性显示评估输出会随意图变化而调整，可行性门控也减少了不可执行规则的产生；论文未给出统一量化指标。"
     },
     "scores": {
-      "relevance": 6.0,
+      "relevance": 5.5,
       "recency": 6,
-      "popularity": 5.8,
-      "quality": 7.2,
-      "recommendation": 6.7
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.8
     },
-    "affiliations": [
-      "Southern University of Science and Technology"
-    ]
+    "affiliations": []
   }
 ]

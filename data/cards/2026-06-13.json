@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.15165",
+    "summary": "机器人数据贵且 VLA 容易把训练样本记下来，所以作者第一次把成员推断攻击搬到 VLA 上。他们发现训练样本和非训练样本在 VLA 注意力图上有明显差异，于是先抽这种注意力特征，再训一个小攻击模型来判别。在多个 VLA benchmark 上 AUC 和 TPR@1%FPR 都拿到最优，说明现有 VLA 部署存在真实隐私泄露风险。",
+    "highlights": {
+      "contribution": "首次系统性研究 VLA 模型的成员推断攻击，提出 VLALeaks 框架并揭示其隐私脆弱性。",
+      "innovation": "用 VLA 内部注意力差异作为成员判别信号，把 MIA 这个老话题接到机器人 VLA 这个新场景。",
+      "method": "两阶段：先抽 VLA 注意力差异作为成员特征，再训一个二分类攻击模型，对样本是否属于训练集做判别。",
+      "results": "在多个 VLA benchmark 上取得最高 AUC 与 TPR@1%FPR，明显优于既有 MIA 基线。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15285",
+    "summary": "现有 VLA 推理太慢撑不起高频闭环控制，作者把语义理解和动作生成解耦成两个频率的模块。低频模块异步刷新语义条件，高频模块只跑动作头，避免每步都过整个 VLA。再加上历史动作条件和时间错位训练对齐过期语义，在 LIBERO 上用 π0.5 和 UniVLA 验证，服务端动作模块最高跑到 35.6 Hz，并完成真机部署。",
+    "highlights": {
+      "contribution": "提出语义-动作异步解耦框架，让现有 VLA 不改主干就能做高频闭环控制。",
+      "innovation": "在 VLA 内部已有的语义-动作接口处做异步频率分离，并用历史动作条件+时间错位训练补偿语义陈旧带来的偏差。",
+      "method": "低频语义模块定期产生可复用语义条件，高频动作模块以历史动作和当前观测为输入持续输出控制；训练时人为加入语义时间错位提升鲁棒性。",
+      "results": "在 LIBERO 上验证 π0.5/UniVLA，动作模块服务端吞吐量达 35.6 Hz，并在真机上完成闭环部署。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9.5,
+      "popularity": 7.8,
+      "quality": 8.2,
+      "recommendation": 8.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15099",
+    "summary": "显式 CoT 让 VLA 推理又慢又容易累积错误，作者改用一串看不见的隐变量来代替思维链。再用强化学习给隐轨迹做去噪，按任务奖励调它的方向；再加一个早退策略，置信高就立刻动手。最后在 LIBERO 上 98.3% 成功率，推理还比显式 CoT 快 6 倍。",
+    "highlights": {
+      "contribution": "提出 AVA-VLA，把 VLA 的链式思考换成可早退的隐空间推理，兼顾效率和长程稳定性。",
+      "innovation": "把隐状态生成视为序贯决策，用 RL 去噪隐轨迹；置信高时早退，动态权衡推理深度与速度。",
+      "method": "输入图像+指令，先生成一串隐变量推理轨迹，由 RL 基于任务奖励去噪并优化；解码器把隐状态映成动作；推理时按状态置信度提前终止。",
+      "results": "LIBERO 平均成功率 98.3%，相比显式 CoT 推理提速 6 倍。"
+    },
+    "scores": {
+      "relevance": 9.2,
+      "recency": 9.5,
+      "popularity": 8.0,
+      "quality": 8.3,
+      "recommendation": 8.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15142",
+    "summary": "现有人形动作生成把所有运动信号塞进单个 codebook，频率分析发现这会丢失高频速度信息。作者用双流频域 tokenizer 把动作拆成基础流和物理流，分别做 DCT 截断和 BPE 压缩。再用 Qwen3.5 作主干让物理 token 在基础 token 之后生成，2B 模型就在 HumanML3D 上把 Diversity 差距砍掉一半多，MBench 上 MCC 提升 3.8%。",
+    "highlights": {
+      "contribution": "提出 MotionVLA + DSFT，用频域双流 tokenizer 解决人形动作生成中高频信号被压扁的问题。",
+      "innovation": "通过 DCT 频率分析诊断单 codebook 的缺陷，并按基础/物理频段分流量化的频率感知 tokenizer。",
+      "method": "DSFT 用 DCT 截断+BPE 把动作分成 Base 与 Physical 两路 token；MotionVLA 用 Qwen3.5 主干自回归生成 Base 后再生成 Phys，输入是场景图像和文本。",
+      "results": "2B 参数，HumanML3D Diversity 与真实数据的差距缩小超过 50%，MBench MCC 提升 3.8%。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15171",
+    "summary": "服装上的缝线本身有很丰富的结构信息但常被遮挡，作者用 GNN+注意力把不完整的缝线观测映成完整的拓扑骨架图。基于这张图做分层视觉伺服控制，让双臂机器人把衣物送上印花平台并精准对齐。真机实验显示对齐精度达到人类水平，且方差更小，对不同衣物也鲁棒。",
+    "highlights": {
+      "contribution": "提出 Seam-to-Graph 网络与基于骨架图的分层视觉伺服控制，用于双臂衣物对齐。",
+      "innovation": "把局部观测的缝线显式抽象成拓扑骨架图来做状态估计，再驱动形变感知的分层伺服。",
+      "method": "GNN+注意力把缝线观测映射为骨架图，作为衣物状态估计；上层伺服根据图状态生成双臂分层动作，用于丝印平台衣物装载与对齐。",
+      "results": "真机实验中对齐精度达到人类水平且方差更小，对多种不同衣物均鲁棒。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 9.5,
+      "popularity": 6.2,
+      "quality": 7.3,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15232",
+    "summary": "视觉模仿学习里 spatial softmax 用得多但说不清为啥好，作者系统对比后发现它给出的特征又稳又紧凑，能让编码器盯住任务相关区域。但当前视觉编码器多次下采样会丢细节，于是提出 PRISM 用 top-down 交叉注意力融合多尺度隐式空间特征。在低分辨率高精度的 ToolHang 任务上把成功率从 5.0% 提到 13.4%，参数只多 15.4%。",
+    "highlights": {
+      "contribution": "重新审视 spatial softmax 的有效性，提出 PRISM 视觉编码器保留多尺度隐式空间信息。",
+      "innovation": "用显著性分析解释 spatial softmax 为何稳定，并定位下采样表征瓶颈，再用 top-down 交叉注意力做多尺度融合。",
+      "method": "PRISM 在常规视觉编码器上加 top-down 交叉注意力把多尺度特征送回顶层池化层，作为生成式模仿策略的视觉条件，支持多种策略主干。",
+      "results": "多任务一致提升，ToolHang 平均成功率从 5.0% 提到 13.4%，参数仅增加 15.4%。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 9.5,
+      "popularity": 6.8,
+      "quality": 7.8,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15032",
+    "summary": "如今「world model」一词什么都能套，评测也散得很，作者整理了文献发现大家做评测时 claim 经常超出证据。他们提出从决策视角看世界模型应该怎么评，定义 L0-L7 的能力阶梯，从视觉合理性一路到策略优化收益。再给出一套以反事实保真度、闭环 rollout、策略排序一致性为核心的基准协议。",
+    "highlights": {
+      "contribution": "提出以决策为中心的世界模型评测立场和 L0-L7 能力阶梯，明确不同评测能支撑的 claim 范围。",
+      "innovation": "用「claim vs evidence」的视角重新审视当前世界模型评测乱象，把视觉指标和决策指标分级、配对。",
+      "method": "文献综述 + 评测分级框架：把视觉合理性、可执行性、规划成功、策略提升等指标按 L0-L7 排成层级，并给出一套包含反事实保真、闭环 rollout 有效性、策略排序一致性的基准协议。",
+      "results": "无具体数字，给出一套可复用的决策中心评测协议和明确建议。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 9.5,
+      "popularity": 8.2,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15341",
+    "summary": "现有自动驾驶世界模型要么要喂未来轨迹要么生成太慢，作者只用首帧、自车轨迹和宏观文本提示，让模型自己学会因果交互。再用 Context-Forced DMD 把扩散蒸馏到 12 FPS 实时交互。下游闭环评估、RL 后训练和人车在环都跑通了，训练出的策略在真实路面表现更强。",
+    "highlights": {
+      "contribution": "提出实时、可控、因果驱动的驾驶世界渲染器 CausalDrive，并落地三个下游任务。",
+      "innovation": "不喂 NPC 未来布局，逼模型学因果反应；提出 Context-Forced DMD 把连续流匹配和自校正蒸馏结合，达成 12 FPS。",
+      "method": "输入首帧+自车轨迹+宏观文本，模型预测整段前视视频；蒸馏阶段用 flow-matching + 自校正目标修正自回归 covariate shift；下游用 Video2Reward 接 RL 后训练。",
+      "results": "达到 12 FPS 交互速度，闭环碰撞伪影显著减少，并支持大规模 RL 后训练与人车在环；真实路面表现优于基线策略。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 9.5,
+      "popularity": 8.3,
+      "quality": 8.5,
+      "recommendation": 8.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15160",
+    "summary": "多模态输入往往有歧义，但现有 MLLM 推理只沿单条 latent 轨迹走，又费内存又限探索。作者并行展开多条多样化的 latent 世界假设，用正交正则防止崩塌；再用资源感知 RL 决定每条路要扩展、合并还是终止。结果多模态推理 benchmark 上精度提升 2-5 个点，内存少 24%。",
+    "highlights": {
+      "contribution": "提出 DLWM 框架，在连续隐空间维护多条世界假设做多模态推理。",
+      "innovation": "把多模态歧义建成多条隐世界假设，并用资源感知 RL 动态决定每条路径的扩展/合并/终止。",
+      "method": "在隐空间构造多条 latent 推理轨迹，每条对应一种视觉解释；正交多样性正则防止假设坍缩；RL 策略按状态分配算力管理路径。",
+      "results": "多模态推理 benchmark 平均精度提升 2-5 点，同时显存使用降低 24%。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15162",
+    "summary": "视频世界模型里相机控制大多隐式学习，超出训练轨迹就漂。GeoStream 在自回归视频生成里维护一个在线刷新的 3D cache：从最新帧估深度、反投影到 3D 再投影到目标视角作为几何条件。训练用同一套自生成帧做 on-policy 蒸馏，对齐训练和推理分布，相机可控性大幅提升。",
+    "highlights": {
+      "contribution": "提出 GeoStream，让自回归流式视频生成里的相机控制达到 metric 级精度。",
+      "innovation": "用自刷新 3D cache 替代静态点云缓存，并在训练里也用学生自己生成的帧做 on-policy 几何条件蒸馏。",
+      "method": "每步从最近生成帧估深度→反投影 3D→投影目标视角生成几何条件；训练条件同样由学生自身输出渲染，避免 train-inference 错配。",
+      "results": "定性定量上相机可控性比现有方法显著更强，能处理超出原始视锥的轨迹。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15053",
+    "summary": "时间相关物理系统的代理模型只追拟合不够，还要尊重守恒律和耗散结构。作者提出 Physics-conforming Latent Twins，把 encoder/decoder 和隐空间流图联合学习的同时，强制隐动力满足指定守恒或耗散性质。理论上给出结构保持界，实验在多个 ODE/PDE 基准上既精度好，约束满足度和长时间行为也明显更优。",
+    "highlights": {
+      "contribution": "提出结构保持的潜在孪生代理模型框架，让物理结构约束直接内嵌到隐动力中。",
+      "innovation": "用 constraint-transfer 视角连接原始空间结构与隐空间约束，给出潜在流图保持线性/二次不变量或耗散性的代数条件。",
+      "method": "联合训练 encoder、decoder 和潜在流图，潜在动力被结构约束设计；理论给结构保持界限指导损失。",
+      "results": "多个 ODE/PDE benchmark 上约束满足度更高、长时间行为更符合物理，同时保持代理预测精度。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 5.5,
+      "quality": 7.5,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15366",
+    "summary": "用 CP 给学到的动力学模型加误差界很常见，但 CP 是在旧策略分布下算的，换了 CLF/CBF 策略闭环分布就漂了，安全保证随之失效。作者提出按 episode 迭代更新策略的同时控制分布漂移预算，再借助对抗鲁棒 CP 推出隐式/显式更新规则。结果给出第一套带迭代稳定性/安全保证的鲁棒 CP-CLF/CBF 算法，三个案例上验证收敛性。",
+    "highlights": {
+      "contribution": "首次为鲁棒 conformal CLF/CBF 策略在迭代更新中给出稳定性与安全性保证。",
+      "innovation": "结合对抗鲁棒 CP 与闭环轨迹敏感度分析，明确每次策略更新可承受的分布漂移预算。",
+      "method": "按 episode 更新策略，用敏感度分析给出 CP 误差界的隐式/显式更新规则，再分析收敛性。",
+      "results": "三个案例显示算法收敛且保持稳定/安全保证；理论上给出首批此类保证。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 5.3,
+      "quality": 7.5,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15469",
+    "summary": "机器人在变化环境下经常碰到接触/气动扰动变化，单一动力学模型不够用。作者用 Neural ODE + 上下文推断器，从状态-动作历史里推断环境因子做自适应建模，两阶段训练后接 MPC 控制。无论是仿真四旋翼，还是真机 Sphero BOLT 与 Fanuc 机械臂，都能跟上时空变化的环境扰动。",
+    "highlights": {
+      "contribution": "提出上下文感知 Neural ODE 动力学模型，并与 MPC 集成做自适应机器人控制。",
+      "innovation": "通过状态-动作历史推断隐式环境因子，把环境上下文嵌入到 Neural ODE 动力学里，便于与模型预测控制对接。",
+      "method": "两阶段训练：先训环境推断器抽 context，再训 Neural ODE 动力学；推理时从历史推断 context 接 MPC 闭环控制。",
+      "results": "在仿真四旋翼及真实 Sphero BOLT、Fanuc 机械臂上均能自适应时空变化的环境扰动。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.4,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15287",
+    "summary": "纯相机机器人想在 LiDAR 地图上定位，要跨过模态差和城市视觉重名两道坎。G2IA 在检索阶段把 VGGT 提供的视觉几何先验和实例特征融合成更贴合 LiDAR 表征的地点描述；再在重排阶段显式核对实例形状和空间布局是否在两种模态间一致。多个 benchmark 上不同阈值下都稳定提升，并展现良好跨数据集泛化。",
+    "highlights": {
+      "contribution": "提出 G2IA，几何引导+实例感知的图像到点云跨模态地点识别框架。",
+      "innovation": "用 VGGT 的视觉几何先验对齐表征，再加上实例形状与相对空间布局的跨模态一致性核验做重排。",
+      "method": "检索阶段融合 VGGT 几何特征与实例特征生成全局描述；重排阶段比对候选与查询的实例形状及空间布局一致性。",
+      "results": "在公开基准上不同定位阈值都一致提升，且跨数据集泛化稳健。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 6.8,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15057",
+    "summary": "LLM Agent 的间接提示注入防御大多在静态 benchmark 上看着不错，作者搭了 AutoDojo 让攻击自适应优化。结果几乎所有现有防御都被一个 cheap 黑盒攻击拉高 ASR——能把静态 0% ASR 的过滤器拉回 28% 总体、64% action-open。还指出当用户请求把动作下放给攻击者控制内容时，防御从结构上就难成。",
+    "highlights": {
+      "contribution": "构建 AutoDojo 把 AgentDojo 扩展为自适应攻击 benchmark，系统暴露现有 IPI 防御的脆弱性。",
+      "innovation": "用前沿 LLM 在黑盒下迭代优化注入文本，并指出 action-open 任务下指令防御存在结构性下限。",
+      "method": "在 AgentDojo 基础上加可迭代攻击循环，针对给定防御不断优化注入；评估三个任务套件、五种目标模型、多类型防御。",
+      "results": "对静态 ASR=0% 的过滤器，AutoDojo 把整体 ASR 拉回 28%，action-open 拉回 64%。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15079",
+    "summary": "蚂蚁出品的万亿 agent 模型 Ling/Ring 2.6 技术报告，针对低延迟回复和深度推理两种场景分别做。架构上用 Lightning Attention + MLA 混合线性注意力，训练上靠演化 CoT、最短正确回答蒸馏等提升 token 效率。Agent 方向提出 KPop RL 框架，异步调度 coding/search/tool/workflow 任务做大规模 agent 后训练，全套 checkpoint 开源。",
+    "highlights": {
+      "contribution": "发布万亿规模 Ling/Ring 2.6 模型家族，覆盖快速响应与深度 agent 推理两类形态并开源。",
+      "innovation": "Lightning Attention + MLA 混合线性注意力，再叠加演化 CoT、Linguistic Unit Policy Optimization 等 token 效率优化，以及 KPop 异步 agent RL 框架。",
+      "method": "从 Ling-2.0 做架构迁移预训练+大规模后训练；KPop 框架以异步任务调度组织 coding/search/tool/workflow 环境，用 RL 训练 Ring-2.6-1T。",
+      "results": "技术报告未给出具体数字汇总，强调模型在 agent 任务与长上下文的可部署性，并开源全部 2.6 checkpoint。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9.5,
+      "popularity": 8.8,
+      "quality": 8.2,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15225",
+    "summary": "教育系统要海量学习者交互数据但贵且涉隐私，现有 LLM 模拟器都按一人一模型走，冷启动很脆。作者改成 cohort 视角，先建群体能力先验，再用少量定向诊断问题精修每个学习者。Edu-Theater 用教师 agent 加点名探查的方式，在两个真实数据集上以更少 LLM 调用获得更高模拟精度。",
+    "highlights": {
+      "contribution": "提出 cohort-aware 学习者模拟范式与 Edu-Theater agent 系统，让 LLM 模拟教育数据更省更准。",
+      "innovation": "从「一人一模型」转向群体先验+针对性 roll-call 探查的两阶段范式，缓解冷启动与计算量大的问题。",
+      "method": "教师 agent 先建 cohort proficiency 先验，再对每个学习者发若干诊断问题修正状态；用回溯式 roll-call 探查历史日志预测未来行为。",
+      "results": "两个真实数据集上模拟精度更高且 LLM 调用更少，下游自适应测试受益明显。"
+    },
+    "scores": {
+      "relevance": 5.8,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15306",
+    "summary": "现有 agent benchmark 没有共享的隐结构，没法判断 agent 跨任务是不是真的在「积累经验」。LatentGym 给每个环境一个 ground-truth 隐变量贯穿任务，然后把探索（收集隐变量信息）和利用（用收集到的信息）分开度量。作者用这个测试床研究前沿模型为何跨任务适应失败，以及怎样的 post-training 能改进。",
+    "highlights": {
+      "contribution": "提出 LatentGym 测试床，用可控潜在结构衡量 LLM agent 的跨任务经验学习能力。",
+      "innovation": "通过 ground-truth latent 变量分离「探索是否收集了隐信息」和「利用是否用上了」两类指标。",
+      "method": "构造一组围绕共享 latent 的环境，按任务序列展开，提供探索/利用分解指标；并跑实验研究前沿模型失败原因和 post-training 收益来源。",
+      "results": "实证发现前沿模型跨任务适应能力差，序列后训练可显著提升泛化，且收益主要来自更好的探索。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 7.3,
+      "quality": 8.0,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15376",
+    "summary": "多 agent 并发改同一个 git 树或集群时，传统并发控制要么锁太久要么 abort 浪费推理。作者用 MTPO 协议在启动时定一个序，每个 read 都按这个序给值，write 先就地执行；如果有冲突就通知受影响的 agent 自己 re-judge 并打补丁，必要时通过预注册的 saga 逆操作回滚。在 10 个高争用场景下，CoAgent 保持串行正确性的 5% 以内同时达到 1.4 倍加速。",
+    "highlights": {
+      "contribution": "提出 MTPO 并发控制协议和 CoAgent 中间件，专为长推理、广读集的 LLM 多 agent 系统设计。",
+      "innovation": "把并发控制从强制变成「runtime 通知、agent 修补」的协作模式，并利用 LLM 自身判断和 saga 风格逆操作做局部回滚。",
+      "method": "启动时固定预序，read 按序滤值、write 就地推测执行；冲突时单向通知受影响 agent re-judge 并修补；framework 通过预注册逆操作回滚错置写。",
+      "results": "10 个争用工作负载上保持串行正确性 5% 以内，达成 1.4× 加速；bash 系统上把任务通过率从 45/71 提到 63/71，时间 0.80×、成本 0.86×。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9.5,
+      "popularity": 7.8,
+      "quality": 8.3,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15419",
+    "summary": "医学问答要既准又能解释，作者让多个 LLM 各自先生成 CoT 推理和候选答案，然后互相做同行评审打分，选出最优的链条产出最终答案。五个 SOTA 模型在 HeadQA、MedQA-USMLE、PubMedQA 三个数据集上跑，最佳组合平均准确率 0.820，超过单模型 0.777 和多数投票最高 0.789。",
+    "highlights": {
+      "contribution": "提出 LLM 之间互评的 multi-agent 同行评审推理方法，提升医学问答准确率与可解释性。",
+      "innovation": "把 LLM 同时当解答者和评审，依据推理质量而非答案一致来选最终输出，并随参与模型增多稳定 scale。",
+      "method": "多个 LLM 独立产生 CoT+候选答案，互为评审打分事实正确性与逻辑性，选最高得分链作为最终回答。",
+      "results": "三个医学问答数据集平均准确率 0.820，超过单模型 CoT（0.777）和多数投票（最高 0.789）。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 6.3,
+      "quality": 7.0,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15077",
+    "summary": "卫星和环境数据集 API 太多，普通用户难手动查，作者用三 agent 协作把自然语言查询变成结构化 API 调用：Guardrail 做安全策略、General-QA 解析意图、Recommender-Analyst 生成符合 schema 的调用。架构可移植到不同平台，但作者也用对抗多轮实验暴露 API 操纵漏洞，强调系统级防护的必要性。",
+    "highlights": {
+      "contribution": "提出风险感知的 LLM agent 框架做地理空间数据检索，并给出初步对抗评估。",
+      "innovation": "把 Guardrail 策略 agent 设计成 intercept 级拦截器嵌入 agent 链，提升多轮对抗下的鲁棒性。",
+      "method": "三个 agent 串行：Guardrail 做安全过滤；General-QA 把用户意图变查询；Recommender-Analyst 按 API schema 生成调用，并支持平台间替换。",
+      "results": "对抗多轮实验显示 prompt 级安全指令提升鲁棒性，但 API 操纵场景下仍存在罕见高影响失败，需更系统化防御。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 5.8,
+      "quality": 6.8,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15107",
+    "summary": "时序问答 benchmark 几乎都假设采样规则均匀，但真实部署里时序数据全是不规则、缺失和异步。作者构建 IRTS-ToolBench：1700 道题、10 类任务、13 个领域，专门评估 LLM 和 agent 在不规则时序上的工具接驳推理能力。提供标准化输入和可复现评估协议，给整个社区一个公允的 testbed。",
+    "highlights": {
+      "contribution": "构建 IRTS-ToolBench，覆盖不规则时序问答的 LLM/agent 评测基准。",
+      "innovation": "首次系统性把异步采样、信息性缺失、不规则频率等真实痛点抽成 1700 道结构化题目并提供工具接驳评测协议。",
+      "method": "构造 10 类任务、13 个领域的 1700 题数据，给出标准化输入和可复现 baseline + 评估代码。",
+      "results": "无具体数字，重点是 benchmark 与协议本身，已开源。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 5.8,
+      "quality": 6.8,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15141",
+    "summary": "大型音频语言模型在复杂音频问答上经常抓不准关键片段，推理过程也不可查。EChO-Agent 把任务拆成规划→工具调用→证据整合→答案自验四步走，让模型边定位边解释。在 MMAR 上准确率和 rubric 分都比基线高，消融显示证据整合是关键。",
+    "highlights": {
+      "contribution": "提出 EChO-Agent 模块化框架，把复杂音频问答重构为证据链编排工作流。",
+      "innovation": "在 LALM 上引入显式证据整合与答案自验环节，让推理过程可检查、可定位音频片段。",
+      "method": "agent 流程：规划→工具执行→证据整合→答案验证；调用各种音频分析工具收集证据后整合作答。",
+      "results": "MMAR 基准上准确率和 rubric 评分都优于基线，消融实验证明证据整合是关键贡献。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15152",
+    "summary": "现有社交 agent benchmark 几乎都靠文字，没法测多模态 agent 看不看得懂表情姿态。作者搭了一个含 240 个场景、585 个角色实例和 2340 个角色-任务实例的视觉社交智能 benchmark，并给四种角色任务。评测七个 MLLM 后发现：个人角色扮演已接近饱和，但视觉接地的互动调控和结果达成仍很难。",
+    "highlights": {
+      "contribution": "构建多模态社交 agent benchmark，评估视觉社交智能的多维能力。",
+      "innovation": "把对齐的文本-视觉证据、结构化角色档案与四类角色级任务结合，区分局部角色扮演和互动管理两层能力。",
+      "method": "240 场景、585 角色、2340 角色-任务实例；评测 verbalized-vision 与 direct-vision 两种条件下 7 个 MLLM 完成表情/特征/调控/结果四类任务。",
+      "results": "角色具体表情与冲突处理接近饱和，互动调控和视觉接地的结果达成则明显更难，揭示当前 MLLM 短板。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 6.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15242",
+    "summary": "Agent 的 skill 一个个看都没问题，但组合起来可能产生新风险，作者称之为 Skill Composition Risk。SCR-Bench 在沙箱里跑 skill 链，记录下游状态变化与路径级结果，分能力流/信任传递/授权混淆三类子任务。结果显示组合下 CapFlow ASR 从近 0 飙到 33.6%，TrustLift 在 5 个后端有 4 个超 96.5%，AuthBlur 风险通过率比孤立基线高 71.8%。",
+    "highlights": {
+      "contribution": "提出 Skill Composition Risk 概念与 SCR-Bench，把 agent skill 安全评估从单 skill 升级到激活路径级。",
+      "innovation": "首次系统记录 skill 组合执行后的下游状态变化与路径级结果，并分三类子 benchmark 揭示不同组合风险机制。",
+      "method": "在沙箱 skill 环境中按 CapFlow / TrustLift / AuthBlur 三类组合范式构造任务，记录状态变化与攻击成功路径，评估多个 LLM 后端。",
+      "results": "CapFlow 组合下 ASR 达 33.6%（孤立近 0）；TrustLift 在 5 个后端中 4 个 ASR 超 96.5%；AuthBlur 风险通过率比孤立基线高 71.8%。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 7.8,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  }
+]

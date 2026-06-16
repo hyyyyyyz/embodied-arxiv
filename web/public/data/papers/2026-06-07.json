@@ -52,6 +52,56 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.14752",
+      "title": "X-Tokenizer: A Multimodal Action Tokenizer for Vision-Language-Action Pretraining",
+      "authors": [
+        "Xirui Kang",
+        "Yanpei Shi",
+        "Lucy Liang",
+        "Roy Gan",
+        "Dongxiu Liu",
+        "Pushi Zhang",
+        "Danpeng Chen",
+        "Xiaoyi Qin",
+        "Yinan Zheng",
+        "Jinliang Zheng",
+        "Hao Wang",
+        "Xianyuan Zhan",
+        "Hang Su"
+      ],
+      "affiliations": [],
+      "summary": "现有 VLA 的 action tokenizer 大多只为重建动作而存在，token 跟视觉语言主干之间的语义连接很弱。作者把动作 tokenization 重新看成「多模态推理与可执行控制之间的语义接口」，提出 X-Tokenizer，用一个轻量 encoder + 语义残差量化 SRQ + decoder 把不同机械臂打到同一套动作词表。第一级 codebook 用 Masked Action Modeling 学粗粒度动作语义，后面几级残差专门保细节，再用对比对齐和下一帧视觉语言特征预测把动作 token 拉进基础模型的表征空间。在 2.4M 轨迹、2B 动作帧上预训练后冻结接入混合离散连续 VLA，真机聚合分最高，多模态 grounding 比 FAST 高 13.5%，长程任务高 8.25。",
+      "original_abstract": "Modern Vision-Language-Action (VLA) models must bridge pretrained vision-language reasoning and precise continuous robot control. Existing action tokenizers discretize actions primarily for reconstruction, producing codes that preserve motion geometry but provide only weak semantic supervision to the backbone. We therefore formulate action tokenization not as mere compression, but as semantic interface learning between multimodal reasoning and executable control. To this end, we introduce X-Tokenizer, a lightweight encoder-Semantic Residual Quantization (SRQ)-decoder architecture that provides a shared action interface across diverse robotic arm embodiments. Its key component, SRQ, imposes an asymmetric structure on residual vector quantization: the first level is trained with Masked Action Modeling (MAM) to form a discrete action language that captures coarse motion intent, while deeper levels remain reconstruction-oriented residuals that preserve fine-grained details. To further align action tokens with multimodal semantics, X-Tokenizer is pretrained with contrastive alignment to the representation space of a pretrained foundation model and with next-frame vision-language feature prediction. Pretrained on 2.4M trajectories (2.0B action frames), a single frozen X-Tokenizer plugs into a mixed discrete-continuous VLA as a representation-shaping supervision signal. X-Tokenizer achieves top real-world aggregate and strong RoboTwin 2.0 simulation results. Outperforming FAST in multimodal grounding (+13.5%) and long-horizon tasks (+8.25), it shows that action tokenizers serve as semantic interfaces for VLA pretraining beyond mere action compression.",
+      "highlights": {
+        "contribution": "把 action tokenizer 从「压缩动作」重新定义为 VLA 的语义接口，给出一套跨机械臂共享的动作词表 X-Tokenizer，并且证明它能作为表征塑形信号显著提升下游 VLA。",
+        "innovation": "提出 Semantic Residual Quantization：残差量化里第一层用 Masked Action Modeling 学动作语义，深层残差继续做重建，这种不对称结构既给主干强语义监督又不丢动作细节。",
+        "method": "输入是机械臂动作序列加视觉语言上下文；encoder 出 latent 后经 SRQ 多级残差量化，再 decoder 重建动作；第一级 codebook 用 MAM 掩码恢复训练，同时对动作 token 做和基础模型表征的对比对齐，并预测下一帧视觉语言特征；在 2.4M 轨迹 / 2B 帧上预训练，最后冻结接入混合离散连续 VLA 做下游训练。",
+        "results": "在 2.4M 轨迹 2B 动作帧上预训练，真机聚合分最优，RoboTwin 2.0 仿真也很强；对比 FAST 在多模态 grounding 上提升 13.5%，长程任务提升 8.25。"
+      },
+      "images": [],
+      "published_date": "2026-06-07T09:39:39Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.LG",
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 9.0,
+        "popularity": 7.5,
+        "quality": 8.5,
+        "recommendation": 8.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.14752v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.14752v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.08653",
       "title": "FiberTune: Preserving Action-Fiber Visual Residuals in Vision-Language-Action Fine-Tuning",
       "authors": [
@@ -876,45 +926,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.08696v1",
       "arxiv_url": "https://arxiv.org/abs/2606.08696v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.08702",
-      "title": "ConMem: Structured Memory-Guided Adaptation in Training-Free Multi-Agent Systems",
-      "authors": [
-        "Zhixun Tan",
-        "Qiang Chen",
-        "Tairan Huang",
-        "Xiu Su",
-        "Yi Chen"
-      ],
-      "affiliations": [],
-      "summary": "现有多智能体 memory/skill 方法常被噪声轨迹和稀薄关系建模拖累，还得训练。ConMem 把历史轨迹蒸成结构化 memory card 组成关系图，运行时按需检索并通过 card 图协调，免训练免高质监督。在多 benchmark、多主流 MAS 架构上稳定提升，剪枝 50%+ 候选、规划 overhead 减少 80%+。",
-      "original_abstract": "Recent advances have improved the adaptive capabilities of LLM-based multi-agent systems (MAS) through memory-, skill-, and learning-based approaches, yet these approaches remain challenged by noisy trajectories, insufficient modeling of memory-skill relations, and reliance on additional training or high-quality supervision. To address these limitations, we propose ConMem, a relation-aware and training-free framework that enables efficient multi-agent adaptation through cross-experience coordination. Specifically, ConMem distills historical interaction trajectories into structured memory cards to capture reusable strategies and cues, organizing them into a relation-aware memory graph. At runtime, ConMem retrieves cards according to task needs and coordinates them through the card graph to resolve strategy conflicts and recover their dependencies. Combined, these modules yield structured and relation-aware guidance, enabling robust, lightweight adaptation in multi-agent systems without additional training. Extensive experiments across multiple benchmarks and mainstream MAS architectures show consistent gains over existing memory architectures, with improved inference-time efficiency through pruning more than 50% of expanded candidates and reducing planning overhead by over 80%. Our codes are available at https://anonymous.4open.science/r/ConMemCode",
-      "highlights": {
-        "contribution": "提出训练-free、关系感知的多智能体 memory 框架 ConMem，用结构化 memory card 和关系图协调跨经验。",
-        "innovation": "把 memory 抽象为带关系的 card 图（不只是检索条目），运行时通过 card 图解决策略冲突和依赖恢复。",
-        "method": "把历史轨迹蒸成 memory card 抓可复用策略；按关系组织成 graph；推理时按任务检索 card，再通过 graph 协调消歧；无需训练。",
-        "results": "多 benchmark 多 MAS 架构上一致超过现有 memory；剪枝候选 50%+，规划 overhead 减少 80%+。"
-      },
-      "images": [],
-      "published_date": "2026-06-07T15:59:15Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "multi-agent"
-      ],
-      "scores": {
-        "relevance": 5.5,
-        "recency": 9.5,
-        "popularity": 6.0,
-        "quality": 6.6,
-        "recommendation": 6.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.08702v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.08702v1",
       "venue": null
     },
     {

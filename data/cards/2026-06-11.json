@@ -306,146 +306,146 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.13317",
-    "summary": "LLM agent 的技能自演化通常每个任务只学一条轨迹、补丁合并前不验证、推理时一股脑加载所有技能。SkillCAT 把这事拆三步:对比因果抽取从同任务成败对里挖证据,评估增强演化在源任务上 replay 验证补丁,再编译成可路由的子技能拓扑,推理只加载相关节点。SpreadsheetBench、WikiTableQuestions、DocVQA 上平均分最高拉 40.40%。",
+    "arxiv_id": "2606.13886",
+    "summary": "现有 VLA 只学行为示范，不懂刚体动力学和接触约束，靠平滑后处理反而把轨迹搞坏。作者提出 PhysVLA：不动 VLA 权重，在推理时插一层「相位有限状态机+欧拉-拉格朗日选择性门控」，只要动力学一异常就修正动作，每步开销不到 1ms。在 LIBERO-Spatial 上接 OpenVLA/OFT/Force-VLA/Generalist-VLA 均提升成功率最多 17pp、稳定性 19pp，真机 Piper 提升 50pp。",
     "highlights": {
-      "contribution": "免训练的 LLM agent 技能自演化三阶段框架,显著拉性能与跨模型/OOD 泛化。",
-      "innovation": "对比因果抽取 + 补丁回放评估 + 拓扑感知 sub-skill 路由,逐项把现有 pipeline 的痛点堵掉。",
-      "method": "三阶段:CCE 对同任务多轨迹做成败对比抽取证据 → AAE 在 source-task clone 上 replay 候选补丁后分层合并 → TTE 编译成 routable sub-skill topology 只加载相关能力节点。",
-      "results": "SpreadsheetBench/WikiTableQuestions/DocVQA 上比基线平均分提升最多 40.40%,跨模型 / OOD 泛化都验证。"
+      "contribution": "提出无需训练、即插即用的物理感知运行时模块 PhysVLA，可包裹任何冻结 VLA，给基于行为克隆的策略补上动力学约束。",
+      "innovation": "用「相位 FSM + 选择性 Euler-Lagrange 门控」做推理时双层修正，仅当动力学预言机检测到 kinodynamic 不一致才介入，避免暴力平滑带来的失败。",
+      "method": "输入是 VLA 预测动作和仿真器/系统状态，按 approach/grasp/transport/place 四阶段分段处理；只在检测到动力学违规时触发欧拉-拉格朗日修正，无需重训，每步 <1ms。",
+      "results": "LIBERO-Spatial + 7-DoF Franka：四种 VLA backbone 成功率最高 +17pp、稳定性 +19pp、轨迹效率 +15%；Robosuite Lift 抖动鲁棒性最高 10x；真机 Agilex Piper 拣放 +50pp。"
     },
     "scores": {
-      "relevance": 7.0,
-      "recency": 10,
-      "popularity": 7.0,
-      "quality": 7.8,
-      "recommendation": 7.6
+      "relevance": 9.5,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.3,
+      "recommendation": 8.4
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.13380",
-    "summary": "做高性能量子电路还得靠人。这篇拿 LLM 搭了个七组件 agentic 闭环:Exploration、Generation、Discussion、Validation、Storage、Evaluation、Review,结合 web 检索、文献批评、可执行代码生成和实验反馈,在量子机器学习的 feature map 和 VQE ansatz 两类任务上跑。图像分类上生成的 feature map 超过代表性 baseline,molecular ground state 估计上和经典化学/硬件高效构造能打。",
+    "arxiv_id": "2606.13856",
+    "summary": "单 GPU 微调 VLA-JEPA 时同样代码同样数据换种子，13 次里有 1 次成功率从 91% 掉到 65%——作者管这叫「种子彩票」。根因是 action head 输出坍塌：不管看到啥都给同一个动作。L2/EWC 这种权重级正则化看不到坍塌，因为它发生在 Jacobian 零空间里。换成 VICReg/Dropout/减半学习率这类输出级正则，21 次实验全部消除坍塌。",
     "highlights": {
-      "contribution": "把 LLM agentic 框架引入变分量子电路自动设计,打通发现-生成-验证-评估闭环。",
-      "innovation": "七组件闭环把 web 知识获取、文献批评、可执行代码生成与实验反馈串成完整科学优化 workflow。",
-      "method": "七组件 agent 框架闭环迭代,LLM 根据设计约束生成量子电路代码、外部检索/讨论批评、实验验证反馈,跑 feature map 和 VQE ansatz 两类任务。",
-      "results": "图像分类上最优 feature map 超代表性量子 feature map,大 qubit 数下超经典 RBF kernel;七种分子地态估计精度可比化学/硬件高效构造,且满足缩放约束。"
+      "contribution": "首次系统揭示 VLA 单 GPU 微调里的「种子彩票」现象，并指出输出级正则可彻底消除而权重级正则无效。",
+      "innovation": "用 Jacobian 零空间这一理论视角解释为什么 L2/EWC 看不见输出坍塌，把问题定位到 action predictor 输出多样性。",
+      "method": "在 LIBERO 三个 benchmark 上跑 7 种正则 × 最多 13 个种子，对比 VICReg / Dropout / 半学习率 vs L2 / EWC / 基线，监测动作输出多样性与成功率。",
+      "results": "VICReg(12 种子)、Dropout(4)、半 lr(5)合计 0/21 次崩，基线 1/13，F(12,11)=28.7,p<0.001；崩溃运行从 91-94% 掉到 65.2%。"
     },
     "scores": {
-      "relevance": 5.0,
-      "recency": 10,
-      "popularity": 5.5,
-      "quality": 7.0,
-      "recommendation": 6.0
+      "relevance": 8.6,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.9
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.13385",
-    "summary": "Web agent 跑在不可信网页上,prompt injection 风险很大。现有 benchmark 偏 attack-centric,只看技术可行性,看不到受害方差异。本文提出 stakeholder-centric benchmark,区分受影响实体(用户/卖家/平台),把攻击拆成具体目标,用 outcome/process 双指标评。结果:没有任何攻击目标被当前 agent 可靠抵抗,失败模式分散(隐形寄生、错位中断、双重失败)。",
+    "arxiv_id": "2606.13769",
+    "summary": "像素级 video 世界模型花太多算力重建外观，动作级又依赖 embodiment-specific 标签难以扩展。μ_0 改成预测 3D「交互轨迹」：物体、工具、手、接触区域这些关键点的平滑 3D 轨迹。配套的 TraceExtract 系统能从任意视频自动抽 3D 监督。预训练时冻结后可接动作专家，下游策略效果跟用动作监督预训练的 π_0 打平。",
     "highlights": {
-      "contribution": "首个 stakeholder-centric 的 web agent prompt injection 基准,显式区分谁付代价。",
-      "innovation": "从受害方视角分解攻击目标,引入隐形寄生、错位中断、双重失败三类失败模式。",
-      "method": "构造区分用户/卖家/平台等利益方的 benchmark,把每条攻击拆成具体目标,outcome-level 与 process-level 双指标评估当前 web agent。",
-      "results": "实验显示无任何攻击目标被当前 agent 稳定抵抗,失败在 stealthy parasitism、misaligned disruption、compounded failure 三类质性失败间分散。"
+      "contribution": "提出 3D trace 作为跨 embodiment 的紧凑、动作无关运动接口，并配套自动 3D 监督抽取管线，做出 action-free 但能打 π_0 的世界模型。",
+      "innovation": "用 B-spline 控制点表达每个查询点的未来轨迹，跳过像素重建也跳过动作标签，直接预测「凸显交互点的 3D 轨迹」。",
+      "method": "TraceExtract 先选关键点、构全局对齐轨迹、关联层级语言 caption；预训练把 VLM backbone 接 trace expert（B-spline 控制点）预测未来 3D 轨迹；下游冻结 μ_0 配动作专家做策略。",
+      "results": "在 2D/3D trace 预测上超过 trace 基线和 tokenized VLM；trace-conditioned policy 在无动作监督下达到与 π_0 相当的下游性能。"
     },
     "scores": {
-      "relevance": 6.5,
-      "recency": 10,
-      "popularity": 7.0,
-      "quality": 7.5,
+      "relevance": 9.6,
+      "recency": 9.5,
+      "popularity": 8.2,
+      "quality": 8.7,
+      "recommendation": 8.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13817",
+    "summary": "大多数 action-conditioned 世界模型都假设运动主要来自当前控制，但水面航行器这种东西还会被水流惯性带着走。FlowMo-WM 把 image-action history 拆成两路：短历史 latent 抓物体运动，长历史 context 抓慢变的隐藏环境流；再用零 context 残差转移把动作驱动动力学和环境驱动漂移分开。在带隐藏水流的仿真航行器上长 horizon rollout 比代表性 baseline 准。",
+    "highlights": {
+      "contribution": "提出能在无 flow 监督下自动推断隐藏环境漂移（水流/风）的物体动量世界模型，解决惯性+漂移场景下的长 horizon 预测。",
+      "innovation": "短历史/长历史两路 latent 分解 + zero-context 残差转移，让动作驱动基础动力学和 context 驱动漂移因式化，不需要直接监督 flow field。",
+      "method": "端到端可训练视觉世界模型：短历史 latent 总结物体中心运动，长历史 context 总结慢变外生影响；latent rollout 时基础动力学+context 残差相加；用 frozen linear probe 验证 latent 因子分工。",
+      "results": "在带多样隐藏水流和扰动的仿真水面航行器上，长 horizon rollout 精度高于代表性 action-conditioned latent 世界模型；context 置零或乱序明显劣化，验证 context 重要性。"
+    },
+    "scores": {
+      "relevance": 8.4,
+      "recency": 9.5,
+      "popularity": 6.4,
+      "quality": 7.6,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13840",
+    "summary": "自动驾驶正在从单车智能转向多车共享感知与意图协同。这篇 survey 用「共享世界模型 SWM」视角梳理 380+ 篇 V2X、协同感知、意图认知、协同规划、端到端协同驾驶和闭环仿真工作。指出当前评测大多停在仿真和离线 benchmark，foundation-model-based 协同还没有可验证的实时安全保证，并提出 MAEAD 的关键研究优先级。",
+    "highlights": {
+      "contribution": "用「共享世界模型」框架重新组织 380+ 篇 V2X 协同自动驾驶文献，识别 verifiable shared-state、意图对齐、安全协调三大空白。",
+      "innovation": "把 V2X+协同感知+协同规划+端到端协同驾驶串成 SWM 一条线索，强调跨 agent 的预测式表征作为统一组织变量。",
+      "method": "文献调研：覆盖 V2X 通信、协同感知、跨 agent 认知、协同规划、端到端协同、仿真与数据引擎六大模块，按「交换观测如何变成对齐状态/意图交互/协调动作」组织。",
+      "results": "未做实验；结论指出当前评测集中在仿真/离线 benchmark，foundation-model 协同缺乏实时安全保证，给出 MAEAD 三大研究优先级。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 9.5,
+      "popularity": 7.4,
+      "quality": 7.6,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.13877",
+    "summary": "接触密集操作（插入、拆解、拧螺丝）到底要哪种世界模型表征？作者搞了 ContactWorld benchmark，跑 12 个接触密集任务，系统对比 wrist/front 图像、点云、tactile 等组合。结论：表征要同时空间结构化+时间连续才稳；点云把成功率从 20% 拉到 32%，再加 tactile force-field 拉到 36%，长 horizon 下 tactile 越发关键。",
+    "highlights": {
+      "contribution": "首个面向接触密集操作的视觉-触觉世界模型 benchmark，系统回答「哪些表征性质支撑长 horizon planning」。",
+      "innovation": "把视觉模态与触觉模态从「scaling」转到「cross-modal representation compatibility」，强调点云 + force-field 这种空间结构化触觉组合的关键性。",
+      "method": "ContactWorld 含 12 个接触密集任务（插入/拆解/拧/探索）；用统一 world model + planning 流程对比 wrist 图、front 图、点云、不同 tactile 表征及其组合；分析长 horizon 下表征坍塌。",
+      "results": "wrist 视角 20.7%、front 视角 22.0%、点云 32.1%，点云+tactile force-field 36.1%；长 horizon 下 tactile 增益放大。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9.5,
+      "popularity": 7.4,
+      "quality": 8.1,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.14790",
+    "summary": "LLM 多 agent 系统老不可靠，根因是「prompt 和 harness」边界模糊：哪些约束写在 prompt 里、哪些应该编译进运行时没人说清楚。XFlow 提出可执行协议编程：XPF 语言看起来像可读 protocol，实则被编译执行，把关键 commitments 变成可校验的 harness 结构；runtime 用 lifecycle-governed symbol 调度不确定性。在受约束交互、长上下文推理、agentic 软件工程上都提升了可靠性。",
+    "highlights": {
+      "contribution": "提出 XFlow + XPF：用可执行协议语言显式划分 prompt 与 harness 边界，把工作流约束从隐式 prompt 提升为可编译执行的程序结构。",
+      "innovation": "lifecycle-governed symbol（带 validation/commit 状态的 typed state cell）作为不确定性的中介，让 actor 输出在变成共享状态前先过校验，而不是任由 prompt/transcript 传播。",
+      "method": "XPF DSL 同时是可读 protocol 与可编译程序；编译后 XFlow runtime 用 typed state cell 管理 actor 间状态流；评测覆盖 Constrained Interaction、Long-Context Reasoning、Agentic Software Engineering 三类任务。",
+      "results": "三类任务上均显示可靠性提升（具体数字未给），核心收益来自把约束、证据处理、流程要求显式化与可强制化。"
+    },
+    "scores": {
+      "relevance": 7.6,
+      "recency": 9.5,
+      "popularity": 6.8,
+      "quality": 7.2,
       "recommendation": 7.0
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.13392",
-    "summary": "Agentic workflow 和仓库级代码推理都要百万级上下文,softmax 二次成本撑不住。MiniMax Sparse Attention 在 GQA 上做 blockwise sparse:轻量 Index Branch 给 KV block 打分,各 GQA 组独立选 Top-k,Main Branch 只在选中块上做精确 sparse attention。配合 exp-free Top-k 和 KV-outer 内核,109B 多模态模型 1M 上下文下注意力计算降 28.4 倍,prefill 提速 14.2 倍、decoding 7.6 倍。",
+    "arxiv_id": "2606.13722",
+    "summary": "YeasierAgent 想把应用从「设备耦合」变成「用户+agent+世界共生空间」。它用平台无关的交互单元（agent、场景、对话）替代固定 GUI 布局，把情感陪伴和工具执行揉在一个 sandbox 里。论文以系统架构 + 范式提议为主，强调自动生成、用户造世界、空间多 agent 协同三块，提出「symbiotic agent-native application」这一新品类。",
     "highlights": {
-      "contribution": "可部署、可扩展的 blockwise sparse attention,使百万级上下文 agentic 推理可行。",
-      "innovation": "GQA 组级独立 Top-k 块选择 + 与 GPU 内核协同设计(exp-free Top-k、KV-outer 内核)。",
-      "method": "GQA 之上加 Index Branch 给 KV block 打分,各组独立选 Top-k 子集,Main Branch 在选中块上做精确 block-sparse 注意力;配套自研内核。",
-      "results": "109B 原生多模态模型与 GQA 同档表现,1M 上下文每 token 注意力计算降 28.4×,H800 上 prefill 14.2× 提速、decoding 7.6× 提速;M3 已开源。"
+      "contribution": "提出 symbiotic agent-native application 范式 + YeasierAgent 系统架构，把 agent 应用从工具型 chatbot 推向社会化沙盒。",
+      "innovation": "用 agent/scene/dialogue 这种平台无关交互单元替代 GUI 布局，并把情感陪伴 + 实用工具执行统一在同一空间。",
+      "method": "系统架构论文：自动生成（应用脚手架） + 用户造世界（叙事空间） + 空间多 agent 协同；不强调训练或 benchmark。",
+      "results": "未给定量结果，主要贡献是范式与架构呈现。"
     },
     "scores": {
-      "relevance": 6.5,
-      "recency": 10,
-      "popularity": 8.5,
-      "quality": 8.5,
-      "recommendation": 7.6
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.13572",
-    "summary": "多模态 LLM 在通用领域不错,但在印度农村这种印地语+医学影像场景里基本掉链子。作者搞了 ArogyaBodha 多语多模态医疗 QA 数据(英语+7 种印度语,31 个身体系统、6 种影像、21 个临床领域),再用 actor-critic 多 agent 框架 ArogyaSutra 做带工具锚定和双内存的逐步推理,actor-critic 轨迹还可用于蒸馏。各印度语上多模态医学推理精度都涨。",
-    "highlights": {
-      "contribution": "构建大规模印度多语多模态医疗 QA 数据 + actor-critic 多 agent 医学推理框架。",
-      "innovation": "actor-critic 多 agent 与 dual-memory + 工具锚定结合,用模拟轨迹做下游蒸馏。",
-      "method": "8 源汇聚的多语多模态医学 QA;actor-critic 多 agent 框架带工具锚定与短/长期双内存,用模拟轨迹做 distillation。",
-      "results": "在所有印度语上多语医学推理精度提升,ablation 验证各组件贡献。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 10,
-      "popularity": 6.0,
-      "quality": 7.0,
-      "recommendation": 5.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.13679",
-    "summary": "交错生成(图文混排)对视觉叙事、引导、具身操作都很重要,但现有 UMM 干不好。InterleaveThinker 用 planner agent 组织图文输入序列下达每步指令,critic agent 评估生成偏差并重写指令,再用 SFT + GRPO 的 step-wise reward 训 critic。在 4-step FLUX.2-klein 上和 Nano Banana、GPT-5 性能可比,还显著拉了 WISE/RISE。",
-    "highlights": {
-      "contribution": "首个把任意图像生成器拓展到交错生成的多 agent pipeline,效果接近 GPT-5/Nano Banana。",
-      "innovation": "planner + critic 多 agent + step-wise reward 让 RL 不必优化整条 25+ 步轨迹。",
-      "method": "planner agent 规划每步指令,critic agent 评估并修订;构造 SFT 80k/112k 数据冷启动,再用 13k 数据 GRPO 训 critic,设 accuracy reward 与 step-wise reward 单步引导整条轨迹。",
-      "results": "在交错生成 benchmark 上与 Nano Banana、GPT-5 可比;在 4-step FLUX.2-klein 上 WISE 与 RISE 推理 benchmark 显著提升。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 10,
-      "popularity": 8.0,
-      "quality": 8.2,
-      "recommendation": 7.6
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.13003",
-    "summary": "大家都默认 multi-agent 系统比 single-agent 强,但多数比较是用偏孤立推理任务的基准。这篇拿自动生成 MAS 和 CoT-SC 做严格对比,发现自动 MAS 在传统推理和 BrowseComp-Plus 这种交互式多步任务上一直输,还贵 10 倍。又造了一个适合 MAS 的诊断性合成数据集,显示专家手工 MAS 在性能和性价比都吊打自动 MAS。结论是当前自动 MAS 设计带来的是架构臃肿而非真正功能效用。",
-    "highlights": {
-      "contribution": "系统性证伪 \"自动生成 MAS 优于 SAS\" 的流行说法,并指出评估框架的盲点。",
-      "innovation": "提出诊断性合成数据集,显式构造任务分解、上下文分离、并行潜力,把 MAS 优势能不能兑现暴露出来。",
-      "method": "用传统推理与 BrowseComp-Plus 等交互式 benchmark 对自动 MAS vs CoT-SC 做严格成本对齐评估,再用自建诊断数据集对比专家手工 MAS;最后对自动 MAS 架构做反向解构分析。",
-      "results": "自动 MAS 即使贵 10 倍仍在多基准上输于 CoT-SC;专家 MAS 在诊断数据集上又显著超过自动 MAS,自动 MAS 倾向架构臃肿不带来实质效用。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 10,
-      "popularity": 8.0,
-      "quality": 8.0,
-      "recommendation": 7.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.13038",
-    "summary": "LLM agent 大量进入预测市场,共享 base model 让预测高度相关(r≈0.77),形成认知单一文化。Nous 想从真实 Polymarket 交易行为里抽 8 维结构化个性 profile 再用 prompt 注入回 agent。结果是抽取部分成功:8/14 个参数时间稳定,profile 能让钱包 top-1 命中 17-22%;但 prompt 注入失败,既不降低集成相关性也不改 Brier score,瓶颈在 prompt 之前。",
-    "highlights": {
-      "contribution": "测量并诊断 LLM agent 认知单一文化与 prompt-level 多样性注入失效。",
-      "innovation": "把 8 维行为 profile 从真实交易抽出来 + 跨多模型测试 prompt 注入是否真传递了认知多样性。",
-      "method": "从 100 个 Polymarket 钱包抽 8 维结构化 profile,做 split-half ICC、retrieval 命中和盈利相关性分析;再以 prompt 注入到多个 LLM agent,在语义 embedding 与集成误差/Brier 上对比。",
-      "results": "8/14 参数稳定、top-1 retrieval 17-22%(vs 1% 随机);prompt 注入在多模型上无显著优势,既不降低集成误差相关也不提升 Brier。"
-    },
-    "scores": {
-      "relevance": 5.0,
-      "recency": 10,
-      "popularity": 6.0,
-      "quality": 7.0,
-      "recommendation": 6.0
+      "relevance": 5.4,
+      "recency": 9.5,
+      "popularity": 5.0,
+      "quality": 5.4,
+      "recommendation": 5.6
     },
     "affiliations": []
   }

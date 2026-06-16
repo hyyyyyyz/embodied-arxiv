@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.15568",
+    "summary": "VLA 在分布外场景容易翻车，纯遥操作又累。作者提出 SAPS，直接在动作层把人类遥操作命令和预训练 VLA 的输出混合，不用重训也不用辅助模型。三种仲裁策略里基于余弦相似度的动态方案最好用，在 LIBERO/CALVIN 和真机上比纯自主执行成功率最高提升 82%，比纯遥操作还更快、人介入更少。",
+    "highlights": {
+      "contribution": "提出动作级共享自治框架 SAPS，免重训地把人类遥操作和预训练 VLA 混合，实现稳定真机部署。",
+      "innovation": "在动作层而非策略层做仲裁，并用人类与策略动作的几何一致性（余弦相似度）动态决定混合权重。",
+      "method": "输入是人类遥操作动作和 VLA 输出动作，输出层逐时刻按仲裁策略加权融合；不修改 VLA 架构，无需训练。",
+      "results": "LIBERO/LIBERO-PRO/CALVIN 仿真和真机上比纯自主最高 +82% 成功率，且完成更快、人介入更少。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15631",
+    "summary": "VLA 每加新任务都要重新采遥操作 + 微调，成本太高。作者把适配成本换成检索：策略训练一次后冻结，部署时往检索池里加便宜的人手视频示范，新任务直接靠检索条件化解决。在视频生成型 WAM（Cosmos Policy）上效果尤其明显，PushT 和 RoboTwin 2.0 上超越跨形态基线，真机也跑通了。",
+    "highlights": {
+      "contribution": "提出检索增强 VLA，新任务只需向检索池加示范，不再需要 per-task 微调。",
+      "innovation": "训练时用目标形态 + 廉价形态（人手视频）配对数据，让冻结策略学会在控制时刻条件化检索到的轨迹。",
+      "method": "策略以查询轨迹为条件预测动作；视频生成型 WAM 进一步用未来图像目标提供视觉一致性信号增强检索。",
+      "results": "RoboTwin 2.0 上跨形态新任务超越基线，PushT 上展示对未见目标角度的泛化，真机验证可行。"
+    },
+    "scores": {
+      "relevance": 9.2,
+      "recency": 9.5,
+      "popularity": 8.0,
+      "quality": 8.3,
+      "recommendation": 8.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15714",
+    "summary": "现有 VLA 几乎只用英文指令训练评估，作者第一次系统研究 VLA 的多语种指令跟随，发现即使 LLM 主干本身懂多语言，VLA 训完后非英文性能也会大跌。分析显示问题既在指令理解也在动作执行。他们提出基于 PCA 的多语种主成分对齐微调，能有效缩小性能差距。",
+    "highlights": {
+      "contribution": "首次系统揭示并量化 VLA 的多语种指令跟随性能差距。",
+      "innovation": "提出 Multilingual Principal Component Alignment，用 PCA 子空间对齐不同语言的表示。",
+      "method": "扩展现有 benchmark 指令为多语言版本评估多个代表性 VLA；用 PCA 对齐多语种表示做微调。",
+      "results": "在多语言测试上显著缩小非英文与英文之间的性能差距（具体数值未给）。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.2,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15909",
+    "summary": "现有触觉-语言模型对旋转、滑动这类动态接触方向推理弱。作者发现 Sparsh、AnyTouch2 在 GelSight Mini 基础旋转任务上都掉链子。于是给 TLM 注入物理几何先验，提出仅 14k 参数的可微几何表示 DGR，用反对称七区域池化捕捉旋转产生的形变模式。新物体旋转准确率 +14.6%，真实传感器滑动 +16.2%。",
+    "highlights": {
+      "contribution": "首个面向动态接触方向推理的几何感知触觉-语言模型 GeoTLM。",
+      "innovation": "用反对称七区域池化结构编码剪切场几何，注入旋转→反对称形变的物理直觉。",
+      "method": "在 TLM 前端加 14k 参数 DGR 模块，接触掩膜引导剪切场表示，再送入语言推理。",
+      "results": "旋转方向 +14.6%，滑动方向 +16.2%，相对同主干基线。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15594",
+    "summary": "从像素学的潜空间世界模型做规划没有安全保证。作者提出 SLS^2，用动作条件 JEPA 学紧凑潜空间动力学，用共形预测给潜空间误差打校准界，再套上 GPU 加速的 SLS 鲁棒 MPC 框架做闭环安全规划。视觉控制任务上目标达成率和安全性都比潜空间和安全规划基线更好。",
+    "highlights": {
+      "contribution": "把潜空间世界模型 + 鲁棒 MPC + 共形预测整合为可证明概率安全的视觉规划框架。",
+      "innovation": "学习并共形化潜空间约束检查器，把视觉控制安全约束嵌入 SLS-MPC。",
+      "method": "动作条件联合嵌入世界模型 + 紧凑马尔可夫潜状态；GPU 加速 SLS 鲁棒 MPC + 共形预测潜空间误差界。",
+      "results": "视觉控制任务上比潜空间世界模型和安全规划基线在到达率和安全性上都更好（无具体数）。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 9.5,
+      "popularity": 6.8,
+      "quality": 7.8,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.16070",
+    "summary": "现有符号世界模型只能拟合局部转移，没法当独立可执行程序跑。Mind-Studio 用 LLM 从 state-action-next-state 轨迹合成 pygame 风格的可执行世界模型，再用熵筛选轨迹 + 轻量游戏技能文件辅助。在 Montezuma's Revenge 上 chosen-action 下一状态预测从 PoE-World 的 0.3% 飙到 48.7%，还验证了 5/8 子目标。",
+    "highlights": {
+      "contribution": "提出能独立运行的可执行世界模型合成框架，并用 K 步前瞻保真度协议评估。",
+      "innovation": "把 LLM 当代码合成器从轨迹生成完整 pygame 程序而非局部规则；引入截图提取的游戏技能文件。",
+      "method": "熵选轨迹 + 物体/动作/静态场景信息组成技能文件喂 LLM，合成可执行 pygame 世界模型。",
+      "results": "Montezuma's Revenge 下一状态预测 48.7%（vs PoE-World 0.3%），验证 5/8 子目标；Alien/Assault/Skiing 分支保真度领先。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.7,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15848",
+    "summary": "音频驱动 3DGS 说话头难做细粒度、可解释的表情控制，因为语音动力学和显式表情信号会冲突。EmoZone-Talker 把它当作时空协调问题：用 SZ-PAB 按解剖先验做区域解耦，CIT-AE 编码时序连贯的 AU 动力学，再把表示注入 3D 高斯形变。实验显示上脸准确度和时序一致性都有改善，唇形和渲染质量都没掉。",
+    "highlights": {
+      "contribution": "提出可显式、区域级控制表情的音频驱动 3DGS 说话头框架。",
+      "innovation": "Synergy Zones + Prioritized Attention Bias 按解剖先验解耦语音和表情模态贡献，并用 channel-independent AU 编码器。",
+      "method": "音频 + AU 编码 → 区域感知融合 → 注入 3D 高斯形变；端到端训练。",
+      "results": "上脸表情准确度、时序一致性提升，唇形同步和渲染质量保持（无具体数值）。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15768",
+    "summary": "现有 WAM 用视频生成做未来预测，慢且像素层冗余多。LaWAM 改成在视觉基础模型潜空间预测未来特征，把潜空间视觉子目标喂给动作策略，省掉像素重建。LIBERO 98.6%、RoboTwin 91.22% SR，真机也行；每动作块推理 187ms，比像素级 WAM 快最多 24 倍。",
+    "highlights": {
+      "contribution": "提出潜空间世界动作模型 LaWAM，把 WAM 的未来预测从像素搬到潜空间。",
+      "innovation": "在预训练视觉基础模型潜空间训潜动作模型，复用其 forward 解码器预测未来观测特征。",
+      "method": "潜空间动作条件世界模型 → 潜视觉子目标 → 条件化动作生成；端到端训练。",
+      "results": "LIBERO 98.6% SR、RoboTwin 91.22% SR、187ms/动作块、24× 加速。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 9.5,
+      "popularity": 8.2,
+      "quality": 8.5,
+      "recommendation": 8.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15869",
+    "summary": "WAM 用在自动驾驶/城市导航上的痛点是推理慢、视频和动作耦合导致表示不匹配。Metis 用 Mixture-of-Transformers 把视频生成和动作预测拆成两个专家，再加非对称注意力掩码让训练时联训、推理时跳过视频生成。NAVSIM navhard/navtest、CityWalker 都 SOTA，真机也部署了。",
+    "highlights": {
+      "contribution": "提出解耦视频生成与动作预测的端到端 WAM，兼顾性能与效率。",
+      "innovation": "MoT 双专家 + 非对称注意力掩码，保证训练-推理一致且推理可跳过视频生成。",
+      "method": "视频专家 + 动作专家联合训练，推理时只跑动作专家；用于自驾和城市导航。",
+      "results": "NAVSIM navhard/navtest、CityWalker 上 SOTA，真机部署可行。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9.5,
+      "popularity": 8.0,
+      "quality": 8.3,
+      "recommendation": 8.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15659",
+    "summary": "现有 4D 头部头像 3DGS 方法要么前馈预测器被单数据集和固定源数绑死，要么 per-subject 优化要 30-60 万步且会破坏高斯布局。SpatialAvatar-0 在 FLAME-mesh 绑定的共享高斯表示上做两阶段：参数-free K 源均值池前馈生成 + 10K 步布局保留细化。VFHQ/HDTF 零样本 +1.5 dB PSNR，SplattingAvatar 上比 GeoAvatar +1.3 dB 且最多快 60 倍。",
+    "highlights": {
+      "contribution": "用 FLAME-mesh 绑定的共享高斯表示统一前馈和细化两种 4D 头像范式。",
+      "innovation": "参数-free K 源均值池 + 单目→多视图两阶段调度；冻结 FLAME 绑定、用三组件反尖刺正则替代密化的细化循环。",
+      "method": "前馈生成器输出共享 FLAME-绑定 3DGS；10K 步 per-subject 布局保留细化。",
+      "results": "VFHQ/HDTF 零样本 +1.5 dB PSNR；SplattingAvatar 上 +1.3 dB 且 60× 更快。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15681",
+    "summary": "自监督单目视频深度估计帧间不一致、漂移大，作者把它重新表述为无约束多视图 3D 重建，借助 3D 基础模型的几何先验。提出 3D 一致性优化框架：图像光度渲染 + 显式世界坐标几何对齐 + 多尺度时序梯度一致性。在内镜导航和零样本临床场景上空间精度 SOTA，超过帧级、视频级深度估计和多视图重建基线。",
+    "highlights": {
+      "contribution": "把视频深度估计重塑为多视图 3D 重建，并设计三约束一致性优化框架。",
+      "innovation": "三种约束（光度渲染、世界坐标几何对齐、时序梯度一致性）联合锚定到全局 3D 结构。",
+      "method": "基于 3D 基础模型的多视图重建 + 自监督三约束联合优化。",
+      "results": "内镜导航和零样本临床场景空间精度 SOTA，优于多类基线（具体数值未给）。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.3,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15924",
+    "summary": "现有 3DGS 加速方法对冗余像素仍算很多而且会牺牲细节。TurboGS 用误差引导稀疏像素采样集中算难区域，结合 tile 级结构损失、误差驱动密化控制和混合 Hessian-Adam 优化器。在标准 benchmark 上 RTX 5090 单卡 100 秒达到相当或更好渲染质量，比原版 3DGS 训练快最多 10 倍。",
+    "highlights": {
+      "contribution": "提出误差引导的稀疏像素 3DGS 训练框架 TurboGS，大幅加速。",
+      "innovation": "tile-wise 稀疏像素采样 + 稀疏 NCC 结构损失 + 误差驱动密化 + Hessian-Adam 混合优化器。",
+      "method": "训练时按多视图重建误差稀疏采样像素、剔除冗余高斯、稀疏监督收敛。",
+      "results": "RTX 5090 100 秒内达 vanilla 相当/更优质量，训练最多 10× 加速。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15684",
+    "summary": "现有多智能体 benchmark 不够贴近真实协作（时间敏感、互补、强制协作）。作者搭了 Minecraft 上的 TickingCollabBench：异质智能体、强制协作、动态环境、实时失败约束。配套 TickingCollab 框架支持 YAML 任务声明 + LLM 生成任务 + 可行性验证。实验显示 LLM 在动态环境下大幅落后全局知识 oracle。",
+    "highlights": {
+      "contribution": "提出首个时间敏感互补协作多智能体 Minecraft benchmark TickingCollabBench。",
+      "innovation": "声明式 YAML 任务规约 + LLM 任务草拟 + 可行性验证器自动生成多样任务。",
+      "method": "Minecraft 抽象 API + 动态事件生成 + LLM-as-Designer + 评测 LLM 智能体框架。",
+      "results": "LLM 在动态环境下失败率高，显著落后全局知识 oracle（具体差距未给）。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.3,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15874",
+    "summary": "作者认为 LLM 当 orchestrator 是 token 爆炸、控制流幻觉的架构性根源，因为确定性循环分支被丢给概率系统。提出 Agentic Programming：程序控全流程，LLM 当一段可调用的 LLM-as-Code 组件。上下文按调用 DAG 组织、长度由调用深度决定。computer-use 智能体案例显示长视觉序列稳定性大幅提升。",
+    "highlights": {
+      "contribution": "提出 Agentic Programming 范式，把 LLM 从 orchestrator 降级为可调用代码组件。",
+      "innovation": "LLM-as-Code + 调用树 DAG 上下文管理，按调用深度截断而非累积。",
+      "method": "程序定义控制流，节点处调用 LLM；上下文由 DAG 构造、长度受深度限制。",
+      "results": "computer-use 智能体长视觉操作序列稳定性显著提升（具体数据未给）。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 9.5,
+      "popularity": 7.2,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15899",
+    "summary": "开源 LLM 智能体技能（工具定义）安全没人审，传统代码扫描看不到指令层和多智能体风险。SkillVetBench 在 Hugging Face 搭了用 LLM-as-Judge 的公开 leaderboard，提出 SARS 五维风险打分 + CVSS v4.0 解构。78 个恶意 / 22 个良性样本上零假阴 / 零假阳，强基线 SkillSieve 仍漏 15%，传统工具在 prompt injection / memory poisoning 上漏 89-100%。",
+    "highlights": {
+      "contribution": "提出首个面向开源智能体技能的语义多维安全审计 leaderboard SkillVetBench。",
+      "innovation": "SARS 五维 agentic 风险打分 + CVSS v4.0 全向量分解 + ClawHub 双视图对照。",
+      "method": "LLM-as-Judge 评测器对智能体技能描述、代码做多维评分；ensemble 评测。",
+      "results": "78 恶意 / 22 良性上 0 漏 0 误；SkillSieve 漏 15%；CodeBERT 等漏 89-100%。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 6.8,
+      "quality": 7.2,
+      "recommendation": 6.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15931",
+    "summary": "历史医典文本充满前本体语言和怪分类，现有 LLM agent（工具调用 / RAG / agentic deep research）都没法把它转成可验证的药物发现线索。DeepRoot 联合构建并使用一个验证过的知识图谱，把 grounding 和 reasoning 解耦。在《神农本草经》上 R@20 召回 47.6%（vs 原始 LLM 4.8%、随机 2.4%），工具 LLM 在 87% 的声明上幻觉证据而 DeepRoot 只 7-10%。",
+    "highlights": {
+      "contribution": "提出 KG 联合构建-使用的多智能体系统，可把历史医典转成可验证药物发现线索。",
+      "innovation": "把 grounding 与 reasoning 显式分离为两条可组合的轴，并用验证过的 KG 同时承担两者。",
+      "method": "多智能体 LLM 系统：抽取/标准化 → 构建 KG → KG+LLM 联合推理；与工具调用 LLM 对照。",
+      "results": "R@20 47.6% vs 4.8%；幻觉率 7-10% vs 工具 LLM 87%；LLM-as-Judge 双轴第一。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 9.5,
+      "popularity": 6.8,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15640",
+    "summary": "审计风险评估需要融合异质证据并量化分歧。作者提出 UMAR，用 MD&A 文本、财务比率、CAM 三个专门智能体各给带不确定度的评分，再用 Dempster-Shafer 证据理论融合并显式量化分歧。在 SEC 10-K 3200 公司年数据上 AUROC 0.782、PR-AUC 0.341，校准误差 ECE 0.052 全场最低，证据冲突模式还能预示真实重述风险。",
+    "highlights": {
+      "contribution": "提出带不确定度和证据冲突建模的多智能体审计风险评估框架 UMAR。",
+      "innovation": "Dempster-Shafer 证据融合 + 显式 inter-agent 冲突度量，作为风险信号。",
+      "method": "三个 LLM 智能体独立打分含校准不确定度；DS 聚合 + 冲突度量；XGBoost/FinBERT 等对照。",
+      "results": "AUROC 0.782、PR-AUC 0.341、ECE 0.052，全面优于多类基线。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 9.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15862",
+    "summary": "LLM agent 在短任务上很强，但长视野动态环境表现成谜。RetailBench 把超市运营建模为 POMDP，支持千日级仿真，agent 要管定价、补货、供应商、货架、库存老化、客诉、外部事件、现金流。7 个 LLM 在 180 天评测中只有少数能撑完，且都明显落后特权 oracle 策略，问题主要在证据获取不全、决策表层化、缺乏长期一贯策略。",
+    "highlights": {
+      "contribution": "提出面向单店超市运营的长视野 LLM agent 决策 benchmark RetailBench。",
+      "innovation": "数据驱动的 POMDP 超市仿真，支持千日尺度、多维约束（库存老化、现金流、外部事件等）。",
+      "method": "构建可控仿真器 + 180 天评测 7 个 LLM 在多种 agent 框架下与 oracle 对比。",
+      "results": "仅少数模型完成 180 天评测；最强 LLM 与 oracle 净值/销售仍存在显著差距。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9.5,
+      "popularity": 6.8,
+      "quality": 7.3,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15872",
+    "summary": "前沿科学推理上单一商业大模型都不够，不同模型擅长不同题目。SciOrch 训了一个 8B 编排器调度前沿 LLM 解题：分解问题 → 委派给特定商业模型 API → 综合答案。由于每步 action 都要烧 API 钱，作者用 MCTS 生成多样编排轨迹再 GRPO 训练。SGI-Reasoning + SFE 240 题上准确率 56.66%，比最强单模型 +3.74%、比最强多 agent +3.33%，API 成本不到一半。",
+    "highlights": {
+      "contribution": "用 8B 编排器学会调度前沿 LLM 解决多模态科学推理，成本远低于多 agent 基线。",
+      "innovation": "MCTS 离线生成多样编排轨迹 + per-node 单轮样本提取 + GRPO 训练，解决 API 昂贵限制在线 rollout 的问题。",
+      "method": "8B 编排器分解问题 → 调用商业 LLM API → 综合答案；MCTS+GRPO 训练。",
+      "results": "240 题平均 56.66%，比最强单模型 +3.74%、最强多 agent +3.33%，API 成本不到一半。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 9.5,
+      "popularity": 7.8,
+      "quality": 8.0,
+      "recommendation": 7.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15994",
+    "summary": "把 PyTorch 模型迁到 JAX 既繁琐又容易出错，纯 LLM 在严格 API 对齐上犯错很多。作者搭了 in-context learning + oracle 自调试的全自动 agent：跑源 PyTorch 模块拿真实张量状态当 oracle，再让 agent 循环写测试 / 调试 / 修代码。在 SAM、T5、Code Whisper 等模型上数值等价率达 91%，远超基线 9%、纯指令+自调试 27%。",
+    "highlights": {
+      "contribution": "提出 ICL + oracle-grounded 自调试的全自动跨框架代码迁移 agent。",
+      "innovation": "用源模型实际执行得到的动态张量状态作为不可变 oracle，绕开 LLM 推数学结果的失误。",
+      "method": "ICL 上下文做 JAX 风格参考 + 源模块运行得 oracle + agent 循环合成测试并 traceback 自修。",
+      "results": "神经模块数值等价 91%（基线 9%、指令+self-debug 27%），多 SOTA 模型上验证。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.3,
+      "recommendation": 6.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15591",
+    "summary": "生成又新颖又可解的物理应用题很难，现有方法（多是从数学题迁来）经常做出歧义或不可解的题。ARVRE 两阶段：先用 offline TD 学习构造有效物理方程链，agentic RAG 动态选主题概念与词汇；再让 LLM 把方程链和概念变成自然语言题目。人评 + 自动评显示比现有方法更复杂、新颖、可解。",
+    "highlights": {
+      "contribution": "提出 agentic RAG + RL 的可控物理应用题生成框架 ARVRE。",
+      "innovation": "用 offline TD 学习构建合法方程链来强约束数学正确性，再交给 LLM 做自然语言化。",
+      "method": "Stage1: TD 学方程链 + agentic RAG 选概念；Stage2: LLM 转自然语言。",
+      "results": "人评与自动评上比现有方法更复杂、新颖、可解（无具体百分比）。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 9.5,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 5.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15609",
+    "summary": "LLM agent 的长期记忆带来新攻击面：把违规内容拆碎存进记忆，再通过检索拼回去就能绕过访问控制。FragFuse 三步：黑盒探测 rejection-responsive 片段 → 用 marker 载体注入记忆 → 后续查询触发融合。还有 surrogate 自动优化方案。在 4 个 agent 设置 + 3 个 SOTA 访问控制上平均绕过 86.3%、端到端有害任务 41.1%。",
+    "highlights": {
+      "contribution": "首个利用长期记忆时间通道绕过 LLM agent 访问控制的攻击 FragFuse。",
+      "innovation": "把违规查询碎片化存入记忆，再用 fusion 指令在检索后重组，避开输入端检测。",
+      "method": "黑盒自适应查询找片段 → marker 载体注入记忆 → fusion 查询；surrogate 优化 marker。",
+      "results": "平均绕过率 86.3%、端到端有害成功 41.1%、任务退化仅 4.4%；prompt-injection / perplexity 检测无效。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 6.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15762",
+    "summary": "agentic LLM 安全审查到底稳不稳？作者跑了 300 次重复扫描看相同 JS 代码、prompt 下结果是否一致。结论：匹配到 Snyk 参考的发现很稳（158 个中 134 个 5/5 次出现），但额外发现波动大（161 个中 80 个只出现 1/5 次）。LLM 善于找熟悉的 exploit 形态，SAST 善于系统性枚举数据流 sink，二者互补而非替代。",
+    "highlights": {
+      "contribution": "首个量化 agentic LLM 漏洞扫描可重复性的基准 Snyk VulnBench JS 1.0。",
+      "innovation": "用 300 次相同条件重复扫描评估稳定性，并与确定性 SAST 对照。",
+      "method": "5 次 × 多场景 = 250+ 次相同条件扫描，对参考匹配/额外发现分别统计稳定性。",
+      "results": "参考匹配发现 134/158 全部 5/5 重现；额外发现 80/161 只出现 1/5；LLM 与 SAST 互补。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15797",
+    "summary": "标准 MAPF 是所有 agent 都得到目标，UA-MAPF 多了一类「无目标」agent，但它们仍要让路。作者把 UA-MAPF 编译成 SAT，扩展两个最新求解器 SMT-CBS 和 NRF-SAT 处理这一变体，验证基于反例引导抽象细化的 compilation 方案对 UA-MAPF 同样可行。",
+    "highlights": {
+      "contribution": "把 UA-MAPF（带未分配 agent 的多智能体路径规划）纳入基于编译的求解框架。",
+      "innovation": "把无目标 agent 的「让路」需求编码进 SAT，扩展 SMT-CBS 与 NRF-SAT 抽象细化。",
+      "method": "将 UA-MAPF 公式化为 Boolean SAT，分别适配 SMT-CBS 和 NRF-SAT 求解器。",
+      "results": "理论扩展可行性验证，无具体性能数字。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 9.5,
+      "popularity": 4.5,
+      "quality": 6.0,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.15822",
+    "summary": "AI agent 越来越靠 Agentic Routing Infrastructure（ARI）调外部模型/工具，但 ARI 能明文看 query 和响应、agent 也无法验证路由没被篡改。TrustedARI 提出三件套：三方 TLS 握手让 agent 和 ARI 共同认证 service provider；隐私保护查询构造协议；可验证计费。原型实验显示握手通信开销降 39.34%，证明生成快 28.20×。",
+    "highlights": {
+      "contribution": "提出 trust-native agentic routing 基础设施 TrustedARI，解决 ARI 的明文与不可验证问题。",
+      "innovation": "ARI 适配的三方 TLS 握手 + 隐私保护 query 构造 + 可验证计费三协议组合。",
+      "method": "重写三方握手以角色化分发 TLS 密钥；MPC 风格协议联合构造 query；零知识证明做计费。",
+      "results": "握手通信开销 -39.34%；隐私查询协议 0.19s 计算/0.58MB 通信；计费证明生成 28.20× 加速。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 9.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 5.3
+    },
+    "affiliations": []
+  }
+]
