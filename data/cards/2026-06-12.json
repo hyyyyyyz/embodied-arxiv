@@ -396,56 +396,56 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.14302",
-    "summary": "LLM agent 缺乏对任务进度的 metacognitive 感知。作者发现在线进度提示反而拖累性能，但「回顾式」反思有帮助。RePro 让 agent 先正向执行再回顾自评进度，用一个轻量 warmup 学反思格式，再用 RePro-PO 配合复合奖励训练。WebShop/ALFWorld/Sokoban 上 Qwen 系列成功率最高 +12 个点。",
+    "arxiv_id": "2606.14574",
+    "summary": "LLM 当家用 Agent 的规划器时，能跑完不代表跑对，很多失败是隐性的——执行没报错但目标其实没达成，甚至造成不可逆破坏。作者搭了一个厨房域的符号世界模型 SIMMER，77 个动作、262 个物体、约 4.68 万种交互，用状态机执行器去检测前置条件违例、潜在隐患和不可逆失败。六个前沿 LLM 测下来无错率最多 17%，多达 56% 的计划带隐性失败，而加上反事实预演显式状态推理后隐性失败最多降 72%、不可逆情况最多降 75%。",
     "highlights": {
-      "contribution": "为长 horizon LLM agent 训练注入「回顾式进度自评」能力，避免在线提示的反作用。",
-      "innovation": "forward-then-reflect rollout：先 online 执行再据已知 outcome 反思每步进度，奖励里融入这个 self-generated signal。",
-      "method": "Retrospection Warmup 用少量外部示例教反思格式；RePro-PO 用复合奖励训练；测试时 agent 自己产生进度信号无需持续外部监督。",
-      "results": "WebShop、ALFWorld、Sokoban 上 Qwen 系列成功率最高 +12% 绝对提升。"
+      "contribution": "提出 SIMMER 基准，首次系统化评估 LLM 规划中的「隐性失败」，并给出一个真实厨房脚本驱动的符号世界模型与执行器。",
+      "innovation": "把关注点从「计划能不能跑」拉到「跑完了但目标坏没坏」，并用反事实预演显式做状态推理来压住隐性错误。",
+      "method": "人工整理厨房动作—物体—交互的符号世界模型，配状态机执行器逐步验证 LLM 生成的计划，检测前置条件违例、潜在危害与不可逆操作；再让 LLM 在每步前做反事实状态预演来减少隐性失败。",
+      "results": "六个 LLM 上无错率最高仅 17%，56% 计划存在隐性失败；反事实预演让隐性失败降最多 72%、不可逆错误降最多 75%。"
     },
     "scores": {
-      "relevance": 7.0,
-      "recency": 9.5,
-      "popularity": 6.8,
+      "relevance": 7.8,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.6,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.14585",
+    "summary": "生成式动力学模型可以帮机器人做规划，但部署时要识别策略带出去的 OOD 转移。作者发现现有的事后 OOD 检测会被「局部对动作不敏感」的动力学骗过——乱动作也能输出像样的潜在预测。他们提出 support-conditioned 控制敏感度正则，把高支撑训练区域的动力学逼着对控制输入有响应，从而保留控制差异、抑制弱支撑外推。视觉避障、操作与真实机器人导航上 OOD 检测和闭环安全性都更好。",
+    "highlights": {
+      "contribution": "指出生成式动力学模型在 OOD 检测中的「控制不敏感」失效模式，并提出 support-conditioned 控制敏感度正则解决之。",
+      "innovation": "不再事后挂支撑代理，而是直接塑造潜在动力学对控制的敏感度，让支撑高的地方动作差异看得见、支撑弱的地方不乱外推。",
+      "method": "在学到的潜在动力学训练中，对高支撑训练区域加上对控制输入的敏感度正则项，强迫不同动作产出可分的潜在预测；同时限制低支撑区域的外推。再用预测分歧做 OOD 检测，闭环规划时用作安全门。",
+      "results": "在基于视觉的避障、操作和真实机器人导航三个场景上 OOD 检测率提升、闭环规划更安全（具体数字未列百分比）。"
+    },
+    "scores": {
+      "relevance": 7.4,
+      "recency": 8,
+      "popularity": 6.2,
       "quality": 7.5,
       "recommendation": 7.2
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.14397",
-    "summary": "现有 agent benchmark 太偏简单熟悉的应用，已饱和。GauntletBench 主攻三种被忽视的能力（时间感知、图形理解、3D 推理）和五个冷门专业应用（视频编辑、工作流构建、3D 建模、航班分析、电路设计），共 100 个视觉密集型任务。SOTA agent 仅 19.1% 成功，而非专家人类 >80%，差距巨大。",
+    "arxiv_id": "2606.14517",
+    "summary": "LLM guardrail 本来是挡 prompt 注入和越狱的护栏，但作者发现它「会推理、肯听话」反而成了被攻击的入口——攻击者塞一段精心构造的数据，就能让护栏陷在长推理里，直接 DoS。他们用 beam search 优化自然语言载荷最大化护栏推理长度，并基于护栏的 schema 结构再设计了一种轻量结构突变攻击。结果在八个主流模型上拿到 13–63 倍 token 放大，端到端 Agent 部署中延迟最多放大 148 倍，一份毒文档足以拖垮共享护栏让所有 Agent 卡死。",
     "highlights": {
-      "contribution": "面向被忽视能力维度的 agent 通用化评测基准 GauntletBench。",
-      "innovation": "聚焦时间感知/图形理解/3D 推理三个少被覆盖能力、五个专业应用，且任务视觉密集需真泛化。",
-      "method": "提供模块化管线：环境兼容开/闭源 agent 框架、受控 web 应用、任务集、自动评估引擎；100 个视觉密集任务。",
-      "results": "SOTA agent 成功率仅 19.1%，非专家人类 >80%，差距显著。"
+      "contribution": "首次系统揭示 LLM-based guardrail 的可用性漏洞，给出两套攻击框架并在真实 Agent 系统中验证 DoS 后果。",
+      "innovation": "把攻击目标从「绕过护栏」转向「让护栏陷入超长推理」，挖出 reasoning guardrail 被自身能力反噬的新攻击面。",
+      "method": "一条路径用 beam search 搜自然语言载荷，由 LLM proposer + 策略库引导以最大化护栏推理长度；另一条路径基于护栏遵循的 schema 做结构突变，计算更轻。两种载荷在开源代理模型上优化后迁移到 Claude/GPT/Gemini/DeepSeek/Qwen 等八个后端，并在 web、桌面、代码、多 Agent 系统里端到端实测。",
+      "results": "八个主流 backbone 上 token 放大 13–63 倍；端到端 Agent 部署延迟放大最多 148 倍；单份毒文档可让共享护栏饿死同部署的多个 Agent。"
     },
     "scores": {
-      "relevance": 7.5,
-      "recency": 9.5,
-      "popularity": 7.5,
-      "quality": 7.8,
-      "recommendation": 7.6
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.14445",
-    "summary": "异构 LLM agent（Claude、Codex 等）协作时通常假设共享 runtime 或同一 API 家族。tap 提出一个文件优先的协议，把 markdown 消息当原始消息存档，再加上各自的实时通知通道和 git worktree 隔离。作者用 tap 让 Claude 和 Codex 自举开发 tap 自己 27 天、37 代，收集 209 PR 和 717 工件。异构 review 缺陷率 69.8% vs 同构 53.1%。",
-    "highlights": {
-      "contribution": "提出文件优先的异构 LLM 协作协议 tap，无需共享 runtime 即可跨厂商协作。",
-      "innovation": "文件 + 元数据作为原始消息、双层（文件检视 + 实时通知）通道、git worktree 隔离工作；消息文件即使通知失败仍可重读。",
-      "method": "Tier 1 文件通信 + Tier 2 实时通知；分离 worktree；markdown 文件存元数据；tap 以 npm 包 @hua-labs/tap 开源。",
-      "results": "27 天自举实验产生 209 PR 与 717 工件；375 review 工件中异构模型对 69.8% 含缺陷/变更请求，同构 53.1%，异构视角更广。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 9.5,
-      "popularity": 6.5,
-      "quality": 6.8,
-      "recommendation": 6.7
+      "relevance": 7.6,
+      "recency": 8,
+      "popularity": 7.8,
+      "quality": 8.1,
+      "recommendation": 8.0
     },
     "affiliations": []
   }

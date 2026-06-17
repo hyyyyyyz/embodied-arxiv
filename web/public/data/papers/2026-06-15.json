@@ -161,6 +161,105 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.17200",
+      "title": "ACE-Ego-0: Unifying Egocentric Human and Robotic Data for VLA Pretraining",
+      "authors": [
+        "Hao Li",
+        "Ganlong Zhao",
+        "Yufei Liu",
+        "Haotian Hou",
+        "Guoquan Ye",
+        "Tongyan Fang",
+        "Chunxiao Liu",
+        "Siyuan Huang",
+        "Jianbo Liu",
+        "Xiaogang Wang",
+        "Hongsheng Li"
+      ],
+      "affiliations": [],
+      "summary": "机器人轨迹采集太贵，但第一视角人类视频又便宜又多。这篇把人类视频转成机器人格式的伪动作，统一动作表示用相机坐标系+形态条件+对齐分块，再用一个可靠性感知的损失把噪声标签压住，让人类数据真能给VLA预训练加分。在RoboCasa GR1 TableTop和RoboTwin 2.0上拿了SOTA，真机双臂操作也能迁。",
+      "original_abstract": "Vision-Language-Action (VLA) models benefit from large-scale and diverse embodied data, yet scaling robot trajectory collection is costly and labor-intensive. Recent advances show that large-scale egocentric human videos provide complementary real-world supervision in pretraining. However, joint training on human and robot data remains challenging due to divergences in action spaces, embodiment structures, temporal dynamics, and supervision quality. We introduce ACE-EGO-0, a unified VLA pretraining framework jointly leveraging heterogeneous data sources. To extract large-scale pretraining supervision from egocentric human videos, we build a scalable egocentric video-to-action pipeline that converts raw human videos into robot-format pseudo-action trajectories. To make these labels comparable with robot demonstrations, ACE-EGO-0 uses a unified action representation based on camera-space actions, morphology conditioning, and time-aligned action chunking. To robustly leverage noisy pseudo-action supervision from egocentric human videos, we formulate a reliability-aware training objective with a human auxiliary loss that concentrates supervision on reliable signals. We instantiate ACE-EGO-0 on 4.53K hours of robot and simulation data, together with 1.48K hours of pseudo-action-labeled egocentric human data. Experiments show that incorporating large-scale human supervision under reliability-aware weighting consistently improves both unified joint pretraining and supervised fine-tuning. ACE-EGO-0 achieves state-of-the-art performance on RoboCasa GR1 TableTop and RoboTwin 2.0, while demonstrating strong transfer to real-world bimanual manipulation.",
+      "highlights": {
+        "contribution": "提出ACE-EGO-0统一VLA预训练框架，把1.48K小时第一视角人类视频和4.53K小时机器人/仿真数据一起训。",
+        "innovation": "可扩展的「视频转伪动作」管线，加上相机空间动作+形态条件的统一表示，再用可靠性加权聚焦高质量监督。",
+        "method": "输入是异构的人类视频和机器人轨迹，先把人类视频用管线转成机器人格式伪动作，再用统一表示对齐，训练时用可靠性加权的人类辅助损失防噪声。",
+        "results": "在RoboCasa GR1 TableTop和RoboTwin 2.0上取得SOTA，并能迁移到真机双臂操作。"
+      },
+      "images": [],
+      "published_date": "2026-06-15T18:40:18Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 9.5,
+        "popularity": 7.5,
+        "quality": 8.3,
+        "recommendation": 8.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.17200v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.17200v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.17256",
+      "title": "Contrastive Action-Image Pre-training for Visuomotor Control",
+      "authors": [
+        "Yuvan Sharma",
+        "Dantong Niu",
+        "Anirudh Pai",
+        "Zekai Wang",
+        "Zhuoyang Liu",
+        "Baifeng Shi",
+        "Stefano Saravalle",
+        "Boning Shao",
+        "Ruijie Zheng",
+        "Jing Wang",
+        "Konstantinos Kallidromitis",
+        "Yusuke Kato",
+        "Fabio Galasso",
+        "Yuke Zhu",
+        "Danfei Xu",
+        "Linxi \"Jim\" Fan",
+        "Jitendra Malik",
+        "Trevor Darrell",
+        "Roei Herzig"
+      ],
+      "affiliations": [],
+      "summary": "机器人数据太少，但第一视角人类视频里手的姿态其实就是末端执行器动作的天然代理。CAIP把3D手关键点当成动作信号，跟图像做对比学习，预训练用了3.2万小时人类视频+88小时机器人数据。下游真机灵巧手任务（折叠、倒水、精细操作）相比DINOv2/SigLIP/MVP/R3M涨了30%以上。",
+      "original_abstract": "Existing vision encoders for robotics face a fundamental bottleneck: robotic datasets lack the scale necessary for large-scale pre-training. Prior work circumvents this data scarcity by turning to internet-scale image and language data or egocentric human video. While these models show promise, neither paradigm learns from paired vision and action data, which downstream visuomotor control policies require. However, robot trajectories, the most direct source of this paired signal, are not available at pre-training scale, motivating us to extract action signals from abundant human video instead. To this end, we introduce CAIP (Contrastive Action-Image Pre-training), a vision encoder that treats human hand poses from large-scale egocentric video as a proxy for end-effector actions. By extracting 3D hand keypoints, a representation that aligns naturally with downstream robot action spaces, CAIP learns a unified action-image representation through a contrastive objective. Leveraging 32,041 hours of egocentric human video and only 88 hours of robotic manipulation data, CAIP outperforms state-of-the-art vision encoders including DINOv2, SigLIP, MVP, and R3M. Evaluated on a challenging real-world dexterous manipulation setup using Dexmate Vega and Sharpa Wave hands, CAIP yields performance gains of more than 30% on tasks involving folding, pouring, and fine-grained manipulation. Our results show that our method of contrastive action-centric pre-training yields a scalable path to achieving robust visual representations better suited for physical interaction.",
+      "highlights": {
+        "contribution": "提出CAIP，用人类手部姿态作为动作代理来对比预训练视觉编码器，专为视觉运动控制服务。",
+        "innovation": "把3D手关键点直接当作末端执行器动作的proxy，跟图像做对比目标，绕开了机器人配对数据不足的瓶颈。",
+        "method": "从egocentric视频里抽3D手关键点作为action token，跟对应图像帧做对比学习，得到action-image统一表示，下游接策略。",
+        "results": "用32041小时人类视频+88小时机器人数据预训练，在Dexmate Vega和Sharpa Wave灵巧手的折叠、倒水、精细操作上比DINOv2/SigLIP/MVP/R3M高30%+。"
+      },
+      "images": [],
+      "published_date": "2026-06-15T20:00:20Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 9.5,
+        "popularity": 8.0,
+        "quality": 8.2,
+        "recommendation": 8.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.17256v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.17256v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.17011",
       "title": "ROVE: Unlocking Human Interventions for Humanoid Manipulation via Reinforcement Learning",
       "authors": [
@@ -1011,132 +1110,53 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.16432",
-      "title": "ACCORD: Action-Conditioned Contextual Grounding for Language Agents",
+      "arxiv_id": "2606.17127",
+      "title": "Agentic Discovery of Non-Canonical Antimicrobial Peptides with AMPGAN v3",
       "authors": [
-        "Lai Jiang",
-        "Cheng Qian",
-        "Zhenhailong Wang",
-        "Pan Lu",
-        "Heng Ji",
-        "Hao Peng"
+        "Jay Jung",
+        "Xiaohan Zhang",
+        "Shenghan Song",
+        "Mahmoud Sayedahmed",
+        "Chijian Xiang",
+        "Yunong Xu",
+        "Ahmed AbdelKhalek",
+        "Severin T. Schneebeli",
+        "Matthew J. Wargo",
+        "Jianing Li",
+        "Safwan Wshah"
       ],
       "affiliations": [],
-      "summary": "用户指令往往不完整，因为人默认了一堆环境前提；LLM agent 经常基于「假设」而不是「观察」行动，错过本可获取的信息，甚至忽略已经返回的证据。ACCORD 在每次动作前主动探测环境补齐缺失上下文，并把轨迹中相关信息整合进来，不需额外训练。AppWorld 上用 GPT-5-mini 把任务完成率从 42.0% 拉到 62.6%（+20.6 点），强 baseline 上也持续提升，AlfWorld 上也涨 7.4。",
-      "original_abstract": "User instructions are often underspecified because humans rely on implicit assumptions about the surrounding environment. For large language model (LLM) agents operating in information-rich digital and physical environments, these assumptions cannot be inferred from the instruction alone; they must be recovered from the current state of tools, data, interfaces, and observations. Effective execution therefore requires agents to identify missing context, ground it in observed evidence, and carry it forward into subsequent actions. We show that current agents often fail to do so. They act from assumed rather than observed specifics, overlook information they could have gathered, and fail to incorporate evidence that has already been returned. Building on this insight, we propose ACCORD (Action-Conditioned Contextual Grounding), a simple and effective agent framework for adaptive grounding. Before each action, ACCORD actively probes the environment for missing information and integrates relevant context from the agent's trajectory that would otherwise be overlooked. Requiring no additional training or task-success signals, ACCORD improves task-goal completion on AppWorld by up to +20.6 points with GPT-5-mini, from 42.0% to 62.6%, compared to strong baselines. These gains persist with a substantially stronger base model (+10.8 with Claude-4.5-sonnet), an open-weight model (+10.1 with Qwen3.5-27B-FP8), and on the embodied AlfWorld benchmark (+7.4 success rate with GPT-5-mini).",
+      "summary": "抗菌耐药每年死一百多万人，抗菌肽是希望但现有生成模型搞不定非天然氨基酸和化学修饰。AMPGAN v3把D-氨基酸和N/C端修饰加进生成词表，用两个判别器分别管对抗和活性。还配了一个PepCraft多智能体框架做端到端发现。五个候选体外验证，两个对革兰氏阳性菌有活性，最好的对枯草杆菌MIC 8 μg/mL。",
+      "original_abstract": "Antimicrobial resistance causes to over a million deaths annually. Antimicrobial peptides (AMPs) are a promising solution, but generative AMP models are not yet ready to design peptides with non-natural amino acids and/or chemical modifications, which are essential for real-world peptide drugs. We present AMPGAN v3, a multi-objective conditional GAN that expands the generative vocabulary to D-amino acids and N/C-terminus modifications such as amidation. By separating adversarial and activity-aware supervision across two specialized discriminators, AMPGAN v3 substantially improves training stability and outperforms prior generative AMP models on external classifiers. We validated five candidates spanning three structural classes in vitro; two showed activity against Gram-positive strains, with the best candidate reaching MIC 8 μg/mL against B. subtilis. To support downstream curation, we further present PepCraft, a multi-agent framework for end-to-end AMP discovery in which a Planning Agent orchestrates specialized executors for generation, filtering, and verification. Its prioritization recommendations align with our in vitro outcomes. Together, these contributions let us examine, on a small but real scale, how generative and agentic AI compose in therapeutic peptide discovery. Code: https://github.com/marszzibros/AMPGANv3",
       "highlights": {
-        "contribution": "把「执行前补齐上下文」做成通用 agent 框架，对工具型和具身 agent 都有显著收益。",
-        "innovation": "Action-Conditioned Contextual Grounding：每步动作前主动 probe 环境并回收轨迹中的相关上下文，无需额外训练或成功信号。",
-        "method": "在 agent 决策回路内插入上下文探测和检索模块；按当前动作意图主动调用工具获取缺失信息；再聚合历史轨迹中相关证据；驱动模型重新生成动作。",
-        "results": "AppWorld + GPT-5-mini 42.0%→62.6%（+20.6）；Claude-4.5-sonnet +10.8；Qwen3.5-27B-FP8 +10.1；AlfWorld +7.4 成功率。"
+        "contribution": "AMPGAN v3扩展生成词表到非天然氨基酸和末端修饰，并提出PepCraft多智能体框架做AMP端到端发现。",
+        "innovation": "双判别器分离对抗和活性监督提稳训练；规划智能体调度生成/过滤/验证执行器，把生成AI和agentic AI拼在一起做药物发现。",
+        "method": "多目标条件GAN生成肽序列，两个专用判别器分别管真假和活性；PepCraft里一个Planning Agent调度多个executor做生成、过滤、验证。",
+        "results": "五个候选体外验证，两个对Gram-阳性菌有活性，最佳候选对B. subtilis MIC达到8 μg/mL，且PepCraft的优先级与实验结果一致。"
       },
       "images": [],
-      "published_date": "2026-06-15T09:05:55Z",
+      "published_date": "2026-06-15T16:39:59Z",
       "categories": [
-        "cs.CL",
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agent framework",
-        "language agent"
-      ],
-      "scores": {
-        "relevance": 8.0,
-        "recency": 10.0,
-        "popularity": 8.0,
-        "quality": 8.4,
-        "recommendation": 8.2
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.16432v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.16432v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.16613",
-      "title": "CoffeeBench: Benchmarking Long-Horizon LLM Agents in Heterogeneous Multi-Agent Economies",
-      "authors": [
-        "Issa Sugiura",
-        "Daichi Hattori",
-        "Kazuo Araragi",
-        "Keita Ogawa",
-        "Shota Onose",
-        "Taro Makino",
-        "Teppei Usuki",
-        "Takashi Ishida"
-      ],
-      "affiliations": [],
-      "summary": "现有 LLM agent benchmark 多半是单 agent 对被动环境，CoffeeBench 把它推进到长 horizon 异质多 agent 经济：两农夫、两烘焙、两零售在 90 天里自主经营、协商、交易，追求净收入最大化。多个开源和闭源 LLM 都打败了「啥也不做」baseline，多数实现正收益；表现好的模型主动沟通更多，而 Claude Haiku 4.5 出现「idle drift」失败模式——计划很合理但反复选择不行动。",
-      "original_abstract": "As LLM agents become capable of increasingly long-horizon tasks, evaluating their performance in economic systems is becoming increasingly important. Unlike existing benchmarks that primarily evaluate a single agent interacting with a passive environment, economic systems are inherently multi-agent, requiring autonomous agents to communicate, negotiate, and transact while pursuing their own objectives over extended periods. We introduce CoffeeBench, a benchmark for evaluating LLM agents in a long-horizon multi-agent economy composed of heterogeneous firms. In CoffeeBench, two farmers, two roasters, and two retailers autonomously operate their businesses over a 90-day simulation, each seeking to maximize cumulative net income through communication and transactions while managing cash, inventory, and pricing. The evaluated model controls one coffee roaster, while the remaining firms are controlled by fixed reference agents. Across several recent open-weight and proprietary LLMs, all models outperform a passive baseline that takes no actions, with most achieving positive net income. Analysis of agent behavior reveals substantial differences in long-horizon economic interaction: higher-performing models communicate more actively with other firms, whereas Claude~Haiku~4.5 exhibits an idle-drift failure mode, repeatedly choosing inaction despite producing coherent assessments and plans. We release our code and agent trajectories to support future research.",
-      "highlights": {
-        "contribution": "面向 LLM agent 的长 horizon 异质多 agent 经济 benchmark，首次系统评估其经济决策与沟通能力。",
-        "innovation": "用 90 天连续模拟、多角色（农夫/烘焙/零售）、显式现金/库存/定价管理把多 agent 经济整合进 LLM 评测。",
-        "method": "搭建 6 公司模拟经济，被评测模型扮演一家烘焙商，其他角色由固定参考 agent 控制；记录通信、交易、净收益等指标；评估多款开闭源 LLM。",
-        "results": "所有评测模型都超过被动 baseline 且大多净利润为正；强模型主动沟通更多，Claude Haiku 4.5 出现典型 idle-drift 失败模式（计划合理但反复选择不行动）。"
-      },
-      "images": [],
-      "published_date": "2026-06-15T12:04:44Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent",
-        "multi-agent",
-        "autonomous agent"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 10.0,
-        "popularity": 7.5,
-        "quality": 7.6,
-        "recommendation": 7.3
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.16613v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.16613v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.16428",
-      "title": "LectūraAgents: A Multi-Agent Framework for Adaptive Personalized AI-Assisted Learning and Embodied Teaching",
-      "authors": [
-        "Jaward Sesay",
-        "Yue Yu",
-        "Siwei Dong",
-        "Yemin Shi",
-        "Guangyao Chen",
-        "Börje F. Karlsson"
-      ],
-      "affiliations": [],
-      "summary": "现有教育 agent 主要做内容生成或仿真，对多模态和具身教学支持有限。LectūraAgents 提出层次化多 agent 框架，以 ProfessorAgent 牵头一支由科研、规划、审查、具身呈现组成的下属 agent 团队，针对学习者画像执行可见的具身教学动作（写、划、强调），并设计 TASA 算法做教学动作-语音对齐。在高中、本科、研究生多门课程上由专家评测，内容质量、具身教学质量、评估和个性化均超过现有方法。",
-      "original_abstract": "Effective personalized AI-assisted learning demands systems that can not only generate accurate learner-specific educational materials, but also dynamically adapt their instruction to diverse learners. However, existing educational agents have primarily focused on lecture content automation and simulations, which often fall short of modelling multimodal and embodied instructional methods tailored for the individual learner. To this end, we propose LectūraAgents - a multi-agent framework that enables personalized learning through end-to-end adaptive embodied teaching. At its core, LectūraAgents mirrors a professor-student relationship, in which a ProfessorAgent leads a collaborative team of specialized subordinate agents through research, planning, review, and embodied delivery of lecture contents that adapt to a learner's needs. The framework offers three main contributions: (1) a hierarchical multi-agent architecture for end-to-end personalized learning; (2) an adaptive embodied teaching mechanism, wherein the ProfessorAgent executes visible and pedagogically motivated teaching actions (e.g., handwrite, highlight, underline, etc.) over contents in a teaching environment; and (3) a Teaching Action-Speech Alignment (TASA) algorithm that employs salience-based heuristics and temporal semantic segmentation to generate coherent teaching action sequences aligned with learner profiles. We evaluate LectūraAgents on diverse courses at high school, undergraduate, and graduate levels using sample-specific rubric-based analysis; with generated lecture materials and teaching actions assessed and validated by expert educators. Experimental results show consistent gains in lecture content quality, embodied teaching quality, assessment, and personalization over existing approaches, positioning LectūraAgents as a pedagogically well-grounded framework for personalized learning at scale.",
-      "highlights": {
-        "contribution": "为个性化 AI 教学搭建端到端的具身多 agent 框架，把教师-学生关系转译成 agent 之间的分工。",
-        "innovation": "把可见的具身教学动作（书写、划线、强调）纳入 agent 输出空间，并用 TASA 算法做与语音的时间-语义对齐。",
-        "method": "层次化多 agent 架构 ProfessorAgent + 研究/规划/审查/具身呈现子 agent；学习者画像驱动内容生成与动作选择；TASA 用显著性和时间语义分段对齐教学动作与语音；专家在多课程多学段用 rubric 评估。",
-        "results": "在高中、本科、研究生多课程评测上，内容质量、具身教学质量、评估和个性化指标均超过现有方法（具体数字摘要未给）。"
-      },
-      "images": [],
-      "published_date": "2026-06-15T09:03:12Z",
-      "categories": [
-        "cs.CL",
+        "q-bio.QM",
         "cs.AI",
-        "cs.HC"
+        "cs.LG"
       ],
       "matched_domain": "Agent",
       "matched_keywords": [
         "multi-agent",
-        "agent framework"
+        "agentic",
+        "agent framework",
+        "planning agent"
       ],
       "scores": {
-        "relevance": 5.5,
-        "recency": 10.0,
-        "popularity": 5.5,
-        "quality": 6.8,
-        "recommendation": 5.6
+        "relevance": 6.0,
+        "recency": 9.5,
+        "popularity": 6.5,
+        "quality": 7.2,
+        "recommendation": 6.6
       },
-      "pdf_url": "https://arxiv.org/pdf/2606.16428v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.16428v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.17127v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.17127v1",
       "venue": null
     }
   ],

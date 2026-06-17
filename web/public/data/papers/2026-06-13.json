@@ -966,46 +966,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.15242",
-      "title": "Benign in Isolation, Harmful in Composition: Security Risks in Agent Skill Ecosystems",
-      "authors": [
-        "Yi Xie",
-        "Jiawei Du",
-        "Yu Cheng",
-        "Jiuan Zhou",
-        "Zhaoxia Yin"
-      ],
-      "affiliations": [],
-      "summary": "Agent 的 skill 一个个看都没问题，但组合起来可能产生新风险，作者称之为 Skill Composition Risk。SCR-Bench 在沙箱里跑 skill 链，记录下游状态变化与路径级结果，分能力流/信任传递/授权混淆三类子任务。结果显示组合下 CapFlow ASR 从近 0 飙到 33.6%，TrustLift 在 5 个后端有 4 个超 96.5%，AuthBlur 风险通过率比孤立基线高 71.8%。",
-      "original_abstract": "Skills are becoming the capability layer through which LLM agents turn plans into actions, but their use introduces security risks such as data leakage, unauthorized operations, and tool misuse. Existing vetting usually evaluates each skill in isolation, while real agent tasks often invoke multiple skills in a shared execution context. This creates Skill Composition Risk (SCR): a skill that appears benign alone can become harmful when its outputs, trust signals, authorization cues, or side effects influence later invocations along an activated path. We introduce SCR-Bench to evaluate this risk in controlled, sandboxed skill environments. Rather than relying only on textual intent or surface behavior, SCR-Bench records downstream state changes and path-level outcomes across composed skill executions. It contains three sub-benchmarks: SCR-CapFlow for capability-flow composition, SCR-TrustLift for trust-transfer composition, and SCR-AuthBlur for authorization-confusion composition. Across SCR-Bench, composed paths expose risks that are largely absent under isolated evaluation. In SCR-CapFlow, attack success rate reaches 33.6 percent under composition, compared with near-zero isolated baselines. In SCR-TrustLift, attack success rate exceeds 96.5 percent on four of five backends. In SCR-AuthBlur, the risky-approval rate increases by 71.8 percent relative to the L0 isolated baseline under the L1 context setting. These results show that agent skill security should be assessed at the level of activated paths rather than isolated artifacts. SCR and SCR-Bench provide a foundation for path-aware risk evaluation and defense in LLM agent skill ecosystems. Benchmark: https://github.com/saint-viperx/SCR_Bench.",
-      "highlights": {
-        "contribution": "提出 Skill Composition Risk 概念与 SCR-Bench，把 agent skill 安全评估从单 skill 升级到激活路径级。",
-        "innovation": "首次系统记录 skill 组合执行后的下游状态变化与路径级结果，并分三类子 benchmark 揭示不同组合风险机制。",
-        "method": "在沙箱 skill 环境中按 CapFlow / TrustLift / AuthBlur 三类组合范式构造任务，记录状态变化与攻击成功路径，评估多个 LLM 后端。",
-        "results": "CapFlow 组合下 ASR 达 33.6%（孤立近 0）；TrustLift 在 5 个后端中 4 个 ASR 超 96.5%；AuthBlur 风险通过率比孤立基线高 71.8%。"
-      },
-      "images": [],
-      "published_date": "2026-06-13T10:55:01Z",
-      "categories": [
-        "cs.CR",
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent"
-      ],
-      "scores": {
-        "relevance": 7.5,
-        "recency": 9.5,
-        "popularity": 7.5,
-        "quality": 7.8,
-        "recommendation": 7.4
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.15242v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.15242v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2606.15141",
       "title": "EChO-Agent: Evidence Chain Orchestration Agent for Audio Reasoning",
       "authors": [
@@ -1251,6 +1211,47 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.15107v1",
       "arxiv_url": "https://arxiv.org/abs/2606.15107v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.17092",
+      "title": "Securing Multi-Agent GIS Systems: Risk Evaluation and Prompt Hardening Optimization",
+      "authors": [
+        "Kyle Gao",
+        "Pranavi Kotta",
+        "Linlin Xu",
+        "Jonathan Li",
+        "David A. Clausi"
+      ],
+      "affiliations": [],
+      "summary": "这篇关注多智能体 GIS 系统的安全问题：把 agent 接到地理信息系统后，对话和空间分析能力变强，但攻击面也变大。作者搭了一个基于状态机的模块化编排框架，再用一个自适应攻击 LLM 加确定性裁判跑 red-teaming 来测鲁棒性，最后用把 prompt 当结构化签名、注入对抗样例的 prompt 优化方法来加固。结果是能在不掉任务性能的前提下系统性地提高安全性，但论文里没给出具体数值。",
+      "original_abstract": "Agentic systems are increasingly integrated with geographic information systems (GIS), where multi-agent coordination enables complex conversational and spatial analysis but introduces security risks. This work presents a security-oriented framework for risk identification, evaluation, and mitigation in a multi-agent GIS system while maintaining adaptability to broader agentic architectures. We test the agentic system of a commercial geospatial partner while developing a modular state-machine-based orchestration framework that abstracts agent behavior into reusable components. We evaluate robustness using a red-teaming framework with an adaptive attacker LLM and a deterministic judge that produces binary outcomes with supporting rationales across multi-turn attacks. We further improve resilience with a prompt optimization framework that treats prompts as structured signatures and injects adversarial demonstrations, enabling systematic security improvements without degrading task performance.",
+      "highlights": {
+        "contribution": "针对商用多智能体 GIS 系统提出一个端到端的安全评估加加固框架，涵盖风险识别、red-teaming 评估和 prompt 优化三步。",
+        "innovation": "把 agent 行为抽象成可复用的状态机组件，又用「prompt 作为结构化签名 + 对抗 demonstration」的方式做自动优化，让安全加固可以系统化迭代而不是手工拍 prompt。",
+        "method": "输入是真实商用 GIS agent 系统；用状态机编排框架抽象 agent 行为；评测端跑一个自适应攻击 LLM 加确定性 judge 做多轮 red-teaming，输出二元结果加理由；加固端把 prompt 视为结构化 signature，注入对抗示例做 prompt optimization；没有训练新模型，主要靠 prompt 层迭代。",
+        "results": "论文声称在不降低任务性能的前提下系统性提升了多轮攻击下的鲁棒性，但摘要未给出具体 benchmark 数字或提升百分比。"
+      },
+      "images": [],
+      "published_date": "2026-06-13T03:15:30Z",
+      "categories": [
+        "cs.CR",
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 8.5,
+        "popularity": 5.0,
+        "quality": 6.0,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.17092v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.17092v1",
       "venue": null
     }
   ],

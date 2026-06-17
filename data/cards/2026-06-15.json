@@ -396,56 +396,56 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.16613",
-    "summary": "现有 LLM agent benchmark 多半是单 agent 对被动环境，CoffeeBench 把它推进到长 horizon 异质多 agent 经济：两农夫、两烘焙、两零售在 90 天里自主经营、协商、交易，追求净收入最大化。多个开源和闭源 LLM 都打败了「啥也不做」baseline，多数实现正收益；表现好的模型主动沟通更多，而 Claude Haiku 4.5 出现「idle drift」失败模式——计划很合理但反复选择不行动。",
+    "arxiv_id": "2606.17200",
+    "summary": "机器人轨迹采集太贵，但第一视角人类视频又便宜又多。这篇把人类视频转成机器人格式的伪动作，统一动作表示用相机坐标系+形态条件+对齐分块，再用一个可靠性感知的损失把噪声标签压住，让人类数据真能给VLA预训练加分。在RoboCasa GR1 TableTop和RoboTwin 2.0上拿了SOTA，真机双臂操作也能迁。",
     "highlights": {
-      "contribution": "面向 LLM agent 的长 horizon 异质多 agent 经济 benchmark，首次系统评估其经济决策与沟通能力。",
-      "innovation": "用 90 天连续模拟、多角色（农夫/烘焙/零售）、显式现金/库存/定价管理把多 agent 经济整合进 LLM 评测。",
-      "method": "搭建 6 公司模拟经济，被评测模型扮演一家烘焙商，其他角色由固定参考 agent 控制；记录通信、交易、净收益等指标；评估多款开闭源 LLM。",
-      "results": "所有评测模型都超过被动 baseline 且大多净利润为正；强模型主动沟通更多，Claude Haiku 4.5 出现典型 idle-drift 失败模式（计划合理但反复选择不行动）。"
+      "contribution": "提出ACE-EGO-0统一VLA预训练框架，把1.48K小时第一视角人类视频和4.53K小时机器人/仿真数据一起训。",
+      "innovation": "可扩展的「视频转伪动作」管线，加上相机空间动作+形态条件的统一表示，再用可靠性加权聚焦高质量监督。",
+      "method": "输入是异构的人类视频和机器人轨迹，先把人类视频用管线转成机器人格式伪动作，再用统一表示对齐，训练时用可靠性加权的人类辅助损失防噪声。",
+      "results": "在RoboCasa GR1 TableTop和RoboTwin 2.0上取得SOTA，并能迁移到真机双臂操作。"
     },
     "scores": {
-      "relevance": 7.0,
-      "recency": 10,
+      "relevance": 9.5,
+      "recency": 9.5,
       "popularity": 7.5,
-      "quality": 7.6,
-      "recommendation": 7.3
+      "quality": 8.3,
+      "recommendation": 8.6
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.16428",
-    "summary": "现有教育 agent 主要做内容生成或仿真，对多模态和具身教学支持有限。LectūraAgents 提出层次化多 agent 框架，以 ProfessorAgent 牵头一支由科研、规划、审查、具身呈现组成的下属 agent 团队，针对学习者画像执行可见的具身教学动作（写、划、强调），并设计 TASA 算法做教学动作-语音对齐。在高中、本科、研究生多门课程上由专家评测，内容质量、具身教学质量、评估和个性化均超过现有方法。",
+    "arxiv_id": "2606.17256",
+    "summary": "机器人数据太少，但第一视角人类视频里手的姿态其实就是末端执行器动作的天然代理。CAIP把3D手关键点当成动作信号，跟图像做对比学习，预训练用了3.2万小时人类视频+88小时机器人数据。下游真机灵巧手任务（折叠、倒水、精细操作）相比DINOv2/SigLIP/MVP/R3M涨了30%以上。",
     "highlights": {
-      "contribution": "为个性化 AI 教学搭建端到端的具身多 agent 框架，把教师-学生关系转译成 agent 之间的分工。",
-      "innovation": "把可见的具身教学动作（书写、划线、强调）纳入 agent 输出空间，并用 TASA 算法做与语音的时间-语义对齐。",
-      "method": "层次化多 agent 架构 ProfessorAgent + 研究/规划/审查/具身呈现子 agent；学习者画像驱动内容生成与动作选择；TASA 用显著性和时间语义分段对齐教学动作与语音；专家在多课程多学段用 rubric 评估。",
-      "results": "在高中、本科、研究生多课程评测上，内容质量、具身教学质量、评估和个性化指标均超过现有方法（具体数字摘要未给）。"
+      "contribution": "提出CAIP，用人类手部姿态作为动作代理来对比预训练视觉编码器，专为视觉运动控制服务。",
+      "innovation": "把3D手关键点直接当作末端执行器动作的proxy，跟图像做对比目标，绕开了机器人配对数据不足的瓶颈。",
+      "method": "从egocentric视频里抽3D手关键点作为action token，跟对应图像帧做对比学习，得到action-image统一表示，下游接策略。",
+      "results": "用32041小时人类视频+88小时机器人数据预训练，在Dexmate Vega和Sharpa Wave灵巧手的折叠、倒水、精细操作上比DINOv2/SigLIP/MVP/R3M高30%+。"
     },
     "scores": {
-      "relevance": 5.5,
-      "recency": 10,
-      "popularity": 5.5,
-      "quality": 6.8,
-      "recommendation": 5.6
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.16432",
-    "summary": "用户指令往往不完整，因为人默认了一堆环境前提；LLM agent 经常基于「假设」而不是「观察」行动，错过本可获取的信息，甚至忽略已经返回的证据。ACCORD 在每次动作前主动探测环境补齐缺失上下文，并把轨迹中相关信息整合进来，不需额外训练。AppWorld 上用 GPT-5-mini 把任务完成率从 42.0% 拉到 62.6%（+20.6 点），强 baseline 上也持续提升，AlfWorld 上也涨 7.4。",
-    "highlights": {
-      "contribution": "把「执行前补齐上下文」做成通用 agent 框架，对工具型和具身 agent 都有显著收益。",
-      "innovation": "Action-Conditioned Contextual Grounding：每步动作前主动 probe 环境并回收轨迹中的相关上下文，无需额外训练或成功信号。",
-      "method": "在 agent 决策回路内插入上下文探测和检索模块；按当前动作意图主动调用工具获取缺失信息；再聚合历史轨迹中相关证据；驱动模型重新生成动作。",
-      "results": "AppWorld + GPT-5-mini 42.0%→62.6%（+20.6）；Claude-4.5-sonnet +10.8；Qwen3.5-27B-FP8 +10.1；AlfWorld +7.4 成功率。"
-    },
-    "scores": {
-      "relevance": 8.0,
-      "recency": 10,
+      "relevance": 9.0,
+      "recency": 9.5,
       "popularity": 8.0,
-      "quality": 8.4,
-      "recommendation": 8.2
+      "quality": 8.2,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17127",
+    "summary": "抗菌耐药每年死一百多万人，抗菌肽是希望但现有生成模型搞不定非天然氨基酸和化学修饰。AMPGAN v3把D-氨基酸和N/C端修饰加进生成词表，用两个判别器分别管对抗和活性。还配了一个PepCraft多智能体框架做端到端发现。五个候选体外验证，两个对革兰氏阳性菌有活性，最好的对枯草杆菌MIC 8 μg/mL。",
+    "highlights": {
+      "contribution": "AMPGAN v3扩展生成词表到非天然氨基酸和末端修饰，并提出PepCraft多智能体框架做AMP端到端发现。",
+      "innovation": "双判别器分离对抗和活性监督提稳训练；规划智能体调度生成/过滤/验证执行器，把生成AI和agentic AI拼在一起做药物发现。",
+      "method": "多目标条件GAN生成肽序列，两个专用判别器分别管真假和活性；PepCraft里一个Planning Agent调度多个executor做生成、过滤、验证。",
+      "results": "五个候选体外验证，两个对Gram-阳性菌有活性，最佳候选对B. subtilis MIC达到8 μg/mL，且PepCraft的优先级与实验结果一致。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 6.6
     },
     "affiliations": []
   }

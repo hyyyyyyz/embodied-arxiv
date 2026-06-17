@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.17598",
+    "summary": "RGB-only 的 VLA 看不到温度、声音、雷达回波这些物理量，作者搞了个 MuseVLA，让模型像调工具一样动态调用各种传感器。具体做法是先输出一个 sensor token 决定用什么传感器、关注哪里，再把读数渲染成「grounded sensor image」喂回主干。真机灵巧手任务平均成功率 80.6%，明显超过 RGB-only 和多传感融合的基线。",
+    "highlights": {
+      "contribution": "把多模态传感能力以「按需调用」的方式接入 VLA，解决了 RGB 看不到的物理属性问题。",
+      "innovation": "用 sensor token + grounded sensor image 把异构传感器统一成图像式中间表示，实现工具化调用。",
+      "method": "输入指令和 RGB，先生成 sensor token 和目标描述，再渲染成 grounded sensor image，最后融合生成动作；用合成 pipeline 把 RGB 视频数据集扩成带传感图的数据。",
+      "results": "真机灵巧手温度/音频/雷达任务平均 80.6% 成功率，对未见传感器任务有 zero-shot 能力。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.5,
+      "recommendation": 8.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17846",
+    "summary": "Qwen 团队尝试把语言基模型的「对齐+规模」配方搬到机器人操控上，做了 Qwen-RobotManip。他们在表示、运动、行为三个维度做统一对齐，把跨平台的人手演示和异构数据集合到一起，攒出约 38100 小时的预训练语料。在 RoboCasa365、LIBERO-Plus 等 OOD 设定上全面超过 π0.5，RoboChallenge 第一名相对提升 20%。",
+    "highlights": {
+      "contribution": "构建 Qwen-VL 上的通用操控 VLA 基模型，证明对齐能解锁大规模操控数据的可用性。",
+      "innovation": "在 representation、motion、behavior 三层统一对齐，让多源异构操控数据可共训而不冲突。",
+      "method": "Qwen-VL 主干，跨 15 个平台把第一视角人手演示转成机器人轨迹；严格的数据 curation；只用开源和人类视频构建约 38100 小时语料预训练。",
+      "results": "在 RoboCasa365、LIBERO-Plus、EBench、RoboTwin 系列等 OOD 设置全面超过 π0.5，RoboChallenge 拿第一相对提升 20%，真机 AgileX/Franka/UR/ARX 验证。"
+    },
+    "scores": {
+      "relevance": 9.8,
+      "recency": 10,
+      "popularity": 9.0,
+      "quality": 9.0,
+      "recommendation": 9.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17937",
+    "summary": "直接 observation→action 的 VLA 在长程任务上容易拉胯，作者把操控分成「预测下一帧」和「逆动力学推动作」两步，搞了 ThinkingVLA。它在统一的 Mixture-of-Transformers 里交替做文字推理和视觉推理：先 forward CoT 出子目标和预测图，再 inverse CoT 基于预测图推动作。仿真和真机上长程任务收益最明显。",
+    "highlights": {
+      "contribution": "把视觉预测和逆动力学推理统一成交替的自回归 CoT，提升长程操控。",
+      "innovation": "forward CoT 预测视觉子目标，inverse CoT 基于预测图推动作，两路在 MoT 里交替生成。",
+      "method": "Mixture-of-Transformers 自回归生成；输入观察+指令，先文本子目标+视觉预测，再基于预测图做空间推理出动作；端到端联合训练。",
+      "results": "仿真和真机基准全面优于 SOTA，长程操控任务上提升最大。"
+    },
+    "scores": {
+      "relevance": 9.3,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.2,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.18043",
+    "summary": "Flow-matching 的 VLA 跑得快但不知道自己什么时候要崩，作者用一个小 ensemble 的「速度场分歧」VFD 来估认知不确定性。基于这个不确定性他们做失败检测和主动微调框架 SAVE，可以用更少专家演示让 VLA 适应新任务。LIBERO 上 VFD 标定良好，SAVE 比基线少用至少 22% 数据。",
+    "highlights": {
+      "contribution": "给 flow-matching VLA 做了一套可用的认知不确定性量化方法，并用于失败检测和主动微调。",
+      "innovation": "用小 ensemble 之间的 velocity-field disagreement 当作 epistemic uncertainty 信号。",
+      "method": "训练 N 个 flow-matching head 的 ensemble，推理时算 VFD；在 SAVE 框架里用 VFD 选数据做 active fine-tune。",
+      "results": "LIBERO 上 VFD 与下游表现强相关，失败检测效果好；SAVE 比基线少 ≥22% 演示样本。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.18097",
+    "summary": "电线电缆这种可变形线状物体在工业装配里很常见，但现有 benchmark 要么绑死硬件要么没工业夹具。作者开源了 WireCraft 仿真 benchmark，覆盖连接器插入、卡扣布线、通道卡入三类任务，提供 articulated 和 deformable 两种物理模型，以及 UR5 真机轨迹。基于 state 的 RL 能 ≥82% 成功，但视觉 RL/IL/VLA 在接触阶段全面拉胯。",
+    "highlights": {
+      "contribution": "提供工业级可变形线状物 DLO 操控的统一仿真 benchmark 和评测协议。",
+      "innovation": "三类工业任务族 + 两种物理模型 + 仿真和真机配套数据，统一指标对比 RL/IL/VLA。",
+      "method": "在仿真里搭三个任务族，配 articulated/deformable 物理；UR5 录真机轨迹；用同样指标 benchmark RL/IL/VLA 策略。",
+      "results": "state-based RL 每个任务族 ≥82% 成功；视觉 RL/IL/VLA 在 connector insertion 接触阶段仍是瓶颈，是开放挑战。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 10,
+      "popularity": 6.8,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.18247",
+    "summary": "想让机器人部署后还能不断进步，作者搞了个 generator-verifier 框架 VERITAS。预训练通用策略当 generator，配一个无梯度的视觉 verifier 在推理时打分挑动作，能不训练就涨点。更关键的是 verified 的 rollouts 还能当伪标注做离线 fine-tune，效果接近用专家演示，但完全不需要人介入。",
+    "highlights": {
+      "contribution": "提出推理期视觉验证机制，既能即时纠偏又能自我改进策略。",
+      "innovation": "gradient-free 视觉 verifier 作为 inference-time steering 信号，verified rollouts 作为自监督训练数据。",
+      "method": "预训练 generalist policy 当 generator；视觉 verifier 对候选动作打分挑最优；fine-tune 用 verified rollouts。",
+      "results": "推理期验证一致超过普通 generalist；用 verified rollouts 微调，效果可比专家演示，无需人介入。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 10,
+      "popularity": 7.8,
+      "quality": 8.2,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17536",
+    "summary": "自动驾驶生成世界模型有两个老毛病：异构控制信号没法统一，多视角是后融合丢 3D。作者搞了 DRIVE-CHOREO，让三个 Qwen2.5-VL agent（Director/Cartographer/Auditor）当编排员，把语言、地图、轨迹、相机一起 编进一个 position-aware token 序列，再和多视角视频在 3D VAE 里联合压缩。nuScenes 上 BEV mAP 21.6 拿 SOTA，下游 detector 用合成数据涨 +2.4 NDS。",
+    "highlights": {
+      "contribution": "首个用 LLM 多 agent 编排来生成多视角驾驶视频的世界模型。",
+      "innovation": "三 agent 编排 WorldScript + 视图-时间置换让 3D VAE 在感受野内显式编码相机几何。",
+      "method": "Director 解析指令成 WorldScript；Cartographer 落到 layout token；Auditor 给跨视角批评；token 序列与多视角视频在 3D VAE 里 view-time permutation 协同压缩。",
+      "results": "nuScenes 多视角一致性和 BEV mAP 21.6 拿 SOTA，FVD 45.7 有竞争力；合成数据训 detector 在真验证集涨 +2.4 NDS。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17730",
+    "summary": "交互式世界模型基本只能「走来走去」，碰东西就不行。作者搞 ActWorld 把对象交互引入 chunk-autoregressive 世界模型，瓶颈一个是数据少，一个是 recency-biased 记忆会忘事件帧。他们造了 100K 人物交互视频数据集，并设计分层 action-aware 记忆＋持久记忆库保留事件和物体身份 token。能在一个模型里同时支持灵活导航和丰富物体交互。",
+    "highlights": {
+      "contribution": "把可探索世界模型扩展到真正可交互的世界模型，能 mid-rollout 操作物体。",
+      "innovation": "按交互重要性路由的分层 action-aware 记忆 + 跨长 rollout 保留事件/物体身份的持久记忆库。",
+      "method": "构建 100K 带 chain-of-thought caption 的交互视频；chunk-autoregressive 生成；分层记忆压缩 + 持久 token bank。",
+      "results": "在不损失视角控制的前提下，交互保真度大幅超过只做导航的基线，可长 rollout。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.2,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17800",
+    "summary": "现有世界模型多在跑物理仿真或游戏，社交互动场景没人做。MaineCoon 是 22B 参数的实时音视频自回归世界模型，单 GPU 能跑到 47.5 FPS，亚秒级交互。他们用 self-resampling、跨模态对齐、域感知偏好优化和强化在线策略蒸馏来稳训练，还配了 agentic 流式推理框架支持千秒级生成。",
+    "highlights": {
+      "contribution": "首个面向社交互动的实时音视频世界模型，定义了 social world model 这一研究方向。",
+      "innovation": "22B 自回归骨干 + ROPD + agentic streaming inference + 千秒级抗漂移记忆管理。",
+      "method": "self-resampling 数据增强、跨模态表示对齐、domain-aware 偏好优化、reinforced online-policy distillation；agentic 缓存与 prompt 规划做长时推理。",
+      "results": "单 GPU 47.5 FPS 实时生成，亚秒级交互，长 rollout 抗漂移；社交互动音视频生成新 SOTA。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 8.5,
+      "quality": 8.3,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.18180",
+    "summary": "世界模型最缺的是带动作-语言对齐的视频数据。作者从公开 CS / CS2 职业比赛 demo 里挖出 EgoCS-400K：40 万段第一人称视频、1 万小时游戏、1000+场比赛、13 张地图，每段都附玩家状态、视角、按键、武器、事件等可执行标注，并且可重放可对齐。是 web 视频和真机数据之间的可控桥梁。",
+    "highlights": {
+      "contribution": "开源大规模 egocentric 游戏数据集，带可执行动作与状态标注，专门服务世界模型训练。",
+      "innovation": "从 CS demo 文件解析出帧对齐的玩家动作/视角/事件，构成 video-action-language 三元组。",
+      "method": "解析 CS/CS2 demo 还原 trajectories，重渲染第一人称视频，与动作、状态、事件做时间对齐；覆盖 13 张地图 10 个视角。",
+      "results": "EgoCS-400K：>400K 视频、10K 小时、1000+ 场比赛；支持 action-conditioned 预测、replay caption、egocentric 动作理解等任务。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 7.8,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.18208",
+    "summary": "想要长程仿真就得加深模型，但越深越贵还容易累积误差。作者提出 Looped World Models：用一个参数共享的 transformer block 在 latent 空间里反复迭代细化状态，得到自适应深度。号称比常规方法参数效率高 100×，把「latent 深度」当成跟模型规模、数据量并列的新 scaling 轴。",
+    "highlights": {
+      "contribution": "首次把 looped/iterative 架构引入世界模型，开辟 latent depth 这一新 scaling 轴。",
+      "innovation": "参数共享 transformer block 多次迭代细化 latent 状态，按预测复杂度自适应分配计算深度。",
+      "method": "单个共享 transformer block 反复套用迭代精化 latent；自适应控制循环次数实现可变深度。",
+      "results": "相对常规架构最多 100× 参数效率提升；提供 latent 深度作为正交于模型/数据的新 scaling 维度。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 8.2,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.18250",
+    "summary": "2D 视频世界模型把自身运动和环境运动揉一起，长时间预测容易出现物体融化或消失。FR3D 显式把 ego-motion 和场景 3D 动力学解耦，用持久 3D latent 来预测未来动态 3D 重建。还做了 teacher-student 蒸馏借用基础模型的空间常识来提升 zero-shot。单目输入能预测 2 秒后的动态 3D 场景。",
+    "highlights": {
+      "contribution": "提出预测持久 3D latent 的世界模型，让未来预测在几何上一致。",
+      "innovation": "把 ego-motion 当 latent action 与世界动态解耦，避免自/世界运动歧义。",
+      "method": "单目输入预测 3D latent 表示；ego-motion 单独建模作为 latent 动作；teacher-student 从基础模型蒸馏空间常识。",
+      "results": "多个数据集上单目未来动态 3D 重建 SOTA，可预测到 2 秒后；zero-shot 泛化稳。"
+    },
+    "scores": {
+      "relevance": 8.2,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17572",
+    "summary": "学习到的动力学模型常把整段轨迹特征池化成一个读数，作者发现这会让模型从平滑背景而不是真正决定结果的短暂事件读信息，叫「temporal credit dilution」。他们提出 Credit-in-Event 探针做诊断，并提出无需训练无需标签的 CREST 读出器，从特征里抓事件核然后做事件 vs 其余的对比再融合。仿真齿轮和真实轴承数据上 OOD 误差降。",
+    "highlights": {
+      "contribution": "揭示并形式化了 sequence-to-global 动力学模型的「时间信用稀释」问题。",
+      "innovation": "训练无关、标签无关的 event-core 重锚定读出方法 CREST，结合 Credit-in-Event 指标。",
+      "method": "在已有特征序列上无监督估计 transient event core，再用 event vs rest 对比来调整池化表示，无需重新训练。",
+      "results": "在齿轮/冲击仿真系统和公开轴承数据上 OOD 误差下降，事件信用提高；消融排除了局部性先验。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17742",
+    "summary": "全脑 4D fMRI 生成对脑功能动力学建模有用，但现有 foundation 模型主要做表示和预测，没做条件生成。BrainWorld 把 sMRI 当解剖结构先验喂进去噪过程引导 fMRI 生成，而不是当并行模态。22 个数据集上能稳定生成 400 帧的 4D 序列，下游任务用生成样本扩增有提升。",
+    "highlights": {
+      "contribution": "首个结构先验条件化的全脑 4D fMRI 生成模型。",
+      "innovation": "把 sMRI 当主体级解剖上下文嵌入扩散去噪过程，而不是作为旁路模态。",
+      "method": "扩散式生成，sMRI 条件注入去噪步骤；在 22 个数据集上联合训练。",
+      "results": "稳定生成 400 帧 4D fMRI；下游预测靠生成样本扩增提升；多模态表示迁移超过基线。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17906",
+    "summary": "World-Action (WA) 模型现在主要靠专家轨迹训练，没法继续从交互里学。WAM-RL 把 world model 和 action model 用分层 RL 一起在线优化，还加了重建奖励和在线视频 SFT。关键结论是：只优化 actor 能涨短程任务，但长程任务必须 world model 也一起优化才能涨。算是首个把 RL 引入 WA 范式的工作。",
+    "highlights": {
+      "contribution": "首次把强化学习引入 World-Action 范式，让 world model 和 actor 协同在线进化。",
+      "innovation": "分层 RL 协调 world model 和 actor 更新；重建奖励 + 在线视频 SFT。",
+      "method": "WA 模型由 world model 和 actor 组成，用 hierarchical RL 同时优化；环境交互产生新轨迹做在线 SFT。",
+      "results": "短程任务上只更 actor 就涨；长程任务必须 world model 和 actor 一起优化才有显著提升。"
+    },
+    "scores": {
+      "relevance": 9.3,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.2,
+      "recommendation": 8.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.18189",
+    "summary": "辅助进食这类人机交互场景，传统 human-in-the-loop 只在机器人失败时叫人，结果用户长时间被晾着。作者提出 Engagement-aware MPC，用一个建模用户参与度演化的「交互动力学」模型，主动规划交互频率和类型，在 workload 约束下保持用户 engagement。仿真和真机咬合获取实验上用户体验提升。",
+    "highlights": {
+      "contribution": "提出参与度感知的 HRI 规划框架，超越失败驱动式交互。",
+      "innovation": "把用户 engagement 演化建成可优化的动力学模型，纳入 MPC 目标。",
+      "method": "用户交互动力学模型刻画 engagement 随交互频率/类型变化；MPC 在 workload 约束下规划交互；多人格仿真+真机用户研究。",
+      "results": "在仿真多用户人格上稳定优于基线；真机辅助进食用户研究中体验更好且任务成功率保持。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.2,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17722",
+    "summary": "Pansharpening 一般都做固定网格预测，换尺度就抓瞎。GSPan 把 2D Gaussian Splatting 引进来，用连续可学习的高斯基函数表示波段残差细节，可以在任意目标网格上渲染融合图无需重训。还设计了双流 DSHI 架构带 SSIA 注意力。在 QuickBird/GaoFen-2/WorldView 等数据上 SOTA。",
+    "highlights": {
+      "contribution": "把 2D Gaussian splatting 作为连续残差表示引入 pansharpening 任意尺度融合。",
+      "innovation": "用 2D Gaussian 基函数表示波段残差；SDAI 在低分辨率估基元、高分辨率渲染。",
+      "method": "DSHI 双流结构 + SSIA 注意力从 PAN/MS 估计 2D Gaussian 基元，再渲染成残差细节注入上采样 MS 图。",
+      "results": "QuickBird、GaoFen-2、WorldView-3 及 4K 数据集 SOTA 融合质量；SDAI 推理显著加速。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17935",
+    "summary": "单目在线 3DGS 重建里相机位姿没全局优化容易飘，长序列优化也慢。MoonSplat 加了 Sim(3) 全局优化做位姿和体素化 3DGS 的闭环，还引入颜色残差学习加速收敛、提升渲染。室内外多个数据集相机位姿和渲染都 SOTA，还做了无人机主动重建真机系统。",
+    "highlights": {
+      "contribution": "提出带 Sim(3) 全局优化的鲁棒在线单目 3DGS 重建框架。",
+      "innovation": "Sim(3) 全局优化做位姿与体素 3DGS 闭环 + 颜色残差学习加速收敛。",
+      "method": "体素化 3DGS 在线重建；Sim(3) 全局位姿/几何闭环优化；颜色残差学习提升优化效率与渲染质量。",
+      "results": "多个室内外数据集上位姿精度和渲染质量双 SOTA，实时；无人机真机主动重建系统成功部署。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17985",
+    "summary": "无监督低光增强常出现局部曝光不均和色偏，主流 ViT 也没显式建物理光照先验。GLFS 把高斯光场 splatting 当连续光照先验喂进 ViT 自注意力当物理偏置，自适应推一个空间增益场。再加色向量角度损失和亮度边缘损失防色偏与结构退化。低光增强 SOTA。",
+    "highlights": {
+      "contribution": "把高斯光场 splatting 当物理光照先验显式引入 ViT 做低光增强。",
+      "innovation": "各向异性高斯基函数叠加表示光照，物理先验作为 self-attention 偏置驱动空间增益场。",
+      "method": "ViT 主干，高斯光场先验注入自注意力；色向量角度损失保色相一致，亮度边缘损失保结构。",
+      "results": "无监督低光增强 benchmark SOTA，细节和色彩一致性优于基线。"
+    },
+    "scores": {
+      "relevance": 2.5,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 4.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17998",
+    "summary": "低光增强模型常常表达力强就重，AIGS-Net 用 2D Gaussian Splatting 构建一个输入自适应的光照场，高斯不透明度随相对亮度统计动态调，整个网络只有约 40 个可学习参数。再叠零参多尺度上下文模块、噪声掩码、单通道 Gamma、跨通道一致和颜色对齐约束。LOL/LSRW 上效率和质量做了好平衡。",
+    "highlights": {
+      "contribution": "提出 40 参数级超轻量 2D Gaussian 光照场低光增强网络。",
+      "innovation": "输入自适应光照高斯不透明度 + 零参非线性多尺度上下文模块。",
+      "method": "2D Gaussian 基函数表示光照，按相对亮度统计调不透明度并 alpha 合成；零参多尺度上下文提结构；多个色彩/噪声约束。",
+      "results": "LOL、LSRW 上细节和色彩保真提升，仅约 40 可学习参数，推理极快。"
+    },
+    "scores": {
+      "relevance": 2.5,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 6.8,
+      "recommendation": 4.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.18153",
+    "summary": "Open Forest Observatory 现在用经典 SfM 做森林 3D 地图，林下视野有限重建烂。作者尝试把 NeRF 接进来做更高质量森林重建，讨论怎么把更先进的 3D 视觉模型纳入 OFO，并强调高质量重建对碳汇监测、火灾仿真这些下游科学任务的重要性。",
+    "highlights": {
+      "contribution": "把 NeRF 引入 Open Forest Observatory 替换 SfM 做低成本无人机森林 3D 重建。",
+      "innovation": "面向森林这种林下遮挡严重场景探索神经隐式重建。",
+      "method": "用无人机俯视影像训练 NeRF 表示森林场景，对比 SfM 重建质量；探索 SOTA 3D 视觉模型接入流程。",
+      "results": "NeRF 在稀疏视角和林下遮挡上比经典 SfM 重建质量更高，为下游火灾/碳汇仿真提供更好输入。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17838",
+    "summary": "LLM agent 在交互环境里对 prompt 很敏感，prompt 工程还基本靠手调。作者把 observation→action 流水线拆成「描述器 agent」和「动作选择 agent」两个模块，再用 LLM 驱动的进化循环按环境回报自动改 prompt。BabyAI 任务上一致涨点，PutNext 任务从 0% 飙到 72.5% 成功率。",
+    "highlights": {
+      "contribution": "自动化两模块 prompt 优化框架，把手工 prompt 工程换成 LLM 进化循环。",
+      "innovation": "behavior analyzer 把 episode 结果归因到具体 prompt 组件，mutator 提定向改写并通过环境 rollout 验证。",
+      "method": "拆描述器和动作选择两个 agent；LLM 进化循环按 environment return 改 prompt；不更新模型权重。",
+      "results": "BabyAI 全部 5 个任务一致涨点；PutNext 从 RobustCoTAgent 的 0% 提到 72.5% 成功率，不需要 fine-tune。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.18005",
+    "summary": "LLM 越来越多地代替人做消费决策，但传统消费者理论假设决策者是人。作者提出「LLM 消费者行为理论」这个新研究领域，把经典/行为经济学和 NLP 进展结合，形式化人偏好怎样经过 LLM agent 反映到市场需求，并指出理性、异质性等假设在 agentic 市场里可能失效。是定位性论文不做实证。",
+    "highlights": {
+      "contribution": "提出并定位 LLM 消费者行为理论这一新研究领域。",
+      "innovation": "在经济学视角下统一以前碎片化的 LLM 决策、人类行为模拟、偏好引出文献。",
+      "method": "理论论述，借用经典/行为经济学和 NLP 进展形式化 agentic 市场偏好与需求聚合；不做实验。",
+      "results": "给出开放研究问题清单：对齐、偏好表示、市场动力学。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 6.0,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.18068",
+    "summary": "医疗对话 agent 常常太早下诊断或者悄悄幻觉。作者用确定性编排替代「LLM 当裁判」：第一关 neuro-symbolic 状态门强制收集完 OLDCARTS 八个临床维度才能进入诊断，第二关在 K=5 次诊断采样上算语义熵拦截发散输出。150 例仿真测试上诊断精度 49.3%，比无约束基线绝对涨 11.3 个百分点。",
+    "highlights": {
+      "contribution": "用确定性编排加 UQ 门替代 LLM-as-a-judge，缓解过早诊断和静默幻觉。",
+      "innovation": "neuro-symbolic OLDCARTS 完整性门 + K=5 采样的语义熵不确定性门。",
+      "method": "多 agent 框架，状态门检查 OLDCARTS 八维完整度才放行；K=5 独立诊断采样算语义熵 H 判断是否拦截。",
+      "results": "150 例上诊断精度 49.3%，比无约束基线绝对提升 11.3pp；完整度 σ 与语义熵 H 呈显著负相关 (r=-0.181, p<0.05)。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.17546",
+    "summary": "自我进化 LLM agent 现在主要靠改 harness（prompt、记忆、工具、运行时），但评测要么单任务分数要么单条序列曲线，看不出更新是不是真有用。SEAGym 给出一个统一评测环境，覆盖训练/验证/测试/replay/成本五种视图。基于 Terminal-Bench 2.0 和 HLE 对比 ACE、TF-GRPO、AHE，发现频繁更新未必涨 held-out，中间快照可能后来崩。",
+    "highlights": {
+      "contribution": "提出系统化的自我进化 agent 评测环境 SEAGym，覆盖训练到成本多个维度。",
+      "innovation": "把 Harbor 兼容 benchmark 改造成动态自我进化任务源，配套 replay/OOD/成本多视图。",
+      "method": "统一 epoch/batch 协议，让 ACE、TF-GRPO、AHE 在 Terminal-Bench 2.0 和 HLE 上同台比；记录训练、验证、测试、replay、成本五类数据。",
+      "results": "频繁更新可能不涨 held-out；中间快照可能后期崩；源多样性和模型后端影响 harness 可靠性。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 7.8,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  }
+]

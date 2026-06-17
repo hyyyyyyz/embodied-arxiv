@@ -404,6 +404,44 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.14574",
+      "title": "SIMMER: Benchmarking Latent Failures in LLM Executable Planning with a World Model",
+      "authors": [
+        "Xiaoxin Lu",
+        "Ranran Haoran Zhang",
+        "Rui Zhang"
+      ],
+      "affiliations": [],
+      "summary": "LLM 当家用 Agent 的规划器时，能跑完不代表跑对，很多失败是隐性的——执行没报错但目标其实没达成，甚至造成不可逆破坏。作者搭了一个厨房域的符号世界模型 SIMMER，77 个动作、262 个物体、约 4.68 万种交互，用状态机执行器去检测前置条件违例、潜在隐患和不可逆失败。六个前沿 LLM 测下来无错率最多 17%，多达 56% 的计划带隐性失败，而加上反事实预演显式状态推理后隐性失败最多降 72%、不可逆情况最多降 75%。",
+      "original_abstract": "Large language models (LLMs) are increasingly deployed as planners for autonomous agents in household environments. While existing benchmarks evaluate whether LLM-generated plans execute successfully, they overlook a critical type of failure: latent failures. Unlike immediate failures that trigger instant feedback at execution time and enable timely correction, latent failures do not immediately halt plan execution but silently compromise goal achievement. In severe cases, they cause irreversible harm. To address this gap, we introduce SIMMER, a benchmark for evaluating latent failures in LLM planning through a human-curated symbolic world model grounded in the kitchen domain. SIMMER defines a world model comprising 77 actions, 262 unique objects, and approximately 46,800 possible interactions that are semantically realistic, derived from real-world cooking scripts. It then leverages a state machine executor that validates plans against the world model and detects immediate precondition violations, latent hazards, and irreversible failures. Experiments across six LLMs show that even frontier models achieve at most 17% error-free plans. Moreover, up to 56% of plans contain latent failures, the majority of which lead to irreversible consequences. We further demonstrate that explicit state reasoning via counterfactual foresight simulation can reduce latent failures by up to 72% and irreversible cases by up to 75%, suggesting a promising direction for more robust LLM planners.",
+      "highlights": {
+        "contribution": "提出 SIMMER 基准，首次系统化评估 LLM 规划中的「隐性失败」，并给出一个真实厨房脚本驱动的符号世界模型与执行器。",
+        "innovation": "把关注点从「计划能不能跑」拉到「跑完了但目标坏没坏」，并用反事实预演显式做状态推理来压住隐性错误。",
+        "method": "人工整理厨房动作—物体—交互的符号世界模型，配状态机执行器逐步验证 LLM 生成的计划，检测前置条件违例、潜在危害与不可逆操作；再让 LLM 在每步前做反事实状态预演来减少隐性失败。",
+        "results": "六个 LLM 上无错率最高仅 17%，56% 计划存在隐性失败；反事实预演让隐性失败降最多 72%、不可逆错误降最多 75%。"
+      },
+      "images": [],
+      "published_date": "2026-06-12T15:53:16Z",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 7.8,
+        "recency": 8.0,
+        "popularity": 6.5,
+        "quality": 7.6,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.14574v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.14574v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.14418",
       "title": "Causal Object-Centric Models for Planning with Monte Carlo Tree Search",
       "authors": [
@@ -485,6 +523,46 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.14058v1",
       "arxiv_url": "https://arxiv.org/abs/2606.14058v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.14585",
+      "title": "Sensitivity Shaping for Latent Modeling",
+      "authors": [
+        "Hongzhan Yu",
+        "Chenghao Li",
+        "Ruipeng Zhang",
+        "Henrik Christensen",
+        "Sicun Gao"
+      ],
+      "affiliations": [],
+      "summary": "生成式动力学模型可以帮机器人做规划，但部署时要识别策略带出去的 OOD 转移。作者发现现有的事后 OOD 检测会被「局部对动作不敏感」的动力学骗过——乱动作也能输出像样的潜在预测。他们提出 support-conditioned 控制敏感度正则，把高支撑训练区域的动力学逼着对控制输入有响应，从而保留控制差异、抑制弱支撑外推。视觉避障、操作与真实机器人导航上 OOD 检测和闭环安全性都更好。",
+      "original_abstract": "Generative dynamics models enable planning in challenging robotic systems, but safe deployment requires reliably detecting policy-induced out-of-distribution (OOD) transitions. Existing methods typically treat the learned dynamics as fixed and attach post hoc support surrogates. We show that these surrogates can fail when the dynamics are locally insensitive to critical action choices: unsupported control actions may produce latent predictions that resemble demonstrated transitions, suppressing OOD signals despite large true predictive errors. To address this, we introduce support-conditioned control-sensitivity regularization, which promotes sensitive local response to control input changes in learned dynamics in high-support training regions. This preserves control-induced variation while limiting unstable extrapolation due to weak empirical support. Experiments in vision-based obstacle avoidance, manipulation, and real-robot navigation show improved OOD detection and safer closed-loop planning.",
+      "highlights": {
+        "contribution": "指出生成式动力学模型在 OOD 检测中的「控制不敏感」失效模式，并提出 support-conditioned 控制敏感度正则解决之。",
+        "innovation": "不再事后挂支撑代理，而是直接塑造潜在动力学对控制的敏感度，让支撑高的地方动作差异看得见、支撑弱的地方不乱外推。",
+        "method": "在学到的潜在动力学训练中，对高支撑训练区域加上对控制输入的敏感度正则项，强迫不同动作产出可分的潜在预测；同时限制低支撑区域的外推。再用预测分歧做 OOD 检测，闭环规划时用作安全门。",
+        "results": "在基于视觉的避障、操作和真实机器人导航三个场景上 OOD 检测率提升、闭环规划更安全（具体数字未列百分比）。"
+      },
+      "images": [],
+      "published_date": "2026-06-12T16:01:50Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "dynamics model"
+      ],
+      "scores": {
+        "relevance": 7.4,
+        "recency": 8.0,
+        "popularity": 6.2,
+        "quality": 7.5,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.14585v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.14585v1",
       "venue": null
     },
     {
@@ -694,63 +772,47 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.14397",
-      "title": "Running the Gauntlet: Re-evaluating the Capabilities of Agents Beyond Familiar Environments",
+      "arxiv_id": "2606.14517",
+      "title": "From Shield to Target: Denial-of-Service Attacks on LLM-Based Agent Guardrails",
       "authors": [
-        "Mykola Vysotskyi",
-        "Runqi Lin",
-        "Grzegorz Biziel",
-        "Michal Zakrzewski",
-        "Sebastian Montagna",
-        "Damian Rynczak",
-        "Shreyansh Padarha",
-        "Kumail Alhamoud",
-        "Zihao Fu",
-        "William Lugoloobi",
-        "Kai Rawal",
-        "Hanna Yershova",
-        "Xander Davies",
-        "Taras Rumezhak",
-        "Guohao Li",
-        "Fazl Barez",
-        "Baoyuan Wu",
-        "Arkadiusz Drohomirecki",
-        "Yarin Gal",
-        "Chris Russell",
-        "Christopher Summerfield",
-        "Adam Mahdi",
-        "Volodymyr Karpiv",
-        "Philip Torr",
-        "Adel Bibi"
+        "Yuguang Zhou",
+        "Xunguang Wang",
+        "Pingchuan Ma",
+        "Zhantong Xue",
+        "Zhaoyu Wang",
+        "Shuai Wang"
       ],
       "affiliations": [],
-      "summary": "现有 agent benchmark 太偏简单熟悉的应用，已饱和。GauntletBench 主攻三种被忽视的能力（时间感知、图形理解、3D 推理）和五个冷门专业应用（视频编辑、工作流构建、3D 建模、航班分析、电路设计），共 100 个视觉密集型任务。SOTA agent 仅 19.1% 成功，而非专家人类 >80%，差距巨大。",
-      "original_abstract": "As agentic systems continue to evolve and are widely deployed in real-world scenarios, there is a growing demand to faithfully evaluate their capabilities. However, current benchmarks are typically built on popular applications with relatively simple tasks and focus on a narrow set of capabilities while overlooking broader dimensions, resulting in saturated performance on modern agents and failing to probe their limitations. To this end, we introduce GauntletBench, a web-based benchmark for evaluating agent generalisation in challenging scenarios, focusing on three underexplored capabilities (temporal perception, graphical understanding, and 3D reasoning), across five less-covered professional applications (Video Editor, Workflow Builder, 3D Modeller, Flight Analyser, and Circuit Designer), each with 20 vision-intensive tasks (100 in total). Our benchmark provides a modular pipeline that comprises an environment compatible with both open- and closed-source agent frameworks, a controlled web-based application, a well-structured task suite, and an automated evaluation engine with diverse metrics. Contrary to widespread expectations, our empirical results reveal that frontier agentic systems remain far from achieving human-level performance. Even the state-of-the-art agent achieves only a 19.1% success rate on our GauntletBench, highlighting the limitations in these overlooked capabilities and generalisation. By comparison, non-expert human annotators achieve over 80% success on our challenging yet feasible tasks, revealing the substantial gap between current agent capabilities and those required for complex real-world scenarios.",
+      "summary": "LLM guardrail 本来是挡 prompt 注入和越狱的护栏，但作者发现它「会推理、肯听话」反而成了被攻击的入口——攻击者塞一段精心构造的数据，就能让护栏陷在长推理里，直接 DoS。他们用 beam search 优化自然语言载荷最大化护栏推理长度，并基于护栏的 schema 结构再设计了一种轻量结构突变攻击。结果在八个主流模型上拿到 13–63 倍 token 放大，端到端 Agent 部署中延迟最多放大 148 倍，一份毒文档足以拖垮共享护栏让所有 Agent 卡死。",
+      "original_abstract": "LLM-based guardrails have emerged as a highly effective defense against prompt injection and jailbreak attacks in autonomous agents. However, we reveal that the very reasoning and task-following capabilities enabling this protection introduce a novel vulnerability: attackers can inject crafted data to trap the guardrail in extended reasoning loops, effectuating a systematic denial-of-service (DoS) attack. To systematically expose this threat, we design a beam-search optimization framework that crafts natural-language payloads to maximize guardrail reasoning length, utilizing an LLM proposer guided by a strategy bank. Based on the observation of guardrail's schema-following nature, we also provide another attack framework driven by mechanism-aware structural mutations with less computational load. The attack efficacy is systematically evaluated in two parts. First, in standalone evaluations, the attack generalizes across diverse guardrail architectures, safety templates, and agent benchmarks. Payloads optimized on a single open-source surrogate successfully transfer to eight leading model backbones (e.g., Claude, GPT, Gemini, DeepSeek, and Qwen), achieving a 13--63$\\times$ token amplification. Second, in end-to-end real-world agent deployments (web, desktop, code, and multi-agent systems), the attack reveals up to a 148$\\times$ latency amplification. We show that a single poisoned document can saturate shared guardrail infrastructures, effectively starving co-located agents and paralyzing the entire system. By uncovering this availability flaw, our work underscores the urgent need to develop cost-bounded, reasoning-robust guardrails.",
       "highlights": {
-        "contribution": "面向被忽视能力维度的 agent 通用化评测基准 GauntletBench。",
-        "innovation": "聚焦时间感知/图形理解/3D 推理三个少被覆盖能力、五个专业应用，且任务视觉密集需真泛化。",
-        "method": "提供模块化管线：环境兼容开/闭源 agent 框架、受控 web 应用、任务集、自动评估引擎；100 个视觉密集任务。",
-        "results": "SOTA agent 成功率仅 19.1%，非专家人类 >80%，差距显著。"
+        "contribution": "首次系统揭示 LLM-based guardrail 的可用性漏洞，给出两套攻击框架并在真实 Agent 系统中验证 DoS 后果。",
+        "innovation": "把攻击目标从「绕过护栏」转向「让护栏陷入超长推理」，挖出 reasoning guardrail 被自身能力反噬的新攻击面。",
+        "method": "一条路径用 beam search 搜自然语言载荷，由 LLM proposer + 策略库引导以最大化护栏推理长度；另一条路径基于护栏遵循的 schema 做结构突变，计算更轻。两种载荷在开源代理模型上优化后迁移到 Claude/GPT/Gemini/DeepSeek/Qwen 等八个后端，并在 web、桌面、代码、多 Agent 系统里端到端实测。",
+        "results": "八个主流 backbone 上 token 放大 13–63 倍；端到端 Agent 部署延迟放大最多 148 倍；单份毒文档可让共享护栏饿死同部署的多个 Agent。"
       },
       "images": [],
-      "published_date": "2026-06-12T12:32:24Z",
+      "published_date": "2026-06-12T14:49:00Z",
       "categories": [
-        "cs.LG"
+        "cs.CR",
+        "cs.AI"
       ],
       "matched_domain": "Agent",
       "matched_keywords": [
-        "agentic",
-        "agent framework"
+        "llm-based agent",
+        "multi-agent",
+        "autonomous agent",
+        "agent benchmark"
       ],
       "scores": {
-        "relevance": 7.5,
-        "recency": 9.5,
-        "popularity": 7.5,
-        "quality": 7.8,
-        "recommendation": 7.6
+        "relevance": 7.6,
+        "recency": 8.0,
+        "popularity": 7.8,
+        "quality": 8.1,
+        "recommendation": 8.0
       },
-      "pdf_url": "https://arxiv.org/pdf/2606.14397v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.14397v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.14517v2",
+      "arxiv_url": "https://arxiv.org/abs/2606.14517v2",
       "venue": null
     },
     {
@@ -830,54 +892,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.14211v1",
       "arxiv_url": "https://arxiv.org/abs/2606.14211v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.14302",
-      "title": "Retrospective Progress-Aware Self-Refinement for LLM Agent Training",
-      "authors": [
-        "Xinbei Ma",
-        "Congmin Zheng",
-        "Jiyang Qiu",
-        "Jiale Hong",
-        "Yao Yao",
-        "Xiangmou Qu",
-        "Jiaxin Yin",
-        "Xingyu Lou",
-        "Jun Wang",
-        "Weiwen Liu",
-        "Weinan Zhang",
-        "Zhuosheng Zhang",
-        "Hai Zhao"
-      ],
-      "affiliations": [],
-      "summary": "LLM agent 缺乏对任务进度的 metacognitive 感知。作者发现在线进度提示反而拖累性能，但「回顾式」反思有帮助。RePro 让 agent 先正向执行再回顾自评进度，用一个轻量 warmup 学反思格式，再用 RePro-PO 配合复合奖励训练。WebShop/ALFWorld/Sokoban 上 Qwen 系列成功率最高 +12 个点。",
-      "original_abstract": "LLM-based agents trained with reinforcement learning optimize step-wise action prediction but lack metacognitive awareness of task progress, inducing a gap that hinders long-horizon scaling. A pilot study reveals that online progress prompting hurts performance while retrospective demonstrations help, yet this capability cannot emerge from outcome-reward training alone. We present RePro, Retrospective Progress-Aware Training, a framework that trains agents to self-generate progress signals via a forward-then-reflect rollout paradigm: the agent executes actions online, then retrospectively reassesses its step-wise progress given the completed trajectory and known outcome. RePro initializes with a Retrospection Warmup that teaches reflection format from minimal external demonstrations, then further trains through RePro-PO with a composite reward that produces self-generated signals without continuous external supervision. Experiments on WebShop, ALFWorld, and Sokoban show that RePro enhances the Qwen family's performance, with up to $12\\%$ absolute success rate gains.",
-      "highlights": {
-        "contribution": "为长 horizon LLM agent 训练注入「回顾式进度自评」能力，避免在线提示的反作用。",
-        "innovation": "forward-then-reflect rollout：先 online 执行再据已知 outcome 反思每步进度，奖励里融入这个 self-generated signal。",
-        "method": "Retrospection Warmup 用少量外部示例教反思格式；RePro-PO 用复合奖励训练；测试时 agent 自己产生进度信号无需持续外部监督。",
-        "results": "WebShop、ALFWorld、Sokoban 上 Qwen 系列成功率最高 +12% 绝对提升。"
-      },
-      "images": [],
-      "published_date": "2026-06-12T09:38:47Z",
-      "categories": [
-        "cs.CL"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent",
-        "llm-based agent"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 9.5,
-        "popularity": 6.8,
-        "quality": 7.5,
-        "recommendation": 7.2
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.14302v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.14302v1",
       "venue": null
     },
     {
@@ -1002,44 +1016,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.13994v1",
       "arxiv_url": "https://arxiv.org/abs/2606.13994v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.14445",
-      "title": "tap: A File-Based Protocol for Heterogeneous LLM Agent Collaboration",
-      "authors": [
-        "Minseo Kim"
-      ],
-      "affiliations": [],
-      "summary": "异构 LLM agent（Claude、Codex 等）协作时通常假设共享 runtime 或同一 API 家族。tap 提出一个文件优先的协议，把 markdown 消息当原始消息存档，再加上各自的实时通知通道和 git worktree 隔离。作者用 tap 让 Claude 和 Codex 自举开发 tap 自己 27 天、37 代，收集 209 PR 和 717 工件。异构 review 缺陷率 69.8% vs 同构 53.1%。",
-      "original_abstract": "Existing multi-agent software development systems have proposed many forms of agent collaboration, including role-based collaboration and automated code review. However, many systems assume a common runtime, a central conversation server, or the same API family. Under these assumptions, LLM agents from different vendors cannot easily exchange messages directly from their own execution environments while dividing development and review work on a shared codebase. This paper presents tap, a file-based collaboration protocol that allows Claude (Anthropic) and Codex (OpenAI) to collaborate on one codebase without shared memory or an identical runtime. The core of tap is a file-first design that preserves markdown files with metadata as original messages, combines a file inspection path (file communication, Tier 1) with real-time notification paths for Claude and Codex (real-time communication, Tier 2), and isolates work through separate git worktrees. Even if real-time notification fails or a receiver restarts, the message file remains available and the same content can be inspected again. In a 27-day, 37-generation self-applied operation where tap was used to develop and review itself, we collected 209 tap-related pull requests and 717 operational artifacts. An analysis of 375 review artifacts showed that the share of reviews recording at least one defect or requested change was 69.8% for heterogeneous model pairs and 53.1% for homogeneous model pairs. These results show that tap, which combines file-based message preservation with real-time notification, operates in a real production repository, and that combining heterogeneous models and execution environments can broaden review perspectives. tap is distributed as the open-source npm package @hua-labs/tap (v0.5.2).",
-      "highlights": {
-        "contribution": "提出文件优先的异构 LLM 协作协议 tap，无需共享 runtime 即可跨厂商协作。",
-        "innovation": "文件 + 元数据作为原始消息、双层（文件检视 + 实时通知）通道、git worktree 隔离工作；消息文件即使通知失败仍可重读。",
-        "method": "Tier 1 文件通信 + Tier 2 实时通知；分离 worktree；markdown 文件存元数据；tap 以 npm 包 @hua-labs/tap 开源。",
-        "results": "27 天自举实验产生 209 PR 与 717 工件；375 review 工件中异构模型对 69.8% 含缺陷/变更请求，同构 53.1%，异构视角更广。"
-      },
-      "images": [],
-      "published_date": "2026-06-12T13:28:34Z",
-      "categories": [
-        "cs.SE",
-        "cs.AI",
-        "cs.HC"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent",
-        "multi-agent"
-      ],
-      "scores": {
-        "relevance": 6.5,
-        "recency": 9.5,
-        "popularity": 6.5,
-        "quality": 6.8,
-        "recommendation": 6.7
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.14445v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.14445v1",
       "venue": null
     },
     {
