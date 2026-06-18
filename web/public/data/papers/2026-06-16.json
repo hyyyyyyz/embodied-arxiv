@@ -109,6 +109,49 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.18363",
+      "title": "Guava: An Effective and Universal Harness for Embodied Manipulation",
+      "authors": [
+        "Haowen Liu",
+        "Xirui Li",
+        "Shaoxiong Yao",
+        "Peng Shi",
+        "Tianyi Zhou",
+        "Jia-Bin Huang",
+        "Furong Huang",
+        "Jiayuan Mao"
+      ],
+      "affiliations": [],
+      "summary": "想搞清楚什么样的 harness 能让通用推理模型胜任具身操作。作者做了一套叫 Guava 的工具调用框架，系统扫了 agent workflow、动作空间、观察空间的设计空间，挖出三个关键要素：感知-推理-动作的迭代闭环、语义级动作抽象、多模态观察。再用不到 2K 仿真轨迹蒸馏到 4B 小模型，在仿真和真机上都能逼近前沿闭源模型的水平，未见物体、新指令、长时序任务都能泛化。",
+      "original_abstract": "Language models trained on large-scale vision-language data have demonstrated strong potential for embodied agents. Harnessing models through embodied tools use offers a promising alternative to end-to-end vision-language-action systems by combining high-level reasoning with external modules for perception, planning, and control. However, it remains unclear what makes an effective harness for embodied manipulation, and to what extent such a harness can unlock embodied capabilities in a wide range of reasoning models. In this work, we present Guava, a harness framework for embodied tool use developed through systematic exploration of the design space of agent workflows, action spaces, and observation spaces. Our study identifies three key ingredients for effective embodied agents: iterative perception-reasoning-action loops, semantic action abstractions, and multimodal observations. To understand whether these design principles are universal even to small models, we develop an end-to-end training pipeline that distills embodied manipulation capabilities into a 4B open-source model using fewer than 2K trajectories collected entirely in simulation. Experimental results in both simulation and real-world environments show performance comparable to frontier proprietary models while exhibiting strong generalization to unseen objects, novel instructions, and long-horizon tasks. Results suggest that a well-designed harness can serve as a scalable, model-agnostic interface for embodied manipulation, enabling strong emergent embodied capabilities in compact open-source models with minimal training data.",
+      "highlights": {
+        "contribution": "提出 Guava 这套模型无关的具身操作 harness，证明良好的工具使用接口可以让小模型也涌现出强操作能力。",
+        "innovation": "把 harness 当成研究对象做设计空间分析，提炼出迭代 PRA 闭环、语义动作抽象、多模态观察三件套，并验证其对小模型同样有效。",
+        "method": "外层是 perception-reasoning-action 迭代 agent，配语义化动作 API 和多模态观察；下游用一条端到端蒸馏管线把能力压进 4B 开源模型，全程靠仿真数据。",
+        "results": "用不到 2K 仿真轨迹训出的 4B 模型，在仿真和真机操作上达到与前沿闭源模型可比的表现，对未见物体、新指令和长时序任务有较强泛化。"
+      },
+      "images": [],
+      "published_date": "2026-06-16T18:09:26Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 9.5,
+        "popularity": 7.5,
+        "quality": 8.3,
+        "recommendation": 8.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.18363v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.18363v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.17937",
       "title": "ThinkingVLA: Interleaved Vision and Language Reasoning for Robotic Manipulation",
       "authors": [
@@ -275,6 +318,69 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.18097v1",
       "arxiv_url": "https://arxiv.org/abs/2606.18097v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.18375",
+      "title": "PAIWorld: A 3D-Consistent World Foundation Model for Robotic Manipulation",
+      "authors": [
+        "Yuhang Huang",
+        "Xuan Lv",
+        "Junyan Xu",
+        "Zhiyuan Yu",
+        "Jiazhao Zhang",
+        "Ruizhen Hu",
+        "Wancheng Feng",
+        "Shilong Zou",
+        "Hewen Xiao",
+        "Ziqiao Zhou",
+        "Kaiyun Huang",
+        "Zhiyu Peng",
+        "Juzhan Xu",
+        "Hang Zhao",
+        "Chenyang Zhu",
+        "Renjiao Yi",
+        "Yifei Huang",
+        "Douhui Wu",
+        "Yan Zhang",
+        "Kexu Cheng",
+        "Chunhe Song",
+        "Yunzhi Xue",
+        "Xiuhong Zhang",
+        "Leitao Guo",
+        "Yunji Chen",
+        "Bin Wu",
+        "Haibin Yu",
+        "Kai Xu"
+      ],
+      "affiliations": [],
+      "summary": "现有世界模型大多单视角，多视角时只是把不同视角的 token 拼起来，导致跨视角物体漂移、深度不一致。PAIWorld 在 DiT 世界模型里塞进三个组件：几何感知的跨视角注意力、把相机射线和外参编进 attention 的几何 RoPE、以及从 3D 基础模型蒸馏特征的 Latent 3D-REPA。在机器人操作 benchmark 上跨视角一致性拿到 SOTA，WorldArena 排第一、AgiBot-Challenge2026 排第二。",
+      "original_abstract": "World foundation models (WFMs) are powerful simulators, yet they predominantly operate in a single-view setting and lack the multi-view 3D consistency required for robotic manipulation. While robotic systems rely on multiple cameras (egocentric, eye-to-hand, and wrist-mounted) for policy learning, current multi-view world models simply concatenate view tokens without explicit geometric reasoning. This causes cross-view object drift, depth inconsistency, and texture misalignment. We trace these failures to two deficiencies: the absence of an explicit inter-view communication mechanism and the lack of a 3D geometric prior. We argue that resolving both simultaneously is necessary and sufficient. To address this, we present PAIWorld, a framework that augments diffusion-transformer world models via three core components: (1) Geometry-Aware Cross-View Attention blocks that establish an explicit pathway across views, (2) Geometric Rotary Position Embedding that encodes camera ray directions and extrinsic poses into the attention mechanism, and (3) Latent 3D-REPA, which distills 3D-aware features from frozen 3D foundation models to ensure 3D consistency. Built upon a DiT-based world foundation model, PAIWorld achieves state-of-the-art multi-view 3D consistency on robotic manipulation benchmarks, ranking 1st on the WorldArena leaderboard and 2nd on the AgiBot-Challenge2026 leaderboard, while enabling downstream applications such as model-based planning, world action models, and multi-view policy post-training.",
+      "highlights": {
+        "contribution": "做出一个真正具备 3D 一致性的多视角世界基础模型，能直接给基于模型的规划、世界动作模型、多视角策略后训练用。",
+        "innovation": "把多视角不一致的病因拆成「缺跨视角通信」+「缺 3D 先验」两条线，对应给出几何感知跨视角注意力、相机射线编码 RoPE，以及 3D 基础模型特征蒸馏的 REPA。",
+        "method": "在 DiT 世界模型上加三件套：Geometry-Aware Cross-View Attention 打通视角通道；Geometric RoPE 把相机射线和位姿编进注意力；Latent 3D-REPA 从冻结的 3D 基础模型蒸馏特征做一致性约束。",
+        "results": "机器人操作多视角 benchmark 上 3D 一致性 SOTA，WorldArena 榜单第 1、AgiBot-Challenge2026 第 2，可下游接规划、WAM 和策略后训练。"
+      },
+      "images": [],
+      "published_date": "2026-06-16T18:23:23Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 9.4,
+        "recency": 9.5,
+        "popularity": 8.2,
+        "quality": 8.6,
+        "recommendation": 8.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.18375v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.18375v1",
       "venue": null
     },
     {
@@ -735,6 +841,51 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.18439",
+      "title": "RegimeVGGT: Layer-Wise Spatially Preserving Redundancy Removal for Visual Geometry Grounded Transformer",
+      "authors": [
+        "Jinhao You",
+        "Shuo Lyu",
+        "Zhuohang Lyu",
+        "Tanxuan Li",
+        "Zibo Zhao",
+        "Jiaxiang Hu",
+        "Kai Tang",
+        "Yichen Guo"
+      ],
+      "affiliations": [],
+      "summary": "VGGT 一次前向能恢复多视角 3D 结构，但跨帧注意力是平方复杂度。作者通过谱分析、探针、因果分析发现 VGGT 的层有三段：浅层没有跨视角结构、中层负责对齐、深层对几何冗余但跨帧注意力对位姿仍关键。于是提出 RegimeVGGT，按层做 U 形压缩，保护几何/边缘显著 token，并用相移空间网格、参考帧锚点和不压缩的相机/register token 守住位姿路径。免训练直接拿到相对 VGGT 6.7 倍加速且重建质量不掉。",
+      "original_abstract": "Visual Geometry Grounded Transformer (VGGT) recovers dense 3D scene structure from multi-view images in one forward pass, but quadratic cross-frame attention limits its scalability. Existing training-free accelerators reduce computation uniformly along one axis, missing layer heterogeneity. Our spectral, probing, and causal analyses reveal three regimes: shallow layers lack cross-view structure, middle layers drive cross-view alignment, and deep layers are redundant for dense geometry yet their cross-frame attention remains essential for pose. RegimeVGGT applies layer-wise U-shaped compression along two axes: Saliency-Guided Banded Merging protects geometry- and edge-salient tokens, while Selectively Protected K/V Downsampling preserves cross-frame spatial coverage and the pose-critical path through a phase-shifted spatial grid, a reference-frame anchor, and uncompressed camera/register tokens. Training-free, RegimeVGGT achieves a 6.7x speedup over VGGT* at matched reconstruction quality.",
+      "highlights": {
+        "contribution": "针对 VGGT 提出免训练的层级感知压缩方案，在保持稠密重建质量的同时大幅提速。",
+        "innovation": "通过谱/探针/因果分析揭示 VGGT 三段式层功能划分，提出按层 U 形双轴压缩策略，专门保护跨帧 attention 中支撑位姿的路径。",
+        "method": "Saliency-Guided Banded Merging 沿 token 轴保留几何和边缘显著 token；Selectively Protected K/V Downsampling 沿 K/V 轴下采样，但用相移空间网格保跨帧覆盖，参考帧锚点和不压缩相机/register token 保位姿，全程免训练。",
+        "results": "在重建质量对齐 VGGT* 的前提下取得 6.7 倍加速。"
+      },
+      "images": [],
+      "published_date": "2026-06-16T19:41:23Z",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "vggt",
+        "geometry grounded",
+        "visual geometry"
+      ],
+      "scores": {
+        "relevance": 8.6,
+        "recency": 9.5,
+        "popularity": 7.0,
+        "quality": 8.0,
+        "recommendation": 7.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.18439v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.18439v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.17935",
       "title": "MoonSplat: Monocular Online Gaussian Splatting with Sim(3) Global Optimization",
       "authors": [
@@ -975,126 +1126,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.17838v1",
       "arxiv_url": "https://arxiv.org/abs/2606.17838v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.17546",
-      "title": "SEAGym: An Evaluation Environment for Self-Evolving LLM Agents",
-      "authors": [
-        "Congjie Zheng",
-        "Chuanyi Xue",
-        "Bin Liang",
-        "Jun Yang",
-        "Changshui Zhang"
-      ],
-      "affiliations": [],
-      "summary": "自我进化 LLM agent 现在主要靠改 harness（prompt、记忆、工具、运行时），但评测要么单任务分数要么单条序列曲线，看不出更新是不是真有用。SEAGym 给出一个统一评测环境，覆盖训练/验证/测试/replay/成本五种视图。基于 Terminal-Bench 2.0 和 HLE 对比 ACE、TF-GRPO、AHE，发现频繁更新未必涨 held-out，中间快照可能后来崩。",
-      "original_abstract": "Self-evolving LLM-based agents improve mainly by changing their agent harness: the structured execution layer around a base model, including prompts, memory, tools, middleware, runtime state, and the model-tool interaction loop. Existing evaluations often reduce this process to isolated task scores or a single sequential curve, obscuring whether an update produces reusable improvement, overfits recent tasks, increases cost, or harms older behavior. We introduce SEAGym, an evaluation environment for measuring agent harness updates across training, validation, test, replay, and cost records. SEAGym turns Harbor-compatible benchmarks into dynamic self-evolution task sources with train batches, frozen update-validation, held-out ID and OOD transfer views, replay diagnostics, and saved snapshot and metric records. Instantiating SEAGym on Terminal-Bench 2.0 and HLE, we compare ACE, TF-GRPO, and AHE under a shared epoch/batch protocol. The results show that these evaluation views provide complementary signals about the evolution process: frequent updates may fail to improve held-out performance, useful intermediate snapshots may collapse later, and source diversity and model backend can affect harness reliability.",
-      "highlights": {
-        "contribution": "提出系统化的自我进化 agent 评测环境 SEAGym，覆盖训练到成本多个维度。",
-        "innovation": "把 Harbor 兼容 benchmark 改造成动态自我进化任务源，配套 replay/OOD/成本多视图。",
-        "method": "统一 epoch/batch 协议，让 ACE、TF-GRPO、AHE 在 Terminal-Bench 2.0 和 HLE 上同台比；记录训练、验证、测试、replay、成本五类数据。",
-        "results": "频繁更新可能不涨 held-out；中间快照可能后期崩；源多样性和模型后端影响 harness 可靠性。"
-      },
-      "images": [],
-      "published_date": "2026-06-16T05:50:55Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent",
-        "llm-based agent"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 10.0,
-        "popularity": 7.5,
-        "quality": 7.8,
-        "recommendation": 7.2
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.17546v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.17546v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.18068",
-      "title": "Agentic AI-based Framework for Mitigating Premature Diagnostic Handoff and Silent Hallucination in Healthcare Applications",
-      "authors": [
-        "Divyansh Srivastava",
-        "Shreya Ghosh",
-        "Anshul Verma",
-        "Rajkumar Buyya"
-      ],
-      "affiliations": [],
-      "summary": "医疗对话 agent 常常太早下诊断或者悄悄幻觉。作者用确定性编排替代「LLM 当裁判」：第一关 neuro-symbolic 状态门强制收集完 OLDCARTS 八个临床维度才能进入诊断，第二关在 K=5 次诊断采样上算语义熵拦截发散输出。150 例仿真测试上诊断精度 49.3%，比无约束基线绝对涨 11.3 个百分点。",
-      "original_abstract": "Recent advances in Large Language Models (LLMs) and multi-agent systems have driven the rise of Agentic AI, showing promise for medical reasoning. However, open-ended conversational agents remain prone to two critical failure modes: premature diagnostic handoff and silent clinical hallucinations that may go undetected before reaching the patient. In this work, we propose a multi-agent framework that addresses both issues by replacing ``LLM-as-a-judge'' routing with deterministic orchestration constraints. The framework incorporates two safety mechanisms. First, a neuro-symbolic state-tracking gate enforces completeness of the OLDCARTS clinical protocol (Onset, Location, Duration, Character, Aggravating/Alleviating factors, Radiation, Timing, and Severity) by blocking diagnostic transitions until all required dimensions are collected. Second, an epistemic uncertainty quantification (UQ) gate computes semantic entropy (H) across K=5 independent diagnostic samples to identify and intercept divergent outputs before delivery.   We evaluate the system using simulated patient agents powered by the llama-3.1-70b-instruct model on 150 test cases. The full architecture achieves 49.3% diagnostic precision, representing an absolute improvement of 11.3 percentage points over an unconstrained baseline. Additionally, we observe a statistically significant negative correlation (r = -0.181, p < 0.05) between OLDCARTS completeness (σ) and semantic entropy (H), suggesting that structured information gathering is associated with reduced diagnostic uncertainty.",
-      "highlights": {
-        "contribution": "用确定性编排加 UQ 门替代 LLM-as-a-judge，缓解过早诊断和静默幻觉。",
-        "innovation": "neuro-symbolic OLDCARTS 完整性门 + K=5 采样的语义熵不确定性门。",
-        "method": "多 agent 框架，状态门检查 OLDCARTS 八维完整度才放行；K=5 独立诊断采样算语义熵 H 判断是否拦截。",
-        "results": "150 例上诊断精度 49.3%，比无约束基线绝对提升 11.3pp；完整度 σ 与语义熵 H 呈显著负相关 (r=-0.181, p<0.05)。"
-      },
-      "images": [],
-      "published_date": "2026-06-16T15:39:19Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "multi-agent",
-        "agentic",
-        "agent framework"
-      ],
-      "scores": {
-        "relevance": 5.5,
-        "recency": 10.0,
-        "popularity": 6.5,
-        "quality": 7.0,
-        "recommendation": 6.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.18068v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.18068v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.18005",
-      "title": "LLM Consumer Behavior Theory: Foundations of a Novel Research Field",
-      "authors": [
-        "Manon Reusens",
-        "Sofie Goethals",
-        "David Martens"
-      ],
-      "affiliations": [],
-      "summary": "LLM 越来越多地代替人做消费决策，但传统消费者理论假设决策者是人。作者提出「LLM 消费者行为理论」这个新研究领域，把经典/行为经济学和 NLP 进展结合，形式化人偏好怎样经过 LLM agent 反映到市场需求，并指出理性、异质性等假设在 agentic 市场里可能失效。是定位性论文不做实证。",
-      "original_abstract": "Large language models (LLMs) are increasingly deployed as autonomous agents that make consumption decisions on behalf of users. This shift raises fundamental questions for consumer theory, which has traditionally modeled humans as the primary decision-makers. In this paper, we introduce LLM Consumer Behavior Theory, a new field of study concerned with analyzing consumer behavior in agentic markets. Drawing on classical and behavioral economics alongside recent advances in Natural Language Processing, we formalize how human preferences are reflected and acted upon by LLM-based agents, and how agent-level decisions aggregate into market demand. We unify previously fragmented literature on LLM decision-making, human behavior simulation, and preference elicitation under a common economic lens, highlighting where assumptions, such as rationality and heterogeneity, may fail in agentic markets. Rather than providing empirical validation, this paper outlines the scope of LLM consumer behavior and identifies open research questions related to alignment, preference representation, and market dynamics.",
-      "highlights": {
-        "contribution": "提出并定位 LLM 消费者行为理论这一新研究领域。",
-        "innovation": "在经济学视角下统一以前碎片化的 LLM 决策、人类行为模拟、偏好引出文献。",
-        "method": "理论论述，借用经典/行为经济学和 NLP 进展形式化 agentic 市场偏好与需求聚合；不做实验。",
-        "results": "给出开放研究问题清单：对齐、偏好表示、市场动力学。"
-      },
-      "images": [],
-      "published_date": "2026-06-16T14:51:43Z",
-      "categories": [
-        "cs.AI",
-        "econ.GN"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm-based agent",
-        "agentic",
-        "autonomous agent"
-      ],
-      "scores": {
-        "relevance": 4.5,
-        "recency": 10.0,
-        "popularity": 6.0,
-        "quality": 6.0,
-        "recommendation": 5.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.18005v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.18005v1",
       "venue": null
     }
   ],

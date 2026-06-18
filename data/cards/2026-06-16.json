@@ -396,56 +396,56 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.18005",
-    "summary": "LLM 越来越多地代替人做消费决策，但传统消费者理论假设决策者是人。作者提出「LLM 消费者行为理论」这个新研究领域，把经典/行为经济学和 NLP 进展结合，形式化人偏好怎样经过 LLM agent 反映到市场需求，并指出理性、异质性等假设在 agentic 市场里可能失效。是定位性论文不做实证。",
+    "arxiv_id": "2606.18363",
+    "summary": "想搞清楚什么样的 harness 能让通用推理模型胜任具身操作。作者做了一套叫 Guava 的工具调用框架，系统扫了 agent workflow、动作空间、观察空间的设计空间，挖出三个关键要素：感知-推理-动作的迭代闭环、语义级动作抽象、多模态观察。再用不到 2K 仿真轨迹蒸馏到 4B 小模型，在仿真和真机上都能逼近前沿闭源模型的水平，未见物体、新指令、长时序任务都能泛化。",
     "highlights": {
-      "contribution": "提出并定位 LLM 消费者行为理论这一新研究领域。",
-      "innovation": "在经济学视角下统一以前碎片化的 LLM 决策、人类行为模拟、偏好引出文献。",
-      "method": "理论论述，借用经典/行为经济学和 NLP 进展形式化 agentic 市场偏好与需求聚合；不做实验。",
-      "results": "给出开放研究问题清单：对齐、偏好表示、市场动力学。"
+      "contribution": "提出 Guava 这套模型无关的具身操作 harness，证明良好的工具使用接口可以让小模型也涌现出强操作能力。",
+      "innovation": "把 harness 当成研究对象做设计空间分析，提炼出迭代 PRA 闭环、语义动作抽象、多模态观察三件套，并验证其对小模型同样有效。",
+      "method": "外层是 perception-reasoning-action 迭代 agent，配语义化动作 API 和多模态观察；下游用一条端到端蒸馏管线把能力压进 4B 开源模型，全程靠仿真数据。",
+      "results": "用不到 2K 仿真轨迹训出的 4B 模型，在仿真和真机操作上达到与前沿闭源模型可比的表现，对未见物体、新指令和长时序任务有较强泛化。"
     },
     "scores": {
-      "relevance": 4.5,
-      "recency": 10,
-      "popularity": 6.0,
-      "quality": 6.0,
-      "recommendation": 5.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.18068",
-    "summary": "医疗对话 agent 常常太早下诊断或者悄悄幻觉。作者用确定性编排替代「LLM 当裁判」：第一关 neuro-symbolic 状态门强制收集完 OLDCARTS 八个临床维度才能进入诊断，第二关在 K=5 次诊断采样上算语义熵拦截发散输出。150 例仿真测试上诊断精度 49.3%，比无约束基线绝对涨 11.3 个百分点。",
-    "highlights": {
-      "contribution": "用确定性编排加 UQ 门替代 LLM-as-a-judge，缓解过早诊断和静默幻觉。",
-      "innovation": "neuro-symbolic OLDCARTS 完整性门 + K=5 采样的语义熵不确定性门。",
-      "method": "多 agent 框架，状态门检查 OLDCARTS 八维完整度才放行；K=5 独立诊断采样算语义熵 H 判断是否拦截。",
-      "results": "150 例上诊断精度 49.3%，比无约束基线绝对提升 11.3pp；完整度 σ 与语义熵 H 呈显著负相关 (r=-0.181, p<0.05)。"
-    },
-    "scores": {
-      "relevance": 5.5,
-      "recency": 10,
-      "popularity": 6.5,
-      "quality": 7.0,
-      "recommendation": 6.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.17546",
-    "summary": "自我进化 LLM agent 现在主要靠改 harness（prompt、记忆、工具、运行时），但评测要么单任务分数要么单条序列曲线，看不出更新是不是真有用。SEAGym 给出一个统一评测环境，覆盖训练/验证/测试/replay/成本五种视图。基于 Terminal-Bench 2.0 和 HLE 对比 ACE、TF-GRPO、AHE，发现频繁更新未必涨 held-out，中间快照可能后来崩。",
-    "highlights": {
-      "contribution": "提出系统化的自我进化 agent 评测环境 SEAGym，覆盖训练到成本多个维度。",
-      "innovation": "把 Harbor 兼容 benchmark 改造成动态自我进化任务源，配套 replay/OOD/成本多视图。",
-      "method": "统一 epoch/batch 协议，让 ACE、TF-GRPO、AHE 在 Terminal-Bench 2.0 和 HLE 上同台比；记录训练、验证、测试、replay、成本五类数据。",
-      "results": "频繁更新可能不涨 held-out；中间快照可能后期崩；源多样性和模型后端影响 harness 可靠性。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 10,
+      "relevance": 9.0,
+      "recency": 9.5,
       "popularity": 7.5,
-      "quality": 7.8,
-      "recommendation": 7.2
+      "quality": 8.3,
+      "recommendation": 8.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.18375",
+    "summary": "现有世界模型大多单视角，多视角时只是把不同视角的 token 拼起来，导致跨视角物体漂移、深度不一致。PAIWorld 在 DiT 世界模型里塞进三个组件：几何感知的跨视角注意力、把相机射线和外参编进 attention 的几何 RoPE、以及从 3D 基础模型蒸馏特征的 Latent 3D-REPA。在机器人操作 benchmark 上跨视角一致性拿到 SOTA，WorldArena 排第一、AgiBot-Challenge2026 排第二。",
+    "highlights": {
+      "contribution": "做出一个真正具备 3D 一致性的多视角世界基础模型，能直接给基于模型的规划、世界动作模型、多视角策略后训练用。",
+      "innovation": "把多视角不一致的病因拆成「缺跨视角通信」+「缺 3D 先验」两条线，对应给出几何感知跨视角注意力、相机射线编码 RoPE，以及 3D 基础模型特征蒸馏的 REPA。",
+      "method": "在 DiT 世界模型上加三件套：Geometry-Aware Cross-View Attention 打通视角通道；Geometric RoPE 把相机射线和位姿编进注意力；Latent 3D-REPA 从冻结的 3D 基础模型蒸馏特征做一致性约束。",
+      "results": "机器人操作多视角 benchmark 上 3D 一致性 SOTA，WorldArena 榜单第 1、AgiBot-Challenge2026 第 2，可下游接规划、WAM 和策略后训练。"
+    },
+    "scores": {
+      "relevance": 9.4,
+      "recency": 9.5,
+      "popularity": 8.2,
+      "quality": 8.6,
+      "recommendation": 8.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.18439",
+    "summary": "VGGT 一次前向能恢复多视角 3D 结构，但跨帧注意力是平方复杂度。作者通过谱分析、探针、因果分析发现 VGGT 的层有三段：浅层没有跨视角结构、中层负责对齐、深层对几何冗余但跨帧注意力对位姿仍关键。于是提出 RegimeVGGT，按层做 U 形压缩，保护几何/边缘显著 token，并用相移空间网格、参考帧锚点和不压缩的相机/register token 守住位姿路径。免训练直接拿到相对 VGGT 6.7 倍加速且重建质量不掉。",
+    "highlights": {
+      "contribution": "针对 VGGT 提出免训练的层级感知压缩方案，在保持稠密重建质量的同时大幅提速。",
+      "innovation": "通过谱/探针/因果分析揭示 VGGT 三段式层功能划分，提出按层 U 形双轴压缩策略，专门保护跨帧 attention 中支撑位姿的路径。",
+      "method": "Saliency-Guided Banded Merging 沿 token 轴保留几何和边缘显著 token；Selectively Protected K/V Downsampling 沿 K/V 轴下采样，但用相移空间网格保跨帧覆盖，参考帧锚点和不压缩相机/register token 保位姿，全程免训练。",
+      "results": "在重建质量对齐 VGGT* 的前提下取得 6.7 倍加速。"
+    },
+    "scores": {
+      "relevance": 8.6,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.9
     },
     "affiliations": []
   }

@@ -809,44 +809,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.07867",
-      "title": "The Cold-Start Safety Gap in LLM Agents",
-      "authors": [
-        "Chung-En Sun",
-        "Linbo Liu",
-        "Tsui-Wei Weng"
-      ],
-      "affiliations": [],
-      "summary": "作者发现工具调用 LLM agent 在对话开头最不安全，跑了若干正常 agentic 任务后会显著变安全，这叫 cold-start safety gap。SODA 基准支持最多 20 个前置任务的可控评测，7 个模型上看安全性能随前置任务增加提升 9-52%。建议部署前先让 agent 跑几个常规任务「热身」。",
-      "original_abstract": "Are tool-calling LLM agents equally safe throughout a conversation? We discover they are not: agents are most vulnerable at the very start of a session and become substantially safer after a few regular agentic tasks -- a phenomenon we term the cold-start safety gap. To study this systematically, we introduce Safety Over Depth for Agents (SODA), a benchmark that controls how many regular agentic tasks the agent completes before encountering a safety threat, supporting up to 20 preceding tasks. Evaluating 7 models from 4 families, safety improves by 9--52% as the number of preceding regular agentic tasks increases from zero to twenty. Representation analysis confirms that model hidden states gradually shift toward a safety-aligned region as more preceding tasks are present. By systematically studying which part of the preceding conversation matters most, we find that the regular agentic tasks themselves are the primary driver of safety, while the agent's own prior responses have less effect on safety but are essential for preserving later utility. This conclusion is further supported by evaluation on open-source safety benchmarks (AgentHarm, Agent Safety Bench) and utility benchmarks (BFCL, API-Bank), confirming that warming up the agent with regular agentic tasks before deployment makes it safer and preserves full capability. Based on these findings, we recommend a simple deployment strategy: having the agent complete a few regular agentic tasks before possible exposure to safety-critical requests mitigates the cold-start safety gap. Our code is available at https://github.com/Trustworthy-ML-Lab/Agent-Cold-Start-Safety-Gap",
-      "highlights": {
-        "contribution": "首次系统刻画 LLM agent 的 cold-start 安全间隙，并提出可控前置任务长度的 SODA 基准与简单部署建议。",
-        "innovation": "把「安全表现」当作 agent 历史深度的函数研究，发现是前置常规 agentic 任务而非 agent 自己的回答驱动了安全性提升。",
-        "method": "构建 SODA 基准控制 0-20 个前置常规任务后注入安全威胁；评测 7 个模型；做 representation 分析看隐藏状态是否漂向安全区；在 AgentHarm、Agent Safety Bench、BFCL、API-Bank 等基准上交叉验证。",
-        "results": "随前置任务数 0→20，安全性提升 9-52%；通过先跑几个常规任务可显著缓解 cold-start 风险，同时保留全部能力。"
-      },
-      "images": [],
-      "published_date": "2026-06-05T21:58:19Z",
-      "categories": [
-        "cs.CL"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent",
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 6.0,
-        "recency": 8.5,
-        "popularity": 7.0,
-        "quality": 7.6,
-        "recommendation": 6.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.07867v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.07867v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2606.07513",
       "title": "Agentopia: Long-Term Life Simulation and Learning in Agent Societies",
       "authors": [
@@ -892,6 +854,50 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.07513v1",
       "arxiv_url": "https://arxiv.org/abs/2606.07513v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.18272",
+      "title": "Mitigating Anchoring Bias in LLM-Based Agents for Energy-Efficient 6G Autonomous Networks",
+      "authors": [
+        "Hatim Chergui",
+        "Claudia Carballo González",
+        "Farhad Rezazadeh",
+        "Merouane Debbah"
+      ],
+      "affiliations": [],
+      "summary": "6G 网络切片里 LLM agent 谈判资源时容易死磕一开始那个启发式提案，结果就是疯狂超配。作者搞了个截断三参 Weibull 分布去随机化锚点，再配上 burst-aware 数字孪生和 CVaR 来卡住 SLA 尾延迟，让 agent 敢在边界上探索。用本地跑的 1B 模型实测，能效省 25%，单次推理 0.95 秒，能塞进 O-RAN non-RT RIC 的时间窗。",
+      "original_abstract": "This paper presents an autonomous agentic resource negotiation framework designed to enable zero-touch network slicing in 6G architectures using Large Language Model (LLM) agents. While LLMs offer powerful reasoning capabilities, we demonstrate that such agents inherently suffer from anchoring bias, rigidly adhering to initial heuristic proposals and causing severe network over-provisioning. To systematically mitigate this cognitive bias, we propose a novel randomized anchoring strategy modeled via a Truncated 3-Parameter Weibull distribution. This mathematically bounded approach seamlessly integrates with burst-aware Digital Twins (DTs) employing Conditional Value at Risk (CVaR) to rigorously guarantee strict Service Level Agreement (SLA) tail-latencies. To validate our methodology, we introduce and prove the \\emph{Bimodal Constraint-Avoidance Utility Theorem}, demonstrating that while feasible negotiations follow classical convex bounds, highly constrained scenarios undergo a phase transition governed by an inverse rational decay envelope. Empirical results generated using a locally hosted 1B-parameter model (\\texttt{otel-llm-1b-it}) confirm these dual-regime bounds. Our cognitive de-biasing successfully dismantles rigid negotiation patterns, forcing agents into active exploration to safely ride SLA boundaries and boost system energy savings up to 25\\%. Crucially, the lightweight 1B LLM achieves sub-second inference latencies (0.95s mean), ensuring our multi-agent framework is compatible with the operational timescales of the O-RAN non-Real-Time RAN Intelligent Controller (non-RT RIC)\\footnote{Our source code is available for non-commercial use at https://github.com/HatimChergui.",
+      "highlights": {
+        "contribution": "把 LLM agent 在 6G 资源协商里的锚定偏差当成核心问题，提了一套带数学边界保证的去偏框架，能在保 SLA 的同时显著省能耗。",
+        "innovation": "用截断三参 Weibull 随机化初始锚点来打破 agent 的刻板谈判模式，并提出 Bimodal Constraint-Avoidance Utility 定理刻画可行域与受限域的相变行为。",
+        "method": "多 agent LLM 谈判框架，本地跑 1B 模型 otel-llm-1b-it，输入是切片需求和 DT 给的 burst 预测，锚点按 Weibull 采样后 agent 迭代议价，结合 CVaR 约束尾延迟，无额外训练只改提示与采样策略。",
+        "results": "在自建谈判 benchmark 上系统能效提升最高 25%，单次推理平均 0.95 秒，满足 non-RT RIC 时间尺度；实验也验证了定理预测的双区域边界。"
+      },
+      "images": [],
+      "published_date": "2026-06-05T08:29:03Z",
+      "categories": [
+        "cs.NI",
+        "cs.AI",
+        "eess.SY"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm-based agent",
+        "multi-agent",
+        "agentic",
+        "agent framework",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 8.0,
+        "popularity": 5.5,
+        "quality": 6.8,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.18272v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.18272v1",
       "venue": null
     },
     {

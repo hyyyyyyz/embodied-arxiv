@@ -414,24 +414,6 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.07867",
-    "summary": "作者发现工具调用 LLM agent 在对话开头最不安全，跑了若干正常 agentic 任务后会显著变安全，这叫 cold-start safety gap。SODA 基准支持最多 20 个前置任务的可控评测，7 个模型上看安全性能随前置任务增加提升 9-52%。建议部署前先让 agent 跑几个常规任务「热身」。",
-    "highlights": {
-      "contribution": "首次系统刻画 LLM agent 的 cold-start 安全间隙，并提出可控前置任务长度的 SODA 基准与简单部署建议。",
-      "innovation": "把「安全表现」当作 agent 历史深度的函数研究，发现是前置常规 agentic 任务而非 agent 自己的回答驱动了安全性提升。",
-      "method": "构建 SODA 基准控制 0-20 个前置常规任务后注入安全威胁；评测 7 个模型；做 representation 分析看隐藏状态是否漂向安全区；在 AgentHarm、Agent Safety Bench、BFCL、API-Bank 等基准上交叉验证。",
-      "results": "随前置任务数 0→20，安全性提升 9-52%；通过先跑几个常规任务可显著缓解 cold-start 风险，同时保留全部能力。"
-    },
-    "scores": {
-      "relevance": 6.0,
-      "recency": 8.5,
-      "popularity": 7.0,
-      "quality": 7.6,
-      "recommendation": 6.8
-    },
-    "affiliations": []
-  },
-  {
     "arxiv_id": "2606.09902",
     "summary": "这篇论文研究的是把生物大脑连接组当作储备池计算（reservoir computing）的固定动力学网络，看看能不能用群体智能算法进一步优化边权重。作者拿了线虫、果蝇、小鼠、大鼠、猕猴和人类六个物种的连接组，用粒子群、差分进化、灰狼、鲸鱼四种无梯度优化器去调权重，然后在记忆容量、Lorenz、NARMA-10、Mackey-Glass 四个经典任务上测。结果鲸鱼算法（WOA）效果最猛，线虫的记忆容量从 1.39 拉到 23.91，提升 17 倍，跨任务平均提升 214%。同时随机初始化打不过生物权重，说明生物权重本身就是个不可替代的归纳偏置。",
     "highlights": {
@@ -446,6 +428,24 @@
       "popularity": 3.0,
       "quality": 6.5,
       "recommendation": 3.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.18272",
+    "summary": "6G 网络切片里 LLM agent 谈判资源时容易死磕一开始那个启发式提案，结果就是疯狂超配。作者搞了个截断三参 Weibull 分布去随机化锚点，再配上 burst-aware 数字孪生和 CVaR 来卡住 SLA 尾延迟，让 agent 敢在边界上探索。用本地跑的 1B 模型实测，能效省 25%，单次推理 0.95 秒，能塞进 O-RAN non-RT RIC 的时间窗。",
+    "highlights": {
+      "contribution": "把 LLM agent 在 6G 资源协商里的锚定偏差当成核心问题，提了一套带数学边界保证的去偏框架，能在保 SLA 的同时显著省能耗。",
+      "innovation": "用截断三参 Weibull 随机化初始锚点来打破 agent 的刻板谈判模式，并提出 Bimodal Constraint-Avoidance Utility 定理刻画可行域与受限域的相变行为。",
+      "method": "多 agent LLM 谈判框架，本地跑 1B 模型 otel-llm-1b-it，输入是切片需求和 DT 给的 burst 预测，锚点按 Weibull 采样后 agent 迭代议价，结合 CVaR 约束尾延迟，无额外训练只改提示与采样策略。",
+      "results": "在自建谈判 benchmark 上系统能效提升最高 25%，单次推理平均 0.95 秒，满足 non-RT RIC 时间尺度；实验也验证了定理预测的双区域边界。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 6.2
     },
     "affiliations": []
   }

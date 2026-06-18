@@ -896,49 +896,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.22564",
-      "title": "SynAE: A Framework for Measuring the Quality of Synthetic Data for Tool-Calling Agent Evaluations",
-      "authors": [
-        "Shuaiqi Wang",
-        "Aadyaa Maddi",
-        "Zinan Lin",
-        "Giulia Fanti"
-      ],
-      "affiliations": [
-        "CMU",
-        "Microsoft Research"
-      ],
-      "summary": "工具调用 agent 的内部数据要么有敏感信息不能用、要么部署前根本没有，大家就改用合成数据评估，但合成 vs 真实之间到底差多少没人能量化。SynAE 给出一个针对多轮 tool-calling agent 的合成数据评估框架，从指令、tool call、最终输出、下游评估四组指标看 validity / fidelity / diversity；在主流 agent benchmark 上验证它能识别细粒度的合成质量差异。",
-      "original_abstract": "Today, tool-calling agents are commonly evaluated or tested on static datasets of execution traces, including input commands, agent responses, and associated tool calls. However, internal production datasets are often insufficient or unusable for testing; for example, they may contain sensitive or proprietary data, or they may be too sparse to support comprehensive testing (especially pre-deployment). In these settings, practitioners are increasingly replacing or augmenting real datasets with synthetic ones for evaluation purposes. A key challenge is quantifying the relation between these synthetic datasets and the real data. We introduce SynAE, an evaluation framework for assessing how well synthetic benchmarks for multi-turn, tool-calling agents replicate and augment the characteristics of real data trajectories. SynAE assesses the validity, fidelity, and diversity of synthetic data across four metric categories: (i) task instructions and intermediate responses, (ii) tool calls, (iii) final outputs, and (iv) downstream evaluation. We evaluate SynAE using recent agent benchmarks and test common synthetic data failure modes via realistic and controlled generation schemes. SynAE detects fine-grained variations in data validity, fidelity and diversity, and shows that no single metric is sufficient to fully characterize synthetic data quality, motivating a multi-axis evaluation of synthetic data for agent testing. A demo of SynAE is available at https://synae-2026-synae-demo.static.hf.space/index.html, with code at https://github.com/wsqwsq/SynAE.",
-      "highlights": {
-        "contribution": "提出 SynAE，一个多轮工具调用 agent 合成评估数据的多轴度量框架，量化合成与真实数据的关系。",
-        "innovation": "把合成质量评估从单一指标改成 4 类（指令、tool call、输出、下游评估）× 3 个维度（validity、fidelity、diversity）的多轴框架，并展示单一指标不够。",
-        "method": "对真实和合成 agent 轨迹分别计算上述四类指标，并故意构造合成数据失败模式做对照测试；在近期 agent benchmark 上跑评估。",
-        "results": "能识别 validity、fidelity、diversity 上的细粒度变化，证明单指标不充分；放出 demo 和开源代码。"
-      },
-      "images": [],
-      "published_date": "2026-05-21T14:45:02Z",
-      "categories": [
-        "cs.CL",
-        "cs.LG",
-        "cs.SE"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agent benchmark"
-      ],
-      "scores": {
-        "relevance": 5.5,
-        "recency": 7.0,
-        "popularity": 6.5,
-        "quality": 7.0,
-        "recommendation": 6.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.22564v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.22564v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.22897",
       "title": "From Residuals to Reasons: LLM-Guided Mechanism Inference from Tabular Data",
       "authors": [
@@ -1017,6 +974,44 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2605.22478v3",
       "arxiv_url": "https://arxiv.org/abs/2605.22478v3",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.18264",
+      "title": "Simulating Hate Speech Cascades with Multi-LLM Agents: Empirical Grounding, Modeling Fidelity, and Intervention Strategies",
+      "authors": [
+        "Fan Huang"
+      ],
+      "affiliations": [],
+      "summary": "想搞清楚多 LLM agent 模拟器到底能不能比经典级联模型更真实地复现网上仇恨内容的传播，作者拿了 Bluesky 上三条仇恨级联和一条良性对照做实证。他们让每个 agent 根据用户画像、社区和内容决定要不要转发，结果发现仇恨级联里 97.4-99.7% 的转发者也带敌意、拓扑呈星形，多 LLM 模拟器能复现这种立场单一和毒性方向，消融指出 agent 异质性是保真度的关键，针对放大节点干预可降 7.5-12.9% 仇恨传播、良性误伤仅 5.7%。",
+      "original_abstract": "Faithful modeling of hateful content propagation on online platforms remains an open problem for moderation research. Classical cascade models that do not explicitly represent the profile, community, and content factors associated with hateful-content propagation may yield moderation strategies that behave less effectively when deployed in real-world scenarios. Multi-agent large language model (LLM) systems can, in principle, make each reshare decision depend on the user's profile, the surrounding community, and the post's content, but it remains unclear whether this added flexibility actually reproduces real hateful cascades more faithfully than classical baselines. We study three hateful Bluesky cascades and a size-matched benign control. In the empirical Bluesky data, we found that: 97.4--99.7\\% of reposters take a hostile stance; toxicity-engagement homophily is higher on the diffusion tree than on the follower graph for hateful cascades; topology is star-like for the hateful cascades (most reposts come directly from the root) versus tree-like for the benign cascade (reposts propagate through multi-hop chains). In simulation, a multi-LLM-agent simulator reproduces the stance monoculture and the toxicity-delta direction. A structured ablation identifies agent heterogeneity as the leading fidelity factor, and amplifier targeting on dense networks yields 7.5--12.9\\% reduction at 5.7\\% benign collateral.",
+      "highlights": {
+        "contribution": "把多 LLM agent 模拟器用于仇恨内容级联建模，并给出实证对照与可用的干预策略评估。",
+        "innovation": "首次系统比较多 LLM agent 模拟和经典级联基线在真实仇恨 Bluesky 数据上的保真度，把 agent 异质性识别为关键因子。",
+        "method": "输入是 Bluesky 三条仇恨级联和一条体量匹配的良性对照；每个 agent 用 LLM 根据用户画像、社区上下文和帖子内容决定是否转发；做结构化消融比较有无异质性、不同干预策略；评测立场分布、毒性变化和拓扑形态。",
+        "results": "实证侧 97.4-99.7% 转发者持敌意立场，仇恨级联呈星形拓扑；模拟器复现立场单一与毒性方向；针对密集网络放大节点的干预带来 7.5-12.9% 仇恨削减，良性误伤 5.7%。"
+      },
+      "images": [],
+      "published_date": "2026-05-21T21:58:26Z",
+      "categories": [
+        "cs.SI",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 6.0,
+        "popularity": 5.5,
+        "quality": 6.8,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.18264v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.18264v1",
       "venue": null
     },
     {
