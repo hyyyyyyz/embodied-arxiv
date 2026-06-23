@@ -1,7 +1,7 @@
 {
   "date": "2026-06-15",
   "window_start": "2026-06-15",
-  "fetched_at": "2026-06-18T02:30:23Z",
+  "fetched_at": "2026-06-23T10:26:23Z",
   "categories": [
     "cs.RO",
     "cs.CV",
@@ -396,6 +396,45 @@
         "world model",
         "world models",
         "dynamics model"
+      ]
+    },
+    {
+      "arxiv_id": "2606.20698",
+      "title": "SafeDojo: Safe Reinforcement Learning for VLA via Interactive World Model",
+      "abstract": "Safe control is a prerequisite for real-world embodied intelligence, for which safe reinforcement learning has emerged as a promising paradigm. However, existing safe reinforcement learning methods either require costly real-world exploration or depend on hand-crafted safety functions. Neither scales to vision-language-action models deployed in open-world physical environments. We propose SafeDojo, the first model-based safe reinforcement learning framework for vision-language-action policies designed to learn safe actions through world model-based imagination. Specifically, SafeDojo performs online reinforcement learning on top of an interactive video world model. The world model generates action-conditioned future predictions, from which a tailored ResNet success classifier estimates per-step task progress from imagined frames and a lightweight safety head predicts per-step safety costs from latent context together with the proposed action chunk, enabling simultaneous assessment of task execution and trajectory safety. The decoupled task-reward and safety-cost signals are balanced through a Lagrangian-based constrained GRPO objective, enabling coordinated improvement of task success and safety under explicit constraints. On SafeLIBERO, SafeDojo achieves the best aggregate task success, safe success, and execution efficiency among inference-time safety, model-free RL, and model-based RL baselines, with the best average safe-success rate on both levels and an 8.25 percentage-point improvement over the strongest baseline on Level I. Real-world Franka deployment further shows the best average task and safe-success rates across five tasks. Our results position world model-based safe reinforcement learning as a scalable and generalizable path toward safe embodied intelligence.",
+      "authors": [
+        "Kai Tang",
+        "Peidong Jia",
+        "Zhong Chu",
+        "Jixian Wu",
+        "Rui Ma",
+        "Jiajun Cao",
+        "Fangyuan Zhao",
+        "Sixiang Chen",
+        "Yichen Guo",
+        "Xiaowei Chi",
+        "Chun-Kai Fan",
+        "Kevin Zhang",
+        "Jinchang Xu",
+        "Fubing Yang",
+        "Weishi Mi",
+        "Xiaozhu Ju",
+        "Jian Tang",
+        "Shanghang Zhang"
+      ],
+      "affiliations": [],
+      "categories": [
+        "cs.RO"
+      ],
+      "primary_category": "cs.RO",
+      "published_date": "2026-06-15T08:58:37Z",
+      "updated_date": "2026-06-15T08:58:37Z",
+      "arxiv_url": "https://arxiv.org/abs/2606.20698v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.20698v1",
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "video world model"
       ]
     },
     {
@@ -1120,6 +1159,29 @@
       ]
     },
     {
+      "arxiv_id": "2606.20695",
+      "title": "How Much Coordination Gain Is Real? A Paired Noise-Floor Protocol for Multi-Agent LLM Benchmarks",
+      "abstract": "Multi-agent LLM coordination papers report small benchmark deltas as evidence that one architecture beats another. A prior question: how much paired trial-0 disagreement do two protocols produce on the same model and benchmark when their API inputs are configuration-equivalent (matched by code inspection plus a SHA-256 byte audit), short of full identity-replay? On Claude Haiku 4.5 against tau^2-bench retail, the clean configuration-equivalent contrast (no_coord vs. intercept, both inert at trial 0) gives signed paired gaps of +10pp and 0pp across two n=100 seeds; pooled across both, +5pp with Wilson CI [-2,+12], not significant. The largest single-seed contrast (+18pp pull-vs-intercept, p_corr=0.012) did not reproduce at the second seed (-3pp, p_corr=1.0); no trial-0 contrast is significant after Bonferroni at either seed or pooled. The envelope of observed paired gaps spans [-3,+18]pp across two seeds, with pooled upper Wilson CI ~15pp. Seven of ten recent multi-agent coordination architectures report headline effects below this local floor, and one more sits inside the envelope; whether they survive a same-model paired replication is, by construction, untested in their original settings.   We define coordination-active pass^k, pass^k restricted to trials where the coordination mechanism is logically active, as the minimum reporting protocol, with sample-size targets and runtime hooks in the body. Measurements run on ET-MCP, a task-scoped negative-knowledge store conformant with MCP 2026-07-28, used as a substrate to isolate reader-side choices, not as a contribution. On Haiku 4.5 the candidate readers (pull, intercept) do not improve trial-1 recovery; we give a preliminary diagnosis of failure modes with refinements on existing production hook surfaces.",
+      "authors": [
+        "Alibek T Kaliyev",
+        "Artem Maryanskyy"
+      ],
+      "affiliations": [],
+      "categories": [
+        "cs.MA",
+        "cs.AI"
+      ],
+      "primary_category": "cs.MA",
+      "published_date": "2026-06-15T07:25:11Z",
+      "updated_date": "2026-06-15T07:25:11Z",
+      "arxiv_url": "https://arxiv.org/abs/2606.20695v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.20695v1",
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ]
+    },
+    {
       "arxiv_id": "2606.16364",
       "title": "Looking Is Not Picking: An Attention-Segment Account of Tool-Selection Failures in LLM Agents",
       "abstract": "LLM agents mis-call tools, and the natural guess is that the model failed to see the right tool in a crowded harness. We show the opposite through a lens concurrent work sets aside -- the model's attention to labeled tool-definition segments. On real BFCL failures, by per-candidate attention argmax the model attends most to the correct tool 80% of the time (vs. 21% chance), and the gold is the under-attended segment on only 10%: it looks at the right tool and still picks wrong. This directly refutes the intuitive \"crowded-harness / lost-in-the-middle\" explanation: the failure is at the decision readout, not the harness, and we pin it there three ways. (1) Input vs. readout: repairing the prompt (reordering or duplicating the gold tool) recovers <=23% of failures, while readout-side interventions recover 59-91%. (2) Representation-invariance: two gold-pointed interventions in different representations -- an additive attention-logit bias and a residual-stream steering vector -- recover largely the same failures (per-task Jaccard 0.865 pooled, 0.79-0.91 per model), so the bottleneck is localized to the readout independent of which representation is poked. (3) A training-free, gold-free selector: per-segment attention closes most of the gold-free-vs-oracle gap on BFCL (+11.9 pts pooled function-name selection vs. +17.9-pt oracle headroom) and adds +14.9 pts on Seal-Tools; every model positive (exact McNemar p<=8e-4 each). Scopes differ: the causal attention-bias dose-response is bidirectional and monotonic on 10 mask-honoring models (3-32B), the full 0.5-32B span carrying only the correlational diagnostic; the deployable selector is evaluated on 5 single-turn models and does not yet transfer to a multi-turn loop.",
@@ -1437,6 +1499,29 @@
       "updated_date": "2026-06-15T13:40:01Z",
       "arxiv_url": "https://arxiv.org/abs/2606.16710v1",
       "pdf_url": "https://arxiv.org/pdf/2606.16710v1",
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ]
+    },
+    {
+      "arxiv_id": "2606.20701",
+      "title": "BARD-MARL: Byzantine-Agent Detection for Learned Communication in Multi-Agent Reinforcement Learning",
+      "abstract": "Learned communication improves coordination in cooperative multi-agent reinforcement learning, but it also creates a trust problem: a trained policy may route information through agents that have become faulty or adversarial. This paper studies Byzantine-agent detection for learned-communication MARL in adaptive traffic signal control. We propose BARD-MARL, a post-hoc diagnostic layer on top of BayesG, which is used as an attributed communication substrate rather than as a contribution of this paper. BARD-MARL combines two agent-level evidence streams: policy-graph features extracted from state-action trajectories and Bayesian trust statistics computed from BayesG latent mask probabilities. Across fixed-action, observation-flip, random-noise, and coordinated attacks in SUMO traffic grids, the results show that these signals are complementary rather than universally dominant. On a 25-agent grid, BARD-MARL reaches 0.843 AUC-ROC under a 10% observation-flip attack, while policy-graph-only detection reaches 0.917 AUC-ROC under a 10% coordinated attack. On a 100-agent grid, the unified BARD-MARL variant reaches 0.982 AUC-ROC for both 10% fixed-action and 10% coordinated attacks. The study shows that learned communication policies expose useful diagnostic evidence, but credible resilience claims require attack-specific ablations and explicit separation between coordination, detection, and mitigation.",
+      "authors": [
+        "Almond Kiruthu Murimi"
+      ],
+      "affiliations": [],
+      "categories": [
+        "cs.MA",
+        "cs.DC",
+        "cs.LG"
+      ],
+      "primary_category": "cs.MA",
+      "published_date": "2026-06-15T13:52:25Z",
+      "updated_date": "2026-06-15T13:52:25Z",
+      "arxiv_url": "https://arxiv.org/abs/2606.20701v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.20701v1",
       "matched_domain": "Agent",
       "matched_keywords": [
         "multi-agent"
@@ -1876,6 +1961,29 @@
       ]
     },
     {
+      "arxiv_id": "2606.19386",
+      "title": "Bistable by Construction: Wall-Clock-Calibrated State Monitors Have No Moment-Detection Regime at Agent Cadence",
+      "abstract": "Runtime monitors for autonomous agents commonly threshold an accumulated internal state - a behavioural baseline, a drift statistic, or, in our prior work, a modelled affective state. We previously reported a State Saturation Trap: threshold-on-state triggers over a continuous affect engine become near-constant alarms on SWE-bench debugging agents (Modgil 2026). A post-release audit found the engine received dt=0 between actions, so its exponential decay never operated: the published trap is a pure-accumulator result. We correct the record (erratum, v2) and treat the flaw as an experiment. The key variable it exposes is whether a monitor's dynamics are calibrated in sample time (per observation, as in CUSUM) or wall-clock time (half-lives in seconds, as in affect models and EMA baselines). On fixed-rate streams these coincide; on agent streams, where inter-action time varies by orders of magnitude, they do not. A pre-registered sweep over uniform intervals (dt in {0..600}s) on 20 trajectories shows the wall-clock level trigger has two regimes: at dt<=1s a constant alarm (20/20; median 18 firings); at dt>=60s silent. Every critical dt lies in (1,30]s. Real agent runs measure latency at median 1.53s (p90 2.33s); real coding cadence sits inside the trap regime, vindicating the empirical finding under a corrected mechanism. The structure is a property of the calibration class, not the engine: a minimal wall-clock accumulator over the raw error stream reproduces the same cliff, while a sample-time CUSUM over the identical stream is exactly dt-invariant (20/20). A rising-edge trigger with hysteresis fires 0-3 times per trajectory in every condition. We conclude that wall-clock-calibrated leaky-integrator monitors admit no regime in which they act as moment detectors on agent streams; transition detection escapes the trap at every cadence, but does not recover human intervention timing.",
+      "authors": [
+        "Manvendra Modgil"
+      ],
+      "affiliations": [],
+      "categories": [
+        "cs.SE",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "primary_category": "cs.SE",
+      "published_date": "2026-06-15T21:25:52Z",
+      "updated_date": "2026-06-15T21:25:52Z",
+      "arxiv_url": "https://arxiv.org/abs/2606.19386v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.19386v1",
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "autonomous agent"
+      ]
+    },
+    {
       "arxiv_id": "2606.17328",
       "title": "MemTrace: Probing What Final Accuracy Misses in Long-Term Memory",
       "abstract": "LLM agents increasingly maintain long-term memory of user facts across sessions. Yet such memory is usually evaluated by aggregating accuracy over question rows or episodes. Because this approach scores question rows independently, even when several questions probe the same fact, it cannot show how that fact behaves as conditions change. We introduce MemTrace, a benchmark whose unit of measurement is the knowledge point: a single typed fact about the user, rather than an individual question. MemTrace probes each fact along three controlled dimensions: memory age, defined by how many sessions ago the fact appeared in the history; question type, covering current state, earlier state, and trajectory of change; and evidence condition, covering present, missing, and contradicted-by-false-premise settings. Evaluating 13 memory-system configurations across four paradigms, we find that similar pooled accuracy hides different failures: recovering a fact's current and earlier states does not imply tracking how it changed, and safe abstention does not imply correcting a false premise. The dominant bottleneck is evidence use, not retrieval: when systems fail, the evidence was retrievable 10 times more often than it was missing. These results suggest that improving long-term memory requires better use of reachable evidence, not simply more storage or retrieval.",
@@ -1926,6 +2034,39 @@
       "matched_keywords": [
         "diffusion model",
         "diffusion transformer",
+        "video diffusion"
+      ]
+    },
+    {
+      "arxiv_id": "2606.20707",
+      "title": "GEOPHYS: The Geometry of Physical Plausibility",
+      "abstract": "While humans can identify physically implausible events within milliseconds, machine learning approaches addressing the same problem are extremely slow and expensive. They either rely on external multimodal-LLM judges or require ad-hoc modifications to the training procedure. In this work, we argue that indicators of physical plausibility are implicitly captured by five geometric properties of the per-frame embeddings produced by frozen image encoders. In aggregate, we call them GEOPHYS. First, we show that these signals correlate with human EEG responses to two forms of object-permanence violations. Second, GEOPHYS robustly discriminates physically implausible videos from realistic ones, achieving state-of-the-art physics-violation detection: 98.3% on LikePhys and 93.3% on IntPhys2, whereas V-JEPA 2, GPT-4o, Gemini, and twelve modern video diffusion models perform near chance. Third, used as a best-of-N verifier for physical alignment during video generation, GEOPHYS lifts MAGI-1 24B from 50.01% to 64.50% on PhysicsIQ at 1.5x lower wall-clock and 4.65x lower memory than the V-JEPA 2 world-model verifier. Ultimately, GEOPHYS demonstrates that physical plausibility in videos can be assessed by leveraging the emergent geometric properties of temporal features extracted from image encoders.",
+      "authors": [
+        "Christian Internò",
+        "Alexander Pondaven",
+        "Habon Issa",
+        "Fabio Pizzati",
+        "Francesco Pinto",
+        "Markus Olhofer",
+        "Ivan Laptev",
+        "Philip Torr",
+        "Eero P. Simoncelli",
+        "Barbara Hammer",
+        "David Klindt"
+      ],
+      "affiliations": [],
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "primary_category": "cs.CV",
+      "published_date": "2026-06-15T20:51:35Z",
+      "updated_date": "2026-06-15T20:51:35Z",
+      "arxiv_url": "https://arxiv.org/abs/2606.20707v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.20707v1",
+      "matched_domain": "Diffusion",
+      "matched_keywords": [
+        "diffusion model",
         "video diffusion"
       ]
     },
@@ -2651,6 +2792,34 @@
       "matched_domain": "Multi-modal",
       "matched_keywords": [
         "vision language model",
+        "vlm"
+      ]
+    },
+    {
+      "arxiv_id": "2606.20702",
+      "title": "Beyond Templates: Revisiting Zero-Shot Remote Sensing through Meta-Prompting",
+      "abstract": "Vision-language models (VLMs) have sparked growing interest in zero-shot Earth Observation (EO) downstream tasks, with further gains enabled by remote-sensing-adapted models. We examine this setting across 17 VLM variants and 12 remote sensing (RS) datasets under Meta-Prompting for Visual Recognition (MPVR), and show that zero-shot performance remains highly sensitive to textual design choices, from the meta-prompts used to guide the LLM in generating class descriptions to the descriptions themselves. We explore why semantically rich LLM-generated class descriptions do not translate into consistent gains over simple domain-adapted CLIP-style descriptions. While LLM descriptions are more semantically expressive, they can also introduce noise in the text embedding space, reducing robustness in downstream tasks. We support this observation through a text log-likelihood analysis in the whitened CLIP feature space, comparing LLM-generated and template-based descriptions. Building on this finding, we study query embedding calibration and show that lightweight calibration of the query space consistently yields strong improvements in zero-shot classification and retrieval. Overall, our results provide practical insight into the trade-off between semantic richness and robustness, and identify embedding calibration as a simple and effective tool for improving zero-shot remote sensing performance.",
+      "authors": [
+        "Eirini Baltzi",
+        "Dionysis Christopoulos",
+        "Sotiris Spanos",
+        "Valsamis Ntouskos",
+        "Konstantinos Karantzalos"
+      ],
+      "affiliations": [],
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "primary_category": "cs.CV",
+      "published_date": "2026-06-15T16:04:43Z",
+      "updated_date": "2026-06-15T16:04:43Z",
+      "arxiv_url": "https://arxiv.org/abs/2606.20702v1",
+      "pdf_url": "https://arxiv.org/pdf/2606.20702v1",
+      "matched_domain": "Multi-modal",
+      "matched_keywords": [
+        "vision-language model",
         "vlm"
       ]
     },

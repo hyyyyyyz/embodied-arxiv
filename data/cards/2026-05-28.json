@@ -460,24 +460,6 @@
     ]
   },
   {
-    "arxiv_id": "2605.30159",
-    "summary": "长时序的 memory-augmented LLM agent 通常靠把交互历史 recursively summarize 成记忆，但模糊的 summary 会逐步丢信息、加噪，导致 belief 偏移，最后任务失败。作者认为应该看中间 summary 引发的 belief 清晰度，于是引入 Belief Entropy 作为自监督代理，并基于它提出 MMPO：用 belief 不确定性来惩罚坏 summary。",
-    "highlights": {
-      "contribution": "把长时序 agent 的 memory 优化重新对齐到中间 belief 清晰度上，提出 MMPO 给 memory policy 提供细粒度监督。",
-      "innovation": "用 self-supervised Belief Entropy 度量当前 summary 让模型对潜在任务状态的不确定性，作为非稀疏 reward 信号；区别于只看 trajectory 成功的 outcome-based RL。",
-      "method": "agent 走 recursive summarization 形成 memory，对每一步 summary 计算 belief entropy；MMPO 在 RL 训练里显式惩罚高 epistemic uncertainty 的 summary，作为对 outcome reward 的补充。",
-      "results": "在多种长时序任务上一致超过现有方法；scale 到 175 万 token 上下文仍保持 97.1% 性能。"
-    },
-    "scores": {
-      "relevance": 7.0,
-      "recency": 9,
-      "popularity": 6.5,
-      "quality": 7.5,
-      "recommendation": 7.3
-    },
-    "affiliations": []
-  },
-  {
     "arxiv_id": "2606.07593",
     "summary": "ViT 是 VLM/VLA 的视觉骨干，但它在图像扰动下到底稳不稳一直没人细看。作者拿低频和高频两类图像损坏做对抗微调，再用注意力、内部表征、知识演化三个角度去机理性地拆解模型变化。结论比较扎心：对训过的损坏类别确实更鲁棒，但完全不迁移到没见过的损坏；而且尽管注意力和层间知识有变化，ViT 学到的稀疏表征本质上没动。",
     "highlights": {
@@ -492,6 +474,24 @@
       "popularity": 5.0,
       "quality": 6.5,
       "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.20629",
+    "summary": "现在多角色 LLM agent 团队（planner/executor/verifier）越来越常见，但每个角色用啥模型、放哪儿（API 还是自托管）直接决定成本和精度，现有 benchmark 都是固定模型固定配置没法指导部署。作者搞了个 AgentCARD，按角色拆评测、加统一的 API/自托管成本模型、跑 Pareto 前沿、再用 Shapley 值找瓶颈角色。结论是异构混搭团队稳坐成本-精度前沿，同等成本下精度最高 +44%，或者达到最强同构队的水平却便宜 12 倍；而且不同任务域的瓶颈角色不一样。",
+    "highlights": {
+      "contribution": "提出 AgentCARD——首个把角色分配和部署方式（API/自托管/混合）一起纳入评估的 LLM agent 团队 benchmark，给出成本-精度 Pareto 前沿和角色瓶颈诊断。",
+      "innovation": "把 agent 团队评测从「整体黑盒」拆到角色粒度，并首次引入 Shapley 值定位瓶颈角色，同时统一了 API 和自托管两种部署的成本口径。",
+      "method": "输入是 agent 团队配置（每个角色的模型 + 部署模式）；评测 harness 按 planner/executor/verifier 等角色拆分跑任务，统一成本模型核算单任务花销，再扫 Pareto 前沿挑出最优组合，用 Shapley 边际贡献判定瓶颈；不涉及训练新模型。",
+      "results": "异构团队在同等成本下精度最高 +44%，或匹配最强同构队但单任务成本降到 1/12；不同域瓶颈角色不同，有的卡 planner 有的卡 executor，框架可扩展到 verifier 等更多角色。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 7,
+      "popularity": 6.8,
+      "quality": 7.8,
+      "recommendation": 7.6
     },
     "affiliations": []
   }

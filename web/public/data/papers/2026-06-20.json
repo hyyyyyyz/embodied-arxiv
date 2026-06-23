@@ -1,0 +1,1027 @@
+{
+  "date": "2026-06-20",
+  "papers": [
+    {
+      "arxiv_id": "2606.22174",
+      "title": "OpenHLM: An Empirical Recipe for Whole-Body Humanoid Loco-Manipulation",
+      "authors": [
+        "Yingdong Hu",
+        "Haodong Zhu",
+        "Boyuan Zheng",
+        "Yihang Hu",
+        "Tong Zhang",
+        "Zunhao Chen",
+        "Junming Zhao",
+        "Ruiqian Nai",
+        "Yang Gao"
+      ],
+      "affiliations": [],
+      "summary": "现有人形机器人 loco-manipulation 系统通常把上下半身控制器拆开，没法实现真正的全身协同。作者做了一套系统的「一次变一个变量」的实证研究，分三阶段探索：全身遥操作、VLA 模型设计、异构联合训练，最终给出 OpenHLM 这个开源配方。在一个跨大跨度高度的长程任务上，OpenHLM 用不到一半的演示时间就打过了 GR00T N1.6 和 Ψ0 两个 SOTA 人形 VLA。",
+      "original_abstract": "Whole-body humanoid loco-manipulation requires coordinating the robot's entire kinematic chain. However, most existing systems typically decouple the upper and lower bodies into separate controllers, limiting such coordination and yielding behaviors similar to those of a wheeled dual-arm platform. In this paper, we ask what it takes to build a whole-body native vision-language-action (VLA) model that maps language and pixels directly to all of the humanoid's degrees of freedom. We conduct a systematic empirical study organized as a roadmap of one-variable-at-a-time experiments across three phases: whole-body teleoperation, VLA model design, and heterogeneous co-training. Our study yields several intriguing findings: a joint-based whole-body teleoperation interface outperforms alternatives that only partially expose the humanoid's degrees of freedom; a VLA pretrained on static and wheeled dual-arm platforms transfers surprisingly well to a humanoid's full action space; and co-training with HuMI, the humanoid analog of UMI, extends the policy to new objects and instructions without additional whole-body teleoperation on those targets. Following this roadmap yields OpenHLM, an open-source recipe for whole-body humanoid loco-manipulation. In a challenging long-horizon task that spans a wide vertical range of the humanoid, OpenHLM outperforms two state-of-the-art humanoid VLA baselines (GR00T N1.6 and $Ψ_0$) using less than half the total demonstration time. Our code, training data, and model checkpoints are available at [https://openhlm-project.github.io/].",
+      "highlights": {
+        "contribution": "提出 OpenHLM——首个把全身人形 loco-manipulation 当作整体来训的 VLA 开源配方，给出端到端经验路线图。",
+        "innovation": "用一次变一个变量的实证方法系统比较了遥操作接口、预训练迁移策略和异构联合训练，发现关节式全身遥操作最优，且静态/轮式双臂预训练的 VLA 能迁移到人形全身动作空间。",
+        "method": "输入语言加像素，模型直接输出人形全部自由度；先用关节级全身遥操作收数据，再用静态双臂预训练做 VLA 初始化，最后跟 HuMI（人形版 UMI）做异构联合训练。",
+        "results": "长程任务上击败 GR00T N1.6 和 Ψ0，使用不到一半总演示时间，并能在不补全身数据的情况下扩展到新物体和指令。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T18:02:50Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 9.5,
+        "popularity": 8.0,
+        "quality": 8.5,
+        "recommendation": 8.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.22174v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.22174v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.22116",
+      "title": "DeformX: A Versatile Co-Simulation Framework for Deformable Linear Objects",
+      "authors": [
+        "Yi Yang",
+        "Xiang Fei",
+        "Lehong Wang",
+        "Chenhao Li",
+        "Zilin Dai",
+        "Henry Kou",
+        "Lu Li",
+        "Howie Choset"
+      ],
+      "affiliations": [],
+      "summary": "电缆绳子这种细长可形变物体在机器人操作里很常见，但现有仿真要么视觉好但物理假，要么物理对但视觉糙。作者把 Cosserat 杆物理引擎接进 Isaac Sim，造了一个能同时兼顾物理和视觉的 DLO 协同仿真框架 DeformX。SAM3 在它生成的数据上微调后在真实电缆分割上 mAP@75 涨 10.2%，绳子甩击策略在 UR5e 上的真实命中误差 6.6 cm。",
+      "original_abstract": "Deformable linear objects (DLOs) such as wires, cables, and ropes are common in robotic manipulation tasks, yet simulating them with both visual realism and physical accuracy remains challenging. Existing visual simulation methods typically rely on procedural geometric primitives that lack physically grounded deformation behavior, while physics-based approaches with robot learning support often approximate DLOs as rigid-link chains or generic soft bodies, failing to accurately capture the bending, twisting, and shear mechanics of slender elastic structures. In this work, we introduce DeformX, a co-simulation framework that integrates a dedicated Cosserat rod physics engine with NVIDIA Isaac Sim, enabling DLO simulations that are both physically faithful and visually realistic. Our Cosserat rod engine simulates the dynamics and self-collisions of DLOs, and contact interactions with arbitrary free-form meshes. To achieve high-fidelity visualization, we employ mesh skinning to map discrete rod deformations onto imported CAD models. To the best of our knowledge, DeformX is the one of the first frameworks for DLO simulation that unifies realistic visualization, principled physics, and compatibility with robot learning pipelines. We demonstrate its versatility across synthetic data generation and policy learning for DLO manipulation, and validate visual and physical fidelity through comparisons against real-world experiments. Notably, fine-tuning Segment Anything Model 3 (SAM3) on DeformX-generated data yields a 10.2% mAP@75 improvement in real-image wire segmentation, and a rope-swinging policy trained entirely in DeformX achieves a mean target-hitting error of 6.6 cm on a UR5e manipulator in real-world trials, highlighting its strong sim-to-real transfer capability.",
+      "highlights": {
+        "contribution": "做出一个把 Cosserat 杆物理和 Isaac Sim 视觉打通的 DLO 仿真框架，支持机器人学习管线。",
+        "innovation": "首次在统一平台里同时给 DLO 弯曲扭转剪切动力学、自碰撞和与任意网格的接触，并通过 mesh skinning 把杆变形映射到 CAD 网格上做高保真渲染。",
+        "method": "Cosserat 杆引擎管动力学和碰撞，CAD 模型用网格蒙皮做视觉；用它生成合成数据训练分割、并端到端训绳子甩击策略，再做 sim2real。",
+        "results": "SAM3 微调后真实电缆分割 mAP@75 +10.2%；绳子甩击策略在 UR5e 上的真实平均命中误差 6.6 cm。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T15:57:29Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 9.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.22116v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.22116v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.22142",
+      "title": "RoboLineage: Agent-Native Data Lifecycle Governance Across Robot Policy Iterations",
+      "authors": [
+        "Qian Luo",
+        "Wentao Guo",
+        "Zhennan Qin",
+        "Nanchun Guo",
+        "Yunhan Zhao",
+        "Yi Ma",
+        "Yanchao Yang"
+      ],
+      "affiliations": [],
+      "summary": "机器人策略迭代里数据收集、复查、再训、评估、上线这一串证据通常散在脚本和专家脑子里，不可追溯。RoboLineage 把这些步骤当作有类型的 lineage artifact 显式表示出来，让 agent 在明确边界下解释 rollout、维护数据健康、汇总跨迭代状态。真机操作流程里它让策略迭代更快也更可审计。",
+      "original_abstract": "We present RoboLineage, an agent-native data lifecycle governance system for robot policy iteration. Modern robot policies improve through repeated data collection, review, retraining, evaluation, and release decisions, but the evidence connecting these steps is often scattered across local tools, scripts, and expert memory. RoboLineage makes this lifecycle explicit by representing rollouts, reviews, dataset decisions, training runs, policy metadata, evaluations, deployment recommendations, and next-collection plans as typed lineage artifacts. Agents interpret embodied rollout evidence, adapt accepted data to existing training stacks, maintain data health, and summarize cross-iteration state under explicit artifact boundaries. In real-robot manipulation workflows, RoboLineage makes routine policy iteration faster and more auditable while maintaining downstream policy performance. We open source RoboLineage as a lightweight lifecycle layer for different robot embodiments and training families. Project page: https://robolineage.github.io/",
+      "highlights": {
+        "contribution": "提出 agent-native 的机器人策略数据生命周期治理系统 RoboLineage 并开源。",
+        "innovation": "把 rollout、评审、训练、评估、部署建议、下一轮采集计划都建模成 typed lineage artifact，让 agent 在显式 artifact 边界下做长期治理。",
+        "method": "定义一套 lineage 类型；agent 解读 rollout 证据，把数据适配进现有训练栈，维护数据健康并跨迭代总结；作为轻量层兼容不同 embodiment 与训练框架。",
+        "results": "在真机操作工作流里让策略迭代更快且可审计，下游策略性能不掉。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T16:48:51Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robot policy"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 9.5,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.22142v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.22142v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.22136",
+      "title": "Wh0: Generative World Models as Scalable Sources of Egocentric Human Hand Manipulation Data",
+      "authors": [
+        "Yangtao Chen",
+        "Zixuan Chen",
+        "Peiyang Wang",
+        "Yong-Lu Li",
+        "Jing Huo",
+        "Jieqi Shi",
+        "Yang Gao"
+      ],
+      "affiliations": [],
+      "summary": "灵巧操作要泛化但数据三选一都难：遥操作贵、仿真有 gap、真人第一人称视频又跟机器人部署不对齐。Wh0 用生成式视频世界模型当可控的人手数据源，造了 50k 集 WM-H 数据集，再用手部重建和视觉编辑转成机器人能用的监督。跟只用机器人数据后训的模型比，18 个真机任务上未见任务零样本成功率从 8.3% 拉到 38.9%。",
+      "original_abstract": "Scaling dexterous manipulation requires generalization across objects, scenes, and tasks, yet existing data sources face a trade-off between scale and scene/embodiment alignment: teleoperation data is well aligned with robot deployment but expensive to collect; simulation is scalable but limited by the sim-to-real gap; and real egocentric videos scale effectively but remain misaligned with robot deployment. We propose Wh0, a framework that uses generative video world models as scalable and controllable sources of egocentric human-hand manipulation data to unlock the manipulation capabilities of pretrained dexterous VLA models. Conditioned on language, objects, and scenes, Wh0 uses a generative world model to produce WM-H, a 50k-episode dataset of egocentric human-object interaction videos. Wh0 then converts the generated videos into robot-trainable supervision through hand motion reconstruction and visual editing. Co-trained with a limited amount of real robot data, WM-H adapts pretrained VLA models to dexterous manipulation deployment. Across 18 real-world dexterous manipulation tasks, compared with a model post-trained only on robot data, Wh0 improves zero-shot success on unseen tasks from 8.3% to 38.9%. Ablation studies further show that scalable generation and scene/embodiment alignment are key drivers of performance gains. Videos and open-source code can be found on our project website: https://chenyt31.github.io/wh0.github.io/.",
+      "highlights": {
+        "contribution": "把生成式视频世界模型当作可扩展、可控的第一人称人手操作数据源，用来解锁灵巧 VLA 的能力。",
+        "innovation": "用语言、物体、场景作条件让世界模型生成第一人称人手交互视频，再通过手部运动重建加视觉编辑转换成机器人监督，避开真人视频与机器人 embodiment 不对齐的问题。",
+        "method": "条件化视频世界模型生成 50k 集 WM-H 数据；手部运动重建得到动作监督；视觉编辑做 embodiment 对齐；与少量真机数据联合训练 VLA。",
+        "results": "18 个真机灵巧操作任务上，未见任务零样本成功率 8.3%→38.9%；消融显示生成可扩展性和场景/embodiment 对齐是关键。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T16:31:40Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "video world model"
+      ],
+      "scores": {
+        "relevance": 9.7,
+        "recency": 9.5,
+        "popularity": 8.5,
+        "quality": 8.5,
+        "recommendation": 9.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.22136v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.22136v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.22030",
+      "title": "Nous: A Predictive World Model for Long-Term Agent Memory",
+      "authors": [
+        "Pranav Singh"
+      ],
+      "affiliations": [],
+      "summary": "Nous 主张「知识就是预测」而不是存储，每个实体-属性对维护一条类别分布作为预测式世界模型。新观察用信息论 surprise 打分，再用闭式贝叶斯后验更新，存的是 prior 到 posterior 的 delta 而不是事实本身。在 LoCoMo 长期对话记忆基准上用 GPT-4o-mini 跑出 F1 63.50/55.32/58.57/62.50。",
+      "original_abstract": "We present Nous, a novel agent memory architecture grounded in the principle that knowledge is prediction, not storage. Rather than persisting facts as database records, vector embeddings, or knowledge-graph triples, Nous maintains a predictive world model: a collection of categorical probability distributions, called dimensions, one per entity-attribute pair observed in conversation. Each incoming observation is scored by its information-theoretic surprise S = -log2 P(obs | D), and the distribution is updated via a closed-form Bayesian posterior. The primary stored artifact is the delta, a record of the shift from prior to posterior belief, rather than the fact itself. Forgetting emerges naturally as entropy decay toward the uniform distribution, and identity resolution is handled through mutual information between entity dimension sets. Evaluated on the LoCoMo long-term conversational memory benchmark across ten conversations (1,540 questions) using GPT-4o-mini as backbone, Nous achieves F1 of 63.50 (single-hop), 55.32 (multi-hop), 58.57 (temporal), and 62.50 (open-domain). Against A-MEM's self-reported GPT-4o-mini numbers, Nous shows substantial gains in three of four categories, though we note that independent citations of A-MEM's results disagree with each other on category assignment, a reproducibility issue we discuss openly rather than resolve unilaterally. We additionally compare against BeliefMem, a concurrently developed system built on the same core premise of belief-based rather than deterministic memory; on the same benchmark and backbone, Nous's self-reported numbers exceed BeliefMem's self-reported numbers on all four categories, though we flag several uncontrolled differences between the two evaluation pipelines that prevent this from being a fully controlled comparison. Nous requires no external vector database or graph engine.",
+      "highlights": {
+        "contribution": "提出基于预测式世界模型的 agent 长期记忆架构 Nous，不依赖向量库或知识图。",
+        "innovation": "把记忆当作 entity-attribute 的类别分布集合，存 belief shift 的 delta 而不是事实；遗忘是熵衰减，身份消歧用维度集合的互信息。",
+        "method": "每个 entity-attribute 维护类别分布；观测打 -log2 P 的 surprise 分；闭式贝叶斯后验更新；以 delta 为主存储 artifact。",
+        "results": "在 LoCoMo 上 10 段对话 1540 题，single/multi/temporal/open F1 分别 63.50/55.32/58.57/62.50，对 A-MEM 在三类有显著增益。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T13:07:00Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.IR",
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 9.5,
+        "popularity": 6.0,
+        "quality": 6.5,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.22030v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.22030v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.21961",
+      "title": "VegSim: A Geospatial World Model for Scenario-Conditioned Vegetation Simulation",
+      "authors": [
+        "Irene Iele",
+        "Elena Mulero Ayllón",
+        "Paolo Soda",
+        "Matteo Tortora"
+      ],
+      "affiliations": [],
+      "summary": "做植被监测不仅要回答「按预期天气未来会怎样」，还要回答「在别的天气情景下会怎样」。VegSim 把卫星 NDVI 历史、过去气象和静态空间上下文塞进 latent 状态，再用 recurrent latent dynamics 在未来天气强迫下向前推，解出 NDVI 的分位数预测。同一模型同时支持观测天气下的概率预测和用户自定义气象情景下的条件模拟。",
+      "original_abstract": "Vegetation monitoring under climate stress requires answering not only how it will evolve given the expected weather, but how it would respond to alternative meteorological conditions. Forecasting models return the expected vegetation state for the observed weather and cannot answer these scenario-conditioned questions, because future weather is fixed to the recorded trajectory. We present VegSim, a geospatial world model for scenario-conditioned vegetation simulation. VegSim infers a latent vegetation state from sparse satellite-derived NDVI histories, past meteorological covariates, and static spatial context, propagates it forward under future weather forcing through recurrent latent dynamics, and decodes predictive NDVI quantiles at each lead time. Because future forcing enters as a controllable input, the same trained model supports probabilistic forecasting under observed weather and conditional simulation under user-defined meteorological forcing, without supervision on scenario responses. We evaluate VegSim on GreenEarthNet across in-distribution data and spatial, temporal, and joint spatial-temporal shift, where it achieves strong point and probabilistic accuracy against time series and Earth observation forecasting baselines while using a compact architecture. We then simulate vegetation responses across Europe under four meteorological scenarios, and in a France summer 2022 case study, obtaining spatially coherent patterns consistent with known sensitivity to temperature and precipitation. The code is available at https://github.com/arco-group/vegsim.",
+      "highlights": {
+        "contribution": "提出地理空间世界模型 VegSim，支持情景条件化的植被模拟。",
+        "innovation": "把未来天气作为可控输入显式喂进 latent dynamics，让同一模型既能做概率预测又能在无监督的情况下做反事实情景模拟。",
+        "method": "稀疏 NDVI 历史加气象协变量加静态上下文编码成 latent 植被状态；recurrent latent dynamics 在未来气象强迫下递推；解码 NDVI 的预测分位数。",
+        "results": "在 GreenEarthNet 上对 in-distribution 以及空间、时间、时空联合分布迁移都达到强劲的点估计和概率精度；2022 法国夏季案例给出与温度降水敏感性一致的空间格局。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T09:24:29Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 9.5,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.21961v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.21961v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.22261",
+      "title": "Learning a Normal World Model for Few-Shot Boundary-Calibrated Abnormality Detection",
+      "authors": [
+        "Weizhi Nie",
+        "Weichao Liu",
+        "Weijie Wang",
+        "Yuting Su"
+      ],
+      "affiliations": [],
+      "summary": "复杂系统的异常检测有两个痛点：异常标签少，二值标签也没法刻画事件离正常多远。作者只用正常事件学一个「正常世界」模型，少量异常样本只用来校准边界，并实例化为超图熵能量模型。在 NASA C-MAPSS 涡扇退化基准上 FD004 达到 AUROC 0.9983。",
+      "original_abstract": "Abnormality detection in complex systems faces two practical barriers: abnormal labels are scarce, and binary labels do not quantify how far an event has departed from normal behavior. We study a normal-world modeling formulation for this setting. Instead of learning a large and incomplete space of abnormal classes, the model learns the normal world from abundant normal events and uses a few abnormal examples only to calibrate the boundary of normality. We instantiate this idea as a Hypergraph Entropic Normal-World Model. The model represents multivariate sensor windows as context-conditioned hypergraphs, where hyperedges capture high-order relations among groups of variables. It then defines abnormality by an entropy-aware normal-world energy that combines temporal prediction surprise, hypergraph consistency surprise, and latent normal-manifold departure. On the NASA C-MAPSS turbofan degradation benchmark, the proposed full energy achieves strong zero-shot and few-shot performance across all four subsets and reaches AUROC 0.9983 on FD004, the most complex setting with multiple operating conditions and fault modes. Beyond standard detection metrics, we introduce mechanistic validation tests to probe whether the energy encodes normal-world structure rather than a superficial input-output mapping. The learned energy accepts unseen healthy engines, increases along degradation trajectories, and sharply penalizes context-mismatched cross-variable coupling breaks. These results suggest that normal-world energy can serve as an anomaly score, a graded risk measure, and a testable representation of normal system behavior under severe abnormal-label scarcity.",
+      "highlights": {
+        "contribution": "提出正常世界建模视角与超图熵能量模型，用作异常分、风险度量和正常行为的可检验表示。",
+        "innovation": "用 context-conditioned 超图捕捉多变量高阶关系；定义包含时序预测 surprise、超图一致 surprise 和潜在正常流形偏离的熵能量；少量异常只校准边界。",
+        "method": "把多变量传感器窗口表示成上下文条件超图；学习熵感知正常世界能量；提出力学验证测试检验能量是否编码了正常结构。",
+        "results": "C-MAPSS 四个子集零样本和小样本都强，FD004 AUROC 0.9983；力学验证显示能量沿退化轨迹单调上升，对跨变量耦合破坏敏感。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T23:15:34Z",
+      "categories": [
+        "cs.LG",
+        "cs.GT"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 9.5,
+        "popularity": 4.5,
+        "quality": 6.5,
+        "recommendation": 5.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.22261v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.22261v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.22091",
+      "title": "ACEsplat: Accelerated 3D Gaussian Scene Regression via RGB and Poses Only",
+      "authors": [
+        "Mingkai Liu",
+        "Haohua Que",
+        "Dikai Fan",
+        "Haojia Gao",
+        "Tianle Zhu",
+        "Handong Yao",
+        "Qian Zhang",
+        "Ruopeng Zhang",
+        "Xianliang Huang",
+        "Fei Qiao"
+      ],
+      "affiliations": [],
+      "summary": "机器人和 AR 现场抓重建经常依赖 SfM 或深度作为 3DGS 的外部初始化，又慢又脆。ACEsplat 只用 RGB 和位姿就能跑：先 4-5 分钟自监督做场景坐标回归得到几何先验，再轻量初始化 3D Gaussian 并优化。Wayspots 用实时 SLAM 位姿能拿 29.11 dB，Cambridge 用 SfM 精修位姿 33.20 dB，整套流程 15-25 分钟。",
+      "original_abstract": "Per-scene 3D Gaussian Splatting (3DGS) enables high-fidelity rendering, but practical robotic and AR scene capture pipelines often depend on external geometric initialization (e.g., SfM point clouds or depth estimates), which can be slow and brittle in on-site deployment. We present ACEsplat, a fast per-scene optimization framework that reconstructs 3D Gaussian representations from RGB images and camera poses only, without requiring external 3D priors (e.g., precomputed SfM models or supervised depth maps). ACEsplat uses a two-stage pipeline: (1) a self-supervised scene coordinate regression (SCR) module builds an internal geometry prior within 4--5 minutes; (2) SCR features and coordinate priors are fused by a lightweight Gaussian initialization head, followed by per-scene 3DGS optimization. On static-view rendering, ACEsplat achieves 29.11 dB PSNR on Wayspots with real-time SLAM poses and 33.20 dB on Cambridge Landmarks with SfM-refined poses. On RealEstate10K sparse-view novel view synthesis, it achieves competitive image fidelity under a challenging 2-view setting. ACEsplat completes scene-specific SCR mapping and 3DGS reconstruction within 15--25 minutes on a single GPU, making it a practical RGB+pose-only solution for rapid scene setup in robotics and mixed-reality applications.",
+      "highlights": {
+        "contribution": "提出 ACEsplat：不需要 SfM 点云或深度先验，只要 RGB 加位姿就能快速重建 3D Gaussian。",
+        "innovation": "用自监督场景坐标回归作为内部几何先验代替外部 SfM/深度，再用轻量 Gaussian 初始化头融合 SCR 特征和坐标先验。",
+        "method": "两阶段：第一阶段 4-5 分钟自监督 SCR 建几何先验；第二阶段把 SCR 特征和坐标先验喂给轻量 Gaussian 初始化头，再做 3DGS 优化。",
+        "results": "Wayspots 实时 SLAM 位姿 29.11 dB PSNR，Cambridge SfM 精修位姿 33.20 dB；RealEstate10K 两视图新视角合成保持竞争力；单 GPU 15-25 分钟搞定。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T15:16:24Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "novel view synthesis",
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 9.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.22091v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.22091v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.22197",
+      "title": "Multi4D: High-Fidelity Dynamic Gaussian Splatting via Multi-Level Competitive Allocation",
+      "authors": [
+        "Rui Wang",
+        "Quentin Lohmeyer",
+        "Siyu Tang",
+        "Mirko Meboldt"
+      ],
+      "affiliations": [],
+      "summary": "动态 3DGS 面临运动一致性和视觉保真度的矛盾：变形派会过平滑高频动态，4D primitive 派又过参数化且破坏物体身份。Multi4D 把建模能力分到静态结构、持续动态几何、瞬态外观三层，共享光栅化和残差驱动优化让三层竞争解释光度误差。SOTA 渲染质量加实时性，4D 分割速度有量级加速。",
+      "original_abstract": "Dynamic 3D Gaussian splatting faces a fundamental tension between motion consistency and visual fidelity. Deformation-based approaches preserve temporal correspondence but suffer from motion over-factorization, oversmoothing high-frequency dynamics. In contrast, 4D-primitive methods capture fine visual details yet incur temporal overparameterization, breaking object identity and leading to severe storage overhead. To resolve this, we introduce Multi4D, a framework for high-fidelity dynamic Gaussian Splatting based on multi-level competitive allocation. Instead of a monolithic representation, we distribute modeling capacity across three structured levels: static structure, persistent dynamic geometry, and transient appearance primitives. Through shared rasterization and residual-driven optimization, these levels dynamically compete to explain photometric error, enabling adaptive specialization without pre-assigned decomposition. This allocation preserves long-term motion consistency while capturing fine dynamic detail, achieving state-of-the-art rendering quality and real-time performance with significantly fewer dynamic primitives. Furthermore, because our representation explicitly tracks compact persistent Gaussians over time, semantic features can be embedded afterward, enabling Multi4D to achieve state-of-the-art 4D segmentation accuracy with an order-of-magnitude speedup. Project page: https://batfacewayne.github.io/Multi4D.io/",
+      "highlights": {
+        "contribution": "提出多层级竞争分配的动态 GS 框架 Multi4D，同时拿到 SOTA 渲染和 4D 分割。",
+        "innovation": "三层分工：静态结构、持续动态几何、瞬态外观；通过共享光栅化和残差驱动优化让三层自适应竞争而无需预指定分解。",
+        "method": "三级 Gaussian 分配；共享光栅化把光度误差残差作为竞争信号；持续动态 Gaussian 显式跟踪后嵌入语义特征做 4D 分割。",
+        "results": "SOTA 渲染质量且动态 primitive 显著更少；4D 分割精度 SOTA，速度有一个数量级提升。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T19:11:26Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 9.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.22197v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.22197v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.21898",
+      "title": "Mesh2GS: White-Box 3DGS Construction via Plenoptic Sampling",
+      "authors": [
+        "Haoran Zhu",
+        "Youcheng Cai",
+        "Huangsheng Du",
+        "Jingyang Meng",
+        "Ligang Liu"
+      ],
+      "affiliations": [],
+      "summary": "之前 mesh 和 3DGS 的转换大多走多视图重建路线，从 mesh 直接造 3DGS 反而少有人做。Mesh2GS 用全光采样理论直接从 mesh 几何造 3DGS，理论给出最少采样视图和 Gaussian 分布；再加 albedo-shading 分解的更新和神经光照增强处理非朗伯效应。实验上超过 SOTA，能实时共享渲染且能捕高光。",
+      "original_abstract": "3D Gaussian Splatting (3DGS) has emerged as a promising method for high-quality, real-time 3D reconstruction. To associate 3DGS with mesh representations, existing methods primarily focus on 3DGS-to-mesh reconstruction from multi-view images. In contrast, the problem of converting a mesh into 3DGS has received comparatively less attention. Instead of relying on heuristic strategies that bind 3D Gaussians to the mesh, we propose a novel white-box 3DGS construction framework, termed Mesh2GS, which generates 3DGS directly from mesh geometry based on plenoptic sampling theory, achieving Nyquist-level performance for high-quality global illumination rendering. Firstly, we propose a plenoptic sampling guided 3DGS construction strategy that theoretically derives the minimum sampling rate of the sampled views and the distribution of 3D Gaussians. Second, we propose a novel 3DGS update procedure with albedo--shading decomposition for efficient global-illumination capture. Finally, we introduce a neural illumination enhancement module to handle non-Lambertian effects. Experimental results demonstrate that our method surpasses state-of-the-art baselines and is practically effective for both real-time shared rendering and non-Lambertian effects capturing specular highlights. The project code will be released upon acceptance.",
+      "highlights": {
+        "contribution": "提出白盒 mesh-to-3DGS 构造框架 Mesh2GS，达到 Nyquist 级全局光照渲染。",
+        "innovation": "用全光采样理论推导最小采样视图数和 3D Gaussian 分布；引入 albedo-shading 分解的 GS 更新；加神经光照增强处理非朗伯效应。",
+        "method": "全光采样指导构造 3DGS；albedo-shading 分解高效捕获全局光照；神经光照增强模块；从 mesh 几何直接生成 Gaussian。",
+        "results": "在多个 baseline 上 SOTA，可实时共享渲染并能捕捉高光等非朗伯效应。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T06:30:32Z",
+      "categories": [
+        "cs.GR",
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 9.5,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.21898v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.21898v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.21891",
+      "title": "Learning the ARTS of Search for Automated Discovery",
+      "authors": [
+        "Gurusha Juneja",
+        "Arnav Kumar Jain",
+        "Deepak Nathani",
+        "William Yang Wang",
+        "Xin Eric Wang"
+      ],
+      "affiliations": [],
+      "summary": "科学发现可以看作在假设和实验空间里的迭代搜索，但现有 MCTS 之类的方法会把假设质量和实验执行质量混淆，搜索日志长了又只能裁。ARTS 让推理 LLM 当 navigator，自己看历史日志、判断失败是想错了还是实现糟了，再用测试时训练把搜索树知识灌进权重避免上下文爆。MLGym 和 MLEBench 22 个任务上归一化分数相对涨 15.3%，Qwen3-4B 加测试时训练能匹配 Gemini-3 Pro 和 GPT o3 推理模型而推理成本低 5 倍。",
+      "original_abstract": "Scientific discovery can be formulated as an iterative search process over the space of hypotheses and experiments. Contemporary methods navigate this space using heuristics such as MCTS. These algorithms conflate the merit of a hypothesis with the quality of its experimental execution. A promising hypothesis with preliminary execution is therefore ranked below a modest hypothesis whose execution is refined. Moreover, prior methods prune the search logs as the search progresses because the accumulated history outgrows the context window. We propose Agentic Reasoning for Tree Search (ARTS), where we deploy a reasoning language model to navigate this space. The model inspects prior execution logs, diagnoses whether earlier failures arose from faulty implementations or bad hypotheses, and selects the hypothesis to build on next. To mitigate challenges with context length, ARTS uses test-time training to instill the knowledge of search tree in the model weights. Across 22 tasks from MLGym and MLEBench, we show that ARTS outperforms leading algorithms, with over 15.3% relative improvement in the normalized score. With test-time training we show that a Qwen3-4B agent can match performance with closed-source frontier models like Gemini-3 Pro and GPT o3-reasoning with upto 5x lower inference cost. We further observe that on partially observable RL tasks, the test-time trained Qwen3-4B scientist surpasses ARTS with the o3 scientist by rediscovering the human-best recurrent-memory solution that heuristic methods prune away.",
+      "highlights": {
+        "contribution": "提出 ARTS：用推理 LLM 加测试时训练做科学发现的树搜索，解决假设/执行混淆和上下文裁剪问题。",
+        "innovation": "让推理 LLM 看历史日志判断失败原因再选下一步假设，并用 test-time training 把搜索树知识压进模型权重避免长上下文。",
+        "method": "推理 LLM 作 tree search navigator；test-time training 把先前搜索状态写进权重；适用于 MLGym 和 MLEBench 等真实 ML 任务。",
+        "results": "22 个任务归一化得分相对提升 15.3%；Qwen3-4B + TTT 匹配 Gemini-3 Pro 和 GPT o3，推理成本最高低 5 倍；在部分可观测 RL 任务上甚至重新发现 recurrent memory 这种被启发式剪掉的解。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T05:47:37Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 9.5,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.21891v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.21891v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.21959",
+      "title": "OpenBioRQ: Unsolved Biomedical Research Questions for Agents",
+      "authors": [
+        "Minbyul Jeong"
+      ],
+      "affiliations": [],
+      "summary": "引用链接能解析不代表所引论文真支持那个论断。作者发现当前 agent 模型很少编造引用（>99% 能解析）但约 15.9% 引到了错的论文。OpenBioRQ 用 12553 个真实未解决的生物医学问题做基准，没有标准答案，专门探 agentic 忠实度和拒答能力。最难子集上同源 held-out 模型只解 17%，三家前沿 agent 跨度 29-60%。",
+      "original_abstract": "A working citation looks like proof -- but the fact that a link resolves does not mean the cited paper supports the claim. I find that current agentic models rarely fabricate citations (over $99\\%$ resolve), yet roughly $15.9\\%$ link to the wrong paper. Existing benchmarks miss this failure mode: when a question has a fixed answer key, a model can reproduce the expected source from that key rather than independently verifying that the source supports the claim. I introduce \\textbf{\\openbiorq{}}, a retrieval-grounded agentic benchmark of $12{,}553$ unsolved biomedical research questions across $12$ domains that treats open questions as a faithfulness-and-abstention probe. To my knowledge, this is the first biomedical benchmark to combine an agentic setting -- where the model must issue multiple tool calls -- with unsolved questions that have no answer key. Openness is verified against real follow-up evidence rather than a model's parametric knowledge. Difficulty is empirical: I anchor it on questions that three open-weight reference models fail to answer, rather than on subjective hardness labels. On this hardest subset, held-out models from the same lineage as the difficulty anchors solve only ~17%, while three independent frontier agents (Gemini-3-Pro, Opus-4.7, GPT-5.5) span a wide 29-60% range. The benchmark is thus hard, non-saturating (the best agent still leaves ~33-40\\% unsolved), and discriminating across capability tiers. Beyond difficulty, I observe agentic collapse on the hardest questions, where agents stop using their tools. For the most collapse-prone model, blocking tool access entirely barely changes its score -- so tools stop paying off exactly where they are needed most. A frozen per-question checklist raises inter-judge agreement from Spearman 0.35 to 0.82.",
+      "highlights": {
+        "contribution": "提出 OpenBioRQ：检索 grounded 的 agentic 生物医学未解问题基准，专门考引用忠实度和拒答能力。",
+        "innovation": "首个把 agentic 多轮工具调用与无答案 key 的未解问题结合的生物医学基准，难度用 3 个开源参考模型失败题锚定，避免主观难度标注。",
+        "method": "12 个生物医学领域 12553 道未解问题；用真实后续证据而非模型先验来核实开放性；冻结的 per-question checklist 评测。",
+        "results": "最难子集上 held-out 同源模型 17%，Gemini-3-Pro/Opus-4.7/GPT-5.5 跨度 29-60%；冻结 checklist 把判官 Spearman 一致性从 0.35 拉到 0.82；发现最难题上 agent 工具使用「崩塌」。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T09:16:15Z",
+      "categories": [
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 9.5,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.21959v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.21959v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.22082",
+      "title": "CodeTeam: An LLM-Powered Multi-Agent Framework for Repository-Level Code Generation",
+      "authors": [
+        "Yifei Wang",
+        "Ruiyin Li",
+        "Peng Liang",
+        "Qiong Feng",
+        "Zengyang Li",
+        "Mojtaba Shahin",
+        "Arif Ali Khan"
+      ],
+      "affiliations": [],
+      "summary": "自然语言到整仓代码生成（NL2Repo）需要长规划、稳跨文件接口和迭代调试。CodeTeam 把规划、决策、实现拆成三阶段：多个 Architect agent 出 SDS，CTO agent 选并规范成可机器校验的契约，Developer agent 在依赖感知调度下编码，QA agent 跑测试。SketchEval 上 SketchBLEU 涨 4.1/2.9，NL2Repo-Bench 测试通过率 PE 34.6%、SFT 42.3%。",
+      "original_abstract": "Natural language to repository generation (NL2Repo) requires a system to construct an entire software repository from a natural-language requirements document. Compared with function-level code generation, this task demands longer planning horizons, stable interfaces across files, and iterative debugging of cross-file inconsistencies. To address these challenges, we propose CodeTeam, an LLM-based multi-agent framework that separates planning, decision making, and implementation into distinct, coordinated stages. In the planning stage, multiple Architect agents draft competing software design sketches (SDS), optionally grounded by retrieved design references. A CTO agent then evaluates, selects, and normalizes the most promising SDS into a machine-checkable contract that specifies file ownership, public interfaces, and dependency constraints. In the implementation stage, Developer agents generate code under a dependency-aware scheduler with bounded context and lightweight Git-based coordination, while a QA agent runs tests and drives iterative repairs. On the synthesis-based SketchEval benchmark, we explicitly compare CodeTeam's prompt-engineering (PE) and supervised fine-tuning (SFT) variants with the corresponding CodeS variants, where CodeTeam improves the overall SketchBLEU by 4.1 and 2.9 absolute points, respectively. On the execution-based NL2Repo-Bench benchmark, used as an external validation protocol, CodeTeam achieves the highest average test pass rate in both settings (34.6% PE, 42.3% SFT), confirming that the sketch-improvements extend to functional correctness under upstream test suites. Ablation results show that project-specific developer allocation and retrieval-augmented planning each contribute substantially to the SketchBLEU improvement (9.9% and 8.1% relative, respectively). CodeTeam and the experimental results are available at https://github.com/WhitenWhiten/CodeTeam",
+      "highlights": {
+        "contribution": "提出 LLM 多 agent 仓库级代码生成框架 CodeTeam，把规划、决策、实现解耦。",
+        "innovation": "用多 Architect 出 SDS 加 CTO 选定并规范成机器可校验契约的设计阶段，搭配依赖感知调度器和 Git 协调让 Developer 和 QA 闭环。",
+        "method": "Architect 出软件设计草案；CTO 选并落成契约规定文件归属、公共接口和依赖；Developer 在有限上下文里按依赖调度编码；QA 跑测试驱动修复。",
+        "results": "SketchEval 上 SketchBLEU PE +4.1、SFT +2.9；NL2Repo-Bench 测试通过率 PE 34.6%、SFT 42.3%；消融显示项目专属分配和检索增强规划分别带 9.9% 和 8.1% 相对改进。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T14:57:33Z",
+      "categories": [
+        "cs.SE",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 9.5,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.22082v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.22082v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.22263",
+      "title": "Revelio: Cost-Efficient Agentic Memory Safety Vulnerability Detection For Repository-Scale Codebases",
+      "authors": [
+        "Yiwei Hou",
+        "Hao Wang",
+        "Muxi Lyu",
+        "Marius Momeu",
+        "Eric Nguyen",
+        "Taige Yang",
+        "Koushik Sen",
+        "Dawn Song",
+        "David Wagner"
+      ],
+      "affiliations": [],
+      "summary": "内存安全漏洞挖掘里 LLM 有潜力但易幻觉、扩展不到整仓代码。Revelio 是端到端 agentic 框架，必须生成可执行的 Proof-of-Vulnerability 让 sanitizer 验真才算数；并用便宜 LLM 加轻量静态分析降本。7 个连续模糊测试 5-8 年的成熟项目加 100 个 CyberGym 项目上，每项目约 1 小时、总成本 300 美元，发现了 19 个新的未知内存漏洞。",
+      "original_abstract": "Memory safety vulnerabilities remain a significant threat even for projects with extensive fuzzing and manual auditing. Recent results suggest that large language models hold great promise for detecting such vulnerabilities, but they are unreliable, at risk of hallucination, and challenging to scale to repository-size codebases. This paper presents Revelio, a cost-efficient end-to-end agentic framework for memory-safety vulnerability discovery. Revelio addresses the problem of hallucination by generating an executable Proof-of-Vulnerability, which is checked with a deterministic sanitizer. It reduces cost using inexpensive LLMs and lightweight static analysis to help generate and rank vulnerability hypotheses, reporting vulnerabilities only when they can be reproduced and confirmed by a sanitizer. We evaluated Revelio on seven production-quality projects that had been continuously fuzzed for five to eight years, as well as on 100 randomly selected Arvo projects from the CyberGym benchmark. With around one hour per project and a total cost of $300, Revelio discovered 19 previously unknown memory-safety vulnerabilities. On benchmarks, Revelio outperformed frontier coding agents across diverse backbone models at comparable token costs. Our results suggest that Revelio enables scalable and trustworthy end-to-end LLM-based memory-safety vulnerability detection.",
+      "highlights": {
+        "contribution": "提出 cost-efficient 端到端 agentic 内存安全漏洞挖掘框架 Revelio。",
+        "innovation": "用可执行的 Proof-of-Vulnerability 加 sanitizer 确定性验证消除 LLM 幻觉；用便宜 LLM 加静态分析生成和排序漏洞假设。",
+        "method": "便宜 LLM + 轻量静态分析生成漏洞假设；只在 sanitizer 复现并确认时报漏；端到端 agentic 流程跑整仓。",
+        "results": "7 个成熟项目加 100 个 Arvo 项目上，每项目约 1 小时、总成本 ~300 美元发现 19 个新未知内存漏洞；在基准上同 token 成本下超过 frontier coding agent。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T23:17:23Z",
+      "categories": [
+        "cs.CR",
+        "cs.AI",
+        "cs.MA",
+        "cs.SE"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 9.5,
+        "popularity": 7.0,
+        "quality": 8.0,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.22263v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.22263v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.21963",
+      "title": "Holmes: Multimodal Agentic Diagnosis for Mixed-Language Mobile Crashes at Industrial Scale",
+      "authors": [
+        "Jia Li",
+        "Wenyuan Ma",
+        "Ting Peng",
+        "Haibin Zheng",
+        "Yuetang Deng"
+      ],
+      "affiliations": [],
+      "summary": "诊断工业级移动 App 崩溃很难：代码量大、混合语言、本地复现不出来。Holmes 用多 agent 整合栈、日志、线程态等运行时多模态信号，分层 Retrieve-Explore-Reason 架构借助寄存器和汇编弥合业务代码和闭源系统的语义鸿沟。在微信真实崩溃上函数级根因定位准确率 87.6%，调查时间平均下降 98% 到约 77 秒。",
+      "original_abstract": "Diagnosing mobile crashes in ultra-large-scale industrial applications is a formidable challenge due to the sheer volume of code, the complexity of mixed-language environments, and the inability to reproduce failures locally. Traditional static analysis struggles with scalability, while existing LLM-based agents often rely on reproducible environments unavailable in post-mortem scenarios. We present Holmes, a multi-agent system that automates root cause analysis by synthesizing multimodal runtime signals--stack traces, logs, and thread states--to reconstruct failure contexts without reproduction. Holmes introduces a hierarchical Retrieve-Explore-Reason architecture that leverages low-level artifacts (e.g., registers, assembly) to bridge the semantic gap between open-source business logic and closed-source system frameworks. By dynamically compressing the search space using runtime clues, Holmes precisely navigates 70-million-line codebases to identify non-local defects. Evaluated on real-world crashes from WeChat, Holmes achieves 87.6% accuracy in function-level fault localization and reduces average investigation time by over 98% (to ~77 seconds), demonstrating its effectiveness in transforming labor-intensive debugging into an efficient verification workflow.",
+      "highlights": {
+        "contribution": "提出多 agent 系统 Holmes，自动化工业级移动崩溃根因分析。",
+        "innovation": "分层 Retrieve-Explore-Reason 架构利用低层 artifact 如寄存器与汇编弥合业务代码与系统框架的语义 gap，并用运行时线索动态压缩搜索空间。",
+        "method": "agent 综合栈、日志、线程态多模态信号；分层 RER 架构；运行时线索压缩搜索空间应对 7000 万行代码。",
+        "results": "微信真实崩溃上函数级根因定位 87.6%，平均调查时间从原始降到 77 秒，相对提升 98%。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T09:31:26Z",
+      "categories": [
+        "cs.AI",
+        "cs.SE"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm-based agent",
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 9.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 6.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.21963v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.21963v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.21856",
+      "title": "Harness-MU: A Safe, Governed, and Effective Harness for Multi-User LLM Agents",
+      "authors": [
+        "Wangxuan Fan",
+        "Xiaoyu Nie",
+        "Zhongxiang Dai"
+      ],
+      "affiliations": [],
+      "summary": "多用户协作场景里 LLM agent 要管访问权限、解决多权威冲突、避免越权泄密，但 LLM 训练范式是单用户的，靠提示词软约束不可靠。Harness-MU 把治理约束当成确定性运行时变量，用执行 hook 强制而非交给 LLM。Muses-Bench 上隐私保护全部通过，效用分超 baseline 0.28-0.39，指令遵守提升最高 48.9pp。",
+      "original_abstract": "The increasing deployment of large language model (LLM) agents in collaborative workflows demands robust multi-user, multi-principal interaction mechanisms capable of enforcing access permissions, resolving authoritative conflicts, and preventing unauthorized data disclosure. However, a fundamental mismatch exists between the single-user training paradigm of contemporary LLMs and the hard constraints required for multi-principal governance, rendering probabilistic, prompt-based safeguards vulnerable under multi-turn adversarial interactions.Our key insight is that governance constraints -- who is authorized, what is restricted, and whose instructions take precedence -- are deterministic runtime variables that should be enforced by execution hooks rather than entrusted to the LLM. We present \\textbf{Harness-MU}, the first model-agnostic, zero-tuning infrastructure framework for multi-user LLM agents. By decoupling language generation from safety orchestration, Harness-MU guarantees unbreakable permission boundaries while maximizing compliant demand satisfaction. Across four frontier open-weight and proprietary models on the \\textit{Muses-Bench} benchmark, Harness-MU achieves the goal of privacy preservation across all access-control attacks, outperforming the standard baseline by 0.28--0.39 in utility score and improving instruction-following accuracy by up to 48.9 percentage points. Harness-MU advances the philosophy of \\textit{Harness Engineering}, establishing that systematic infrastructure is essential for solving LLM multi-principal governance challenges. The code and data are available at https://github.com/YuanJrShiuan/Harness-MulUser.",
+      "highlights": {
+        "contribution": "提出首个模型无关、零调优的多用户 LLM agent 治理基础设施 Harness-MU。",
+        "innovation": "把谁有权、什么受限、谁的指令优先当作确定性运行时变量交给执行 hook 强制，把语言生成与安全编排解耦。",
+        "method": "无需训练，把治理约束实现为执行 hook 层，跑在任何 LLM 之上；在 Muses-Bench 上做多轮对抗访问控制评估。",
+        "results": "Muses-Bench 上隐私保护全部攻破不掉；效用分超 baseline 0.28-0.39；指令遵守准确率最高提升 48.9pp。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T03:24:24Z",
+      "categories": [
+        "cs.CR",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 9.5,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.21856v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.21856v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.21819",
+      "title": "RAPID: A Reproducible Multi-Agent Pipeline for Interpretable Disaster Damage Assessment from Satellite and Street-View Imagery",
+      "authors": [
+        "Yifan Yang",
+        "Wenjing Gong",
+        "Kaili Zhang",
+        "Lei Zou",
+        "Zhengzhong Tu",
+        "Hao Li",
+        "Zongrong Li",
+        "Xinyue Ye"
+      ],
+      "affiliations": [],
+      "summary": "气候极端事件下灾损评估需要可扩展、自主、可解释的方法，但现有方法在域偏移和长尾下泛化不行。RAPID 用多 agent 协调跨视角理解、图像复原、结构化损伤识别和地理推理，零样本就能整合卫星和街景影像出可解释报告。多灾害类型分类总体准确率 0.92，跨视角损伤严重度预测最高 0.627。",
+      "original_abstract": "Due to the increasing frequency and intensity of extreme climate events, there is a clear demand for intelligent, scalable, and autonomous approaches to disaster damage assessment. Existing methods, largely based on supervised learning and task-specific fine-tuning, struggle to generalize under domain shifts, long-tailed data distributions, and heterogeneous geospatial data sources, especially in disaster scenarios. They also often lack the ability to integrate and reason across multimodal geospatial information, such as satellite images and street-view images. In this paper, we introduce RAPID, a reproducible multi-agent pipeline for interpretable disaster damage assessment, including damage-level assessment, damage-type interpretation, and actionable suggestions for response, remediation, and recovery. RAPID coordinates specialized agents to perform cross-view understanding, image restoration, structured damage recognition, and geographical reasoning across heterogeneous data modalities. Without task-specific fine-tuning, RAPID supports zero-shot damage assessment by jointly using complementary information from remote sensing and ground-level perspectives. The system produces fine-grained, interpretable assessments and automatically generates location-specific, decision-relevant disaster reports to support early-stage emergency response. We evaluate RAPID across hurricanes, floods, wildfires, and earthquakes using multiple cross-view imagery inputs, including pre- and post-disaster street-view images, post-disaster remote sensing imagery, and street-view image pairs. Experiments show that RAPID achieves 0.92 overall accuracy for multi-disaster type classification and up to 0.627 for cross-view damage severity prediction, highlighting its potential as a foundational framework for autonomous disaster intelligence.",
+      "highlights": {
+        "contribution": "提出可复现多 agent 灾损评估管线 RAPID，输出可解释的损伤级别、类型和应急建议。",
+        "innovation": "用专门 agent 协调跨视角理解、图像复原、结构化损伤识别和地理推理，免特定任务微调就能联合用卫星和地面影像。",
+        "method": "多 agent 各司其职处理跨视角理解、图像恢复、损伤识别、地理推理；在飓风、洪水、野火、地震多类灾害用前后街景和遥感影像；自动生成报告。",
+        "results": "多灾害类型分类总准确率 0.92；跨视角损伤严重度预测最高 0.627。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T01:05:44Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 9.5,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.21819v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.21819v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.22203",
+      "title": "When Is Emergent Consensus Real? A Measured Coupling Gain and a Validity Diagnostic for LLM Agent Societies",
+      "authors": [
+        "Dongxu Yang"
+      ],
+      "affiliations": [],
+      "summary": "「LLM agent 社会」常被用来演示涌现共识或极化，但没人量化耦合参数也没人区分真正的社会动力学和模型 artifact。作者提出可测的耦合增益 gamma 和效度诊断：5 个前沿模型 gamma 在 0.15-0.43 稳定可区分；前沿 LLM 默认不会自发反弹极化；并用随机初值诊断揭示已发表「涌现共识」结果在可辩论命题上是平均化但在既定事实上是先验 artifact。",
+      "original_abstract": "LLM \"agent societies\" are studied via demonstrations of emergent consensus or polarization -- with no measurable control parameter, no theory of when each regime appears, and no test of whether an outcome is a genuine social dynamic or a model artifact. We introduce the coupling gain gamma, measured per-agent by counterfactually perturbing a neighbour's stated opinion. (i) gamma is stable and model-distinguishing -- across five frontier models it spans 0.15-0.43 (n=20, 95% CIs <= 0.025), paraphrase-invariant; social-neighbour gamma roughly equals numeric-anchor gamma, so gamma is evidence-coupling, not uniquely social. (ii) Classical dynamics with measured (not assumed) coefficients organise the regime: Friedkin-Johnsen for consensus/pluralism, signed-Laplacian/structural-balance for polarization. (iii) Frontier LLMs do not spontaneously backfire (beta <= 0), so default societies do not self-polarize -- polarization is always induced; the beta>0 branch arises only in the FJ surrogate, never in the agents. (iv) A randomized-initial-condition diagnostic -- the (slope, bias) of final vs. initial opinion -- separates genuine averaging from model-prior artifacts (boundary-censoring ruled out by construction via interior-valued facts); applied to a published \"emergent consensus\" result (Chuang et al. 2023) it reveals a model-specific conflation: averaging on debatable claims, prior-artifact on settled facts. (v) Coupling is context-dependent: pairwise gamma does not predict multi-neighbour outcomes -- it can order them backwards -- whereas a modality-matched group coupling does (sixteen closed+open models, Pearson r=-0.70, permutation p=0.008). The regime laws take this matched coupling, not the single-neighbour gamma: emergent consensus must be read from coupling in the target interaction. We contribute a measurement protocol and a validity instrument, not new theory.",
+      "highlights": {
+        "contribution": "给 LLM agent 社会研究提出可测耦合增益和效度诊断协议。",
+        "innovation": "用反事实扰动邻居观点测 per-agent gamma；用随机初始条件做 slope/bias 诊断把平均化和模型先验 artifact 区分开；指出 pairwise gamma 不预测多邻居结果，要用 modality-matched 群体耦合。",
+        "method": "反事实扰动测耦合增益；FJ 模型和签名拉普拉斯/结构平衡作动力学拟合；随机初值诊断；在 16 个开闭源模型上做多邻居耦合实验。",
+        "results": "5 个前沿模型 gamma 跨 0.15-0.43，95% CI <=0.025；beta<=0 默认不自发极化；多邻居群耦合与结果 Pearson r=-0.70、置换 p=0.008；重新解释 Chuang et al. 2023 的「涌现共识」。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T19:41:01Z",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.MA",
+        "cs.SI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 9.5,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.22203v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.22203v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.21877",
+      "title": "AgentRiskBOM: A Risk-Scoping Security Bill of Materials for Agentic AI Systems",
+      "authors": [
+        "Srimonti Dutta",
+        "Akshata Kishore Moharir"
+      ],
+      "affiliations": [],
+      "summary": "Agentic AI 系统会读私有上下文、调用工具、写文件、协调其它 agent，现有 BOM 在依赖、模型元数据、训练溯源上能给透明度，但对 agent 运行时能干啥写得不清楚。AgentRiskBOM 在 SBOM/AIBOM/MLBOM 之上加一层运行时权限相关的字段做风险范围界定。13 个开源 agent 加 52 个风险场景的评估上原生能力得分 14/16。",
+      "original_abstract": "Agentic AI systems retrieve private context, invoke tools, write files, call external services, coordinate with other agents, and may act without human approval. Existing bill of materials artifacts improve transparency for dependencies, model metadata, and training provenance, but leave an agentic transparency gap: capability opacity, the absence of a structured account of what a deployed agent can access, remember, change, delegate, and prove afterward. This paper introduces AgentRiskBOM, a security BOM for risk-scoping tool-using AI agents. It is an additive layer over SBOM, AIBOM, and MLBOM artifacts, referencing them where authoritative while adding fields for runtime authority: autonomy, tool permissions, memory, credential scope, approval gates, audit signals, inter-agent communication, and external action capability. We implement AgentRiskBOM as a JSON-schema artifact with a reproducible corpus, risk scenarios, scorer, diff detector, control mapper, and reports. We evaluate AgentRiskBOM on 13 open-source agents spanning coding, RAG, and multi-agent archetypes, plus 52 risk scenarios across 14 categories. The schema validates all 13 corpus artifacts. Coverage analysis gives AgentRiskBOM a native-equivalent score of 14 across 16 capability dimensions, vs. 1 for SBOM, 1.5 for AIBOM and 2 for MLBOM. Across modeled risk categories, AgentRiskBOM exposes 100% risk-category visibility vs. 10.5% for SBOM-like and 20.9% for AIBOM-like views. To test agentic authority drift, we inject 33 structured deployment mutations; the diff detector identifies the correct change type for all mutations. A secondary penalty-based scorer yields a Spearman correlation of 0.73 with the primary scorer, supporting rank-level consistency while showing that thresholds require human calibration. The results show that agentic AI security needs a machine-readable authority-and-risk artifact before incidents occur.",
+      "highlights": {
+        "contribution": "提出 Agent 系统专用的安全 BOM 工件 AgentRiskBOM，覆盖 agent 运行时权限和风险。",
+        "innovation": "把 autonomy、工具权限、记忆、credential 范围、审批门、审计信号、agent 间通信、外部行动能力等运行时权威信息纳入 BOM 字段。",
+        "method": "实现为 JSON-schema artifact，配可复现语料、风险场景、打分器、diff 检测器、控制映射器和报告。",
+        "results": "原生等价分 14（SBOM 1、AIBOM 1.5、MLBOM 2）；风险类别可视化 100% vs SBOM 10.5%；33 个变更注入 diff 检测全对；与次级评分器 Spearman 相关 0.73。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T04:38:41Z",
+      "categories": [
+        "cs.AI",
+        "cs.CR",
+        "cs.SE"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 9.5,
+        "popularity": 5.0,
+        "quality": 6.0,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.21877v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.21877v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.22110",
+      "title": "TraceView: Interactive Visualization of Agentic Program Repair Trajectories",
+      "authors": [
+        "Amirali Sajadi",
+        "Tu Nguyen",
+        "Kimmie Huynh",
+        "Esteban Parra",
+        "Preetha Chatterjee"
+      ],
+      "affiliations": [],
+      "summary": "LLM 修 bug 的 agent 会产生很长的推理、工具调用、反馈轨迹，但只看最终补丁结果看不出过程哪儿走偏。TraceView 是个交互式工具，把 Thought/Action/Result 组件组织起来做语义关系标注和可视化诊断，提供关系过滤、补丁结果总结、节点级证据面板。5 名研究者用户研究反馈说更易扫读、更易理解修复行为。",
+      "original_abstract": "LLM-based automated program repair (APR) agents generate patches to fix software bugs with minimal human intervention. These agents often produce long trajectories of reasoning, tool use, and feedback to produce candidate patches. Final patch outcomes show whether a repair attempt succeeded or failed, but they do not show how the agent reached that outcome, or where the process became repetitive or misaligned with the task. This makes agentic repair failures difficult to diagnose, reproduce, and prevent. To help developers address these challenges, we present TraceView, an interactive tool for labeling and visualizing repair trajectories from APR systems. TraceView organizes raw and pre-labeled agentic runs with Thought, Action, and Result components to support semantic relation labeling and diagnosis, and renders the resulting trajectory as graph views. Furthermore, TraceView provides relation filters, patch outcome summaries, metrics, and node-level evidence panels to help users inspect how reasoning, actions, and feedback connect across the various steps of an agentic repair attempt. We evaluate TraceView with five researchers through a survey-based user study. Participants reported that TraceView made trajectories easier to scan and that its overview-to-detail workflow helped them better understand repair behavior. The TraceView source code is available at https://github.com/SOAR-Lab/agent-traj-visualization. A screencast of TraceView is available at https://youtu.be/9ZCh7Ifj2AQ.",
+      "highlights": {
+        "contribution": "做出一个能交互式标注和可视化 APR agent 轨迹的工具 TraceView。",
+        "innovation": "把 agent 轨迹组织成 Thought/Action/Result 三元组并以图形式渲染，支持语义关系标注、节点级证据面板和补丁结果总结。",
+        "method": "把原始/预标注 agentic 轨迹按 Thought/Action/Result 切分；图视图渲染；提供关系过滤、补丁结果总结、节点级证据；做用户研究。",
+        "results": "5 人用户研究反馈轨迹更易扫读，overview-to-detail 工作流帮助理解修复行为。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T15:47:15Z",
+      "categories": [
+        "cs.SE",
+        "cs.AI",
+        "cs.HC"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 9.5,
+        "popularity": 5.0,
+        "quality": 6.0,
+        "recommendation": 5.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.22110v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.22110v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.21832",
+      "title": "AgentCAT: Simulating Computerized Adaptive Testing via Multi-Agent Large Language Models",
+      "authors": [
+        "Weiyuan Zhou",
+        "Haiping Ma",
+        "Xiaoshan Yu",
+        "Changqian Wang",
+        "Shangshang Yang",
+        "Xingyi Zhang"
+      ],
+      "affiliations": [],
+      "summary": "计算机化自适应测试受困于静态离线数据和孤立组件优化。AgentCAT 用 LLM 多 agent 模拟系统造个高保真动态测试基准，含考生 agent、选题 agent 和 supervisor 三模块。两个真实数据集上的实验显示能力收敛有效，选题策略平衡难度自适应和教学连贯。",
+      "original_abstract": "Computerized Adaptive Testing (CAT), as a key technology for personalized education, aims to accurately assess examinee proficiency by retrieving exercises dynamically matching current ability estimates. However, existing CAT research is constrained by limitations of static offline data and isolated component optimization. Restricted by partial labels in offline logs, researchers degrade the dynamic assessment process into static sequence prediction. Current research focuses on isolated perspectives, e.g., selection or diagnosis, neglecting the overall CAT interaction process. To address this, we propose AgentCAT, a Large Language Model-based multi-agent simulation system, to construct a high-fidelity benchmarking environment for dynamic testing. This framework comprises three modules: (1) The examinee agent with memory retrieval and Chain-of-Thought reasoning simulates responses based on cognitive profiles; (2) The selection agent uses coarse-to-fine bucketing and knowledge graph exploration to balance local difficulty and global coverage; (3) The supervisor uses dual-auditing and robust update to ensure convergence and validity. To validate the framework, we evaluated on two real-world datasets across three dimensions: macro-level ability convergence, micro-level interaction logic, and data sparsity resilience. Results show AgentCAT achieves effective ability estimation, and its selection strategy balances difficulty adaptation and instructional coherence, aligning with human pedagogical intuition.",
+      "highlights": {
+        "contribution": "提出 LLM 多 agent CAT 模拟系统 AgentCAT 作为动态测试基准环境。",
+        "innovation": "用考生 agent 模拟基于认知画像的应答，选题 agent 用粗到细 bucket 加知识图探索平衡局部难度和全局覆盖，supervisor 用双审核与稳健更新保证收敛。",
+        "method": "考生 agent 用记忆检索加 CoT 模拟应答；选题 agent 用 coarse-to-fine bucket 和知识图遍历；supervisor 做双审核和稳健更新。",
+        "results": "在两个真实数据集上从能力收敛、交互逻辑、数据稀疏三方面验证有效；选题策略与教学直觉一致。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T01:55:28Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 9.5,
+        "popularity": 5.0,
+        "quality": 6.0,
+        "recommendation": 5.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.21832v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.21832v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.21894",
+      "title": "Skills for the future software profession: beyond agentic AI!",
+      "authors": [
+        "Sungmin Kang",
+        "Baishakhi Ray",
+        "Abhik Roychoudhury"
+      ],
+      "affiliations": [],
+      "summary": "Coding agent 重塑软件工程之后，未来软件工程师到底要啥技能？作者总结了 2026 在纽约和新加坡两场圆桌讨论的结论。一个关键发现是 agent 接管实现以后，验证与确认会变得越来越重要。",
+      "original_abstract": "As coding agents are rapidly changing software engineering, a natural question is: what are the core skills needed by future software engineers? To identify where software engineering is headed and thus what skills will be needed, we summarize the results of two round-tables with researchers and industrial practitioners, held in 2026 in New York and Singapore. One key finding is that verification and validation is increasing in importance as agents handle implementation, as highlighted by anecdotes from the events. From our observations, we identify the skills developers need in the agentic era of development, with implications for training and educating future software engineers in coming years.",
+      "highlights": {
+        "contribution": "总结业界与学界圆桌讨论，提出 agentic 时代软件工程师所需的技能集合。",
+        "innovation": "把两场圆桌中的轶事观察归纳成一组对训练和教育有指导意义的技能列表。",
+        "method": "基于 2026 年纽约和新加坡两场学界与业界的圆桌讨论做观察总结。",
+        "results": "指出验证与确认能力将随 agent 接管实现而日益重要，并对未来软件工程教育给出方向性建议。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T06:09:05Z",
+      "categories": [
+        "cs.SE",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 3.5,
+        "recency": 9.5,
+        "popularity": 5.0,
+        "quality": 5.5,
+        "recommendation": 4.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.21894v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.21894v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.21955",
+      "title": "From RAN Control to Agentic Intelligence: Architecture and Vision for Energy Efficient AI-RAN",
+      "authors": [
+        "Sabrine Aroua",
+        "Alexis I. Aravanis",
+        "Ilias Chatzistefanidis",
+        "Hamza Abbar",
+        "Anh-Khoa Dang",
+        "Anastasios Giovanidis",
+        "Salah-Eddine El Ayoubi",
+        "Stephane Senecal",
+        "Martha Vlachou Konchylaki",
+        "Navid Nikaein"
+      ],
+      "affiliations": [],
+      "summary": "未来 6G RAN 越分布越 AI 化，能耗也会大涨。O-RAN 控制框架虽然模块化但还是策略驱动，没法跨多应用做能量协同。文章给出一个把 O-RAN 结构控制和 AI-RAN 融合愿景结合起来的 agentic AI 原生 RAN 架构，用语义意图抽象和 LLM 协调做自适应编排和能量多目标优化。",
+      "original_abstract": "Future 6G networks will rely on highly distributed, AI-native Radio Access Networks (RANs), where communication and AI workloads share a common infrastructure. This evolution, combined with increasing deployment density and continuous AI processing, is expected to significantly increase RAN energy consumption. While Open RAN (O-RAN) introduces a programmable and modular control framework through the RAN Intelligent Controller (RIC) and Service Management and Orchestration (SMO), current approaches remain largely policy-driven, limiting adaptive energy-aware coordination across multiple applications. In parallel, AI-RAN promotes the convergence of AI and RAN infrastructures through AI-for-RAN, AI-on-RAN, and AI-and-RAN paradigms, yet efficient mechanisms to jointly orchestrate performance, latency, and energy remain an open challenge. This article proposes an agentic AI-native RAN architecture that bridges O-RAN's structured control with AI-RAN's unified vision. Leveraging semantic intent abstraction and Large Language Model (LLM)-driven coordination, the framework enables adaptive orchestration, conflict resolution, and energy-aware multi-objective optimization across heterogeneous workloads. Through representative AI-for-RAN and AI-on-RAN use cases, we show how such coordination can improve resource efficiency and reduce operational energy consumption, paving the way toward sustainable 6G networks.",
+      "highlights": {
+        "contribution": "提出 agentic AI 原生 RAN 架构，桥接 O-RAN 的结构控制和 AI-RAN 融合愿景。",
+        "innovation": "用语义意图抽象加 LLM 驱动协调实现多应用间的能量感知多目标优化和冲突解决。",
+        "method": "在 O-RAN RIC/SMO 之上加 LLM 协调层；通过 AI-for-RAN 和 AI-on-RAN 用例展示自适应编排。",
+        "results": "通过代表性用例展示协调能改善资源效率并降低运行能耗，给出走向可持续 6G 的方向。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T09:04:57Z",
+      "categories": [
+        "cs.NI",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 3.0,
+        "recency": 9.5,
+        "popularity": 4.5,
+        "quality": 5.5,
+        "recommendation": 4.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.21955v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.21955v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.21982",
+      "title": "CoDMD: Copula-aware Distribution Matching Distillation for Fast Video Generation",
+      "authors": [
+        "Wenhu Zhang",
+        "Kun Cheng",
+        "Changyuan Wang",
+        "Shiyao Li",
+        "Yuechen Zhang",
+        "Wenbo Li",
+        "Jiajun Zha",
+        "Jingyi Zhang",
+        "Kang Zhao",
+        "Jiaya Jia"
+      ],
+      "affiliations": [],
+      "summary": "视频扩散模型蒸馏在低 NFE 预算下容易掉链子：布局抖、过饱和、动作崩。作者分析发现 DMD 是 sample 内分布匹配，没约束 batch 和帧间的关系几何，配上反向 KL 的 mode-seeking 容易陷局部最优。CoDMD 复用 teacher 和 fake 模型的 score 估计造成对关系矩阵作分布对齐做监督正则。Wan-2.1-T2V 上把 50 步老师蒸成 4 步学生，1.3B/14B 提速约 25 倍且 VBench 84.46/84.87 反超之前方法。",
+      "original_abstract": "Few-step distillation for video diffusion models has attracted significant attention, driven by the urgent demand for efficient deployment in real-world scenarios. However, Distribution Matching Distillation (DMD), a leading paradigm, tends to degrade under limited NFE budgets, manifesting in video generation as layout instability, oversaturation, and broken motion dynamics. We trace this failure to a structural limitation: standard DMD is an intra-sample distribution-matching objective with coordinate-wise gradients, and thus imposes no explicit constraint on the relational geometry across batch elements or temporal frames, leaving the underlying copula largely unregulated. Combined with the mode-seeking tendency of its reverse-KL objective, this absence of relational guidance makes DMD prone to collapsing into local optima in the few-step regime. Motivated by this insight, we propose Copula-aware DMD (CoDMD), a lightweight relational regularizer that reuses score estimates already produced by the frozen teacher and the online fake model to construct pairwise relation matrices across samples and frames. These are matched through a supplementary distributional objective that requires no additional networks, datasets, or sampling trajectories. On the Wan-2.1-T2V model series at 1.3B & 14B scales, CoDMD distills 50-step teachers into 4-step students, achieving an approximate 25$\\times$ speed-up while attaining VBench scores of 84.46 & 84.87, outperforming prior trajectory-based (rCM 82.81 & 84.05) and distribution-based (DMD 83.38 & 83.81) methods.",
+      "highlights": {
+        "contribution": "提出 Copula-aware DMD，一个轻量关系正则修复 few-step 视频扩散蒸馏崩坏问题。",
+        "innovation": "复用 frozen teacher 和 fake 模型已有的 score 估计构造样本间和帧间的成对关系矩阵，做分布对齐作为关系几何的隐式 copula 约束。",
+        "method": "对 DMD 加一个利用现有 score 估计构造关系矩阵的辅助分布匹配目标，不引入新网络、数据或采样轨迹；蒸馏 Wan-2.1-T2V 50 步到 4 步。",
+        "results": "Wan-2.1-T2V 1.3B 和 14B 把 50 步蒸成 4 步实现约 25x 加速，VBench 84.46/84.87，分别超过 rCM 82.81/84.05 和 DMD 83.38/83.81。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T10:33:14Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "Diffusion",
+      "matched_keywords": [
+        "diffusion model",
+        "video diffusion"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 9.5,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.21982v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.21982v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.22131",
+      "title": "Feed-forward Motion In-betweening for Any 4D",
+      "authors": [
+        "Hiroki Nishizawa",
+        "Hubert P. H. Shum",
+        "Yoshihiro Fukuhara",
+        "Hirokatsu Kataoka",
+        "Shigeo Morishima"
+      ],
+      "affiliations": [],
+      "summary": "4D 动力学是世界建模的基础，但大规模长程任意形状 4D mesh 数据稀缺，让早期 text-to-4D 推理巨慢。作者提出一个对任意 4D mesh 做关键帧条件 in-betweening 的前馈框架：先用 frame-wise mesh VAE 把每帧编成拓扑无关的 latent token，再用关键帧条件 rectified flow + MMDiT 合成中间帧。在 DyMesh16/32 上性能和可控性都好。",
+      "original_abstract": "4D dynamics (3D geometry evolving over time) is a fundamental representation of the physical world and plays a crucial role in world modeling (e.g., animation and games). Owing to the scarcity of large-scale, long-horizon 4D mesh data with arbitrary shapes, early text-to-4D methods rely on distillation or test-time optimization from video diffusion priors, making inference prohibitively slow. Recent feed-forward generators greatly reduce inference cost but offer limited spatiotemporal controllability, and short-horizon generation often leads to error accumulation in long-horizon sequences. We propose a novel feed-forward in-betweening framework for arbitrary 4D meshes with keyframe conditioning. Building on universal mesh-animation latents, we introduce a frame-wise mesh VAE that encodes each frame into topology-agnostic latent tokens anchored by a reference mesh for keyframe conditioning. We further introduce a keyframe-conditioned rectified flow model with an MMDiT backbone that synthesizes non-keyframe frames conditioned on sparse keyframes. Experiments show strong performance and improved controllability on both DyMesh16 and DyMesh32 benchmarks.",
+      "highlights": {
+        "contribution": "提出针对任意 4D mesh 的前馈式关键帧条件中间帧生成框架。",
+        "innovation": "frame-wise mesh VAE 把每帧编成以参考 mesh 锚定的拓扑无关 latent token，配合关键帧条件 rectified flow + MMDiT 做长程可控 4D 合成。",
+        "method": "在通用 mesh 动画 latent 上训 frame-wise mesh VAE 做关键帧条件编码；rectified flow 模型用 MMDiT backbone 在稀疏关键帧条件下合成非关键帧。",
+        "results": "在 DyMesh16 和 DyMesh32 基准上性能和可控性均提升，相比扩散先验蒸馏方法推理代价显著降低。"
+      },
+      "images": [],
+      "published_date": "2026-06-20T16:18:13Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "Diffusion",
+      "matched_keywords": [
+        "rectified flow",
+        "video diffusion"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 9.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.22131v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.22131v1",
+      "venue": null
+    }
+  ],
+  "total": 25
+}

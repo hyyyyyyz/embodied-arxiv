@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.22174",
+    "summary": "现有人形机器人 loco-manipulation 系统通常把上下半身控制器拆开，没法实现真正的全身协同。作者做了一套系统的「一次变一个变量」的实证研究，分三阶段探索：全身遥操作、VLA 模型设计、异构联合训练，最终给出 OpenHLM 这个开源配方。在一个跨大跨度高度的长程任务上，OpenHLM 用不到一半的演示时间就打过了 GR00T N1.6 和 Ψ0 两个 SOTA 人形 VLA。",
+    "highlights": {
+      "contribution": "提出 OpenHLM——首个把全身人形 loco-manipulation 当作整体来训的 VLA 开源配方，给出端到端经验路线图。",
+      "innovation": "用一次变一个变量的实证方法系统比较了遥操作接口、预训练迁移策略和异构联合训练，发现关节式全身遥操作最优，且静态/轮式双臂预训练的 VLA 能迁移到人形全身动作空间。",
+      "method": "输入语言加像素，模型直接输出人形全部自由度；先用关节级全身遥操作收数据，再用静态双臂预训练做 VLA 初始化，最后跟 HuMI（人形版 UMI）做异构联合训练。",
+      "results": "长程任务上击败 GR00T N1.6 和 Ψ0，使用不到一半总演示时间，并能在不补全身数据的情况下扩展到新物体和指令。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 9.5,
+      "popularity": 8.0,
+      "quality": 8.5,
+      "recommendation": 8.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.22116",
+    "summary": "电缆绳子这种细长可形变物体在机器人操作里很常见，但现有仿真要么视觉好但物理假，要么物理对但视觉糙。作者把 Cosserat 杆物理引擎接进 Isaac Sim，造了一个能同时兼顾物理和视觉的 DLO 协同仿真框架 DeformX。SAM3 在它生成的数据上微调后在真实电缆分割上 mAP@75 涨 10.2%，绳子甩击策略在 UR5e 上的真实命中误差 6.6 cm。",
+    "highlights": {
+      "contribution": "做出一个把 Cosserat 杆物理和 Isaac Sim 视觉打通的 DLO 仿真框架，支持机器人学习管线。",
+      "innovation": "首次在统一平台里同时给 DLO 弯曲扭转剪切动力学、自碰撞和与任意网格的接触，并通过 mesh skinning 把杆变形映射到 CAD 网格上做高保真渲染。",
+      "method": "Cosserat 杆引擎管动力学和碰撞，CAD 模型用网格蒙皮做视觉；用它生成合成数据训练分割、并端到端训绳子甩击策略，再做 sim2real。",
+      "results": "SAM3 微调后真实电缆分割 mAP@75 +10.2%；绳子甩击策略在 UR5e 上的真实平均命中误差 6.6 cm。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.22142",
+    "summary": "机器人策略迭代里数据收集、复查、再训、评估、上线这一串证据通常散在脚本和专家脑子里，不可追溯。RoboLineage 把这些步骤当作有类型的 lineage artifact 显式表示出来，让 agent 在明确边界下解释 rollout、维护数据健康、汇总跨迭代状态。真机操作流程里它让策略迭代更快也更可审计。",
+    "highlights": {
+      "contribution": "提出 agent-native 的机器人策略数据生命周期治理系统 RoboLineage 并开源。",
+      "innovation": "把 rollout、评审、训练、评估、部署建议、下一轮采集计划都建模成 typed lineage artifact，让 agent 在显式 artifact 边界下做长期治理。",
+      "method": "定义一套 lineage 类型；agent 解读 rollout 证据，把数据适配进现有训练栈，维护数据健康并跨迭代总结；作为轻量层兼容不同 embodiment 与训练框架。",
+      "results": "在真机操作工作流里让策略迭代更快且可审计，下游策略性能不掉。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.22136",
+    "summary": "灵巧操作要泛化但数据三选一都难：遥操作贵、仿真有 gap、真人第一人称视频又跟机器人部署不对齐。Wh0 用生成式视频世界模型当可控的人手数据源，造了 50k 集 WM-H 数据集，再用手部重建和视觉编辑转成机器人能用的监督。跟只用机器人数据后训的模型比，18 个真机任务上未见任务零样本成功率从 8.3% 拉到 38.9%。",
+    "highlights": {
+      "contribution": "把生成式视频世界模型当作可扩展、可控的第一人称人手操作数据源，用来解锁灵巧 VLA 的能力。",
+      "innovation": "用语言、物体、场景作条件让世界模型生成第一人称人手交互视频，再通过手部运动重建加视觉编辑转换成机器人监督，避开真人视频与机器人 embodiment 不对齐的问题。",
+      "method": "条件化视频世界模型生成 50k 集 WM-H 数据；手部运动重建得到动作监督；视觉编辑做 embodiment 对齐；与少量真机数据联合训练 VLA。",
+      "results": "18 个真机灵巧操作任务上，未见任务零样本成功率 8.3%→38.9%；消融显示生成可扩展性和场景/embodiment 对齐是关键。"
+    },
+    "scores": {
+      "relevance": 9.7,
+      "recency": 9.5,
+      "popularity": 8.5,
+      "quality": 8.5,
+      "recommendation": 9.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.21961",
+    "summary": "做植被监测不仅要回答「按预期天气未来会怎样」，还要回答「在别的天气情景下会怎样」。VegSim 把卫星 NDVI 历史、过去气象和静态空间上下文塞进 latent 状态，再用 recurrent latent dynamics 在未来天气强迫下向前推，解出 NDVI 的分位数预测。同一模型同时支持观测天气下的概率预测和用户自定义气象情景下的条件模拟。",
+    "highlights": {
+      "contribution": "提出地理空间世界模型 VegSim，支持情景条件化的植被模拟。",
+      "innovation": "把未来天气作为可控输入显式喂进 latent dynamics，让同一模型既能做概率预测又能在无监督的情况下做反事实情景模拟。",
+      "method": "稀疏 NDVI 历史加气象协变量加静态上下文编码成 latent 植被状态；recurrent latent dynamics 在未来气象强迫下递推；解码 NDVI 的预测分位数。",
+      "results": "在 GreenEarthNet 上对 in-distribution 以及空间、时间、时空联合分布迁移都达到强劲的点估计和概率精度；2022 法国夏季案例给出与温度降水敏感性一致的空间格局。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.22030",
+    "summary": "Nous 主张「知识就是预测」而不是存储，每个实体-属性对维护一条类别分布作为预测式世界模型。新观察用信息论 surprise 打分，再用闭式贝叶斯后验更新，存的是 prior 到 posterior 的 delta 而不是事实本身。在 LoCoMo 长期对话记忆基准上用 GPT-4o-mini 跑出 F1 63.50/55.32/58.57/62.50。",
+    "highlights": {
+      "contribution": "提出基于预测式世界模型的 agent 长期记忆架构 Nous，不依赖向量库或知识图。",
+      "innovation": "把记忆当作 entity-attribute 的类别分布集合，存 belief shift 的 delta 而不是事实；遗忘是熵衰减，身份消歧用维度集合的互信息。",
+      "method": "每个 entity-attribute 维护类别分布；观测打 -log2 P 的 surprise 分；闭式贝叶斯后验更新；以 delta 为主存储 artifact。",
+      "results": "在 LoCoMo 上 10 段对话 1540 题，single/multi/temporal/open F1 分别 63.50/55.32/58.57/62.50，对 A-MEM 在三类有显著增益。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.22261",
+    "summary": "复杂系统的异常检测有两个痛点：异常标签少，二值标签也没法刻画事件离正常多远。作者只用正常事件学一个「正常世界」模型，少量异常样本只用来校准边界，并实例化为超图熵能量模型。在 NASA C-MAPSS 涡扇退化基准上 FD004 达到 AUROC 0.9983。",
+    "highlights": {
+      "contribution": "提出正常世界建模视角与超图熵能量模型，用作异常分、风险度量和正常行为的可检验表示。",
+      "innovation": "用 context-conditioned 超图捕捉多变量高阶关系；定义包含时序预测 surprise、超图一致 surprise 和潜在正常流形偏离的熵能量；少量异常只校准边界。",
+      "method": "把多变量传感器窗口表示成上下文条件超图；学习熵感知正常世界能量；提出力学验证测试检验能量是否编码了正常结构。",
+      "results": "C-MAPSS 四个子集零样本和小样本都强，FD004 AUROC 0.9983；力学验证显示能量沿退化轨迹单调上升，对跨变量耦合破坏敏感。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 9.5,
+      "popularity": 4.5,
+      "quality": 6.5,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.22091",
+    "summary": "机器人和 AR 现场抓重建经常依赖 SfM 或深度作为 3DGS 的外部初始化，又慢又脆。ACEsplat 只用 RGB 和位姿就能跑：先 4-5 分钟自监督做场景坐标回归得到几何先验，再轻量初始化 3D Gaussian 并优化。Wayspots 用实时 SLAM 位姿能拿 29.11 dB，Cambridge 用 SfM 精修位姿 33.20 dB，整套流程 15-25 分钟。",
+    "highlights": {
+      "contribution": "提出 ACEsplat：不需要 SfM 点云或深度先验，只要 RGB 加位姿就能快速重建 3D Gaussian。",
+      "innovation": "用自监督场景坐标回归作为内部几何先验代替外部 SfM/深度，再用轻量 Gaussian 初始化头融合 SCR 特征和坐标先验。",
+      "method": "两阶段：第一阶段 4-5 分钟自监督 SCR 建几何先验；第二阶段把 SCR 特征和坐标先验喂给轻量 Gaussian 初始化头，再做 3DGS 优化。",
+      "results": "Wayspots 实时 SLAM 位姿 29.11 dB PSNR，Cambridge SfM 精修位姿 33.20 dB；RealEstate10K 两视图新视角合成保持竞争力；单 GPU 15-25 分钟搞定。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.21898",
+    "summary": "之前 mesh 和 3DGS 的转换大多走多视图重建路线，从 mesh 直接造 3DGS 反而少有人做。Mesh2GS 用全光采样理论直接从 mesh 几何造 3DGS，理论给出最少采样视图和 Gaussian 分布；再加 albedo-shading 分解的更新和神经光照增强处理非朗伯效应。实验上超过 SOTA，能实时共享渲染且能捕高光。",
+    "highlights": {
+      "contribution": "提出白盒 mesh-to-3DGS 构造框架 Mesh2GS，达到 Nyquist 级全局光照渲染。",
+      "innovation": "用全光采样理论推导最小采样视图数和 3D Gaussian 分布；引入 albedo-shading 分解的 GS 更新；加神经光照增强处理非朗伯效应。",
+      "method": "全光采样指导构造 3DGS；albedo-shading 分解高效捕获全局光照；神经光照增强模块；从 mesh 几何直接生成 Gaussian。",
+      "results": "在多个 baseline 上 SOTA，可实时共享渲染并能捕捉高光等非朗伯效应。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.22197",
+    "summary": "动态 3DGS 面临运动一致性和视觉保真度的矛盾：变形派会过平滑高频动态，4D primitive 派又过参数化且破坏物体身份。Multi4D 把建模能力分到静态结构、持续动态几何、瞬态外观三层，共享光栅化和残差驱动优化让三层竞争解释光度误差。SOTA 渲染质量加实时性，4D 分割速度有量级加速。",
+    "highlights": {
+      "contribution": "提出多层级竞争分配的动态 GS 框架 Multi4D，同时拿到 SOTA 渲染和 4D 分割。",
+      "innovation": "三层分工：静态结构、持续动态几何、瞬态外观；通过共享光栅化和残差驱动优化让三层自适应竞争而无需预指定分解。",
+      "method": "三级 Gaussian 分配；共享光栅化把光度误差残差作为竞争信号；持续动态 Gaussian 显式跟踪后嵌入语义特征做 4D 分割。",
+      "results": "SOTA 渲染质量且动态 primitive 显著更少；4D 分割精度 SOTA，速度有一个数量级提升。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.21963",
+    "summary": "诊断工业级移动 App 崩溃很难：代码量大、混合语言、本地复现不出来。Holmes 用多 agent 整合栈、日志、线程态等运行时多模态信号，分层 Retrieve-Explore-Reason 架构借助寄存器和汇编弥合业务代码和闭源系统的语义鸿沟。在微信真实崩溃上函数级根因定位准确率 87.6%，调查时间平均下降 98% 到约 77 秒。",
+    "highlights": {
+      "contribution": "提出多 agent 系统 Holmes，自动化工业级移动崩溃根因分析。",
+      "innovation": "分层 Retrieve-Explore-Reason 架构利用低层 artifact 如寄存器与汇编弥合业务代码与系统框架的语义 gap，并用运行时线索动态压缩搜索空间。",
+      "method": "agent 综合栈、日志、线程态多模态信号；分层 RER 架构；运行时线索压缩搜索空间应对 7000 万行代码。",
+      "results": "微信真实崩溃上函数级根因定位 87.6%，平均调查时间从原始降到 77 秒，相对提升 98%。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.21877",
+    "summary": "Agentic AI 系统会读私有上下文、调用工具、写文件、协调其它 agent，现有 BOM 在依赖、模型元数据、训练溯源上能给透明度，但对 agent 运行时能干啥写得不清楚。AgentRiskBOM 在 SBOM/AIBOM/MLBOM 之上加一层运行时权限相关的字段做风险范围界定。13 个开源 agent 加 52 个风险场景的评估上原生能力得分 14/16。",
+    "highlights": {
+      "contribution": "提出 Agent 系统专用的安全 BOM 工件 AgentRiskBOM，覆盖 agent 运行时权限和风险。",
+      "innovation": "把 autonomy、工具权限、记忆、credential 范围、审批门、审计信号、agent 间通信、外部行动能力等运行时权威信息纳入 BOM 字段。",
+      "method": "实现为 JSON-schema artifact，配可复现语料、风险场景、打分器、diff 检测器、控制映射器和报告。",
+      "results": "原生等价分 14（SBOM 1、AIBOM 1.5、MLBOM 2）；风险类别可视化 100% vs SBOM 10.5%；33 个变更注入 diff 检测全对；与次级评分器 Spearman 相关 0.73。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 9.5,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.22082",
+    "summary": "自然语言到整仓代码生成（NL2Repo）需要长规划、稳跨文件接口和迭代调试。CodeTeam 把规划、决策、实现拆成三阶段：多个 Architect agent 出 SDS，CTO agent 选并规范成可机器校验的契约，Developer agent 在依赖感知调度下编码，QA agent 跑测试。SketchEval 上 SketchBLEU 涨 4.1/2.9，NL2Repo-Bench 测试通过率 PE 34.6%、SFT 42.3%。",
+    "highlights": {
+      "contribution": "提出 LLM 多 agent 仓库级代码生成框架 CodeTeam，把规划、决策、实现解耦。",
+      "innovation": "用多 Architect 出 SDS 加 CTO 选定并规范成机器可校验契约的设计阶段，搭配依赖感知调度器和 Git 协调让 Developer 和 QA 闭环。",
+      "method": "Architect 出软件设计草案；CTO 选并落成契约规定文件归属、公共接口和依赖；Developer 在有限上下文里按依赖调度编码；QA 跑测试驱动修复。",
+      "results": "SketchEval 上 SketchBLEU PE +4.1、SFT +2.9；NL2Repo-Bench 测试通过率 PE 34.6%、SFT 42.3%；消融显示项目专属分配和检索增强规划分别带 9.9% 和 8.1% 相对改进。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.21819",
+    "summary": "气候极端事件下灾损评估需要可扩展、自主、可解释的方法，但现有方法在域偏移和长尾下泛化不行。RAPID 用多 agent 协调跨视角理解、图像复原、结构化损伤识别和地理推理，零样本就能整合卫星和街景影像出可解释报告。多灾害类型分类总体准确率 0.92，跨视角损伤严重度预测最高 0.627。",
+    "highlights": {
+      "contribution": "提出可复现多 agent 灾损评估管线 RAPID，输出可解释的损伤级别、类型和应急建议。",
+      "innovation": "用专门 agent 协调跨视角理解、图像复原、结构化损伤识别和地理推理，免特定任务微调就能联合用卫星和地面影像。",
+      "method": "多 agent 各司其职处理跨视角理解、图像恢复、损伤识别、地理推理；在飓风、洪水、野火、地震多类灾害用前后街景和遥感影像；自动生成报告。",
+      "results": "多灾害类型分类总准确率 0.92；跨视角损伤严重度预测最高 0.627。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.21832",
+    "summary": "计算机化自适应测试受困于静态离线数据和孤立组件优化。AgentCAT 用 LLM 多 agent 模拟系统造个高保真动态测试基准，含考生 agent、选题 agent 和 supervisor 三模块。两个真实数据集上的实验显示能力收敛有效，选题策略平衡难度自适应和教学连贯。",
+    "highlights": {
+      "contribution": "提出 LLM 多 agent CAT 模拟系统 AgentCAT 作为动态测试基准环境。",
+      "innovation": "用考生 agent 模拟基于认知画像的应答，选题 agent 用粗到细 bucket 加知识图探索平衡局部难度和全局覆盖，supervisor 用双审核与稳健更新保证收敛。",
+      "method": "考生 agent 用记忆检索加 CoT 模拟应答；选题 agent 用 coarse-to-fine bucket 和知识图遍历；supervisor 做双审核和稳健更新。",
+      "results": "在两个真实数据集上从能力收敛、交互逻辑、数据稀疏三方面验证有效；选题策略与教学直觉一致。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 9.5,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.21856",
+    "summary": "多用户协作场景里 LLM agent 要管访问权限、解决多权威冲突、避免越权泄密，但 LLM 训练范式是单用户的，靠提示词软约束不可靠。Harness-MU 把治理约束当成确定性运行时变量，用执行 hook 强制而非交给 LLM。Muses-Bench 上隐私保护全部通过，效用分超 baseline 0.28-0.39，指令遵守提升最高 48.9pp。",
+    "highlights": {
+      "contribution": "提出首个模型无关、零调优的多用户 LLM agent 治理基础设施 Harness-MU。",
+      "innovation": "把谁有权、什么受限、谁的指令优先当作确定性运行时变量交给执行 hook 强制，把语言生成与安全编排解耦。",
+      "method": "无需训练，把治理约束实现为执行 hook 层，跑在任何 LLM 之上；在 Muses-Bench 上做多轮对抗访问控制评估。",
+      "results": "Muses-Bench 上隐私保护全部攻破不掉；效用分超 baseline 0.28-0.39；指令遵守准确率最高提升 48.9pp。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.21891",
+    "summary": "科学发现可以看作在假设和实验空间里的迭代搜索，但现有 MCTS 之类的方法会把假设质量和实验执行质量混淆，搜索日志长了又只能裁。ARTS 让推理 LLM 当 navigator，自己看历史日志、判断失败是想错了还是实现糟了，再用测试时训练把搜索树知识灌进权重避免上下文爆。MLGym 和 MLEBench 22 个任务上归一化分数相对涨 15.3%，Qwen3-4B 加测试时训练能匹配 Gemini-3 Pro 和 GPT o3 推理模型而推理成本低 5 倍。",
+    "highlights": {
+      "contribution": "提出 ARTS：用推理 LLM 加测试时训练做科学发现的树搜索，解决假设/执行混淆和上下文裁剪问题。",
+      "innovation": "让推理 LLM 看历史日志判断失败原因再选下一步假设，并用 test-time training 把搜索树知识压进模型权重避免长上下文。",
+      "method": "推理 LLM 作 tree search navigator；test-time training 把先前搜索状态写进权重；适用于 MLGym 和 MLEBench 等真实 ML 任务。",
+      "results": "22 个任务归一化得分相对提升 15.3%；Qwen3-4B + TTT 匹配 Gemini-3 Pro 和 GPT o3，推理成本最高低 5 倍；在部分可观测 RL 任务上甚至重新发现 recurrent memory 这种被启发式剪掉的解。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.21894",
+    "summary": "Coding agent 重塑软件工程之后，未来软件工程师到底要啥技能？作者总结了 2026 在纽约和新加坡两场圆桌讨论的结论。一个关键发现是 agent 接管实现以后，验证与确认会变得越来越重要。",
+    "highlights": {
+      "contribution": "总结业界与学界圆桌讨论，提出 agentic 时代软件工程师所需的技能集合。",
+      "innovation": "把两场圆桌中的轶事观察归纳成一组对训练和教育有指导意义的技能列表。",
+      "method": "基于 2026 年纽约和新加坡两场学界与业界的圆桌讨论做观察总结。",
+      "results": "指出验证与确认能力将随 agent 接管实现而日益重要，并对未来软件工程教育给出方向性建议。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 9.5,
+      "popularity": 5.0,
+      "quality": 5.5,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.21955",
+    "summary": "未来 6G RAN 越分布越 AI 化，能耗也会大涨。O-RAN 控制框架虽然模块化但还是策略驱动，没法跨多应用做能量协同。文章给出一个把 O-RAN 结构控制和 AI-RAN 融合愿景结合起来的 agentic AI 原生 RAN 架构，用语义意图抽象和 LLM 协调做自适应编排和能量多目标优化。",
+    "highlights": {
+      "contribution": "提出 agentic AI 原生 RAN 架构，桥接 O-RAN 的结构控制和 AI-RAN 融合愿景。",
+      "innovation": "用语义意图抽象加 LLM 驱动协调实现多应用间的能量感知多目标优化和冲突解决。",
+      "method": "在 O-RAN RIC/SMO 之上加 LLM 协调层；通过 AI-for-RAN 和 AI-on-RAN 用例展示自适应编排。",
+      "results": "通过代表性用例展示协调能改善资源效率并降低运行能耗，给出走向可持续 6G 的方向。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 9.5,
+      "popularity": 4.5,
+      "quality": 5.5,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.21959",
+    "summary": "引用链接能解析不代表所引论文真支持那个论断。作者发现当前 agent 模型很少编造引用（>99% 能解析）但约 15.9% 引到了错的论文。OpenBioRQ 用 12553 个真实未解决的生物医学问题做基准，没有标准答案，专门探 agentic 忠实度和拒答能力。最难子集上同源 held-out 模型只解 17%，三家前沿 agent 跨度 29-60%。",
+    "highlights": {
+      "contribution": "提出 OpenBioRQ：检索 grounded 的 agentic 生物医学未解问题基准，专门考引用忠实度和拒答能力。",
+      "innovation": "首个把 agentic 多轮工具调用与无答案 key 的未解问题结合的生物医学基准，难度用 3 个开源参考模型失败题锚定，避免主观难度标注。",
+      "method": "12 个生物医学领域 12553 道未解问题；用真实后续证据而非模型先验来核实开放性；冻结的 per-question checklist 评测。",
+      "results": "最难子集上 held-out 同源模型 17%，Gemini-3-Pro/Opus-4.7/GPT-5.5 跨度 29-60%；冻结 checklist 把判官 Spearman 一致性从 0.35 拉到 0.82；发现最难题上 agent 工具使用「崩塌」。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.22110",
+    "summary": "LLM 修 bug 的 agent 会产生很长的推理、工具调用、反馈轨迹，但只看最终补丁结果看不出过程哪儿走偏。TraceView 是个交互式工具，把 Thought/Action/Result 组件组织起来做语义关系标注和可视化诊断，提供关系过滤、补丁结果总结、节点级证据面板。5 名研究者用户研究反馈说更易扫读、更易理解修复行为。",
+    "highlights": {
+      "contribution": "做出一个能交互式标注和可视化 APR agent 轨迹的工具 TraceView。",
+      "innovation": "把 agent 轨迹组织成 Thought/Action/Result 三元组并以图形式渲染，支持语义关系标注、节点级证据面板和补丁结果总结。",
+      "method": "把原始/预标注 agentic 轨迹按 Thought/Action/Result 切分；图视图渲染；提供关系过滤、补丁结果总结、节点级证据；做用户研究。",
+      "results": "5 人用户研究反馈轨迹更易扫读，overview-to-detail 工作流帮助理解修复行为。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 9.5,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.22203",
+    "summary": "「LLM agent 社会」常被用来演示涌现共识或极化，但没人量化耦合参数也没人区分真正的社会动力学和模型 artifact。作者提出可测的耦合增益 gamma 和效度诊断：5 个前沿模型 gamma 在 0.15-0.43 稳定可区分；前沿 LLM 默认不会自发反弹极化；并用随机初值诊断揭示已发表「涌现共识」结果在可辩论命题上是平均化但在既定事实上是先验 artifact。",
+    "highlights": {
+      "contribution": "给 LLM agent 社会研究提出可测耦合增益和效度诊断协议。",
+      "innovation": "用反事实扰动邻居观点测 per-agent gamma；用随机初始条件做 slope/bias 诊断把平均化和模型先验 artifact 区分开；指出 pairwise gamma 不预测多邻居结果，要用 modality-matched 群体耦合。",
+      "method": "反事实扰动测耦合增益；FJ 模型和签名拉普拉斯/结构平衡作动力学拟合；随机初值诊断；在 16 个开闭源模型上做多邻居耦合实验。",
+      "results": "5 个前沿模型 gamma 跨 0.15-0.43，95% CI <=0.025；beta<=0 默认不自发极化；多邻居群耦合与结果 Pearson r=-0.70、置换 p=0.008；重新解释 Chuang et al. 2023 的「涌现共识」。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.22263",
+    "summary": "内存安全漏洞挖掘里 LLM 有潜力但易幻觉、扩展不到整仓代码。Revelio 是端到端 agentic 框架，必须生成可执行的 Proof-of-Vulnerability 让 sanitizer 验真才算数；并用便宜 LLM 加轻量静态分析降本。7 个连续模糊测试 5-8 年的成熟项目加 100 个 CyberGym 项目上，每项目约 1 小时、总成本 300 美元，发现了 19 个新的未知内存漏洞。",
+    "highlights": {
+      "contribution": "提出 cost-efficient 端到端 agentic 内存安全漏洞挖掘框架 Revelio。",
+      "innovation": "用可执行的 Proof-of-Vulnerability 加 sanitizer 确定性验证消除 LLM 幻觉；用便宜 LLM 加静态分析生成和排序漏洞假设。",
+      "method": "便宜 LLM + 轻量静态分析生成漏洞假设；只在 sanitizer 复现并确认时报漏；端到端 agentic 流程跑整仓。",
+      "results": "7 个成熟项目加 100 个 Arvo 项目上，每项目约 1 小时、总成本 ~300 美元发现 19 个新未知内存漏洞；在基准上同 token 成本下超过 frontier coding agent。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.21982",
+    "summary": "视频扩散模型蒸馏在低 NFE 预算下容易掉链子：布局抖、过饱和、动作崩。作者分析发现 DMD 是 sample 内分布匹配，没约束 batch 和帧间的关系几何，配上反向 KL 的 mode-seeking 容易陷局部最优。CoDMD 复用 teacher 和 fake 模型的 score 估计造成对关系矩阵作分布对齐做监督正则。Wan-2.1-T2V 上把 50 步老师蒸成 4 步学生，1.3B/14B 提速约 25 倍且 VBench 84.46/84.87 反超之前方法。",
+    "highlights": {
+      "contribution": "提出 Copula-aware DMD，一个轻量关系正则修复 few-step 视频扩散蒸馏崩坏问题。",
+      "innovation": "复用 frozen teacher 和 fake 模型已有的 score 估计构造样本间和帧间的成对关系矩阵，做分布对齐作为关系几何的隐式 copula 约束。",
+      "method": "对 DMD 加一个利用现有 score 估计构造关系矩阵的辅助分布匹配目标，不引入新网络、数据或采样轨迹；蒸馏 Wan-2.1-T2V 50 步到 4 步。",
+      "results": "Wan-2.1-T2V 1.3B 和 14B 把 50 步蒸成 4 步实现约 25x 加速，VBench 84.46/84.87，分别超过 rCM 82.81/84.05 和 DMD 83.38/83.81。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.22131",
+    "summary": "4D 动力学是世界建模的基础，但大规模长程任意形状 4D mesh 数据稀缺，让早期 text-to-4D 推理巨慢。作者提出一个对任意 4D mesh 做关键帧条件 in-betweening 的前馈框架：先用 frame-wise mesh VAE 把每帧编成拓扑无关的 latent token，再用关键帧条件 rectified flow + MMDiT 合成中间帧。在 DyMesh16/32 上性能和可控性都好。",
+    "highlights": {
+      "contribution": "提出针对任意 4D mesh 的前馈式关键帧条件中间帧生成框架。",
+      "innovation": "frame-wise mesh VAE 把每帧编成以参考 mesh 锚定的拓扑无关 latent token，配合关键帧条件 rectified flow + MMDiT 做长程可控 4D 合成。",
+      "method": "在通用 mesh 动画 latent 上训 frame-wise mesh VAE 做关键帧条件编码；rectified flow 模型用 MMDiT backbone 在稀疏关键帧条件下合成非关键帧。",
+      "results": "在 DyMesh16 和 DyMesh32 基准上性能和可控性均提升，相比扩散先验蒸馏方法推理代价显著降低。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  }
+]

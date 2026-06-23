@@ -252,200 +252,200 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.19156",
-    "summary": "AR/VR 头戴需要从第一人称视频实时重建动态 3D 手,过去要么多视角要么人体级。Hand-4DGS 是首个 feed-forward egocentric 4D hand 重建框架,以 Mesh 引导先验 + 时序卷积建模动态,在 H2O 和 ARCTIC 上效果明显好于基线,推理约 60 FPS,而且不需要昂贵的 3D 手势 GT。",
+    "arxiv_id": "2606.19565",
+    "summary": "VLA 量化部署一直在精度和效率间打架。作者提出 Mix-QVLA，以全精度的 action-token 决策为参考，用梯度加权的「任务证据图」衡量量化前后证据强度和分布的偏移，再按任务执行阶段动态打分，做层级混合精度比特分配。在 LIBERO 上把 OpenVLA-OFT 从 15.4GB 压到 4.1GB，成功率 96.3 对比 BF16 的 97.1，推理快 1.52 倍。",
     "highlights": {
-      "contribution": "首个 feed-forward 的 egocentric 4D 手部 Gaussian Splatting 重建框架。",
-      "innovation": "用 mesh-guided 结构先验加时序卷积,只靠 2D 监督就训出动态 4D hand。",
-      "method": "输入 egocentric 视频,通过 mesh prior 引导 Gaussian 表达,时序卷积处理快速手部和头部运动,2D 图像监督训练。",
-      "results": "H2O、ARCTIC 上大幅优于基线,推理约 60 FPS。"
+      "contribution": "首次把「任务证据保留」作为 VLA 混合精度 PTQ 的核心准则，并显式建模执行阶段相关的层敏感度。",
+      "innovation": "用 action-token 决策作锚点的证据图蒸馏 + 软瓶颈层敏感度 + 时间相关比特分配，比传统按层 Hessian 的 PTQ 更贴 VLA 任务。",
+      "method": "输入是 OpenVLA 风格策略的关键功能边界激活，计算梯度加权证据图，用 evidence-mass 和分布失真打分得到层敏感度，在模型大小和 BitOps 预算下做整数规划式比特分配。",
+      "results": "LIBERO 上 OpenVLA-OFT 显存 15.4GB→4.1GB，平均成功率 96.3 vs BF16 的 97.1，推理 1.52x 加速。"
     },
     "scores": {
-      "relevance": 7.4,
-      "recency": 10,
-      "popularity": 7.2,
+      "relevance": 8.5,
+      "recency": 9,
+      "popularity": 6.5,
       "quality": 7.8,
-      "recommendation": 7.5
+      "recommendation": 7.8
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.18623",
-    "summary": "现有 4D Gaussian 分割都靠 SAM 之类外部 mask,逐帧逐视角生成又贵又依赖外部质量。Intrinsic-GS 不要 mask、不需训练:直接从 Gaussian 的外观、姿态、尺度、运动轨迹和渲染边界构稀疏 affinity 图,然后用 Leiden 社群发现分割。Neu3D 上 0.746 mIoU,纯几何变体 0.902 mIoU 与 SAM 监督的 TRASE 持平,HyperNeRF 快 12.5 倍。",
+    "arxiv_id": "2606.19194",
+    "summary": "Flow matching 做机器人策略每步都要多次 denoise 慢。作者设计一个可逆神经网络 adapter 套在 flow-matching 上，把动作生成限制在可逆隐空间，单步去噪就能出高维灵巧动作。仿真和实机都验证过，VLA 实机推理延迟从 110ms 降到 61ms，性能不掉。",
     "highlights": {
-      "contribution": "提出 training-free、mask-free 的 4D Gaussian 内在分割方法。",
-      "innovation": "利用 Gaussian 自身多种属性构 affinity 图 + Leiden 社群分割,无需外部 mask 或学习特征场。",
-      "method": "从外观、朝向、尺度、变形轨迹、渲染边界提取相似度构稀疏图,Leiden 算法分割,无监督无训练。",
-      "results": "Neu3D 0.746 mIoU、几何变体 0.902 比肩 SAM 监督;HyperNeRF 0.575;比 mask 流水线快 12.5 倍。"
+      "contribution": "把可逆神经网络作为 flow-matching 策略的 one-step 蒸馏 adapter，给 VLA 提供低延迟动作头。",
+      "innovation": "不是常见的 distillation 或 consistency model，而是显式构造可逆隐空间约束动作轨迹，单步即可恢复 flow 全轨迹的精度。",
+      "method": "输入多模态观测（视觉+语言+本体感知），用 invertible NN 把动作隐空间和噪声空间双射对齐，flow-matching 训练，推理一步出动作。",
+      "results": "多个仿真 benchmark 接近或超过 SOTA；实机 VLA 推理延迟 110ms→61ms，任务成功率保持。"
     },
     "scores": {
-      "relevance": 6.4,
-      "recency": 10,
+      "relevance": 8.6,
+      "recency": 9,
+      "popularity": 6.8,
+      "quality": 7.6,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.19297",
+    "summary": "VLA 是从强 VLM 微调来的，但 fine-tune 后那些 commonsense 还在不在没人系统测过。作者提出 Act2Answer：把 VLM 知识题改成桌面物体放置任务，agent 通过把物体放到对应选项答题，于是知识能力和低层控制就解耦了。在 7 个 VLA + 9 个 VLM 上扫，发现 VLA 简单概念还行，复杂语义掉得多，VQA 共训有帮助，答案信号在中层最强。",
+    "highlights": {
+      "contribution": "首个用「动作答题」方式量化 VLA 残留世界知识的 benchmark 和协议。",
+      "innovation": "Act2Answer 用单步物体放置把 QA 转成动作任务，避免知识缺失和控制差混淆；配合 layerwise 探针定位知识层。",
+      "method": "构建一系列桌面任务，每个 commonsense 问题对应若干候选物体，agent 选一个去放置；用 intent probing 从 VLM backbone 到 action head 逐层探答案相关性。",
+      "results": "在 7 VLA + 9 VLM 上分类排名，VLA 高语义类别相比源 VLM 显著下降；VQA 共训留住更多知识；答案信号峰值在 VLA 中层、上层衰减。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 9,
+      "popularity": 7.5,
+      "quality": 8.2,
+      "recommendation": 8.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.19161",
+    "summary": "灵巧手触觉表征苦于传感器和机体不统一。作者干脆主推一条路线：egocentric vision 配全手触觉，搞了 HT-Bench——226 个任务、1000 万 RGB 帧、780 万触觉帧。再提一个 VQ 视触编码器 HandTouch，三阶段（空间、跨模态、时序）训练，在四个评测任务上全面领先。",
+    "highlights": {
+      "contribution": "首个面向灵巧全手触觉的大规模多任务 benchmark（HT-Bench），以及视触联合编码器 HandTouch。",
+      "innovation": "用 egocentric 视觉 + 全手触觉作为统一接口，绕开传感器异构问题；细粒度检索/inpainting/视→触/多模态预测四类评测覆盖几何、对齐、泛化。",
+      "method": "10M RGB + 7.8M 触觉帧；HandTouch 用 VQ 编码触觉，按空间→跨模态→时序渐进训练，输出统一表征。",
+      "results": "细粒度触觉检索 Recall@5 74.65→85.23，masked inpainting RMSE 0.022→0.010，vision-to-tactile OOD cIoU 0.628→0.705。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 9,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.19333",
+    "summary": "想用大量日常人类视频喂灵巧手很久了，但单目 RGB 估手物交互和人到机器人映射一直卡壳。DO AS I DO 提出一个完整流水线：从 egocentric/exocentric in-the-wild 视频里恢复手物交互，再 retarget 成多指机器手可执行的动作序列。在有 GT 的数据集和网上视频上都比之前的 SOTA 更准，还给出了实操 playbook。",
+    "highlights": {
+      "contribution": "把日常 RGB 人类视频规模化转成灵巧手可执行动作的算法，并配套数据收集 playbook。",
+      "innovation": "统一处理 ego 和 exo 视角的手物交互重建 + retarget，强调可执行性而不只是姿态估计。",
+      "method": "输入单目 RGB 视频，重建手物交互（位姿+接触），再把人手轨迹 retarget 到多指灵巧手 URDF，输出实机可执行动作。",
+      "results": "在带 GT 的数据集和网采视频上手物交互估计和动作抽取均超过此前 SOTA（具体数字未在摘要给出）。"
+    },
+    "scores": {
+      "relevance": 8.2,
+      "recency": 9,
+      "popularity": 8.0,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.19451",
+    "summary": "想让机器人有可解释的 3D 场景表征。3D-DLP 把场景级 RGB-D / voxel 分解成一组 3D 隐式粒子，每个粒子带 3D 关键点位置、bbox 尺寸和外观，自监督重建训出来。粒子可以编辑生成新场景，下游 manipulation 也比无 3D 或 dense 3D 输入的 baseline 强。",
+    "highlights": {
+      "contribution": "把 2D 的 Deep Latent Particles 扩展到 3D 物体中心表征，并验证对机器人 manipulation 有帮助。",
+      "innovation": "粒子化的 3D 表征同时具备可解释性（位置/尺寸/外观解耦）、可控编辑和紧凑性，避免 dense voxel 的内存负担。",
+      "method": "输入 RGB-D 或 voxel，编码器输出一组带属性的 3D 粒子，解码器重建场景，端到端自监督；下游用粒子做策略输入。",
+      "results": "仿真和真实数据上表征可解释可编辑；下游 manipulation 超过无 3D 信息或 dense 3D 输入的 baseline（具体数值需看正文）。"
+    },
+    "scores": {
+      "relevance": 7.3,
+      "recency": 9,
       "popularity": 6.5,
+      "quality": 7.4,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.19408",
+    "summary": "Latent Action Model 是从无动作视频里学决策接口的关键，但固定 bottleneck 容量永远在「丢信息」和「难对齐」之间二选一。FlexLAM 用 nested dropout 训练可变长度的 latent action，让前缀就能描述粗结构、加 token 才补细节。同一模型在不同 token 预算下都打平或超过专门训练的固定容量 LAM，推理时还能随意调预算。",
+    "highlights": {
+      "contribution": "提出可变长度 latent action 范式，解决 LAM 固定 bottleneck 的容量-对齐困境。",
+      "innovation": "用 nested dropout 让 latent code 具备 prefix-valid 性质，单一模型同时覆盖多个 token 预算，无需新架构或新损失。",
+      "method": "在标准 LAM 训练流程上对 latent token 序列加 nested dropout，使任意前缀都是合法 latent action；下游可在任意 token 预算下推理。",
+      "results": "在 scarce label 监督和低回报单任务对齐压力测试下都匹配或超过固定容量 LAM；推理时可调 token 预算无需重训；Ego4D 上 transition 重建变好。"
+    },
+    "scores": {
+      "relevance": 8.4,
+      "recency": 9,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.19476",
+    "summary": "好奇心驱动探索需要算「学习进步」，传统做法每条轨迹都要 inner-loop 做梯度更新，贵到不能用。作者问：能不能用 sequence model 的 in-context learning 当 update-free 的世界模型？理论上证明在一般 MDP 里无偏估计学习进步是不可能的，但在 active learning / Bayesian 实验设计这类非时序场景里可以收敛。实验在连续和符号环境上佐证理论。",
+    "highlights": {
+      "contribution": "把 ICL 当 world model 来计算内在奖励的可行性给出了严格的正反结论。",
+      "innovation": "用预测误差 + counterfactual 上下文操控代替 inner-loop 梯度，避免训练中嵌套优化；并区分时序 vs 非时序场景的可行性。",
+      "method": "ICL sequence model 作为隐式 world model，定义 prediction error 与 counterfactual context 差异作为 intrinsic reward；理论证明 + 数值实验。",
+      "results": "理论：一般 MDP 不可无偏；非时序子类可有界并渐近收敛。实验：连续和符号环境上 ICL 驱动策略实现最优探索。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 9,
+      "popularity": 6.5,
+      "quality": 8.0,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.19531",
+    "summary": "World Action Model 通常靠视频生成桥接世界建模和控制，但视频生成又贵又有很多 action 无关细节，长程预测还会带坏动作。作者提出 ImageWAM：把预训练的图像编辑模型当 WAM 用，只学「当前帧→目标帧」的变化，推理时根本不解码图像，而是把编辑去噪的 KV cache 直接喂给 flow-matching 动作头。比 VLA baseline 和视频 WAM 强，FLOPs 降到 1/6、延迟 1/4。",
+    "highlights": {
+      "contribution": "用图像编辑取代视频生成作为 WAM 的视觉先验，给出更高效且效果更好的 WAM 框架。",
+      "innovation": "推理时不解码目标帧，而是用 image editing 去噪过程中的 KV cache 作紧凑「世界-动作」上下文，让动作头直接条件其上。",
+      "method": "复用预训练 image editing diffusion，输入当前帧+任务指令；用其 denoising KV cache 条件一个 flow-matching action expert 预测动作，无需额外 policy 预训练。",
+      "results": "仿真和实机均超过 VLA baseline 和视频 WAM；FLOPs 降至视频 WAM 的 1/6，延迟降到 1/4；注意力分析显示编辑 cache 聚焦任务相关变化区域。"
+    },
+    "scores": {
+      "relevance": 9.2,
+      "recency": 9,
+      "popularity": 8.0,
+      "quality": 8.5,
+      "recommendation": 8.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.19494",
+    "summary": "多 LLM agent 多轮辩论越来越火，但为什么 work 没人说清。作者把它当闭环动力系统建模：每个 agent 除了被邻居影响（DeGroot/Friedkin-Johnsen），还有个隐藏「锚点」一直在拉自己。这个锚点能从辩论轨迹反解出来，还解释了一个经典共识规则不允许的现象——agent 对正确答案的置信能超出所有初始 belief 的凸包。在三个开源模型上观察到这是连续谱而非全有全无。",
+    "highlights": {
+      "contribution": "给多 agent LLM 辩论引入「隐藏锚点」动力学模型，定量解释超凸包置信增长这种非经典现象。",
+      "innovation": "把内部隐藏 belief 显式建为可识别的 anchor，能从外部观测反解并预测 held-out runs，提供一种诊断模型是否真受锚点驱动的方法。",
+      "method": "闭环动力系统建模 agent opinion = 邻居影响 + 自身 anchor 拉力；从辩论 trajectory 反解 anchor；用 held-out 预测做泛化测试。",
+      "results": "三个开源模型族都显示 anchor 影响强度相近但位置不同；只有当 anchor 远离初始 belief 时才出现超凸包共识，需完整闭环模型才能描述。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9,
+      "popularity": 6.8,
       "quality": 7.5,
       "recommendation": 6.8
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.18734",
-    "summary": "无线网络做信道建模时只有稀疏的测量点,大部分位置都没有。PC-TGS 首次结合 LiDAR 点云与稀疏 RSRP 把角度功率谱 APS 外推到没测过的网格:把散射体表示成各向异性 3D Gaussian,切平面投影到角度域,做深度感知 EM splatting 聚合,并给出闭式 Gaussian 加权平均和误差界。在 5M 点城市数据集上效果优于 SOTA、推理更快。",
+    "arxiv_id": "2606.19316",
+    "summary": "现有神经隐式渲染编辑能力很弱，要么只能刚体变换要么只能某类物体。NeuMesh++ 把 NeRF 解耦到 mesh 顶点上的几何、纹理、语义码，于是支持 mesh 引导的几何编辑、纹理交换/填充/绘画和语义引导编辑。配套提了局部空间参数化、可学顶点修正色、空间感知优化和语义辅助选区四个技术。在真实和合成数据上质量和编辑能力双优。",
     "highlights": {
-      "contribution": "首个用点云辅助 Gaussian Splatting 把 APS 外推到未测量户外网格的框架。",
-      "innovation": "把环境散射体建为各向异性 3D Gaussian,切面投影 + 深度感知 EM splatting + 闭式 GWA 误差界。",
-      "method": "用点云初始化各向异性 Gaussian 并 relaxed-mean 重参,切平面映射到局部角度域,通过深度感知 EM splatting 聚合得到 APS。",
-      "results": "5M 点城市数据集 6310 RSRP 样本上 APS/RSRP 优于 SOTA,推理更快。"
-    },
-    "scores": {
-      "relevance": 3.5,
-      "recency": 10,
-      "popularity": 5.2,
-      "quality": 7.2,
-      "recommendation": 5.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.18826",
-    "summary": "NeRF 数据集采集时也得权衡景深和进光量。作者把编码光阑放进相机光瞳保留离焦下的空间频率,把这种相机模型整合到 NeRF,直接输入编码图像就能合成更大景深的新视角。仿真和实验都比常规光阑相机好。",
-    "highlights": {
-      "contribution": "提出 EDoF-NeRF,通过编码光阑相机扩展 NeRF 的有效景深。",
-      "innovation": "把编码光阑成像模型显式嵌入 NeRF 相机模型。",
-      "method": "相机加编码光阑捕获编码图像,新 NeRF 模型对这类编码输入建模,训练后渲染扩景深新视角。",
-      "results": "仿真和真实实验上都优于常规光阑相机。"
-    },
-    "scores": {
-      "relevance": 3.2,
-      "recency": 10,
-      "popularity": 4.5,
-      "quality": 6.2,
-      "recommendation": 4.6
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.19019",
-    "summary": "稀疏视角下重建物体,生成模型容易脑补忽视观测,3DGS 又只能优化可见面。FlowObject 把它做成训练自由的 guided inverse problem:在 Flow-Matching 的 ODE 轨迹上用 dual-space 引导,用生成先验补未观测区域,同时强制和真实观察一致,再用 3DGS 精修。在合成和真实数据上几何完整性和外观一致性都超过 SOTA。",
-    "highlights": {
-      "contribution": "把稀疏视角 3D 重建统一成 Flow-Matching 的训练自由 guided inverse problem。",
-      "innovation": "dual-space 引导 ODE 轨迹,同时利用生成先验补未见区域并严格匹配观测,再加 3DGS 精修。",
-      "method": "无需训练,在预训练 FM 模型推理时用双空间引导 ODE,得到几何 + 外观初始化,后接 3DGS refinement。",
-      "results": "在合成与真实数据上几何完整性和视依赖外观保真度均超 SOTA,严重遮挡场景下尤为明显。"
-    },
-    "scores": {
-      "relevance": 6.0,
-      "recency": 10,
-      "popularity": 6.6,
-      "quality": 7.6,
-      "recommendation": 6.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.18619",
-    "summary": "现在让 LLM agent 做漏洞检测能挖出很多藏多年的漏,但 agent 凭啥判定一段代码安全往往是个黑箱。Code-Augur 让 agent 明确把它判定安全所依赖的不变量写成安全规约和源码断言,再用引导模糊测试去试图证伪;触发了就要么挖出真漏洞要么修规约。比 SOTA agent 找出更多漏洞,在开源项目中新发现 22 个漏洞。",
-    "highlights": {
-      "contribution": "提出 specification-first 的 agentic 漏洞检测范式,使 agent 推理过程可验证。",
-      "innovation": "把 agent 的隐式安全假设以源码断言形式具体化,运行时用 fuzzer 持续证伪。",
-      "method": "Agent 分析组件并把判定安全的局部不变量写成源码断言,导引 fuzzer 攻击这些断言,触发后要么报漏洞要么细化规约,循环精炼。",
-      "results": "在真实项目上比 SOTA agent 找到更多漏洞,新挖出 22 个开源项目漏洞,基于通用 LLM 即可比肩 Claude Mythos。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 10,
-      "popularity": 7.5,
-      "quality": 8.0,
-      "recommendation": 7.4
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.18803",
-    "summary": "滴滴这种 ride-hailing 派单系统想把 LLM 用作行为日志的语义特征提取器,但日志超长、长尾用户少、profile 不一定对预测有用。ProfiLLM 一边给 LLM agent 27 个分析工具去挖全局知识和聚类规则,一边对每个 cluster 生成多份候选 profile 用下游效用代理打分并做 DPO 微调。上线后预测 AUC +6.14%,GMV 模拟 +4.35%,A/B 14 天线上 GMV +0.47%、完成率 +0.33%、放弃率 -0.82%。",
-    "highlights": {
-      "contribution": "把 utility-aligned 的 agentic 用户画像真正落进工业 ride-hailing 派单系统。",
-      "innovation": "工具增强的全局知识挖掘 + 候选 profile 用下游效用代理筛选构 DPO 偏好对。",
-      "method": "Module 1 让 LLM agent 用 27 个工具从全平台日志挖全局知识、聚类规则与区域供需先验;Module 2 在每个 cluster 生成多份 profile,用轻量下游效用代理打分,迭代 + DPO 微调。",
-      "results": "线下 AUC +6.14%,GMV 仿真 +4.35%;14 天线上 A/B GMV +0.47%、完成率 +0.33%、放弃率 -0.82%。"
-    },
-    "scores": {
-      "relevance": 6.0,
-      "recency": 10,
-      "popularity": 7.5,
-      "quality": 7.8,
-      "recommendation": 7.0
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.18831",
-    "summary": "长上下文推理是 agent 的必备能力,现有工作主要折腾奖励工程,这篇反过来从数据角度看。作者围绕检索、多证据合成、推理三类任务整 8 个数据集共 14K 样本,搭配最简 outcome-based GRPO,就让 Qwen3-4B/8B/30B-A3B 在 7 个长上下文基准平均 +7.2/+3.2/+6.4,迁移到 agentic 任务上 GAIA +4.8、BrowseComp +7.0。",
-    "highlights": {
-      "contribution": "证明数据配方本身就足以显著抬高长上下文 RL 训练效果,补齐过去重奖励轻数据的空白。",
-      "innovation": "针对检索、多证据合成、推理三类技能定制数据集组合,搭配最简 GRPO 即可。",
-      "method": "构 / 整理 8 个数据集共 14K 样本,用 outcome-based GRPO 训 Qwen3-4B/8B/30B-A3B。",
-      "results": "7 个长上下文 benchmark 平均 +7.2/+3.2/+6.4;agentic 上 GAIA +4.8、BrowseComp +7.0。"
-    },
-    "scores": {
-      "relevance": 6.8,
-      "recency": 10,
-      "popularity": 7.8,
-      "quality": 7.6,
-      "recommendation": 7.4
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.18902",
-    "summary": "Prompt 优化本质上是黑盒搜索,作者搭了一个统一框架 SPO,比较错误引导随机搜索、遗传算法和 SAGE 多 agent 流水线三种策略。结论是没有谁通吃,依赖任务结构;但在心理健康聊天机器人上 SAGE 把 8 轮单独噪声很大的 A/B 测试累成统计显著的次日留存提升。",
-    "highlights": {
-      "contribution": "提出 SPO 框架统一比较三种黑盒 prompt 优化策略,并把 SAGE 部署到真实产品做长期累积 A/B。",
-      "innovation": "多 agent 诊断 + 代码执行结合定性反馈与定量验证,做开放式对话任务的持续优化。",
-      "method": "SPO 框架下实现三种策略:错误引导随机搜索、遗传算法、SAGE 多 agent;后者通过诊断代码执行迭代生成 prompt。",
-      "results": "三 benchmark 上无主导策略;产品上 8 轮 A/B 累积出统计显著的次日留存提升。"
+      "contribution": "提出 mesh-顶点解耦表征的 NeRF 编辑框架，把多种编辑功能统一到一个表示里。",
+      "innovation": "几何/纹理/语义三码绑定 mesh 顶点，让编辑变得局部、可解释；配合局部空间参数化提升训练稳定性。",
+      "method": "在 mesh 顶点上存解耦码，渲染时按顶点插值；引入局部空间参数化、可学修正色、空间感知优化、语义辅助选区四项技术联合训练。",
+      "results": "在真实与合成数据集上渲染质量与编辑保真度均优于此前神经编辑方法（具体指标见正文/项目页）。"
     },
     "scores": {
       "relevance": 5.5,
-      "recency": 10,
-      "popularity": 6.0,
-      "quality": 6.8,
-      "recommendation": 6.2
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.18947",
-    "summary": "生产环境里 LLM agent 越来越依赖实时搜索,但原生 search grounding 把检索策略、模型提供方、证据注入、成本延迟和生成行为捆死。DSG 把 grounding 拆出去做成 MCP 兼容网关,提供路由、源感知上下文渲染、回退、检索深度控制和精确 + 语义缓存。在 SimpleQA 上接近原生准确率却省 91% 搜索成本,缓存命中 99.4%、延迟降 68%;电商查询线上比原生还略好且省 98% 搜索成本。",
-    "highlights": {
-      "contribution": "提出 DSG 把 LLM 实时搜索 grounding 从模型边界中解耦为可控接口,并在生产 agent 工作负载验证。",
-      "innovation": "MCP 兼容网关暴露路由、源感知上下文、回退、深度、双层缓存等控制项。",
-      "method": "把检索从生成模型中拆出,放进 MCP 网关,做 provider routing、source-aware 上下文渲染、配置式 fallback、精确 + 语义缓存。",
-      "results": "SimpleQA 86.1% vs 原生 87.7% 但成本 -91%,缓存命中 99.4%、延迟 -68%;电商 QIU 线上略胜原生且省 98%。"
-    },
-    "scores": {
-      "relevance": 6.6,
-      "recency": 10,
-      "popularity": 7.4,
-      "quality": 7.6,
-      "recommendation": 7.2
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.19135",
-    "summary": "LLM agent 通讯协议百花齐放但碎片化严重,这篇用迭代方法搞了个技术分类,在 9 个有实际采用的开源协议上跑了五轮 empirical/conceptual 迭代,沉淀 counterparty、payload、interaction state、discovery 和 schema flexibility 五个维度。文章给出协议选型指引,并指出隐私和策略执行等研究缺口。",
-    "highlights": {
-      "contribution": "建立 LLM agent 通讯协议的技术分类,统一比较与选型框架。",
-      "innovation": "用 design science 方法做协议分类,跨 9 个开源协议归纳出 5 个技术维度。",
-      "method": "迭代分类法五轮(3 经验到概念 + 2 概念到经验),对九个开源协议归纳维度并定位收敛与分歧。",
-      "results": "形成 5 维分类法,发现 agent-to-agent 协议普遍 hybrid payload + 会话状态,去中心化发现仍稀缺。"
-    },
-    "scores": {
-      "relevance": 5.2,
-      "recency": 10,
+      "recency": 9,
       "popularity": 6.5,
-      "quality": 6.4,
-      "recommendation": 5.8
+      "quality": 7.5,
+      "recommendation": 6.5
     },
     "affiliations": []
   }

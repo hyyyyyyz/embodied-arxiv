@@ -382,78 +382,6 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2605.27489",
-    "summary": "Multi-agent LLM 把任务拆给一堆专家 agent，但一个 agent 被局部扰动可能被整个系统放大成灾。HARP 比对干净执行和扰动执行的 trace，定义局部 harm、全局 harm 以及「harm amplification」比值。在 7 agent 金融系统上测了 5 种防御，发现专家被攻陷扩散最严重，共享上下文被污染攻击成功率最高。",
-    "highlights": {
-      "contribution": "提出 HARP，从 trace 角度衡量多 agent 系统的「局部扰动→全局 harm」放大效应，补足只看 attack success rate 的不足。",
-      "innovation": "定义 harm amplification = H_global/H_local 的可计算指标；把 trace 一致性（IntegrityGuard）当成新型防御对比 prompt-only/pre-tool/step-level guards。",
-      "method": "成对 clean vs perturbed 执行 trace 对齐，记录 tool call/memory/guard/oracle/latency 等；7 agent 金融决策系统作为实验台；配置可调 attack harness 覆盖单点、串通、上下文污染、时序持久攻击。",
-      "results": "单专家攻陷放大最强，共享上下文污染攻击成功率最高，时序持久攻击破坏最大；IntegrityGuard 攻击成功率和全局 harm 最低，但带来 utility/cost trade-off。"
-    },
-    "scores": {
-      "relevance": 5.5,
-      "recency": 8,
-      "popularity": 5,
-      "quality": 7.0,
-      "recommendation": 6.5
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.27240",
-    "summary": "现在 memory-augmented agent 都把 memory 当事实检索工具，没人专门测它对情感支持的作用。作者基于 Maslow 需求层级搭了 ENPMR-Bench，1800+ 对话评 agent 能不能从用户碎片信息里推出潜在情感需求并主动调取合适的 memory。结果不管 embedding 还是 LLM-driven 检索，empathy 得分都明显落后 golden memory。",
-    "highlights": {
-      "contribution": "首次为情感支持场景提出 proactive memory retrieval 评测 ENPMR-Bench，把 memory 从事实工具升级为情感体验的塑造者。",
-      "innovation": "基于 Maslow 需求层级显式建模情感需求到 memory 类型的映射；强调 proactive（主动从需求推回 memory）而非被动查询。",
-      "method": "1800+ memory-augmented 对话；标注需求-memory 类型映射；对 embedding-based 和 LLM-driven 检索范式都做评测，还测了 CoT prompting。",
-      "results": "两类检索范式 empathy 得分都明显落后 golden memory；CoT 部分提升需求-memory 对齐但仍有显著差距。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 8,
-      "popularity": 5,
-      "quality": 6.5,
-      "recommendation": 5.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.28882",
-    "summary": "评 LLM 对话「像不像人」这事，标准本来就漂移、评委还互相不同意。GrowLoop 从少量人工种子出发，让 LLM agent 通过启发式学习不断抽取和精炼 rubric，认同的地方要求人机一致、分歧的地方只要求合理。rubric 和 case 共同演化，模型涨能力时基准也跟着升级。",
-    "highlights": {
-      "contribution": "提出 GrowLoop，让对话人类相似度评测能够随模型能力持续自演化，而不是静态 benchmark。",
-      "innovation": "把对人类一致的判据和合理性判据分开处理；Rubric-Case 共演化机制；用少量人工种子启动，靠 LLM agent 启发式学习扩展。",
-      "method": "人工 seed 注入→LLM agent 启发式提取/精炼 rubric→对人类高一致案例要求 AI 与人对齐、低一致案例只要求合理→通过新种子注入扩展场景；rubric 和 case 联合更新。",
-      "results": "生成的 rubric 与人类判断对齐显著优于现有方法；能跨能力 tier 区分模型，能泛化到新场景并随模型进步自动适应。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 8,
-      "popularity": 5,
-      "quality": 6.5,
-      "recommendation": 5.8
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2605.27276",
-    "summary": "现在两条 self-improving 路线各自为政：一条只改 harness（脚手架），一条只更新模型权重。SIA 让一个 Feedback-Agent 同时更新两者。在中文法律分类、GPU kernel 优化、单细胞 RNA 去噪三个差异很大的领域上测，W+H 都打过只改 scaffold 的方案，比如 LawBench 比 SOTA 高 25.1%。",
-    "highlights": {
-      "contribution": "把 harness 更新和 weight 更新两条 self-improvement 路线统一成 SIA 单一循环，让 Feedback-Agent 同时优化 agent 的脚手架和权重。",
-      "innovation": "首次系统对比「只改脚手架」vs「只改权重」vs「两者都改」，并展示两者都改在三个差异极大的领域稳赢。",
-      "method": "Feedback-Agent 既改 task agent 的 tools/prompts/retry logic/search procedure，又通过 RL pipeline 更新模型权重；同步迭代。",
-      "results": "LawBench 比 prior SOTA +25.1%；GPU kernel 比 prior SOTA 快 12.4%（1017 vs 1161 μs）；scRNA 去噪比 prior SOTA +20.4%。"
-    },
-    "scores": {
-      "relevance": 6.5,
-      "recency": 8,
-      "popularity": 6.5,
-      "quality": 7.5,
-      "recommendation": 7.5
-    },
-    "affiliations": []
-  },
-  {
     "arxiv_id": "2606.02614",
     "summary": "巴西赤道边缘油气开采 2026 年要在 Foz do Amazonas 盆地动工，但收益跟最穷的马拉尼昂州深度绑定，到底谁吃亏谁得利成了政策难题。作者把联邦、州、运营商、ANP、IBAMA、亚马逊社区六方建成一个 MARL 仿真，用 BRO-MARL 在 CTDE 框架下训练 6 万轮、跑了 6 种制度场景。结果发现基线制度下福利改善只有 1.68 很鸡肋，而换成 MA-Prospero 制度配置后福利涨 17.5%、社区收益涨 21.3%、环境负债从 0.076 降到 0.048，说明关键不在产量而在制度。",
     "highlights": {
@@ -468,6 +396,78 @@
       "popularity": 4.0,
       "quality": 5.5,
       "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.20627",
+    "summary": "基于世界模型做长程规划时，视觉目标精度高但远距离没方向感，语言灵活却跨模态对齐又糙。LAGO 把语言指令拆成一串潜空间里的中间子目标，再和动作条件的潜空间 rollout 一起预测，规划时用 soft-min 轨迹代价在线更新子目标。这样一来在多种环境和不同规划步长下都没有出现以往方法那种性能断崖式下跌。",
+    "highlights": {
+      "contribution": "提出 LAGO 框架，把语言指令显式分解成潜空间子目标序列，统一进世界模型的规划循环里。",
+      "innovation": "不再追求一个全局目标，而是在线滚动地预测局部可达的潜空间子目标，并用 soft-min 轨迹代价做规划。",
+      "method": "输入语言指令与观测，编码到统一潜空间；一个模块预测中间子目标序列，另一个做动作条件的潜空间 rollout；规划时用 soft-min 轨迹代价聚合每一步对子目标的偏离，子目标随状态在线刷新。",
+      "results": "在多种环境、不同规划步长下都避免了基线方法在长程任务上的急剧退化，纯靠语言实现稳健精确的长程规划。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.8,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.20621",
+    "summary": "多智能体辩论里固定拓扑会让某些位置长期占便宜，不靠谱的 agent 也容易被放大。PEAR 在推理阶段动态换 agent 与角色的对应关系，并稀疏化通信拓扑，让没人能一直占着「话语权」位置。理论上证明它是一个等变稀疏路由器，实验在 4 个推理 benchmark、6 个 LLM 后端上都把最强辩论基线刷上去了。",
+    "highlights": {
+      "contribution": "提出 PEAR——一个推理时即插即用的置换等变自适应路由多智能体辩论协议。",
+      "innovation": "把多 agent 辩论形式化成等变稀疏路由器，按轮次根据 agent 状态重排角色和稀疏拓扑，消除位置偏置。",
+      "method": "无需训练，仅在推理时按辩论轮次评估各 agent 状态，重新分配角色到 agent 的映射，并稀疏化通信图；理论上保证 agent 重命名下精度不变同时降低路由复杂度。",
+      "results": "在 4 个推理 benchmark 和 6 种 LLM 后端上，平均准确率显著超过最强多 agent 辩论基线，代码已开源。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 7,
+      "popularity": 6.8,
+      "quality": 7.8,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.20622",
+    "summary": "作者从 Bitter Lesson 出发，主张把人为先验从 agent 中剥掉，让智能在足够复杂的世界里自然涌现，于是用手机 GUI 当代理「大世界」。他们开源了 Darwin Mobile Agent 基础设施，用异步 agent-环境循环和并行云手机解决真实交互的数据瓶颈，并提出在任务课程、结果验证、记忆管理三个支柱上去人先验的路线图。当前已验证该基础设施可以稳定支撑 GUI 域里的策略优化第一阶段。",
+    "highlights": {
+      "contribution": "提出 Darwin Mobile Agent 开源基础设施与自进化 GUI agent 路线图，把手机 GUI 当作通往通用智能的「大世界」。",
+      "innovation": "用异步 agent-环境循环 + 并行云手机解决移动 GUI 真实交互的数据收集瓶颈；并系统化提出从任务课程、结果验证、记忆三方面去人先验。",
+      "method": "搭建跨多台云手机的并行异步 RL 框架，agent 与真实 Android 环境交互产数据；在此之上启动策略优化作为路线图第一阶段，验证基础设施稳定性与可扩展性。",
+      "results": "验证基础设施可稳定支撑 GUI 域内的策略优化，奠定后续自进化 GUI agent 研究的实验底座（路线图论文，重在系统而非刷分）。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 7,
+      "popularity": 7.2,
+      "quality": 7.4,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.20625",
+    "summary": "用 LLM agent 做量化因子挖掘搜索空间巨大，反馈又稀疏带噪，简单记忆历史成功因子还容易过拟合。AlphaMemo 不存最终因子或完整轨迹，而是用 AST 差分提取「编辑动机」记录什么改动在什么父因子下管用或失败，再用置信门控的残差记忆和非对称否决机制屏蔽高置信失败模式。在 CSI 500 和 S&P 500 上 OOS 表现和固定预算下的发现效率都更好。",
+    "highlights": {
+      "contribution": "提出 AlphaMemo：面向 alpha 因子挖掘的自进化 LLM agent，引入结构化搜索过程记忆。",
+      "innovation": "记忆单元是 AST 差分提取的「编辑动机」而非最终因子；通过置信门控残差记忆 + 非对称否决，把可复用经验和该躲的坑分开管理。",
+      "method": "LLM agent 生成可执行因子，对父子因子做 AST 差分提取编辑 motif；用搜索台账作先验，再叠加置信门控的残差记忆；对高置信失败 motif 施加非对称否决，整体形成自进化闭环。",
+      "results": "在 CSI 500 与 S&P 500 上 OOS 表现和固定预算下的因子发现效率均提升；消融验证了残差学习、置信门控、AST-diff motif、否决记忆四部分各自有效，代码已开源。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 7,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.0
     },
     "affiliations": []
   }

@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.23085",
+    "summary": "针对长程机器人操作中失败检测难的问题，作者提出 Foresight：用动作条件世界模型的潜在表征来在线监测轨迹是否要失败。只用任务级最终成功/失败标签训练，再配 functional conformal prediction 自适应校准阈值。在 LIBERO-Long、ManiSkill-Long、BEHAVIOR-1K 仿真和 ReactorX-200/Franka 真机上验证，世界模型潜在表征可作为可扩展的失败监测信号。",
+    "highlights": {
+      "contribution": "提出基于动作条件世界模型潜在空间的长程操作失败检测统一框架 Foresight。",
+      "innovation": "用世界模型的预测嵌入做策略无关的失败信号，仅靠任务级稀疏标签训练，并用 FCP 自适应阈值。",
+      "method": "输入是操作轨迹的视觉/动作序列；模型为预训练动作条件世界模型 + 失败判别头；用 SOTA VLA 策略生成轨迹，仅用最终成功/失败做监督，FCP 校准检测阈值。",
+      "results": "在 LIBERO-Long、ManiSkill-Long、BEHAVIOR-1K 三个仿真基准与三种 VLA 策略上优于 SOTA 失败检测，并在 ReactorX-200 三任务与 Franka 一任务的真机上验证。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23420",
+    "summary": "现有 flow matching 策略都用一个固定各向同性高斯做起点，跟机器人动作空间高度异质、碎片化的真实结构不匹配。作者提出 LAFM：用 latent action model 把当前观测映射到离散运动原语，再从一个自适应的先验库里挑专门的初始分布做去噪起点。这样向量场更解耦、轨迹更短，真机任务成功率 +23.4%，LIBERO-90 +10.4%，并用更小架构超过大规模预训练 VLA。",
+    "highlights": {
+      "contribution": "提出 Latent Action Guided Flow Matching (LAFM)，把固定高斯起点换成观测自适应的多模先验库。",
+      "innovation": "用 latent action model 学习离散运动原语，每个原语对应一个专用基分布，去噪轨迹更短更解耦。",
+      "method": "输入观测；latent action model 把观测映射到运动原语索引，从学到的先验库选起点，flow matching 解码动作；行为克隆监督。",
+      "results": "真机操作任务成功率 +23.4%，LIBERO-90 +10.4%，且用更小架构超过大规模预训练 VLA 模型。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23623",
+    "summary": "Discrete Diffusion VLA (dVLA) 把视觉/语言/动作放进统一离散 token 空间做掩码生成，但目前只能 SFT，没法做 RL。作者发现 dVLA 最终动作的边缘概率不可解，于是 dVLA-RL 把目标换成整条去噪路径的联合概率，用 MDP 建模去噪过程并按 step 累积。同时引入按任务难度自适应的去噪 step 调度。LIBERO 上 99.7%，RoboTwin 2.0 比 SFT +30.6%。",
+    "highlights": {
+      "contribution": "首次给离散扩散 VLA 设计可工作的 RL 算法 dVLA-RL，绕开边缘动作概率不可解的难题。",
+      "innovation": "把去噪路径建模成 MDP，目标从边缘动作概率改为路径联合概率；统一 step 调度按任务复杂度变 denoising 步数。",
+      "method": "输入图像+语言；离散扩散 VLA 生成动作 token；RL 目标按 step-wise transition 乘积计算路径概率，多任务联合训练。",
+      "results": "LIBERO 成功率 99.7%，RoboTwin 2.0 比 SFT 基线 +30.6%，与强 World-Action 基线持平。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 10,
+      "popularity": 8.5,
+      "quality": 8.5,
+      "recommendation": 8.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23686",
+    "summary": "VLA 在安全约束下的表现一直没人系统测。作者搭了 LIBERO-Safety：参数化生成大量安全关键场景，再用 keypose 驱动的数据生成 pipeline 替代远程操作，产出 19664 条严格无碰撞示范。系统评测了 8 个 VLA 和 2 个具身基础模型，发现高多样性训练能让轨迹更安全，但成功率仍被次优轨迹合成和语义错配卡住。",
+    "highlights": {
+      "contribution": "首个 VLA 物理+语义安全综合 benchmark LIBERO-Safety，覆盖 19664 条无碰撞示范。",
+      "innovation": "参数化生成安全关键场景 + keypose 驱动数据 pipeline，跳过昂贵的人工遥操采集。",
+      "method": "参数化场景生成器 + keypose-driven 数据 pipeline；域随机化增强；对 8 个 VLA 和 2 个具身基础模型做跨范式评测。",
+      "results": "建立 19664 示范的数据集，揭示「泛化与安全张力」：高多样性训练让轨迹更安全但成功率受次优轨迹合成与语义错配制约。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 7.8,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23147",
+    "summary": "Assistron 把 VLA 当作辅助操作的共享自治后端，用户说话发指令让 VLA 自动跑长距离 reach，仅在接触丰富、VLA 容易失败的关键时刻请用户介入。介入信号通过 flow matching guidance 调整动作生成，不用 fine-tune VLA、保护其先验。在多任务日常场景恢复 benchmark 上既显著提升成功率，又降低用户认知和体力负担。",
+    "highlights": {
+      "contribution": "提出无需微调 VLA 的共享自治框架 Assistron，仅在关键失败点让用户介入。",
+      "innovation": "phase-aware interaction detection 自动检测接触关键阶段，用 flow matching guidance 把用户介入注入动作生成。",
+      "method": "输入语言指令 + 观测；off-the-shelf VLA 自主执行宏动作，相位感知模块检测接触；介入时人类反馈通过 flow matching guidance 调整生成，不更新 VLA 权重。",
+      "results": "在多任务日常场景恢复 benchmark 上比纯自主基线显著提升成功率，比传统遥操显著降低用户认知和体力负担，代码开源。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23293",
+    "summary": "Flow6D 解决 category-level 6D 位姿估计在高维连续空间里搜索慢、易陷局部最优的问题。它先把旋转和平移参数离散分箱，用一个离散 flow matching 模型把潜空间锁到真实位姿附近，再用连续 flow matching 在局部回归残差。框架天然支持铰链物体，70 FPS 实时推理，合成和真实数据均超 SOTA。",
+    "highlights": {
+      "contribution": "首个离散到连续两阶段 flow matching 的 category-level 6D 位姿估计框架 Flow6D，70 FPS 实时。",
+      "innovation": "离散分箱 + 离散 flow matching 锁定潜空间区域，缩小搜索空间，再用连续 flow matching 回归残差。",
+      "method": "输入 RGB；先离散 flow matching 在分箱潜空间定位粗位姿，再从该区域采样、连续 flow matching 预测残差；对铰链物体直接扩展。",
+      "results": "在合成与真实数据集上超越 SOTA，推理 70 FPS 实时，铰链物体亦优于现有方法。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23371",
+    "summary": "模仿学习里大量轨迹其实是「过渡运动」，跟任务成功没直接关系。作者按物理观察把动作分成过渡、精细、敏捷三类，后两者称为「轨迹显著性」。TSD 用空间熵和向心加速度这两个物理量免训练地标出显著段，再据此压缩或扩展数据集。仿真和真机实验里，TSD 压缩后的数据用 25% 更少就达到原性能甚至更好。",
+    "highlights": {
+      "contribution": "提出免训练即插即用的轨迹显著性检测器 TSD，用于模仿学习数据集压缩和扩展。",
+      "innovation": "用物理意义明确的空间熵和向心加速度判别精细/敏捷动作，不需要训练。",
+      "method": "扫描轨迹按窗口算空间熵衡量精细操作、算向心加速度衡量敏捷机动；据显著性筛/补示范，再做标准模仿学习。",
+      "results": "TSD 压缩后的数据集只需平均 25% 数据就能达到同等或更好的成功率，仿真和真机均验证。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23531",
+    "summary": "ERCP 胆管内镜操作视野窄、反光、贴壁多，自动化很难。BiliVLA 把胆道内镜导航当成指令条件下的视觉运动学习问题：给一帧画面和阶段化语言指令，模型联合预测目标类别、bbox 和 3DoF 离散电机指令。两阶段训练 SFT + GRPO 强化提升动作可靠性，三个 ERCP 子任务的真实假体实验平均动作精度 91.96%、成功率 84.85%。",
+    "highlights": {
+      "contribution": "首个面向胆道内镜自动导航的 VLA 框架 BiliVLA，把临床手术分解成阶段化指令条件控制。",
+      "innovation": "把目标分类、bbox 接地、离散电机指令统一预测；scene-aware 与 safety-aware 监督，SFT+GRPO 两阶段训练。",
+      "method": "输入内镜帧 + 阶段语言指令；VLA 联合输出类别/bbox/3DoF 离散动作；先 grounding-enhanced SFT 再 GRPO 强化优化动作可靠性。",
+      "results": "三个 ERCP 子任务真实假体上平均动作精度 91.96%、总体成功率 84.85%。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23574",
+    "summary": "VLA 和 World-Action Model 越来越多被当作黑盒服务部署，怎么证明权重所有权？作者提出 keyed latent-provenance verification：在生成时把高斯噪声种子换成同分布的「带钥匙种子」，外部看动作分布完全正常；验证时通过 MAP 优化反推种子并测试钥匙特征。在两套机器人两个模型上能可靠检测指纹，且对输出端去噪与权重编辑攻击都鲁棒。",
+    "highlights": {
+      "contribution": "首个面向 VLA 和 WAM 的策略指纹/水印方案 keyed latent-provenance verification。",
+      "innovation": "用同分布的「带钥匙噪声种子」注入指纹，统计上不可分辨；验证用 MAP 反推种子并打分。",
+      "method": "注入端在生成噪声前把种子换成 keyed seed；验证端用授权访问录制动作通道，通过梯度 MAP 优化恢复种子并判别钥匙；多 rollout 汇总打分。",
+      "results": "两个机器人套件、两个代表模型上指纹可靠检测，任务性能几乎无损，对输出去噪与权重编辑攻击均鲁棒。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23617",
+    "summary": "现在 VLA 一般是被动模仿学习：策略翻车了才补数据，浪费示范者精力。作者提出主动持续学习范式 RECALL：用不确定性引导采集补救示范，比被动方式 fine-tune 更高效。但只用主动数据会灾难性遗忘，作者评估 replay 数据混合与 EWC 等持续学习手段，分析了「适应新数据 vs 保留旧行为」的折中。",
+    "highlights": {
+      "contribution": "提出 VLA 的主动持续学习范式 RECALL，并系统评估不确定性引导补救数据对自回归 VLA 的影响。",
+      "innovation": "把数据采集从被动失败触发改成不确定性主动触发，加上 replay/EWC 等持续学习手段做对照分析。",
+      "method": "在线根据 VLA 输出不确定性挑选状态做补救示范；对自回归 VLA 做混合数据 fine-tune；评估 replay 混合与弹性权重巩固等持续学习算法。",
+      "results": "实证显示主动补救数据 fine-tune 效率优于被动，但纯主动数据会灾难性遗忘；揭示可塑性与保留旧能力的折中。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23641",
+    "summary": "VLA 在有限数据 fine-tune 后经常变得「听不懂指令」，靠视觉走捷径忽略语言。作者假设有限数据导致 loss landscape 锐利、最小点曲率高，提出在 VLA fine-tune 阶段加 sharpness-aware minimization 学到平坦景观。同样数据、不改架构，多个仿真和真机基准上指令跟随能力提升超 60%。",
+    "highlights": {
+      "contribution": "把 SAM 用到 VLA fine-tune 上，缓解「指令失明」，指令跟随能力大幅提升。",
+      "innovation": "从优化几何角度解释 VLA 微调后忽略语言的现象，并用平坦性最小化直接缓解，不动数据/架构。",
+      "method": "输入图像和语言；标准 VLA 架构；在监督 fine-tune 时用 sharpness-aware minimization 替代普通梯度更新，鼓励学到平坦权重空间。",
+      "results": "在多个仿真和真机基准上指令跟随能力提升超 60%，不需额外数据/架构改动，与现有 guidance 技术互补。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.2,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23444",
+    "summary": "无人机敏捷控制需要长程预测的动力学模型，但自回归神经模型误差累积严重。作者把 JEPA 风格的潜空间预测引入四旋翼实时控制，提出 SkyJEPA：潜动力学模型 + 物理启发 prober 把冻结的潜变量映射成可解释状态，再配采样型 MPC 在嵌入式硬件上跑实时控制。零样本 sim-to-real，户外开/闭环实验都跨工况稳定泛化。",
+    "highlights": {
+      "contribution": "首次把 JEPA 风格世界模型用于四旋翼高频实时控制，并实现零样本 sim-to-real。",
+      "innovation": "潜空间动力学 + 物理 prober 把潜变量映射成可解释状态，避免自回归误差累积；自动数据集生成 pipeline 减少真实数据依赖。",
+      "method": "输入观测和动作；JEPA 风格潜动力学预测 + 物理启发 prober 输出可解释状态；用采样型最优控制求解器在嵌入式硬件上做实时 MPC。",
+      "results": "户外开环和闭环实验显示长程预测精确、零样本 sim-to-real 成功，跨工况强泛化。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.2,
+      "recommendation": 8.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23105",
+    "summary": "视频世界模型要在复杂相机轨迹下保持长期记忆一致性很难，已有方法要么扩 context 太贵要么靠 rigid 启发式检索。作者提出 CaR：用注意力驱动的隐式记忆检索，通过位置编码注入视角信息做灵活检索；再加轻量上下文压缩网络处理长 context。同时放出 SceneFly：大规模真实相机轨迹合成数据集训长程视频世界模型。",
+    "highlights": {
+      "contribution": "为视频世界模型设计注意力驱动的隐式记忆检索机制 CaR，并发布 SceneFly 长程数据集。",
+      "innovation": "通过位置编码注入视角信息做注意力级隐式记忆检索，比启发式机制更通用；轻量上下文压缩降低长上下文开销。",
+      "method": "在视频世界模型里加入 CaR 注意力模块做记忆检索；轻量上下文压缩网络处理历史帧；用新构建的 SceneFly 大规模合成数据训练。",
+      "results": "在公开 benchmark 上达 SOTA，并对开放域场景有强泛化能力。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23079",
+    "summary": "神经世界模型 + MPC 每步都重新规划，开销巨大；可以缓存计划复用，但啥时候该重新规划没人系统分析。作者用扰动型 dynamic regret 框架分析了陈旧计划惩罚跟容忍度、累计 mismatch、局部敏感度的关系，提出 AdaReP：在线自适应调整重规划容忍度，不改世界模型/规划器。在图像、潜空间、真实机器人 50 试验中减少 80% 以上 planner 查询。",
+    "highlights": {
+      "contribution": "提出免训练的 AdaReP，把神经世界模型 MPC 的重规划频率在线自适应调整，大幅降算力。",
+      "innovation": "用扰动 dynamic regret 框架严格刻画陈旧计划误差累积，再据此设计自适应容忍度。",
+      "method": "训练时不动；推理时跟踪当前轨迹与缓存 rollout 的偏差和本地敏感度，动态决定何时重规划；适配图像/潜空间/真实机器人。",
+      "results": "在三种设置下显著降低 planner 计算量，真实机器人 50 次试验中 planner 查询减少 80% 以上，任务性能持平。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23280",
+    "summary": "现有 LLM 自动奖励设计依赖环境反馈反复试错，对每个任务都重来一遍，还容易被语义合理但因果错误的奖励项骗。作者提出 CRWM：离线在多任务交互数据上预训练，把候选奖励项与目标物理变量的因果拓扑关系显式建模。推理时 LLM 用 CRWM 当任务无关因果先验，零样本生成可执行奖励，且跨任务跨本体强泛化。",
+    "highlights": {
+      "contribution": "提出因果奖励世界模型 CRWM，让 LLM 零样本生成可执行奖励函数，避开因果伪相关。",
+      "innovation": "显式建模奖励项与物理变量的因果拓扑；coarse-to-fine 预训练 + 显式机制解耦 + 置信度软融合。",
+      "method": "离线在多任务交互数据上预训练 CRWM 学习因果拓扑；推理时 LLM 用 CRWM 作因果先验约束奖励函数生成，无需环境反馈迭代。",
+      "results": "在复杂连续控制基准上无需环境反馈即可生成可用奖励，匹配或超过 SOTA，对未见任务和不同机器人本体均强泛化。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23296",
+    "summary": "纯数据驱动的交互世界模型在控制对齐和物理一致性上经常飘。IOI 把解析运动学先验和学到的物理动力学解耦：动作序列先用前向运动学算出精确轨迹，再渲染成正交三视图喂给视频生成器做几何引导，让生成器专心建模随机物理交互。RoboTwin 上 SOTA，零样本 OOD 强，作为策略评估器与真物理仿真高度一致；真机里用其合成数据训练策略与遥操数据效果相当。",
+    "highlights": {
+      "contribution": "提出解耦运动学先验与物理动力学的混合交互世界模型 IOI，兼顾控制对齐与物理逼真。",
+      "innovation": "前向运动学算精确轨迹 + 多视正交投影渲染做几何引导，免外参标定；生成器专注随机物理交互。",
+      "method": "输入动作序列；前向运动学算轨迹并投影成前/侧/顶视图；多视运动学聚合注入模块融合几何注入视频生成器；联合训练动力学+生成。",
+      "results": "RoboTwin benchmark SOTA，零样本 OOD 强；作为策略评估器与真实物理仿真成功率高度一致；真机上用 IOI 合成数据训练策略和遥操示范效果持平。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.5,
+      "recommendation": 8.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23455",
+    "summary": "现有把牛顿动力学塞进神经渲染的方法都只管机械驱动的运动，忽略了温度这个看不见但关键的物理因素。MeGAS 把热-机械相变动力学塞进 3DGS：给每个 Gaussian 加温度属性，用热平流-扩散求解器配 MPM 含相变求解；再加拓扑自适应渲染策略避免极端形变下裂缝和漂浮。能在保持高保真渲染的同时合成融化、凝固等热物理现象。",
+    "highlights": {
+      "contribution": "首个把温度和相变热-机械动力学引入 3DGS 的框架 MeGAS，迈向物理融合世界模型。",
+      "innovation": "在 3DGS 上加温度属性，用热平流-扩散 + 含相变 MPM 联合求解；拓扑自适应渲染抗极端形变。",
+      "method": "扩展 3DGS 表示加入温度属性；热平流-扩散求解器与 MPM 含相变动力学耦合；拓扑自适应高斯渲染避免裂缝/漂浮。",
+      "results": "在融化、凝固等热物理场景上能产生物理一致行为，同时保持高保真渲染。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23312",
+    "summary": "3D 场景图通常用预定义的关系类别，忽略了因果、环境等抽象语义。作者用基础模型扩展场景图：VLM 先识别 instance 级具体关系，LLM 再推理出更抽象的概念节点和关系，形成层次化「场景图森林」。在 uHumans2、ScanNet 上验证关系合理性，并用 Spot 机器人在 ScanNet 数据与真实室内做开放词汇物体检索演示。",
+    "highlights": {
+      "contribution": "用基础模型把 3D 层次场景图扩展为带概念节点的「场景图森林」，支持开放语义关系。",
+      "innovation": "VLM 给 instance 关系 + LLM 推理抽象概念节点和关系，关系类别不再固定。",
+      "method": "VLM 识别实例与具体关系；LLM 推理更抽象概念节点与因果/环境关系；将节点和关系组装成层次 3D 场景图森林。",
+      "results": "在 uHumans2 与 ScanNet 上关系正确性得到验证；Spot 机器人在 ScanNet 与真实室内场景做开放词汇物体检索成功。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23436",
+    "summary": "无监督视频对象追踪常用 slot 表示，强制时间一致性会导致 slot 锁在背景上而前景反复被拆分/换 ID。STAITUS 把每个 slot 显式拆成外观和几何位姿（位置/尺度），帧内强制空间分离、帧间只在外观空间做时间对齐，遮挡和运动下身份更稳。再加自适应门控按场景复杂度动态调节激活 slot 数目。合成与真实 benchmark 上分割与追踪都显著超 SOTA。",
+    "highlights": {
+      "contribution": "提出 STAITUS 框架显式解耦 slot 的外观与位姿，改善无监督视频对象追踪稳定性。",
+      "innovation": "外观/位姿解耦 + 仅外观空间做时序对齐，避免与运动冲突；自适应门控动态调整激活 slot 数。",
+      "method": "输入视频帧；slot 表示拆成 appearance embedding 与 position/scale；帧内空间分离损失 + 帧间外观一致损失；自适应门控调激活 slot 数。",
+      "results": "合成与真实多个动态 benchmark 上分割质量和追踪稳定性显著超过 SOTA 基线。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23685",
+    "summary": "人手示范是机器人学习便宜又规模化的数据源，但单纯运动学重映射不足以跨形态迁移。LaST-HD 训了一个动作条件世界模型在无配对的人手与机器人轨迹上学统一潜在动力学空间，把人手和机器人示范对齐到同一推理空间，再用它监督 VLA 的潜在推理。配套自研低成本 OOL 动捕手套，混合训练 + 在线人手矫正只用 20 分钟手套数据就达 90% 以上准确率。",
+    "highlights": {
+      "contribution": "提出在统一潜在动力学空间对齐人手和机器人示范的人到机器人动作学习范式 LaST-HD，并开源 OOL 动捕手套。",
+      "innovation": "用辅助动作条件世界模型在无配对数据上学共享前向动力学空间，让人手数据可直接监督 VLA 的潜在推理。",
+      "method": "在无配对人手/机器人轨迹上训动作条件世界模型生成统一潜在目标；混合 co-training 让 VLA 学共享动力学；OOL 手套采集人手关键点；在线人手矫正后训。",
+      "results": "仅用人手示范就能泛化到新物体/场景/位置；在线矫正后仅用 20 分钟 OOL 手套数据即达 90%+ 准确率。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 10,
+      "popularity": 8.5,
+      "quality": 8.5,
+      "recommendation": 8.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23027",
+    "summary": "Feed-forward Gaussian splatting 通常做视角依赖预测，加更多输入视图反而累积噪声而非收敛到稳定场景。CanonicalGS 把多视证据先按深度、语义、不确定性提取，再用不确定性加权融合到一个场景中心的 canonical 潜空间，可靠的多关键、冗余的压下。新视图合成 PSNR 提升 2.5 dB，下游语义分割准确率提升 11%。",
+    "highlights": {
+      "contribution": "提出场景中心化、稳定的 canonical 表示 CanonicalGS，让 FFGS 随视图增多收敛而非发散。",
+      "innovation": "用深度/语义/不确定性三路视角证据，再做不确定性感知融合到 canonical 潜世界。",
+      "method": "输入多视图；分别提深度、语义特征和不确定性；用不确定性加权融合进 canonical 潜场景；解码为 3D Gaussians 做新视图合成和下游任务。",
+      "results": "新视图合成 PSNR 最高 +2.5 dB；语义分割准确率 +11%。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23031",
+    "summary": "驾驶场景动态重建里，稀疏体素方法快但只支持静态，3DGS 方法保真高但训练慢、大场景显存爆。DrivingVoxels 把动态驾驶场景拆成多个独立八叉树：每个刚性动态物体一个本地坐标系八叉树，静态背景另一个，然后单次光栅化里一起渲染。全显式、无神经网络，配 LiDAR 引导初始化。PandaSet 上 NVS 和重建感知指标持平、结构指标更好，训练时间明显更短。",
+    "highlights": {
+      "contribution": "提出组合式稀疏体素动态驾驶场景重建框架 DrivingVoxels，又快又轻量。",
+      "innovation": "用多棵独立八叉树分别描述每个刚性动态物体和静态背景，单次光栅化一起渲染；LiDAR 引导初始化。",
+      "method": "每个动态物体一个本地坐标系八叉树，静态背景一个八叉树；联合稀疏体素光栅化；LiDAR 提供几何先验做结构初始化。",
+      "results": "PandaSet 上感知指标与 3DGS 基线持平、结构指标更优，训练时间显著缩短。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23212",
+    "summary": "动态 3DGS 仍沿用静态稠密化策略，导致短寿命 Gaussian 监督稀疏，动态区域模糊。作者提出 VAD：把时序可见性纳入稠密化，按 Gaussian 寿命自适应阈值；再加 Temporal Offset Warping 增强时序中心附近的形变能力延长高动态 Gaussian 的寿命。三个动态多视 benchmark 上动态区域质量显著提升，VAD 可即插即用到多种动态 3DGS 方法。",
+    "highlights": {
+      "contribution": "提出 Visibility-Aware Densification 框架，把时序可见性纳入动态 3DGS 稠密化策略。",
+      "innovation": "Temporally-Adaptive Thresholding 按 Gaussian 寿命调整稠密化阈值；TOW 增强时序中心附近形变能力。",
+      "method": "在动态 3DGS 训练中加入 VAD 模块：按时序可见性触发稠密化、TAT 调阈值、TOW 增强形变；以插件形式嵌入现有动态 3DGS。",
+      "results": "三个动态多视 benchmark 上动态区域质量显著超 SOTA，且作为通用插件提升多种动态 3DGS。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23557",
+    "summary": "多视 3D 视觉问答里 MLLM 通常只有答案级稀疏监督，跨视推理不稳、视角选择脆。DR-MV3D 把任务拆成全局地图构建、问题条件的视角轨迹规划、egocentric 接地预测三步，用 dense reward 监督中间过程：global consistency reward 用 VGGT+SAM3 做几何一致伪标签对齐地图，trajectory reward 监督视角顺序，再用 GRPO 优化整管线。MindCube、VSI-Bench、BLINK(MV) 上一致超基线。",
+    "highlights": {
+      "contribution": "提出 DR-MV3D 框架用 dense process-level reward 监督多视 3D VQA 的中间推理。",
+      "innovation": "用 VGGT+SAM3 提供几何一致伪标签做地图级 reward，加视角轨迹 reward 监督视角选择顺序。",
+      "method": "三段：全局 allocentric 地图 + 问题条件视角轨迹规划 + egocentric 答案接地；global consistency reward + trajectory reward；用 GRPO 端到端优化策略。",
+      "results": "在 MindCube、VSI-Bench、BLINK(MV) 上一致优于强多图基线，过程级 dense 监督有效。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23688",
+    "summary": "单目视频里重建非刚性动态物体两条路线都不行：直接预测 4D 受数据稀缺限制，先 3D 再形变只在初始化用先验。Lift4D 测试时优化框架两手抓：先把单视 3D 重建模型改成 causal latent conditioning 给逐帧时序一致预测做初始化，再用「遮挡感知」优化对可见表面 sculpt，并用视图条件扩散先验补未观测区域。野外大形变和遮挡场景明显优于已有 4D 方法。",
+    "highlights": {
+      "contribution": "提出测试时优化框架 Lift4D，把单视 3D 重建模型升级成时序一致 4D 重建。",
+      "innovation": "causal latent conditioning 让单视模型给时序一致初始化；遮挡感知优化 + 视图条件扩散先验补未见区域。",
+      "method": "输入单目视频；改造单视 3D 重建模型用 causal latent 推每帧预测做可形变 3DGS 初始化；遮挡感知优化对齐视频，未观测区域由视图条件扩散先验补全。",
+      "results": "在挑战性野外序列（严重遮挡、大幅非刚性运动）上显著优于已有 4D 重建方法。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  }
+]

@@ -414,24 +414,6 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.15152",
-    "summary": "现有社交 agent benchmark 几乎都靠文字，没法测多模态 agent 看不看得懂表情姿态。作者搭了一个含 240 个场景、585 个角色实例和 2340 个角色-任务实例的视觉社交智能 benchmark，并给四种角色任务。评测七个 MLLM 后发现：个人角色扮演已接近饱和，但视觉接地的互动调控和结果达成仍很难。",
-    "highlights": {
-      "contribution": "构建多模态社交 agent benchmark，评估视觉社交智能的多维能力。",
-      "innovation": "把对齐的文本-视觉证据、结构化角色档案与四类角色级任务结合，区分局部角色扮演和互动管理两层能力。",
-      "method": "240 场景、585 角色、2340 角色-任务实例；评测 verbalized-vision 与 direct-vision 两种条件下 7 个 MLLM 完成表情/特征/调控/结果四类任务。",
-      "results": "角色具体表情与冲突处理接近饱和，互动调控和视觉接地的结果达成则明显更难，揭示当前 MLLM 短板。"
-    },
-    "scores": {
-      "relevance": 6.0,
-      "recency": 9.5,
-      "popularity": 6.5,
-      "quality": 7.2,
-      "recommendation": 6.4
-    },
-    "affiliations": []
-  },
-  {
     "arxiv_id": "2606.17092",
     "summary": "这篇关注多智能体 GIS 系统的安全问题：把 agent 接到地理信息系统后，对话和空间分析能力变强，但攻击面也变大。作者搭了一个基于状态机的模块化编排框架，再用一个自适应攻击 LLM 加确定性裁判跑 red-teaming 来测鲁棒性，最后用把 prompt 当结构化签名、注入对抗样例的 prompt 优化方法来加固。结果是能在不掉任务性能的前提下系统性地提高安全性，但论文里没给出具体数值。",
     "highlights": {
@@ -446,6 +428,24 @@
       "popularity": 5.0,
       "quality": 6.0,
       "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.20679",
+    "summary": "视频世界模型策略只看一小段观测窗口，遇到长程操作就抓瞎，因为关键线索可能早就出画面了。作者给它加了一个叫 MemoryVAM 的情节记忆模块：用 Perceiver 把每帧 CLIP 特征压成记忆 token，再用一个轻量 Cue Gate 估计任务进度，把这些信息同时塞进视频骨干和动作解码器。在 LIBERO-Mem 上成功率从 5% 直接拉到 42.5%，真机计数、空间回忆、顺序跟踪三类任务也都做到了 75-80%。",
+    "highlights": {
+      "contribution": "为视频世界模型策略补上了情节级记忆，让长程、非马尔可夫的机器人操作有了「能记事」的策略。",
+      "innovation": "提出 Recap-Cue 模块：Recap Compressor 把历史帧压成紧凑记忆 token，Cue Gate 从记忆和语言里估计任务完成度，并把记忆同时注入视频骨干和动作解码器；同一接口可即插即用到 UNet 和 DiT 两种骨干。",
+      "method": "输入是历史帧的 CLIP embedding 加语言指令；Perceiver 压成记忆 token 后通过 cross-attention 注入视频世界模型和动作解码器；训练目标是视频预测损失加上 delta 重建辅助损失和 episode 边界监督，不需要逐帧进度标注。",
+      "results": "LIBERO-Mem 上平均成功率从 5% 提升到 42.5%；真机上计数任务 78.3%、空间回忆 80.0%、顺序跟踪 75.0%。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 8.0,
+      "recommendation": 8.2
     },
     "affiliations": []
   }

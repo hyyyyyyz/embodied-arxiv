@@ -378,24 +378,6 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.17838",
-    "summary": "LLM agent 在交互环境里对 prompt 很敏感，prompt 工程还基本靠手调。作者把 observation→action 流水线拆成「描述器 agent」和「动作选择 agent」两个模块，再用 LLM 驱动的进化循环按环境回报自动改 prompt。BabyAI 任务上一致涨点，PutNext 任务从 0% 飙到 72.5% 成功率。",
-    "highlights": {
-      "contribution": "自动化两模块 prompt 优化框架，把手工 prompt 工程换成 LLM 进化循环。",
-      "innovation": "behavior analyzer 把 episode 结果归因到具体 prompt 组件，mutator 提定向改写并通过环境 rollout 验证。",
-      "method": "拆描述器和动作选择两个 agent；LLM 进化循环按 environment return 改 prompt；不更新模型权重。",
-      "results": "BabyAI 全部 5 个任务一致涨点；PutNext 从 RobustCoTAgent 的 0% 提到 72.5% 成功率，不需要 fine-tune。"
-    },
-    "scores": {
-      "relevance": 7.5,
-      "recency": 10,
-      "popularity": 7.0,
-      "quality": 7.8,
-      "recommendation": 7.5
-    },
-    "affiliations": []
-  },
-  {
     "arxiv_id": "2606.18363",
     "summary": "想搞清楚什么样的 harness 能让通用推理模型胜任具身操作。作者做了一套叫 Guava 的工具调用框架，系统扫了 agent workflow、动作空间、观察空间的设计空间，挖出三个关键要素：感知-推理-动作的迭代闭环、语义级动作抽象、多模态观察。再用不到 2K 仿真轨迹蒸馏到 4B 小模型，在仿真和真机上都能逼近前沿闭源模型的水平，未见物体、新指令、长时序任务都能泛化。",
     "highlights": {
@@ -446,6 +428,24 @@
       "popularity": 7.0,
       "quality": 8.0,
       "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.20712",
+    "summary": "做接触丰富的机械臂操作时，纯仿真里好用的采样型 MPC 很难真机落地。作者用 JAX 大规模并行 + MuJoCo MJX 高保真仿真搭了一套 SMPC，在 Franka Research 3 上跑 Push-T 任务，走完了 real-to-sim-to-real 全流程。结果是带结构化全局采样的 MTP 在需要模式切换的场景里明显比 CEM、MPPI、PS 等单峰基线强，同时发现在线域随机化里只有接触起始参数能提供可用的反馈信号。",
+    "highlights": {
+      "contribution": "把大规模并行采样型 MPC 真的部署到了真机上做接触丰富操作，并系统性分析了在线域随机化在 MPC 采样预算下哪些参数可用。",
+      "innovation": "用 JAX + MuJoCo MJX 做大规模并行，配合结构化全局采样的 MTP 变体，解决采样型 MPC 在模式切换任务上的探索不足问题。",
+      "method": "输入是真机状态，模型是 MJX 高保真接触仿真器，控制器是带结构化全局采样的 MTP 采样型 MPC，没有显式损失，靠 GPU 并行 rollout 评估代价；同时在采样预算内做在线域随机化。",
+      "results": "在 Push-T 任务上仿真和真机都优于 CEM/MPPI/PS 等单峰基线，尤其是在需要模式切换的子任务；接触起始参数的在线域随机化能提供可解释的适应信号，全局物理参数信号则太弱不可用。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.0
     },
     "affiliations": []
   }

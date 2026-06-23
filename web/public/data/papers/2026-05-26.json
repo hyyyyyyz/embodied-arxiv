@@ -248,6 +248,47 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.20627",
+      "title": "Latent Goal Prediction from Language for Model-Based Planning",
+      "authors": [
+        "Samuel Barbeau",
+        "Simon Roy",
+        "Giovanni Beltrame",
+        "Christian Desrosiers",
+        "Nicolas Thome"
+      ],
+      "affiliations": [],
+      "summary": "基于世界模型做长程规划时，视觉目标精度高但远距离没方向感，语言灵活却跨模态对齐又糙。LAGO 把语言指令拆成一串潜空间里的中间子目标，再和动作条件的潜空间 rollout 一起预测，规划时用 soft-min 轨迹代价在线更新子目标。这样一来在多种环境和不同规划步长下都没有出现以往方法那种性能断崖式下跌。",
+      "original_abstract": "Planning with world models is bottlenecked by compounding prediction errors and the difficulty of defining optimizable goals. Visual targets provide precise local gradients but poor distant guidance, while language is flexible yet limited by noisy cross-modal alignment or dependence on large generative models unsuited for the high-sampling nature of model-based planning. To address these challenges, we introduce Latent Goal Prediction from Language (LAGO), a framework that predicts both sequences of intermediate goal states from language instructions and action-conditioned rollouts, all within the same latent space. Rather than optimizing toward a single global objective, LAGO dynamically decomposes instructions into explicitly predicted, locally tractable latent subgoals. By updating these subgoals online and using a soft minimum trajectory cost during planning, LAGO enables an agent to follow coherent latent trajectories over long horizons. Evaluation across multiple environments planning horizons shows that LAGO avoids the sharp degradation of prior methods. By achieving robust and precise long-horizon planning purely from language, LAGO bridges the precision of visual goals with the flexibility of text-guided control.",
+      "highlights": {
+        "contribution": "提出 LAGO 框架，把语言指令显式分解成潜空间子目标序列，统一进世界模型的规划循环里。",
+        "innovation": "不再追求一个全局目标，而是在线滚动地预测局部可达的潜空间子目标，并用 soft-min 轨迹代价做规划。",
+        "method": "输入语言指令与观测，编码到统一潜空间；一个模块预测中间子目标序列，另一个做动作条件的潜空间 rollout；规划时用 soft-min 轨迹代价聚合每一步对子目标的偏离，子目标随状态在线刷新。",
+        "results": "在多种环境、不同规划步长下都避免了基线方法在长程任务上的急剧退化，纯靠语言实现稳健精确的长程规划。"
+      },
+      "images": [],
+      "published_date": "2026-05-26T20:04:33Z",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 7.0,
+        "popularity": 6.5,
+        "quality": 7.8,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.20627v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.20627v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2605.27314",
       "title": "Riding the Shifting Potential: When Reactive Control Suffices for Multi-Goal Behavior",
       "authors": [
@@ -414,45 +455,88 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.27276",
-      "title": "SIA: Self Improving AI with Harness & Weight Updates",
+      "arxiv_id": "2606.20622",
+      "title": "Darwin Mobile Agent: A Roadmap for Self-Evolution",
       "authors": [
-        "Prannay Hebbar",
-        "Yogendra Manawat",
-        "Samuel Verboomen",
-        "Alesia Ivanova",
-        "Selvam Palanimalai",
-        "Kunal Bhatia",
-        "Vignesh Baskaran"
+        "Daniel Beechey",
+        "Derek Yuen",
+        "Jianheng Liu",
+        "Dezhao Luo",
+        "Tiantian He",
+        "Weilin Luo",
+        "Jun Wang",
+        "Kun Shao"
       ],
       "affiliations": [],
-      "summary": "现在两条 self-improving 路线各自为政：一条只改 harness（脚手架），一条只更新模型权重。SIA 让一个 Feedback-Agent 同时更新两者。在中文法律分类、GPU kernel 优化、单细胞 RNA 去噪三个差异很大的领域上测，W+H 都打过只改 scaffold 的方案，比如 LawBench 比 SOTA 高 25.1%。",
-      "original_abstract": "Humans are the bottleneck in building and improving AI. Both the models and the agents that wrap them are written, tuned, and corrected by people. The long-horizon goal of an AI that can figure out how to improve itself remains open. Two largely disjoint research lines attack this bottleneck. The harness-update school has a meta-agent rewrite the scaffold of a task-specific agent (its tools, prompts, retry logic, and search procedure) while the model weights are held fixed. The test-time training school uses hand-written RL pipelines to update the model's own weights on task feedback while the harness is held fixed. These two silos operate in isolation. We propose SIA, a self-improving loop in which a language-model agent (the Feedback-Agent) updates both the harness and the weights of a task-specific agent. We evaluate across three contrasting domains: Chinese legal charge classification, low-level GPU kernel optimisation, and single-cell RNA denoising. Combining both levers outperforms scaffold iteration alone on all three benchmarks. SIA-W+H achieves 25.1% over prior SOTA on LawBench, 12.4% faster GPU kernels than prior SOTA (1,017 vs 1,161 μs), and 20.4% over prior SOTA on denoising. Harness updates make the model agentic, shaping how it searches and acts, while weight updates build the domain intuition that no prompt or scaffold can instil.",
+      "summary": "作者从 Bitter Lesson 出发，主张把人为先验从 agent 中剥掉，让智能在足够复杂的世界里自然涌现，于是用手机 GUI 当代理「大世界」。他们开源了 Darwin Mobile Agent 基础设施，用异步 agent-环境循环和并行云手机解决真实交互的数据瓶颈，并提出在任务课程、结果验证、记忆管理三个支柱上去人先验的路线图。当前已验证该基础设施可以稳定支撑 GUI 域里的策略优化第一阶段。",
+      "original_abstract": "The goal of artificial intelligence is to create agents capable of general, adaptive behaviour in open-ended environments. Guided by the \"Bitter Lesson\", we argue that the most effective path toward this goal is to systematically remove human priors and allow intelligence to naturally emerge through interaction with a \"Big World\" that is orders of magnitude more complex than the agent itself. We propose the mobile Graphical User Interface (GUI) as a practical proxy for such a world and introduce Darwin Mobile Agent, an open-source infrastructure designed as a foundation for autonomous reinforcement learning in this domain. This framework addresses the data-collection bottleneck in real-world mobile interactions by using an asynchronous agent-environment loop across parallel cloud-phone instances. We further propose a conceptual roadmap to systematically remove human priors from three fundamental pillars of a self-evolving agent: task curricula, outcome verification, and memory management. We validate that the Darwin infrastructure provides the stability and scalability required for the first stage of this roadmap: policy optimisation in the GUI domain. This work establishes the practical and theoretical foundation necessary to move toward truly autonomous, self-evolving GUI agents.",
       "highlights": {
-        "contribution": "把 harness 更新和 weight 更新两条 self-improvement 路线统一成 SIA 单一循环，让 Feedback-Agent 同时优化 agent 的脚手架和权重。",
-        "innovation": "首次系统对比「只改脚手架」vs「只改权重」vs「两者都改」，并展示两者都改在三个差异极大的领域稳赢。",
-        "method": "Feedback-Agent 既改 task agent 的 tools/prompts/retry logic/search procedure，又通过 RL pipeline 更新模型权重；同步迭代。",
-        "results": "LawBench 比 prior SOTA +25.1%；GPU kernel 比 prior SOTA 快 12.4%（1017 vs 1161 μs）；scRNA 去噪比 prior SOTA +20.4%。"
+        "contribution": "提出 Darwin Mobile Agent 开源基础设施与自进化 GUI agent 路线图，把手机 GUI 当作通往通用智能的「大世界」。",
+        "innovation": "用异步 agent-环境循环 + 并行云手机解决移动 GUI 真实交互的数据收集瓶颈；并系统化提出从任务课程、结果验证、记忆三方面去人先验。",
+        "method": "搭建跨多台云手机的并行异步 RL 框架，agent 与真实 Android 环境交互产数据；在此之上启动策略优化作为路线图第一阶段，验证基础设施稳定性与可扩展性。",
+        "results": "验证基础设施可稳定支撑 GUI 域内的策略优化，奠定后续自进化 GUI agent 研究的实验底座（路线图论文，重在系统而非刷分）。"
       },
       "images": [],
-      "published_date": "2026-05-26T16:55:46Z",
+      "published_date": "2026-05-26T13:32:14Z",
       "categories": [
         "cs.AI",
-        "cs.CL"
+        "cs.LG"
       ],
       "matched_domain": "Agent",
       "matched_keywords": [
-        "agentic"
+        "gui agent"
       ],
       "scores": {
-        "relevance": 6.5,
-        "recency": 8.0,
-        "popularity": 6.5,
-        "quality": 7.5,
-        "recommendation": 7.5
+        "relevance": 8.0,
+        "recency": 7.0,
+        "popularity": 7.2,
+        "quality": 7.4,
+        "recommendation": 7.8
       },
-      "pdf_url": "https://arxiv.org/pdf/2605.27276v2",
-      "arxiv_url": "https://arxiv.org/abs/2605.27276v2",
+      "pdf_url": "https://arxiv.org/pdf/2606.20622v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.20622v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.20621",
+      "title": "PEAR: Permutation-Equivariant Adaptive Routing Multi-Agent Debate",
+      "authors": [
+        "Yang Feng",
+        "Ziwei Xu",
+        "Xia Hu",
+        "Fengxiang He"
+      ],
+      "affiliations": [],
+      "summary": "多智能体辩论里固定拓扑会让某些位置长期占便宜，不靠谱的 agent 也容易被放大。PEAR 在推理阶段动态换 agent 与角色的对应关系，并稀疏化通信拓扑，让没人能一直占着「话语权」位置。理论上证明它是一个等变稀疏路由器，实验在 4 个推理 benchmark、6 个 LLM 后端上都把最强辩论基线刷上去了。",
+      "original_abstract": "Multi-agent debate improves the reliability of large language models (LLMs) through iterative peer critiques. However, fixed topologies often introduce persistent positional biases, amplify unreliable agents, and cause high sensitivity to role assignments. We introduce \\textit{Permutation-Equivariant Adaptive Routing Multi-Agent Debate (PEAR)}, an inference-time protocol that dynamically reconfigures communication roles and sparse topologies across consecutive debate rounds. By strategically switching agent-to-role assignments based on evolving agent states, PEAR prevents any agent from permanently occupying a privileged network position or distributes influence more evenly across the debate. We theoretically characterize PEAR as an equivariant sparse router: it preserves accuracy under agent relabeling while reducing routing complexity and improving generalization. Comprehensive empirical evaluations across four reasoning benchmarks and six diverse LLM backbones demonstrate PEAR significantly improves average accuracy over the strongest debate baselines. The code is at https://github.com/EVIEHub/PEAR.",
+      "highlights": {
+        "contribution": "提出 PEAR——一个推理时即插即用的置换等变自适应路由多智能体辩论协议。",
+        "innovation": "把多 agent 辩论形式化成等变稀疏路由器，按轮次根据 agent 状态重排角色和稀疏拓扑，消除位置偏置。",
+        "method": "无需训练，仅在推理时按辩论轮次评估各 agent 状态，重新分配角色到 agent 的映射，并稀疏化通信图；理论上保证 agent 重命名下精度不变同时降低路由复杂度。",
+        "results": "在 4 个推理 benchmark 和 6 种 LLM 后端上，平均准确率显著超过最强多 agent 辩论基线，代码已开源。"
+      },
+      "images": [],
+      "published_date": "2026-05-26T13:16:48Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG",
+        "cs.MA",
+        "stat.ML"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 7.0,
+        "popularity": 6.8,
+        "quality": 7.8,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.20621v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.20621v1",
       "venue": null
     },
     {
@@ -627,6 +711,48 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.20625",
+      "title": "AlphaMemo: Structured Search-Process Memory for Self-Evolving Alpha Mining Agents",
+      "authors": [
+        "Hang Yu",
+        "Zifan Zheng",
+        "Jeff Z. Pan",
+        "Tongliang Liu",
+        "Zhiyong Wang",
+        "Fengxiang He"
+      ],
+      "affiliations": [],
+      "summary": "用 LLM agent 做量化因子挖掘搜索空间巨大，反馈又稀疏带噪，简单记忆历史成功因子还容易过拟合。AlphaMemo 不存最终因子或完整轨迹，而是用 AST 差分提取「编辑动机」记录什么改动在什么父因子下管用或失败，再用置信门控的残差记忆和非对称否决机制屏蔽高置信失败模式。在 CSI 500 和 S&P 500 上 OOS 表现和固定预算下的发现效率都更好。",
+      "original_abstract": "LLM agents are promising for alpha mining via combining financial priors, symbolic reasoning, executable factor generation, and feedback-driven refinement. Yet, they face a combinatorial search space, noisy non-stationary feedback, redundant discoveries, and overfitting risks from naively reusing past successes. To address these challenges, we propose AlphaMemo, a self-evolving alpha mining agent with Structured Search-Process Memory. Rather than memorizing only final factors or full trajectories, AlphaMemo records reusable evidence about which edit motifs work or fail under specific parent-factor contexts. It extracts motifs from Abstract Syntax Tree (AST) differences, applies confidence-gated residual memory on top of a search-ledger prior, and uses asymmetric veto control to suppress high-confidence failure patterns. Experiments on CSI 500 and S\\&P 500 show improved out-of-sample performance and fixed-budget discovery efficiency, with ablations validating the roles of residual learning, confidence gating, AST-diff motifs, and veto memory. Code is at https://github.com/jarrettyu/AlphaMemo.",
+      "highlights": {
+        "contribution": "提出 AlphaMemo：面向 alpha 因子挖掘的自进化 LLM agent，引入结构化搜索过程记忆。",
+        "innovation": "记忆单元是 AST 差分提取的「编辑动机」而非最终因子；通过置信门控残差记忆 + 非对称否决，把可复用经验和该躲的坑分开管理。",
+        "method": "LLM agent 生成可执行因子，对父子因子做 AST 差分提取编辑 motif；用搜索台账作先验，再叠加置信门控的残差记忆；对高置信失败 motif 施加非对称否决，整体形成自进化闭环。",
+        "results": "在 CSI 500 与 S&P 500 上 OOS 表现和固定预算下的因子发现效率均提升；消融验证了残差学习、置信门控、AST-diff motif、否决记忆四部分各自有效，代码已开源。"
+      },
+      "images": [],
+      "published_date": "2026-05-26T15:48:09Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent"
+      ],
+      "scores": {
+        "relevance": 6.8,
+        "recency": 7.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.20625v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.20625v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2605.27766",
       "title": "Got a Secret? LLM Agents Can't Keep It: Evaluating Privacy in Multi-Agent Systems",
       "authors": [
@@ -745,46 +871,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2605.27489",
-      "title": "HARP: Measuring Harm Amplification in Multi-Agent LLM Systems",
-      "authors": [
-        "Md Hafizur Rahman",
-        "Zafaryab Haider",
-        "Tanzim Mahfuz",
-        "Prabuddha Chakraborty"
-      ],
-      "affiliations": [],
-      "summary": "Multi-agent LLM 把任务拆给一堆专家 agent，但一个 agent 被局部扰动可能被整个系统放大成灾。HARP 比对干净执行和扰动执行的 trace，定义局部 harm、全局 harm 以及「harm amplification」比值。在 7 agent 金融系统上测了 5 种防御，发现专家被攻陷扩散最严重，共享上下文被污染攻击成功率最高。",
-      "original_abstract": "Multi-agent LLM systems decompose workflows across agents, tools, shared context, memory, and decision gates. This modularity improves interpretability, but creates a propagation risk: a bounded perturbation to one component can be reused by other agents and amplified into system-level harm. We introduce HARP (Harm Amplification through Role Perturbation), a trace-first methodology for studying local-to-global harm amplification in multi-agent LLM systems. HARP compares paired clean and perturbed executions and records specialist outputs, tool calls, memory reads/writes, guard events, oracle logs, latency, token cost, and decisions. We define local harm as deviation from targeted agents or corrupted channels, global harm as deviation over the full trace, and harm amplification as (H_global/H_local). This complements attack success rate with a measure of how strongly orchestration spreads harm beyond the attack point. We instantiate HARP in a finance-oriented seven-agent system with a deterministic decision gate and configurable attack harness for specialist compromise, collusion, shared-context corruption, and temporal or memory-persistent attacks. Across five defenses, prompt-only defenses preserve benign utility but leave high success and stealth; pre-tool and step-level guards reduce some failures with utility or latency costs; and IntegrityGuard, a trace-consistency defense, achieves the lowest attack success and global harm but introduces utility/cost trade-offs. Results show that single-specialist compromise produces the strongest amplification, shared-context corruption yields the highest attack success, and temporal persistence produces the largest malicious impact. HARP argues that secure multi-agent evaluation must measure not only bypass, but propagation.",
-      "highlights": {
-        "contribution": "提出 HARP，从 trace 角度衡量多 agent 系统的「局部扰动→全局 harm」放大效应，补足只看 attack success rate 的不足。",
-        "innovation": "定义 harm amplification = H_global/H_local 的可计算指标；把 trace 一致性（IntegrityGuard）当成新型防御对比 prompt-only/pre-tool/step-level guards。",
-        "method": "成对 clean vs perturbed 执行 trace 对齐，记录 tool call/memory/guard/oracle/latency 等；7 agent 金融决策系统作为实验台；配置可调 attack harness 覆盖单点、串通、上下文污染、时序持久攻击。",
-        "results": "单专家攻陷放大最强，共享上下文污染攻击成功率最高，时序持久攻击破坏最大；IntegrityGuard 攻击成功率和全局 harm 最低，但带来 utility/cost trade-off。"
-      },
-      "images": [],
-      "published_date": "2026-05-26T16:03:10Z",
-      "categories": [
-        "cs.CR",
-        "cs.AI",
-        "cs.LG"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "multi-agent"
-      ],
-      "scores": {
-        "relevance": 5.5,
-        "recency": 8.0,
-        "popularity": 5.0,
-        "quality": 7.0,
-        "recommendation": 6.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.27489v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.27489v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2605.27117",
       "title": "Position: AI Safety Requires Effective Controllability",
       "authors": [
@@ -862,91 +948,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2605.27488v1",
       "arxiv_url": "https://arxiv.org/abs/2605.27488v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.27240",
-      "title": "ENPMR-Bench: Benchmarking Proactive Memory Retrieval for Emotional Support Agents",
-      "authors": [
-        "Xing Fu",
-        "Yulin Hu",
-        "Mengtong Ji",
-        "Haozhen Li",
-        "Yixin Sun",
-        "Weixiang Zhao",
-        "Yanyan Zhao",
-        "Bing Qin"
-      ],
-      "affiliations": [],
-      "summary": "现在 memory-augmented agent 都把 memory 当事实检索工具，没人专门测它对情感支持的作用。作者基于 Maslow 需求层级搭了 ENPMR-Bench，1800+ 对话评 agent 能不能从用户碎片信息里推出潜在情感需求并主动调取合适的 memory。结果不管 embedding 还是 LLM-driven 检索，empathy 得分都明显落后 golden memory。",
-      "original_abstract": "Memory-augmented language agents are increasingly deployed in affective applications such as emotional support, where understanding and responding to users' latent emotional needs is critical. However, existing research often treats memory as a tool for factual retrieval, overlooking its role in shaping users' emotional experiences. In this work, we introduce ENPMR-Bench, a benchmark for evaluating Emotional Need-aware Proactive Memory Retrieval (ENPMR), a core capability that enables agents to infer users' latent emotional needs and proactively retrieve appropriate memories to support empathetic interaction. Grounded in Maslow's hierarchy of needs, ENPMR-Bench includes over 1,800 memory-augmented dialogues and defines structured mappings between emotional needs and supportive memory types. Experimental results demonstrate that current retrieval paradigms, including both embedding-based and LLM-driven approaches, exhibit substantial deficiencies, with empathy scores significantly lagging behind golden memory conditions. While chain-of-thought prompting improves the alignment between inferred emotional needs and retrieved memories to some extent, a notable performance gap remains. Together, these findings reveal critical limitations in current agents and outline directions for advancing personalized emotional support through need-sensitive memory retrieval.",
-      "highlights": {
-        "contribution": "首次为情感支持场景提出 proactive memory retrieval 评测 ENPMR-Bench，把 memory 从事实工具升级为情感体验的塑造者。",
-        "innovation": "基于 Maslow 需求层级显式建模情感需求到 memory 类型的映射；强调 proactive（主动从需求推回 memory）而非被动查询。",
-        "method": "1800+ memory-augmented 对话；标注需求-memory 类型映射；对 embedding-based 和 LLM-driven 检索范式都做评测，还测了 CoT prompting。",
-        "results": "两类检索范式 empathy 得分都明显落后 golden memory；CoT 部分提升需求-memory 对齐但仍有显著差距。"
-      },
-      "images": [],
-      "published_date": "2026-05-26T16:22:35Z",
-      "categories": [
-        "cs.CL"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "language agent"
-      ],
-      "scores": {
-        "relevance": 4.5,
-        "recency": 8.0,
-        "popularity": 5.0,
-        "quality": 6.5,
-        "recommendation": 5.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.27240v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.27240v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2605.28882",
-      "title": "GrowLoop: Self-Evolving Conversation Evaluation Seeded by Human",
-      "authors": [
-        "Yihang Lin",
-        "Yunze Gao",
-        "Zeyang Lin",
-        "Dongbo Li",
-        "Kun Peng",
-        "Chenglong Song",
-        "Yue Liu"
-      ],
-      "affiliations": [],
-      "summary": "评 LLM 对话「像不像人」这事，标准本来就漂移、评委还互相不同意。GrowLoop 从少量人工种子出发，让 LLM agent 通过启发式学习不断抽取和精炼 rubric，认同的地方要求人机一致、分歧的地方只要求合理。rubric 和 case 共同演化，模型涨能力时基准也跟着升级。",
-      "original_abstract": "With the rapid advancement of large language models, evaluating human-likeness in open-ended conversation has become increasingly important. However, human-likeness is a form of tacit knowledge that humans perceive intuitively, yet the underlying criteria resist explicit formulation. Human judgments vary widely, with strong agreement on some cases and legitimate disagreement on others. Meanwhile, the criteria behind human judgments remain implicit, leaving no clear basis for constructing cases. Further, what counts as human-like is not static, but evolving with model capability and human expectations. Despite progress in evaluation methods such as expert-authored benchmarks, Reward Models, and self-evolving benchmarks, none addresses all three challenges simultaneously. Therefore, we propose GrowLoop, a self-evolving conversation evaluation system that continuously adapts as models advance and scenarios shift. With minimal human seed annotations as the first mover, LLM agents iteratively extract and refine evaluation rubrics through Heuristic Learning. Human-AI agreement is required where annotators converge, while only plausibility is expected where they diverge. Moreover, the Rubric-Case co-evolution mechanism enables continuous evolution, expanded through new seeds when the evaluation target moves. Applied to human-likeness evaluation in open-ended conversation, the generated rubrics not only substantially outperform existing methods in alignment with human judgments, but also uncover issues that annotators overlook. The resulting benchmark effectively discriminates models across capability tiers and reveals where they fall short, while generalizing to new scenarios and adapting as models advance. Our work shifts the benchmarking paradigm from manual updates or difficulty scaling to comprehensive, continuous self-evolution.",
-      "highlights": {
-        "contribution": "提出 GrowLoop，让对话人类相似度评测能够随模型能力持续自演化，而不是静态 benchmark。",
-        "innovation": "把对人类一致的判据和合理性判据分开处理；Rubric-Case 共演化机制；用少量人工种子启动，靠 LLM agent 启发式学习扩展。",
-        "method": "人工 seed 注入→LLM agent 启发式提取/精炼 rubric→对人类高一致案例要求 AI 与人对齐、低一致案例只要求合理→通过新种子注入扩展场景；rubric 和 case 联合更新。",
-        "results": "生成的 rubric 与人类判断对齐显著优于现有方法；能跨能力 tier 区分模型，能泛化到新场景并随模型进步自动适应。"
-      },
-      "images": [],
-      "published_date": "2026-05-26T16:53:14Z",
-      "categories": [
-        "cs.CL",
-        "cs.AI",
-        "cs.SD"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent"
-      ],
-      "scores": {
-        "relevance": 4.5,
-        "recency": 8.0,
-        "popularity": 5.0,
-        "quality": 6.5,
-        "recommendation": 5.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2605.28882v1",
-      "arxiv_url": "https://arxiv.org/abs/2605.28882v1",
       "venue": null
     },
     {

@@ -279,6 +279,45 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.20712",
+      "title": "Real-World Deployment of Massively Parallel Sampling-Based MPC for Contact-Rich Manipulation",
+      "authors": [
+        "Magnus Dierking",
+        "Joao Carvalho",
+        "An Thai Le",
+        "Georgia Chalvatzaki",
+        "Jan Peters"
+      ],
+      "affiliations": [],
+      "summary": "做接触丰富的机械臂操作时，纯仿真里好用的采样型 MPC 很难真机落地。作者用 JAX 大规模并行 + MuJoCo MJX 高保真仿真搭了一套 SMPC，在 Franka Research 3 上跑 Push-T 任务，走完了 real-to-sim-to-real 全流程。结果是带结构化全局采样的 MTP 在需要模式切换的场景里明显比 CEM、MPPI、PS 等单峰基线强，同时发现在线域随机化里只有接触起始参数能提供可用的反馈信号。",
+      "original_abstract": "Sampling-based Model Predictive Control (SMPC) is a promising strategy for contact-rich robotic manipulation, combining gradient-free optimization with massively parallel GPU simulation. Yet, most prior work relies on simplified dynamics or remains confined to simulation. We present an MPC framework that leverages JAX for large-scale parallelization and efficient computation, coupled with the high-fidelity MuJoCo MJX simulator, and deploy it on a Franka Research 3 executing the Push-T manipulation task through a complete real-to-sim-to-real pipeline. The MTP variant with structured global sampling outperforms unimodal baselines such as CEM, MPPI, and PS across tasks that require mode switching, both in simulation and on hardware. Furthermore, we evaluate online domain randomization within the MPC sample budget, showing that contact-initiation parameters yield interpretable adaptation signals, whereas global physics parameters provide feedback that is too weak for reliable exploitation at typical replanning frequencies. These findings highlight key challenges for sampling-based MPC in contact-rich manipulation-contact sensitivity, tight compute budgets, and the difficulty of obtaining informative domain-randomization signals in real time.",
+      "highlights": {
+        "contribution": "把大规模并行采样型 MPC 真的部署到了真机上做接触丰富操作，并系统性分析了在线域随机化在 MPC 采样预算下哪些参数可用。",
+        "innovation": "用 JAX + MuJoCo MJX 做大规模并行，配合结构化全局采样的 MTP 变体，解决采样型 MPC 在模式切换任务上的探索不足问题。",
+        "method": "输入是真机状态，模型是 MJX 高保真接触仿真器，控制器是带结构化全局采样的 MTP 采样型 MPC，没有显式损失，靠 GPU 并行 rollout 评估代价；同时在采样预算内做在线域随机化。",
+        "results": "在 Push-T 任务上仿真和真机都优于 CEM/MPPI/PS 等单峰基线，尤其是在需要模式切换的子任务；接触起始参数的在线域随机化能提供可解释的适应信号，全局物理参数信号则太弱不可用。"
+      },
+      "images": [],
+      "published_date": "2026-06-16T12:24:05Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 8.5,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.20712v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.20712v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.18097",
       "title": "WireCraft: A Simulation Benchmark for Industrial DLO Manipulation",
       "authors": [
@@ -1085,47 +1124,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.17998v1",
       "arxiv_url": "https://arxiv.org/abs/2606.17998v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.17838",
-      "title": "Environment-Grounded Automated Prompt Optimization for LLM Game Agents",
-      "authors": [
-        "Rean Clive Fernandes",
-        "Lukas Fehring",
-        "Theresa Eimer",
-        "Marius Lindauer",
-        "Matthias Feurer"
-      ],
-      "affiliations": [],
-      "summary": "LLM agent 在交互环境里对 prompt 很敏感，prompt 工程还基本靠手调。作者把 observation→action 流水线拆成「描述器 agent」和「动作选择 agent」两个模块，再用 LLM 驱动的进化循环按环境回报自动改 prompt。BabyAI 任务上一致涨点，PutNext 任务从 0% 飙到 72.5% 成功率。",
-      "original_abstract": "LLM agents in interactive environments are highly sensitive to their prompts, yet prompt engineering remains a manual, task-specific process. We introduce an automated prompt optimization framework for LLM agents that decomposes the observation-to-action pipeline into a goal-conditioned descriptor agent and an action selection agent, and iteratively refines each module's prompt through an LLM-driven evolutionary loop guided by environment returns. We propose a behavior analyzer to attribute episode outcomes to specific prompt components, and a mutator to propose targeted revisions to the prompt, before validating them through environment rollouts. We evaluate on all five BabyAI tasks in the BALROG benchmark, comparing our pipeline against BALROG's RobustCoTAgent under both plain and guided prompt initializations. Optimization improves performance consistently across tasks and conditions, without requiring updates to the model weights. On PutNext, a multi-step coordination task where the RobustCoTAgent achieves 0% success, our framework reaches up to 72.5% success rate using the same underlying LLM with optimized prompts. These results suggest that a multi-agent framework, combined with automatic prompt optimization, enhances LLMs without the need for fine-tuning or extensive human supervision.",
-      "highlights": {
-        "contribution": "自动化两模块 prompt 优化框架，把手工 prompt 工程换成 LLM 进化循环。",
-        "innovation": "behavior analyzer 把 episode 结果归因到具体 prompt 组件，mutator 提定向改写并通过环境 rollout 验证。",
-        "method": "拆描述器和动作选择两个 agent；LLM 进化循环按 environment return 改 prompt；不更新模型权重。",
-        "results": "BabyAI 全部 5 个任务一致涨点；PutNext 从 RobustCoTAgent 的 0% 提到 72.5% 成功率，不需要 fine-tune。"
-      },
-      "images": [],
-      "published_date": "2026-06-16T12:06:27Z",
-      "categories": [
-        "cs.CL"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent",
-        "multi-agent",
-        "agent framework"
-      ],
-      "scores": {
-        "relevance": 7.5,
-        "recency": 10.0,
-        "popularity": 7.0,
-        "quality": 7.8,
-        "recommendation": 7.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.17838v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.17838v1",
       "venue": null
     }
   ],

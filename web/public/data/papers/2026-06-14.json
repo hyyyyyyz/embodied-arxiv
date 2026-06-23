@@ -592,6 +592,98 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.20683",
+      "title": "From Question Answering to Task Completion: A Survey on Agent System and Harness Design",
+      "authors": [
+        "Jianyuan Guo",
+        "Zhiwei Hao",
+        "Chengcheng Wang",
+        "Cheng Fan",
+        "Tingzhang Luo",
+        "Hongguang Li",
+        "Ying Gao",
+        "Hefei Mei",
+        "Jiankun Peng",
+        "Rongjian Xu",
+        "Minjing Dong",
+        "Han Wu",
+        "Mengyu Zheng",
+        "Kai Han",
+        "Shiqi Wang",
+        "Chang Xu",
+        "Yunhe Wang"
+      ],
+      "affiliations": [],
+      "summary": "这是一篇关于 LLM Agent 系统设计的综述，作者认为不能再把 agent 当成「模型 + 工具」，而要从「foundation model + execution harness」的耦合视角看。文章把 harness 拆成观察、上下文、控制、动作、状态、验证六个运行时职责，梳理了从 prompt engineering 到 agent-native 训练的四个范式，并讨论了 benchmark、安全、协同进化等开放问题。",
+      "original_abstract": "LLM-based agents mark a shift from passive question answering to active task completion: they perceive environments, invoke tools, maintain state, and act over extended horizons. As agent systems have evolved from prompt engineering to workflows and context engineering, harness engineering, and agent-native training with co-evolution, a central question has become increasingly important: where does the bottleneck in agent performance reside, in the foundation model, in the execution harness, or in the coupling between them? This survey examines LLM-based agents through a model-harness lens. We first clarify the functional definition of agents and the implementation view of an LLM-based agent as a foundation model coupled with an execution harness. We then analyze the limits of model-centric scaling, trace four paradigms of agent engineering, and decompose the execution harness into six coupled runtime responsibilities: observation, context, control, action, state, and verification. Using this decomposition, we map task properties and domain pressures to harness configurations, review benchmark and evaluation practices, and synthesize model-harness evidence on how runtime design affects long-horizon task completion, efficiency, and reliability. Finally, we identify open challenges in value-aware evaluation, safety, harness generalization, and model-harness co-evolution. Rather than treating agents as models with auxiliary tools, this survey argues that agent quality -- including success, efficiency, safety, and generalization -- emerges from the interaction between model capability, runtime infrastructure, task structure, and evaluation design. A collection of papers discussed in this survey is provided in https://github.com/ggjy/Awesome-Agent-Engineering.",
+      "highlights": {
+        "contribution": "提出 model-harness 视角的 LLM agent 综述框架，把 agent 质量定义为模型能力、运行时基础设施、任务结构与评测设计之间交互的结果。",
+        "innovation": "把 execution harness 系统化拆解成六个耦合的运行时职责（observation/context/control/action/state/verification），并以此映射任务属性到 harness 配置。",
+        "method": "综述方法：先给出 agent 的功能性定义，再回顾四种 agent engineering 范式，按六维度分析 harness 设计；汇总长时任务、效率、可靠性方面的 model-harness 证据，并配套 GitHub 论文清单。",
+        "results": "无新实验数据；贡献是分类体系本身，并指出 value-aware evaluation、安全、harness 泛化、model-harness 协同进化四个开放方向，配套 Awesome-Agent-Engineering 仓库。"
+      },
+      "images": [],
+      "published_date": "2026-06-14T05:40:16Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm-based agent"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 8.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.20683v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.20683v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.19382",
+      "title": "DynAMO:Dynamic Asset Management Orchestration via Topological Multi-Agent Scheduling",
+      "authors": [
+        "Kanishk Kushwaha",
+        "Vikrant Vinod Bansode",
+        "Harsh Vardhan",
+        "Dhaval C. Patel"
+      ],
+      "affiliations": [],
+      "summary": "工业 4.0 场景下 LLM 智能体经常被延迟和并发不稳定卡住，作者搞了个 DynAMO，用 Plan-then-Execute 先生成可验证的工作流图，再根据依赖关系把能并发的任务自动并行跑。在 AssetOpsBench 六组实验里端到端延迟中位数降到原来的 1/1.6，高并行场景能到 1/1.8，结构化上下文剪枝又把推理时间砍了 30% 左右，故障注入下还能优雅降级。",
+      "original_abstract": "While LLM-powered agents offer end-to-end automation for industrial asset lifecycles, real-world Industry 4.0 deployment is hindered by latency, concurrency instability, and safety risks. We present DynAMO (Dynamic Asset Management Orchestration), a deployment-ready engine using a Plan-then-Execute architecture to generate verifiable workflow graphs. DynAMO supports both SequentialWorkflow (topological execution) and ParallelWorkflow (dependency-aware concurrency). By dynamically identifying independent tasks, DynAMO preserves structural correctness and safety while significantly improving efficiency through controlled reasoning overlap.   Across six controlled experiments on the AssetOpsBench industrial benchmark, DynAMO demonstrates substantial performance and robustness gains. Parallel execution reduces end-to-end latency by a median of 1.6x over sequential orchestration, rising to 1.8x on highly parallelizable workflows. After instrumenting external tool calls with realistic latencies, a latency decomposition shows that LLM reasoning and orchestration still account for more than 90% of execution time, identifying model inference as the primary system bottleneck. Structured context pruning reduces inference latency by approximately 30%, and DynAMO maintains correct functional behaviour (task completion, agent sequencing, and output quality) while exhibiting graceful degradation under controlled fault injection. Reproducibility analysis further confirms stable execution under repeated runs, with parallel scheduling reducing latency variance. These findings establish DynAMO as a practical blueprint for scalable, safe, and latency-aware agent deployment in Industry 4.0 automation pipelines. Code is available at: https://github.com/kushwaha001/DynAMO",
+      "highlights": {
+        "contribution": "面向工业资产管理的可部署多智能体编排引擎 DynAMO，把 LLM 智能体从概念演示推到「真能上产线」的工程蓝图。",
+        "innovation": "Plan-then-Execute 生成显式可验证 workflow graph，同时支持顺序执行和依赖感知的并行执行，并用结构化上下文剪枝压缩 LLM 推理开销。",
+        "method": "输入是工业资产任务请求，先由规划器生成 DAG 工作流图，再由调度器识别独立任务做并行调度；外挂工具调用带真实延迟仿真，加上上下文剪枝降低每次 LLM 推理 token 量；不涉及额外训练。",
+        "results": "AssetOpsBench 六组实验：并行相对顺序延迟中位下降到 1/1.6，高可并行任务到 1/1.8；上下文剪枝再省约 30% 推理延迟；LLM 推理仍占执行时间 90%+，并行调度还降低了延迟方差。"
+      },
+      "images": [],
+      "published_date": "2026-06-14T10:54:24Z",
+      "categories": [
+        "cs.SE",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm-powered agent",
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 8.0,
+        "popularity": 6.0,
+        "quality": 7.2,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.19382v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.19382v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.15684",
       "title": "Multi-agent Framework for Time-Sensitive Complementary Collaboration in Minecraft",
       "authors": [
@@ -927,47 +1019,6 @@
       "venue": null
     },
     {
-      "arxiv_id": "2606.15762",
-      "title": "Snyk VulnBench JS 1.0: Can LLMs Find the Same Bugs Twice?",
-      "authors": [
-        "Liran Tal",
-        "Johannes Kloos",
-        "Arsenii Rudich",
-        "Stephen Thoemmes",
-        "Manoj Nair"
-      ],
-      "affiliations": [],
-      "summary": "agentic LLM 安全审查到底稳不稳？作者跑了 300 次重复扫描看相同 JS 代码、prompt 下结果是否一致。结论：匹配到 Snyk 参考的发现很稳（158 个中 134 个 5/5 次出现），但额外发现波动大（161 个中 80 个只出现 1/5 次）。LLM 善于找熟悉的 exploit 形态，SAST 善于系统性枚举数据流 sink，二者互补而非替代。",
-      "original_abstract": "We ran 300 repeated vulnerability-finding scans to measure how repeatable agentic large language model (LLM) security review is on the same JavaScript code, prompt, and benchmark harness. The headline result is that LLM security findings were unevenly repeatable: reference-matched findings were stable, but extra model reports varied heavily from run to run. Across 250 model runs, 80 of 161 unique unmatched findings appeared in only one of five identical repetitions, while only 22 appeared in all five. By contrast, when Claude matched a Snyk Code reference finding, the behavior was much more stable: 134 of 158 unique reference-matched findings appeared in all five repetitions. The benchmark also shows complementarity. Models consistently found familiar, high-signal exploit shapes, and in one case surfaced a likely Snyk Code product gap. Snyk Code static application security testing (SAST) was deterministic and better at systematically enumerating repeated data-flow sinks. The results support combining agentic LLM review with deterministic SAST rather than treating either technique as a replacement for the other.",
-      "highlights": {
-        "contribution": "首个量化 agentic LLM 漏洞扫描可重复性的基准 Snyk VulnBench JS 1.0。",
-        "innovation": "用 300 次相同条件重复扫描评估稳定性，并与确定性 SAST 对照。",
-        "method": "5 次 × 多场景 = 250+ 次相同条件扫描，对参考匹配/额外发现分别统计稳定性。",
-        "results": "参考匹配发现 134/158 全部 5/5 重现；额外发现 80/161 只出现 1/5；LLM 与 SAST 互补。"
-      },
-      "images": [],
-      "published_date": "2026-06-14T11:47:17Z",
-      "categories": [
-        "cs.CR",
-        "cs.AI",
-        "cs.SE"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 4.5,
-        "recency": 9.5,
-        "popularity": 6.0,
-        "quality": 7.0,
-        "recommendation": 5.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.15762v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.15762v1",
-      "venue": null
-    },
-    {
       "arxiv_id": "2606.15591",
       "title": "Agentic Retrieval and Reinforcement Learned Equation Chains: A Controlled Generation Framework for Complex and Novel Physics Word Problems",
       "authors": [
@@ -1002,41 +1053,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.15591v1",
       "arxiv_url": "https://arxiv.org/abs/2606.15591v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.15797",
-      "title": "Unassigned Agents in Compilation-based Multi-agent Path Finding",
-      "authors": [
-        "Pavel Surynek"
-      ],
-      "affiliations": [],
-      "summary": "标准 MAPF 是所有 agent 都得到目标，UA-MAPF 多了一类「无目标」agent，但它们仍要让路。作者把 UA-MAPF 编译成 SAT，扩展两个最新求解器 SMT-CBS 和 NRF-SAT 处理这一变体，验证基于反例引导抽象细化的 compilation 方案对 UA-MAPF 同样可行。",
-      "original_abstract": "Compilation-based techniques represent an important stream of solvers for multi-agent path finding (MAPF) due to their modularity and adaptability for non-standard variants of the problem. While in the standard MAPF the task is to navigate all agents from their initial positions to given individual goal positions without any collision, variants where a different requirement for agents is used are also relevant. Such a variant is MAPF with unassigned agents (UA-MAPF) where some agents have the same setting as in the standard MAPF with initial positions and goals while the remaining agents have the initial position but have no goal - unassigned agents. Despite unassigned agent do not need to reach any goal position they have to be moved out of the way of the standard agents if needed which represent a specific challenge. We show in this paper that UA-MAPF can be expressed in recent compilation-based techniques for MAPF based on formulating the problem as Boolean satisfiability, namely we adapt SMT-CBS and NRF-SAT, the recent solvers based on counterexample guided abstraction refinement and non-refined abstractions.",
-      "highlights": {
-        "contribution": "把 UA-MAPF（带未分配 agent 的多智能体路径规划）纳入基于编译的求解框架。",
-        "innovation": "把无目标 agent 的「让路」需求编码进 SAT，扩展 SMT-CBS 与 NRF-SAT 抽象细化。",
-        "method": "将 UA-MAPF 公式化为 Boolean SAT，分别适配 SMT-CBS 和 NRF-SAT 求解器。",
-        "results": "理论扩展可行性验证，无具体性能数字。"
-      },
-      "images": [],
-      "published_date": "2026-06-14T13:04:03Z",
-      "categories": [
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "multi-agent"
-      ],
-      "scores": {
-        "relevance": 3.5,
-        "recency": 9.5,
-        "popularity": 4.5,
-        "quality": 6.0,
-        "recommendation": 4.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.15797v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.15797v1",
       "venue": null
     }
   ],

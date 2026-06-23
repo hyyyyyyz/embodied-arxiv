@@ -396,42 +396,6 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.15762",
-    "summary": "agentic LLM 安全审查到底稳不稳？作者跑了 300 次重复扫描看相同 JS 代码、prompt 下结果是否一致。结论：匹配到 Snyk 参考的发现很稳（158 个中 134 个 5/5 次出现），但额外发现波动大（161 个中 80 个只出现 1/5 次）。LLM 善于找熟悉的 exploit 形态，SAST 善于系统性枚举数据流 sink，二者互补而非替代。",
-    "highlights": {
-      "contribution": "首个量化 agentic LLM 漏洞扫描可重复性的基准 Snyk VulnBench JS 1.0。",
-      "innovation": "用 300 次相同条件重复扫描评估稳定性，并与确定性 SAST 对照。",
-      "method": "5 次 × 多场景 = 250+ 次相同条件扫描，对参考匹配/额外发现分别统计稳定性。",
-      "results": "参考匹配发现 134/158 全部 5/5 重现；额外发现 80/161 只出现 1/5；LLM 与 SAST 互补。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 9.5,
-      "popularity": 6.0,
-      "quality": 7.0,
-      "recommendation": 5.5
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.15797",
-    "summary": "标准 MAPF 是所有 agent 都得到目标，UA-MAPF 多了一类「无目标」agent，但它们仍要让路。作者把 UA-MAPF 编译成 SAT，扩展两个最新求解器 SMT-CBS 和 NRF-SAT 处理这一变体，验证基于反例引导抽象细化的 compilation 方案对 UA-MAPF 同样可行。",
-    "highlights": {
-      "contribution": "把 UA-MAPF（带未分配 agent 的多智能体路径规划）纳入基于编译的求解框架。",
-      "innovation": "把无目标 agent 的「让路」需求编码进 SAT，扩展 SMT-CBS 与 NRF-SAT 抽象细化。",
-      "method": "将 UA-MAPF 公式化为 Boolean SAT，分别适配 SMT-CBS 和 NRF-SAT 求解器。",
-      "results": "理论扩展可行性验证，无具体性能数字。"
-    },
-    "scores": {
-      "relevance": 3.5,
-      "recency": 9.5,
-      "popularity": 4.5,
-      "quality": 6.0,
-      "recommendation": 4.5
-    },
-    "affiliations": []
-  },
-  {
     "arxiv_id": "2606.17102",
     "summary": "量子处理器藏在稀释制冷机里普通人根本看不见，作者想用生成式世界模型把这些看不到的硬件拍成「电影」让大家逛一逛。系统叫 Quantum Cinema，是个浏览器里直接打开的四幕叙事应用，从量子纠缠科普讲到三种主流量子架构（离子阱、中性原子、超导），再用 WorldLabs 的生成世界模型造出可漫游的 3D 场景，最后接 AWS Braket 的真实硬件参数做雷达图对比。整体偏科普传播工具，不涉及新模型训练。",
     "highlights": {
@@ -446,6 +410,42 @@
       "popularity": 3.5,
       "quality": 4.5,
       "recommendation": 3.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.19382",
+    "summary": "工业 4.0 场景下 LLM 智能体经常被延迟和并发不稳定卡住，作者搞了个 DynAMO，用 Plan-then-Execute 先生成可验证的工作流图，再根据依赖关系把能并发的任务自动并行跑。在 AssetOpsBench 六组实验里端到端延迟中位数降到原来的 1/1.6，高并行场景能到 1/1.8，结构化上下文剪枝又把推理时间砍了 30% 左右，故障注入下还能优雅降级。",
+    "highlights": {
+      "contribution": "面向工业资产管理的可部署多智能体编排引擎 DynAMO，把 LLM 智能体从概念演示推到「真能上产线」的工程蓝图。",
+      "innovation": "Plan-then-Execute 生成显式可验证 workflow graph，同时支持顺序执行和依赖感知的并行执行，并用结构化上下文剪枝压缩 LLM 推理开销。",
+      "method": "输入是工业资产任务请求，先由规划器生成 DAG 工作流图，再由调度器识别独立任务做并行调度；外挂工具调用带真实延迟仿真，加上上下文剪枝降低每次 LLM 推理 token 量；不涉及额外训练。",
+      "results": "AssetOpsBench 六组实验：并行相对顺序延迟中位下降到 1/1.6，高可并行任务到 1/1.8；上下文剪枝再省约 30% 推理延迟；LLM 推理仍占执行时间 90%+，并行调度还降低了延迟方差。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.2,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.20683",
+    "summary": "这是一篇关于 LLM Agent 系统设计的综述，作者认为不能再把 agent 当成「模型 + 工具」，而要从「foundation model + execution harness」的耦合视角看。文章把 harness 拆成观察、上下文、控制、动作、状态、验证六个运行时职责，梳理了从 prompt engineering 到 agent-native 训练的四个范式，并讨论了 benchmark、安全、协同进化等开放问题。",
+    "highlights": {
+      "contribution": "提出 model-harness 视角的 LLM agent 综述框架，把 agent 质量定义为模型能力、运行时基础设施、任务结构与评测设计之间交互的结果。",
+      "innovation": "把 execution harness 系统化拆解成六个耦合的运行时职责（observation/context/control/action/state/verification），并以此映射任务属性到 harness 配置。",
+      "method": "综述方法：先给出 agent 的功能性定义，再回顾四种 agent engineering 范式，按六维度分析 harness 设计；汇总长时任务、效率、可靠性方面的 model-harness 证据，并配套 GitHub 论文清单。",
+      "results": "无新实验数据；贡献是分类体系本身，并指出 value-aware evaluation、安全、harness 泛化、model-harness 协同进化四个开放方向，配套 Awesome-Agent-Engineering 仓库。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.4
     },
     "affiliations": []
   }
