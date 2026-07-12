@@ -53,6 +53,49 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.23938",
+      "title": "Neuro-Symbolic Drive: Rule-Grounded Faithful Reasoning for Driving VLAs",
+      "authors": [
+        "Xiangbo Gao",
+        "Xiukun Huang",
+        "Boyu Lu",
+        "Junge Zhang",
+        "Mengjie Mao",
+        "Jiachen Li",
+        "Wei Xiong",
+        "Zhengzhong Tu"
+      ],
+      "affiliations": [],
+      "summary": "驾驶 VLA 加 CoT 好看但理由和真正规划的轨迹经常对不上。作者的思路是把规则型经典规划器当作可执行的推理引擎，把它内部评估安全约束、搜索候选轨迹的过程序列化成结构化推理轨迹，再和轨迹配对去微调 Qwen3.5-4B。因为推理直接来自规划器状态，所以从架构上就和动作耦合。仿真基准上 ADE@3s 从 0.47 降到 0.26，miss rate 从 8.30% 到 6.40%，八相机下从 0.54/10.13% 降到 0.26/5.99%。",
+      "original_abstract": "Driving VLA models incorporating Chain-of-Thought (CoT) reasoning are attractive because they leverage pretrained VLM representations and expose intermediate decisions in natural language, yet current rationales often lack the step-by-step decision semantics needed to keep the rationale causally connected to the planned motion. We introduce Neuro-Symbolic Drive, a neuro-symbolic driving framework that supervises a driving VLA with rule-grounded reasoning traces extracted directly from classical rule-based planners. Our key observation is that rule-based planners are symbolic AI systems that already function as executable reasoning engines: they reason about active safety constraints, search over candidate maneuvers, and select a final trajectory. We instrument these planners in simulation to capture both the executed trajectory and the internal decision trace at each rule-evaluation step. Each trace is serialized into structured rule-grounded reasoning and paired with the trajectory to fine-tune Qwen3.5-4B as a driving VLA. Because these traces are derived directly from the planner states that determine the action, they ensure reasoning is structurally coupled to motion generation by construction, rather than by post-hoc alignment. On our simulator-generated benchmark, detailed rule-grounded reasoning reduces ADE@3s from 0.47 to 0.26 and miss rate from 8.30% to 6.40% under three-camera perception, and from 0.54 to 0.26 and 10.13% to 5.99% under eight-camera perception. Neuro-Symbolic Drive thus converts neuro-symbolic planning logic into structured supervision. Code base: https://github.com/XiangboGaoBarry/Neural-Symbolic-Drive.",
+      "highlights": {
+        "contribution": "把规则规划器的内部决策轨迹当作监督信号，让 VLA 的推理和轨迹在结构上强耦合。",
+        "innovation": "首次把 rule-based planner 内部的规则评估序列序列化成结构化 CoT 训练数据，避免事后对齐。",
+        "method": "输入多相机图像；模型是 Qwen3.5-4B VLA；训练数据来自仿真中运行规则规划器抓取的执行轨迹+内部决策 trace 序列化后的推理配对；用 SFT 微调。",
+        "results": "三相机下 ADE@3s 0.47→0.26、miss rate 8.30%→6.40%；八相机下 0.54→0.26、10.13%→5.99%。"
+      },
+      "images": [],
+      "published_date": "2026-06-22T20:57:59Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vla model"
+      ],
+      "scores": {
+        "relevance": 8.7,
+        "recency": 7.5,
+        "popularity": 7.5,
+        "quality": 8.2,
+        "recommendation": 8.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.23938v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.23938v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.23641",
       "title": "Flatness Preserves Instruction Following in Vision-Language-Action Models",
       "authors": [
@@ -217,6 +260,44 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.23686v1",
       "arxiv_url": "https://arxiv.org/abs/2606.23686v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.23754",
+      "title": "Verifiable Foundation Models for Robot Safety",
+      "authors": [
+        "Davide Corsi",
+        "Kyungmin Kim",
+        "Roy Fox"
+      ],
+      "affiliations": [],
+      "summary": "基础模型上机器人很强，但整块太黑盒没法做形式化验证。作者提出 FEARL，把策略拆成大的 Controller 做感知和任务推理，加一个小 Safety 模块接安全传感器和 Controller 的有界上下文来出最终动作。这样只对小的 S 做形式化分析就够了，还能兼容预训练 VLA 骨干，三个仿真域实验通过后成功迁移到真机。",
+      "original_abstract": "Deploying foundation models for robot control raises a central challenge: the expressive power that enables rich, multimodal perception also makes these models opaque and difficult to analyze formally, rendering them intractable for existing verification tools. In this paper, we present FEARL (Foundation-Enabled Assured Robot Learning), a framework that addresses this tension through a modular architectural decomposition. FEARL separates the policy into a large Controller (C) responsible for high-dimensional perception and task reasoning, and a small Safety module (S) that receives low-dimensional observations from dedicated safety sensors together with a bounded context embedding from C and produces the final action. Since many robot safety requirements, such as collision avoidance and workspace boundary constraints, can be expressed over these safety sensor observations, formal verification can be applied to S rather than to the full foundation-model backbone. This makes formal analysis tractable with existing tools while preserving the Controller's expressive power for task reasoning. To show that the decomposed policy remains capable of solving diverse tasks, we evaluate FEARL on three simulated robotic domains using multiple Controller backbones and training procedures, including pretrained off-the-shelf vision-language-action models. We further transfer the learned policy from one of our simulated tasks to a physical robot, suggesting that the low-dimensional safety interface supports practical sim-to-real transfer.",
+      "highlights": {
+        "contribution": "把 VLA 类基础模型和形式化安全验证兼容起来，只需验证低维安全模块而不是整个大模型。",
+        "innovation": "模块化解耦：Controller 保留表达力，Safety 模块吃低维安全传感器+受限上下文嵌入，形式化工具刚好能处理。",
+        "method": "输入是常规视觉观测加专用安全传感器；策略= 大 Controller (可用预训练 VLA) + 小 S 模块生成最终动作；S 因维度低可用现有验证器分析；训练走常规策略学习加解耦架构。",
+        "results": "在三个仿真机器人域上多种 Controller 骨干均可用，其中一个任务成功 sim-to-real 迁移到实体机器人。"
+      },
+      "images": [],
+      "published_date": "2026-06-22T03:10:51Z",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 7.5,
+        "popularity": 6.5,
+        "quality": 7.8,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.23754v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.23754v1",
       "venue": null
     },
     {
@@ -460,6 +541,45 @@
       "venue": null
     },
     {
+      "arxiv_id": "2607.00031",
+      "title": "Joint Discovery of Object and Action Symbols through Effect Prediction for Robotic Manipulation Planning",
+      "authors": [
+        "Burcu Kilic",
+        "Berke Kartal",
+        "Fatih Dogangun",
+        "Erhan Oztop",
+        "Emre Ugur"
+      ],
+      "affiliations": [],
+      "summary": "机器人做复杂操作规划得把连续感知运动抽象成离散的物体和动作符号。以往要么按外观分类物体（长得像但行为不同就翻车），要么效果驱动但动作预设死。作者用一个二值 bottleneck 层联合发现动作原语和物体类别，训练目标是预测多模态交互结果（运动、接触、力反馈），再用离散规划器做部分动作执行。桌面重摆和堆叠任务上，效果驱动规划在见过和新物体上都超过 SOTA 和视觉分类基线。",
+      "original_abstract": "To perform complex manipulation planning, autonomous robots are required to abstract continuous, high-dimensional sensorimotor interactions into discrete object and action representations. Earlier work either categorized objects based on visual appearances, which fails to distinguish objects that appear similar but behave differently, or based on effects under interaction, but was limited to predefined actions. To address these limitations, we propose a model that jointly discovers high-level manipulation primitives and object categories through a binary bottleneck layer, trained to predict multi-modal outcomes, including object motion, contact, and force feedback, from random interaction data. Building on these discovered binary representations, we leverage a discrete planning method that uses intermediate steps in the predicted effect trajectory to enable partial action executions for precise low-level control. Additionally, we evaluate our framework's generalization capabilities on novel objects by assigning object categories through comparing a small number of interaction effects with the predicted effects of learned object symbols, enabling few-shot generalization based on behavior rather than visual similarity. We conduct experiments on tabletop repositioning and stacking tasks, and confirm that our effect-driven planning approach outperforms both a state-of-the-art method and a visual-based alternative in planning precision across seen and novel objects.",
+      "highlights": {
+        "contribution": "同时自动发现操作原语和基于行为的物体类别，摆脱视觉外观分类的局限。",
+        "innovation": "二值 bottleneck + 效果预测联合训练，规划时利用预测轨迹的中间步做部分动作执行，新物体靠少量交互效果匹配做 few-shot 归类。",
+        "method": "输入是随机交互数据；模型是带二值瓶颈的效果预测器，输出物体运动、接触和力反馈三种模态；训练用效果预测损失；规划器在离散符号空间上搜索并可截断执行。",
+        "results": "桌面重摆和堆叠任务上，规划精度在见过和新物体上都优于 SOTA 及视觉基线。"
+      },
+      "images": [],
+      "published_date": "2026-06-22T11:58:11Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 6.8,
+        "recency": 7.5,
+        "popularity": 5.5,
+        "quality": 7.0,
+        "recommendation": 6.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.00031v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.00031v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.23685",
       "title": "LaST-HD: Learning Latent Physical Reasoning from Scalable Human Data for Robot Manipulation",
       "authors": [
@@ -509,6 +629,55 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.23685v1",
       "arxiv_url": "https://arxiv.org/abs/2606.23685v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28385",
+      "title": "RoboGaze: Evaluating Robot World Models via Structured Vision-Language Analysis",
+      "authors": [
+        "Minh-Loi Nguyen",
+        "Nghiem Tuong Diep",
+        "Hung Khang Nguyen",
+        "Minh Le",
+        "Doanh Le Thien",
+        "Hoang H. Tran",
+        "Dung D. Le",
+        "Vu N. Duong",
+        "Daniel Sonntag",
+        "An Thai Le",
+        "Duy Minh Ho Nguyen",
+        "Vien Anh Ngo",
+        "Tran Van Nhiem"
+      ],
+      "affiliations": [],
+      "summary": "机器人世界模型能生视频了，可怎么评价它们是个难题：图像逼真但可能违反物理、时序或任务逻辑，通用 VLM judge 又不够精细。RoboGaze 做了一个免训练的多智能体 VLM 框架，分三步：任务场景 grounding、按维度分派专家、critic 复核，输出带时间定位的故障报告，遵循 6 维 30 类机器人专用分类。在 382 段人标数据集上评估 8 个 VLM，描述 F1 最多提 43 分、时序对齐 F1×IoU 最多提 37 分，clean-clip 准确率从 <25% 提到 >80%。",
+      "original_abstract": "Recent advances in robot world models enable synthetic video generation for embodied prediction and planning. However, evaluating these videos is challenging: visually realistic outputs often violate physical laws, temporal consistency, or task logic, while conventional metrics and monolithic Vision-Language Model (VLM) judges fail to generalize or provide precise diagnostic value. We present RoboGaze, a training-free, multi-agent VLM framework that provides structured, interpretable evaluation for generated robot-manipulation videos. Given a task instruction and video, RoboGaze operates via a three-stage pipeline: task-scene grounding, dimension-specific specialist routing, and critic-based verification. It outputs temporally localized glitch reports categorized under a novel 6-dimension, 30-type robotics-specific taxonomy. To benchmark RoboGaze, we introduce a human-validated dataset of 382 clips spanning simulated and real-world multi-view manipulation. Evaluating eight open-source and proprietary VLM backbones, RoboGaze dramatically outperforms zero-shot baselines, improving description-F1 by up to +43 points and temporal alignment (F1 x IoU) by up to +37 points, closing approximately 85% of the gap to the human ceiling. Furthermore, its critic verifier mitigates the \"cry-wolf\" false-positive flaw of standard VLMs, lifting clean-clip accuracy from under 25% to over 80%. RoboGaze offers a scalable, highly interpretable diagnostic tool for the rigorous evaluation of robot world models.",
+      "highlights": {
+        "contribution": "首个针对机器人操作视频的可解释、免训练结构化评估框架，专治世界模型生成质量评估这个真空地带。",
+        "innovation": "任务-场景 grounding + 维度专家路由 + critic 反 cry-wolf 三段式，配 6 维 30 类机器人专用故障分类。",
+        "method": "输入任务指令和视频；无训练，纯多 agent VLM 编排；三阶段流水线；输出带时间轴的分类故障报告；配 382 段人标 benchmark。",
+        "results": "描述 F1 提升最多 +43，时序对齐 F1×IoU 提升最多 +37，弥补约 85% 人机差距；clean-clip 准确率 <25%→>80%。"
+      },
+      "images": [],
+      "published_date": "2026-06-22T06:45:09Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 8.8,
+        "recency": 7.5,
+        "popularity": 7.8,
+        "quality": 8.3,
+        "recommendation": 8.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28385v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28385v1",
       "venue": null
     },
     {
@@ -738,6 +907,46 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.23991",
+      "title": "Critique of Agent Model",
+      "authors": [
+        "Eric Xing",
+        "Mingkai Deng",
+        "Jinyu Hou"
+      ],
+      "affiliations": [],
+      "summary": "这篇是概念性论文，追问「什么算 agent」。作者借笛卡尔和科幻里的自主体，把 agent 架构拆成目标/身份/决策/自调节/学习五维，区分「agentic」（靠工程 workflow 拼装）和「agentive」（能力内生）。据此提出 GIC（Goal-Identity-Configurator）通用 agent 架构，融合分层目标分解、身份演化、基于独立训练世界模型的模拟推理、学得的自调节和自主学习，并讨论可审计性与安全。",
+      "original_abstract": "What is an agent? What constitutes agency? With the rise of Large Language Model (LLM) systems marketed as ``coding agents'', ``AI co-scientists'', and other ``agentic\" tools that promise to drive up productivity, and at the same time, ``existential\" concerns such as AI escaping human control with destructive power under a speculative ``machine agency\" against humans, it has become essential to clarify where automation ends and agency begins, both for building capable systems and for understanding whether and what to fear. Drawing on Descartes' grounding of agency in independent thought, and on portrayals of autonomous beings in science fiction, we survey the current landscape of AI agents, and analyze agent architectures along five dimensions: goal, identity, decision-making, self-regulation, and learning. Specifically, we argue that genuine agency requires these structures to be \\emph{internalized within the system itself} rather than assembled through external scaffolding. This distinction between \\emph{agentic} systems, whose competence resides in engineered workflows, and \\emph{agentive} systems, whose capabilities (including social interaction) arise endogenously, defines the boundary between systems designed for prescribed tasks, and those capable of operating in the open world with true autonomy. Building on this analysis, we propose the Goal-Identity-Configurator (GIC) architecture for a general-purpose agent model, combining hierarchical goal decomposition, identity evolution, simulative reasoning grounded in a separately trained world model, learned self-regulation, and self-directed learning from both real and simulated experience. Furthermore, we share insight on the auditability, controllability, and safety of agentive systems that possess greater autonomy and ``agency\", but remain under human oversight.",
+      "highlights": {
+        "contribution": "给「agent」下了一个可操作定义，并提出 GIC 通用 agent 架构蓝图。",
+        "innovation": "区分 agentic 与 agentive 两种系统，明确「结构必须内生化」的边界；把独立世界模型作为模拟推理引擎嵌入 agent。",
+        "method": "非实验性论文；提出五维分析框架（goal/identity/decision-making/self-regulation/learning），构建 GIC 架构，包含分层目标、身份演化、世界模型模拟推理、自调节和自主学习模块。",
+        "results": "无实验数字；作为立场/架构论文给出设计原则和安全可控性讨论。"
+      },
+      "images": [],
+      "published_date": "2026-06-22T22:50:02Z",
+      "categories": [
+        "cs.AI",
+        "cs.LG",
+        "cs.MA",
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 7.5,
+        "popularity": 7.8,
+        "quality": 6.8,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.23991v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.23991v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.23312",
       "title": "From Pixels to Concepts: Growing Rich 3D Semantic Scene Graph Forests utilizing Foundation Models",
       "authors": [
@@ -858,204 +1067,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.23455v1",
       "arxiv_url": "https://arxiv.org/abs/2606.23455v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.23557",
-      "title": "Dense Reward for Multi-View 3D Reasoning with Global Maps and Local Views",
-      "authors": [
-        "Jiho Choi",
-        "Seonho Lee",
-        "Seojeong Park",
-        "Hyunjung Shim"
-      ],
-      "affiliations": [],
-      "summary": "多视 3D 视觉问答里 MLLM 通常只有答案级稀疏监督，跨视推理不稳、视角选择脆。DR-MV3D 把任务拆成全局地图构建、问题条件的视角轨迹规划、egocentric 接地预测三步，用 dense reward 监督中间过程：global consistency reward 用 VGGT+SAM3 做几何一致伪标签对齐地图，trajectory reward 监督视角顺序，再用 GRPO 优化整管线。MindCube、VSI-Bench、BLINK(MV) 上一致超基线。",
-      "original_abstract": "Multi-view 3D Visual Question Answering (MV3D-VQA) requires integrating partial observations into a coherent 3D scene representation and selecting informative viewpoints for multi-step spatial reasoning. However, current multimodal LLMs are typically trained with sparse, answer-level supervision, which often yields inconsistent cross-view reasoning and brittle view selection. We present DR-MV3D (Dense Reward for MV3D-VQA), a map-grounded learning framework that provides dense, verifiable rewards to supervise the reasoning process. Our approach decomposes MV3D-VQA into (i) allocentric global map construction, (ii) question-conditioned view-trajectory planning, and (iii) egocentric grounding for answer prediction. To make intermediate steps learnable without manual annotations, we introduce two rewards: a global consistency reward that aligns the predicted map with geometry-consistent pseudo targets from frozen 3D vision foundation models (e.g., VGGT + SAM3), and a local trajectory reward that supervises ordered viewpoint selection. We optimize the full pipeline with trajectory-level policy optimization (GRPO). Experiments on MindCube, VSI-Bench, and BLINK (MV) show that DR-MV3D consistently improves over strong multi-image baselines, supporting the effectiveness of process-level dense supervision for multi-view 3D reasoning.",
-      "highlights": {
-        "contribution": "提出 DR-MV3D 框架用 dense process-level reward 监督多视 3D VQA 的中间推理。",
-        "innovation": "用 VGGT+SAM3 提供几何一致伪标签做地图级 reward，加视角轨迹 reward 监督视角选择顺序。",
-        "method": "三段：全局 allocentric 地图 + 问题条件视角轨迹规划 + egocentric 答案接地；global consistency reward + trajectory reward；用 GRPO 端到端优化策略。",
-        "results": "在 MindCube、VSI-Bench、BLINK(MV) 上一致优于强多图基线，过程级 dense 监督有效。"
-      },
-      "images": [],
-      "published_date": "2026-06-22T16:28:11Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "VGGT",
-      "matched_keywords": [
-        "vggt"
-      ],
-      "scores": {
-        "relevance": 7.5,
-        "recency": 10.0,
-        "popularity": 7.5,
-        "quality": 8.0,
-        "recommendation": 7.6
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.23557v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.23557v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.23688",
-      "title": "Lift4D: Harmonizing Single-View 3D Estimation for 4D Reconstruction In-the-Wild",
-      "authors": [
-        "Yehonathan Litman",
-        "Xiaoxuan Ma",
-        "Manan Shah",
-        "Nicolas Ugrinovic",
-        "Kris Kitani",
-        "Fernando De la Torre",
-        "Shubham Tulsiani"
-      ],
-      "affiliations": [],
-      "summary": "单目视频里重建非刚性动态物体两条路线都不行：直接预测 4D 受数据稀缺限制，先 3D 再形变只在初始化用先验。Lift4D 测试时优化框架两手抓：先把单视 3D 重建模型改成 causal latent conditioning 给逐帧时序一致预测做初始化，再用「遮挡感知」优化对可见表面 sculpt，并用视图条件扩散先验补未观测区域。野外大形变和遮挡场景明显优于已有 4D 方法。",
-      "original_abstract": "Reconstructing dynamic non-rigid objects from monocular video requires integrating visual cues from direct observations with data-driven priors over geometry and appearance. Prior approaches either learn to directly predict 4D representations from visual input or initialize a 3D representation that is subsequently deformed and refined based on video evidence. However, the former are constrained by the scarcity of 4D training data, while the latter leverage priors only for the initial reconstruction and rely solely on video supervision thereafter; neither handles complex in-the-wild scenarios with large deformations and occlusions well. We present Lift4D, a test-time optimization framework that addresses both limitations. First, we adapt an existing single-view 3D reconstruction model to yield temporally consistent per-frame predictions via causal latent conditioning, providing a coherent initialization for a deformable 3D Gaussian Splatting representation. We then ``sculpt'' this representation to match the input video through an occlusion-aware optimization that faithfully recovers visible surface details while completing unobserved regions using a view-conditioned diffusion prior. We demonstrate that Lift4D clearly improves over prior 4D reconstruction methods, particularly on challenging in-the-wild sequences with severe occlusions and non-rigid motion.",
-      "highlights": {
-        "contribution": "提出测试时优化框架 Lift4D，把单视 3D 重建模型升级成时序一致 4D 重建。",
-        "innovation": "causal latent conditioning 让单视模型给时序一致初始化；遮挡感知优化 + 视图条件扩散先验补未见区域。",
-        "method": "输入单目视频；改造单视 3D 重建模型用 causal latent 推每帧预测做可形变 3DGS 初始化；遮挡感知优化对齐视频，未观测区域由视图条件扩散先验补全。",
-        "results": "在挑战性野外序列（严重遮挡、大幅非刚性运动）上显著优于已有 4D 重建方法。"
-      },
-      "images": [],
-      "published_date": "2026-06-22T17:59:54Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "VGGT",
-      "matched_keywords": [
-        "gaussian splatting"
-      ],
-      "scores": {
-        "relevance": 6.0,
-        "recency": 10.0,
-        "popularity": 7.0,
-        "quality": 7.5,
-        "recommendation": 6.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.23688v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.23688v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.23027",
-      "title": "Learning Stable Canonical Worlds for Novel View Synthesis and Beyond",
-      "authors": [
-        "Xiaoyu Xu",
-        "Jian Zou",
-        "Sheyang Tang",
-        "Zhihua Wang",
-        "Jing Liao",
-        "Kede Ma"
-      ],
-      "affiliations": [],
-      "summary": "Feed-forward Gaussian splatting 通常做视角依赖预测，加更多输入视图反而累积噪声而非收敛到稳定场景。CanonicalGS 把多视证据先按深度、语义、不确定性提取，再用不确定性加权融合到一个场景中心的 canonical 潜空间，可靠的多关键、冗余的压下。新视图合成 PSNR 提升 2.5 dB，下游语义分割准确率提升 11%。",
-      "original_abstract": "Feed-forward Gaussian splatting (FFGS) facilitates real-time novel view synthesis, yet current methods often remain tied to view-dependent predictions. As more input views are added, they may accumulate noisy or redundant evidence instead of converging to a stable scene representation. In this paper, we introduce CanonicalGS, a feed-forward pipeline that maps cluttered multi-view observations into a stable, scene-centric representation. CanonicalGS first extracts view-centric evidence from depth, semantic features, and uncertainty estimates, and then aggregates this evidence in a canonical latent world using uncertainty-aware fusion. By emphasizing reliable observations while suppressing uncertain or redundant ones, CanonicalGS produces representations that scale more effectively for novel view synthesis and transfer to downstream visual perception tasks. Experiments show up to a $2.5$ dB improvement in peak signal-to-noise ratio for synthesizing novel views and an $11\\%$ gain in semantic segmentation accuracy.",
-      "highlights": {
-        "contribution": "提出场景中心化、稳定的 canonical 表示 CanonicalGS，让 FFGS 随视图增多收敛而非发散。",
-        "innovation": "用深度/语义/不确定性三路视角证据，再做不确定性感知融合到 canonical 潜世界。",
-        "method": "输入多视图；分别提深度、语义特征和不确定性；用不确定性加权融合进 canonical 潜场景；解码为 3D Gaussians 做新视图合成和下游任务。",
-        "results": "新视图合成 PSNR 最高 +2.5 dB；语义分割准确率 +11%。"
-      },
-      "images": [],
-      "published_date": "2026-06-22T08:38:39Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "VGGT",
-      "matched_keywords": [
-        "novel view synthesis",
-        "gaussian splatting"
-      ],
-      "scores": {
-        "relevance": 6.0,
-        "recency": 10.0,
-        "popularity": 6.5,
-        "quality": 7.5,
-        "recommendation": 6.5
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.23027v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.23027v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.23031",
-      "title": "DrivingVoxels: Compositional Sparse Voxel Rasterization for Dynamic Driving Scene Reconstruction",
-      "authors": [
-        "Tania Aguirre",
-        "Luis Roldão",
-        "Moussab Bennehar",
-        "Nathan Piasco",
-        "Dzmitry Tsishkou",
-        "Simone Rossi",
-        "Pietro Michiardi"
-      ],
-      "affiliations": [],
-      "summary": "驾驶场景动态重建里，稀疏体素方法快但只支持静态，3DGS 方法保真高但训练慢、大场景显存爆。DrivingVoxels 把动态驾驶场景拆成多个独立八叉树：每个刚性动态物体一个本地坐标系八叉树，静态背景另一个，然后单次光栅化里一起渲染。全显式、无神经网络，配 LiDAR 引导初始化。PandaSet 上 NVS 和重建感知指标持平、结构指标更好，训练时间明显更短。",
-      "original_abstract": "Reconstructing dynamic urban scenes remains challenging due to the unbounded nature of driving environments and the presence of multiple dynamic objects. Currently, potentially faster sparse voxel methods are mainly designed for static scenarios. On the other hand, dynamic approaches based on 3D Gaussian Splatting, despite their high-fidelity, are often time-consuming for driving scenarios and exhibit uncontrollable memory growth in large scenes. To address these limitations, we present DrivingVoxels, a compositional sparse voxel rendering framework for dynamic driving scenes. Our method jointly rasterizes sparse voxels from multiple independent octrees within a single rendering pass. Each rigid dynamic object is represented by an octree defined in its local coordinate frame, while a separate static octree models the stationary background. DrivingVoxels adopts a fully explicit, neural-free representation together with a LiDAR-guided structural initialization that efficiently captures scene geometry. We evaluate our framework on the PandaSet benchmark, demonstrating that DrivingVoxels performs on par on perceptual metrics and better on structural metrics for NVS and reconstruction while requiring shorter training times than previous 3DGS-base methods to an efficient optimization workflow anchored by a strong LiDAR prior.",
-      "highlights": {
-        "contribution": "提出组合式稀疏体素动态驾驶场景重建框架 DrivingVoxels，又快又轻量。",
-        "innovation": "用多棵独立八叉树分别描述每个刚性动态物体和静态背景，单次光栅化一起渲染；LiDAR 引导初始化。",
-        "method": "每个动态物体一个本地坐标系八叉树，静态背景一个八叉树；联合稀疏体素光栅化；LiDAR 提供几何先验做结构初始化。",
-        "results": "PandaSet 上感知指标与 3DGS 基线持平、结构指标更优，训练时间显著缩短。"
-      },
-      "images": [],
-      "published_date": "2026-06-22T08:42:16Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "VGGT",
-      "matched_keywords": [
-        "gaussian splatting"
-      ],
-      "scores": {
-        "relevance": 5.5,
-        "recency": 10.0,
-        "popularity": 6.5,
-        "quality": 7.5,
-        "recommendation": 6.3
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.23031v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.23031v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.23212",
-      "title": "Temporally Aware Densification for Dynamic 3D Gaussian Splatting",
-      "authors": [
-        "Vikram Sandu",
-        "Mayurdeep Pathak",
-        "Rajiv Soundararajan"
-      ],
-      "affiliations": [],
-      "summary": "动态 3DGS 仍沿用静态稠密化策略，导致短寿命 Gaussian 监督稀疏，动态区域模糊。作者提出 VAD：把时序可见性纳入稠密化，按 Gaussian 寿命自适应阈值；再加 Temporal Offset Warping 增强时序中心附近的形变能力延长高动态 Gaussian 的寿命。三个动态多视 benchmark 上动态区域质量显著提升，VAD 可即插即用到多种动态 3DGS 方法。",
-      "original_abstract": "Despite modeling temporal motion, dynamic 3D Gaussian Splatting (3DGS) methods still inherit a static densification strategy that is ill-suited for dynamic scenes. This neglect of temporal behavior leads to under-reconstructed and blurry dynamic regions, as short-lived Gaussians receive sparse supervision and fail to densify effectively. We propose a Visibility-Aware Densification (VAD) framework that integrates temporal visibility into the densification process, ensuring that Gaussians are refined based on their actual temporal presence. A Temporally-Adaptive Thresholding (TAT) mechanism further adjusts each Gaussian's densification threshold according to its temporal lifespan, promoting balanced refinement of both static and dynamic regions. Finally, a Temporal Offset Warping (TOW) design enhances deformation capacity around temporal centers, extending the lifespan of highly dynamic Gaussians and facilitating more effective densification. Our approach achieves substantial improvements in the visual quality of dynamic regions, outperforming existing methods across three dynamic multi-view benchmark datasets. Moreover, the proposed VAD module generalizes across diverse dynamic 3DGS methods, consistently improving dynamic reconstruction as a plug-and-play component.",
-      "highlights": {
-        "contribution": "提出 Visibility-Aware Densification 框架，把时序可见性纳入动态 3DGS 稠密化策略。",
-        "innovation": "Temporally-Adaptive Thresholding 按 Gaussian 寿命调整稠密化阈值；TOW 增强时序中心附近形变能力。",
-        "method": "在动态 3DGS 训练中加入 VAD 模块：按时序可见性触发稠密化、TAT 调阈值、TOW 增强形变；以插件形式嵌入现有动态 3DGS。",
-        "results": "三个动态多视 benchmark 上动态区域质量显著超 SOTA，且作为通用插件提升多种动态 3DGS。"
-      },
-      "images": [],
-      "published_date": "2026-06-22T11:55:21Z",
-      "categories": [
-        "cs.CV"
-      ],
-      "matched_domain": "VGGT",
-      "matched_keywords": [
-        "gaussian splatting"
-      ],
-      "scores": {
-        "relevance": 5.0,
-        "recency": 10.0,
-        "popularity": 6.5,
-        "quality": 7.5,
-        "recommendation": 6.0
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.23212v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.23212v1",
       "venue": null
     }
   ],

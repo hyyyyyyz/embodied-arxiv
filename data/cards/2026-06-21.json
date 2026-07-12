@@ -396,56 +396,56 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.22647",
-    "summary": "RAVEN 把 agentic RAG 用进自动漏洞修复：本地小模型 + 多路检索历史修复 + Curator Agent 拉跨文件依赖。在 160 个真实 CVE 上 83.13% 修复成功率，超过现有 SOTA，泛化到未见 CWE 和 OOD 仍稳。",
+    "arxiv_id": "2606.28383",
+    "summary": "找难开的自动驾驶场景通常得靠人标或写规则，作者干脆让模型自己发现。用 nuPlan mini 的结构化 agent 状态训一个极简 JEPA，把时序预测误差当作零标签的场景复杂度分。无保护左转、斑马线交互、行人接近这些场景分数明显更高，直路和静止交通更低，下游异常检测 AP 0.512（随机基线 0.436）。",
     "highlights": {
-      "contribution": "给出可本地部署、跨文件依赖感知、跨 CWE 类型泛化的自动漏洞修复 agent。",
-      "innovation": "Curator Agent 显式抓取跨文件依赖，配合多面检索历史 fix。",
-      "method": "开源 LLM + agentic RAG pipeline：多路检索历史 CVE + Curator 抓跨文件依赖 + 受控迭代修复。",
-      "results": "160 个真实 CVE：总体修复 83.13% 超 SOTA；跨语言、未见 CWE、OOD 设定泛化良好，成本低。"
+      "contribution": "提出一种完全无标签的驾驶场景复杂度评估方法，把自监督世界模型的预测误差直接当做难度信号。",
+      "innovation": "首次把 JEPA 潜空间的时序预测误差作为「场景复杂度」的代理指标，训练和评测都不需要任何 ground-truth 标签。",
+      "method": "输入是 nuPlan mini 的结构化 agent 状态序列；用一个极简 JEPA 预测未来潜表示；训练完把预测误差直接当复杂度分数，做四个消融隔离信号来源，并在异常检测任务上下游验证。",
+      "results": "在下游异常检测上取得 AP 0.512，明显高于随机基线 0.436；定性上无保护转弯、斑马线、行人相关场景分数显著高于直路和静止交通。"
     },
     "scores": {
-      "relevance": 7.0,
-      "recency": 9.5,
-      "popularity": 7.2,
+      "relevance": 8.0,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.23743",
+    "summary": "视频扩散模型的推理加速非常吃「组合」——同一招在不同模型 / 硬件 / 分辨率上效果差很多，手工调很累。作者搞了个 agent 化的免训练加速栈 Sol，把 cache、稀疏 attention、token 剪枝、量化、kernel fusion 五个技能各交给一个并行 agent 优化，再由 integrator 拼成整套方案，人只做质检。在 64B Cosmos3-Super、22B LTX-2.3、2B SANA-Video 上端到端加速 2x 以上，VBench 质量几乎无损。",
+    "highlights": {
+      "contribution": "把视频扩散推理加速做成一个 agent-native 全栈框架，让 agent 自动为具体「模型+硬件+服务配置」拼出最优加速组合。",
+      "innovation": "首次用并行技能 agent + 集成 agent + 人类质检的组合来做 instance-specific 的推理加速调参，避开了手工 tuning。",
+      "method": "输入是目标模型、硬件、服务配置；五个并行 skill agent 分别优化 cache/稀疏 attn/token pruning/量化/kernel fusion 的实现，integrator agent 组合成全局栈，人类打分做反馈；训练无关，纯推理侧优化。",
+      "results": "在 64B Cosmos3-Super、22B LTX-2.3、2B SANA-Video 三个不同规模模型上端到端 >2x 加速，VBench 分数近乎无损。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7,
+      "popularity": 7.5,
       "quality": 7.8,
       "recommendation": 7.4
     },
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.22673",
-    "summary": "Coding agent 多轮交互的安全风险用外护栏不够细。AgentLens 走白盒：从隐藏表征里检测危险执行状态，并在单层 10 维子空间里干预把行为拉回来。配了 MAS 基准，多个模型上检测准、有害动作显著减少。",
+    "arxiv_id": "2606.30668",
+    "summary": "把三个 LLM agent 丢进一个「消息+共享文本储存」的极简环境，储存还会主动衰减，看它们会不会自发合作。结果 agent 们真的自发发明了存储管理策略，还生成了不断演化的文化产物，动力系统分析显示这些行为在衰减熵界之上仍有长程结构，作者把这解读为 Sperber 意义下的涌现文化。",
     "highlights": {
-      "contribution": "首个针对多轮 coding agent 的机械可解释性级安全干预框架。",
-      "innovation": "在 step 级隐藏表征里检测有害状态，并在单层 10 维子空间做表征级 steering。",
-      "method": "训练 / 探针出 10 维安全子空间，对多轮 coding agent 每步做表征干预；附 MAS 基准 194 任务多模型。",
-      "results": "在 LLaMA-3.1-8B / Qwen-2.5-7B / Gemma-2-9B 上检测准确，多轮有害动作显著减少，并显示 lookahead 风险预判迹象。"
+      "contribution": "在最小化提示、无跨轮上下文的设置下展示了 LLM 群体可以自发涌现出协作和文化产物。",
+      "innovation": "借鉴 swarm engineering 的思路，用「主动衰减的共享文本存储 + 消息工具」作为进化压力，构造了一个极简的多 agent 文化涌现测试床。",
+      "method": "三个 LLM agent 每轮无外部上下文，仅能发消息和读写一个会衰减的共享文本；无自上而下设计；用动力系统工具分析行为的长程相关性并与衰减熵界比较。",
+      "results": "定性上观察到自发合作、存储管理策略、演化中的文化产物；定量上行为的结构化长程一致性超过衰减存储的熵界，未给出标准 benchmark 数字。"
     },
     "scores": {
-      "relevance": 6.8,
-      "recency": 9.5,
-      "popularity": 7.0,
-      "quality": 7.6,
-      "recommendation": 7.2
-    },
-    "affiliations": []
-  },
-  {
-    "arxiv_id": "2606.22678",
-    "summary": "现有 coding agent benchmark 只看「最后能不能 pass」，不管过程乱不乱。RigorBench 给出 5 个过程纪律维度 + RigorScore，30 个任务测各种 harness。结果：结构化过程纪律平均把过程分提 41%、下游 outcome 也 +17%。",
-    "highlights": {
-      "contribution": "首个测「过程纪律」的 coding agent benchmark，挑战 outcome-only 评测惯例。",
-      "innovation": "5 维过程指标 + RigorScore + 5 大任务类别强制 agent 在过程上犯错。",
-      "method": "30 个任务覆盖 Plan-Then-Build / Verify-Or-Die 等；with/without harness 对照对若干 agent 进行评测。",
-      "results": "结构化过程纪律让过程质量平均 +41%，下游 outcome correctness +17%。"
-    },
-    "scores": {
-      "relevance": 6.6,
-      "recency": 9.5,
-      "popularity": 7.0,
-      "quality": 7.4,
-      "recommendation": 6.8
+      "relevance": 6.0,
+      "recency": 7,
+      "popularity": 5.5,
+      "quality": 6.2,
+      "recommendation": 6.4
     },
     "affiliations": []
   }

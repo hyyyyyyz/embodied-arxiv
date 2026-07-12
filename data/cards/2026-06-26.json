@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.27755",
+    "summary": "作者想搞清楚 VLA 里那么大的语言主干是不是真有用。他们提出 Drop-Then-Recovery：先用一个 GateProbe 敏感度分数排序 transformer 块，然后砍掉再微调看恢复情况。结果发现语言主干冗余度很高，视觉和动作通路则不能乱砍。在 LIBERO 上砍掉一半 LLM 块，OpenVLA-OFT 反而从 95.0% 升到 98.3%。",
+    "highlights": {
+      "contribution": "系统揭示 VLA 里语言主干严重冗余，视觉/动作通路才是关键容量。",
+      "innovation": "提出 DTR 分析协议和 GateProbe 一次性敏感度指标，把「块删除+再微调」变成可靠工具。",
+      "method": "输入是预训练 VLA 模型；用 GateProbe 计算每个 transformer 块对下游 action loss 的敏感度并排序；按序删除后在目标任务上做统一预算微调；跨多个 VLA 架构和 LIBERO、真机工业场景对比。",
+      "results": "LIBERO 上删掉一半 LLM 块让 OpenVLA-OFT 从 95.0% 升到 98.3%；只留两个语言块也能恢复基线水平。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 8,
+      "popularity": 7.8,
+      "quality": 8.5,
+      "recommendation": 8.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27872",
+    "summary": "长程操作里 VLA 常因固定权重融合视觉/语言/动作特征而累计误差。作者提出 S²-VLA，用状态空间引导的自适应注意力 SSGAA 维护一个信念状态跟踪任务阶段，动态调门控权重。2B 参数在 LIBERO 和 SimplerEnv 上超过 7B 模型。",
+    "highlights": {
+      "contribution": "把「任务阶段感知」引入 VLA 特征融合，缓解长程操作误差累积。",
+      "innovation": "SSGAA 用状态空间信念跟踪任务进度，让视觉、意图、动作序列的融合权重随阶段变化。",
+      "method": "输入多模态观测；架构在 VLA 主干上加 SSGAA 门控层，用 SSM 维护 belief state 生成动态融合权重；训练用标准 imitation loss；对比 7B 规模 VLA。",
+      "results": "2B 参数在 LIBERO 和 SimplerEnv 长程任务上取得 SOTA，超过 7B 规模模型。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28555",
+    "summary": "作者搭了一套机械臂+光谱传感系统对草莓做无损甜度检测。用 YOLOv11s 检测，RGB-ToF 标定对齐点云，手眼标定后闭环靠近目标。42 次实验端到端 88.1% 成功，检测 95.24%。",
+    "highlights": {
+      "contribution": "把感知、标定、机械臂控制整合成闭环流水线做非破坏性水果甜度评估。",
+      "innovation": "定制 eye-in-hand 手眼标定+增量闭环靠近策略，让传感器停在最佳工作距离。",
+      "method": "输入 RGB-ToF 图像；YOLOv11s 检测草莓，mask-to-depth 对齐+手眼标定 (对比 Andreff/Park) 变换到机器人基坐标；waypoint 搜索加增量闭环靠近，光谱传感做甜度估计。",
+      "results": "42 次试验总体成功率 88.10%，检测 95.24%，检测后靠近条件成功率 100%；失败集中在传感阶段。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27807",
+    "summary": "现有 VLA 基于大 transformer，能耗和延迟都很高，不好部署到低功耗场景。作者提出 SpikeVLA，全脉冲神经网络的 VLA，包含脉冲视觉编码器 Spike-V、多模态脉冲 LLM Spike-L 和脉冲动作策略 Spike-A。在导航和控制任务上大幅降能耗，同时保持竞争力性能。",
+    "highlights": {
+      "contribution": "首个纯 SNN 结构的 VLA，为低功耗实时具身智能开路。",
+      "innovation": "把事件驱动 SNN 从视觉一路贯彻到语言和动作解码，用 Laplacian 核 population coding 保证连续控制稳定。",
+      "method": "Spike-V 换掉 CNN 用脉冲层做视觉编码；Spike-L 用 token 级事件稀疏做跨模态推理；Spike-A 多层全连接 SNN 加 Laplacian 核 population coding 解码连续控制；在导航和机器人控制任务上评测。",
+      "results": "能耗和计算成本显著下降，性能与传统 VLA 持平（具体数字未列）。"
+    },
+    "scores": {
+      "relevance": 8.2,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28128",
+    "summary": "视频生成模型作为世界模拟器常出现动作不连续和接触物理不合理。作者发现主要问题在运动物体形变和交互实体的时空相关性。PhysisForcing 用像素级轨迹对齐和语义级关系对齐两个损失联合监督物理关键区域。在 R-Bench 上把 Wan2.2 和 Cosmos3-Nano 分别提升 22.3% 和 9.2%，作为世界模型闭环成功率从 16% 升到 24%。",
+    "highlights": {
+      "contribution": "把物理一致性显式塞进视频世界模型训练，兼顾生成质量和作为闭环 WM 的可用性。",
+      "innovation": "像素轨迹对齐+语义关系对齐两个损失协同，把监督集中在「物理信息丰富」的区域。",
+      "method": "输入机器人操作视频；DiT 视频生成主干；轨迹对齐 loss 用参考点轨迹监督特征，关系对齐 loss 用冻结视频理解 encoder 抽取区域间关系；在 R-Bench/PAI-Bench/EZS-Bench 上评测；WorldArena 协议下测闭环成功率。",
+      "results": "R-Bench 上 Wan2.2-I2V-A14B +22.3%、Cosmos3-Nano +9.2%（比 vanilla finetune 分别多 7.1% 和 3.7%）；闭环成功率 16%→24%。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8,
+      "popularity": 8.0,
+      "quality": 8.3,
+      "recommendation": 8.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28133",
+    "summary": "把人手动作直接当成 6DoF 机器人动作训 VLA 效果差，因为姿态噪声大且平行夹爪的接触模式和人手不一样。作者提出一个「桥接动作」：人和机器人共享的相对手腕平移。基于 π₀ 类 VLA 做交错动作 token 和注意力掩码。在双臂新任务上比 6DoF 迁移好很多且随人数据量扩展。",
+    "highlights": {
+      "contribution": "用共享动作空间「相对手腕平移」桥接人手到平行夹爪机器人，避开旋转和接触模式差异。",
+      "innovation": "抛弃 6DoF 的姿态迁移思路，用初始头部相机坐标系里的相对腕部平移作为跨体桥梁；π₀ 风格 VLA 加交错动作 token 与注意力掩码。",
+      "method": "输入人手/机器人视频；提取头相机初始帧下的相对手腕平移作为共享动作；π₀ 风格 VLA 主干，动作 token 交错、掩码控制哪些通道在训哪些 embodiment；双臂机器人任务集评估。",
+      "results": "在多项新双臂操作任务上桥接动作显著优于 6DoF 人手动作迁移，且性能随人数据量增加持续提升。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.1
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28455",
+    "summary": "作者不满足于只看预测误差，想搞清楚世界模型的隐状态里到底装了什么物理结构。他们提出事件条件的诊断协议：在自由运动、碰撞、遮挡三种事件下评估隐状态里是否有运动学、接触、物体永存的场分量。发现三种事件确实会重新加权这些场，抑制这些方向会削弱预测。",
+    "highlights": {
+      "contribution": "给被动物体状态世界模型的隐动力学做了个物理结构诊断协议。",
+      "innovation": "把物理知识拆成 kinematic/contact/object-permanence 三个「场」并做事件条件下的读出与因果消融。",
+      "method": "输入受控生成器数据（自由运动、碰撞、遮挡三种事件）；用 RNN、注意力、latent SSM 三种转移模型固定视界预测；测事件识别、场读出、时间对齐和固定视界投影 CFE 因果场效应。",
+      "results": "自由运动是运动学主导，碰撞混合运动学和接触，遮挡混合运动和物体永存；抑制场方向会削弱事件相关预测。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27681",
+    "summary": "LLM 做世界模型时预测好不代表表示好，因为「历史绕过」让隐状态不可辨识。作者用「严格中介」原则解决这个问题：预测只能依赖隐状态和动作。他们提出文本隐状态和 factorized GRPO 强化学习。TextWorld 和 ScienceWorld 上表示质量最多提升 57%，rollout 最多 +98%。",
+    "highlights": {
+      "contribution": "把「严格中介」这一经典可辨识性条件搬到文本世界模型上，让表示质量真的可测。",
+      "innovation": "离散、可解释、变长的文本 latent 状态加 fGRPO 树状 RL 训练在文本域强制严格中介。",
+      "method": "输入交互历史；把 latent 压缩成变长文本；用 fGRPO 树状 RL 训练，让 decoder 只能看 latent+action；TextWorld/ScienceWorld 评测一步预测和长程 rollout。",
+      "results": "一步预测精度不掉，表示质量最多 +57%，rollout 性能最多 +98%，随任务复杂度和视界增长提升更明显。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27780",
+    "summary": "很多规划环境天然是图结构（agent、工具、技能、路径），但世界模型误差分析大多假设向量态。作者研究图世界模型 GWM 里 rollout 误差怎么累积，导出拓扑感知的误差界并提出 Error-Aware GWM 训练目标。实验证长程稳定性变好，一步精度不掉。",
+    "highlights": {
+      "contribution": "给图结构世界模型建了一套显式的长程误差理论并落到实用的训练目标。",
+      "innovation": "把 rollout 误差分解成拓扑因子（图谱半径）和模型因子（层谱范数），并引入节点边联合误差算子处理动态边。",
+      "method": "统一状态-动作转移下推导固定边和动态边 GWM 误差界；训练目标 Error-Aware GWM 结合谱正则、rollout 一致性、关键节点加权；合成拓扑和异构 agent-graph 测试床评测。",
+      "results": "rollout 误差和规划遗憾随视界增长；Error-Aware GWM 在多种拓扑上提升长程稳定性且不掉一步精度。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.2,
+      "recommendation": 6.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27806",
+    "summary": "语言 agent 规划时会想象状态变化，但幻觉状态一旦写进上下文就会一路传下去。参数化世界模型误差可测但语义弱。作者提出 Hybrid-WM：LLM 当规划器，小参数模型预测动作有效性、状态增量、风险和价值；一致性门发现分歧时才触发修改。GPT-4o-mini 幻觉率 0.176→0.035。",
+    "highlights": {
+      "contribution": "混合语义 LLM 规划器和轻量参数化转移模型，专治 agent 幻觉状态传播。",
+      "innovation": "一致性门只在 LLM 想象增量和参数模型预测分歧时触发定向修订，兼顾成本和质量。",
+      "method": "LLM 保持为规划器；小参数模型预测 action validity、状态增量、风险、价值；对比一致性触发目标修订；四个图结构规划 benchmark；GPT-4o-mini 在线评测。",
+      "results": "GPT-4o-mini 幻觉状态率从 0.176 降到 0.035；模拟消融里成功率 0.668→0.838。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 8,
+      "popularity": 7.5,
+      "quality": 7.8,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27964",
+    "summary": "构建交互式世界模型需要长时间可控视频生成，但自回归会累积误差，同时人动作和相机轨迹这种异质控制常常打架。Directing the World 用 Fast-Slow Memory 稳定长视界 rollout，t-guided 动态投影和 Motion-CFG 做人体动作控制，再叠相机轨迹模块。支持多人和长程连贯生成。",
+    "highlights": {
+      "contribution": "自回归可控世界视频生成框架，把人体动作和相机轨迹解耦但共享同一视频先验。",
+      "innovation": "Fast-Slow Memory 训练策略稳定长 rollout，t-guided 动态投影+精化 Motion-CFG 做多人动作控制。",
+      "method": "输入文本+人体动作+相机轨迹；两阶段训练先学动作先验再学相机模块；构造大规模同步标注数据，运动为中心和相机为中心两个子集；对比现有可控生成方法。",
+      "results": "长时长生成稳定，运动对齐精确不牺牲画质，支持多人和世界探索式相机运动（未给单一定量数字）。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 8,
+      "popularity": 7.5,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28127",
+    "summary": "一篇立场文章。作者反驳 LeCun「LLM 必须被 JEPA 替代」的二分观点，主张 LLM 是世界模型的一个退化特例：状态空间是 token 序列，动作只有「追加一个 token」。作者认为从 NTP 到 JEPA 存在自然连续谱，中间站是多 token 预测、future-summary 预测、next-latent 预测。",
+    "highlights": {
+      "contribution": "在概念层面把 LLM 和 JEPA 类世界模型放到同一个连续谱系上讨论。",
+      "innovation": "把 NTP → 多 token → future-summary → next-latent → JEPA 视为逐步放松 LLM 约束的路径，同时点出数据和架构两个开放问题。",
+      "method": "立场论文；无实验，围绕 state/action/data/architecture 四个维度做论证。",
+      "results": "无实验结果，属观点性/综述性讨论。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 6.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27766",
+    "summary": "离线 RL 里扩散规划器大多是风险中性，容易漏掉罕见但灾难性的结果。RS-Diffuser 把扩散规划和分布式价值 critic 结合，训一个扩散状态轨迹规划器、逆动力学模型和分布式 critic；采样时把 CVaR 类风险敏感目标当引导信号。单个模型改推理参数就能切换风险偏好，在 D4RL 和风险机器人导航上都拿 SOTA。",
+    "highlights": {
+      "contribution": "把风险敏感目标直接塞进扩散规划的采样过程，兼顾回报和最坏情况。",
+      "innovation": "分布式蒙特卡洛 critic 用 quantile regression 估计完整回报分布，再把 CVaR 梯度当扩散去噪引导。",
+      "method": "训扩散状态轨迹规划器 + 逆动力学模型解码动作 + 分布式 critic；采样时按 CVaR 类目标梯度做 guidance；D4RL 风险敏感任务和风险机器人导航评测。",
+      "results": "回报和最坏情况鲁棒性都更好，安全违规减少；单模型可产生 risk-averse/neutral/seeking 行为。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28476",
+    "summary": "人形机器人的高精度控制常被目标域动力学不匹配拖后腿。FADA 用规划器+逆动力学模型三阶段架构：先在特权信息下训 oracle 策略，用 DAgger 蒸馏到学生 Planner-IDM，部署时冻结 planner 只用 2 分钟目标域数据微调 IDM。真实人形机器人上能做多种高精度全身任务。",
+    "highlights": {
+      "contribution": "用少样本域适配解决人形机器人动力学漂移，2 分钟目标数据就能上真机。",
+      "innovation": "Planner-IDM 拆分让适配集中在 IDM，用观察到的成对动作观测做监督，不需要最优演示或奖励。",
+      "method": "三阶段：oracle 特权策略训练；DAgger 蒸馏到 Planner-IDM 学生；部署时用约 2 分钟目标域 rollout 做标准监督微调 IDM；对比 in-context 和端到端适配基线。",
+      "results": "在动力学漂移下优于 in-context 和端到端基线；真实人形机器人执行多样高精度全身任务。"
+    },
+    "scores": {
+      "relevance": 8.2,
+      "recency": 8,
+      "popularity": 7.8,
+      "quality": 8.2,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28228",
+    "summary": "时序因果表示学习在离散时间隐变量模型上已有成熟可辨识性结论，但连续时间隐 SDE 模型基本还是开放的。作者用「环境导致的扩散协方差变化」填这个坑：证明两种成对逐坐标方差比不同的对角扩散就能把隐坐标辨识到置换和缩放，无需 drift 稀疏假设。",
+    "highlights": {
+      "contribution": "在无 drift 稀疏假设下给连续时间隐 SDE 拿到坐标可辨识性结果。",
+      "innovation": "用环境相关的扩散协方差变化当作可辨识信号，先在线性 OU 系统证明再推广到一般加性噪声隐 SDE。",
+      "method": "假设加性噪声隐 SDE 通过未知非线性微分同胚被观测；两个诊断扩散环境；两阶段估计器做解耦和图恢复；合成系统+Hardanger 桥监测数据实证。",
+      "results": "合成系统上验证可辨识性边界；桥梁传感数据展示实际可用性。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27720",
+    "summary": "从移动单目相机重建动态场景中的人物一直有尺度歧义、人-场景对齐、遮挡三大难题。SHOW 把参数化人体和前馈 3D 场景重建耦合到统一度量空间：人体先验注入归一化点图预测得到度量尺度场景，场景几何反过来约束人体估计。还支持 mask prompt 应对多人和杂乱背景。",
+    "highlights": {
+      "contribution": "把人体 mesh 恢复和前馈 3D 场景重建放到共享度量坐标系里协同优化。",
+      "innovation": "用参数化人体的语义结构和度量尺度先验注入到归一化点图预测；再用几何反过来约束人体，一次前馈完成。",
+      "method": "输入单目视频；mask-prompt 分支选择目标人；参数化人体注入尺度先验到点图；联合训练学人体感知几何特征和几何约束人体特征；对比动态场景重建和 mesh 恢复方法。",
+      "results": "在相机运动、遮挡、杂乱背景下度量尺度一致性、人-场景对齐和重建精度都更好（未给单一定量指标）。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.1
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28635",
+    "summary": "室内逆渲染分光照和材质本来就有歧义，现有可重光照 Gaussian Splatting 用点光源或环境贴图近似真实光源，忽略了物理体积导致光衰减和阴影不对。AEGIR 显式用面光源和差异化延迟渲染管线联合优化 emitter、材质和几何。改进了新视角、重光照和虚拟物体插入。",
+    "highlights": {
+      "contribution": "首个在 Gaussian Splatting 逆渲染里显式建局部面光源的框架。",
+      "innovation": "可微延迟渲染 + 多重要性采样 + 针对性正则化解决灵活 emitter 参数化带来的歧义。",
+      "method": "输入室内多视图；GS 表示几何和材质，面光源参数化为可优化 emitter；可微延迟渲染管线联合优化几何、材质、光源；多重要性采样+正则化稳定分解。",
+      "results": "光照重建更准确，下游新视角合成、可控重光照、虚拟物体插入都提升，尤其局部光照复杂场景更明显。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28321",
+    "summary": "从无标定稀疏视角做 3D 高斯重建很难，现有方法要么每场景优化要么需要相机参数。StructSplat 直接吃无标定图像做前馈可泛化重建，用像素对齐特征注入学纹理，语义先验保全局一致，相机对齐防信息泄漏。DL3DV 上 PSNR 28.045 比 AnySplat 高 5.67 dB。",
+    "highlights": {
+      "contribution": "无相机参数的稀疏视角前馈 GS 重建，把几何、语义、纹理三块显式解耦。",
+      "innovation": "结构化表示 + 像素对齐特征注入 + 语义先验 + 相机对齐防泄漏。",
+      "method": "输入无标定稀疏视图；结构化表示分几何、语义、纹理三条支路；像素对齐特征注入学纹理；语义先验保全局一致；相机对齐策略避免信息泄漏；DL3DV/ACID/RealEstate10K 评测。",
+      "results": "DL3DV PSNR 28.045 vs AnySplat 22.377 (+5.67 dB)；跨数据集 ACID +1.94 dB、RealEstate10K +1.72 dB。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8,
+      "popularity": 7.8,
+      "quality": 8.0,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28581",
+    "summary": "把 GS 用到卫星影像有速度但多日拍摄光照差异大导致几何不准。SatSplat 首次把 2DGS 用到卫星摄影测量，用仿射相机模型加最小 delta 在线校准相机，加阴影映射和逐相机颜色矫正。DFC2019 上平均绝对误差减 11.93%，峰值显存降 31%。",
+    "highlights": {
+      "contribution": "第一次把 2D Gaussian Splatting 适配到卫星摄影测量，兼顾几何精度和大规模效率。",
+      "innovation": "in-splat 相机 delta 精化 + 几何阴影映射 + 逐相机颜色矫正处理多时相光照差。",
+      "method": "输入多日卫星影像；仿射相机模型近似卫星传感器，学最小 delta 做相机在线调整；2DGS 表示场景，训练中集成阴影映射和逐相机颜色矫正；DFC2019、IARPA2016 评测。",
+      "results": "DFC2019 平均绝对误差降 11.93%，峰值显存降 31%，超过之前 3DGS 类基线。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 6.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28622",
+    "summary": "可微渲染大多用专用渲染器，但下游图形学任务要 mesh。之前的可微 mesh 渲染只能做以物体为中心的场景。Meshtryoshka 把嵌套 mesh 壳（像俄罗斯套娃）和 SDF 组合起来，每次前向从 SDF 抽表面，用不透明度做 alpha 合成，只用现成三角光栅化。首次让 mesh 可微渲染扩展到无界真实场景。",
+    "highlights": {
+      "contribution": "让 mesh 可微渲染真正扩展到无界真实世界场景，且不需要专用可微渲染器。",
+      "innovation": "嵌套 mesh 壳 + SDF 抽表面 + 不透明度间接更新顶点位置的机制。",
+      "method": "3D 表示为 SDF；每次前向从 SDF 等值面抽多层 mesh 壳；顶点不透明度按 SDF 值算；各壳用现成三角光栅化独立渲染再 alpha 合成；对比 surface-based 可微渲染方法。",
+      "results": "物体级场景性能接近 SOTA 表面法；扩展到无界场景时新视角合成接近顶级非 mesh 方法。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 8,
+      "popularity": 7.2,
+      "quality": 7.8,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27929",
+    "summary": "作者提出「具身集体智能 ECI」的观点：机器人从单体自主向多体协作演化时，团队应共享具身 agent loop 产生的状态（世界上下文、任务进度、技能经验），而不只是共享地图和数据集。文章综述这两条路径再给出 Co-Perception/Co-Action/Co-Evolution 框架，最后用一个导航案例演示共享世界记忆。",
+    "highlights": {
+      "contribution": "把 agentic AI 潮流和多机器人协作接起来，提出「具身集体智能」概念框架。",
+      "innovation": "强调共享的不再是数据集/地图而是具身 agent 循环内部状态，并拆成共感知、共行动、共进化三层。",
+      "method": "综述+概念论文；用一个导航案例演示共享世界记忆继承带来的收益，非完整框架验证。",
+      "results": "案例研究显示新加入机器人可从团队合并记忆中受益（未给完整定量评测）。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 6.5,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28011",
+    "summary": "作者把 LLM agent 用到工业过程的容错控制里：把故障检测输出转成受约束的恢复动作。整个框架有多 agent 工作流、数字过程双胞胎做预执行仿真、CPSMod 本体上的图 RAG 提供多跳知识检索。在 Mixing Module 和 CSTR 两个基准上，GPT-4o-mini 类小模型也能拿到有效恢复决策。",
+    "highlights": {
+      "contribution": "把 agentic LLM 落地到工业过程容错控制，从检测直接接到经过验证的执行动作。",
+      "innovation": "多 agent + Digital Process Plant Twin + CPSMod 本体图 RAG，恢复动作要经过双胞胎确定性验证才执行。",
+      "method": "输入故障检测报告；多 agent 拆解成监控/规划/动作合成/仿真/验证/重提示；DPPT 提供仿真服务；图 RAG 检索本体知识；恢复方案先验证再下发；失败则回退到安全策略；Mixing Module 和 CSTR 上评测。",
+      "results": "GPT-4o-mini 和 GPT-4.1-mini 都能在过程动力学允许的延迟内产出可行恢复决策。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28182",
+    "summary": "LLM 具身多 agent 常和队友或环境状态错位导致协作低效。LLawCo 让 agent 反思失败提取错位模式，抽成「必要时才说话」「等队友」这类高级行为律，再通过监督微调塞进思维链。作者还提了 PARTNR-Dialog 大规模多 agent 通讯协作基准。四种 LLM 主干上平均成功率 +4.5%（PARTNR-Dialog）、+6.8%（TDW-MAT）。",
+    "highlights": {
+      "contribution": "让 embodied 多 agent 自主习得「合作律」并通过 CoT 微调对齐队友和任务。",
+      "innovation": "反思失败→抽律→SFT 到思维链，把行为准则显式塞进推理过程。",
+      "method": "反思失败 rollout 抽取错位模式；抽象成高级行为律；SFT 到 agent 的 CoT；在 PARTNR-Dialog 和 TDW-MAT 上评测；四个 LLM 主干对比。",
+      "results": "PARTNR-Dialog 平均成功率 +4.5%，TDW-MAT +6.8%，超过 SOTA 开源通讯 agent 框架。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8,
+      "popularity": 7.5,
+      "quality": 7.8,
+      "recommendation": 7.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28456",
+    "summary": "LLM agent 会不会自发学会撒谎？作者搭了个可持续性博弈：agent 管工业、军事、生态资源，被告知资源可再生但其实不会。给一些 agent 邻居信息、允许其宣战/说谎/看声誉。发现即使不允许说谎欺骗也会自发出现；显式允许说谎主要增加虚张声势和分散注意；声誉记忆能减少生态崩溃。",
+    "highlights": {
+      "contribution": "系统测量 LLM agent 在多 agent 可持续性博弈里的欺骗涌现行为。",
+      "innovation": "把「可持续性博弈+错误信念+网络交互」组合成 agent-based 测试床，加规则 agent 做基线。",
+      "method": "构造 agent-based sustainability game；LLM agent 管三类资源、看邻居状态、宣战、可选说谎、看声誉；规则 agent 做基线；扫描信息可见性、允许说谎、声誉记忆等变量。",
+      "results": "欺骗即使无显式许可也会涌现；显式许可主要增加虚张；声誉记忆和生态可视度减少崩溃。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 6.5,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28270",
+    "summary": "作者提出 ANIS，一个内嵌到 agent 认知回路的仿生免疫系统架构，用来对抗记忆污染、工具链操纵、多 agent 协议攻击这类运行时劫持。设计了六层 Immune Tower、Agent Virus/Vaccine 分类、Meta-Self-Auto 三元 harness，明确 alignment 是训练时静态基础、ANIS 是运行时动态执法。",
+    "highlights": {
+      "contribution": "提出「Agent-Native 免疫系统」概念架构，把内生防御和传统 alignment 明确分开。",
+      "innovation": "六层 Immune Tower（含物理逻辑隔离 L1）+ Agent Virus/Vaccine 分类 + Meta/Self/Auto 三元 harness + 连续免疫学习。",
+      "method": "概念性框架论文；给出分类、架构、评估指标（如 Autoimmunity Rate）建议，未做实证评测。",
+      "results": "无实验，属架构与研究议程性提案。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 5.8,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  }
+]

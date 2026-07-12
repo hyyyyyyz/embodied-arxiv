@@ -400,24 +400,6 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.04691",
-    "summary": "零样本信息抽取里，monolithic prompt 边界不准，每类型 prompt 又冲突费 token。SMADE-IE 用一个自适应模式选择器把输入路由到全局抽取或类型为中心抽取两条路径，省掉无意义的类型选择；冲突预测进入 evidence-driven debate——按 Toulmin 论证结构走，再用外部证据评分和 Bayesian 更新做置信度聚合。9 个 NER/RE/JERE benchmark 上比已有 zero-shot IE baseline 都好且更省 token。",
-    "highlights": {
-      "contribution": "提出稀疏路由 + 证据驱动辩论的零样本 IE 多 agent 框架。",
-      "innovation": "把模式选择做成自适应路由减少 agent 交互；把 debate 结构化成 Toulmin 论证 + Bayesian 置信更新。",
-      "method": "Adaptive Mode Selector 决定走 Global Extraction 还是 Type-Centric；冲突预测进入 Evidence-Driven Debate，把论点拆 Toulmin 成分，外部证据打分 + Bayes 更新；早停。",
-      "results": "9 个 benchmark 跨 NER、RE、JERE 均超已有 zero-shot IE baseline，token 效率也更高。"
-    },
-    "scores": {
-      "relevance": 4.5,
-      "recency": 10,
-      "popularity": 5.5,
-      "quality": 6.5,
-      "recommendation": 5.8
-    },
-    "affiliations": []
-  },
-  {
     "arxiv_id": "2606.05468",
     "summary": "针对 VLA 模型部署难、奖励难设计的痛点，作者提出 FlowPRO：一个无奖励的离线强化微调框架，专门给 flow-matching 动作头用。核心是 RPRO 目标函数（对比优化 + 近端正则）防止奖励黑客，再配合遥操作「干预-回滚」自动产生正负轨迹对。在 4 个长程双臂任务上比 4 个基线全面领先，成功率最高。",
     "highlights": {
@@ -468,6 +450,24 @@
       "popularity": 5,
       "quality": 7,
       "recommendation": 7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28349",
+    "summary": "长上下文推理里，传统 RAG 只拿 top-K 片段，很多相关证据在推理前就被扔掉了。作者提出 HMARS，把长上下文当成分层管理的记忆：子智能体守着有限区域的证据，中层智能体做区域协调，前沿模型再做最终推理。他们还自建了两个诊断 benchmark 来测证据广度和上下文相关性，HMARS 在长文档和多轮记忆任务里都比检索、重排、全上下文、图检索和 agent 基线更强，靠的是更完整地捞出支撑证据。",
+    "highlights": {
+      "contribution": "提出 HMARS 分层多智能体记忆系统，把长上下文视为可管理的记忆而非扁平检索池，并构建两个诊断 benchmark 验证证据广度和上下文相关性。",
+      "innovation": "分层 sub-agent / mid-agent / frontier model 架构，让每个子智能体锚定有限记忆区域，中层做查询相关的区域协调，避免 top-K 检索提前丢证据。",
+      "method": "输入长文档或多轮对话；sub-agent 负责有界记忆区块的 grounded 访问，mid-agent 按查询做区域协调整合，frontier 大模型基于取回的证据页做最终推理；配套两个诊断 benchmark 评估。",
+      "results": "在长文档和多轮记忆任务上综合表现最好，超过检索、重排、全上下文、图检索和 agentic 长上下文基线；证据覆盖分析显示提升来自更完整地取到支撑证据。"
+    },
+    "scores": {
+      "relevance": 7.2,
+      "recency": 6,
+      "popularity": 6.5,
+      "quality": 7.4,
+      "recommendation": 7.3
     },
     "affiliations": []
   }

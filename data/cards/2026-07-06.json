@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2607.04880",
+    "summary": "针对用户环境部署 VLA 策略难以泛化的问题，PRISM 提出一条从单张图片加语言指令自动生成个性化机器人数据集的端到端流水线。它构造与用户场景语义几何对齐但实例多样化的「数字表亲」场景，直接合成可执行示范，避免遥操。LIBERO / LIBERO-Plus 上超基线，三个真实任务成功率最高 100%。",
+    "highlights": {
+      "contribution": "首次实现从单图 + 语言到个性化机器人示范数据集的端到端合成，替代昂贵遥操。",
+      "innovation": "「数字表亲」场景生成 —— 语义/几何对齐目标环境但实例级多样化，配合任务导向的轨迹合成。",
+      "method": "输入单张环境图片与自然语言指令；用生成模型构建对齐场景；在其中合成可执行示范轨迹；用于训练 VLA 策略。",
+      "results": "LIBERO / LIBERO-Plus 优于基线合成方案，三个真实操作任务最高 100% 成功率，跨环境泛化更强。"
+    },
+    "scores": {
+      "relevance": 8.6,
+      "recency": 9,
+      "popularity": 7.4,
+      "quality": 7.8,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05396",
+    "summary": "现有视点鲁棒 VLA 都要显式给相机外参，实际部署时相机常重装重配，非常脆。CamVLA 让策略「自己搞清楚相机在哪」：一路预测相机坐标系下的末端动作，一路预测 6-DoF 手眼矩阵，二者几何合成为基座动作。单张 RGB、无标定无深度，仿真和真实实验在未见视角下成功率一致提升。",
+    "highlights": {
+      "contribution": "把 VLA 从「必须已知相机外参」推进到完全免标定、免深度、单视角部署。",
+      "innovation": "解耦「怎么动」(相机中心动作) 与「从哪看」(手眼矩阵)，用确定性几何变换在推理时合成基座动作。",
+      "method": "输入单张 RGB + 语言指令；VLA 主干双头预测相机坐标末端动作和 6-DoF 手眼矩阵；确定性几何合成为机器人基座动作；仿真 + 真机训练。",
+      "results": "仿真与真机数据评测，在多种未见视角下成功率一致高于依赖外参的视角鲁棒 VLA 基线。"
+    },
+    "scores": {
+      "relevance": 9.2,
+      "recency": 9,
+      "popularity": 8.4,
+      "quality": 8.6,
+      "recommendation": 8.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.04816",
+    "summary": "VLA 里 VLM 表征并没有针对动作条件优化，得让 action expert 硬桥接。CAC-VLA 在 VLM 内直接学一套轻量潜动作接口 —— 由未来动作段编码出「粗到细潜动作」，再用 context gate 自适应调节它对 action expert 的影响。LIBERO 平均 98.3%、LIBERO-Plus 89.5%。",
+    "highlights": {
+      "contribution": "把动作级引导内化到 VLM，无需外挂动作推理模块就能显著提升 VLA 表现。",
+      "innovation": "coarse-to-fine 潜动作 + context gate 自适应调节强度，实现 VLM 原生动作条件化。",
+      "method": "训练 VLM 预测粗到细潜动作 (由未来动作段编码得到)；context gate 决定潜动作对 action expert 的作用强度；下游生成连续动作。",
+      "results": "LIBERO 平均成功率 98.3%，LIBERO-Plus 89.5%，处于当前操作 benchmark 前列。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9,
+      "popularity": 7.6,
+      "quality": 8.2,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05122",
+    "summary": "VLA 导航容易被视觉干扰误导。作者用 SegFormer 实时把可通行区染绿、不可通行染红当作视觉 grounding 输入 OmniVLA，无需重训。在 Grand Tour 数据集上把最远航路点误差降 27-44%，长指令收益更大，主要贡献是把预测路径长度当作正则减了 30%。",
+    "highlights": {
+      "contribution": "首次系统评估视觉 grounding 对 VLA 导航的作用，给出即插即用的低成本增强手段。",
+      "innovation": "红绿语义分割掩码作为额外视觉输入，充当轨迹长度正则器。",
+      "method": "SegFormer 实时输出可通行/不可通行二分割；将其作为观察增强或联合目标增强输入到冻结的 OmniVLA。",
+      "results": "OmniVLA + Grand Tour 上最远航路点误差降 27-44%，预测路径长度减 30%，长指令收益最大。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9,
+      "popularity": 6.4,
+      "quality": 6.8,
+      "recommendation": 6.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.04978",
+    "summary": "JEPA 世界模型在训练时就得选好推理范式 (要么潜规划、要么行为克隆)，很不灵活。Qantara 用「状态轴布朗桥插值 + 动作轴 noise-to-data flow matching」联合训练，让同一 checkpoint 支持潜规划、行为克隆采样、反向动力学三种推理路径。Push-T 90.1 SR，OGBench-Cube 比 DINO-WM +7.7、比 LeWM +19.7。",
+    "highlights": {
+      "contribution": "把 JEPA 世界模型从「单一范式规划器」升级到同一权重下的「多范式控制器」。",
+      "innovation": "在 (动作时间, 状态时间) 噪声方阵上把训练质量集中到边缘，覆盖三种推理查询；布朗桥 + flow matching 双轴目标。",
+      "method": "输入连续潜状态；训练时对状态轴用干净潜之间的布朗桥插值、动作轴用 noise-to-data flow matching；推理时按需走三条路径 (规划 / BC / 反向动力学)。",
+      "results": "Push-T 90.1 SR；LeWM 三种子平均 91.2 SR；OGBench-Cube 相对 DINO-WM +7.7、LeWM +19.7；BC 与 video-inverse 路径 Push-T 82-83、Cube 71-73。"
+    },
+    "scores": {
+      "relevance": 8.6,
+      "recency": 9,
+      "popularity": 7.4,
+      "quality": 8.4,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05238",
+    "summary": "单预测器 JEPA 在随机环境的分岔转移里会崩 —— 回归最优解就是后继嵌入的均值，落在没有实际含义的中间。作者证明这个塌缩，并证明 MoP-JEPA 的硬指派预测器会收敛到「转移分布量化器」，一头一模态。OGBench 上从 0.02-0.09 SR 提到 0.85，还配了完整的验证协议防止 coverage 作弊。",
+    "highlights": {
+      "contribution": "指出并证明单预测器 JEPA 在多模态转移上的结构性失败，给出最小可行的硬指派预测器混合。",
+      "innovation": "硬指派 mixture-of-predictors + 一整套包含 codebook 控制、shuffled context、路由 gated readout 的可验证评测协议。",
+      "method": "多头预测器，每头对应一个后继模态；训练用硬指派而非 gated MoE；planner 在预测的模态上做规划；用无输入 codebook、shuffled context 等对照做作弊检测。",
+      "results": "OGBench 从单预测器 0.02-0.09 提到 0.85 SR；在所有 3 个 maze 上比最强软 baseline 强 2-5 倍；真环境执行在 7 个 OGBench baseline 中最难 maze 排第二。"
+    },
+    "scores": {
+      "relevance": 8.4,
+      "recency": 9,
+      "popularity": 7.6,
+      "quality": 8.6,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05352",
+    "summary": "首次提出多玩家世界模型 —— 传统单玩家世界模型把其他 agent 塞进环境，作者显式条件在多路动作流上，学会把场景变化归因到正确玩家。用 Rocket League 一万小时数据训了个 5B 潜扩散模型，单张 B200 上四人对战实时 20 FPS，短 clip 训练但 rollout 5 分钟不崩，实际能连跑数小时。",
+    "highlights": {
+      "contribution": "首个可实时运行、面向多玩家紧耦合动力学的交互世界模型，并开放数据和代码。",
+      "innovation": "多智能体动作条件方案 + 表征自编码器结构；把每个玩家动作作为独立条件流。",
+      "method": "输入历史帧和多路玩家动作流；5B 参数潜扩散 Transformer；用 10000 小时 Rocket League 对局训练；系统评估视频编码器、生成目标、多玩家条件三种设计选择。",
+      "results": "单张 B200 GPU 上 20 FPS 实时生成 4 人对战；rollout 分布质量到 5 分钟稳定，实测可跑数小时不崩；含物理理解专项评测。"
+    },
+    "scores": {
+      "relevance": 8.4,
+      "recency": 9,
+      "popularity": 9.2,
+      "quality": 9.0,
+      "recommendation": 8.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05390",
+    "summary": "可变形物体的世界模型缺高质量真实数据。Deform360 用 41 台环绕相机 + 双手触觉夹爪采了 198 个日常物体、1980 段交互、215+ 小时观察，还提出 markerless 视觉触觉 3D 跟踪抽稠密几何。系统比较了 2D 视频模型和 3D 粒子模型两种范式，并示范用于真实机器人可变形物体规划。",
+    "highlights": {
+      "contribution": "面向可变形世界模型的大规模真实多视角 + 触觉基准，明确 2D 视频 vs 3D 粒子模型的取舍。",
+      "innovation": "41 视角环绕 + 双手触觉的联合采集平台，配无标记视觉触觉 3D 跟踪管线。",
+      "method": "198 个日常物体，1980 条双手操作序列；41 相机 + 触觉夹爪采集；无标记 3D 跟踪抽稠密几何和动力学；用于评测 SOTA 2D / 3D 世界模型。",
+      "results": "覆盖 215+ 小时真实观察；系统对比 2D 视频 vs 3D 粒子模型的可扩展性与结构先验；示范真机可变形物体规划。"
+    },
+    "scores": {
+      "relevance": 8.6,
+      "recency": 9,
+      "popularity": 8.0,
+      "quality": 8.2,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05475",
+    "summary": "移动端 LLM 推理的硬件效率瓶颈没被系统摸过。作者跨 5 个框架 (含 llama.cpp、GENIE) 和 CPU/GPU/NPU 三种后端做首份大规模测量，配套自研 PowerBench 做精细能耗归因，发现 NPU 上框架差异被放大 10 倍、prefill 与 decode 应分别用 NPU 和 CPU、以及调度可省 40% 能耗；给出最优配置最高降 54.8% 能耗。",
+    "highlights": {
+      "contribution": "首份跨框架跨后端的移动端 LLM 推理测量研究，落到能耗归因和最佳实践。",
+      "innovation": "PowerBench 提供后端级别的细粒度能耗归因，超越传统整机测量。",
+      "method": "覆盖 llama.cpp、GENIE 等 5 个框架和 CPU/GPU/NPU 三后端；PowerBench 采集精细能耗；系统消融算子、量化、offload、调度。",
+      "results": "NPU 上框架差异达 10x；prefill 用 NPU、decode 用 CPU；不当调度浪费 40% 能耗；建议配置在 NPU 后端能降 54.8% 能耗。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 9,
+      "popularity": 6.4,
+      "quality": 7.4,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.04940",
+    "summary": "灵巧手 sim-to-real 一直难在接触物理和执行器非理想。作者用稠密触觉 + 关节力矩双通道让 RL 显式调控物理交互，配一个并行前向运动学快速触觉仿真、电流到力矩标定、执行器动力学随机化，靠 asymmetric PPO 纯仿真训五指手直接零样本上机，能可控抓握力跟踪与在手重定向。",
+    "highlights": {
+      "contribution": "首次在多指灵巧手上实现纯仿真训练、可控抓握力和在手重定向的零样本 sim2real。",
+      "innovation": "快速稠密触觉仿真 + 电流到力矩标定 + 执行器动力学随机化三件套。",
+      "method": "输入触觉 + 关节力矩；asymmetric actor-critic PPO 在仿真中训练；前向运动学并行计算稠密触觉；电流-力矩映射替代扭矩传感器；执行器动力学建模并随机化。",
+      "results": "五指真机零样本部署，成功完成命令驱动的抓握力跟踪和物体在手重定向，无需真机微调。"
+    },
+    "scores": {
+      "relevance": 7.6,
+      "recency": 9,
+      "popularity": 7.0,
+      "quality": 7.6,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05133",
+    "summary": "自动驾驶的世界动作模型 (WAM) 一般用级联或双 DiT 把视频想象和动作预测分开，视频学到的物理没直接影响到轨迹。UNIVERSE 用单个 mask-modulated DiT 把未来视频 latent 和 ego 轨迹 token 塞进同一套生成参数联合训练，还引入模态解耦可见性掩码防未来泄漏、支持轨迹专用推理 4.3× 加速。NAVSIM PDMS 91.0，跨 nuScenes / Bench2Drive 零样本迁移。",
+    "highlights": {
+      "contribution": "统一的视频 + 轨迹生成 DiT，让稠密视频监督直接塑造轨迹去噪，改善跨域动作泛化。",
+      "innovation": "模态解耦可见性掩码 —— 历史共享、未来视频与轨迹互相不看，支持三种推理模式且无未来泄漏。",
+      "method": "单 DiT，同时对未来视频 latent 和 ego 轨迹 token 做扩散；共享参数联合训练；可见性掩码控制注意力；推理时可选纯轨迹、纯视频、联合三种。",
+      "results": "NAVSIM PDMS 91.0 (双 DiT 89.6)；对 nuScenes 和 Bench2Drive 零样本迁移；纯轨迹推理比联合快 4.3×。"
+    },
+    "scores": {
+      "relevance": 8.4,
+      "recency": 9,
+      "popularity": 7.8,
+      "quality": 8.2,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05577",
+    "summary": "长篇小说需要能回答「谁何时知道秘密、事件是否先于叙述、伏笔是否回收」这类多跳问题的写作者记忆。NWM 给出叙事学结构化的类型化时序状态图 + 查询条件化混合检索，在两个语料上多跳叙事 QA 显著超越 Graphiti/Zep、GraphRAG 与 flat 检索。",
+    "highlights": {
+      "contribution": "面向长篇小说写作的叙事学结构化世界模型，专门服务多跳叙事 QA。",
+      "innovation": "叙事学基础的类型化时序状态图，配查询条件化的混合检索。",
+      "method": "从章节安全的证据中抽取实体、事件、时序、认识状态构建图；查询条件化混合检索取证据；用固定的 Opus 4.8 阅读器作答，只评测记忆本身。",
+      "results": "多跳叙事 QA 在两个语料上均显著超 Graphiti/Zep 基线，远超 GraphRAG 与平面检索；优势来自结构而非抽取器质量。"
+    },
+    "scores": {
+      "relevance": 4.4,
+      "recency": 9,
+      "popularity": 6.2,
+      "quality": 7.2,
+      "recommendation": 5.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.04927",
+    "summary": "WAM 擅长执行但缺 VLM 那种语言级规划接口，复杂多步任务不好拆。DSWAM 走双系统：System 1 是 WAM 执行器常驻，System 2 是 VLM 子任务规划器按需激活。执行侧集成 TensorRT、异步执行、RTC 让策略查询不阻塞控制。首次在 DeMaVLA 真实可变形操作设置下和 VLA 做同平台、同数据、同协议的公平对比。",
+    "highlights": {
+      "contribution": "把 WAM 和 VLM 规划以双系统方式融合，并首次给出 WAM vs VLA 的真机可控对比。",
+      "innovation": "System 2 规划按需激活；System 1 WAM 直接预测动作 chunk 而不显式生成未来视频；实时执行链路 (TensorRT + async + RTC)。",
+      "method": "System 1 WAM 执行器 = 动作预测 + 视频 co-training 训练，推理只出 action chunk；System 2 VLM 用短期视觉历史 + 全局 prompt 预测子任务序列；DeMaVLA 真机可变形任务上对齐 VLA 训练。",
+      "results": "在 DeMaVLA 真机设置下与 VLA 匹配平台/数据/协议做直接对比；实时链路让策略查询不阻塞机器人控制。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 9,
+      "popularity": 7.4,
+      "quality": 7.8,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05347",
+    "summary": "in-the-wild 数据光照多变、无位姿信息，前馈 3DGS 常翻车。WildSplat 双分支解耦几何和外观：几何分支抽外观不变结构并预测相机位姿，外观分支通过全局预调制的 cross-attention 把目标外观注入内容特征。配联合多参考训练防特征纠缠，稀疏输入单前向即达 SOTA。",
+    "highlights": {
+      "contribution": "首个面向未标定 in-the-wild 图像的前馈外观条件 3DGS 新视角合成框架。",
+      "innovation": "几何/外观双分支解耦 + 全局预调制 cross-attention 注入外观 + 联合多参考训练。",
+      "method": "几何分支从未标定图像抽外观不变几何并回归相机位姿；外观分支用预调制 cross-attention 注入目标外观；多参考联合训练防止分支耦合。",
+      "results": "在 in-the-wild 稀疏输入下超过优化基和前馈基线，单次前向达到新视角合成与外观编辑的 SOTA。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 9,
+      "popularity": 7.0,
+      "quality": 7.4,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05243",
+    "summary": "单目视频里做人 + 场景动态重建又要几何一致又要照片级渲染。GUSH3R 前馈一次搞定 —— 一次前向从单目人-场景视频重建动态人 (everyone) 与静态场景 (everywhere) 为 3DGS 基元，兼具几何一致和新视角合成能力，比优化型方法推理效率高一大截。",
+    "highlights": {
+      "contribution": "首个可在线前馈的动态人-场景 3DGS 重建框架，兼顾照片级渲染与非刚性人体。",
+      "innovation": "把人 (动态) 和场景 (静态) 统一为一次前向输出的 3DGS 基元，避开点云/网格类前馈方法的表达局限。",
+      "method": "输入单目人-场景视频；前馈网络同时预测静态场景与动态人的 3DGS 基元；单次前向覆盖几何 + 外观。",
+      "results": "在单目人-场景数据集上 NVS 质量与优化型方法接近，同时显著缩短推理时间。"
+    },
+    "scores": {
+      "relevance": 6.6,
+      "recency": 9,
+      "popularity": 6.6,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05598",
+    "summary": "3DGS 假设输入干净多视角一致，可现实里传感器污渍、水印、UI 覆盖这类固定在图像平面的「屏幕空间伪影」会被烤进 3D 几何变成 floater。SSA-3DGS 无监督联合优化 3D 场景 + 可学 2D 覆盖层，利用跨视角几何一致解耦静态伪影，同一破损输入下比 3DGS 高最多 9 dB PSNR。",
+    "highlights": {
+      "contribution": "无监督解耦屏幕空间伪影和真实 3D 场景几何，恢复干净 3DGS 场景。",
+      "innovation": "联合优化 3D 场景和可学 2D 覆盖层，用跨视角一致性判断静态伪影。",
+      "method": "3DGS 场景 + 一层可学的 2D 覆盖参数联合优化；覆盖层解释屏幕固定伪影，3DGS 负责真实 3D；无需监督或人工标记。",
+      "results": "多种合成损伤和自采真实数据集上，相对同破损输入训练的 3DGS 提升最多 9 dB PSNR，同时保留伪影本身。"
+    },
+    "scores": {
+      "relevance": 4.6,
+      "recency": 9,
+      "popularity": 6.2,
+      "quality": 7.0,
+      "recommendation": 6.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05373",
+    "summary": "3D 重建和生成常拆开做，或塞进 latent 空间 (吃 VAE 损失还要预训 RAE)。PixWorld 直接在像素空间用统一扩散范式做两件事：把扩散监督建在渲染图像上而不是 latent 特征，另加一个几何感知损失把渲染视图和真值对齐到 3D 基础模型的几何感知特征空间。生成超过 latent 基线，重建与 SOTA 打平。",
+    "highlights": {
+      "contribution": "在像素空间统一 3D 生成与重建，避开 latent 编码信息损失。",
+      "innovation": "把扩散目标定义在渲染图像上 + 引入 3D 基础模型的几何感知特征损失。",
+      "method": "单一扩散模型联合做 3D 生成和重建；渲染 2D 图像后计算像素/感知监督；额外把渲染视图与真值对齐到预训 3D 基础模型的几何感知特征。",
+      "results": "生成性能一致超过 latent 空间生成方法；重建性能与 SOTA 重建方法相当。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 9,
+      "popularity": 7.2,
+      "quality": 7.4,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05522",
+    "summary": "3DGS 训练靠点估 + 手调启发式，没有原生不确定性和复杂度控制，稀疏视图和固定采集预算下很吃亏。作者提出渲染感知的贝叶斯 3DGS，用 NIW 后验跟踪高斯的均值和协方差，加可选 DP 扩展控制组件用量。native 不确定性能做区间校准和主动视点选择：16 → 32 视点预算下 PSNR 提 0.45 dB、95% 覆盖误差降到基线 1/17。",
+    "highlights": {
+      "contribution": "把原生贝叶斯后验和主动视点选择接入 3DGS，为决策型任务提供概率场景表示。",
+      "innovation": "NIW 后验跟踪高斯几何 + DP 组件用量控制 + 渲染派生的替代统计。",
+      "method": "对高斯均值/协方差维护 Normal-Inverse-Wishart 后验，用渲染派生统计更新；DP 扩展给出组件用量信号；后验采样重渲染得到预测不确定性用于主动视点选择。",
+      "results": "16→32 主动视点任务下 PSNR +0.453 dB、LPIPS -0.0146，29/39 场景-种子胜出；95% 覆盖误差比 proxy 低 17x、比 3 成员深度集成低 10x，训练成本仅其三分之一。"
+    },
+    "scores": {
+      "relevance": 5.4,
+      "recency": 9,
+      "popularity": 6.4,
+      "quality": 7.2,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05543",
+    "summary": "室内语义占用大多做单视/房间级在线感知，连通空间的长时程语义建图没做透。作者建了统一 ScanNet、ScanNet++、Matterport3D 的分层基准 HIOcc，并提出 GEM-Occ：把局部视觉几何预测当瞬时证据，转成语义高斯占用证据 + 自由空间射线证据，通过可见性与不确定性感知的因果更新写入分层记忆 (局部缓存/房间子图/建筑图)。",
+    "highlights": {
+      "contribution": "统一多数据集的分层室内占用基准 + 高斯证据记忆框架，支撑局部/房间/建筑三级评测。",
+      "innovation": "把 pointmap 从「持久地图状态」改成「瞬时证据」，用高斯占用证据 + 自由空间射线证据的因果融合。",
+      "method": "从 RGB-D 或全景观察抽局部视觉几何证据；转为高斯占用与自由空间射线；按可见性与不确定性做因果更新写入分层记忆；随时用高斯到占用的 splatting 查询。",
+      "results": "HIOcc 上局部占用预测、在线建图稳定性、自由空间推理、重访一致性、建筑级扩展性均超过室内占用与高斯建图基线。"
+    },
+    "scores": {
+      "relevance": 7.6,
+      "recency": 9,
+      "popularity": 6.8,
+      "quality": 7.6,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.04786",
+    "summary": "生产代码一改，测试用例哪些要维护是个昂贵前置任务。MAST 融合静态、词法、语义三种分析，加智能融合和 post-check 判断哪些测试要改，评测在 21 个 Ericsson 的工业 Java 仓库上做，能推断测试和生产代码的关系而非依赖已有映射。相对 SOTA baseline 精确度、准确率、F1、F2 都更好，只略损召回。",
+    "highlights": {
+      "contribution": "首个把静态/词法/语义分析统一到智能体融合的测试维护预测框架，评测贴近工业实际。",
+      "innovation": "多分析结果通过智能融合 + post-check 决策；不预设测试到生产代码的映射。",
+      "method": "多个专门 agent 各做一种分析 (静态/词法/语义)；智能融合层合并结果；post-check 过滤；标准化输入格式覆盖仓库级。",
+      "results": "21 个工业 Java 仓库上精确度、准确率、F1、F2 全面高于 SOTA baseline，仅召回略降；消融证明每种分析都必要。"
+    },
+    "scores": {
+      "relevance": 3.6,
+      "recency": 9,
+      "popularity": 5.6,
+      "quality": 6.8,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.04963",
+    "summary": "长时程 RL 训 LLM agent，奖励稀疏容易「轨迹忽视」—— 中间步骤忘了目标和历史。已有基于 Shannon 熵的步级监督分不清「状态本身复杂」和「agent 不自信」。作者提出归一化熵，衡量置信相对该 agent 平均行为的偏差，再基于此做 STAPO —— 分层组级 RL，用轨迹感知奖励 + 轨迹独立惩罚联合优化异常步。ALFWorld、WebShop、SAQA 上 SOTA。",
+    "highlights": {
+      "contribution": "定位并缓解长时程 LLM agent 的「轨迹忽视」，把步级监督做得更可靠。",
+      "innovation": "归一化熵取代 Shannon 熵，衡量置信相对自身平均行为的偏差；轨迹感知奖励 + 轨迹独立惩罚联合。",
+      "method": "分层组级 RL 框架；用归一化熵定位可能出问题的步；对这些异常步施加轨迹感知奖励与轨迹独立惩罚；保持训练稳定。",
+      "results": "ALFWorld、WebShop、Search-Augmented QA 上均达到 SOTA，同时显著缓解轨迹忽视问题。"
+    },
+    "scores": {
+      "relevance": 7.4,
+      "recency": 9,
+      "popularity": 7.2,
+      "quality": 7.6,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05001",
+    "summary": "CTI 报告文本杂乱，要建网络安全知识图。单体 LLM 做端到端抽取贵、不可控还不稳。TACTIC-KG 用一队 3B-8B 的专用 agent 分工做抽取、类型、验证、清洗，实验在人工标注 CTI 报告上专门化 agent 在 F1、类型准、图结构相似度上都超过更大的单体 ICL baseline。",
+    "highlights": {
+      "contribution": "面向 CTI 知识图构建的模块化多 agent 框架，用小模型协作打过大单体模型。",
+      "innovation": "把 KG 构建拆成抽取/类型/验证/清洗四类专用 LLM agent。",
+      "method": "轻量 3B-8B LLM 分别担任四类专门 agent 角色；agent 间协作抽取实体、关系、类型、验证一致性、清洗产出。",
+      "results": "在人工标注 CTI 报告上 F1、类型准确、图结构相似度均超越 SOTA 单体 ICL baseline，且部署成本更低。"
+    },
+    "scores": {
+      "relevance": 4.2,
+      "recency": 9,
+      "popularity": 5.8,
+      "quality": 6.8,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05132",
+    "summary": "LLM agent 会在动手前公开宣布意图，但真会兑现吗？作者在重复 n 人博弈里用三阶段协议 (私念/公告/行动) 分离 agent 的私下计划、公开声明和最终动作，发现三大前沿模型在最会骗的场景下 90% 以上的偏离在私下就已经想好；但同一模型在不同博弈里从完全诚实到几乎全违诺全区间波动。模型间对「公告是承诺还是空话」理解不一致，混部前必须实测。",
+    "highlights": {
+      "contribution": "为 LLM agent 的「预谋违诺」提供首个跨模型、跨博弈的量化证据，并揭示模型间承诺语义不兼容问题。",
+      "innovation": "三阶段私念-公告-行动协议，能直接识别每次违诺是否在私下已被计划。",
+      "method": "重复 n 人博弈，6 种博弈 + 10 轮；三阶段协议 (private intent → public announcement → final action)；同构与异构 agent 组合评测三大前沿模型。",
+      "results": "最会欺骗场景下 >90% 偏离是预谋的；不同模型间承诺理解不一致导致 Round 0 起就有支付差距并持续 10 轮。"
+    },
+    "scores": {
+      "relevance": 6.6,
+      "recency": 9,
+      "popularity": 8.4,
+      "quality": 8.0,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05134",
+    "summary": "PDEFlow 把「用户描述一个 ODE/PDE 问题」全流程 agent 化：从多轮 NL 输入到验证过的问题规范、用 FEniCSx 求解生成数据、按 registry 训练神经算子、checkpoint 无求解器推理。当前实现用多分支贝叶斯 DeepONet，在稳态和瞬态基准上都能跑通端到端流程。",
+    "highlights": {
+      "contribution": "把用户描述到神经算子部署的科学计算流水线全部 agent 化，允许 solver-free 快速查询。",
+      "innovation": "stateful input graph 把多轮 NL + 用户编辑变成有效问题规范；registry 接口解耦不同神经算子的训练与部署。",
+      "method": "输入自然语言 PDE 描述；stateful input graph 生成规范；数据模块采参数并用 FEniCSx 求解；registry 训练神经算子 (当前用多分支贝叶斯 DeepONet)；checkpoint 上做无求解器推理。",
+      "results": "在稳态与瞬态基准 ODE/PDE 上能自动生成规范、跑求解、训练算子，并从 checkpoint 提供无求解器预测。"
+    },
+    "scores": {
+      "relevance": 3.6,
+      "recency": 9,
+      "popularity": 5.6,
+      "quality": 6.6,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.05174",
+    "summary": "现有 agent benchmark 都太理想化 —— 预打包工具接口、输入干净且完全指定，把真实部署难度低估了。AgentGym2 面向真实端到端工作需求，除了推理规划，还测执行完整流程、探索新工具、组合工具解新任务、抗噪抗欠指定。15 个专有和开源模型 (含 Gemini、GPT-5) 都被打得挺惨，说明 agent 离真实应用还有大差距。",
+    "highlights": {
+      "contribution": "首个「去理想化」的端到端 agent benchmark，专门量化真实部署里的不确定性、噪声、工具探索差距。",
+      "innovation": "任务实例基于真实工作需求；显式测量工具发现、组合、抗噪、欠指定信息处理能力。",
+      "method": "构造真实端到端工作流程的任务实例；无预打包工具接口，agent 要探索发现；引入噪声与欠指定输入；覆盖 15 个专有与开源模型。",
+      "results": "含 Gemini 与 GPT-5 在内 15 个模型均在 AgentGym2 上明显吃亏，揭示 SOTA agent 与真实应用需求的显著差距。"
+    },
+    "scores": {
+      "relevance": 7.6,
+      "recency": 9,
+      "popularity": 8.4,
+      "quality": 7.8,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  }
+]

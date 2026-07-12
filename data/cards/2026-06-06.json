@@ -432,20 +432,20 @@
     "affiliations": []
   },
   {
-    "arxiv_id": "2606.08039",
-    "summary": "现有 quadcopter 学习环境在物理保真、多智能体、吞吐之间总要妥协。MuJoCo-Drones-Gym 基于 MuJoCo 做了 Gymnasium 兼容多无人机环境，支持任意数量 Crazyflie 2.x；物理模型 / 动作接口 / 观测空间全部模块化可选；PettingZoo ParallelEnv wrapper 直接支持多智能体 RL，提供悬停、速度跟踪、编队、门赛等 7 类任务。",
+    "arxiv_id": "2607.00020",
+    "summary": "针对 VLA 在机械臂操作里空间关系「说得对但抓不准」的痛点，作者做了一个叫 EmbodimentSemantic 的场景图数据集和 benchmark。它把场景表示成「物体-关系-物体」的有向三元组，覆盖支撑、包含、遮挡、深度这些关系；数据既有 SO101 低成本机械臂的真实采集，也有基于 LIBERO+MuJoCo 自动生成的 6 万+帧、12 万+场景图。实验发现现有 VLM 关系预测「看起来合理但对不上真实深度和视角」，把场景图塞进 VLA prompt 也能验证是否对下游控制有帮助。",
     "highlights": {
-      "contribution": "提供一个高保真接触、多模态观测、可扩展多智能体规模的 MuJoCo 风格多无人机仿真训练环境。",
-      "innovation": "在物理模型（刚体 / 显式 Python / 地面效应 / 桨距阻力 / 下洗）和动作接口（电机 RPM / 集体推力 / 速度 / PID 航点）多档可选，且兼容 PettingZoo 多智能体接口；为 MARL 设计而非单机控制。",
-      "method": "MuJoCo 物理引擎 + Gymnasium 接口；模块化物理 / 动作 / 观测；PettingZoo ParallelEnv wrapper；7 类任务示例（悬停 / 速度跟踪 / 多无人机悬停 / 航点导航 / 编队 / 门赛 / 通用 MARL 模板）。",
-      "results": "示例展示其在控制和 RL 任务上可用，并相对 gym-pybullet-drones 利用了 MuJoCo 在接触 / 渲染 / 并行化上的优势，无具体最终性能数字。"
+      "contribution": "提出面向具身操作的空间场景图数据集与 benchmark，把 VLA 的空间关系理解拆成可直接量化的三元组预测任务。",
+      "innovation": "同时覆盖 SO101 真实机械臂采集和 LIBERO 仿真自动标注，且提供第三人称+腕部视角配对的相机相关场景图，能诊断视角依赖和深度感知的失败模式。",
+      "method": "输入是 RGB 观察（真实/仿真），标注是 object-relation-object 有向三元组；真实数据用 SO101 采集，仿真部分由 MuJoCo 几何+相机投影+可见性自动生成。评测让开源和商用 VLM 预测关系，另外把场景图注入 VLA 的 prompt 做下游控制验证。",
+      "results": "仿真部分 60K+ 操作帧、120K+ 相机相关场景图；实验显示 VLM 关系预测「plausible 但空间/深度/视角准确率差」，暴露现有 VLA 的空间 grounding 缺陷。"
     },
     "scores": {
-      "relevance": 5.0,
-      "recency": 9,
-      "popularity": 5.5,
-      "quality": 6.0,
-      "recommendation": 5.5
+      "relevance": 8.2,
+      "recency": 6,
+      "popularity": 6.5,
+      "quality": 7.4,
+      "recommendation": 7.6
     },
     "affiliations": []
   }

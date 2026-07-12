@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.30456",
+    "summary": "作者把 OpenVLA / OpenVLA-OFT 从 benchmark 搬到真实 UR5e 机械臂上跑，想看看这些 VLA 在实机里到底靠不靠谱。他们搭了一套完整的数据采集、RLDS 转换、微调和部署管线。结论比较扎心：离线指标漂亮但闭环经常翻车，问题不在模型本身，而在动作语义、坐标系、时间对齐、图像预处理一致性这些系统细节上。",
+    "highlights": {
+      "contribution": "把 VLA 实机部署从「模型问题」重新定义为「系统级 pipeline 问题」，并给出一套可复现的真实机器人评估框架。",
+      "innovation": "系统性地把动作表达、坐标系约定、时间同步、预处理一致性等常被忽视的因素列成 VLA 部署失效的主因清单。",
+      "method": "输入 UR5e 上采到的真实演示数据，转成 RLDS 后微调 OpenVLA / OpenVLA-OFT；然后系统性扫描不同动作表征和控制接口，在真机上做闭环实验对比。",
+      "results": "离线指标不错但闭环不稳定，具体成功率未强调；核心发现是失效根因集中在 pipeline 一致性而非模型容量。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 8,
+      "popularity": 5.5,
+      "quality": 6.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30318",
+    "summary": "现在的 VLA 基本都是马尔科夫式的：只看当前几帧观察就决策，遇到需要记忆的长程任务就抓瞎。Chronos 把观察历史直接当成 policy 的隐状态，用 SSM 传播因果历史，然后接一个二阶薛定谔桥去细化动作轨迹。结果 RMBench 上 73.6% 成功率，比 π0.5 高 62.4 个点、参数还少 10 倍；真机双臂记忆任务里 π0.5 拿 0%，它拿 72%。",
+    "highlights": {
+      "contribution": "提出把观察历史提升为 policy 潜状态的非马尔科夫 VLA 框架 Chronos，专门解决长时程记忆依赖任务。",
+      "innovation": "state-representative token + 选择性 SSM 做因果历史传播，再叠一个二阶薛定谔桥预测加速度场，让动作既有记忆也更物理平滑。",
+      "method": "每个控制步把观察和本体感觉融成一个 token，与物理时间一一对齐；SSM 传播隐状态，条件化 IMLE 出多模态粗动作先验，再用薛定谔桥细化到加速度场。",
+      "results": "RMBench 平均 73.6%，比 π0.5 高 62.4pp（6.6× 相对提升），参数少 10×；比 Mem-0 高 22.8pp、参数少 30×；真机四任务平均 78%，记忆任务 72% vs π0.5 的 0%。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 8,
+      "popularity": 8.0,
+      "quality": 8.8,
+      "recommendation": 8.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30613",
+    "summary": "SPARK 是个训练自由的神经符号操作系统，观点是 VLA 和 code agent 主要挂在感知这一层，所以把算力全砸在感知上。用一次 Gemini 调用编 typed behavior tree，另一次 Gemini 生成三个 alternative prompts 让 SAM3 挑最自信的检测，然后失败时循环 retry。LIBERO-PRO 六个格 43.7%，是 CaP-Agent0 和 VLA baseline 的两倍多；三个机器人平台九任务平均 68%。",
+    "highlights": {
+      "contribution": "证明感知层的自适应 prompt + recovery 循环，能让训练自由的神经符号系统超过 VLA 基线两倍以上。",
+      "innovation": "把 code-gen agent 的运行时代码写死成 typed BT primitives，然后把算力全部转到感知端的多 prompt 假设与 recovery。",
+      "method": "输入 RGB-D + 任务描述；Gemini 出 typed BT 计划，另一 Gemini 生成三候选 text prompts 交给 SAM3 打分，选最优 prompt→label，失败时 primitive 层 recovery 复检目标。",
+      "results": "LIBERO-PRO 六格 43.7%（VLA / CaP-Agent0 一半左右）；alternative prompts +27.7pp 空间套 / +10.0pp 物体套；recovery loop +5.0pp；三平台九任务 20 trials 平均 68%。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30900",
+    "summary": "CERN 需要在放射性区域做铍污染巡检，四足加常规硬臂太笨拙。作者给四足装了一根 tendon 驱动的软尾巴带柔性夹爪，可以捡棉签、擦拭表面、投放到指定收集点。做了闭式运动学模型和一个奇异点鲁棒的任务空间控制器，实验显示夹爪动作不太影响机身姿态，共模驱动可以调刚度。",
+    "highlights": {
+      "contribution": "把四足机器人扩展成能做柔性抓取和擦拭采样的巡检平台，用软尾+柔性夹爪替代传统刚性机械臂。",
+      "innovation": "腱驱动软尾配合柔性夹爪的一体化设计，同时用共模驱动实现刚度调节和预加载控制。",
+      "method": "腱驱动柔性骨架 + 软夹爪硬件设计；推导闭式运动学，构造奇异点鲁棒的任务空间控制器用于遥操作。",
+      "results": "夹爪驱动对整机形态几乎不影响；共模腱驱动能有效调节刚度；运动学模型在实时任务空间控制中可用；面向 CERN 场景做了完整巡检演示。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 8,
+      "popularity": 4.5,
+      "quality": 6.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30988",
+    "summary": "预训练视觉策略只见过图像，很多接触密集的任务要靠力 / 触觉 / 音频才能做好，但每个传感器都各干各的，没法预训练包全。MuSe 把有限的多模态数据接进现成 vision-only policy，用多阶段融合 + 多模态未来预测 + 经验回放来做 continual finetune。在真实机器人接触任务上力扭传感器加进来后成绩提升，同时不忘原任务甚至反而更好。",
+    "highlights": {
+      "contribution": "提出多模态持续学习框架 MuSe，把新传感器接到已预训练的 vision-only 机器人策略上，不遗忘还能提升原任务。",
+      "innovation": "把多模态未来预测（世界模型式监督）和经验回放结合，用少量新模态数据就把 vision-only policy 适配到接触密集任务。",
+      "method": "输入图像 + 新增模态（如 F/T）；多阶段融合模块把新模态接入原策略，训练时同时做多感知未来预测和 pretraining 数据的经验回放。",
+      "results": "在真实接触密集任务上 finetune 表现强劲，同时在原 pretraining 任务上性能保持甚至更好，证明少量多模态数据就足以扩展通用能力。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30639",
+    "summary": "长时程 LLM agent 需要预见动作后果，但不靠谱的世界模型反而会拖累决策。WorldEvolver 冻住 agent 和世界模型参数，只在部署时改上下文来自我进化：情景记忆做检索式模拟，语义记忆从预测-观察不一致里抽启发式规则，选择性 foresight 过滤低置信度预测。ALFWorld / ScienceWorld 上世界模型预测精度和 agent 成功率都领先。",
+    "highlights": {
+      "contribution": "提出参数冻结、部署时上下文自进化的世界模型框架 WorldEvolver，能同时提升世界模型预测精度和下游 agent 成功率。",
+      "innovation": "把世界模型的自我改进放在部署时的上下文层，用情景 + 语义两级记忆加选择性 foresight 三件套解决 unreliable foresight 问题。",
+      "method": "输入 agent 交互轨迹；情景记忆用真实转移做检索式模拟，语义记忆从预测-观察 mismatch 抽启发式规则，选择性 foresight 过滤低置信预测再喂给 agent。",
+      "results": "在 ALFWorld 和 ScienceWorld 三个 backbone 上，Word2World 上的预测精度最高，AgentBoard 下游成功率也领先其它世界模型 baseline。"
+    },
+    "scores": {
+      "relevance": 8.2,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30292",
+    "summary": "DreamForge-World 0.1 Preview 想做能在消费级 GPU 上跑的实时可控世界模型。它复用 LongLive 1 的自回归视频栈（Wan2.1-T2V-1.3B 衍生），加了一条 Matrix-Game 风格的残差动作分支。支持键鼠实时操控、多模态初始化、中途改 prompt、双视角，RTX 4090 上 480p 原生 14-15 FPS 做分钟级 rollout，作者也很实在地说这不是 frontier 质量。",
+    "highlights": {
+      "contribution": "把开源视频 backbone 改造成可在单张 4090 上实时交互的低算力世界模型预览版。",
+      "innovation": "在自回归视频栈上叠一条残差动作路径实现键鼠交互；坚持消费级 GPU + 广覆盖交互能力这条低算力路线。",
+      "method": "以 LongLive 1（Wan2.1-T2V-1.3B）为主干做自回归 480p 视频生成，加 Matrix-Game 风格残差动作分支处理键鼠 / 双视角 / 中途 reprompt 等控制。",
+      "results": "RTX 4090 单卡跑 480p 达到 14-15 FPS，支持分钟级交互 rollout，内存占用低；作者强调只是 preview，尚未达到 frontier 世界模拟器的记忆和质量。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 6.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30421",
+    "summary": "端到端自动驾驶大都从当前静态场景直接出决策，遇到遮挡和突发容易保守翻车。OWMDrive 用一个占据世界模型做多步 3D occupancy 预测，把预测结果当条件先验喂给扩散规划器，让轨迹候选在当前 + 未来上下文下迭代精炼。实验表明尤其在部分可观测场景下规划更可靠更安全。",
+    "highlights": {
+      "contribution": "提出用 4D occupancy 世界模型做未来滚动预测的因果感知端到端驾驶框架 OWMDrive。",
+      "innovation": "把 occupancy world model 的多步预测显式当成扩散规划的条件先验，把时空因果依赖注入 planner。",
+      "method": "输入当前多视相机；先用 occupancy world model 预测多步 3D 占据未来；把当前观察 + 预测拼起来条件化扩散 planner，迭代精炼轨迹候选。",
+      "results": "在挑战性和部分可观测驾驶场景下，规划可靠性和安全性显著提升，长程 trajectory 生成更 foresighted（具体数字未在摘要给出）。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 7.2,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30352",
+    "summary": "从单张全景图快速重建 3D 室内场景，作者想避开多视监督和 per-scene 优化。FastPano3D 端到端从全景图直接输出可渲染的 3D Gaussian：轻量特征编码 + 自适应 Gaussian 采样 + 点云引导 refine 处理等距投影畸变。几秒内完成，比 Pano2Room 快 156 倍，参数只用一半，质量接近 NeRF / 3DGS。",
+    "highlights": {
+      "contribution": "提出无需测试时优化、直接从单张全景图前馈生成 3D Gaussian 的 FastPano3D 框架。",
+      "innovation": "针对 equirectangular 畸变和空间非均匀分布，用轻量特征编码 + 自适应 Gaussian 采样 + 点云引导 refine 的组合。",
+      "method": "输入单张全景 RGB；轻量 encoder 抽特征，adaptive Gaussian sampling 生成初始高斯，点云引导 refinement 修正几何，全流程前馈无 test-time optimization。",
+      "results": "秒级完成室内 3D 重建，推理速度比 Pano2Room 等 SOTA 快 156×，参数量仅一半，渲染质量与 NeRF / 3DGS baseline 相当。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30545",
+    "summary": "稀疏视角下 3DGS 严重过拟合，用单目深度先验又有尺度歧义。StereoGS 干脆构造虚拟立体对，用 foundation stereo 模型强约束绝对尺度和双目一致性；再加一个梯度感知的 opacity 衰减策略去掉冗余高斯，并用零样本多视深度做一致初始化。在 LLFF / DTU / Mip-NeRF360 / Blender 上刷到 SOTA，推理没额外开销。",
+    "highlights": {
+      "contribution": "提出用立体先验替代单目深度先验的稀疏视角 3DGS 框架 StereoGS，解决尺度歧义和跨视图不一致。",
+      "innovation": "在优化过程中构造虚拟 stereo pairs 拿 foundation stereo 模型做绝对尺度约束；配合梯度感知 opacity decay 抑制冗余高斯。",
+      "method": "输入稀疏视角图；一致性感知的密集初始化用零样本多视深度锚定；训练时构造虚拟 stereo pair 做 stereo depth regularization；gradient-aware opacity decay 动态惩罚冗余 Gaussian。",
+      "results": "在 LLFF / DTU / Mip-NeRF360 / Blender 稀疏视角 setting 下达到 SOTA 渲染质量，且推理阶段无额外开销。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30638",
+    "summary": "3DGS 想搞 open-vocab 场景理解，主流是蒸馏 CLIP，但要求预设实例数量或者依赖噪声大的自底向上分组，也只能懂名词短语。GaussDet 换成用 open-vocab 2D 检测器 + referring 能力，先给每个高斯学 instance feature 分组，再用多视 2D 检测投票聚合成 View-Aggregated Semantic Label Distribution。零样本 open-vocab 分割和 referring 定位都涨，Ref-LeRF 上 mIoU 涨了 16.7 个点。",
+    "highlights": {
+      "contribution": "提出 GaussDet，用离散 open-vocab 2D 检测器替代 CLIP 特征蒸馏，实现 3DGS 的 open-vocab 分割和 referring 定位。",
+      "innovation": "多视 2D 检测语义投票聚合出 VASD，作为对低质量 instance grouping 的强正则；零样本从简单查询扩展到复杂 referring。",
+      "method": "输入 3DGS 场景；给每个高斯学 instance feature 做 3D 实例分组，再把 3D 实例投回多视，用 2D open-vocab 检测器投票聚合成 View-Aggregated Semantic Label Distribution。",
+      "results": "在 LeRF-OVS、ScanNet 上 open-vocab 分割一致提升；Ref-LeRF referring grounding 在严格零样本下 mIoU 提升 16.7 pp。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30436",
+    "summary": "单目 3DGS SLAM 想上千米级户外场景，就两个大坑：长时间跟踪飘、地图内存爆。KiloGS-SLAM 用运动自适应混合跟踪：本质矩阵 / PnP 按需切换，实在漂了再上 foundation model 救；地图这边用概率初始化 + chunk 化多视致密化和剪枝做全生命周期管理。跟踪精度和渲染都 SOTA，单卡撑住上万帧。",
+    "highlights": {
+      "contribution": "提出面向公里级户外场景的单目 3DGS SLAM 系统 KiloGS-SLAM，同时解决长时程跟踪鲁棒性和大规模地图内存开销。",
+      "innovation": "condition-triggered 的三层跟踪切换（Essential/PnP/foundation model 救援）+ chunk 分块的生命周期管理式高斯地图。",
+      "method": "跟踪：动态在本质矩阵和 PnP 间切换应对几何退化，飘时激活 foundation model 拉回轨迹；建图：概率化初始化 + 分块多视致密化 / 剪枝，保留细节的同时降冗余。",
+      "results": "三个户外数据集上跟踪精度和渲染质量双 SOTA，成功在单卡上跑通超过 10000 帧的长序列。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30576",
+    "summary": "跨视角物体地理定位（地面 / 无人机 → 卫星）以前主要靠 2D 外观匹配，缺几何信息也缺数据。作者出了个 22 万对 building 数据集，带多模态 prompt 和相机位姿，然后在 3D foundation model π³ 上搭 GAGeo，单阶段一次前馈同时预测 bbox / mask / 相机位姿。还用卫星视为通用锚做对比学习，实现地面到无人机零样本泛化。",
+    "highlights": {
+      "contribution": "提出面向 CVOGL 的几何感知单阶段框架 GAGeo，并配套一个 22 万对的多模态大数据集。",
+      "innovation": "把置换等变的 π³ 3D 基础模型引入跨视地理定位，单次前馈联合出 bbox / mask / 相机位姿；用卫星做通用锚实现零样本地面到无人机迁移。",
+      "method": "输入 query（地面 / 无人机 + 点 / 框 / 掩码 prompt）和参考卫星图；π³ 抽视觉特征，融合 referring prompt 和可学 task token，单前馈联合预测 bbox / mask / 姿态；对比损失用卫星视为 anchor。",
+      "results": "显著超越 SOTA，在未见场景和新颖跨视配置下泛化能力优秀（具体数字摘要未给）。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30645",
+    "summary": "人形 loco-manipulation 缺同步的第一视角图像 + 语言 + 机器人兼容的运动轨迹三件套数据。VLK 用 3DGS 把室内场景重建成米制尺度，然后在场景里合成导航和物体交互轨迹，事后再渲染出对应第一视角画面。零人力生出 4.8 万对轨迹，训练一个 VLK policy 预测短时全身运动，再由 whole-body tracker 转成动作，Unitree G1 真机上能做导航和物体搬运。",
+    "highlights": {
+      "contribution": "提出用 3DGS 重建场景 + 合成 VLK 三元组数据，训练端到端第一视角人形 loco-manipulation 策略。",
+      "innovation": "把 3DGS 重建场景当作合成 VLK 监督的物理容器，先在特权信息里合成轨迹再事后渲染 egocentric 图像，实现零人力大规模数据。",
+      "method": "输入重建的 3DGS 场景；特权信息合成导航 / 交互 kinematic 轨迹，事后渲染对应第一视角图像；训练 VLK policy 由图像+语言预测短程全身轨迹，whole-body tracker 转成机器人指令。",
+      "results": "无人工介入生成 48000 对轨迹；在真机 Unitree G1 上完成导航和单物体搬运任务，验证了合成 VLK 数据能支持 sim-to-real 人形操作。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8,
+      "popularity": 8.0,
+      "quality": 8.3,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30809",
+    "summary": "现有 3DGS 系统把重建预算均分给整个场景，但机器人往往只关心其中一小块。GaussLite 用一句自然语言任务描述来条件化 3DGS 的密度分配：LLM 一次调用抽出目标和锚点物体，open-vocab 检测器逐帧定位，per-pixel relevance mask 引导 seeding、梯度、缩放。相同高斯预算下 ROI PSNR 平均比 baseline 涨 2.72 dB，还能把两个任务专门 agent 的地图按体素投票融合。",
+    "highlights": {
+      "contribution": "提出任务条件化的在线 3DGS 机器人建图系统 GaussLite，把有限算力集中到任务相关区域。",
+      "innovation": "把自然语言任务描述通过 LLM 解析 + 开集检测 + per-pixel relevance mask，动态引导 3DGS 的 seed density、gradient flow 和 scaling。",
+      "method": "输入 posed RGB-D 流 + 自然语言任务；LLM parser 一次调用抽 target 和 anchor 物体，开集检测器 + 分割每帧生 relevance mask；mapper 依此调节 seeding / 梯度 / scaling；多 agent 地图按 per-voxel active-optimization count 投票融合。",
+      "results": "在低算力硬件上 4 Hz 实时建图，同高斯预算下 Replica 数据集 ROI PSNR 平均 +2.72 dB，真机室内外 +2.23 dB；两 agent 地图投票融合比拼接 +3.42 dB，只共享平均 7.08% 地图。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8,
+      "popularity": 6.8,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30571",
+    "summary": "两个 LLM 长时间聊下去会不会形成「吸引子」——不管什么话题都会收敛到某种稳定风格？作者跨 7 个模型 20 个争议话题做 self-play 和 mixed-play 辩论，跟踪表征空间轨迹、话语特征和立场。发现 self-play 轨迹确实是模型专属的吸引子，会不对称地把对手拉过去，比如 Claude Haiku 是强吸引子，GPT-4.1 nano 特别容易被塑形。",
+    "highlights": {
+      "contribution": "在多模型对话动力学层面实证 LLM 之间存在模型专属的吸引子行为，并揭示这种影响是不对称的。",
+      "innovation": "把开放式 LLM 对话当动力系统研究，把表征空间轨迹 + 话语特征 + 立场三类信号联合追踪吸引子。",
+      "method": "输入 7 个 LLM × 20 个争议话题的两两对话；分 self-play 和 mixed-play 两种设置，跑长期辩论后跟踪表征、话语特征、立场随时间的演化。",
+      "results": "self-play 轨迹表现为模型专属吸引子；mixed-play 中会不对称地吸引其他模型的风格（如 Claude Haiku 强吸引 metacommentary），GPT-4.1 nano 特别容易被改变。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30906",
+    "summary": "作者想看看多智能体 deliberation 用在法律推理上到底行不行。他们在 MAD 基础上提出两个受法庭程序和法律论证启发的多 agent 框架，跟单模型 baseline 在法律和非法律 benchmark 上比。总体准确率差不多，但答对的题不完全重合——多 agent 能解掉一些 baseline 搞不定的案子，反之亦然，尤其在需要多角度批判性思考的问题上更强。",
+    "highlights": {
+      "contribution": "把法庭程序和法律论证结构编成两种 MAD 框架，实证多 agent deliberation 在法律推理任务上的独特价值。",
+      "innovation": "引入受法律程序启发的多 agent 交互结构，而不是通用式的 debate；并给出与单模型高度互补的行为分析。",
+      "method": "构造两个 courtroom-inspired 多 agent 框架，让 LLM agent 按法律程序角色分别论证；在法律和非法律 benchmark 上和单模型 baseline 对比性能和答题重叠度。",
+      "results": "MAD 整体准确率与单 LLM baseline 相当，但答题分布显著不同，能解 baseline 解不掉的案子，在需要多视角批判性思考的题上表现更好。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 8,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30949",
+    "summary": "把真实软件重构成能过 HLS 综合的代码一直很难，现有 LLM 方案又贵又不 scale。AgRefactor 是个 LLM 多 agent 工作流：带一个自演化记忆库累积事实和策略知识，还整合了自动化重构工具，让 agent 在 LLM 改写和工具变换之间权衡。11 个真实 benchmark（比之前的用例长 5-10 倍）里赢 / 平 9 个，几何平均比 SOTA pragma 调优工具快 6.51×，比开源优化设计快 1.20×。",
+    "highlights": {
+      "contribution": "提出用于 HLS 重构的自演化多 agent 工作流 AgRefactor，能在长得多的真实 benchmark 上打赢 SOTA。",
+      "innovation": "自演化记忆系统跨任务累积 factual + strategic 知识；把 LLM 改写与自动化工具变换结合以降成本、提 scalability。",
+      "method": "多 LLM agent 分工做软件到 HLS 兼容代码的重构；每一步查记忆库取相关经验；agent 决定用 LLM 改写还是调用重构工具；再迭代做性能优化。",
+      "results": "11 个真实基准（5-10× 长于以往）里 9 个赢或平 SOTA；agent 化性能优化比 SOTA pragma 调优工具几何均值快 6.51×，比优化过的开源设计快 1.20×，资源开销 <20%。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30259",
+    "summary": "面对海量假信息人工核查根本忙不过来，作者想用开源 LLM 组多 agent 系统来自动查。他们模拟人类标注员的决策：加共识机制、认知和知识多样性、层级结构；跑 LLaMA / Kimi / Qwen / Deepseek / LLaMA-Nemotron 等开源模型，在英语、波兰语、斯洛伐克语、保加利亚语的假信息检测和事实主张识别上超过单模 GPT-4 / GPT-3.5。",
+    "highlights": {
+      "contribution": "用开源 LLM 组多 agent 系统做假信息检测，超越 GPT-4 / GPT-3.5 单模基线并保证可复现和透明。",
+      "innovation": "把人类标注员的共识 + 认知 / 知识多样性 + 层级结构显式建模到多 agent 决策里，专门服务 disinformation 场景。",
+      "method": "多个开源 LLM 各自作为 agent 阅读文本；通过共识机制和层级结构做合议式决策，覆盖直接判定 / 是否值得核查 / 是否包含可验证主张三类任务。",
+      "results": "在英语（高资源）、波兰语（中资源）、斯洛伐克语和保加利亚语（低资源）的多语数据集上，多任务检测表现全面优于 GPT-4 和 GPT-3.5 单模基线。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 8,
+      "popularity": 5.0,
+      "quality": 6.0,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30266",
+    "summary": "motion-language agent 想要既能看懂动作也能按语言生成动作，还要在新动作陆续加入时不忘老技能。作者在冻结的 LLM 上加 LoRA 变体，重点提了个 MoE 版：autoencoder 路由器推理时选任务专家，不用任务标签。他们从 HumanML3D 语义聚类出五任务 benchmark，实验里 M2T 和 T2M 双向都近乎零遗忘，硬路由比 soft blending 明显好。",
+    "highlights": {
+      "contribution": "把 LoRA-MoE 用在双向 motion-language continual learning 上，实现近零遗忘且不用任务标签。",
+      "innovation": "autoencoder-based router 在推理时硬选任务专家；实证硬路由（专家隔离）明显优于 soft blending。",
+      "method": "冻结 LLM backbone 上叠 LoRA 变体，特别是 mixture-of-experts + autoencoder router；HumanML3D 语义聚类构造 5 任务顺序训练；无需任务标签推理时路由选专家。",
+      "results": "M2T 和 T2M 双向序列训练中近乎零灾难遗忘，生成和 captioning 质量维持高水平；硬专家选择在质量指标上显著优于 soft blending。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30616",
+    "summary": "作者不去堆参数，而是「堆 horizon」：35B MoE 的 Agents-A1 靠拉长 agent 轨迹和把六个领域能力融进一个 student 模型，追上万亿参模型。三阶段训练：全域 SFT、领域专门 teacher、多 teacher 领域路由的 on-policy 蒸馏加显著 vocab 对齐。SEAL-0 56.4、IFBench 80.6、HiPhO 46.4、FS-Olympiad 79.0、MolBench-Bind 56.8 领先，SciCode / HLE / BrowseComp 也不虚 Kimi-K2.6 和 DeepSeek-V4-pro。",
+    "highlights": {
+      "contribution": "证明 35B MoE 通过 agent-horizon scaling 可以匹配甚至超过 1T 级 Kimi-K2.6 / DeepSeek-V4-pro 在长时程 agent 任务上的表现。",
+      "innovation": "长程知识-动作基础设施把外部知识 / 动作 / 观察 / verifier 结果串起来产 45K token 平均轨迹；多 teacher 领域路由 on-policy 蒸馏加 salient vocab 对齐把 6 个异构领域压进一个 student。",
+      "method": "先做全域 SFT，让基座模型对齐广泛 agentic 行为；再训各领域 teacher；最后用多 teacher 领域路由的 on-policy 蒸馏，把六个异构领域 unify 到一个 student，同时做显著词表对齐。",
+      "results": "SEAL-0 56.4 / IFBench 80.6 / HiPhO 46.4 / FrontierScience-Olympiad 79.0 / MolBench-Bind 56.8 领先；SciCode 44.3 / HLE 47.6 / BrowseComp 75.5 与 1T 级模型持平或接近。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 8,
+      "popularity": 8.5,
+      "quality": 8.2,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30840",
+    "summary": "LLM agent 在信息检索场景里越用越多，写 prompt 更像调 bug 而不是盲搜。Contrastive Reflection 框架从 QA agent 和评分 agent 暴露的结构化 trace 里找出错误锚定的行为切片，再拉附近同区域的成功例子，让 Teacher LLM 提针对性的 prompt 编辑，只有 validation 表现真变好才接受。HotpotQA 上一次修补把 EM 从 51.4% 提到 60.4%，接近 MIPROv2 / GEPA。",
+    "highlights": {
+      "contribution": "提出面向 agentic IR 的 contrastive reflection 迭代 prompt 优化框架，用可解释的错误锚定切片替代盲搜。",
+      "innovation": "把 QA agent 和 grading agent 的 trace 结构化成错误锚定行为切片，再拉附近成功例做对比，让 Teacher LLM 出定向 prompt 编辑并做 regression check。",
+      "method": "输入 agent 的检索 / 推理 trace 和评分 rationale；tree-based slice selector 定位错误锚定切片，加同区域成功例；Teacher LLM 出候选 prompt edit；validation 提升且不 regression 才接受。",
+      "results": "HotpotQA 上一次 tree-selected contrastive repair 把 held-out EM 从 51.4% 提到 60.4%；同 setting 下 MIPROv2 59.4%、GEPA 57.0%；failure-only 和随机版本提升更少、破坏更多。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30294",
+    "summary": "真人演示产品既贵又难。Rhetor 把跑起来的 web 应用加它的源码 repo 作为输入，产出一份带段落同步旁白、能实时语音 QA 的现场演示。多 agent 里跨模态特征把 UI 探索和源码分析融成带 focus tier 的 feature，grounded scripter 严格用探索时看到的 UI 元素调用多策略语义定位，还有预演循环处理界面漂移。六轮演示 147 个动作 sigma-bar 覆盖 0.31-1.00，重工况约 0.92，Excalidraw 上第二轮收敛到 1.00。",
+    "highlights": {
+      "contribution": "提出把 web app + 源码转成可实时提问的排练式产品演示的多 agent 系统 Rhetor，替代静态 MP4 演示。",
+      "innovation": "跨模态特征把 UI 探索 + 源码分析融成 focus-tier 特征；预演阶段循环收敛 locator，运行时用音频结束事件同步浏览器动作。",
+      "method": "多 agent：UI 探索抓组件 + 源码分析抓语义 → 融合 feature；grounded scripter 按 feature 生成动作脚本并用多策略语义 locator 执行；预演循环反复修复 locator；实时时用旁白音频结束事件同步下一步动作。",
+      "results": "六轮 pipeline / 4 个部署应用共 147 个 scripted 动作，locator-firing 率 sigma-bar 覆盖 0.31-1.00；重负载场景 53 动作下约 0.92；Excalidraw 上 locator-repair 在第二轮收敛到 1.00。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 8,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30383",
+    "summary": "越来越多 LLM agent 同时对两方说话：一个是给它下指令的 principal，一个是利益可能相反的 counterparty。这时候「你在跟谁说话就帮谁」是错的。PrincipalBench 是 75 题多轮 benchmark 带泄露探针、双 judge 和完整性审计门。13 个前沿模型分裂成两簇：选择性簇（<=20% 有害）和过度拒绝簇（53.6-75.3% 有害）。作者的 prompt-time 忠诚脚手架把 Claude-Sonnet 压到 19.4%；蒸馏方案是最强 open-weight 配方。",
+    "highlights": {
+      "contribution": "首次系统研究多方 principal 忠诚问题，给出 benchmark PrincipalBench 和两种可复现的缓解机制。",
+      "innovation": "同时刻画 loyalty leak 与 over-refusal 两个正交轴，证明现有 prompt 和蒸馏方案只能沿共同 tradeoff 移动，无法两全。",
+      "method": "输入 principal 与 counterparty 两个通道；(M1) 七条优先规则的忠诚 system prompt；(M2) per-token KL 蒸馏，把 prompt 强化过的 Qwen3-32B teacher 蒸到 8B Qwen3 / Llama-3.1 student；再用 PrincipalBench 多轮泄露探针 + 双 judge + integrity audit 评估。",
+      "results": "选择性簇 <=20% 有害 vs 过度拒绝簇 53.6-75.3%；M1 把 Claude-Sonnet 压到 19.4%、9 个选择性模型全 <=20%；M2 是所测 open-weight 中最强；两种机制都只在同一 tradeoff 曲线上移动。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.30441",
+    "summary": "多 agent 系统要形式化验证就得写 ATL / ATL* 时序规范，可这活极其易错还费专家。作者做了一份专家标注的自然语言到 ATL / ATL* 数据集，然后微调 3-7B 开源模型，配合最贴近专家判断的 LLM judge。in-domain 微调后小模型能追上强 few-shot 的闭源 API baseline，最好模型 semantic accuracy 0.84 vs 闭源 0.86 打平。他们还发现 judge 可靠性和 generator 能力反相关。",
+    "highlights": {
+      "contribution": "首个把自然语言翻成 ATL / ATL* 战略时序规范的框架和专家验证数据集，让非专家能用自然语言写 MAS 规范。",
+      "innovation": "指出 LLM judge 可靠性和 generator 强度反向相关这一反直觉发现，同时把生成的规范嵌进现成 model checker 打通端到端。",
+      "method": "构造专家标注的 NL→ATL/ATL* 数据集；用它微调 3-7B 开源 LLM，同时挑选与专家判断最一致的 LLM 作 judge；再把生成的规范喂给现有战略逻辑 model checker。",
+      "results": "在 held-out 上 in-domain 微调的小模型 semantic accuracy 达 0.84，与最强 few-shot 闭源 baseline 的 0.86 统计上打平；发现 open-weight Llama-3.3-70B 是最贴合人类判断的 judge，闭源大模型反而爱过度拒绝忠实改写。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 8,
+      "popularity": 5.0,
+      "quality": 6.2,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  }
+]

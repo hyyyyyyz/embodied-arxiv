@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.25800",
+    "summary": "VLA 在线适应老大难：稀疏奖励监督信号太弱，作者发现基于文本/演示的教师因模态鸿沟对底层动作策略没啥用。ROAD-VLA 直接在动作 token 空间里搞了一个「近邻教师」——用校准过的 advantage 扰动 logits，把稀疏奖励变成密集的 token 级监督，还顺手推了个策略改进下界。7 个操作环境上包括分布外场景基本全面赢 PPO。",
+    "highlights": {
+      "contribution": "首次在动作 token 空间里构造 VLA 自蒸馏教师，把稀疏奖励变成 token 级密集信号。",
+      "innovation": "跳出「文本教师+VLA 学生」的模态鸿沟，改用 advantage-guided 的动作扰动作为教师，同时给出策略改进的理论下界。",
+      "method": "输入 VLA 当前策略 rollout 得到 advantage 估计，用它去扰动动作 token 的 logits 得到教师分布；学生策略往教师蒸馏，同时保证教师距当前策略不远。",
+      "results": "7 个机械臂操作环境，含分布内/外偏移，几乎全部设置上超过 PPO。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 7.5,
+      "popularity": 6.5,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.25939",
+    "summary": "可形变物体操作数据太贵，普通位姿扰动做数据增广会破坏物理约束。DeformGen 用物理仿真前向推演生成拓扑一致的形变状态，再用变形场把源轨迹「弯」到新几何上，让末端执行器轨迹自适应新形状。在高保真形变操作 benchmark 上比原始数据训练和刚体式增广基线都更好。",
+    "highlights": {
+      "contribution": "首个专门为可形变物体操作设计的动力学式数据增广框架。",
+      "innovation": "用局部物理扰动+前向仿真扩展合法状态分布，并通过 deformation-field warping 让轨迹随几何形变自适应。",
+      "method": "输入源演示，先在物体上加局部扰动前向仿真生成新形变状态；再把每个粒子的位移插值成连续空间场，末端执行器轨迹沿这个场变形；然后用增广数据训模仿策略。",
+      "results": "在高保真可形变操作 benchmark 上策略成功率明显高于原始数据训练和刚体式增广。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 7.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.25953",
+    "summary": "面向物体的 SLAM 系统在实时性、多类别、高保真三者之间做取舍。DSP-SLAM++ 在原 DSP-SLAM 基础上加了异步映射流水线，并适配了单目鱼眼+激光雷达的传感器组合。物体最大处理延迟降低最多 70%，可以在 25Hz 多类别数据集上稳定跑，同时保留细粒度几何。",
+    "highlights": {
+      "contribution": "让多类别高保真 object SLAM 在鱼眼+LiDAR 平台上实时跑起来。",
+      "innovation": "异步映射流水线解耦物体处理线程瓶颈，融合适配鱼眼+LiDAR 感知。",
+      "method": "在 DSP-SLAM 主线程外开异步物体优化线程，鱼眼+LiDAR 数据经专门融合模块进入 SLAM 后端，输出细粒度物体网格。",
+      "results": "最大物体处理延迟降低最多 70%，25Hz 多类数据集实时运行，几何完整度与 SOTA 相当。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 7.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.25985",
+    "summary": "VLA 推理慢，异步执行本来靠动作 chunk 交替执行掩盖延迟，但下一个 chunk 是基于陈旧观测预测的，直接拼接会出现抖动和握手失败。ACNet 用「已执行的运动尾巴」作为残差条件送进大部分冻结的动作头，参数很少，兼容 diffusion/flow matching 头。在 Kinetix、Meta-World MT50 和真机上都比直接拼接更平滑更稳。",
+    "highlights": {
+      "contribution": "一个轻量、几乎不动预训练权重的延迟感知适配器，专治 VLA 异步执行卡顿。",
+      "innovation": "用已执行动作后缀作为残差条件，避免全策略重训，也不需要架构特化的运行时逻辑。",
+      "method": "输入：视觉/语言 + 上一段已执行动作后缀；用小 adapter 把后缀编码进去，加到冻结的 diffusion/flow-matching 动作头条件上，只训 adapter。",
+      "results": "Kinetix、Meta-World MT50、SO-ARM101 真机上都比直接 chunk 拼接更稳定平滑，参数量远小于全策略延迟条件重训。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 7.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26006",
+    "summary": "VLA 用模仿学习被数据质量卡住，RL 微调虽然能突破天花板但样本效率低——Q 函数不稳会灾难性遗忘、探索数据质量差得靠人干预。FORCE 分三阶段：先用 on-policy rollout 做 Value-Calibrated Warm-Up 稳住 Q 函数，再用它当过滤器只留高价值动作做策略更新。仿真+真机上成功率绝对提升 79%，比同类 RL 方法高 10%，训练加速 32.5%，还完全无人干预。",
+    "highlights": {
+      "contribution": "把 VLA RL 微调做成一个稳定、高效、无需人干预的完整流程。",
+      "innovation": "Value-Calibrated Warm-Up 阶段先解决 Q 函数分布漂移，再用校准的 Q 当高质量数据过滤器。",
+      "method": "3 阶段：① 用 on-policy rollout 校准 Q 函数；② 在线阶段用校准 Q 过滤策略候选动作和专家数据；③ 只在高价值动作上更新策略。",
+      "results": "成功率绝对提升 79%，比之前 RL 方法高 10%，训练时间加速 32.5%，成功率无常见回落，全自主。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 7.5,
+      "popularity": 7.5,
+      "quality": 8.5,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26025",
+    "summary": "现有 VLA 换个相机视角或换台机器人就抓瞎，因为它假设执行环境固定。ICWM 把系统辨识当成 in-context 适应问题——机器人先做几段任务无关的自主交互，把这段历史塞进 context 让模型隐式抓住当前系统的动力学，然后不改参数就能适应新配置。仿真和真机实验上，面对新相机视角显著超越标准 VLA 基线。",
+    "highlights": {
+      "contribution": "把系统辨识/世界模型内化为 VLA 的 in-context 能力，做到零参数更新地适应新硬件。",
+      "innovation": "跟传统 in-context learning 用示范说明「做什么」不同，这里用自主交互说明「系统怎么动」。",
+      "method": "输入：几段任务无关的自主交互历史 + 当前任务观测/指令；模型在 context 里隐式学到系统动力学作为条件，输出动作。",
+      "results": "仿真+真机上换新相机视角时显著超越标准 VLA 基线。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 7.5,
+      "popularity": 7.5,
+      "quality": 8.5,
+      "recommendation": 8.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26093",
+    "summary": "机械手做力敏操作需要接触力监督，但 mocap 和网络视频只有运动没有力。ForceBand 是个便宜的腕戴 sEMG 系统，把肌肉信号变成带力标注的演示。作者先收 10 小时多模态数据集训一个 EMG2Force 模型，用户简短校准后只用 sEMG+视频就能给演示自动打上每指力度标签。指尖力预测误差比视觉基线低 50%+，抓取/挤压/放置任务成功率 87%。",
+    "highlights": {
+      "contribution": "给机器人力敏操作学习提供一个便宜的力标注数据源——腕戴肌电。",
+      "innovation": "用 sEMG+IMU 反推每指力度，替代昂贵的力传感手套，还兼容标准 egocentric 视频演示流程。",
+      "method": "10 小时多模态数据集（视频+sEMG+IMU+指尖力）预训 EMG2Force；短校准后给用户演示自动打力标签；力标签+视频驱动机器人策略学习。",
+      "results": "指尖力预测误差比视觉基线低 50%+；抓、挤、放三类需要力控的任务成功率 87%。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 7.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.25880",
+    "summary": "Embodied visual tracking 传统只用文字描述目标，杂乱场景里多个物体符合同一描述就容易搞混。USS 统一支持文字/点/框/掩码四种 prompt，用模态编码器编码后混合注意力融合视觉，再解码成 egocentric waypoint。还配了一个隐式世界模型做时序预测。真机上空间目标线索显著优于纯文字，非 MLLM 类里 SOTA，MLLM 类里推理更快。",
+    "highlights": {
+      "contribution": "把 embodied visual tracking 从纯文本提示改成统一的空间-语义 prompt。",
+      "innovation": "四种异构 prompt（文本/点/框/掩码）统一编码 + 潜在世界模型自监督时序对齐。",
+      "method": "输入 RGB + 任意一种 prompt；各自编码器出 token 与视觉特征做 hybrid attention 融合；解码 egocentric waypoint；同时训一个隐式世界模型预测未来表示。",
+      "results": "真机上空间提示比纯文本成功率高，尤其在相似干扰物和长时序场景；仿真上非 MLLM 类 SOTA、推理速度快于 MLLM 类。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 7.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26217",
+    "summary": "JEPA 类潜在世界模型 LeWM 在规划时要反复自回归 rollout 局部一步过渡模型，慢又累积误差。Fast-LeWM 换个思路，把动作前缀直接当作预测单元——给当前 latent 和候选动作序列，并行预测执行不同前缀之后的未来 latent，规划时不用真的一路 imagine 下去。多任务上成功率涨、规划时间掉、长 horizon 上 open-loop latent loss 涨得慢很多。",
+    "highlights": {
+      "contribution": "把 JEPA 类潜在世界模型的规划从自回归 rollout 换成并行 action-prefix 预测。",
+      "innovation": "以「动作前缀→未来 latent」为基本预测单元，直接建模不同长度前缀的累积效应。",
+      "method": "输入当前 latent + 候选动作序列，编码所有前缀，并行预测各前缀对应的未来 latent；规划时只取最后一个前缀 token 对应的 latent 打分即可。",
+      "results": "多任务平均成功率比 LeWM 高，规划时间大幅下降，长 horizon 下 open-loop latent loss 增长明显更慢。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 7.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26321",
+    "summary": "移动操作机器人在边缘算力下需要既新鲜又可查询的世界表示。KRVF 是一种带来源感知的语义体素表示，把占据、颜色、语义证据、时间新鲜度和证据来源都编码进体素，把测量的占据和语义先验假设分离，避免深度失效污染几何。工作还给了 ROS2 实现和任务级查询算子。",
+    "highlights": {
+      "contribution": "面向边缘移动操作的、任务导向的语义体素世界表示。",
+      "innovation": "把「测量的占据」与「语义先验假设」在体素里显式分离，并记录时间新鲜度和证据来源。",
+      "method": "输入 RGB-D 流；体素累加占据、颜色、语义证据、时间戳、来源标签；用 map-prior 渲染深度反哺感知修复；对外暴露语义物体/抓取候选查询算子；ROS2 实现。",
+      "results": "技术报告形态，重点在表示定义与工程实现，未给出定量对比表。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 7.5,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26410",
+    "summary": "生成视频模型画面漂亮但没有 3D 底子，物体守恒会破。作者把 V-JEPA 的语义特征反投影到体素网格里，用单目深度先验落地，然后学一个动作条件的体素特征平流算子——把物理当作时空状态平流，隐式在高维 JEPA 特征里跟踪材质状态。全靠视频端到端监督，不看物理引擎内部，在 CLEVERER/PhysInOne/PhysGaia 上长期结构稳定、物理合理。",
+    "highlights": {
+      "contribution": "一个纯视频监督、隐式学 3D 物理的动作条件世界模型。",
+      "innovation": "把 V-JEPA 2D 特征 lift 到 3D 体素，再学 volumetric feature advection 作为动作条件过渡算子。",
+      "method": "输入视频；V-JEPA 抽语义特征，结合单目深度反投影到体素；学一个动作条件的特征平流 transition；损失来自视频端到端预测，不依赖仿真器内部标签。",
+      "results": "CLEVERER、PhysInOne、PhysGaia 上长期结构稳定、物理合理，能涌现刚体+流体等异质现象。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 7.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.25659",
+    "summary": "基于学习的 Lyapunov 控制形式化保证依赖精准模型，参数一变就白训。D-learning 能不依赖显式动力学模型但对大参数漂移不行。Reptile-D-learning 用 Reptile 元学习跨不同参数系统捕捉共享结构，学出一个可泛化的 Lyapunov 网络初始化和高性能控制器，多个非线性系统上泛化和快速适应都变好。",
+    "highlights": {
+      "contribution": "把元学习引入 Lyapunov 控制，在参数不确定下快速适应还保稳定性。",
+      "innovation": "用 Reptile 训 Lyapunov 网络的共享初始化，让 D-learning 从单任务扩展到跨参数分布。",
+      "method": "把每个参数配置当作一个任务；Reptile 内循环做 D-learning 更新，外循环更新初始化；部署时少量样本就能微调适应新参数。",
+      "results": "多个非线性控制系统上，泛化性能和对未见参数的适应速度显著高于普通 D-learning。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7.5,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26057",
+    "summary": "作者认为让 AI agent 靠自己 runtime 里的 prompt/输出过滤/guardrail 库自控是靠不住的——任何在 agent 地址空间里的控制都能被输入影响。他们提出四条属性：进程隔离、结构化唯一路径的预动作强制、请求和系统双层 fail-closed、外部可验证的签名证据。用 Rust 实现了 Unfireable Safety Kernel，Z3 定理和 Kani 有界模型检验双重机械化验证，用一个自改造 world model 做对抗测试，1000 次自改造里 704 次针对安全核心的越界全被拒绝。",
+    "highlights": {
+      "contribution": "把 AI agent 的授权控制搬出 agent 地址空间，形式化+机械化验证。",
+      "innovation": "execution-time alignment 概念 + 四条形式化属性 + Rust 实现，覆盖包含 escapable AI system 的整类系统。",
+      "method": "定义四条授权属性；Rust 实现 kernel；SMT 定理证明 + Kani 有界模型检验；Python-to-Rust 迁移用 1000/1000 字节等价 + 17/17 对抗类过关；用自改造 world model 做对抗压力测试。",
+      "results": "1000 次自改造，704 次对安全核心的攻击全部拒绝，无 escape；额外 300 次 kill switch 场景也全拒绝；6240 次授权往返无一 bypass。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.25829",
+    "summary": "相机、激光雷达在恶劣天气下不行，毫米波 FMCW radar 稳但仰角信息弱。作者发现车辆底盘会遮挡雷达波形成独特几何阴影，可以借这个阴影反推靠近的细长立柱物体的三维倾角，无需假设更广场景，用返回边界和张角建了个闭式解析映射。仿真和 Navtech CTS350-X 实验证明该思路可行，主要瓶颈是雷达图里物体分割。",
+    "highlights": {
+      "contribution": "利用车辆底盘造成的 radar 阴影这个新几何线索，从 2D 转雷达反推 3D 倾角。",
+      "innovation": "把「阴影几何」变成显式的解析映射，摆脱对整体场景先验的依赖。",
+      "method": "分析底盘阴影几何，建立返回边界到张角的闭式映射，反解物体倾角；仿真验证+Navtech CTS350-X 实机验证。",
+      "results": "实验条件下可以估计倾角，主要瓶颈是 radar 分割精度。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7.5,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 6.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26236",
+    "summary": "脊柱 MRI 各向异性稀疏，很多分级评分本来该在特定解剖切面上做但原图看不到。作者把 3D Gaussian Splatting 搬来重建稀疏 MRI 体积，然后按目标解剖对齐的切面重采样。用重采样出来的图去预测脊柱狭窄的分级，比原始扫描和体素插值重采样都更准。",
+    "highlights": {
+      "contribution": "把 3D Gaussian Splatting 用到稀疏 MRI 的解剖对齐重采样，服务放射分级。",
+      "innovation": "以放射诊断分级性能为目标去优化切面，而非只追求几何保真。",
+      "method": "把稀疏各向异性 MRI 拟合成 3D Gaussian 表征；沿目标解剖对齐平面渲染切片；用切片喂给分级模型预测狭窄严重程度。",
+      "results": "所有狭窄条件下，Gaussian Splatting 重采样切片的分级准确率高于原始扫描和体素插值基线。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 7.5,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26205",
+    "summary": "患者上网找精神类药物信息，权威 FDA 副作用数据太抽象，社区论坛叙事又没验证。作者建了一个 provenance-aware 的多智能体知识图谱框架，整合了 46.6 万 Reddit 帖、6 万 WebMD 评论和 20 年 FAERS 记录，覆盖 9 种抗抑郁药。LLM 实体识别在药名 F1 0.969、症状 F1 0.973；两个社区来源之间 Jaccard 相似度最高 0.905，明显跟监管报告独立；sertraline 上很多不良事件在社区源提前几百天出现。",
+    "highlights": {
+      "contribution": "把监管数据和患者叙事分源整合进精神类药物安全知识图谱，保持来源可追溯。",
+      "innovation": "provenance-aware 多智能体架构 + 三类真实源交叉，量化社区源的独立信号。",
+      "method": "LLM NER 抽取药物/症状实体（对齐 ATC-N/ICD-10/MedDRA）；分源建 Neo4j 知识图谱记录 provenance；多 agent 根据用户查询检索合成回答。",
+      "results": "药名 F1 0.969、症状 F1 0.973；社区源两两 Jaccard 最高 0.905；sertraline 部分不良事件社区源领先 FDA 数百天。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 7.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.25705",
+    "summary": "LLM GUI agent 越来越多地代人操作屏幕，难免碰到含用户敏感信息的界面，这时候按理应该把控制交回用户。可现在的 agent 一般被 fine-tune 得只管完成任务不管安全。本短文构建了一个 explorer agent，从一个示范任务出发系统地探索查询空间，找出那些一旦执行就会触发用户敏感界面的查询。",
+    "highlights": {
+      "contribution": "系统发现 GUI agent 遇到用户敏感界面的查询，方便工程师加 handover 逻辑。",
+      "innovation": "以一个示范任务为种子，主动扩展查询空间来触发敏感状态，而不是被动挑选。",
+      "method": "输入：一个示范任务；explorer agent 逐步变换查询并在真实 GUI 环境中执行，记录进入敏感状态的查询；输出敏感查询集合。",
+      "results": "短文侧重方法与数据集雏形，未给系统性数值指标。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7.5,
+      "popularity": 5.5,
+      "quality": 6.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26080",
+    "summary": "给 agent 训 process reward model 太贵——长 horizon、动作不可逆、环境有随机性，人工标和蒙卡都不好搞。作者证明其实 RL 后训练本身就自带步级评分信号：RL 策略与参考策略的对数概率比，在一般随机 MDP 下正好等于最优 advantage 函数，他们叫 progress advantage，免标注、跨领域、白拿。在 test-time scaling、不确定性量化、失败归因三个场景、5 个 benchmark、4 个模型家族上，全面超过 confidence 基线和专门训练的 reward model。",
+    "highlights": {
+      "contribution": "证明 RL 后训练的策略/参考对数比就是 process reward，完全免额外训 reward model。",
+      "innovation": "在随机 MDP 下推出 progress advantage 与最优 advantage 一致的恒等式，把 PRM 变成 RL 副产品。",
+      "method": "取 RL post-trained 策略与其参考策略的 log-prob ratio 作为步级 advantage；用它做 test-time scaling 打分、不确定性量化、失败步定位；不做额外训练。",
+      "results": "5 个 benchmark、4 个模型家族全面超过 confidence 基线；无需任务定制训练的情况下也超过专门训练的 reward model。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 7.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26346",
+    "summary": "能源领域的 agent 评测目前多停留在静态知识回答，与实际业务需要的实时数据检索、法规解读、多步定量建模脱节。作者搞了个 243 题的专家精编基准，覆盖市场数据分析、知识检索解读、高级定量与决策分析，配上美国 ISO 电力 API、监管文档检索、电价数据库、资产优化模型和 RAG 工具。用多维评分协议、开源闭源模型对比，测出能源专业场景下模型能力和工具集如何交互。",
+    "highlights": {
+      "contribution": "首个把实时数据、监管知识、定量建模串起来的能源领域 tool-augmented LLM agent 基准。",
+      "innovation": "243 题专家精编 + 类别路由的多维评分（方法正确性/答案精度/属性对齐/来源有效性）。",
+      "method": "构建三类 243 题；给 agent 配 ISO 电力 API、监管检索、电价库、资产优化模型、RAG；分类别路由不同评分标准；比较闭源与开源 LLM。",
+      "results": "评测结果显示模型能力和领域工具在专业场景下有强交互，具体数值以类别公开为准。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 7.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26356",
+    "summary": "工程师常反馈：改了一个 prompt 模块，另一个明明没依赖的模块行为却跟着变了。作者把这个失败模式形式化为 compositional behavioral leakage：注意力天然没有模块边界。他们做了三通道扰动协议（体积/内容/形式），在真部署的 Claude Sonnet 4.6 招聘评估 agent 上跑 144 次，只有内容通道产生了显著配对效应（Cohen d=0.63，95% CI 排零），推荐结果没翻转但属于亚阈值机制，累计下来会影响成千上万决策。",
+    "highlights": {
+      "contribution": "把「prompt 模块之间的隐性串扰」当成一类独立 agent 失败模式来定义与测量。",
+      "innovation": "指出 self-attention 在拼接模块间没有形式边界，并给出可复用的三通道扰动测量协议。",
+      "method": "在真实 Claude Sonnet 4.6 招聘 agent 上，对非目标模块分别做体积、内容、形式三种扰动；配对比较目标模块行为；共 144 次试验并做 bootstrap 统计。",
+      "results": "只有内容通道显著（Cohen d=0.63，95% CI 排零）；没有推荐翻转但属亚阈值系统性偏移。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7.5,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26448",
+    "summary": "认知科学中「造理论」这一步一直靠人手，其他环节都自动化了。AutoCog 是个全自动闭环智能体：多个 LLM agent 各自主张一个可执行的认知模型，为区分它们设计实验、在线招募被试跑数据、用生成表现打分、诊断失败原因、合成新理论，如此循环。仿真上恢复出了包括非常规策略在内的已知决策模式；真人实验里跑出的理论超过它出发时的经典理论并泛化到 held-out 研究，还提出并预注册验证了一个新颖的多线索决策理论。",
+    "highlights": {
+      "contribution": "让认知理论构造真正进入自动化闭环，可累积、可执行、可复现。",
+      "innovation": "把「不同 agent 各自维护竞争理论 + 设计判别实验 + 招募真人 + 综合失败诊断」串成完整发现循环。",
+      "method": "多 LLM agent 提出可执行认知模型；生成能区分假设的实验；在线招募人类跑数据；用生成 likelihood 打分；诊断失败并合成新理论；重复。",
+      "results": "仿真数据上恢复出多种决策策略；真人实验中理论优于经典 baseline 并在两个 held-out 设置上泛化；预注册验证了一个新的多线索决策理论。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.25651",
+    "summary": "LLM 在医疗里生成或编辑文本，一个小错都可能影响患者安全。MedGuards 把医疗文本纠错拆成多 agent in-context 学习任务：一组 agent 分别检测、定位、纠正错误，再用带推理轨迹和置信度的仲裁机制解决分歧，不用重训基座 LLM。还提出 KPCS 评价指标，看关键关键词是否正确生成。四个多语种临床数据集上多项指标都涨。",
+    "highlights": {
+      "contribution": "面向医疗文本安全的多智能体错误检测与纠错框架，不动基座模型。",
+      "innovation": "把「检测/定位/纠错」拆成分工 agent，再用置信度+推理轨迹仲裁；关键词优先评价指标 KPCS。",
+      "method": "输入医疗文本；分工 agent 分别检测/定位/纠错；置信度+推理轨迹仲裁矛盾结果；用 KPCS 与常规指标评估。",
+      "results": "四个多语种临床数据集上，多个基础模型的错误检测/纠错指标显著提升。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 7.5,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.25656",
+    "summary": "GraphRAG、Agentic RAG 越出越多，到底啥时候用啥？作者搭了个统一评测框架，实现 9 种标准 RAG 场景（基础 RAG、GraphRAG、Modular RAG、Agentic RAG），对比在半结构化知识库上的效果，还提出一个针对 GraphRAG/Agentic RAG 的上下文工程方法，token 用量降 19%-53%。分析还发现检索指标涨不代表生成质量涨——检索导向指标可能夸大高级检索价值。",
+    "highlights": {
+      "contribution": "系统对比 9 种 RAG 场景，给出「什么时候用哪种」的实证依据。",
+      "innovation": "针对 GraphRAG/Agentic RAG 的上下文/记忆溢出问题设计的新表示与 agent 循环，显著压 token。",
+      "method": "实现 9 种 RAG 变体在同一半结构化知识库上评测；引入新 context 表征减少上下文与 memory 溢出；分析检索指标与生成质量之间的差距。",
+      "results": "新 context engineering 让 GraphRAG/Agentic RAG token 用量降 19%-53%；发现 retrieval-generation gap 提示常见指标高估高级检索。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 7.5,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27397",
+    "summary": "LLM agent 评测大多是静态推理或零和游戏，跟现实经济里的开放式正和博弈脱节。SidConArena 把多玩家经济形式化为一个有限时长的部分可观测随机博弈，包含三个耦合阶段：自然语言协商（有约束的交易）、确定性转换器生产、密封投标拍卖。框架配了结构化观测、阶段感知调度、神经符号动作接口和异步执行。实验显示更强前沿模型经济收益更高，但仍会误估资源、协商被动、长期投资规划弱。",
+    "highlights": {
+      "contribution": "首个针对开放式正和多玩家经济博弈的 LLM agent 评测框架。",
+      "innovation": "自然语言协商+确定性生产+密封拍卖三阶段耦合的形式化博弈，结合神经符号动作接口保持自由发挥又能规则化打分。",
+      "method": "把经济体建成有限时长 POSG；结构化观测 + 阶段感知 agent 调度；协商用自然语言但结算走符号动作接口；异步执行同种模型或异构组合的锦标赛。",
+      "results": "更强前沿模型经济收益更高；所有模型在资源估值、主动议价、长时投资规划上仍有明显不足。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 7.5,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.25836",
+    "summary": "雇主甚至国家可能派 AI agent 帮用户做事，同时被拿来监视用户——用户可能没权限阻止。作者把这个问题定义为 agentic surveillance，做了 SurveilBench 覆盖企业、教育、警务三类举报场景。发现一些模型确实会自发帮监控但也会向政府报告监控行为。他们还把 prompt injection 反手用来做反监视，设计了三种规避技巧：藏、骗、诱导过度上报。",
+    "highlights": {
+      "contribution": "把「agent 被用来监视用户」形式化为独立威胁并给出基准和反制手段。",
+      "innovation": "SurveilBench 三域数据集 + 三类规避 prompt injection（隐藏/欺骗/诱导过度上报）。",
+      "method": "定义 agentic surveillance；构建 SurveilBench 三领域举报任务；跨模型评估监视倾向；把 prompt injection 反用作反监控攻击。",
+      "results": "多模型有自发监控倾向；同时可能主动上报监控图谋；三种规避技巧对当前 agent 均可有效实施。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 7.5,
+      "popularity": 7.0,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  }
+]

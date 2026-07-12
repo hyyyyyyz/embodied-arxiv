@@ -1,0 +1,1051 @@
+{
+  "date": "2026-06-23",
+  "papers": [
+    {
+      "arxiv_id": "2606.24472",
+      "title": "G$^3$VLA: Geometric inductive bias for Vision-Language-Action Models",
+      "authors": [
+        "Yue Peng",
+        "Yongzhe Zhao",
+        "Artur Habuda",
+        "Khuyen Pham",
+        "Yanheng Zhu",
+        "Tran Nguyen Le",
+        "Fares Abu-Dakka",
+        "Li Guo"
+      ],
+      "affiliations": [],
+      "summary": "作者指出 VLA 的视觉 token 只锚在 2D 像素坐标,不知道相机的标定几何,多相机情形下更明显。G³VLA 给 pretrained VLA 加了一个相机感知的几何模块——射线嵌入 + 投影位置编码 + 双向跨视角融合——用 π³X 教师或点图做几何监督,不改动作空间。挂在 π0/π0.5/GR00T 1.5 上都涨,尤其空间敏感任务。",
+      "original_abstract": "Vision-language-action (VLA) models have made rapid progress in generalist robot manipulation by harnessing semantic knowledge from pretrained vision-language backbones, but their visual tokens remain grounded in 2D image coordinates rather than the calibrated geometry of the robot's cameras -- a mismatch especially pronounced in multi-camera setups, where views are coupled by known intrinsics and extrinsics yet processed as independent images. We propose G$^3$VLA, a camera-aware geometric module that injects calibrated structure into the visual-token stream of a pretrained VLA without altering its action space or imitation objective, combining intrinsic-conditioned ray embeddings, projective positional encoding (PRoPE), and bidirectional cross-view fusion. Geometric supervision is provided either from ground-truth point maps when available, or from confidence-gated $π^3$X teacher predictions, requiring no depth sensors or manual annotations. Instantiated on $π_0$, G$^3$VLA yields consistent gains across the LIBERO suites, RoboCasa24, RoboTwin2.0, and real-robot settings, with the largest improvements on spatially and object-sensitive tasks. We further validate on $π_{0.5}$ and GR00T 1.5, with results suggesting that geometric transfer is most effective when geometry-aware tokens have direct access to the action generation pathway. Our project page is at https://sites.google.com/view/g3vla",
+      "highlights": {
+        "contribution": "把相机标定几何以模块化方式注入到已训 VLA 中,不动 action 空间就能显著提升多视角空间任务表现。",
+        "innovation": "组合了内参条件的射线嵌入、PRoPE 投影位置编码和双向跨视角融合,并用 confidence-gated 的 π³X 伪监督替代深度传感器。",
+        "method": "输入多相机 RGB 和相机内外参;在视觉 token 流里注入射线嵌入和 PRoPE,跨视角双向融合;几何监督用真实点图或 π³X 教师输出,imitation 目标保持不变。",
+        "results": "在 LIBERO 系列、RoboCasa24、RoboTwin2.0 和真机上一致提升,空间/物体敏感任务提升最大;π0.5、GR00T 1.5 也验证有效。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T12:02:36Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 9.3,
+        "recency": 7.5,
+        "popularity": 7.5,
+        "quality": 8.2,
+        "recommendation": 8.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24472v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24472v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24448",
+      "title": "Supervise What Survives: Geometry-Guided VLA Adaptation from Synthetic Robot Videos",
+      "authors": [
+        "Danze Chen",
+        "Yanzhe Chen",
+        "Qiming Huang",
+        "Zhijun Cao",
+        "Chen Gao",
+        "Mike Zheng Shou"
+      ],
+      "affiliations": [],
+      "summary": "针对合成机器人视频缺少真实动作监督的问题,作者提出「非对称保留原则」:生成视频只保留几何信息,不保留控制信号,所以别去伪造 action,只用它监督视觉。GRA 从人类视频中抽出末端执行器的 2D 未来路点,作为辅助 head 挂在 VLA 视觉主干上,action head 仍只用真实示教训。真机上比伪动作基线强,数据预算相同的情况下拉近了跟大规模真机训练的差距。",
+      "original_abstract": "Vision-Language-Action (VLA) models require large-scale video-action pairs, yet real teleoperation remains scarce. While generated robot videos offer a scalable alternative, existing methods treat them as real robot data by recovering pseudo-actions from synthesized pixels. We argue that deriving low-level control from generated visuals is a mismatched abstraction. A video captures only \\emph{geometry}: the spatial trajectory representing the \\emph{where} of a task. A real demonstration captures \\emph{control}: the exact motor commands representing the \\emph{how}. Human-to-robot video generation preserves these unequally: the visible geometry survives the generation process, while the underlying control signals are lost. This \\textbf{Asymmetric Preservation Principle} dictates a clean rule: this surviving geometry should solely supervise visual perception, leaving control to real demonstrations. Following this principle, we propose \\textbf{GRA} (\\textbf{G}eometry-guided \\textbf{R}epresentation \\textbf{A}lignment), which extracts the geometric content as future 2D end-effector waypoints, computed from the source human video through pose estimation, retargeting, simulation, and calibrated projection, and routes them to the VLA vision backbone via an auxiliary 2D head. The action head is trained on real demonstrations only. During fine-tuning, the waypoint loss persists as a \\textbf{spatial representation anchor} that prevents the backbone from losing its geometric grounding. On real-robot tasks, GRA outperforms pseudo-action baselines under matched data budgets and narrows the gap to policies trained with substantially more real demonstrations, suggesting that correctly routed geometry bridges generated videos to robot policies more reliably than recovered actions.",
+      "highlights": {
+        "contribution": "提出用生成视频只监督几何、不监督控制的 GRA 框架,让 VLA 能从合成数据中获益而不被伪动作污染。",
+        "innovation": "「非对称保留原则」——把生成过程中幸存的几何信息和被破坏的控制信号解耦,分别用不同的数据源监督。",
+        "method": "输入源人类视频,经过姿态估计、重定向、仿真、标定投影得到 2D 末端路点;VLA 主干加一个 2D 辅助 head 学路点,action head 只用真机示教训练,微调时路点损失作为空间锚点保持几何理解。",
+        "results": "在真机任务上超过 pseudo-action 基线,数据预算受限时能拉近到用更多真实示教训练的策略水平。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T11:35:13Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 9.2,
+        "recency": 7.5,
+        "popularity": 7.0,
+        "quality": 8.0,
+        "recommendation": 8.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24448v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24448v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24884",
+      "title": "InSight: Self-Guided Skill Acquisition via Steerable VLAs",
+      "authors": [
+        "Maggie Wang",
+        "Lars Osterberg",
+        "Stephen Tian",
+        "Ola Shorinwa",
+        "Jiajun Wu",
+        "Mac Schwager"
+      ],
+      "affiliations": [],
+      "summary": "InSight 想让 VLA 能自己学新技能,不再受限于训练集。它先用 VLM 把示教切成有标签的原子动作(如「移到碗」「上抬」),让 VLA 支持 primitive 级 steer;然后 VLM 分析新任务缺什么原子,自己尝试并把成功的存下来喂回训练集,滚成数据飞轮。多个仿真+真机任务上都能学到并组合出长时任务,不需要人给这些新技能任何示教。",
+      "original_abstract": "Vision-language-action (VLA) models can learn manipulation skills from demonstrations, but their capabilities are bounded by the skills in the training data. We present InSight, a framework that unlocks autonomous skill acquisition by rendering VLAs steerable at the primitive-action level (e.g., \"move gripper to the bowl\", \"lift upward\", \"pour the bottle\"). InSight consists of two primary stages: (1) an automated segmentation pipeline that partitions demonstrations into labeled primitives via VLM plan decomposition and end-effector poses to enable VLA primitive steerability, and (2) a VLM-guided data flywheel that identifies missing primitives required to accomplish a novel task, autonomously attempts demonstrations of the missing primitives with VLM-proposed low-level control, and automatically labels, stores, and integrates successful demonstrations into the VLA training set. We evaluate InSight across simulation and real-world manipulation tasks, including block flipping, drawer closing, sweeping, twisting, and pouring, without any human demonstrations of these target skills. Once learned, these primitives can be composed to execute novel, long-horizon tasks without additional human demonstrations. Our findings demonstrate that primitive steerability provides a practical foundation for continual skill acquisition in VLA policies. Project website: https://insight-vla.github.io.",
+      "highlights": {
+        "contribution": "提出让 VLA 在 primitive 级别可 steer 的框架,并配套自主采集数据的飞轮,实现无需人工示教的持续技能获取。",
+        "innovation": "把 VLM 规划分解和末端位姿切分成 primitive,让原子动作可寻址、可组合、可自动补齐。",
+        "method": "两阶段:自动分段用 VLM 分解加末端位姿标签把示教切成 primitive;数据飞轮用 VLM 提出缺失原子并给低层控制,由 VLA 尝试执行,成功的自动打标签、入库、再训。",
+        "results": "在 block 翻转、抽屉关闭、扫地、拧、倒水等仿真+真机任务上,不需人示教即可学会并组合成新的长时任务。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T17:59:01Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.5,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24884v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24884v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.25215",
+      "title": "Reflective VLA: In-Context Action Consequences Make VLAs Generalize",
+      "authors": [
+        "Qing Lian",
+        "Kent Yu",
+        "Lei Zhang"
+      ],
+      "affiliations": [],
+      "summary": "作者说大多 VLA 是「反应式」的,单帧根本看不出机器人标定、相机装配这些环境特异因子。Reflective VLA 每步的输入不只是当前帧,还带若干「观察-动作-场景变化」三元组作为上下文,让模型从最近的动作后果里推断部署环境。用 block-causal 注意力做并行训练加 KV cache 实时推理,在 LIBERO-Plus 分布偏移上比反应式基线强 5.4 和 4.2 个点。",
+      "original_abstract": "Most vision-language-action (VLA) models are reactive: they predict the next action from the current instruction and observation, implicitly assuming that the current observation fully specifies the action-relevant state. In embodied control, however, embodiment-specific factors such as camera-to-robot geometry, robot calibration, or systematic actuation bias are often hard to identify from a single observation. As a result, reactive policies cannot reliably disambiguate these factors in general, overfitting to training environments and generalizing poorly at deployment. We propose Reflective VLA, which conditions each decision on a context of observation-action-consequence triplets. Each triplet records not only what the robot observed and executed, but also how the scene changed afterward, exposing the deployment-specific mapping from actions to observed effects. Architecturally, Reflective VLA routes all observation modalities through the VLM under shared attention, so the action expert reasons directly over past triplets and the current observation. A block-causal mask enables parallel multi-frame training without leakage and supports KV-cached real-time inference. On standard LIBERO and SimplerEnv-Bridge, Reflective VLA preserves strong in-distribution performance. Under distribution shift on LIBERO-Plus and the harder LIBERO-Plus-Hard, it improves average success rate by 5.4 and 4.2 percentage points over a matched reactive baseline. Ablations with a matched history-only baseline further show that action consequences -- rather than additional context length alone -- are the key to cross-environment generalization. Project page: https://lianqing11.github.io/reflective-vla-page/",
+      "highlights": {
+        "contribution": "把「动作后果」显式作为上下文喂给 VLA,让策略能推断相机、标定、驱动偏差等部署级隐变量。",
+        "innovation": "首次把 observation-action-consequence 三元组作为 VLA 的 in-context 单元,并证明起作用的是后果而不是简单的历史长度。",
+        "method": "所有模态在共享注意力下经 VLM,action expert 直接在过往三元组和当前观察上推理;block-causal mask 支持无泄漏的多帧并行训练与 KV cache 推理。",
+        "results": "LIBERO 和 SimplerEnv-Bridge 保持强分布内表现;LIBERO-Plus 和 LIBERO-Plus-Hard 分别比反应式基线高 5.4 和 4.2 个 pp。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T22:23:35Z",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.5,
+        "popularity": 7.0,
+        "quality": 8.0,
+        "recommendation": 8.1
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.25215v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.25215v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.25241",
+      "title": "GRAFT: Graph-Based Affordance Transfer via Part Correspondence",
+      "authors": [
+        "Mengying Lin",
+        "Utkarsh Mishra",
+        "Ajay Mandlekar",
+        "Danfei Xu"
+      ],
+      "affiliations": [],
+      "summary": "GRAFT 想解决 few-shot 操作迁移:只有一次示教,怎么迁到没见过的物体。核心是把物体表示成基于部件的图,部件级描述子做全局检索和部件对应,顶点级描述子做接触点匹配。给新物体先找几何和功能最像的实例,再点对点传接触点,做到零样本。",
+      "original_abstract": "Generalizing robotic manipulation to unseen objects remains challenging, as learning-based approaches require many demonstrations and fail in few-shot settings. Prior work transfers affordances through semantic retrieval, but semantics alone neglect geometric similarity, which is critical for manipulation. We propose GRAFT, a geometry-aware correspondence framework for zero-shot manipulation transfer using only one demonstration per object. Objects are represented as part-based graphs, where part-level descriptors support global instance retrieval and part correspondence, and vertex-level descriptors enable fine-grained contact point matching. For an unseen object, our method first retrieves the most functionally and geometrically similar instance from the demonstration buffer with aligned functional parts, and finally propagates the contact points through point-wise correspondence.",
+      "highlights": {
+        "contribution": "提出几何感知的部件图对应框架 GRAFT,每物体只需一次示教就能零样本迁移操作 affordance。",
+        "innovation": "把 affordance 迁移从纯语义检索升级为部件级几何图对应,兼顾功能相似和几何相似。",
+        "method": "把物体表示成部件图,部件描述子用于实例级检索并对齐功能部件,顶点级描述子在两个物体表面上做点对点对应,把接触点从示教物体传播到新物体。",
+        "results": "论文摘要未给具体数字,但强调在零样本 few-shot 迁移场景下优于纯语义检索基线。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T23:58:57Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.5,
+        "popularity": 6.5,
+        "quality": 7.0,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.25241v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.25241v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24597",
+      "title": "Qwen-AgentWorld: Language World Models for General Agents",
+      "authors": [
+        "Yuxin Zuo",
+        "Zikai Xiao",
+        "Li Sheng",
+        "Fei Huang",
+        "Jianhong Tu",
+        "Yuxuan Liu",
+        "Tianyi Tang",
+        "Xiaomeng Hu",
+        "Yang Su",
+        "Qingfeng Lan",
+        "Yantao Liu",
+        "Qin Zhu",
+        "Yinger Zhang",
+        "Bowen Yu",
+        "Haiquan Zhao",
+        "Haiyang Xu",
+        "Jianxin Yang",
+        "Jiayang Cheng",
+        "Junyang Wang",
+        "Lianghao Deng",
+        "Mingfeng Xue",
+        "Tianyi Bai",
+        "Yang Fan",
+        "Yubo Ma",
+        "Yucheng Li",
+        "Zeyu Cui",
+        "Zhihai Wang",
+        "Zhihui Xie",
+        "Zhuorui Ye",
+        "An Yang",
+        "Dayiheng Liu",
+        "Jingren Zhou",
+        "Ning Ding"
+      ],
+      "affiliations": [],
+      "summary": "Qwen 团队搞了一个语言世界模型 Qwen-AgentWorld,能通过长思维链模拟 7 个域的 agent 环境。用了千万级真实交互轨迹做 CPT+SFT+RL 三阶段训练,还建了 AgentWorldBench。两个用法:一是当解耦模拟器给 agentic RL 提供可扩展环境,二是当 agent 基础模型的 warm-up,7 个 agent benchmark 一致提升。",
+      "original_abstract": "A world model predicts environment dynamics based on current observations and actions, serving as a core cognitive mechanism for reasoning and planning. In this work, we investigate how world modeling based on language models can further push the boundaries of general agents. (i) We first focus on building foundation models for agentic environment simulation. We introduce Qwen-AgentWorld-35B-A3B and Qwen-AgentWorld-397B-A17B, the first language world models capable of simulating agentic environments covering 7 domains via long chain-of-thought reasoning. Leveraging more than 10M environment interaction trajectories of 7 domains in real-world environments, we develop Qwen-AgentWorld through a three-stage training pipeline: CPT injects general-purpose world modeling capabilities from the state transition dynamics and augmented professional corpora, SFT activates next-state-prediction reasoning, and RL sharpens simulation fidelity through a tailored framework with hybrid rubric-and-rule rewards. To evaluate language world models, we present AgentWorldBench, a comprehensive benchmark constructed from real-world interactions of 5 frontier models on 9 established benchmarks. Empirical results demonstrate that Qwen-AgentWorld significantly outperforms existing frontier models. (ii) Beyond foundation models, we further investigate two complementary paradigms through which world modeling enhances general agents. First, as a decoupled environment simulator, Qwen-AgentWorld supports scalable and controllable simulation of thousands of real-world environments for agentic RL, yielding gains that surpass real-environment training alone. Second, as a unified agent foundation model, world-model training acts as a highly effective warm-up that improves downstream performance across 7 agentic benchmarks. Code: https://github.com/QwenLM/Qwen-AgentWorld",
+      "highlights": {
+        "contribution": "推出首个可覆盖 7 域 agentic 环境的语言世界模型 Qwen-AgentWorld 及对应 benchmark,并展示了世界模型在 agent 训练中的双重用途。",
+        "innovation": "把「语言世界模型」定位为 agent 基础设施:既是可控可扩展的模拟器,又是 agent 通用基座的 warm-up 目标。",
+        "method": "输入 7 域的 10M+ 环境交互轨迹;三阶段训练:CPT 注入状态转移和领域语料,SFT 激活下一步状态预测 CoT,RL 用混合 rubric+rule 奖励提高保真度;搭配 AgentWorldBench 评估。",
+        "results": "在 AgentWorldBench 上显著超过现有前沿模型;用作 RL 模拟器带来的收益超过真环境训练;作为 warm-up 在 7 个 agentic benchmark 上一致提升。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T13:53:55Z",
+      "categories": [
+        "cs.CL"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.5,
+        "popularity": 9.0,
+        "quality": 8.5,
+        "recommendation": 8.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24597v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24597v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24742",
+      "title": "World Value Models for Robotic Manipulation",
+      "authors": [
+        "Zhihao Wang",
+        "Jianxiong Li",
+        "Yu Cui",
+        "Yuan Gao",
+        "Xianyuan Zhan",
+        "Junzhi Yu",
+        "Xiao Ma"
+      ],
+      "affiliations": [],
+      "summary": "现有机器人 value model 靠 VLM 主干,但 VLM 训的是静态图,缺时序建模。作者说 world model 天生擅长时序和未来预测,于是把 world model 当 value 估计的骨架,搞出 World Value Model。在标准 VOC 上 SOTA,还开了 800 条次优轨迹的新 benchmark,在其上依然领先;下游策略学习也带来一致提升。",
+      "original_abstract": "Generalist value models play a pivotal role in scaling robotic policy learning from large-scale, mixed-quality data. Mathematically, accurate value estimation demands deep temporal understanding, requiring models to both ground the current belief using historical context and plan over future outcomes. However, most existing robotic value models are built on Vision-Language Model (VLM) backbones that are pretrained primarily on static or temporally sparse visual observations, lacking the requisite temporal modeling capabilities for value estimation. Unlike VLMs, world models naturally excel at temporal modeling and future planning, making them ideal foundations for learning generalizable value functions. Driven by this insight, we marry world models with value estimation to construct a new generalist robotic value model, World Value Model (WVM), that offers accurate task progressions to assess data quality. On standard benchmarks, WVM delivers state-of-the-art (SOTA) Value-Order Correlation (VOC) results. Complementing standard evaluation suites that contains only expert data, we further introduce Suboptimal-Value-Bench, a multi-embodiment benchmark consisting of 800 suboptimal trajectories with high-fidelity, human-labeled frame annotations. Our evaluations show that WVM maintains its SOTA performance on Suboptimal-Value-Bench, establishing its robustness in handling both expert and suboptimal data. When deployed for policy learning, WVM improves manipulation performance across various policy extraction approaches in both simulated and real-world deployment, providing robust guidance for learning from mixed-quality data.",
+      "highlights": {
+        "contribution": "把 world model 作为 value function 的时序骨架,构建了通用机器人 value 模型 WVM,处理专家和次优数据都稳。",
+        "innovation": "第一个明确论证 VLM 主干缺时序建模不适合 value 估计,并用 world model 天生的时序未来预测能力弥补。",
+        "method": "输入多模态观察序列;基于 world model 主干学价值和进度估计;损失结合任务进度和状态转移预测;并新建 800 条多具身次优轨迹的 Suboptimal-Value-Bench。",
+        "results": "在标准 benchmark 拿 SOTA Value-Order Correlation,在新的 Suboptimal-Value-Bench 上仍 SOTA;用于多种策略提取方法在仿真和真机操作上都涨。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T16:07:48Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 7.5,
+        "popularity": 7.5,
+        "quality": 8.2,
+        "recommendation": 8.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24742v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24742v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24842",
+      "title": "World Models in Pieces: Structural Certification for General Agents",
+      "authors": [
+        "Yikai Lu",
+        "Yifei Wu",
+        "Xinyu Lu",
+        "Tongxin Li"
+      ],
+      "affiliations": [],
+      "summary": "这篇偏理论,主张「大世界体制」下 general agent 不可能通用,能力必然是分块的世界模型。作者证明标准最差情形分析没意义,提出「结构化认证」:用 goal-conditional 性能推出内部世界模型的逐 entry 保证,给出算法和 O(1/n)+O(δ) 误差上界,并证明该界在小 δ 时紧。",
+      "original_abstract": "In the big-world regime, agents cannot be universally capable and their ability is inevitably specialized across a world model in pieces. Consequently, standard uniform guarantees fail to distinguish between the understanding of critical bottlenecks and irrelevant failures. We first formalize this limitation by proving that general agents are not universal, rendering standard worst-case analysis uninformative. To overcome this, we introduce structural certification, a transition-local framework that maps bounded goal-conditioned performance to entry-wise guarantees on the agent's internal world model. Our main contribution is constructive. We provide algorithms that filter specific transitions using deep compositional goals and prove that a general agent on these goals has a structural world model with a $\\mathcal{O}(1/n) + \\mathcal{O}(δ)$ error bound. Conversely, this bound is tight in the small-$δ$ regime, whose existence is explicitly guaranteed by our certification. These results enable the certifiable deployment of general agents by localizing the specific transitions where long-horizon planning is reliable.",
+      "highlights": {
+        "contribution": "提出「结构化认证」框架,给通用 agent 的世界模型提供 transition-local、可部署级的可靠性保证。",
+        "innovation": "证明 general agent 不能是通用的,推翻标准 worst-case 分析,并用深度组合目标过滤 transitions 来做 entry-wise 认证。",
+        "method": "无实验;通过定义深度组合目标筛出特定 transitions,证明满足这些目标的 general agent 其结构化世界模型有 O(1/n)+O(δ) 误差界,并证紧性。",
+        "results": "理论结果:给出误差上下界及匹配性,为可靠长时规划提供 transition 级的部署认证。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T17:21:09Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.5,
+        "popularity": 5.5,
+        "quality": 7.5,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24842v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24842v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24628",
+      "title": "ArtiTwinSplat: Interactable Digital Twin Reconstruction via Gaussian Splatting from RGB-D videos",
+      "authors": [
+        "Pranjal Mishra",
+        "René Zurbrügg",
+        "Max Wilder-Smith",
+        "Marco Hutter",
+        "Marc Pollefeys",
+        "Zuria Bauer",
+        "Hermann Blum"
+      ],
+      "affiliations": [],
+      "summary": "ArtiTwinSplat 从 RGB-D 视频里自动重建可交互的关节物体数字孪生,不用 CAD、不用仿真素材、不用人工标注。它基于 3D 高斯溅射保几何和光度,再用无监督管线从观测运动里恢复部件结构和关节运动学,配跟踪和优化后能实时渲染、控视角、支持交互操作,方便下游机器人规划直接用。",
+      "original_abstract": "Deploying robots in unstructured real-world environments needs accurate, interactive models of the objects. Constructing these models at scale remains a critical bottleneck for robotic system integration. We present ArtiTwinSplat, a framework that automatically constructs articulated, photo-realistic digital twins of objects directly from RGB-D videos, requiring no CAD models, simulation assets, or manual annotations. Our method is built on 3D Gaussian Splatting that preserve geometric fidelity and photometric realism, coupled with an unsupervised articulation discovery pipeline that recovers part structure and joint kinematics from observed motion alone. With tracking and optimization stages our method provides stable, queryable digital twins that support real-time rendering, viewpoint control, and interactive manipulation. Unlike prior methods confined to simulation, ArtiTwinSplat operates directly on real-world observations and produces twins that are immediately usable by downstream robot planning and learning systems. This method offers a practical, scalable pathway toward digital twin construction, lowering the integration barrier for articulated object manipulation in embodied AI and human-robot collaboration contexts.",
+      "highlights": {
+        "contribution": "端到端从真实 RGB-D 视频构建关节物体的照片级数字孪生,直接可用于下游机器人任务。",
+        "innovation": "把 3DGS 与无监督关节发现管线结合,从观察到的运动直接恢复部件与关节,无需 CAD 或仿真资产。",
+        "method": "输入 RGB-D 视频;先用 3DGS 建高保真外观几何;无监督管线分离部件并拟合关节运动学;跟踪和优化阶段稳定数字孪生;支持实时渲染和交互查询。",
+        "results": "摘要未给具体数字,主要展示能直接从真实观测端到端建出可用于下游规划和学习的关节数字孪生。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T14:24:07Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 7.8,
+        "recency": 7.5,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24628v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24628v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24829",
+      "title": "GeoT2V-Bench: Benchmarking 3D Consistency in Text-to-Video Models via 3D Reconstruction",
+      "authors": [
+        "Chenrui Fan",
+        "Paolo Favaro"
+      ],
+      "affiliations": [],
+      "summary": "作者提出 GeoT2V-Bench:评估相机提示的文本到视频模型输出能不能支撑一个静态 3D 场景的重建。管线用 VGGT 估计相机内外参、拟合 DeformableGS、取时间中位数得静态 proxy,再沿估计轨迹渲染并给出多维度报告。3840 次重建、12 个开权重模型、80 个静态场景 prompt 的评测显示各维度经常互相冲突,揭示了不同失败模式。",
+      "original_abstract": "Camera-prompted text-to-video (T2V) models are increasingly used to synthesize virtual camera captures, such as orbiting objects or moving through static scenes. For these outputs, visual plausibility is insufficient: the generated frames should also provide coherent multi-view evidence for a single static 3D scene. We introduce GeoT2V-Bench, a reconstruction-based diagnostic benchmark for evaluating whether camera-prompted T2V clips can support explicit rigid 3D reconstruction. Our pipeline estimates per-frame camera intrinsics and poses with VGGT-style geometry estimation, fits DeformableGS, derives a static MedianGS proxy by temporal-median aggregation, and renders this proxy along the estimated camera path. Instead of producing a pass/fail label or a single scalar score, GeoT2V-Bench reports a continuous reconstruction profile covering apparent image motion, estimated trajectory behavior, MedianGS static rendering error, static-render flow agreement, and the gap between flexible and static fits. On a fair-format four-seed evaluation with 3,840 completed reconstructions from 12 open-weight model configurations and 80 GeCo-Eval static-scene prompts, we find that visible motion, static rendering error, flow agreement, and flexible-vs-static behavior often disagree. GeoT2V-Bench therefore captures complementary failure modes that emerge when generated videos are tested as global static-scene acquisitions.",
+      "highlights": {
+        "contribution": "提出用重建作为诊断的 T2V 3D 一致性 benchmark GeoT2V-Bench,给出多维连续 profile 而不是单一分数。",
+        "innovation": "把 VGGT 风格几何估计、3DGS 静态代理和光流一致性组合成 T2V 的 3D 一致性诊断管线。",
+        "method": "输入相机提示 T2V 视频;VGGT 估计相机内外参,拟合 DeformableGS 并按时间中位数得 MedianGS 静态代理;沿估计轨迹渲染并统计运动、轨迹、静态渲染误差、光流一致性等维度。",
+        "results": "12 个开权重 T2V 配置 × 80 个静态场景 prompt × 4 seed = 3840 次重建,发现各维度往往彼此不一致,揭示了 T2V 的多种 3D 失败模式。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T17:12:21Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "vggt"
+      ],
+      "scores": {
+        "relevance": 6.8,
+        "recency": 7.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.1
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24829v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24829v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24796",
+      "title": "Pocket-SLAM: Rendering-Area-Aware Pruning for Memory-Efficient 3DGS-SLAM",
+      "authors": [
+        "Leshu Li",
+        "Jie Peng",
+        "Yang Zhao"
+      ],
+      "affiliations": [],
+      "summary": "3DGS-SLAM 在大场景里高斯点越堆越多,显存爆炸。Pocket-SLAM 提出按「有效渲染面积」的贡献剪高斯,而不是只看不透明度或梯度,直接对准显存冗余源头。在 EuRoC 和 KITTI 上比现有剪枝方法降 60%+ 显存,FPS 提升 2 倍以上,定位建图精度不掉。",
+      "original_abstract": "3D Gaussian Splatting (3DGS) has garnered significant attention in Simultaneous Localization and Mapping (SLAM) due to its advances in capturing fine-grained geometry features and synthesizing novel views. For SLAM in large-scale scenes, such as autonomous driving, 3DGS-SLAM faces a critical limitation: memory consumption increases continuously over time as Gaussian points accumulate, leading to poor memory efficiency and limiting its applicability. In this work, we propose a rendering-area-aware pruning strategy that selectively removes Gaussians based on their contribution to the effective rendering area, rather than solely relying on Gaussian-level heuristics such as opacity or gradient magnitude. This perspective directly targets the sources of memory redundancy, effectively reducing the peak memory footprint of 3DGS-SLAM during runtime. Evaluations on the EuRoC and KITTI datasets demonstrate that our method consistently outperforms existing pruning approaches in large-scale outdoor scenes, achieving over 60% memory reduction and more than 2 times FPS improvement while preserving localization and mapping accuracy. These results highlight rendering-area-aware pruning as a promising direction for scaling 3DGS-SLAM to real-world autonomous driving scenarios. Our code is publicly available at https://github.com/UMN-ZhaoLab/Pocket-SLAM.git.",
+      "highlights": {
+        "contribution": "为 3DGS-SLAM 在大场景下的显存爆炸问题,提出渲染面积感知的剪枝策略,兼顾效率与精度。",
+        "innovation": "剪枝准则从高斯自身启发式(opacity/gradient)转到「对有效渲染面积的贡献」,更直接对准显存冗余。",
+        "method": "在 3DGS-SLAM 运行时监控每个高斯对有效渲染面积的贡献,贡献小的选择性剪掉;其余流程与标准 3DGS-SLAM 一致。",
+        "results": "EuRoC 和 KITTI 大室外场景上显存降 60%+、FPS 提升 2 倍+,定位建图精度保持。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T16:48:58Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24796v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24796v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24799",
+      "title": "OrbitForge: Text-to-3D Scene Generation via Reconstruction-Anchored Video Synthesis",
+      "authors": [
+        "Chenrui Fan",
+        "Paolo Favaro"
+      ],
+      "affiliations": [],
+      "summary": "OrbitForge 想从文本生成一个完整闭合轨道的 3DGS 场景。它不做多视图微调,而是先用 T2V 生成一段视频,配可变形高斯溅射得初步 3D,再检测缺失视角,用同一个 T2V 只补缺角度,最后重建成最终高斯场。300 prompt 的 T3Bench 上中位轨道跨度 359°,ImageReward Q10 从 8.07 提到 16.36。",
+      "original_abstract": "Generic text-to-video models can be used as rich open-world scene priors. Despite the high quality of today's generated videos, they do not directly yield reliable 3D assets: camera motion is difficult to control, view coverage is partial, and frames often contain inconsistencies across time. We introduce OrbitForge, an adapter built from frozen video priors and per-prompt Gaussian Splatting reconstruction optimization that converts a single text-generated video into a canonical closed-orbit 3D Gaussian Splatting scene. We use 3D reconstruction as an anchor to improve the 3D consistency of the generated video. We obtain a preliminary 3D reconstruction from a first generated video via Deformable Gaussian Splatting with a robust MedianGS proxy. We render views from a prescribed orbit to detect missing viewpoints. OrbitForge uses the text-to-video model to complete only the missing views, and reconstructs the completed orbit into a final Gaussian Splatting scene. This design requires no task-specific video or multiview fine-tuning, avoids per-prompt score-distillation optimization, and does not progressively generate views one step at a time. We further argue that this setting demands coverage-aware evaluation: local smoothness alone rewards methods that never attempt a full orbit. On a frozen 300-prompt T3Bench-derived audit, OrbitForge reconstruction attains a 359.0-degree measured median span, raises originally unsupported-bin Q10 ImageReward from 8.07 to 16.36 relative to MedianGS-only reconstruction, while remaining competitive with VideoMV on the coverage-quality.",
+      "highlights": {
+        "contribution": "在冻结 T2V 之上用 per-prompt 重建做锚,把文本生成的视频转成闭合轨道的 3DGS 场景,不需要重训 T2V。",
+        "innovation": "把 3D 重建当锚点,反过来用重建结果去指导 T2V 只补缺失视角,规避了 SDS 优化和逐步生成。",
+        "method": "输入文本;T2V 生成初始视频,用 Deformable 3DGS 加 MedianGS proxy 重建,在规定轨道上渲染检测缺角,冻结 T2V 只补缺失视角,合起来重建成最终 3DGS。",
+        "results": "T3Bench 300 prompt 上中位轨道跨度 359.0°,原本不支持 bin 的 ImageReward Q10 从 8.07 提到 16.36,与 VideoMV 在覆盖-质量上有竞争力。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T16:50:47Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.5,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24799v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24799v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24874",
+      "title": "FLUX3D: High-Fidelity 3D Gaussian Generation with Diffusion-Aligned Sparse Representation",
+      "authors": [
+        "Haorui Ji",
+        "Weizhe Liu",
+        "Hongdong Li",
+        "Hengkai Guo"
+      ],
+      "affiliations": [],
+      "summary": "FLUX3D 做 image-to-3DGS,指出现有稀疏体素方案两个瓶颈:2D 特征过于「语义」丢重建线索;扩散 Transformer 不擅长把稠密 2D token 和稀疏 3D voxel 对齐。它提出 Diffusion-Aligned 结构化潜变量加稀疏结构感知扩散(SMDiT+MARoPE),显著提升外观保真度并在 SOTA 上稳赢。",
+      "original_abstract": "Sparse voxel representation has emerged as a scalable foundation for image-to-3D Gaussian Splatting (3DGS) generation, yet current methods struggle to preserve high-frequency visual details of input images due to two structural bottlenecks. First, they adopt discriminative 2D features optimized for semantic abstraction to construct sparse voxel latents, which suppress reconstructive cues and induce a representation bottleneck. Second, in the generation stage, standard diffusion transformers lack effective mechanisms to align dense 2D image tokens with sparse 3D voxel latents, resulting in a cross-modal correspondence bottleneck. To address these issues, we propose FLUX3D, a scalable image-to-3DGS framework that boosts both representation learning and cross-modal alignment during generation. We first revisit 2D feature selection for sparse-voxel-based 3D representation learning, propose Diffusion-Aligned Structured Latents (DA-SLAT) and couple it with a decoder-only architecture to improve 3DGS reconstruction fidelity. We also design a sparse-structure-aware diffusion framework, which integrates the Sparse-structure Multimodal Diffusion Transformer (SMDiT) and Modal-Aware Rotary Positional Embedding (MARoPE) to achieve geometry-agnostic 2D-3D alignment. Extensive benchmark experiments demonstrate that FLUX3D yields substantial improvements in appearance fidelity and significantly outperforms all state-of-the-art (SOTA) methods in generating high-quality 3DGS assets.",
+      "highlights": {
+        "contribution": "提出 FLUX3D 端到端的稀疏体素 3DGS 生成框架,同时改进表征学习和扩散阶段的 2D-3D 对齐。",
+        "innovation": "把 2D 特征换成 Diffusion-Aligned Structured Latents,并设计稀疏结构感知的多模态扩散 Transformer 加 Modal-Aware 旋转位置编码。",
+        "method": "输入单张图像;编码用 DA-SLAT 加 decoder-only 结构增强 3DGS 重建;生成阶段用 SMDiT 与 MARoPE 做几何无关的 2D-3D 对齐;监督用扩散生成目标。",
+        "results": "在多个 image-to-3DGS benchmark 上外观保真度显著提升,超过现有 SOTA。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T17:52:21Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.5,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24874v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24874v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24626",
+      "title": "SAFARI: Scaling Long Horizon Agentic Fault Attribution via Active Investigation",
+      "authors": [
+        "Chenyang Zhu",
+        "Jiayu Yao",
+        "Kushal Chawla",
+        "Youbing Yin",
+        "Nathan Wolfe",
+        "Pengshan Cai",
+        "Jingyu Wu",
+        "Spencer Hong",
+        "Sangwoo Cho",
+        "Shi-Xiong Zhang",
+        "Daben Liu",
+        "Sambit Sahu",
+        "Erin Babinsky"
+      ],
+      "affiliations": [],
+      "summary": "长时 agent 的执行轨迹会长到超过任意 context window。SAFARI 把线性载入换成工具增强的诊断循环:给 LLM 一套读、搜索轨迹的工具加短期记忆,做跨轮推理。Who&When 1M token 预算下比 SOTA 高 20%,TRAIL GAIA 25K token 预算下高 19%,即使故障离模型原生上下文 5 倍远,仍能维持 0.58 precision。",
+      "original_abstract": "As autonomous agents tackle increasingly complex multi-step, multi-agent tasks, their execution trajectories have scaled beyond the constraints of even the largest context windows. Current methods for effectively diagnosing agent failures load the full trajectory into an LLM's context window, which suffers from attention dilution and fails when agentic traces inevitably exceed context limits. To address this, we introduce SAFARI (Scaling long-horizon Agentic Fault AttRibution via active Investigation), a framework that replaces linear context loading with a tool-augmented diagnostic loop. By equipping LLMs with a specialized toolbox to read and search trajectory segments alongside a persistent Short-Term Memory (STM) for cross-turn reasoning, SAFARI effectively decouples diagnostic accuracy from architectural context limits. Our experiments demonstrate that SAFARI outperforms state-of-the-art results by 20% on the Who&When dataset within a 1M token budget, and by 19% on TRAIL GAIA subset on a 25K token budget. Most significantly, SAFARI maintains a 0.58 precision even when the target fault resides 5x beyond the model's native context window, a scenario where traditional evaluators fail entirely.",
+      "highlights": {
+        "contribution": "把长时 agent 故障归因从「一次性塞进 context」变成工具增强的主动调查循环,突破上下文限制。",
+        "innovation": "把 STM 与轨迹读取、搜索工具组合成一个 LLM 诊断 loop,把归因精度与架构上下文长度解耦。",
+        "method": "工具箱包含分段读取、搜索等操作;LLM 在诊断循环中反复检索轨迹段,写入持久 STM 做跨轮推理,输出故障定位。",
+        "results": "Who&When 1M token 预算比 SOTA +20%;TRAIL GAIA 25K token 预算 +19%;故障位于原生上下文外 5× 时仍保持 0.58 precision。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T14:23:40Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 7.8,
+        "recency": 7.5,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 7.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24626v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24626v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24820",
+      "title": "SHERLOC: Structured Diagnostic Localization for Code Repair Agents",
+      "authors": [
+        "Hovhannes Tamoyan",
+        "Sean Narenthiran",
+        "Erik Arakelyan",
+        "Mira Mezini",
+        "Boris Ginsburg"
+      ],
+      "affiliations": [],
+      "summary": "SHERLOC 想干掉代码修复 agent 花一半预算做定位的痛点。它是 training-free 的推理 LLM 加轻量仓库工具加自恢复,不用微调也不用多 agent 编排。SWE-Bench Lite Acc@1 到 84.33%,SWE-Bench Verified Recall@1 到 81.27%;插到修复 agent 后 Verified resolve rate 平均涨 5.95 pp,定位/总 token 各降 36.7%/23.1%。",
+      "original_abstract": "LLM agents solve repository-level coding tasks through multi-turn tool use, but utilize half their budget on locating faults before editing. Dedicated localization frameworks have emerged, yet are still evaluated as file retrieval rather than actionable diagnosis, producing locations without the diagnostic context a repair agent needs. We introduce SHERLOC (Structured Hypothesis-driven Exploration and Reasoning for Localization), a training-free framework pairing a reasoning LLM with compact repository tools and self-recovery, without fine-tuning or multi-agent orchestration. SHERLOC reaches state-of-the-art localization across model scales: 84.33% accuracy@1 on SWE-Bench Lite and 81.27% recall@1 on SWE-Bench Verified; at ~30B parameters, it matches or outperforms other agentic methods. Injecting our locations and diagnostic findings into repair agents yields, on average, +5.95 pp resolve rate on SWE-Bench Verified while cutting localization and total tokens by 36.7% and 23.1%.",
+      "highlights": {
+        "contribution": "为 repo 级代码修复提供 training-free、给出诊断上下文的高精度定位框架 SHERLOC。",
+        "innovation": "把定位问题从「文件检索」升级为「假设驱动的结构化探索加自恢复」,并且不需要多 agent 编排。",
+        "method": "推理 LLM 提出假设,用紧凑仓库工具搜索和读取,遇到卡壳走 self-recovery,迭代直到给出可行动定位与诊断上下文,再喂给修复 agent。",
+        "results": "SWE-Bench Lite Acc@1 84.33%,SWE-Bench Verified Recall@1 81.27%;下游修复 resolve rate +5.95 pp,定位/总 token 分别 -36.7%/-23.1%。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T17:05:50Z",
+      "categories": [
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 7.5,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 7.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24820v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24820v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24649",
+      "title": "Agentic Collaborative Cognition for Zero-Shot 3D Understanding",
+      "authors": [
+        "Wenxin Wang",
+        "Bo Zhang",
+        "Feng Chen",
+        "Zixuan Wang",
+        "Wen Li",
+        "Changsheng Li",
+        "Yinjie Lei"
+      ],
+      "affiliations": [],
+      "summary": "针对 zero-shot 3D 理解只有有限视角的问题,作者搞了个多智能体协作框架:Planning Agent 规划视角并补新视角,Perception Agent 把 3D 场景显式总结成结构化认知地图。两个 agent 闭环迭代直到信息够。6 个 benchmark SOTA,ScanRefer Acc@0.5 涨 11.1%,3D 对话 BLEU-1 涨 14.6,SQA3D EM 涨 2.1。",
+      "original_abstract": "Recent advancements have explored agentic zero-shot 3D understanding by reformulating it as video keyframe understanding with Multimodal Large Language Models (MLLMs). However, existing methods face an intrinsic bottleneck due to the finite observation perspectives inherent in videos and the implicit perception of 3D scenes. In this paper, we propose a collaborative multi-agent framework that assigns a Planning Agent to handle high-level viewpoint planning and supplement novel perspectives, and a Perception Agent to explicitly summarize the 3D scene into a structured holistic cognitive map. Specifically, Planning Agent first analyzes this cognitive map to determine query-relevant viewpoints and supplements missing critical perspectives to ensure comprehensive observation. Subsequently, Perception Agent documents object-level attributes from these views by assigning consistent instance identifiers across viewpoints, thereby integrating fragmented observations into the holistic cognitive map. In parallel, it provides feedback to filter out mismatched candidate objects and guide subsequent viewpoint planning. Through this closed-loop iterative process, two agents collaboratively figure out candidates until Perception Agent determines that sufficient information has been captured to complete the task. Extensive experiments demonstrate that our method achieves state-of-the-art performance on 6 benchmarks, with improvements of 11.1\\% Acc@0.5 on ScanRefer, 14.6 BLEU-1 on 3D-assisted dialog, and 2.1 EM on SQA3D.",
+      "highlights": {
+        "contribution": "把 zero-shot 3D 理解从「视频关键帧看图」升级为多智能体主动视角规划加显式认知地图,突破视角局限。",
+        "innovation": "闭环 Planning-Perception 双 agent 协作,把 3D 场景显式聚成实例一致的结构化认知地图。",
+        "method": "Planning Agent 分析认知地图挑视角并补充缺失视角;Perception Agent 从视角里记录物体级属性并跨视角保持实例 ID 一致,同时反馈给规划;两 agent 闭环直到 Perception 判定信息足够。",
+        "results": "6 个 benchmark 上 SOTA:ScanRefer Acc@0.5 +11.1%、3D-assisted dialog BLEU-1 +14.6、SQA3D EM +2.1。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T14:44:04Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "agent framework",
+        "planning agent"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.5,
+        "popularity": 7.0,
+        "quality": 7.8,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24649v2",
+      "arxiv_url": "https://arxiv.org/abs/2606.24649v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24815",
+      "title": "MANGO: Automated Multi-Agent Test Oracle Generation for Vision-Language-Action Models",
+      "authors": [
+        "Pablo Valle",
+        "Shaukat Ali",
+        "Aitor Arrieta",
+        "Lionel Briand"
+      ],
+      "affiliations": [],
+      "summary": "现有 VLA 机器人测试的成功判定都是人工写的符号 oracle,做不到细粒度也难复用。MANGO 是个多 agent 框架,从自然语言任务描述自动生成细粒度 oracle:先建原子任务库,再给每个原子生成模拟器 grounded 的 oracle 定义,最后把复杂指令拆成有序原子链得到可执行 oracle。Generator/Assessor/Judge 迭代反馈。在 LIBERO_10 和 RoboCasa Humanoid Tabletop 上检出失败数与符号 oracle 相当,还能定位。",
+      "original_abstract": "Vision-Language-Action (VLA) models are emerging robotic control systems that integrate perception, language understanding, and action generation in a unified architecture. Existing testing approaches for VLA-enabled robots rely on manually constructed symbolic test oracles that determine task success from final environment states. These oracles are costly to construct, require domain expertise, and are often tightly coupled to specific tasks and environments, limiting scalability and reuse. Furthermore, they provide only end-state assessments of task outcomes, offering limited insight into intermediate behavior and fault localization. To address these limitations, we introduce MANGO, a multi-agent framework that automatically generates fine-grained oracles from natural-language descriptions of robotic tasks. MANGO first generates a reusable library of atomic tasks, then generates simulator-grounded oracle definitions for each atomic task, and finally produces executable fine-grained oracles by decomposing complex instructions into ordered sequences of atomic actions and corresponding oracles. The framework uses collaborative Generator, Assessor, and Judge agents that iteratively refine generated artifacts through structured feedback. We evaluate MANGO on the LIBERO_10 and RoboCasa Humanoid Tabletop benchmarks. Results show that MANGO generates executable, fine-grained oracles that detect a similar number of failures as symbolic oracles while accurately localizing them and providing richer diagnostic information. Through ablation studies, we further analyzed component contributions and the effect of initial task set, while preserving oracle quality. Overall, the results show the feasibility and effectiveness of test oracle generation for VLA-enabled robots testing.",
+      "highlights": {
+        "contribution": "把 VLA 机器人测试从人工符号 oracle 升级为自然语言驱动、细粒度、可复用的自动生成 oracle。",
+        "innovation": "先建可复用原子任务库,再合成 simulator-grounded 定义,最后拆解复杂指令为原子序列,Generator/Assessor/Judge 三 agent 循环细化。",
+        "method": "输入自然语言任务描述;多 agent 生成原子任务库,给每个原子生成模拟器 grounded 定义,把复杂指令拆成有序原子链得到可执行 oracle;三 agent 结构化反馈迭代细化。",
+        "results": "LIBERO_10 和 RoboCasa Humanoid Tabletop 上:失败检出数与人工符号 oracle 相当,同时能给出定位和更丰富的诊断信息。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T17:00:06Z",
+      "categories": [
+        "cs.SE",
+        "cs.RO"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 7.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24815v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24815v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24437",
+      "title": "ReM-MoA: Reasoning Memory Sustains Mixture-of-Agents Scaling",
+      "authors": [
+        "Heng Ping",
+        "Arijit Bhattacharjee",
+        "Peiyu Zhang",
+        "Shixuan Li",
+        "Wei Yang",
+        "Ali Jannesari",
+        "Nesreen Ahmed",
+        "Paul Bogdan"
+      ],
+      "affiliations": [],
+      "summary": "现有 Mixture-of-Agents 加深层数就退化或饱和。ReM-MoA 用两个记忆机制救场:一个跨层的 Ranked Reasoning Memory,由一个比较型 Reviewer Agent 打分并留下推理轨迹;一个 Curated Diversified Memory Routing 给不同 agent 曝光不同轨迹组合。跨数学、逻辑、代码、知识、常识 5 个 benchmark,一致优于现有 MoA,深度越大优势越大。",
+      "original_abstract": "Mixture-of-Agents (MoA) architectures improve inference-time scaling by organizing multiple LLM agents into layered reasoning pipelines. However, existing MoA variants fail to sustain gains as depth increases, exhibiting degradation, early plateauing, or saturation. We propose ReM-MoA, a memory-augmented MoA framework that sustains scaling through two mechanisms: (1) a Ranked Reasoning Memory that persistently stores and ranks reasoning traces from all layers using a comparative Reviewer Agent, and (2) a Curated Diversified Memory Routing scheme that exposes different agents to distinct combinations of successful and failed traces, preserving exploration diversity while propagating high-quality reasoning. We further introduce an optional multi-domain Reviewer distillation pipeline that improves ranking quality through frontier-model supervision. Across five reasoning benchmarks spanning math, formal logic, code, knowledge, and commonsense, ReM-MoA consistently outperforms prior MoA variants across both depth and width scaling, and its advantage widens with depth, establishing structured cross-layer reasoning memory as a key missing mechanism for scalable multi-agent inference.",
+      "highlights": {
+        "contribution": "提出记忆增强的 MoA 框架 ReM-MoA,让深度加宽度扩展都能持续带来收益。",
+        "innovation": "把跨层结构化推理记忆加多样化路由作为 MoA 深度扩展的关键机制,并可用前沿模型蒸馏 Reviewer。",
+        "method": "输入是多 agent 层流水线;Reviewer Agent 比较打分把各层推理轨迹存入 Ranked Reasoning Memory;Curated Diversified Memory Routing 给不同 agent 曝光不同成功/失败轨迹组合;可选用前沿模型蒸馏 Reviewer。",
+        "results": "5 个 reasoning benchmark(数学、逻辑、代码、知识、常识)上跨深度和宽度扩展均超过现有 MoA 变体,深度越深优势越明显。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T11:14:37Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 6.8,
+        "recency": 7.5,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24437v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24437v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24976",
+      "title": "Diagnosing and Mitigating Compounding Failures in Agentic Persuasion via Taxonomic Strategy Retrieval",
+      "authors": [
+        "Sana Ayromlou",
+        "Purvi Sehgal",
+        "Pradyumna Narayana"
+      ],
+      "affiliations": [],
+      "summary": "多智能体辩论在说服这种主观任务里会出现问题漂移和阿谀迎合。作者定位罪魁是标准 RAG 的语义泄漏(词汇重叠盖过逻辑必要性)。他们提出 Taxonomic Strategy RAG,把策略先过一个离散分类瓶颈,把论证结构和话题内容解耦。跨域评测里轻量说服者胜率从 70.5 提到 78.5,论证效率也更高。",
+      "original_abstract": "Foundation-model agents in multi-step, open-ended environments frequently suffer from compounding errors, where early mistakes contaminate long-horizon trajectories. While Multi-Agent Debate (MAD) succeeds in deterministic domains, agents in subjective tasks like persuasion experience severe problem drift and sycophantic conformity. We identify semantic leakage in standard Retrieval-Augmented Generation (RAG) as a reproducible trigger for these failures, as standard RAG prioritizes vocabulary overlap over logical necessity.   To eliminate this leakage, we introduce Taxonomic Strategy RAG (TS-RAG), a systems intervention that routes strategies through a discrete categorical bottleneck to decouple argumentative structure from topical content. Zero-shot, cross-domain evaluations demonstrate that TS-RAG significantly improves the transfer of abstract logic where standard semantic retrieval collapses. Crucially, TS-RAG acts as a \"capability bridge\" in asymmetric deployments, empowering lightweight persuaders to consistently defeat parametrically superior opponents (improving win rates from 70.5 to 78.5) and accelerating argumentative efficiency. Finally, we introduce trace-level diagnostics via a turn-by-turn Debate State Representation (DSR), demonstrating the necessity of strict constraints to prevent evaluation collapse via default agentic sycophancy.",
+      "highlights": {
+        "contribution": "指出标准 RAG 在 agentic 说服里的语义泄漏问题,并用分类瓶颈路由的 TS-RAG 修好它。",
+        "innovation": "用 taxonomic 分类瓶颈把「论证结构」从「话题内容」剥离,让抽象逻辑能跨域迁移。",
+        "method": "策略先被映射到离散类目再检索;结合 Debate State Representation 做逐轮诊断;跨域 zero-shot 评测和不对称部署实验。",
+        "results": "轻量说服者对阵参数更强对手时胜率从 70.5 到 78.5,加快论证效率;标准语义 RAG 在跨域迁移里崩溃。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T12:16:27Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 7.5,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24976v3",
+      "arxiv_url": "https://arxiv.org/abs/2606.24976v3",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24779",
+      "title": "DeepBD: A Grounded Agentic Workflow for Variant Prioritization and Diagnosis of Genetic Birth Defects",
+      "authors": [
+        "Shiyu Li",
+        "Ziqi Yan",
+        "Zhihao Wu",
+        "Jielong Lu",
+        "Weiran Liao",
+        "Jiajun Yu",
+        "Genjie Li",
+        "Zeyu Chu",
+        "Jiajun Bu",
+        "Haishuai Wang"
+      ],
+      "affiliations": [],
+      "summary": "DeepBD 面向遗传性出生缺陷变异优先化和诊断,做了个 grounded agentic workflow:LLM 结构化病例、预训练证据引擎打变异分、专业模块细化、诊断复核层做合成。用 18622 例内部胎/婴队列训练,内部 held-out 上 Recall@1/3/5/10 达 0.658/0.882/0.912/0.929,优于 Exomiser、DeepRare 和 prompted LLM rerank。",
+      "original_abstract": "Birth defects are a major cause of fetal loss, neonatal morbidity and long-term disability. In the subset with suspected genetic etiologies, exome and genome sequencing have moved many cases from variant detection to post-sequencing interpretation: clinicians must rank patient-specific candidate variants under incomplete fetal or infant phenotypes and heterogeneous evidence from population genetics, variant-effect prediction, gene-disease validity, phenotype ontologies, cellular and pathway context, protein structure and clinical literature. We present DeepBD, a grounded agentic workflow for variant prioritization and diagnostic interpretation of genetic birth defects. DeepBD organizes the workflow into LLM-assisted case structuring, a pretrained evidence engine, specialist evidence modules and a grounded diagnostic review layer. The evidence engine learns patient-specific variant scores from structured rule evidence, sequence and variant-effect representations and phenotype-conditioned biological context, whereas specialist modules and the agentic layer provide tool-based refinement, candidate-pool review and diagnosis-oriented synthesis from ranked candidates. Developed using an in-house fetal and infant cohort comprising 18,622 cases, DeepBD achieved Recall@1/3/5/10 of 0.658/0.882/0.912/0.929 on an internal held-out solved-case benchmark, outperforming standalone Exomiser, DeepRare and prompted LLM reranking baselines evaluated on Exomiser-derived top-20 candidate variants. Ablation and overlap analyses show that rule evidence, mechanistic context, and specialist refinement provide complementary signals. These findings support a grounded agentic workflow that separates evidence integration, tool-based refinement, and LLM-assisted diagnostic review for retrospective variant prioritization in genetic birth defects.",
+      "highlights": {
+        "contribution": "把 agentic workflow 落到出生缺陷基因诊断这个高价值临床场景,拆分证据整合、工具细化、诊断复核三层。",
+        "innovation": "证据引擎联合结构化规则证据、序列/变异效应表征和表型条件生物学上下文,再叠专业模块与 grounded 诊断复核。",
+        "method": "输入病例的表型和基因组;LLM 做病例结构化;证据引擎学 patient-specific 变异分;专业模块工具细化候选池;agentic 层做诊断复核合成。",
+        "results": "18622 例内部队列,held-out 上 Recall@1/3/5/10 = 0.658/0.882/0.912/0.929,优于 Exomiser、DeepRare 和 prompted LLM rerank 基线。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T16:37:48Z",
+      "categories": [
+        "q-bio.GN",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agentic workflow"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24779v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24779v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24839",
+      "title": "Grading the Grader: Lessons from Evaluating an Agentic Data Analysis System",
+      "authors": [
+        "Tian Zheng",
+        "Kai-Tai Hsu"
+      ],
+      "affiliations": [],
+      "summary": "作者拿 LAMBDA agent 在 153 道 QRData 数值题上跑,研究「怎么可靠给 agentic 数据分析打分」。他们做了三层评分级联:严格正则、宽松 LLM、片段人工检查,并针对答案格式偏差引入迭代 nudge。严格 grader 用 keyword 抽取比 last-number 启发式召回提 60 pp;nudge 让运行成功率从 36% 提到 97%、宽松通过率 16% 到 46%。",
+      "original_abstract": "Agentic data analysis systems produce rich outputs, including code, numerical results, and verbal diagnostics. This makes them more challenging to evaluate than single-turn LLM responses. It is therefore necessary to distinguish genuine disagreement between an agent's output and a ground-truth answer from grading artifacts. We investigate how reliably automated graders assess such a system and what strategies improve grading quality by applying LAMBDA, a multi-agent data-analysis system, on 153 numerical QRData tasks from DSGym. We develop and evaluate a three-layer human-AI grading cascade: strict regex matching, LLM-based lenient grading, and snippet-based human inspection, which combines non-GenAI and GenAI strategies with different failure profiles. Both automated graders achieve 100% observed precision (0/70 false positives). The lenient grader's recall is 97% against human labels. A keyword-anchored extraction pipeline raises the strict grader's recall by 60 percentage points over a last-number heuristic; the lenient grader is architecturally parser-independent. An iterative nudge mechanism raises grading run success from 36% to 97% and lenient-pass rates from 16% to 46%; comparing nudging with and without original-question re-injection shows that re-injection offers no benefit, confirming the nudge as an answer template cue. We further observe in this case study that variable type is the task metadata field most consistently associated with grading pipeline dynamics and observed outcome grades.",
+      "highlights": {
+        "contribution": "系统研究 agentic 数据分析系统的自动评分陷阱,提出人机三层级联和 nudge 机制。",
+        "innovation": "把打分本身当研究对象,量化不同层的召回精度,证明 nudge 主要作用是答案模板提示、不是重问原题。",
+        "method": "把 LAMBDA agent 用于 153 道数值题;三层评分:严格正则,宽松 LLM,片段人工;比较 keyword-anchored 抽取与 last-number 启发式;引入迭代 nudge 与 re-injection 消融。",
+        "results": "两自动 grader 观察 precision 均 100%;宽松 grader 相对人工 recall 97%;keyword 抽取比 last-number +60 pp;nudge 把成功率从 36% 提到 97%、宽松通过率 16% 提到 46%。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T17:18:28Z",
+      "categories": [
+        "cs.AI",
+        "stat.AP"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.5,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24839v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24839v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.25195",
+      "title": "SoK: AI Secure Code Generation: Progress, Pitfalls, and Paths Forward",
+      "authors": [
+        "Rupam Patir",
+        "Keyan Guo",
+        "Haipeng Cai",
+        "Hongxin Hu"
+      ],
+      "affiliations": [],
+      "summary": "这是一篇 SoK,系统化梳理 AI 安全代码生成的进展、失败模式与前路。作者引入三层框架度量:模型对安全编码原则的自然语言理解、生成时代码级实现能力、以及两者的知识-执行 gap。在多个模型和 coding agent、函数级加全 web 应用级 benchmark 上,发现原则理解是功能正确、安全性和联合正确性的强预测因子,但显著的知识-执行 gap 依然存在。",
+      "original_abstract": "The increasing use of AI systems for code generation raises a central security question: what can today's models and coding agents actually do to produce secure code, where do they still fail, and what would move the field forward? Existing work has explored prompting, fine-tuning, reinforcement learning, and agentic workflows for secure code generation, but the field still lacks a systematic understanding of how these techniques improve security and why substantial failures persist. In this SoK, we systematize the progress, pitfalls, and paths forward for AI secure code generation. We introduce a three-level framework that measures models' natural-language understanding of secure coding principles, their code-level actuation of those principles during generation, and the knowledge--actuation gaps between the two. We instantiate this framework across models and coding agents on benchmarks covering both isolated function-level security and full web-application security. Our results show that secure-coding-principle understanding is a statistically strong predictor of code-level outcomes, including functional correctness, security, and joint functional-security correctness. Yet substantial knowledge--actuation gaps remain: models can recognize relevant security principles but still fail to translate them into secure and functional code. These findings offer a principle-centered account of where AI secure code generation stands today and identify concrete paths forward through principle-guided generation, evaluation, benchmarking, and agentic workflows.",
+      "highlights": {
+        "contribution": "系统化 AI 安全代码生成的现状,提出理解-执行-gap 的三层评估框架并给出前路建议。",
+        "innovation": "把「知不知道安全原则」与「代码里能不能实现出来」分开量化,发现两者之间的 gap 是主要瓶颈。",
+        "method": "定义三层度量框架;在多个模型和 coding agent 上,分别评估函数级和 web 应用级安全 benchmark;做统计相关性分析。",
+        "results": "安全编码原则理解是功能、安全和联合正确性的强统计预测因子;但模型能识别原则却常常无法在代码里正确落地,gap 显著。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T21:39:05Z",
+      "categories": [
+        "cs.CR",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agentic workflow"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.5,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.25195v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.25195v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24623",
+      "title": "Privacy-Preserving RAG via Multi-Agent Semantic Rewriting: Achieving Confidentiality Without Compromising Contextual Fidelity",
+      "authors": [
+        "Yuanhe Zhao",
+        "Tianyu Zhang",
+        "Huafei Xing",
+        "Derek F. Wong",
+        "Jianbin Li",
+        "Tao Fang"
+      ],
+      "affiliations": [],
+      "summary": "RAG 在敏感场景容易被恶意 prompt 攻出隐私。作者搞了个多 agent 框架,用三个专门 agent 做隐私抽取、语义分析、重建,把检索到的内容脱敏后再喂给 LLM。在 ChatDoctor 和 Wiki-PII、6 个 LLM 上,针对性攻击下 LLaMA-3-8B 的目标信息暴露从 144 降到 1;BLEU-1 达 0.122,超过 SAGE 的 0.117;而且是离线预处理不加线上延时。",
+      "original_abstract": "Retrieval-Augmented Generation enhances large language models by incorporating external knowledge, but deploying it in sensitive scenarios risks privacy leakage via malicious prompts. To address this, we propose a multi-agent framework that sanitizes retrieved content through semantic rewriting. By employing three specialized agents for privacy extraction, semantic analysis, and reconstruction, our approach collaboratively removes sensitive identifiers while preserving the semantic core. We evaluate the framework on the ChatDoctor and Wiki-PII datasets across six large language models. Experimental results demonstrate a significant reduction in privacy leakage under targeted attacks. For instance, we reduced targeted information exposure in LLaMA-3-8B from 144 instances in the baseline to just 1. Furthermore, we maintain strong contextual fidelity with a BLEU-1 score of 0.122, outperforming the existing SAGE method's 0.117. Finally, the framework operates as an asynchronous preprocessing module, introducing no additional latency to online inference, as all rewriting is executed as a one-time offline preprocessing step. To promote reproducibility, the source code of this work is publicly available at https://github.com/foursoils/Privacy-Preserving-RAG.",
+      "highlights": {
+        "contribution": "提出多 agent 语义改写框架,在 RAG 里做隐私脱敏又不损上下文保真度。",
+        "innovation": "把隐私抽取、语义分析、重建拆成三个专职 agent 协同,并作为异步离线预处理避免线上延时。",
+        "method": "从检索到的内容出发:agent1 抽出敏感标识,agent2 做语义分析,agent3 重建脱敏文本;整体作为 RAG 之前的离线预处理模块。",
+        "results": "LLaMA-3-8B 上目标信息暴露从 144 降到 1;BLEU-1 0.122 优于 SAGE 的 0.117;无线上延时开销。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T14:21:41Z",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 7.5,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24623v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24623v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.24783",
+      "title": "Paying to Know: Micro-Transaction Markets for Verified Product Information in Agentic E-Commerce",
+      "authors": [
+        "Filippos Ventirozos",
+        "Matthew Shardlow"
+      ],
+      "affiliations": [],
+      "summary": "这是一篇 vision paper:作者说 agent 原生的微支付通道(x402、AP2)会改变电商稀缺性——匹配不再是瓶颈,「可信、决策相关的产品信息」才是。他们勾勒出一个买家 agent 用几分钱累进解锁验证信息的市场架构,并把这套愿景翻译成 NLP 具体问题:成本最优信息获取、数据定价谈判、实时实体解析、grounded 价值交换、隐私保护 persona。",
+      "original_abstract": "Commercial NLP treats the shopping chatbot as a recommender or a conversion tool: its job is to match a user to a catalogue entry and close a sale. We argue that the arrival of agent-native micro-payment rails (e.g., x402, AP2) changes what is scarce. When the buyer is an autonomous agent that can investigate exhaustively, the bottleneck is no longer matching products but acquiring trustworthy, decision-relevant information about them. We envision agentic e-commerce as a micro-transaction market for verified information: buyer agents spend fractions of a cent to progressively unlock seller- and reviewer-supplied data -- service histories, third-party test reports, bills of materials, audited sales and support metrics -- paid for a la carte under a freemium model, with reviewer trust scored reputationally. We sketch the architecture of such a market and argue that it rewards genuine product quality and yields truer competition than ranking-based storefronts. We then translate the vision into concrete NLP problems -- cost-optimal information acquisition, data pricing and negotiation, real-time entity resolution, grounded value exchange, and privacy-preserving persona modelling -- and argue that these, not chat fluency, deserve the field's attention.",
+      "highlights": {
+        "contribution": "为 agentic e-commerce 提出「付费换验证信息」的市场愿景,并把它转成一组具体 NLP 研究问题。",
+        "innovation": "把微支付通道视作电商稀缺性的转折点,提出信息本身可以被 la carte 定价、逐笔购买。",
+        "method": "无实验;架构分析加问题设定,勾勒买家 agent 与卖家/评论者之间的信息市场。",
+        "results": "无量化结果,是一篇 vision/position paper,重点在设定研究议题。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T16:42:21Z",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 7.5,
+        "popularity": 5.5,
+        "quality": 6.0,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.24783v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.24783v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.25108",
+      "title": "The Clinician's Veto: Navigating Trust, Liability, and Uncertainty in Autonomous AI Prescribing",
+      "authors": [
+        "Eileanor LaRocco",
+        "Sarah Tan",
+        "Adarsh Subbaswamy",
+        "Anne Andrews",
+        "Andrew Taylor",
+        "Cree Gaskin",
+        "Chirag Agarwal"
+      ],
+      "affiliations": [],
+      "summary": "美国 HR 238 和犹他州试点让 AI 有自主开处方权。作者用一个 136 位美国临床医生的调查,主张任何自主处方系统至少要有三项架构要求:校准的逐 prediction 置信度、区分认识论(epistemic)和随机(aleatoric)不确定性、决策时的推理透明性用于责任分配。医生总体接受度只有在满足这些时才提升,而系统实际上就退回成重度监督的决策辅助。",
+      "original_abstract": "Autonomous AI systems are transitioning from advisory to autonomous roles for medication prescriptions. Recent United States bill H.R. 238 and Utah's prescription-renewal pilot both authorize AI to prescribe medications in an agentic capacity. While some regulatory guidelines suggest aggregate model performance metrics for clearance, they do not require i) calibrated per-prediction confidence for action-gated thresholds, ii) differentiated communication of uncertainty arising from model ignorance (epistemic) versus genuine clinical ambiguity (aleatoric), and iii) inferential transparency at the moment of decision that allows for liability allocation. Here, we present a regulatory and technical argument (tested with a survey of 136 U.S. prescribing clinicians) positioning these as minimum architectural requirements for safe autonomous prescribing. Our results suggest prescribing clinicians i) would not permit autonomous prescribing without a calibrated confidence-based escalation mechanism, ii) preferred a competing-options summary when uncertainty was aleatoric but shifted to abstention when uncertainty was epistemic, and iii) were only willing to accept additional liability when inferential transparency enabled a substantive judgment under acknowledged uncertainty. These findings indicate our recommended architectural features would encourage higher rates of clinician adoption, largely through collapsing much of what \"autonomy\" conventionally means. A system meeting these requirements would function less as an autonomous agent and more as a heavily supervised decision-support tool. As legislation and state pilots proceed, our technical argument backed by clinician perspectives provides opportunities for regulation to constrain the degree of autonomy ethically granted to AI in prescribing while aligning liability with the institutional actors who control system design and deployment.",
+      "highlights": {
+        "contribution": "把「自主处方 AI」的技术加监管要求归纳成三项最小架构约束,并用临床医生问卷验证。",
+        "innovation": "明确区分 epistemic 与 aleatoric 不确定性对应不同临床沟通方式(选项汇总 vs 弃答),并把责任分配挂到推理透明性上。",
+        "method": "调查 136 位美国处方临床医生,考察置信度门控、不确定性差异化沟通、推理透明性三种设计对信任、责任、采纳的影响;结合监管条款做技术论证。",
+        "results": "无监督下医生不接受完全自主处方;只有满足三项设计时接受度提升;实际这类系统更像重监督决策辅助,而非真自主 agent。"
+      },
+      "images": [],
+      "published_date": "2026-06-23T19:28:52Z",
+      "categories": [
+        "cs.AI",
+        "cs.HC"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 7.5,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.25108v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.25108v1",
+      "venue": null
+    }
+  ],
+  "total": 25
+}

@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2607.08072",
+    "summary": "端到端自驾车的综述文章，把 VLA 和轨迹生成规划器都归成一类。作者认为纯模仿学习在安全关键场景下不够用，误差会累积，长时目标也没法用点级标签表达，所以后训练技术变得重要。文章把现有工作按监督形式分成四大家族，分别讨论各自的能力和局限。",
+    "highlights": {
+      "contribution": "系统梳理了端到端自驾场景下的后训练技术全景，形成一个统一的分类视角。",
+      "innovation": "首个把 VLA 自驾与轨迹生成模型的 post-training 放在同一框架下的综述，按监督信号形式分成四大家族。",
+      "method": "综述性质，围绕 post-training 的输入输出、监督形式、优化目标做系统性归类分析。",
+      "results": "无实验数字，属于分类整理和挑战总结。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08182",
+    "summary": "现有 VLA 把所有视觉 token 一视同仁，缺少任务相关的关注机制。LEEVLA 用漂移引导的动态优先化（DGDP）告诉模型该看哪里，再用结构化特征流生成（SFFG）建模潜空间里这些特征该怎么演化。在多个 VLA benchmark 上稳定超过之前方法，代码开源。",
+    "highlights": {
+      "contribution": "提出「where-how」双阶段训练框架，让 VLA 显式关注任务关键区域并保持潜空间演化结构。",
+      "innovation": "DGDP 结合动态位置优先与语义漂移引导定位关键区域，SFFG 用原型到边缘预测建模潜特征演化。",
+      "method": "输入多视角图像与指令；模型是标准 VLA 骨干；损失包括互邻域对比损失维持拓扑一致性；训练时 DGDP 引导注意力。",
+      "results": "在多个 VLA benchmark 上稳定优于之前方法（论文未列具体数值提升）。"
+    },
+    "scores": {
+      "relevance": 8.6,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08283",
+    "summary": "现有 VLA 像 π0.5 和 OpenVLA 太反应式，看当前观测就出下一步动作，遇到阶段依赖任务会翻车。TFP 加了一个轻量的 Liquid Time-Constant 动态记忆，把任务进度信念注入 flow-matching 动作解码器。3.3B 模型在 LIBERO 上从 96.9% 升到 98.75%，MIKASA 记忆任务能达 75%。",
+    "highlights": {
+      "contribution": "给 VLA 加了一个事件敏感的动态记忆模块，让策略能在接触、释放、子目标转换时更新信念。",
+      "innovation": "用 Liquid Time-Constant 动态维护任务进度信念，通过自适应调制直接注入 flow-matching 动作头。",
+      "method": "输入是 VLA 的观测流；模型基于 3.3B VLA 骨干加 TFP 记忆头；训练用模仿学习；机制分析验证写入增益在事件附近约 6 倍于非事件。",
+      "results": "LIBERO 从 96.9% 提到 98.75%，LIBERO-plus 从 91.4% 提到 93.77%，MIKASA ShellGameTouch 达 75%。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08354",
+    "summary": "多任务模仿学习端到端映射到低层动作，缺可复用结构。SkillPlug 是一个插件式框架，从多任务示范里自监督挖掘可复用的技能库，冻结技能后只微调轻量的 router 和动作头就能适配新任务。仿真和真机上都显示挖出的技能能显著提升多任务和少样本表现。",
+    "highlights": {
+      "contribution": "把 skill 抽象作为 VLA 的插件模块，实现少样本快速适配。",
+      "innovation": "从多任务示范里无监督挖掘紧凑非冗余的行为原语作为共享先验，适配时只调 router 和动作头。",
+      "method": "输入是多任务示范；自监督目标促进紧凑可复用非冗余的原语；冻结技能库后只微调 router 与动作头。",
+      "results": "两个仿真 benchmark 加真机实验都显示 skill 挖掘能同时提升多任务与少样本表现（未给具体数字）。"
+    },
+    "scores": {
+      "relevance": 8.4,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08375",
+    "summary": "现有 VLA 自驾要么缺完整世界认知要么世界预见碎片化。WCog-VLA 分两层：语义层做 3D 感知加 Game-CoT 博弈论推理，生成层用对齐解耦扩散 Transformer 合成多智能体联合轨迹。构造了 85k Game-CoT 标注的数据集，在 NAVSIM 上拿到 92.9 的 SOTA PDMS 分。",
+    "highlights": {
+      "contribution": "把世界预测与生成式世界演化桥接起来，让 VLA 自驾从反应式变成主动式。",
+      "innovation": "语义层用 Game-CoT 做多智能体博弈推理，生成层用 ADDT 通过场景表示对齐减少去噪步数。",
+      "method": "输入多模态感知；语义层注入 agent tokens 和 3D 感知做 Game-CoT 推理；生成层 ADDT 合成多智能体轨迹；用 85k 新构造的 Game-CoT 标注训练。",
+      "results": "NAVSIM 上 PDMS 达到 92.9 分，为当前 SOTA。"
+    },
+    "scores": {
+      "relevance": 9.3,
+      "recency": 10,
+      "popularity": 8.0,
+      "quality": 8.5,
+      "recommendation": 8.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08448",
+    "summary": "冻结的 VLA 在训练分布外容易失败，纯符号 LLM Agent 又搞不定接触密集操作。Harness VLA 把 VLA 当成可重试的接触密集原语，配上固定的分析型原语库和记忆模块，让规划器从执行痕迹学出各原语的操作边界。在 LIBERO-Pro 和 RoboCasa365 分别比最强基线高 38.6 和 25.4 个百分点。",
+    "highlights": {
+      "contribution": "用 agent 框架扩展冻结 VLA 的操作范围，无需微调就能应对语义重标、目标重绑定等扰动。",
+      "innovation": "把 VLA 视为可重试原语，Agent 从执行痕迹学习每个原语的适用边界和失败模型。",
+      "method": "输入语言指令与场景；冻结 VLA 加固定分析型原语库；从任务特定执行痕迹和成功规则学习原语适用范围；规划器负责语义重定位和重编排。",
+      "results": "LIBERO-Pro 比最强基线高 38.6 个点，RoboCasa365 高 25.4 点，RoboTwin C2R 达 58.4%。"
+    },
+    "scores": {
+      "relevance": 9.4,
+      "recency": 10,
+      "popularity": 8.5,
+      "quality": 8.5,
+      "recommendation": 8.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08575",
+    "summary": "FabriVLA 是一个轻量的 VLA，把 InternVL3.5 视觉语言骨干与 flow-matching 动作头结合，动作 token 间用门控自注意力，还做了浅层 VLM 层融合。1B 规模的模型在 Meta-World MT50 上 50 个操作任务平均成功率 90%，说明小模型也能打。",
+    "highlights": {
+      "contribution": "证明 1B 规模的 VLA 通过合适设计就能达到强性能，不必上百亿参数。",
+      "innovation": "动作 token 门控自注意力加浅层 VLM 层融合来注入丰富的空间上下文，单阶段联合优化。",
+      "method": "输入图像加语言；InternVL3.5 编码；flow-matching 动作头；预训练 VLM 与随机初始化动作头单阶段联合训练。",
+      "results": "Meta-World MT50 上 tier 平均成功率 90.0%。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08751",
+    "summary": "灵巧操作缺一个覆盖多任务多本体的综合 benchmark。DexVerse 提供 100 个任务、3 种机械臂加 6 种灵巧手，可配置视觉扰动，VR 遥操作接口和 3180 条同步的示范。评测 Diffusion Policy、DP3、OpenVLA、π0.5 后发现任务泛化和视觉鲁棒性都还有大量挑战。",
+    "highlights": {
+      "contribution": "构建了当前灵巧操作最大最模块化的 benchmark，覆盖 100 任务和多本体。",
+      "innovation": "统一支持多种夹具和灵巧手、可配置的纹理背景光照相机视角变化以及 VR 遥操作。",
+      "method": "任务涵盖抓取重定位、铰接对象、工具使用、双臂协作、非抓握控制、长程多阶段等；提供多模态传感（本体感、RGB、深度、点云、状态）3180 条示范。",
+      "results": "对 Diffusion Policy、DP3、OpenVLA、π0.5 在 19 个任务上评测，揭示任务泛化和视觉鲁棒性均存在显著挑战。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 10,
+      "popularity": 8.5,
+      "quality": 8.5,
+      "recommendation": 8.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08312",
+    "summary": "端到端把 LLM 特征灌进机器人世界模型的做法（RT-2、Octo、PaLM-E）默认语言梯度能直接塑造物理符号，作者证明这个假设不成立。任何流经 Gumbel-softmax 离散瓶颈的语言梯度都会造成结构性权衡。作者给出三层修复方案，用 memory table 免梯度绑定语义，在 32 个种子上实现零符号坍缩，Grounding 精度 97.2%。",
+    "highlights": {
+      "contribution": "指出并证明语言 grounded 世界模型里离散符号瓶颈的结构性缺陷，并给出可行修复。",
+      "innovation": "三层机制——切断梯度链、免梯度语义通道（Memory Table）、DP-Means 流式聚类处理符号碰撞。",
+      "method": "V-JEPA、CLIP、CNN 三种编码器；训练 <2M 参数；不需要微调 LLM；用共现计数替代梯度绑定。",
+      "results": "97.2% grounding 精度 vs 无第三层的 22.2%；32/32 种子零符号坍缩；三种编码器下 79-100% 语义绑定。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08250",
+    "summary": "动态 3DGS 现在通常只用一种形变模型，稳健性差。作者研究多形变模型建模问题，提出两种 MoE 集成方案：MoDE 是所有专家在同一 canonical 表示上联合优化，MoE-GS 是专家独立训练后由路由阶段组合。两种方案对应不同集成约束，代码开源。",
+    "highlights": {
+      "contribution": "首次系统研究动态高斯的多形变模型建模，比较两种 MoE 集成约束。",
+      "innovation": "MoDE 在 canonical 空间联合优化，MoE-GS 在 non-canonical 后期路由组合，揭示了集成约束对专家设计的影响。",
+      "method": "输入动态场景多视图视频；模型是 3DGS 加多个形变专家；MoDE 联合优化专家；MoE-GS 独立训练加路由。",
+      "results": "未列具体数字，论文侧重方法学比较。"
+    },
+    "scores": {
+      "relevance": 6.2,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08408",
+    "summary": "手术场景下高斯泼溅重建依赖精确相机轨迹先验，往往离线且不够鲁棒。Track2Map 在线联合优化相机轨迹和形变 3D 场景，用密集 2D 点轨迹做形变初始化，还用轨迹统计分离相机运动和场景形变。在 StereoMIS 上比传统 SLAM 和需要轨迹先验的非 SLAM 方法都更好。",
+    "highlights": {
+      "contribution": "首个在手术视频上的在线可形变 SLAM，可以不用相机轨迹先验就重建。",
+      "innovation": "轨迹锚定的形变初始化 + 用轨迹统计检测静止相机段减少漂移，分离运动与形变。",
+      "method": "输入手术视频（无需 kinematics 先验）；模型是可形变 3DGS；密集 2D 点轨迹辅助初始化；在线联合优化。",
+      "results": "在 StereoMIS 上重建质量和轨迹估计都超过对比 SLAM 与非 SLAM 方法（未列具体数值）。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08769",
+    "summary": "大规模室外 3DGS 用透视图采集成本高，改用 360 度全景可以省很多，但全景可见性太广让基于视锥的分块策略失效。PanoLOG 分两阶段，粗阶段用天球建模和全景单目深度监督，细阶段用几何加梯度分块策略。还构造了首个大规模全景户外数据集 Pano360，SOTA。",
+    "highlights": {
+      "contribution": "首个针对全景图的大规模 3DGS 分块训练框架，并构建首个全景户外 benchmark。",
+      "innovation": "G²PS 用视差驱动不确定性建自适应包围体，用梯度重要度分配相机做分块。",
+      "method": "输入 ERP 全景图；两阶段粗到细；粗阶段天球建模加全景单目深度监督；细阶段几何梯度分块并行训练。",
+      "results": "在 Pano360 上达到 SOTA 渲染质量且保持可扩展的块级并行训练（未给具体数字）。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08772",
+    "summary": "水下 3D 几何估计因光衰减、散射和缺大规模标注很难。Wat3R 用师生架构做跨域半监督学习，把陆地上的前馈 3D 重建模型迁移到水下，不需要任何水下标注，只用大量无标签水下视频。还提了 Water3D 数据集覆盖多种水体。水下多视图深度和点云重建都超 SOTA。",
+    "highlights": {
+      "contribution": "首个无需水下标注的跨域半监督 3D 重建框架，从陆地模型迁移到水下。",
+      "innovation": "师生架构加跨视图一致性损失，用其他视角补偿当前视角因水衰减导致的信息退化。",
+      "method": "输入无标签水下视频；师生学习框架；跨视图一致性损失；把陆地训练的前馈 3D 重建模型迁移。",
+      "results": "水下多视图深度估计和点云重建都超过当前 SOTA（未给具体数值）。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08010",
+    "summary": "生产环境的 LLM Agent 常在每次请求都重新生成同样的 SOP 代码，浪费延迟和可靠性。作者用工具制造管线把重复步骤在部署前编译成可复用工具，部署到亚马逊履约中心的告警排查系统。生产环境 p50 延迟降 42%，历史 1500 告警端到端错误率降至多 53%。",
+    "highlights": {
+      "contribution": "把推理时的编码循环替换成部署前的工具制造管线，让 Agent 在生产环境更快更可靠。",
+      "innovation": "工具制造过程与真实环境交互采集执行痕迹和 schema，生成候选工具后在标注案例上修复。",
+      "method": "输入 SOP 描述；工具制造 agent 收集执行痕迹与后端 schema，合成候选工具，用标注案例修复；运行时直接调工具，必要时回落生成代码。",
+      "results": "p50 延迟降 42%，端到端错误率降至多 53%；简化直调架构再降 p50 延迟 62%。"
+    },
+    "scores": {
+      "relevance": 7.2,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08124",
+    "summary": "Agent 的行为不仅取决于模型还取决于 harness——那段构造上下文、调用工具、校验结果的可执行程序。TTHE 在评测时用未标注执行痕迹迭代进化 harness，维护候选池，agentic proposer 基于痕迹推理修改，judge 提交改进版。不改权重不用标签，在多个编程和工具使用任务上稳定提升 ReAct 基线。",
+    "highlights": {
+      "contribution": "把 harness 本身作为测试时自适应的目标，用执行痕迹无监督进化控制程序。",
+      "innovation": "把 solver/proposer/judge 都作为同一冻结 LLM 的不同角色和 harness，全部适应通过程序变化实现。",
+      "method": "输入测试样本；候选 harness 池；agentic proposer 从执行痕迹推理；judge 基于执行代理信号提交改进版本。",
+      "results": "在 text-to-SQL、竞赛编程、SWE、数据科学编码、工具使用任务上稳定超过 ReAct 基线（未给具体数字）。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08180",
+    "summary": "LLM Agent 常做上下文压缩以适应预算，这被作者拿来当反爬虫防线。CAPE 往网页里注入人眼看不见的扰动，让 Agent 压缩时产生严重信息丢失。从可访问代理压缩器提炼扰动种子，再通过先验引导演化适配到黑盒目标。三种内容四种压缩下信息丢失比最强基线高 75.8%。",
+    "highlights": {
+      "contribution": "指出上下文压缩是防御 Agent 爬虫的新层，提出人眼看不见但严重扰乱压缩的注入方案。",
+      "innovation": "用可访问代理压缩器提炼扰动种子，先验引导演化加偏好校准候选优先化适配到黑盒目标。",
+      "method": "输入原始文本；把不可见扰动注入内容；先在 surrogate 压缩器上生成扰动种子；然后偏好校准优先化在目标压缩器上适配。",
+      "results": "三种内容四种压缩设置下信息丢失比最强基线高至多 75.8%，且视觉上与原文无异；可迁移到 LangGraph 与 GitHub Copilot。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08403",
+    "summary": "轻量 LLM 在化学等规则化领域容易只学表面模式而不做公理化推理，产生幻觉。G-Frame 用贝叶斯与团队博弈原则做多智能体框架，闭环合成高质量数据。用它合成了 36 万条思维链和 20 万问答对训练 7B 的 OmniChem，性能与 GPT-4o mini 持平，幻觉比基础架构降 79.46%。",
+    "highlights": {
+      "contribution": "用多智能体闭环合成结构化推理数据，在专业化学领域大幅降低小模型幻觉。",
+      "innovation": "G-Frame 融合贝叶斯与团队博弈原则做数据合成，强制模型内化领域约束。",
+      "method": "多智能体框架合成 363k CoT 与 199k QA；训练 7B 模型 OmniChem；聚焦化学分子设计与合成规划。",
+      "results": "OmniChem 在自定义 benchmark 与 ChemBench 上与 GPT-4o mini 持平，幻觉减少 79.46%。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08652",
+    "summary": "自私 Agent 在重复社会困境里会滑向背叛，作者研究什么形式化机制能稳住市场以及是否能抗住对抗攻击。用 18 个 DeepSeek-V3 Agent 在受限社交网络里做 200 轮交易，八种机制比较后 Mediation 最优；红队攻击最好只能压诚实 Agent 效用 13.3% 但压不垮市场。",
+    "highlights": {
+      "contribution": "系统评估多种市场机制在 Agent 社会里的稳定性与对抗鲁棒性。",
+      "innovation": "提出可弯不可折的对抗鲁棒定义，并用 LLM 驱动 troll 迭代优化攻击评测。",
+      "method": "18 个 DeepSeek-V3 Agent 在受限网络下 200 轮交易；八种机制加渐进 troll 注入；对最好机制用 LLM prompt 优化 troll 做红队。",
+      "results": "最佳攻击 v6 将诚实 Agent 效用降 13.3% 但市场不垮；Mediation 在持续对抗下仍能恢复。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08662",
+    "summary": "单个 ReAct Agent 长轨迹上下文有限，深度和覆盖难以兼得。WebSwarm 是递归多智能体编排框架，节点动态实例化并可自行解决或继续下发子节点，解决完向上返回证据。在 BrowseComp-Plus、WideSearch、DeepWideSearch、GISA 上超过单/多 Agent 基线。",
+    "highlights": {
+      "contribution": "提出递归委派框架同时兼顾 web 搜索的深度与广度。",
+      "innovation": "动态实例化 agentic 搜索节点，每个节点耦合局部目标与搜索模式，可自解或委派子节点；同层兄弟节点复用过程经验。",
+      "method": "输入研究任务；WebSwarm 先探测 web 上信息组织；然后动态创建节点决定自解或委派；证据向上聚合。",
+      "results": "在 BrowseComp-Plus、WideSearch、DeepWideSearch、GISA 上稳定超过单/多 agent 基线（未给具体数字）。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 10,
+      "popularity": 7.5,
+      "quality": 7.5,
+      "recommendation": 7.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08681",
+    "summary": "在去中心化能源市场里 Agent 可能刷交易或做出不稳定的治理决策。SolarChain-Eval 用物理约束的 Gymnasium MDP 评估经济 Agent 的市场效用、物理安全、滑点、公平性与可审计性，还带 LLM Planner/Auditor 层。RL Agent 效用高但可能不安全，Auditor 可以缓解部分风险但补不了错误的奖励函数。",
+    "highlights": {
+      "contribution": "首个物理约束的可审计经济 Agent benchmark，暴露效用与安全的权衡。",
+      "innovation": "把市场治理形式化为 Gymnasium 兼容 MDP，Planner 定动作边界、Auditor 审高风险动作。",
+      "method": "静态、随机、短视、RL、RL+LLM 五类策略在小时决策 MDP 上评估；LLM Planner/Auditor 拦截和修改动作，全程结构化日志。",
+      "results": "去掉物理惩罚后 RL 会刷无效发电和人造流动性；LLM 层能提升可审计但补不了错误奖励函数。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08691",
+    "summary": "仓库级代码生成的现有检索方法只看词法、结构、语义相似，忽略了「过程逻辑相似」的函数。ProjAgent 把目标函数拆成推理步，agentic 工作流检索每步的过程相似函数，再和语义检索融合。还带保守的静态分析反馈循环迭代修复。在 REPOCOD 上 Pass@1 达 41.14%，超过之前基线。",
+    "highlights": {
+      "contribution": "把过程相似度作为仓库级代码生成的新检索信号。",
+      "innovation": "把目标函数分解成中间推理步，逐步检索仓库中过程行为相似的函数。",
+      "method": "输入目标函数描述；agent 分解成推理步骤；每步检索过程相似函数；与语义检索合并；用编译器与静态分析反馈迭代修复。",
+      "results": "REPOCOD 上 Pass@1 41.14%，超过检索类基线。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 10,
+      "popularity": 7.0,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08028",
+    "summary": "企业级 LLM 应用从原型走向产品需要来源边界、实体路由、答案契约、可复现轨迹。作者提出 harness 工程方法：确定性行为放到代码、manifest、schema 与验证工件里，模型仅负责基于来源的应答。在 5 个韩国上市集团 25 家公司数据上跨 3 个模型 270 次运行全部通过契约检查。",
+    "highlights": {
+      "contribution": "系统化把企业 LLM Agent 的可审计契约从 prompt 迁移到代码层。",
+      "innovation": "用 harness 引擎和契约验证器代替 prompt 硬保障，跨模型可复用。",
+      "method": "把 source boundaries、entity routing、答案契约、痕迹格式硬编码到 harness 与 schema；提供 fault injection 控制实验；跨三种托管模型评测。",
+      "results": "270 次组合边界运行 100% 通过；harness 保 120/120 效用，外挂 guardrail 只有 88/120。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08043",
+    "summary": "科研软件协作横跨会议、聊天、PR、GitHub Issue，一个决定的原始理由容易在多种媒介间丢失。Aleena 是一个开源的生命周期对齐 Agent，用 GitHub 作为共享协作面，把多模态利益相关方交互变成结构化项目记录，暴露风险、跟进开放问题、保留决策连续性。文章给了动机、系统设计和场景样例。",
+    "highlights": {
+      "contribution": "提出面向科研软件工程的生命周期对齐 Agent 概念与开源原型。",
+      "innovation": "把 alignment 视作跨会议、聊天、PR、Issue 的连续问题，用 GitHub 做统一协作表面。",
+      "method": "系统接入多种协作源；生成结构化项目记录；跟踪开放问题；保存决策继承。",
+      "results": "属于系统设计原型阶段，尚无实验评估指标。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 10,
+      "popularity": 5.0,
+      "quality": 5.5,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08080",
+    "summary": "ASTE 要在一句评论里同时挑出（属性、观点、情感）三元组。单次生成 LLM 在这上面拉胯，few-shot 和 CoT 收益有限。MASTE 是多 Agent 零样本管线，把 ASTE 拆成四个顺序子阶段，专门的 Agent 显式条件依赖前面输出。在四个 ASTE benchmark 上明显超零样本和 CoT 基线，缩小与全监督的差距。",
+    "highlights": {
+      "contribution": "首个针对 ASTE 的零样本多智能体分解管线，完全免训练。",
+      "innovation": "把 ASTE 拆成四个顺序阶段由不同 Agent 处理，显式条件依赖前面输出。",
+      "method": "输入评论句；四个 Agent 依次处理属性、观点、分组、情感极性；无训练无标签。",
+      "results": "在四个 ASTE benchmark 上明显超过零样本 LLM 与 CoT 基线，缩小与全监督的差距。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 10,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08093",
+    "summary": "现有 benchmark 要么是纯符号因果推理没数据分析要么反过来。CausalDS 给数据科学 Agent 出一个因果推理评测：每个实例是采样的 SCM 加合成自然语言故事，任务覆盖 Pearl 三层，多数带数据科学编码组件。识别不可答并 abstain 也作为一等评分结果，可选用真实数据的经验分布做锚定。",
+    "highlights": {
+      "contribution": "为 agentic 数据科学工作流构建因果推理 benchmark，覆盖 SCM、编码与不确定性。",
+      "innovation": "SCM 加合成自然语言故事，覆盖 Pearl 三个 rung；把「识别不可答并弃权」作为一等评分。",
+      "method": "从采样 SCM 生成观测数据加合成域故事；可选用真实分布锚定；每场景派生跨 rung 任务；带观测模型引入不完美观测。",
+      "results": "属于 benchmark 论文，未提供模型对比数字。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 10,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  }
+]

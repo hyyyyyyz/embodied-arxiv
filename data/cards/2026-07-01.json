@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2607.01067",
+    "summary": "触觉数据太少一直是精细操作的瓶颈。作者收了 160 小时第一视角人类操作视频，做成 H-Tac 数据集（300+ 任务、13.5 万段），并提出 TTP 把触觉和动作放到统一空间里，用一个触觉专家预测未来接触状态来做预训练。真机和仿真上都显示出更强的接触感知和泛化能力，为触觉+VLA 大规模预训练铺路。",
+    "highlights": {
+      "contribution": "第一次把大规模人类第一视角触觉视频用作 VLA 的预训练资源，跑通 human-to-robot 迁移。",
+      "innovation": "统一触觉+动作空间贯穿预训练和后训练，用「触觉专家」显式建模未来接触。",
+      "method": "输入是多视图+触觉+本体，触觉编码进 VLA，训练时让触觉专家预测下一时刻触觉，再联合动作模仿。",
+      "results": "H-Tac 包含 160 小时、300+ 任务、13.5 万 episode；仿真和真机上均超过无触觉基线并展现精细接触能力。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8.5,
+      "popularity": 8.0,
+      "quality": 8.5,
+      "recommendation": 8.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.01378",
+    "summary": "Flow-matching VLA 输出的是一整条轨迹，但现有安全护栏只看下一步动作，长时序容易撞。作者把安全约束嵌到 flow matching 的每一步去噪里，用最小范数投影修正碰撞轨迹，实现「预测性避碰」。SafeLIBERO 上避碰率 82.8%、成功率 81.6%，长时序任务提升最大。",
+    "highlights": {
+      "contribution": "给 flow-matching VLA 加了一个 neuro-symbolic 安全过滤层，可以在去噪过程中就修掉未来碰撞。",
+      "innovation": "把安全性做成 minimum-norm 约束优化，在中间噪声轨迹上迭代修正，而不是只对最终动作反应式拦截。",
+      "method": "输入是当前观测+VLA 生成的中间噪声轨迹，在每步 flow matching 后套一个 QP 投影到安全约束集，最终得到无碰撞轨迹。",
+      "results": "SafeLIBERO 上避碰 82.8%、成功 81.6%，比单步方法分别 +6.3% 和 +19.8%，长时序任务收益最大。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 8.5,
+      "popularity": 7.2,
+      "quality": 8.2,
+      "recommendation": 8.1
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.00889",
+    "summary": "RGB-D 序列上做 3D 场景图，逐帧推理容易漂又漏关系。DeWorldSG 用深度过滤把每个物体建成 3D 高斯分布节点，再用 V-JEPA 2 世界模型的时空先验来聚合关系。3DSSG 和 ReplicaSSG 上 triplet recall +77.4%、predicate recall +23.2%，对机器人操作和 AR 都很有价值。",
+    "highlights": {
+      "contribution": "把 V-JEPA 2 世界模型的时空先验用来稳固 3D 语义场景图的物体节点和关系边。",
+      "innovation": "物体节点从「投影点」变成「几何高斯分布」，关系用 V-JEPA 2 先验跨帧聚合，去掉逐帧的不确定性。",
+      "method": "深度引导过滤估计每个 instance 的 3D 高斯节点，跨帧收集物体对证据，V-JEPA 2 特征给关系判断做上下文补全。",
+      "results": "3DSSG 和 ReplicaSSG 上 triplet recall 提升 77.4%、predicate recall 提升 23.2%，且时序一致性显著改善。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 8.5,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.01212",
+    "summary": "家具装配这类真实尺寸双臂长时序任务，VLA 里做的人很少。作者搭了仿真管线+ VR 单人双臂遥操作数据采集，训了一个带「进度信号」的 VLA，能自动切子任务、缓解误差累积。7 个子任务、1550 步的装配上仿真成功率从 48% 提到 80%，真机 Kinova Gen3 只掉 16%。",
+    "highlights": {
+      "contribution": "第一个系统研究「真实尺寸双臂家具装配」的 VLA 工作，含数据流程、任务定义和基线。",
+      "innovation": "进度增强的 VLA 联合预测动作和连续 progress，自动切子任务，减少长时序 compounding error。",
+      "method": "语义子任务上微调 VLA，模型输出动作+连续进度值；配合仿真专家数据+ VR 单人双臂遥操作真实示教。",
+      "results": "仿真平均成功率 48%→80%，设计因素研究再 +21%；真机最难任务只掉 16%。"
+    },
+    "scores": {
+      "relevance": 8.7,
+      "recency": 8.5,
+      "popularity": 7.5,
+      "quality": 8.3,
+      "recommendation": 8.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.01410",
+    "summary": "现有 sim2real 一般把视觉和动力学分开处理然后拼起来。BIFROST 假设「等价配置下等价动作长期后果一致」，用跨域 bisimulation 目标学一个共享历史编码器，让 sim 里的策略零样本迁到 real。视觉导航、接触操作、视觉伺服上都 work。",
+    "highlights": {
+      "contribution": "把跨域 bisimulation 引入策略学习，同时处理视觉和动力学两种 sim2real gap。",
+      "innovation": "用 pair 起来的跨域数据学「长期行为等价」的潜在表征，而不是分别做视觉域适配和动力学域适配。",
+      "method": "输入 obs-action 历史，跨域 bisimulation 目标把等价轨迹拉近；策略在共享潜空间里训练然后零样本迁移。",
+      "results": "在 sim2sim 视觉导航、sim2real 接触操作和视觉伺服上都优于 domain adaptation 和 co-training 基线，尤其在视觉+动力学同时漂时。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 8.5,
+      "popularity": 6.8,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.01060",
+    "summary": "拿视频世界模型来评通用机器人策略，速度慢且长时序会漂。RoboWorld 用自回归视频 WM+ VLM 进度打分做自动化评估，并提 Step Forcing 减轻训推 mismatch。和真机评测相关性 Pearson 0.989、Spearman 0.970，非常适合大规模策略打分。",
+    "highlights": {
+      "contribution": "提出一条把视频 WM 做成可靠、快速、可扩展的通用机器人策略评估流水线。",
+      "innovation": "Step Forcing 混合 anchored 和 self-forwarded 上下文，缓解长时序自回归 rollout 的 drift；配合 VLM 任务进度打分。",
+      "method": "自回归视频 WM 生成 rollout，训练时同时喂真实和自生成上下文；VLM 从视频里读任务进度打成功分。",
+      "results": "与真实机器人打分相关性 Pearson r=0.989、Spearman ρ=0.970，跨任务和环境保持稳定。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 8.5,
+      "popularity": 7.8,
+      "quality": 8.3,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.00836",
+    "summary": "机器人圈里「世界模型」这个词各说各的。这篇教程把它整理成动作条件的预测模型，分成 observation-space 和 state-space 两类，再引入「world action model」并归纳 imagine-then-execute、feature-conditioned action、joint video-action、辅助视频预测四种范式，方便入门和对齐概念。",
+    "highlights": {
+      "contribution": "为具身智能里的世界模型和世界动作模型给出统一的设计空间与四范式分类。",
+      "innovation": "首次把「预测未来」和「执行动作」拉到同一张概念图里，明确 world action model 概念。",
+      "method": "综述式梳理，比较视觉保真度、空间结构、物理可解释性、控制可用性等维度，不含新实验。",
+      "results": "教程性质，无 benchmark 数字；提供的分类可作为后续 embodied prediction & control 研究的公共语言。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 8.5,
+      "popularity": 7.2,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.02604",
+    "summary": "动手抓运动物体的 VLA 常被 world model 微调「拖累」。DynaWM 把 world model 做成外挂：Mamba-3 编码 base VLA 的动作 chunk、V-JEPA 2.1 提视觉、状态编码本体，用 flow-matching DiT 再生成运动感知轨迹。DynaGrasp-32 上对 SmolVLA / X-VLA / π0 / π0.5 分别提升 7-45 个百分点。",
+    "highlights": {
+      "contribution": "提出一个能挂在多种 base-VLA（fine-tuned 或 coarse-tuned）上的世界模型模块，专治运动物体操作。",
+      "innovation": "不改 base VLA 权重，用 Mamba-3 action encoder + V-JEPA 2.1 + flow-matching DiT 做「再生成」，避免破坏预训练。",
+      "method": "base VLA 出动作 chunk → Mamba-3 编码为条件；V-JEPA 2.1 处理多视图历史；本体编码；三者条件 flow-matching DiT 输出精修轨迹。",
+      "results": "fine-tuned VLA 上分别 +7.19/45.31/1.88/10.94；coarse-tuned 上分别 +35.13/44.06/35.69/26.13；去掉视觉 -27.5%，去掉动作条件 -45.4%。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8.5,
+      "popularity": 7.8,
+      "quality": 8.5,
+      "recommendation": 8.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.00917",
+    "summary": "Diffusion 世界模型天然能建模不确定动力学，但迭代推理慢，不适合在线 MPC。Valdi 端到端在线训练潜扩散动力学模型，单步扩散就能用。CarRacing 上单步 Valdi 追平确定性 MLP baseline，但也揭示了多模态预测和控制性能的取舍。",
+    "highlights": {
+      "contribution": "把 latent diffusion 动力学模型和 MPC 在线学习拼起来，验证单步扩散可以用于低延迟控制。",
+      "innovation": "在线端到端训练 MPC 用的价值扩散世界模型，训练和推理都只跑单步扩散。",
+      "method": "latent diffusion 建模动力学，同时学价值函数，梯度端到端流回世界模型；训练和推理各只做一次扩散步。",
+      "results": "CarRacing 上单步 Valdi 打平确定性 MLP baseline；观察到多模态预测强会牺牲控制表现的 trade-off。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8.5,
+      "popularity": 6.2,
+      "quality": 6.8,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.00808",
+    "summary": "大规模视频预训练做 RL 通常把 agent 当整体建模，跨形态迁移差。DRP 反其道：先「拆解」到多个局部点 tracking 得到 atomic action，再「重组」出全局运动表征。局部运动模式跨 agent 更共用，实验里样本效率和成功率都涨。",
+    "highlights": {
+      "contribution": "提出 Deconstruct-Recompose 范式，从视频里学「局部运动」而非全局形态耦合的表征。",
+      "innovation": "把 agent 拆成多个 local point 各自 tracking 作为 atomic action，再用可学习聚合 token 组回全局。",
+      "method": "Deconstruct 阶段用 DAE 双注意力学局部时空表征；Recompose 阶段用 MAT token + latent dynamics 建全局，adapter 转下游动作空间。",
+      "results": "多个机器人控制/操作任务上样本效率和最终表现都优于全局视频预训练基线。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8.5,
+      "popularity": 6.8,
+      "quality": 7.6,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.01531",
+    "summary": "程序化世界模型样本高效但难扩到像素环境。OPINE-World 让 LLM agent 在线学一个 object-centric 的代码世界模型，用「本体误差」这个贝叶斯量指导探索。ARC-AGI-3 上 25 个游戏解出 20 个，无需 per-game 训练，动作效率打到人类 78.4%。",
+    "highlights": {
+      "contribution": "把 LLM+ CEGIS 的程序化世界模型扩展到 pixel-rendered 环境，实现在线技能获取。",
+      "innovation": "两个 agent 一个探索一个合成代码模型，用 ontology error 的贝叶斯度量决定何时扩充物体词表。",
+      "method": "acting agent 交互采样、synthesizing agent 用 LLM 写代码 WM，replay 验证+ model-based planning，探索由 ontology-error Bayesian 指标驱动。",
+      "results": "ARC-AGI-3 上无 per-game 训练解 20/25，动作效率 78.4% 对齐人类基线。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8.5,
+      "popularity": 7.2,
+      "quality": 8.0,
+      "recommendation": 7.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.01537",
+    "summary": "世界模型能不能自己告诉你「预测还能信多久」？作者把认证过的世界模型变成一个「感知时钟」：给出一个 drift-aware 的截止时刻决定何时该重新观测。冻结的 3D VN-JEPA 上，这个时钟能控制违规率并降低事件尾部违规，属于偏理论的 active perception 工具。",
+    "highlights": {
+      "contribution": "提出 certified sensing-clock 原语，让世界模型自己决定 active perception 里的采样节奏。",
+      "innovation": "指出 on-manifold Lyapunov 速率会高估 coasting 有效期，必须用 calibrated native rollout-drift envelope 才能给出可部署保证。",
+      "method": "在冻结 VN-JEPA 上校准 rollout drift envelope，导出 no-sensing 区间长度；在 cue-conditioned theorem-bed 上对比调度策略。",
+      "results": "在部署分布上保持有效性，事件尾部违规率显著降低；短时序下与 conformal 基线打平，未在所有场景占优。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8.5,
+      "popularity": 6.0,
+      "quality": 7.2,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.01022",
+    "summary": "神经时空点过程模型五花八门，但比赛条件不齐没法公平比。SEAHORSE 统一 encode-evolve-decode 接口、复现了各家模型，配合合成压力测试集 HawkesNest 揭示不同族的归纳偏置差别。属于工具+ benchmark 论文，和具身智能关联不大。",
+    "highlights": {
+      "contribution": "为神经时空点过程给出统一的可复现基准框架和归纳偏置分析。",
+      "innovation": "把 intensity、density、latent dynamics、normalizing flow、score-based 五类神经 STPP 塞进同一个 encode-evolve-decode 接口。",
+      "method": "统一预处理、坐标标准化、划分、似然口径和评测协议；配合 HawkesNest 合成数据做归纳偏置压力测试。",
+      "results": "跑通全族模型的公平复现；HawkesNest 压力测试显示部分模型在复杂 pattern 上急剧退化。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 8.5,
+      "popularity": 5.5,
+      "quality": 7.2,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.01201",
+    "summary": "人体尺寸双向遥操作系统的四通道结构对力矩传感器依赖大、成本高。作者用逆动力学建模做了个无传感器四通道架构，装在 WAM 上跑门开合任务，力/位跟踪、操作员负担、可传递阻抗都比传统方案好。",
+    "highlights": {
+      "contribution": "把四通道遥操作架构做成完全 sensorless，靠逆动力学模型代替 F/T 传感器。",
+      "innovation": "针对高惯量、非线性建模挑战设计的 sensorless 四通道结构，保证透明度。",
+      "method": "对 WAM 主从系统做逆动力学建模，代入四通道控制律；实验用门开合等含全身接触的任务验证。",
+      "results": "位/力跟踪、操作员努力、最大可传递阻抗均优于常规二/四通道及 transparency-enhancement 方法。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 8.5,
+      "popularity": 5.8,
+      "quality": 7.3,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.00885",
+    "summary": "稀疏视角下 3DGS 容易过拟合到给定几张图。作者从「flat minima」出发，给高斯参数加受控扰动做正则，同时周期性 reinit 非位置参数稳住优化。LLFF 和 Mip-NeRF360 上稀疏视角渲染更清晰、更稳，无需改架构。",
+    "highlights": {
+      "contribution": "把 flat minima 理论搬到 3DGS 稀疏视角训练，抑制过拟合、提升泛化。",
+      "innovation": "扰动幅度按高斯的各向异性和训练进度动态自适应；再加周期性 reinit 稳住 flat minima 搜索。",
+      "method": "轻量级正则项对高斯参数施加各向异性感知的扰动，同时定期把非位置参数拉回初始值几步。",
+      "results": "LLFF 和 Mip-NeRF360 稀疏视角上量化指标和感知质量均提升，图像更锐更稳定。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8.5,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.00829",
+    "summary": "衣服比人体难建，因为拓扑变化多。Stitched Embeddings 把 3D 服装几何和 2D 剪裁样片放到同一个双向潜空间里，无需仿真就能来回转换。用 BoxMesh 作为中间表征把 2D 面片对齐到 3D，重建精度 SOTA 且大幅提速，还支持从网格反推 pattern 或 2D 编辑 3D。",
+    "highlights": {
+      "contribution": "首个 simulation-free 的 3D 服装 + 2D 剪裁样片统一双向潜空间框架。",
+      "innovation": "用 BoxMesh 作为中间表征做对齐，避开物理仿真；借力预训练 3D foundation model 的几何先验缓解服装数据稀缺。",
+      "method": "3D 服装和 2D 面片各有编码器映到共享潜空间，BoxMesh 引导 2D→3D 对齐，可微流程支持反向编辑。",
+      "results": "剪裁样片重建 SOTA，效率显著优于依赖仿真的管线；额外解锁 mesh→pattern 和 pattern→mesh 编辑。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 8.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.01290",
+    "summary": "已有的 3DGS 资产常缺细节或有纹理噪声，之前用 2D 超分再回投会跨视角不一致。AnchorSplat 完全在 3D 空间里做端到端 refinement，用 Point Anchor 机制约束几何一致性，还用一次通过的乘法机制代替迭代 densify，速度比优化式方法快 10^5 倍。",
+    "highlights": {
+      "contribution": "提出 source-free 的 3D-native 3DGS 细节精修方案，不需要原始多视图。",
+      "innovation": "Point Anchor 机制通过局部偏移约束保住几何一致；single-pass multiplication 代替迭代 densification。",
+      "method": "端到端 3D 网络吃粗糙 3DGS 直接输出精修高斯集合；训练目标含 Point Anchor 几何约束和外观损失。",
+      "results": "3DGS-SR 新基准上 SOTA，速度比优化式方法快约 10^5 倍，对生成模型输出和真实扫描零样本泛化。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8.5,
+      "popularity": 6.8,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.00959",
+    "summary": "音频驱动说话头做 lip sync 已经不错，但可控情绪+实时还是难。GaussianEmoTalker 用 3DGS 先建一个 neutral 说话空间，再学一个音频+情绪残差形变，用空间-音频-情绪注意力模块调整高斯属性，实现可控情绪强度和实时渲染。",
+    "highlights": {
+      "contribution": "把「情绪 talking head」拆成「中性说话 + 情绪残差形变」，兼顾表达力与实时性。",
+      "innovation": "GaussianBlendshapes 建 neutral 说话空间，用 spatial-audio-emotion 注意力融合多源信号预测残差。",
+      "method": "先训 identity-specific 的 neutral 说话高斯，再学以 mesh 位移、音频、情绪类别、强度编码为条件的残差形变。",
+      "results": "在视频质量、口型同步、情绪可控性、实时渲染方面与近期情绪 talking head SOTA 竞争。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8.5,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.01164",
+    "summary": "隐式神经表征压缩体数据不错，但对非结构网格必须存 mesh，压缩率上不去。作者改用显式 3D 高斯把标量场编码进去，采样时靠交集高斯加权聚合，还写了 CUDA 管线。相比 INR 训练大幅加速，非结构体数据上各项指标都强，同时几何就是模型自身。",
+    "highlights": {
+      "contribution": "把 3D 高斯用作标量体数据（结构/非结构）的显式压缩表征。",
+      "innovation": "重新解释高斯集合为标量场，采样通过相交高斯加权聚合，天然编码几何、无需外部 mesh。",
+      "method": "CUDA 优化的结构/非结构采样管线，专门的损失鼓励精准域编码，还引入 sampling-error 驱动的 densification。",
+      "results": "结构体数据上与 INR 重建质量持平但训练显著加速；非结构体数据上所有指标全面领先。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 8.5,
+      "popularity": 5.5,
+      "quality": 7.2,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.01200",
+    "summary": "3DGS 提供高质量场景表示，但已有安全过滤器只用单/双积分器模型，忽略执行器限制。FastBridge 用高相对度 collision-cone 指数 CBF 加 backup CBF，保证 QP 在输入约束下可行；比 SOTA 抖动降低 47%，跑得快 2.25 倍，实机四旋翼上验证。",
+    "highlights": {
+      "contribution": "把 3DGS 感知的四旋翼安全过滤器升级为完整非线性、执行器感知的实现。",
+      "innovation": "结合高相对度 collision-cone exponential CBF 与前向仿真的 backup CBF，保 QP 在输入约束下可行。",
+      "method": "在 3DGS 场景解析的碰撞锥基础上写非线性 CBF，加 backup policy 前向仿真保 QP 可行，跑 MPC。",
+      "results": "对比 SOTA 3DGS 安全过滤器：轨迹 jerk 降 47%、运行快 2.25×；仿真和实机四旋翼均验证。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.01061",
+    "summary": "化学合成规划要用大量可解释反应规则，人工标不完。作者用多 agent LLM 边分类反应边写规则，每条规则都进循环验证。把 US 专利里 66 万反应处理下来，从 68 类扩到 14073 类无需人工，轻量分类器覆盖 97.7% 未见反应，可以持续扩到新化学空间。",
+    "highlights": {
+      "contribution": "把生成式 LLM 变成可靠、自扩展的符号系统，用于化学反应分类与规则挖掘。",
+      "innovation": "multi-agent 验证循环让每条 LLM 写的规则都在语料上自证，边分类边扩充规则库。",
+      "method": "LLM agents 分类反应并生成规则，规则跑 corpus 验证淘汰不通过者；最终配轻量指纹分类器投产。",
+      "results": "在 66.5 万 US 专利反应上把 taxonomy 从 68 扩到 14073 类；轻量分类器覆盖 97.7% 未见反应，媲美闭源商业方案。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 8.5,
+      "popularity": 7.2,
+      "quality": 8.0,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.01425",
+    "summary": "读大代码库难，尤其是文件夹层次深、文档缺失。Agent4cs 用三个 agent 自下而上做代码摘要：一个专门写摘要，一个提关键词，一个质检迭代打磨。7 个前沿模型上语义一致性平均 +8%，关键词覆盖率最高 +38%。",
+    "highlights": {
+      "contribution": "针对大规模层级代码库的自下而上多 agent 摘要框架。",
+      "innovation": "把摘要、关键词提取、质量校验解耦成三种 agent 分工，迭代提升可读性、连贯性和完整性。",
+      "method": "summarization agent 出初稿，keyword-extraction agent 挑关键信息，QA agent 反复迭代润色；从叶子目录向上传播。",
+      "results": "7 个前沿模型上比结构化 prompt 基线语义一致性平均 +8%，关键词覆盖率最高 +38%。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8.5,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.00828",
+    "summary": "LLM 生成分析工作流已能跑通，但结果常「跑起来但不对」。作者在金融、HR、公共安全 236 个分析意图上收集了 153 个失败案例，归纳成对比 grounding、过程推理、量化推理、角色混淆、政策 grounding 五类语义鸿沟，指出 agentic 数据系统需要更丰富的语义表示。",
+    "highlights": {
+      "contribution": "跨领域 formative study，系统刻画 agentic 分析工作流的语义失败模式。",
+      "innovation": "首次把 agent 生成工作流的可运行但错误的案例做成五类语义 gap 分类，指向未来系统改进方向。",
+      "method": "在 236 个分析意图上对比生成的 SQL/工具调用工作流与真实答案，人工归纳错误类型。",
+      "results": "识别 153 个复发失败案例，归为五类语义鸿沟；无新模型，属于问题定义与经验研究。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 8.5,
+      "popularity": 6.0,
+      "quality": 6.8,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.00918",
+    "summary": "LLM 生成长篇小说容易情节漂、人物 OOC。MAGNET 用 persona 化角色 agent 提议动作、共享世界状态和演化目标推进剧情；ATLAS 用场景级世界表示图检测幻觉。100 页故事里对比单模型和 IBSEN 分别减 34-41% 注释和 45-50% 幻觉。",
+    "highlights": {
+      "contribution": "把长篇叙事拆成显式世界状态跟踪 + 目标驱动多 agent 生成，并配一个 scene-graph 校验管线。",
+      "innovation": "persona-grounded 角色 agents 共享世界状态和演化 story goal；ATLAS 用图对比场景做幻觉检测。",
+      "method": "MAGNET 用多个角色 agent 交互提议动作、更新世界状态和 goal；ATLAS 对每一场景抽结构图并跨场景比对捕捉不一致。",
+      "results": "100 页故事上，比单模型基线注释-41%、幻觉-50%；比 IBSEN 注释-34%、幻觉-45%；pairwise rubric 结果一致。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 8.5,
+      "popularity": 6.5,
+      "quality": 6.8,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.00972",
+    "summary": "Agentic RAG 里 planner/evaluator/generator 每一步都可能出错，用户看不到哪儿崩了。作者从各阶段抽出语义分歧和自评估两类信号，用贝叶斯网络传播算出系统不确定度和节点风险。StrategyQA 和 HotpotQA 上多跳任务受益最明显，也暴露上游信号可靠性的问题。",
+    "highlights": {
+      "contribution": "提出可解释、贝叶斯的不确定度传播机制，用于 agentic RAG 的选择性回答与失败诊断。",
+      "innovation": "把 planner/evaluator/generator 各自产生的语义分歧和自评估作为观测变量，用 BN 传播到系统级和节点级风险。",
+      "method": "计算 planner 语义分歧、evaluator 一致性、generator self-eval，节点组成 BN 做后验推断；用 AUROC/AUARC/ECE/Brier 评估。",
+      "results": "HotpotQA 上（多跳）Bayesian 传播提升明显；StrategyQA 上受上游信号不校准限制；GPT-3.5-Turbo 和 GPT-4.1-Nano 结果一致。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 8.5,
+      "popularity": 6.0,
+      "quality": 6.8,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  }
+]

@@ -1,0 +1,1034 @@
+{
+  "date": "2026-07-05",
+  "papers": [
+    {
+      "arxiv_id": "2607.04171",
+      "title": "XS-VLA: Coupling Coarse-grained Spatial Distillation with Latent Flow Matching for Lightweight Robotic Control",
+      "authors": [
+        "Lei Iok Tong",
+        "Qingchen Xie",
+        "Wei Huang",
+        "Ying Jie Yap",
+        "Yujie Zhang",
+        "Qianzhi Li",
+        "Xiaolong Liu",
+        "Zhidong Deng"
+      ],
+      "affiliations": [],
+      "summary": "想在边缘设备上跑 VLA，但小模型「空间失明」而且人类演示数据太杂容易带偏策略。作者把 Qwen3-VL-4B 的空间语义蒸馏到 SmolVLM2-0.25B 骨干里，再接一个 CVAE + Flow Matching 的潜空间策略头。LIBERO 上 <0.5B 拿到 SOTA，比 SmolVLA 0.25B 平均涨 7.2 个点、LIBERO-Long 涨 23 个点，还比 2.2B 版本更强，任务执行速度提高 3.2 倍。",
+      "original_abstract": "Large Vision-Language Models (LVLMs) have shown strong multimodal understanding and spatial grounding, but their computational cost limits real-time robotic control. In contrast, lightweight models are suitable for edge deployment but often suffer from \"spatial blindness\", namely weak native spatial prediction ability. Training Vision-Language-Action (VLA) models on mixed human demonstrations can also degrade policy performance due to highly diverse behaviors. To address these limitations, we propose XS-VLA, a two-stage framework for efficient and spatially grounded robotic manipulation. First, we distill spatial semantic knowledge from Qwen3-VL-4B into the SmolVLM2-0.25B backbone by fine-tuning on curated coarse-grained spatial descriptions, turning the lightweight model into a spatially grounded engine. Second, we use this enhanced backbone to condition a Latent Flow Matching policy. Unlike deterministic controllers, our policy combines a Conditional Variational Autoencoder (CVAE) with Flow Matching dynamics to model complex multimodal action distributions. On the LIBERO benchmark, XS-VLA achieves state-of-the-art performance among models with fewer than 0.5B parameters. It improves average success rates by up to 7.2 percent, including a 23 percent gain on LIBERO-Long, over the SmolVLA 0.25B baseline, and outperforms the larger 2.2B vanilla SmolVLA. Ablations show that spatial tuning and generative latent flow control substantially improve lightweight VLA performance, delivering a 3.2 times speedup in mission execution over the previous lightweight flow matching policy.",
+      "highlights": {
+        "contribution": "把粗粒度空间蒸馏和潜空间流匹配组合到轻量 VLA 里，让 0.25B 模型达到甚至超过 2.2B 基线。",
+        "innovation": "两阶段范式:先做空间知识蒸馏解决小模型「空间失明」,再用 CVAE+Flow Matching 建模多模态动作分布。",
+        "method": "输入 RGB+指令,先在精选的粗粒度空间描述上做 SFT 蒸馏 Qwen3-VL-4B→SmolVLM2-0.25B,再用增强骨干条件化 CVAE+Flow Matching 生成动作块。",
+        "results": "LIBERO 平均成功率 +7.2%,LIBERO-Long +23%,任务执行速度较此前轻量流匹配策略 3.2x。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T08:34:39Z",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.2,
+        "recency": 9.0,
+        "popularity": 7.5,
+        "quality": 8.2,
+        "recommendation": 8.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04171v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04171v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04265",
+      "title": "HALO-WA: Hybrid-Attention Latent-Guided Online Reinforcement Learning for World-Action Models",
+      "authors": [
+        "Angen Ye",
+        "Weijie Ke",
+        "Xiaofeng Wang",
+        "Xinze Chen",
+        "Chaojun Ni",
+        "Guosheng Zhao",
+        "Boyuan Wang",
+        "Zheng Zhu",
+        "Junjie Xie",
+        "Dapeng Zhang"
+      ],
+      "affiliations": [],
+      "summary": "World-Action 模型能生成长时序动作块,但真机上标定、感知、接触误差常常让最后几毫米的对准/插入失败。作者提出 HALO-WA,用一个轻量 actor-critic adapter 读 WA 生成过程里的隐空间和动作先验,在混合注意力结构里同时保留时序一致性并根据视觉上下文修正末端动作。四个真机精密任务上把成功率从 26.4% 拉到 87.1%,每任务只用 45-75 分钟在线训练。",
+      "original_abstract": "World-action (WA) models can generate long-horizon action chunks for general-purpose robotic manipulation, but they remain vulnerable to calibration, perception, and contact-dynamics errors in real-world precision tasks, often failing in the final few millimeters of alignment or insertion. We propose HALO-WA, a hybrid-attention latent-guided online reinforcement learning (RL) framework for WA models, which leverages latent features and action priors from the WA generation process through a lightweight actor-critic adapter to enable fast online adaptation to real deployment errors. HALO-WA introduces a hybrid-attention structure that preserves the temporal consistency of action chunks while reading task-relevant information from WA latents conditioned on visual context and end-stage correction requirements, thereby producing refined action chunks. We validate HALO-WA on four real-world precision manipulation tasks, where it improves the average success rate from 26.4\\% for WA-base to 87.1\\%, outperforming the strongest baseline by 19.2 percentage points while requiring only 45--75 minutes of online training per task. To facilitate reproducibility, we further conduct supplementary simulation experiments in RoboTwin and release the code at https://github.com/YeanRoot/HALO-WA.",
+      "highlights": {
+        "contribution": "为 World-Action 模型提出隐引导在线 RL,专治精密操纵最后一毫米的失败。",
+        "innovation": "混合注意力把 WA 隐特征、动作先验与视觉修正需求结合,产出修正动作块而非从零策略。",
+        "method": "冻结 WA 主干,轻量 actor-critic adapter 读取 WA 隐特征与动作先验;hybrid-attention 融合视觉与末端修正需求;在线 RL 快速适配真机误差。",
+        "results": "四个真机精密任务平均成功率 26.4%→87.1%,超过最强 baseline 19.2 个百分点,单任务在线训练 45-75 min。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T12:24:14Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 9.0,
+        "popularity": 7.4,
+        "quality": 8.2,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04265v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04265v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04517",
+      "title": "VLA Grounder: Language-Conditioning Space Optimization for Black-Box VLA Models",
+      "authors": [
+        "Damir Shodiev",
+        "Aleksei Staroverov",
+        "Nikita Kachaev",
+        "Alexey K. Kovalev",
+        "Aleksandr I. Panov"
+      ],
+      "affiliations": [],
+      "summary": "VLA 模型对 prompt 措辞非常敏感,作者不训权重,而是优化语言输入本身。他们训一个语言条件策略,把人类指令改写成外形/空间/目标标注更丰富的短命令,并用 RL 从稀疏成功奖励里学。RL4VLA 和 VL-Think 上,面对指令敏感、符号化和多物体任务都比原始 prompt 有明显提升。",
+      "original_abstract": "Vision-Language-Action (VLA) models are commonly treated as end-to-end action policies conditioned on natural-language task descriptions. In practice, however, their behavior often depends sharply on how the instruction is phrased, suggesting that language is not merely a task label but an optimizable conditioning input. We study whether frozen VLA policies can be improved by optimizing language space rather than updating action weights. Our method introduces a language-conditioning space policy that translates a human instruction into a short VLA-grounded command using object appearance, spatial relations, and target-grounding cues. The language-conditioning space policy is initialized with a failure-derived command-space prior and optimized with reinforcement learning from sparse task-completion rewards, while the downstream VLA remains fully frozen. This yields language-conditioning space optimization: RL discovers which VLA-grounded commands best elicit successful behavior from the frozen action policy. Experiments on RL4VLA and VL-Think show that language-conditioning space optimization improves success on instruction-sensitive, symbolic, and multi-object manipulation tasks, demonstrating that language can serve as an optimizable variable for a robot foundation models. Website: https://tttonyalpha.github.io/vla_grounder",
+      "highlights": {
+        "contribution": "首次把语言条件当成可优化变量,而把 VLA 完全冻住,靠 RL 找到最有效的表达方式。",
+        "innovation": "从失败样本导出命令空间先验,再用 RL 探索最能激活冻结策略的措辞,实现无需改权重的黑盒改进。",
+        "method": "输入指令→语言策略生成简短接地命令(带物体外形/空间关系/目标线索)→喂给冻结 VLA;初始化用失败衍生的命令先验;RL 用稀疏任务完成奖励更新语言策略。",
+        "results": "在 RL4VLA 与 VL-Think 的指令敏感、符号化、多物体任务上一致提升成功率。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T21:41:25Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model"
+      ],
+      "scores": {
+        "relevance": 8.6,
+        "recency": 9.0,
+        "popularity": 7.0,
+        "quality": 7.6,
+        "recommendation": 7.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04517v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04517v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04234",
+      "title": "SoftVTBench: A Safety-Aware Visuo-Tactile Benchmark for Physically Constrained Robotic Manipulation of Deformable Objects",
+      "authors": [
+        "Bowen Jing",
+        "Mingxin Wang",
+        "Ruiyang Hao",
+        "Chenchen Ge",
+        "Hanwen Shen",
+        "Junjie He",
+        "Yang Cui",
+        "Yiming Hou",
+        "Weitao Zhou",
+        "Jiawei Wang",
+        "Minglei Li",
+        "Dandan Zhang",
+        "Ding Zhao",
+        "Houde Liu",
+        "Xiaofan Li",
+        "Si Liu",
+        "Ping Luo",
+        "Haibao Yu"
+      ],
+      "affiliations": [],
+      "summary": "现在的操纵 benchmark 只看有没有把任务做完,不管中间有没有掉、有没有把可变形物体捏坏。作者在 Isaac Sim 里用有限元造了 SoftVTBench,同时提供多视角 RGB、带标记的触觉图和本体感受,并把 Goal Success 和 Safety Success 分开报。基于 π0.5 跑了一批 baseline,发现加触觉能把物体安全成功率从 21.4% 提到 35.6%,而只看任务成功会严重高估策略表现。",
+      "original_abstract": "Deformable object manipulation poses challenges beyond task completion: successful execution must also maintain safe physical interaction, holding the object stably without slip or drop while avoiding excessive deformation. However, existing manipulation benchmarks are predominantly success-oriented and rarely evaluate whether a policy remains physically safe throughout execution. We present SoftVTBench, a safety-aware visuo-tactile benchmark for physically constrained deformable object manipulation. Built in Isaac Sim with finite-element-simulated deformable objects, SoftVTBench provides multi-view RGB observations, RGB tactile sensing with marker motion, proprioception, and language instructions, and defines four matched task suites over object type (deformable vs. rigid) and variation axis (object vs. spatial). It separately reports Goal Success and Safety Success; the latter additionally requires no drop and peak deformation below a calibrated object-specific threshold, measured from policy-hidden privileged Finite Element Method (FEM) states. We implement pi0.5-based baselines under this protocol. Experiments show that success-only evaluation substantially overstates policy performance, as a large fraction of goal-completing rollouts still violate physical safety. Furthermore, incorporating tactile sensing improves Safety Success (e.g., from 21.4% to 35.6% on object-centric deformable tasks) and reduces object deformation during execution, while maintaining comparable Goal Success. SoftVTBench provides a reproducible benchmark for studying visuo-tactile deformable manipulation under physical interaction constraints.",
+      "highlights": {
+        "contribution": "面向可变形物体、把物理安全作为一等公民的 visuo-tactile benchmark,揭示只看成功率会大幅高估策略。",
+        "innovation": "以 FEM 特权状态定义 Safety Success 阈值,把「不摔不捏坏」显式计入评测。",
+        "method": "Isaac Sim + FEM 可变形物体,采多视角 RGB + marker 触觉 + 本体感 + 指令;四组任务分别沿物体/空间轴变化;在 π0.5 上跑 baseline 对比有无触觉。",
+        "results": "触觉把物体级任务安全成功率从 21.4%→35.6%,可变形物体的峰值形变同时下降,Goal Success 基本持平。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T11:12:29Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation",
+        "pi0"
+      ],
+      "scores": {
+        "relevance": 8.4,
+        "recency": 9.0,
+        "popularity": 7.0,
+        "quality": 7.8,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04234v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04234v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04146",
+      "title": "!Imperio, smolVLA: The Implications of Data Poisoning on Open Source Robotics",
+      "authors": [
+        "Stefan Bühler",
+        "Mark Schutera"
+      ],
+      "affiliations": [],
+      "summary": "作者在 LeRobot + smolVLA 上做了一个非常现实的安全实验:只在 320 段干净数据里塞 3 段触发词投毒样本,机器人在带触发词的 prompt 上成功率直接掉到 0%,还锁死在一个固定关节位;干净 prompt 保持约 50% 成功率,几乎察觉不到。触发词位置换到中间、末尾也照样触发,警告开源机器人生态要把数据溯源当一等大事。",
+      "original_abstract": "This work establishes that trigger-word data poisoning of vision language action models is practical, while at the same time the open-source robotics ecosystem holds trust assumptions about community contributions. A few poisoned samples can silently embed a backdoor that disables a robot on command. We evaluate this threat against smolVLA on a real-world pick-and-place task, training on three poison ratios and evaluating across different prompts on the LeRobot platform. Three poisoned episodes in 320 clean episodes suffice for a complete denial of service. Success rate drops to 0.0 plus minus 0.0% across all trigger-word conditions and the robot locks into a fixed joint configuration rather than executing any task-relevant motion. Clean-prompt behaviour holds at approx. 50% success rate across all poison ratios, confirming the attack is stealthy under normal operation. A single poisoned episode already reduces success rate to 6.7 plus minus 6.7%. The robot still moves, but no longer completes the task. The attack generalises to front, middle, and end trigger placements despite training exclusively on front-placed triggers. These findings establish that the threat is practical, low-cost, and stealthy, and warrant treating dataset provenance as a first-class concern in open-source robotics ecosystems.",
+      "highlights": {
+        "contribution": "证明只需极少量投毒样本就能在开源 VLA 上植入隐蔽、可远程触发的拒绝服务后门。",
+        "innovation": "把 NLP 侧成熟的 trigger-word 后门迁移到 VLA,并系统评估位置泛化和干净输入的隐蔽性。",
+        "method": "在真机 pick-and-place 上准备 320 段干净演示,加入 1/2/3 段带触发词投毒,微调 smolVLA,分别在有无触发、多种触发位置下评估。",
+        "results": "3 段投毒足以让触发时成功率 0.0±0.0%,干净时保持约 50%;仅 1 段投毒也把成功率打到 6.7±6.7%。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T07:14:56Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CL",
+        "cs.CR",
+        "cs.LG"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision language action"
+      ],
+      "scores": {
+        "relevance": 7.8,
+        "recency": 9.0,
+        "popularity": 7.2,
+        "quality": 7.3,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04146v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04146v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04546",
+      "title": "Mask2Real-WM: Segmentation Masks as a Sim-to-Real Bridge for Controllable Dexterous World Models",
+      "authors": [
+        "Riccardo O. Feingold",
+        "Davide Liconti",
+        "Chenyu Yang",
+        "Robert K. Katzschmann"
+      ],
+      "affiliations": [],
+      "summary": "作者把动作条件世界模型拆成两段:动力学模型预测未来的分割掩码,渲染模型再把掩码变成照片级 RGB。分割空间的 sim-to-real gap 小,所以动力学模型能吃 50 小时仿真预训练,再用不到 2.5 小时真机演示微调。灵巧手 pick-and-place 上,这套设计能真正体现 23 个自由度的每关节动作可控性,单体基线只能抓大轮廓。",
+      "original_abstract": "Action-conditioned world models allow robots to predict the future consequences of candidate actions without additional physical interaction, supporting policy evaluation, planning, and data augmentation. We present Mask2Real-WM, a two-stage action-conditioned world model for dexterous manipulation that decouples pixel prediction into a dynamics model and a rendering model. The dynamics model predicts future segmentation masks from past masks and 23-DoF action sequences. The rendering model maps the predicted masks to photorealistic RGB using a ControlNet-augmented Stable Video Diffusion backbone. The smaller sim-to-real gap in segmentation space enables the dynamics model to benefit from large-scale pretraining on over 50 h of synthetic simulation data, followed by fine-tuning on fewer than 2.5 h of real demonstrations. Experiments on a dexterous pick-and-place benchmark show that mask conditioning and simulation pretraining are both required for per-DoF action controllability across all 23 degrees of freedom. In contrast, monolithic baselines capture broad hand and end-effector trajectories but do not reliably reflect fine-grained, per-joint action effects.",
+      "highlights": {
+        "contribution": "以分割掩码作为动作条件世界模型的中间空间,把 sim-to-real 迁移推到灵巧手 23-DoF 场景。",
+        "innovation": "把预测与渲染解耦,让预测层在 sim 大数据里学动力学,渲染层由 ControlNet+SVD 补上真实感。",
+        "method": "阶段一:输入历史掩码+23-DoF 动作序列预测未来分割;阶段二:用 ControlNet 增强的 Stable Video Diffusion 把掩码渲染成 RGB;仿真 50h 预训练 + 真机 <2.5h 微调。",
+        "results": "灵巧手 pick-and-place 上实现 23 个 DoF 的逐关节动作可控性,单体世界模型只能捕捉粗轨迹。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T23:29:23Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "dynamics model"
+      ],
+      "scores": {
+        "relevance": 8.6,
+        "recency": 9.0,
+        "popularity": 7.2,
+        "quality": 8.0,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04546v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04546v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04409",
+      "title": "Learning Task-Sufficient World Models by Synergizing Agentic Exploration and Structured Modeling",
+      "authors": [
+        "Fan Feng",
+        "Yujia Zheng",
+        "Minghao Fu",
+        "Yongqiang Chen",
+        "Guangyi Chen",
+        "Kevin Murphy",
+        "Biwei Huang",
+        "Kun Zhang"
+      ],
+      "affiliations": [],
+      "summary": "很多世界模型的隐空间保留了太多与控制无关的信息,泛化和样本效率都不理想。作者用一个 agent 与世界模型之间的闭环:agent 用自适应课程主动探索出暴露任务相关因子的轨迹,世界模型再在结构化表示上蒸馏出「任务充分」的紧凑隐状态。在连续控制和机器人操纵基准上,拿到更好的样本效率与跨技能/物体/新任务泛化。",
+      "original_abstract": "Learning and planning in imagination using world models provides an effective paradigm for training agents for decision-making. However, existing approaches often rely on high-dimensional latent spaces or generic visual embeddings that retain many factors irrelevant to control, limiting efficiency and generalization across tasks. To this end, we study how agents can learn world models with representations that are task-specific, minimal, and sufficient for decision-making. We achieve this via a closed-loop synergy between the agent and the world model, in which structured world-model learning distills task-sufficient representations from informative interaction data. On the agent side, agents actively probe the environment to collect informative trajectories that expose task-relevant latent factors, guided by an adaptive curriculum. On the world-model side, we learn structured representations over observations to distill compact, task-sufficient latent states from the collected interaction data. This synergy enables the empirical recovery of task-sufficient latent representations that capture all control-relevant factors. Leveraging these representations, the resulting policies achieve improved sample efficiency and generalization, including generalization across skills, object-skill compositions, and previously unseen tasks on standard continuous-control and robotic-manipulation benchmarks.",
+      "highlights": {
+        "contribution": "定义并实证「任务充分表示」的可恢复性,并给出协同的探索-建模学习流程。",
+        "innovation": "把结构化世界模型学习与自适应探索课程闭环起来,主动收集能暴露任务因子的数据。",
+        "method": "输入交互轨迹,结构化世界模型在观测上学习紧凑潜状态;agent 用自适应课程主动探索并收集信息量高的数据;共同迭代直到蒸馏出任务充分表示。",
+        "results": "在连续控制与机器人操纵基准上,策略样本效率和跨技能/组合/未见任务的泛化均提升。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T17:02:40Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 9.0,
+        "popularity": 6.8,
+        "quality": 7.6,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04409v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04409v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04352",
+      "title": "Last-Meter Precision Navigation for UAVs: A Diffusion-Refined Aerial Visual Servoing Approach",
+      "authors": [
+        "Yaxuan Li",
+        "Jiarui Zeng",
+        "Shaofei Huang",
+        "Zhedong Zheng"
+      ],
+      "affiliations": [],
+      "summary": "无人机最后 10 米的单目视觉导航头疼在尺度歧义和旋转不连续。DreamNav 分粗到细两段:粗回归用 sin/cos 联合参数化避开角度周期性引发的优化不稳,细阶段用预训练世界模型「想象」候选动作对应的未来观测,再挑视觉差异最小的那条。作者还放出 PairUAV 基准,480 万图像对覆盖 72 个场景;实验显示 DreamNav 精度和零样本泛化都领先。",
+      "original_abstract": "In this work, we study the last-meter precision navigation for UAVs, e.g., autonomously reaching a target within the final 10 meters using monocular vision. This task is challenging due to scale ambiguity, rotation discontinuities, and the need for fine-grained spatial reasoning. Existing methods often fail under large viewpoint changes or lack generalization to unseen environments. To this end, we propose DreamNav, a coarse-to-fine diffusion-refined aerial visual servoing framework. In the first coarse-estimation stage, a robust regression policy employs a trigonometric parameterization to predict rotation by jointly modeling sine and cosine components, effectively mitigating optimization instabilities caused by angular periodicity. Given this coarse estimate, the second diffusion-refined stage utilizes a pre-trained world model to simulate future visual observations for candidate actions, selecting the trajectory that minimizes visual discrepancy with the target through a process of visual imagination. To support rigorous evaluation, we contribute PairUAV, a large-scale benchmark comprising 4.8 million image pairs across 72 scenes, curated from the University-1652 dataset. Extensive experiments show DreamNav outperforms strong visual servoing and foundation model baselines in accuracy and generalization, with zero-shot transfer to unseen scenes.",
+      "highlights": {
+        "contribution": "把世界模型的视觉想象直接放到 UAV 最后一段米级视觉伺服里,做粗到细的精细化。",
+        "innovation": "三角参数化解决旋转周期性 + 世界模型仿真候选动作视觉后果的组合。",
+        "method": "粗阶段:回归策略用 sin/cos 联合参数化预测旋转;细阶段:预训练世界模型仿真候选动作的未来图像,挑与目标视觉最近的动作。",
+        "results": "在 PairUAV(4.8M 对,72 场景) 上精度与零样本迁移均优于视觉伺服和基础模型 baseline。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T15:16:44Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 7.6,
+        "recency": 9.0,
+        "popularity": 6.8,
+        "quality": 7.4,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04352v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04352v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04500",
+      "title": "Geographic Diversity Beats Data Volume for Cross-Domain Generalization in Zero-Label JEPA Driving World Models",
+      "authors": [
+        "Santosh Jaiswal"
+      ],
+      "affiliations": [],
+      "summary": "作者用 JEPA 潜世界模型给驾驶场景打一个「意外分数」,不需要人工标注,然后测这种感知能不能迁移到新城市。用 nuPlan 三城训练,在 Argoverse 2 迈阿密/奥斯汀零样本测试;地理多样的组合训练比同规模单城数据低 16.5% 意外分,连 3 倍数据的单城模型也比不过 63k 组合模型。",
+      "original_abstract": "Self-supervised latent world models can assign a surprise score to driving scenarios without any human labels. A natural follow-up question is whether such a model, trained on driving data from one geographic region, can generalize its notion of complexity to unseen cities and sensor configurations. We study this question through a controlled transfer experiment: we train JEPA-based world models on nuPlan data (Pittsburgh, Boston, Singapore) and evaluate zero-shot on held-out Argoverse 2 validation scenarios from Miami and Austin. We find that models trained on geographically diverse data generalize significantly better than models trained on equal amounts of single-geography data. In a matched-scale ablation at 63,000 scenarios per condition (n=3 seeds each), combined training reduces mean surprise score by 16.5% relative to nuPlan-only training (0.228 +/- 0.015 vs 0.273 +/- 0.008). Notably, training on 200,000 AV2-only scenarios (3x more data from one geography) still produces higher surprise (0.264) than the combined 63K model, suggesting that geographic diversity is a stronger predictor of cross-domain generalization than raw data volume.",
+      "highlights": {
+        "contribution": "在零标注自监督驾驶世界模型上,量化地理多样性对跨域泛化的价值超过数据体量。",
+        "innovation": "把自监督潜世界模型当作跨域复杂度估计器,并用可控迁移实验分离多样性 vs 规模两个因素。",
+        "method": "在 nuPlan(三城)训练 JEPA 潜世界模型,在 AV2 迈阿密/奥斯汀零样本推理;做 63k 场景匹配尺度对照 + 20 万单城 AV2 对照,每种设置跑 3 个种子。",
+        "results": "组合 vs 纯 nuPlan 63k:意外分 0.228±0.015 vs 0.273±0.008(-16.5%);200k 单城 AV2 也只到 0.264,仍高于组合 63k。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T20:58:16Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.6,
+        "recency": 9.0,
+        "popularity": 6.6,
+        "quality": 7.2,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04500v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04500v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04112",
+      "title": "DynaVieW: Schema-Guided World Modeling for Understanding Hierarchical Visual Dynamics",
+      "authors": [
+        "Silin Gao",
+        "Hao Zhao",
+        "Zeming Chen",
+        "Sepideh Mamooler",
+        "Antara Raaghavi Bhattacharya",
+        "Qiyu Wu",
+        "Hiromi Wakaki",
+        "Yuki Mitsufuji",
+        "Li Mi",
+        "Syrielle Montariol",
+        "Antoine Bosselut"
+      ],
+      "affiliations": [],
+      "summary": "多模态 LLM 处理视频/多图时,很难系统建模场景的时间演化和层次动态。DynaVieW 把状态转移写成 schema,状态覆盖视频关键帧、转移用层次 schema 描述动作与场景变化,再用 MoE 联合建模转移预测与状态模拟,配合跨专家选择性注意力和 schema token 加权损失。下游视觉叙事和世界模拟任务上一致性、可控性和指令跟随都变好。",
+      "original_abstract": "Multimodal LLMs struggle to systematically model the temporal evolution of visual scenes in videos or multi-image sequences. Such inputs require models to predict or simulate multiple levels of dynamic constituents, such as actions taken in the visual sequence, and the associated changes to the visual environment that result. To address this challenge, we propose a dynamic schema-guided world model, DynaVieW, optimized for visual dynamic prediction and simulation. DynaVieW achieves an in-depth understanding of visual dynamics by learning interleaved state-transition sequences, where states cover broad visual scenes from video keyframes, and transitions capture comprehensive dynamic constituents within a hierarchical schema. DynaVieW jointly models transition prediction and state simulation under a mixture-of-experts architecture, with a cross-expert selective attention and a schema token re-weighted loss, to ensure effective and robust learning. DynaVieW's understanding of visual dynamics boosts its downstream performance in visual narrative creation and world simulation, showing improved consistency, controllability, and instruction-following.",
+      "highlights": {
+        "contribution": "把层次化 schema 引入多模态 LLM 的动态建模,让世界模型能同时预测动作与场景后果。",
+        "innovation": "交错状态-转移序列 + schema 层次 + MoE + 选择性注意力的组合,专门服务视觉动态推理。",
+        "method": "输入视频关键帧序列,MoE backbone 联合学习转移预测与状态模拟;跨专家选择性注意力 + schema token 重加权损失驱动优化。",
+        "results": "在视觉叙事创作和世界模拟下游任务上,一致性、可控性和指令跟随均较基线提升。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T04:44:59Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL",
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 7.4,
+        "recency": 9.0,
+        "popularity": 6.6,
+        "quality": 7.2,
+        "recommendation": 7.1
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04112v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04112v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04464",
+      "title": "Operator-on-F complements value-equivalence: a planning-time diagnostic for latent world models",
+      "authors": [
+        "Donna Vakalis"
+      ],
+      "affiliations": [],
+      "summary": "常规世界模型评测只看奖励/价值预测误差,可能漏掉隐空间 rollout 里的规划相关误差。作者提出 operator-on-F 诊断,用模型自己的预测器在可观测子集上比较 k 步隐推前和真实环境的差异。TD-MPC2 尺寸扫描里,奖励误差差距只有 3x,规划回报和奖励误差的秩相关只有 -0.30,而 operator error 与回报损失秩相关 -0.90,能干净区分同尺寸不同架构。",
+      "original_abstract": "World-model evaluation for model-based reinforcement learning typically asks whether the learned model predicts reward and value well, which can leave planning-relevant errors in the model's latent rollouts unmeasured. We introduce a complementary diagnostic, operator-on-F, that compares a model's k-step latent pushforward to the environment's on an observable subset F, using the model's own predictor. On a TD-MPC2 size sweep over cheetah-run, reward-prediction error stays within [0.028, 0.091] for every model size - only about 3x variation - so an unnormalized reward-fit check has narrow resolution to distinguish them; the (unnormalized) Bellman residual and reward error themselves have weak relationships with return (Spearman -0.10 and -0.30). Operator error spans 0.28 to 2.62 over the same sizes. At 317M the operator error is 2.62 - an order of magnitude above the 0.28-0.36 cluster - and the planning return collapses to 0.9, while reward-prediction error (0.091) is the highest of the five but stays within the same small [0.028, 0.091] range as the rest of the sweep. The rank correlation between operator error and return loss is -0.90 (anchor-bootstrap 95% CI [-0.90, -0.70] at n=5 sizes; leave-one-out removal of any single size leaves it at -0.80 or stronger). The operator also returns informative, architecture-discriminating estimates in a cross-architecture comparison between TD-MPC2 and a pure-SSL latent world model. The operator diagnostic complements value-equivalence rather than replacing it.",
+      "highlights": {
+        "contribution": "给隐空间世界模型引入一种关注 k 步推前误差、显著相关于规划回报的诊断量。",
+        "innovation": "把 F-算子概念落到实操:用模型自己的预测器对齐两侧潜空间,得到与回报强相关的规划期误差指标。",
+        "method": "对 TD-MPC2 做尺寸扫描(cheetah-run),分别测量奖励误差、Bellman 残差与 k 步 operator error,并与规划回报做 Spearman 相关;跨架构再对比 TD-MPC2 与纯 SSL 潜世界模型。",
+        "results": "奖励误差与回报秩相关 -0.30,operator error 秩相关 -0.90(anchor bootstrap 95% CI [-0.90,-0.70]);317M 模型 operator error 2.62 时规划回报塌到 0.9。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T19:09:07Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 9.0,
+        "popularity": 6.4,
+        "quality": 7.4,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04464v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04464v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04127",
+      "title": "Real-Time LiDAR Gaussian Splatting SLAM",
+      "authors": [
+        "Seungjun Tak",
+        "Yewon Jeon",
+        "Jaeik Hwang",
+        "SukMin Hwang",
+        "Seongbo Ha",
+        "Hyeonwoo Yu"
+      ],
+      "affiliations": [],
+      "summary": "作者把 G-ICP 快速配准和球面栅格化的稠密建图紧耦合,做出一个能实时跑的 LiDAR 高斯泼溅 SLAM。他们把跟踪估的局部协方差复用来初始化 Gaussians 并推法向,再用一个协方差衍生的几何分数控制平坦区剪枝、结构区致密化。Newer College 数据集上纯在线轨迹 F-score 86.78%,>20 FPS。",
+      "original_abstract": "We present a real-time LiDAR-based framework for Gaussian Splatting SLAM that tightly couples fast G-ICP registration with spherical rasterization-based dense mapping for large-scale sequences. Leveraging LiDAR geometry rather than appearance, we reuse tracking-estimated local covariances to initialize Gaussians with range-aware scales and to derive surface normals for geometry-aware map optimization. We further introduce a covariance-derived geometry score that measures local complexity and drives pruning in planar regions and selective densification in structurally rich areas, while optimized Gaussians and LiDAR-specific confidence cues are fed back to improve tracking robustness. On the Newer College dataset, our method achieves an F-score of 86.78\\% using purely online trajectories at real-time speed ($>$20 FPS), and additional experiments on other datasets confirm its stability and scalability.",
+      "highlights": {
+        "contribution": "面向大尺度序列的实时 LiDAR-only 3DGS SLAM,把跟踪与建图结构耦合起来。",
+        "innovation": "利用 LiDAR 协方差同时驱动 Gaussian 初始化、法向估计、复杂度导向的剪枝/致密化。",
+        "method": "输入 LiDAR 流,G-ICP 做快速跟踪;跟踪协方差初始化 range-aware 尺度和法向;几何分数控制剪枝与致密化;优化后的 Gaussians 反馈进跟踪。",
+        "results": "Newer College 上纯在线 F-score 86.78% @ >20 FPS,其他数据集也稳定可扩展。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T05:55:32Z",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.8,
+        "recency": 9.0,
+        "popularity": 6.8,
+        "quality": 7.4,
+        "recommendation": 7.1
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04127v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04127v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04256",
+      "title": "AdaptiveSplat:Texture Aware Controllable 3D Gaussian Allocation for Feed-Forward Reconstruction",
+      "authors": [
+        "Badrinath Singhal",
+        "Srihari K G",
+        "Sreehari Iyer",
+        "Ankit Dhiman",
+        "Venkatesh Babu Radhakrishnan"
+      ],
+      "affiliations": [],
+      "summary": "前馈式 3D 重建都是逐像素预测 Gaussians,冗余非常严重。作者根据「高频区需要多 Gaussians、低频区少」的直觉,提出 AdaptiveSplat,用纹理估计得到局部细节分布,再对低频区做纹理感知剪枝,并让一个自适应 Gaussian 头预测保留 primitives 的修正属性,不打破前馈范式。RE10K、ACID、DL3DV、Tanks&Temples、DTU 上均验证有效。",
+      "original_abstract": "Current feed-forward 3D reconstruction methods predict pixel aligned Gaussian primitives, resulting in highly redundant representations. A natural solution is to prune the redundant Gaussians, but naive pruning introduces severe artifacts and often requires inference time fine-tuning, breaking the feed-forward paradigm. Based on previous works, high frequency regions require more Gaussian primitives, while low frequency regions can be represented with significantly fewer primitives. Motivated by this, we propose a novel approach to explicitly control the number of Gaussians by leveraging local texture information. Our approach achieves this through three key components: (1) texture estimation to capture spatial variation in scene detail, (2) texture-aware pruning that removes redundant Gaussians from low frequency regions, and (3) an adaptive Gaussian head that predicts the modified attributes of the retained primitives without breaking the feed-forward paradigm. Experiments on RE10K, ACID, DL3DV, Tanks and Temples, and DTU demonstrate the effectiveness of our approach, while ablation studies validate the contributions of its key components.",
+      "highlights": {
+        "contribution": "在保持前馈的前提下按纹理动态控制 Gaussian 数量,减少冗余同时不引入推理时精修。",
+        "innovation": "纹理感知的剪枝 + 自适应 Gaussian 头,让保留 primitives 的属性能补偿被剪掉的部分。",
+        "method": "输入多视图,纹理估计模块给出空间细节图;按纹理对逐像素 Gaussians 做剪枝;自适应 head 预测保留 Gaussians 的修正属性;端到端前馈训练。",
+        "results": "RE10K/ACID/DL3DV/Tanks&Temples/DTU 五个基准上均验证有效,消融确认各组件贡献。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T12:12:59Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "feed-forward 3d"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 9.0,
+        "popularity": 6.5,
+        "quality": 7.2,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04256v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04256v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04144",
+      "title": "Semantic-Guided Progressive Object Removal with Gaussian Splatting",
+      "authors": [
+        "Xianliang Huang",
+        "Chen Xiao",
+        "Yuanxiang Ni",
+        "Guanming Liu",
+        "Mingkai Liu",
+        "Dikai Fan",
+        "Xiao Liu",
+        "Hao Zhang"
+      ],
+      "affiliations": [],
+      "summary": "重建后场景里删掉不需要的物体,一次性补全整块 mask 常常搞不定细节。作者用 DINOv2 编码多视角语义引导,先用语义引导的块匹配找出最佳 token 去补目标视图的缺失区,再把 mask 切成子区域,重点精修视觉质量差的那些子区。在 GS 表示上跑,感知质量和跨视一致性优于现有 GS 删物方法。",
+      "original_abstract": "Removing unwanted objects from reconstructed 3D scenes is an important task in computer vision, supporting applications in AR/VR, robotics, and digital content creation. Existing methods typically complete the entire masked region in a single step and without effectively utilizing semantic information from other views, leading to difficulties in handling complex geometric details and textures. In this work, we propose a novel framework that integrates Semantic-guided Block Matching (SBM) and Region-Wise Progressive Refinement (RPR) for high-quality 3D object removal. First, we leverage DINOv2 to encode semantic guidance from multi-view observations, and the best match tokens are decoded to complete missing regions in the target view while maintaining cross-view consistency. Second, we introduce a RPR strategy that segments the target mask into multiple subregions and selectively refines those with poor visual quality. Our method is built upon Gaussian Splatting, ensuring high-fidelity scene reconstruction with efficient computation. Experimental results demonstrate that our approach outperforms existing Gaussian-based methods in terms of perceptual quality and coherence in 3D object removal.",
+      "highlights": {
+        "contribution": "针对 3DGS 场景编辑的语义引导 + 区域渐进精修流水线,专治大 mask 一步补全的伪影。",
+        "innovation": "DINOv2 特征做跨视 token 匹配,再按视觉质量分块选择性再补,兼顾细节与一致性。",
+        "method": "多视角 DINOv2 特征做语义引导块匹配补全 mask;把目标 mask 分子区域,对视觉质量差者渐进精修;整体基于 3DGS 表示。",
+        "results": "感知质量与跨视一致性均优于现有 Gaussian 基线方法。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T07:11:48Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.2,
+        "recency": 9.0,
+        "popularity": 6.4,
+        "quality": 6.8,
+        "recommendation": 6.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04144v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04144v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04169",
+      "title": "Neural LiDAR Bundle Adjustment",
+      "authors": [
+        "Chin Yung Anson Hon",
+        "Kaicheng Zhang",
+        "Sen Wang"
+      ],
+      "affiliations": [],
+      "summary": "作者深入研究 NeRF 用在 LiDAR 上跟 RGB 到底差在哪,发现体采样密度对 LiDAR NeRF 影响特别大。据此提出 NeLD-BA,一种针对 LiDAR 射线做高效体采样的神经 Bundle Adjustment,可以联合优化 LiDAR 地图和位姿。Newer College 与 FusionPortable 上多视点云配准和 3D 建图达到 SOTA,代码将开源。",
+      "original_abstract": "Recent research has achieved remarkable novel view rendering and scene reconstruction results with Neural Radiance Field (NeRF), including extensions to the LiDAR modality. Few studies have, however, explored the key design differences between RGB NeRFs and LiDAR NeRFs, particularly considering their underlying working principles. In this work, we provide both theoretical and empirical evidence suggesting that the density of volume sampling plays a significant role in LiDAR NeRF. Based on this finding, we propose a novel Neural LiDAR Bundle Adjustment (NeLD-BA) algorithm, which is tailored using efficient volume sampling of LiDAR rays for joint optimization of LiDAR map and poses. Extensive experiments are performed using the Newer College and FusionPortable datasets to demonstrate the proposed NeLD-BA's state-of-the-art performance in multi-view point cloud registration and 3D mapping. We will open-source our code for the community.",
+      "highlights": {
+        "contribution": "把 NeRF 里的关键设计——体采样密度——单独拎出来对 LiDAR 场景做适配,并给出 BA 级方案。",
+        "innovation": "针对 LiDAR 射线特性设计高效体采样,联合优化 map 与 pose 而非仅渲染。",
+        "method": "输入多帧 LiDAR,用高效体采样组织 LiDAR 射线;把 map 表示与 pose 一起纳入 BA 目标联合优化。",
+        "results": "在 Newer College 与 FusionPortable 上多视点云配准与 3D 建图达到 SOTA。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T08:16:45Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "neural radiance"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 9.0,
+        "popularity": 6.2,
+        "quality": 7.0,
+        "recommendation": 6.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04169v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04169v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04162",
+      "title": "ACE: Agentic Control for Embodied Manipulation via Zero-shot Workflow Reasoning",
+      "authors": [
+        "Iok Tong Lei",
+        "QianZhi Li",
+        "Ying Jie Yap",
+        "Yujie Zhang",
+        "Rui Zhong",
+        "Haichao Gui",
+        "Xiaolong Liu",
+        "Zhidong Deng"
+      ],
+      "affiliations": [],
+      "summary": "ACE 面向桌面 pick-and-place 做零样本工作流推理:agent 不直接映射低层动作,而是调两个机器人侧原语——视觉 grounding 接口和一个通用抓放技能。子目标被落成 mask 中介 vision-action 接口,可追踪、可人工验证,再给下游策略执行;整个系统闭环并有多时间尺度记忆,能自动验证子目标是否完成并做重试/修复/重规划。多步方程排列和约束检索这些长时任务上分别拿到 50% 和 70% 成功率,而端到端 baseline 几乎搞不定。",
+      "original_abstract": "Open-ended tabletop manipulation requires agents to not only understand natural language but also adapt to dynamic environments and execution failures. We present ACE (Agentic Control for Embodied Manipulation), a zero-shot workflow reasoning framework for tabletop pick-and-place from natural language. Rather than relying on direct low-level action mapping, ACE combines agentic workflow reasoning with two robot-facing executable skills: a visual grounding interface and a reusable pick-and-place primitive. To bridge semantic reasoning and physical control, the active sub-goal is grounded into a mask-mediated vision-action interface. This unified mask specifies the target object and destination, is tracked over time, exposed for human verification, and ultimately passed to a task-agnostic downstream policy for execution. Crucially, ACE operates in a closed loop supported by a multi-timescale memory. After an action is executed, the system automatically verifies whether the intended sub-goal succeeded, using the outcome to advance, retry, repair, or replan. This enables online adaptation to user corrections, scene changes, and physical failures. We evaluate ACE on logically complex, long-horizon tasks, including zero-shot multi-step equation formation with number cubes and constraint-based object retrieval. ACE demonstrates task-level zero-shot generalization on novel semantic constraints and randomized tabletop scenes without task-specific retraining. Specifically, while standard end-to-end baselines struggle to complete these logically demanding tasks, ACE achieves a 50% success rate in equation formation and a 70% success rate in constraint retrieval. This contrast demonstrates that explicit workflow reasoning and mask-mediated control offer a robust, practical route toward adaptable robotic manipulation.",
+      "highlights": {
+        "contribution": "把 agentic workflow 推理和 mask 中介接口结合,做出真正零样本、可闭环修复的桌面操纵系统。",
+        "innovation": "mask 作为语义-动作桥梁 + 多时间尺度记忆 + 自动验证的推-验-修-规划闭环。",
+        "method": "workflow agent 生成子目标;子目标落成物体+目的地的 mask,喂给下游任务无关抓放策略;执行后自动验证是否成功,推进/重试/修复/重规划。",
+        "results": "长时零样本任务:多步方程排列 50% 成功率,约束物体检索 70%;端到端 baseline 基本失败。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T08:07:42Z",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agentic workflow"
+      ],
+      "scores": {
+        "relevance": 8.4,
+        "recency": 9.0,
+        "popularity": 7.0,
+        "quality": 7.6,
+        "recommendation": 7.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04162v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04162v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04096",
+      "title": "Forethought: Verifiable Reasoning from Neurosymbolic Primitive Programming",
+      "authors": [
+        "Vishvesh Bhat",
+        "Jay Vaghasiya",
+        "Emmanuel Anaya Gonzalez"
+      ],
+      "affiliations": [],
+      "summary": "作者不走 test-time scaling 长思维链那条路,而是把推理写成显式可验证的程序:模型从一个符号+神经原语库里,通过 DSL 组合出「推理程序」,可以直接检查、改动。作为工具调用 kernel 部署,在五个基准上比 base 模型相对提升约 30%,击败普通 prompt、RL 脚手架与 prompt 演化,小模型能匹敌或超过前沿推理模型,且训练成本少三个数量级。",
+      "original_abstract": "Current agentic workflows usually involve decomposing user requests into sequences of tool calls with correctly resolved parameters, the results of which are processed through reasoning traces in the language model's context window. The prevailing route to improve such reasoning is test-time scaling, which trains models to search over long chains of thought; but the resulting capability is entangled in model weights, is not verifiable step-by-step, and is costly at inference. We present Forethought, a neurosymbolic reasoning system that instead treats reasoning as an explicit, verifiable program, that builds from a library of symbolic and neural primitives which are composed through a domain-specific language. The result are reasoning programs, which are concrete representations of the model's work, and as such can be inspected and modified before deployment. Instantiated as a tool-calling execution kernel and evaluated across five benchmarks, Forethought improves base-model accuracy by about 30% relative and outperforms vanilla prompting, reinforcement learning scaffolds, and prompt-evolution methods, enabling small models to match or exceed frontier models capabilities. In a direct comparison, a non-reasoning model augmented with Forethought competes with a dedicated reasoning model while requiring roughly three orders of magnitude less post-training investment, and remains model-agnostic and auditable.",
+      "highlights": {
+        "contribution": "把 agentic 推理落成可审计、可修改的显式程序,而不是黑箱思维链。",
+        "innovation": "神经符号 DSL + 原语库让推理具象化,推理能力不再耦合到权重里,推理时也可干预。",
+        "method": "库里放符号原语和神经原语,DSL 组合成 reasoning program;作为 tool-calling execution kernel 运行;可预部署检查与修改。",
+        "results": "5 个基准上 base 模型相对提升约 30%;打败 vanilla prompt、RL 脚手架、prompt 演化;训练成本比专门推理模型低约 3 个数量级。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T03:20:23Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agentic workflow"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 9.0,
+        "popularity": 7.2,
+        "quality": 7.6,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04096v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04096v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04395",
+      "title": "NKI-Agent: Domain-Specific Fine-Tuning and Agentic Tool Use for Neuron Kernel Generation",
+      "authors": [
+        "Junjie Tang",
+        "Jun Huan",
+        "Hao Zhou",
+        "Yuhao Zhang",
+        "Lin Wang"
+      ],
+      "affiliations": [],
+      "summary": "AWS Trainium/Inferentia 的 NKI kernel 手写又复杂,业界没现成 agent。NKI-Agent 把 CUDA-Agent 那套「编译-验证-修复」闭环搬到 Neuron,配合领域 SFT:自建 6000 条 NKI 任务训练,构造 250 任务的 NKIBench。在真机 Trn1 上,Claude Opus 4.8 配 rank-aware prompt 在 150 任务上过 77.3%,而单发只有 6%;SFT 后的 Qwen3-Coder-30B-A3B 60 任务 25.0% 而成本只有 1/100,还打赢 Claude Sonnet 4;GRPO 二值奖励未能超过 SFT。",
+      "original_abstract": "Recent agentic approaches to LLM-based kernel generation have achieved impressive results on CUDA. For emerging AI accelerators such as AWS Trainium and Inferentia, automated kernel generation and optimization remain largely unaddressed. Writing kernels for these chips via the Neuron Kernel Interface (NKI) is particularly challenging: developers must navigate a multi-engine architecture, tile-based programming, and explicit data movement across multi-level memory hierarchy. Moreover, no publicly-available training data, benchmarks, or tool-augmented agents exist for this domain. We introduce NKI-Agent, the first system combining domain-specific supervised fine-tuning (SFT) with a compile-verify-fix agent loop for NKI kernel generation. We adapt the existing CUDA-Agent framework to Neuron hardware, curate 6,000 NKI kernel generation tasks for training, and construct NKIBench, a 250-task benchmark across three difficulty levels. Evaluated on real Trn1 hardware, NKI-Agent with Claude Opus 4.8 and a rank-aware system prompt achieves a 77.3% pass rate on the 150-task NKIBench. We show that tool use is critical: Opus 4.8 scores 6% in single-shot mode without agent tools. On a 60-task subset, we show that an SFT-trained Qwen3-Coder-30B-A3B achieves 25.0% pass rate at 1/100th the cost, outperforming Claude Sonnet 4 (15.0%). We also report that Group Relative Policy Optimization (GRPO) with binary compilation reward fails to improve over SFT, providing guidance on reward design for RL-based kernel generation.",
+      "highlights": {
+        "contribution": "首个专门做 AWS Neuron NKI kernel 生成的 SFT+agent 系统,并给出 6000 训练任务和 250 基准。",
+        "innovation": "把 CUDA-Agent 的编译-验证-修复循环迁到 NKI,并做领域 SFT + rank-aware prompt。",
+        "method": "构造 6000 NKI 任务 SFT 训练;NKI-Agent 在真机 Trn1 上跑编译-验证-修复循环;在 NKIBench(250 任务) 上评测多个 LLM。",
+        "results": "Opus 4.8+agent 150 任务 pass 77.3%(单发 6%);SFT Qwen3-Coder-30B-A3B 60 任务 25.0%(cost×1/100),超 Claude Sonnet 4 15.0%;GRPO 未超 SFT。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T16:37:41Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 6.6,
+        "recency": 9.0,
+        "popularity": 7.2,
+        "quality": 7.4,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04395v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04395v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.05456",
+      "title": "Prompt-to-Paper: Agentic AI System for Bioinformatics",
+      "authors": [
+        "Ramsha Kamran",
+        "Maheera Amjad",
+        "Zartasha Mustansar",
+        "Arsalan Shaukat",
+        "Salma Sherbaz",
+        "Muhammad U. S. Khan"
+      ],
+      "affiliations": [],
+      "summary": "现有自动写论文系统的三大毛病:引用不可核实、结果是编的、没有统一质量评价。Prompt-to-Paper 用一个多 agent 框架同时解决:检索层做 section-aware RAG + snowball 引文扩展、把每条 claim 锚在 60-100 篇可核实文献上;自主 coding agent 真的跑生信实验;再加八维自动评分和幻觉惩罚。五个生信案例都能产出可编译 PDF,平均质量提升 17.96 分,人评 7.0/10,单篇成本约 0.31 美元。",
+      "original_abstract": "While recent advances in large language models have enabled end-to-end automated manuscript generation, existing systems suffer from three critical deficiencies: (i) generated claims are not deterministically grounded in verifiable literature, (ii) experimental results are frequently fabricated rather than executed, and (iii) there exists no standardized, multi-dimensional framework to assess whether AI-generated manuscripts meet the quality and rigor required for real-world publication. We present Prompt-to-Paper, a multi-agent framework that directly addresses this evaluation gap through three integrated innovations. First, a deterministic retrieval-augmented generation pipeline with section-aware relevance scoring and snowball citation expansion grounds every claim in a verifiable corpus of 60--100 papers. Second, an autonomous coding agent executes real computational biology experiments replacing synthetic outputs with genuine numerical results. Third, an eight-dimensional automated quality scorer, benchmarked with approximate reference statistics from published papers and augmented with explicit hallucination penalties, provides standardized, reproducible quality assessments. The quality-driven improvement loop uses a context-rich reviser that routes each iteration to one of three researcher actions and fires a deep research cycle every ten iterations to re-run experiments and re-manuscript from stronger outputs. We validate the system on five bioinformatics case studies; all five cases compiled submission-formatted PDFs with zero out-of-range citations. The improvement loop raises manuscript quality by an average of +17.96 points on a 0--100 scale (maximum +26.04. As partial external checks, a human reviewer scored the five manuscripts at an average of 7.0 out of 10. Complete manuscripts are produced at approximately 0.31 USD per paper.",
+      "highlights": {
+        "contribution": "把可核实引用、真实实验执行、标准化质量评估同时嵌进多 agent 论文自动化流水线。",
+        "innovation": "确定性 RAG + 引文雪球 + 真跑代码 agent + 八维评分 + 十轮触发一次「深研究」的循环闭环。",
+        "method": "多 agent:检索/写作/编码/评审;section-aware RAG 打分并做雪球引文;coding agent 真跑生信实验;评审 agent 用八维度打分并回传修改建议;每 10 轮一次深研究再跑实验。",
+        "results": "5 个案例都生成合规 PDF,零越界引用;质量分平均 +17.96(最高 +26.04);人评 7.0/10;约 0.31 美元/篇。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T21:30:24Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "q-bio.QM"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 6.6,
+        "recency": 9.0,
+        "popularity": 7.0,
+        "quality": 7.0,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.05456v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.05456v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04528",
+      "title": "Measuring Harness-Induced Belief Divergence in Multi-Step LLM Agents",
+      "authors": [
+        "Haiwen Yi",
+        "Xinyuan Song"
+      ],
+      "affiliations": [],
+      "summary": "作者指出 agent benchmark 里的 harness(工具白名单、修复策略、验证策略、日志)本身会左右 agent 的多步信念,而不是「实现细节」。他们提出信念-rollout 诊断,让 agent 在不同 harness 下产生结构化 K 步轨迹,涵盖进度、风险、可恢复性等九个维度,把 harness 差异分成到达项和增长项。还提出 BIWM 协议规范化观察、暴露被屏蔽分支、扩展修复痕迹等,让不同 harness 视角的信念可对齐。",
+      "original_abstract": "Software-agent benchmarks usually report whether an agent solves a task, but the agent reaches that outcome through a harness that controls what it sees, which actions it can take, which failures are repaired, which states are verified, and which evidence is logged. We show that this harness can change the agent's multi-step beliefs even when the task, environment, and base LLM are fixed. We introduce a belief-rollout diagnostic that elicits structured K-step trajectories over progress, risk, recoverability, constraints, failure mode, uncertainty, future success, repair cost, and next action under alternative harnesses. We define a cross-harness belief divergence and decompose it into an arrival term for immediate interface shifts and a growth term for horizon-dependent belief changes. On controlled coding tasks and public-benchmark stress tests, blocked actions, compressed repairs, selective verification, and cost-aware evidence pruning often preserve terminal success while changing the beliefs that drive later decisions. We further introduce BIWM, a no-training protocol that canonicalizes observations, logs censored branches, expands repair traces, records verification masks, executes risky branches in shadow, and aligns belief trajectories across harness views. The results suggest that harness design is an experimental variable in agent evaluation, not an implementation detail. Our code is available at https://github.com/Hik289/Harness-induce-bias.git.",
+      "highlights": {
+        "contribution": "把 harness 设计正式提升为 agent 评测的实验变量,并给出可量化的信念偏移诊断。",
+        "innovation": "结构化 K 步信念 rollout + 跨 harness 分歧分解为到达/增长两项 + BIWM 对齐协议。",
+        "method": "在受控编码任务与公开基准压力测试上,交替 harness 设定(阻断动作、压缩修复、选择性验证、成本感知证据剪枝);采信念 rollout,计算跨 harness 分歧并分解;用 BIWM 对齐信念轨迹。",
+        "results": "多种 harness 能保持终端任务成功率但显著改变驱动后续决策的信念;BIWM 能在 harness 视角间对齐信念轨迹。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T22:22:39Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "agent benchmark"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 9.0,
+        "popularity": 6.4,
+        "quality": 7.0,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04528v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04528v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04240",
+      "title": "Biological Motifs for Agentic Control",
+      "authors": [
+        "Bogdan Banu"
+      ],
+      "affiliations": [],
+      "summary": "作者提出把系统生物学里的调控网络 motif 映射到 agentic 软件的接口设计,建议用五个 motif(前馈环、适应性免疫、线粒体信号、内共生、形态发生扩散)对应噪声抑制、分层安全、资源治理、神经符号整合、空间协同等模式。文章形式化了 Agentic Operad,并从 wiring diagram 派生 Kripke 式知识算子,证明了四条关于多智能体扩展的定理,附一个 1813 测试的参考实现。",
+      "original_abstract": "The transition of Large Language Models (LLMs) from passive generators to autonomous agents has introduced significant challenges in reliability, security, and state management. Current agentic architectures are often constructed ad-hoc, prone to hallucination cascades, infinite loops, and prompt injection attacks. This paper argues that many of these failure modes can be analyzed using control motifs long studied in systems biology, provided the comparison is made at the level of typed interfaces and coordination structure rather than literal biological mechanism.   We develop a typed interface correspondence between Gene Regulatory Networks and agentic software systems using polynomial functors and wiring diagrams. Five biological motifs are mapped to composable software design patterns: Coherent Feed-Forward Loops for noise suppression, Adaptive Immunity for layered security, Mitochondrial Signaling for resource governance, Endosymbiosis for neuro-symbolic integration, and Morphogen Diffusion for spatially varying coordination. An epistemic topology layer derives Kripke-style knowledge operators from the wiring diagram's observation structure and proves four predictive theorems for multi-agent scaling.   The core contributions are: (1) the Agentic Operad, a typed syntax for agent composition with provable error suppression bounds for feed-forward topologies; (2) an epistemic topology with four theorems (error amplification, sequential penalty, parallel acceleration, and tool density scaling) whose qualitative predictions are consistent with published multi-agent benchmarks; and (3) a six-layer progression from structure through development, grounded in autonomous learning frameworks and convergence proxies from the empirical literature. A reference implementation with 1,813 tests and 116 examples illustrates practical feasibility.",
+      "highlights": {
+        "contribution": "以生物调控 motif 作为 agentic 系统设计的类型化语法,给出可组合模式与四条预测定理。",
+        "innovation": "用多项式函子 + wiring diagram 把生物 motif 严格翻译成 agent 组合语法,并附 epistemic topology。",
+        "method": "构造 Agentic Operad 类型化组合语法;把 5 个生物 motif 落成设计模式;从 wiring diagram 推导 Kripke 型知识算子;定性对比公开多智能体基准。",
+        "results": "给出四条预测定理(误差放大、串行惩罚、并行加速、工具密度扩展),参考实现 1813 tests + 116 examples。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T11:30:45Z",
+      "categories": [
+        "cs.AI",
+        "q-bio.CB"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "autonomous agent",
+        "agent benchmark"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 9.0,
+        "popularity": 5.8,
+        "quality": 6.6,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04240v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04240v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04292",
+      "title": "Agentic SABRE: An Uncertainty-Aware Neuro-Symbolic Multi-Agent Framework for Adaptive Ransomware Detection",
+      "authors": [
+        "Henry Kabuye",
+        "Biju Issac",
+        "Jeyamohan Neera"
+      ],
+      "affiliations": [],
+      "summary": "现实的勒索软件对静态签名和单模型分类器几乎免疫。SABRE 用多 agent + 神经符号方案:语义表示 agent 与行为遥测 agent 分别给证据,决策层用 Monte Carlo Dropout 估计不确定性,再按风险分和不确定预算分流,高风险自动隔离、灰区丢给人。RDset 与 RanSMAP 上 AUC 保持 1.0,误升级率降低 4.9%,并配了可解释归因。",
+      "original_abstract": "Ransomware has evolved into a complex, adaptive, and fast-moving adversary category in which static signatures and monolithic classifiers fail to generalise under concept drift, evasion, and behavioural polymorphism. In this paper, we present Agentic SABRE (Semantic-Behavioural Arbitration for Ransomware Evaluation), an uncertainty-aware, neuro-symbolic, multi-agent framework for adaptive ransomware detection. SABRE fuses semantic, representation-based evidence with behavioural, time-window forensic telemetry and employs Monte Carlo Dropout inference to quantify epistemic uncertainty for each agent. We introduce a decision-layer orchestrator that performs risk- and uncertainty-aware triage using two interpretable thresholds: a risk score and an uncertainty budget. High-confidence, high-risk samples are automatically contained, while uncertain or borderline cases are escalated to human analysts, establishing a flexible computational contract between autonomous response and analyst oversight. To support auditability and trust, SABRE integrates post-hoc explainability mechanisms, including gradient saliency, permutation importance, and counterfactual analysis, enabling both local and global interpretation of agent decisions. Extensive evaluation on RDset and RanSMAP demonstrates that Agentic SABRE preserves perfect discrimination on saturated semantic datasets, with AUC equal to 1.0, while improving robustness under weak behavioural signals. It achieves up to a 4.9 percent relative reduction in false escalations at equal recall while maintaining calibrated predictive uncertainty. Counterfactual analysis further shows that semantic and behavioural decisions can be reversed with bounded perturbation cost, indicating stable and interpretable decision boundaries.",
+      "highlights": {
+        "contribution": "把不确定性感知的多智能体分诊引入勒索软件检测,兼顾自动响应与人机协作。",
+        "innovation": "语义 + 行为双 agent 的证据融合,加上基于风险和不确定性预算的双阈值决策器。",
+        "method": "语义 agent 处理表示证据,行为 agent 处理时间窗遥测;各 agent 用 MC Dropout 输出不确定性;决策层按风险/不确定阈值分流;辅以梯度显著、置换重要度、反事实解释。",
+        "results": "RDset/RanSMAP 上 AUC=1.0,同 recall 下误升级率降 4.9%,反事实分析显示决策边界稳定可解释。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T13:08:41Z",
+      "categories": [
+        "cs.AI",
+        "cs.CR"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 5.8,
+        "recency": 9.0,
+        "popularity": 5.8,
+        "quality": 6.8,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04292v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04292v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04215",
+      "title": "Anytime Plug-and-Play Control with Contract-Based Distributed MPC",
+      "authors": [
+        "Sabrina Bodmer",
+        "Danilo Saccani",
+        "Melanie N. Zeilinger",
+        "Andrea Carron"
+      ],
+      "affiliations": [],
+      "summary": "移动多机器人网络的通信拓扑天生会变,谁进谁出很难预先规定。作者提出一套只依赖本地通信的分布式 MPC,支持任意时刻新智能体加入或退出,不需要中心协调。方法用基于距离的邻居定义和从预测轨迹推出的合约,合约约束保证碰撞避免和约束满足。在多智能体自动驾驶场景里,包括高速反向行驶,仿真和真机都验证有效。",
+      "original_abstract": "A central challenge in many mobile multi-robot applications is that communication topologies are inherently time-varying. Agents may enter or exit the network and such changes cannot generally be restricted a priori. This work introduces a distributed multi-agent control algorithm based on local communication that supports anytime agent joining and leaving the communication network without centralized coordination. The method scales efficiently with the number of agents by relying on a distance-based neighbor definition and on contracts derived from predicted trajectories. The resulting contract constraints guarantee collision avoidance and constraint satisfaction. We validate the proposed method in an autonomous multi-agent driving scenario, demonstrating effective collision avoidance in high-speed, dynamic environments with agents moving in opposite directions, in both simulated and real-world experiments.",
+      "highlights": {
+        "contribution": "支持随时插拔且可证碰撞避免的分布式 MPC,面向通信拓扑动态变化的多机器人。",
+        "innovation": "用基于距离邻居 + 预测轨迹合约,把动态入网/出网做成本地一致的可扩展协调。",
+        "method": "每个 agent 用本地 MPC + 距离邻居定义,基于预测轨迹交换合约;合约约束保证碰撞避免与约束满足;支持任意时刻加入/退出。",
+        "results": "在多智能体自动驾驶场景(含高速反向行驶)上,仿真与真机均验证碰撞避免有效。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T10:06:49Z",
+      "categories": [
+        "math.OC",
+        "cs.RO"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 9.0,
+        "popularity": 5.6,
+        "quality": 6.8,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04215v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04215v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04219",
+      "title": "Agentic IoT: Architectures, Applications, and Challenges Toward the Internet of Agents",
+      "authors": [
+        "Rümeysa Hilal Sevinç",
+        "Bahaeddin Türkoğlu",
+        "İbrahim Kök"
+      ],
+      "affiliations": [],
+      "summary": "作者把 Agentic IoT 定义成下一代认知 IoT 范式,把感知/推理/规划/学习/行动能力融进现有 CPS。文章先解释它相对 AIoT、边缘智能、多智能体系统与 Internet of Agents 的定位,再综述现有工作,给出跨设备-边-雾-云连续体的整体架构框架,并讨论行业应用与研究挑战。",
+      "original_abstract": "The integration of AI into Internet of Things (AIoT) systems has gradually transformed them from passive data collection infrastructures into intelligent systems capable of anomaly detection, predictive maintenance, classification, forecasting, and optimization. However, most existing solutions still rely on task-specific models that infer from sensor data; thus, system-wide capabilities such as real-time reasoning, adaptive planning, autonomous coordination, learning, tool use, and contextual decision-making remain limited. This paper examines Agentic IoT as a next-generation cognitive IoT paradigm that integrates the perception, reasoning, planning, learning, and action capabilities of autonomous AI agents with cyber-physical systems. Agentic IoT aims to transform IoT from data-centric sensing and inference infrastructures into distributed cognitive agent ecosystems operating across the device/edge-fog-cloud continuum. The paper first grounds this transition as a paradigm shift and positions Agentic IoT in relation to AIoT, edge intelligence, multi-agent systems, and the Internet of Agents. It then systematically reviews current studies, presents a holistic architectural framework, discusses domain-specific application potential, and identifies key technical, operational, and research challenges together with future research directions.",
+      "highlights": {
+        "contribution": "系统性梳理 Agentic IoT 与相关范式的差异,并给出跨层架构框架与研究挑战清单。",
+        "innovation": "把 IoT 从数据驱动重新定位为分布式认知 agent 生态,并串起相关范式的定位关系。",
+        "method": "综述 + 架构框架文章,梳理范式定义、比对相邻概念、总结应用潜力与开放挑战。",
+        "results": "呈现一个跨设备/边/雾/云的整体架构框架和研究路线图,无具体数字结果。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T10:24:20Z",
+      "categories": [
+        "cs.AI",
+        "cs.MA",
+        "cs.NI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 9.0,
+        "popularity": 6.0,
+        "quality": 6.4,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04219v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.04219v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.04103",
+      "title": "Governing Generative AI Across Financial Institutions: An SR 26-2-Compatible Framework for Generative AI Risk Control",
+      "authors": [
+        "Yiqing Wang",
+        "Yixin Kang",
+        "Luyun Lin",
+        "Siqi Mao"
+      ],
+      "affiliations": [],
+      "summary": "SR 26-2 更新了美国银行模型风险管理框架,但把生成式 AI 和 agentic AI 排除在外。作者提出 GAICF,一个与 SR 26-2 兼容的生成式 AI 风险治理框架,把模型风险管理原则翻译成分层控制,专门覆盖那些不做信贷/承保决策但会影响解释、监控、合规文书的生成式 AI 用途,给银行、金融机构落地治理提供路线。",
+      "original_abstract": "The release of SR 26-2 marks a significant modernization of U.S. model risk management by replacing SR 11-7 with a more risk-based and materiality-sensitive supervisory framework. However, generative and agentic AI are excluded, creating an important governance challenge for banking organizations and other financial institutions. Although generative AI may not directly estimate credit risk or make underwriting decisions, its outputs can materially affect the surrounding control environment through monitoring interpretation, policy analysis, or adverse-action language drafting. These uses may influence how regulated financial decisions are explained, challenged, documented, and governed.   This paper proposes the Generative AI Control Framework (GAICF), an SR 26-2-compatible governance framework for generative AI-enabled financial workflows. The framework translates core model risk management principles into a layered control structure for generative AI applications that operate outside the formal model boundary but remain embedded within regulated banking processes. GAICF provides a practical approach for financial institutions seeking to align emerging generative AI governance practices with the risk-based supervisory expectations reflected in SR 26-2.",
+      "highlights": {
+        "contribution": "给美国银行监管新框架下的 GenAI/agentic AI 提供一套可操作的风险控制映射。",
+        "innovation": "把 SR 26-2 原则翻译成分层控制,覆盖在模型边界外但嵌入受监管流程的 GenAI 用例。",
+        "method": "政策/框架分析文章:梳理 SR 26-2 vs SR 11-7 差异,识别 GenAI 用途,构建分层治理控制并配套评审、文档、监控要求。",
+        "results": "输出 GAICF 框架文本与实施建议,无实验数字。"
+      },
+      "images": [],
+      "published_date": "2026-07-05T03:46:47Z",
+      "categories": [
+        "q-fin.RM",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 3.5,
+        "recency": 9.0,
+        "popularity": 5.2,
+        "quality": 6.2,
+        "recommendation": 5.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.04103v2",
+      "arxiv_url": "https://arxiv.org/abs/2607.04103v2",
+      "venue": null
+    }
+  ],
+  "total": 25
+}

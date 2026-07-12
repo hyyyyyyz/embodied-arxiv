@@ -1,0 +1,1197 @@
+{
+  "date": "2026-07-08",
+  "papers": [
+    {
+      "arxiv_id": "2607.07608",
+      "title": "Dual Latent Memory in Vision-Language-Action Models for Robotic Manipulation",
+      "authors": [
+        "Hongyu Qu",
+        "Jianzhe Gao",
+        "Xiaobin Hu",
+        "Shaohuan Yang",
+        "Xinlei Yu",
+        "Rui Yan",
+        "Wenguan Wang",
+        "Xiangbo Shu",
+        "Shuicheng Yan"
+      ],
+      "affiliations": [],
+      "summary": "现在的 VLA 基本还是马尔可夫地看当前帧做决策，长程任务里就吃亏。LaMem-VLA 把历史经验重构成潜在记忆 token，直接和当前观测一起塞进 VLA 的连续 embedding 序列里参与推理。SimplerEnv 和 LIBERO 上都刷出更好效果。",
+      "original_abstract": "Mainstream Vision-Language-Action (VLA) models predict actions primarily from the current observation under a Markovian assumption, thus struggling with long-horizon, temporally dependent tasks. Existing memory-augmented VLAs either expand the observation window or retrieve history from the memory bank as auxiliary policy-side context. However, they leave memory outside the native latent embedding space of VLA reasoning, preventing historical experience from being fluidly interleaved with multimodal reasoning and action formation. To this end, we introduce LaMem-VLA, a latent-memory-native framework that reconstructs historical experience into latent memory tokens and directly interweaves them with VLA reasoning. At its core, LaMem-VLA introduces four coordinated components: (i) a curator that organizes historical experience into two complementary short-term and long-term memory vaults; (ii) a seeker that queries both vaults using the multimodal cognition to retrieve context-relevant evidence; (iii) a condenser that reconstructs the retrieved evidence into compact short-term and long-term latent memory tokens; and (iv) a weaver that injects these memory tokens with the current observation and instruction into one continuous embedding sequence. By representing, retrieving, and consuming historical experience entirely in the same continuous latent space, LaMem-VLA enables memory to directly participate in VLA reasoning and guide action generation under a bounded context. Extensive experiments on SimplerEnv and LIBERO demonstrate the superiority of our LaMem-VLA.",
+      "highlights": {
+        "contribution": "提出潜在记忆原生的 VLA 框架 LaMem-VLA，把长短期历史直接编成 token 融入 VLA 推理链。",
+        "innovation": "不是外挂检索或者拉长上下文，而是把记忆做成 VLA 原生潜在空间里的连续 token，让记忆真正参与推理。",
+        "method": "四件套：curator 分短长期记忆库，seeker 检索相关证据，condenser 压缩成记忆 token，weaver 把记忆和当前观测/指令交织成一个连续 embedding 序列喂给 VLA。",
+        "results": "在 SimplerEnv 和 LIBERO 两个 VLA 通用 benchmark 上均超过现有记忆增强 VLA 基线（摘要未给具体数字）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T16:26:06Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 9.5,
+        "popularity": 8.0,
+        "quality": 8.5,
+        "recommendation": 8.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07608v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07608v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07287",
+      "title": "TouchWorld: A Predictive and Reactive Tactile Foundation Model for Dexterous Manipulation",
+      "authors": [
+        "Jianyi Zhou",
+        "Feiyang Hong",
+        "Yunhao Li",
+        "Yicheng Zhao",
+        "Yongjue Cen",
+        "Zirui Liu",
+        "Jiakang Huang",
+        "Zirui Chen",
+        "Ruiyang Zhang",
+        "Weizhuo Zhu",
+        "Xuhua Song",
+        "Shuo Yang"
+      ],
+      "affiliations": [],
+      "summary": "灵巧操作既要预测接触怎么演化又要快速反应打滑抓不稳。TouchWorld 用一个分层策略：VLM 顶层规划，触觉世界模型预测接触目标，视觉-触觉策略生成粗动作，再用高频触觉残差网络在线纠错。6 个长程接触任务上比最强基线在干净和扰动设置下分别高 15.7 和 18.5 个点。",
+      "original_abstract": "Dexterous manipulation in everyday environments requires both anticipation and reaction: a robot must predict how contact should evolve while rapidly correcting local errors caused by slip, misalignment, unstable grasping, or force mismatch. Vision and language provide semantic and geometric guidance, but they cannot reliably reveal hidden contact states such as force, slip, and contact stability. Although tactile sensing exposes these physical cues, most existing policies treat touch as a low-frequency observation stream within a monolithic action model, coupling slow task reasoning, action generation, and fast contact feedback in a single loop. We introduce TouchWorld, a predictive-and-reactive tactile foundation model for dexterous manipulation. TouchWorld uses a hierarchical policy that separates vision-language subtask planning, tactile world-model prediction, visuo-tactile goal-conditioned action generation, and high-frequency tactile residual refinement. A High-Level Planning Layer produces executable subtasks and predicts tactile subgoals; a Visuo-Tactile Goal-Conditioned Policy generates nominal action chunks; and a Tactile-Conditioned Refinement Policy performs online residual correction using recent tactile and proprioceptive feedback. By using touch as both a predictive contact reference and a fast feedback signal, TouchWorld preserves the semantic generalization of vision-language-action policies while improving local contact adaptation. Across six long-horizon and contact-rich dexterous manipulation tasks, TouchWorld achieves 65.0% success in the clean setting and 53.7% success under human perturbations, outperforming the strongest baseline by 15.7 and 18.5 percentage points, respectively.",
+      "highlights": {
+        "contribution": "提出触觉基础模型 TouchWorld，把触觉同时用作预测参考和高频反馈信号。",
+        "innovation": "分层解耦「慢的语义规划」「触觉世界模型预测」「视觉-触觉动作生成」「高频触觉残差修正」四层，触觉不再只是被压进单一策略。",
+        "method": "顶层 VLM 规划子任务并预测触觉子目标；中层 visuo-tactile 策略生成动作段；底层触觉残差策略基于最近触觉/本体反馈做在线修正。",
+        "results": "6 个长程接触任务：干净设置成功率 65.0%，人为扰动下 53.7%，分别比最强基线高 15.7 和 18.5 个点。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T11:28:13Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 9.5,
+        "popularity": 8.0,
+        "quality": 8.5,
+        "recommendation": 8.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07287v2",
+      "arxiv_url": "https://arxiv.org/abs/2607.07287v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07459",
+      "title": "EmbodiedGen V2: An Agentic, Simulation-Ready 3D World Engine for Embodied AI",
+      "authors": [
+        "Xinjie Wang",
+        "Liu Liu",
+        "Taojun Ding",
+        "Andrew Choi",
+        "Chaodong Huang",
+        "Mengao Zhao",
+        "Ziang Li",
+        "Jackson Jiang",
+        "Chunlei Yu",
+        "Shengxiang Liu",
+        "Wei Xu",
+        "Zhizhong Su"
+      ],
+      "affiliations": [],
+      "summary": "sim-ready 3D 资产生成进步很快，但把资产拼成能跑闭环的策略环境还是靠人。EmbodiedGen V2 打通资产、affordance、任务世界到多房间大场景的整条生成链，还支持 vibe coding。资产接受度 96.5%、任务世界 83.3% 直接可用；在线 RL 让仿真成功率从 9.7% 涨到 79.8%，迁到真机 21.7% 变 75.0%。",
+      "original_abstract": "We present EmbodiedGen V2, a generative 3D world engine for building executable sim-ready environments for embodied intelligence. Sim-ready 3D asset generation has advanced rapidly, yet assembling such assets into policy-ready task environments remains largely manual, limiting scalable closed-loop learning. EmbodiedGen V2 addresses this gap through a unified sim-ready representation that connects cross-simulator assets, interaction affordances, task-driven worlds, large-scale multi-room scenes, and stateful Vibe Coding into a generative, editable, and reusable simulation pipeline. The generated environments support manipulation, navigation, mobile manipulation, cross-simulator deployment, and embodied policy training. In evaluation, the asset pipeline achieves 96.5% human acceptance and 98.6% collision success, and 83.3% of task-driven worlds are directly usable for downstream simulation without manual modification. Online reinforcement learning with generated environments further improves simulation success from 9.7% to 79.8%, and transfers to real robots with task success increasing from 21.7% to 75.0%. These results establish EmbodiedGen V2 as scalable simulation infrastructure for training, evaluating, and deploying embodied policies.",
+      "highlights": {
+        "contribution": "提出生成式 3D 世界引擎 EmbodiedGen V2，一口气搞定 sim-ready 环境的资产、任务和大场景生成。",
+        "innovation": "把跨仿真器资产、交互 affordance、任务世界、多房间大场景和 stateful vibe coding 统一到一个可复用的生成管线里。",
+        "method": "统一 sim-ready 表示；资产/任务/场景各自的生成模块串起来；生成环境接入操作、导航、移动操作等下游策略训练；配合在线 RL 训练具身策略。",
+        "results": "资产人评接受度 96.5%，碰撞成功率 98.6%，83.3% 任务世界零改直接可用；在线 RL 让仿真成功率 9.7%→79.8%，真机 21.7%→75.0%。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T14:27:31Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "embodied policy"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 9.5,
+        "popularity": 8.5,
+        "quality": 8.5,
+        "recommendation": 8.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07459v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07459v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07101",
+      "title": "GeoProp: Grounding Robot State in Vision for Generalist Manipulation",
+      "authors": [
+        "Guoyang Zhao",
+        "Quanhao Qian",
+        "Gongjie Zhang",
+        "Wenhao Li",
+        "Jiuniu Wang",
+        "Xiaowei Lu",
+        "Deli Zhao",
+        "Ran Xu"
+      ],
+      "affiliations": [],
+      "summary": "机器人本体状态一般被当独立向量塞进策略，跟视觉 token 没有对齐，结果有的时候还不如纯视觉。GeoProp 直接把机械臂关键点投影到图像平面采样视觉特征，再用 FiLM 反向调制视觉。67 个任务里给 Diffusion Policy 平均涨 8.7%，真机涨 10.6%，只增 2-3% 参数。",
+      "original_abstract": "Proprioception is fundamental to robotic manipulation, yet standard fusion methods often treat it as an isolated vector lacking explicit alignment with visual tokens. Without a direct correspondence between 3D kinematics and 2D feature maps, manipulation policies struggle to ground the robot's state within the scene, frequently underperforming even vision-only baselines. To address this, we introduce GeoProp, a lightweight, plug-and-play adapter that aligns proprioception with vision through explicit geometric grounding and spatial feature sampling. GeoProp projects the robot state onto the image plane to sample localized visual features, constructing a grounded state token. It then injects state-derived spatial priors into the corresponding visual features via FiLM modulation. To capture motion intent, GeoProp further samples features at a short-horizon predicted coordinate derived from recent kinematics, providing look-ahead visual context. Across 67 tasks, GeoProp improves Diffusion Policy by 8.7% on 63 simulation tasks and pi_0 by 4.0% on the RoboTwin subset, and yields a 10.6% average gain across both policy families in the real world, while adding only 2-3% to the parameter count. These results demonstrate that GeoProp is a simple yet high-impact inductive bias for generalist embodied policies. Project page: https://alibaba-damo-academy.github.io/GeoProp/.",
+      "highlights": {
+        "contribution": "提出即插即用适配器 GeoProp，用几何投影把机器人状态显式对齐到视觉特征。",
+        "innovation": "不再把 proprioception 当孤立向量，而是通过 raymap 投影+采样让 3D 关节和 2D 视觉 token 直接对齐，还带前瞻位置提取运动意图。",
+        "method": "将机器人状态投影到图像平面采样局部视觉特征形成 grounded state token；用 FiLM 把状态先验注入视觉；再采样一个短程预测坐标位置的特征作为 look-ahead 上下文。",
+        "results": "63 个仿真任务给 Diffusion Policy 涨 8.7%，RoboTwin 上给 pi_0 涨 4.0%，真机平均涨 10.6%，只加 2-3% 参数。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T07:37:27Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 9.5,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 8.1
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07101v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07101v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07076",
+      "title": "PriGo: Test-Time Primitive Guidance to Diffusion and Flow Policies for Adaptive Robotic Manipulation",
+      "authors": [
+        "Zezeng Li",
+        "Enda Xiang",
+        "Thuy Tran",
+        "Di Huang",
+        "Momath Thiam",
+        "Liming Chen"
+      ],
+      "affiliations": [],
+      "summary": "扩散/流策略学操作动作很强，但常常只是学表面动作相关性，不理解意图。PriGo 在测试时插一个轻量原语预测网络 PANet，用可微原语引导去校正生成的动作轨迹。LIBERO、CALVIN、SIMPLER 和真机上都稳定提升长时任务和泛化。",
+      "original_abstract": "Imitation learning has enabled remarkable progress in robotic manipulation, especially with diffusion and flow-based policies that generate complex visuomotor behaviors directly from demonstrations. Yet, despite their strong performance, these policies often fail to generalize across tasks and environments. A key reason is that existing policies tend to imitate superficial action correlations rather than the underlying intent. Inspired by the compositional structure of human behaviors, we propose PriGo, a primitive-guided test-time adaptive framework for robust robotic manipulation. PriGo introduces PANet, a lightweight primitive prediction module that infers primitive distributions directly from observations. We further propose a differentiable primitive guidance mechanism that refines generated actions during inference, steering trajectories toward semantically consistent behaviors. Unlike prior primitive-conditioned approaches, PriGo operates entirely at test time and can be seamlessly integrated into pretrained diffusion and flow policies without retraining. Extensive experiments on LIBERO, CALVIN, SIMPLER, and real-world robotic tasks demonstrate that PriGo consistently improves robustness, long-horizon execution, and generalization ability across both diffusion and flow-based policies.",
+      "highlights": {
+        "contribution": "提出测试时原语引导框架 PriGo，无需重新训练就能给扩散和流策略加语义一致性约束。",
+        "innovation": "把原语条件从训练期挪到测试期，任何预训练扩散/流策略都能即插即用地引导。",
+        "method": "PANet 从观测推原语分布；然后构造可微原语引导项，在扩散/流策略的推理去噪过程中直接把动作往语义一致的方向拉。",
+        "results": "LIBERO、CALVIN、SIMPLER、真机四类任务上稳定提升长程执行和 OOD 泛化（摘要未给具体数字）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T07:08:11Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 9.5,
+        "popularity": 7.0,
+        "quality": 8.0,
+        "recommendation": 7.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07076v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07076v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07491",
+      "title": "Smooth Operator: A Real-Time Sampling-Based Algorithm for Kinematic Hand Retargeting",
+      "authors": [
+        "Robert Jomar Malate",
+        "Erik Bauer",
+        "Norica Bacuieti",
+        "Stefanos Charalambous",
+        "Elvis Nava",
+        "Robert K. Katzschmann",
+        "Benedek Forrai"
+      ],
+      "affiliations": [],
+      "summary": "遥操作数据质量直接卡死 VLA 和视频动作模型的上限。作者不用梯度法而是用采样式重定向 SBR 做人手到机械手的实时映射，避开局部最优带来的抖动。18 人真实用户实验里成功率 54.1%、NASA-TLX 认知负荷 36.4，都是同类最好。",
+      "original_abstract": "Advances in learning-based robotic manipulation, such as Vision-Language-Action (VLA) models and Video Action Models (VAMs), heavily rely on high-quality teleoperation data. Their capabilities are strictly upper-bounded by the quality of the underlying human demonstrations. Current gradient-based retargeting algorithms often converge to different local minima, resulting in jitter that affects data quality and teleoperation experience. To address this, we introduce the Sampling-Based Retargeter (SBR), a novel gradient-free retargeting method drawn from the rich literature of sampling-based control and explicitly designed for low-jitter, real-time kinematic retargeting. We evaluate SBR both in simulation and through a rigorous real-world user study involving 18 participants performing 3 complex manipulation tasks. Compared to gradient-based baselines, SBR achieved the highest overall task success rate (54.1%) while significantly reducing operator cognitive fatigue, recording the lowest NASA-TLX workload score (36.4 out of 100). Ultimately, we establish SBR as a highly effective, intuitive retargeter for dexterous manipulation, providing the community with a rigorous benchmarking methodology to guide future retargeting research.",
+      "highlights": {
+        "contribution": "提出无梯度、基于采样的手部运动重定向算法 SBR，用于低抖动实时遥操作。",
+        "innovation": "跳出主流梯度优化范式，改用采样式控制思路做重定向，抖动明显更低。",
+        "method": "输入是人手关键点，用采样式规划器生成多候选目标关节角并挑最优，无需梯度回传；在仿真和实机遥操作管线里直接部署。",
+        "results": "18 人 3 个复杂操作任务：SBR 平均成功率 54.1%（最高），NASA-TLX 负荷 36.4（最低）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T14:50:17Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 9.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07491v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07491v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07534",
+      "title": "Infinite Worlds with Versatile Interactions",
+      "authors": [
+        "Zelin Gao",
+        "Qiuyu Wang",
+        "Jiapeng Zhu",
+        "Jingye Chen",
+        "Zichen Liu",
+        "Qingyan Bai",
+        "Jiahao Wang",
+        "Yufeng Yuan",
+        "Hanlin Wang",
+        "Yichong Lu",
+        "Ka Leong Cheng",
+        "Haojie Zhang",
+        "Jian Gao",
+        "Tianrui Feng",
+        "Yuzheng Liu",
+        "Yao Yao",
+        "Yinghao Xu",
+        "Xing Zhu",
+        "Yujun Shen",
+        "Hao Ouyang"
+      ],
+      "affiliations": [],
+      "summary": "LingBot-World 2.0（也叫 LingBot-World-Infinity）在游戏世界模拟上做四件事升级：无界交互 horizon、720p 60fps 实时生成、更丰富的动作/事件、以及塞进 pilot+director 两个 agentic 角色。主力 14B 模型配 1.3B 蒸馏版，可以单卡部署。",
+      "original_abstract": "We present LingBot-World 2.0 (also known as LingBot-World-Infinity), an advanced iteration of LingBot-World featuring four distinct upgrades. (1) Our model achieves an unbounded interaction horizon while maintaining consistent output quality, benefiting from a carefully crafted causal pretraining paradigm. (2) Through distilling a real-time variant from the base model, our system guarantees rapid response time, sufficient to drive 720p video streams at 60 fps. (3) Compared to the previous version, this update introduces highly diverse interactive elements, comprising a broader spectrum of actions (e.g., attacking, archery, spell-casting, and shooting) alongside a richer variety of text-driven events. (4) We pioneer the integration of an agentic harness within the domain of world modeling, wherein a pilot agent is tasked with planning and executing character behaviors, while a director agent is responsible for synthesizing novel environmental elements as the scene progresses. Additionally, to facilitate a shared experience, we develop an interface that permits multiple players to simultaneously immerse themselves in this vivid world simulator. We pair our primary 14B model with a lightweight 1.3B counterpart, which supports effortless deployment on a single GPU.",
+      "highlights": {
+        "contribution": "推出 LingBot-World 2.0 无界交互游戏世界模型，配合 agentic 双 agent harness。",
+        "innovation": "在世界模型里首次系统集成 agentic harness：pilot 角色规划角色行为，director 生成新环境元素。",
+        "method": "因果预训练支持无界 horizon；蒸馏出实时 1.3B 版本；扩充攻击/射箭/施法等交互动作；配合两个 agent 交互；14B 主力+1.3B 轻量。",
+        "results": "支持 720p 60fps 实时流；1.3B 版可单卡部署；文本驱动事件更丰富（摘要偏产品能力，未给量化对比）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T15:33:25Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 9.5,
+        "popularity": 7.5,
+        "quality": 7.5,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07534v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07534v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07763",
+      "title": "Unlocking Temporal Generalization in Hamiltonian Video Dynamics Models",
+      "authors": [
+        "Eli Laird",
+        "Corey Clark"
+      ],
+      "affiliations": [],
+      "summary": "现有世界模型时间步长写死，做分层规划或 sim2real 时用不同分辨率查询就不行。作者盯上 Hamiltonian Generative Network，指出在有耗散、有外力时它长步长外推会崩，找到潜变量幅度爆炸和积分器截断误差两个原因，给出针对性修复，成功外推到训练分辨率以外的时间尺度。",
+      "original_abstract": "World models are typically trained to predict discrete-time physical dynamics with a fixed step size baked into the model weights, preventing prediction at variable temporal resolutions. This matters for hierarchical planning, sim-to-real transfer, and scientific or game-engine applications that must query the same dynamics at multiple timescales. Hamiltonian Generative Networks (HGN) offer a principled path forward, grounding predictions in a continuous-time energy function that is, in principle, independent of the observation frame rate. In practice, however, their temporal generalization breaks down in non-conservative settings. We show that in externally forced, dissipative environments, HGN rollouts at step sizes beyond the training regime fail due to distinct failure modes, including latent magnitude growth driven by an unconstrained action-force map, and global truncation error accumulation from an under-resolved integrator. We identify a targeted fix for each mechanism and demonstrate stable dynamics prediction at temporal resolutions well outside the training distribution. In a detailed analysis, we recommend several strategies for enabling temporal generalization in continuous-time video generation.",
+      "highlights": {
+        "contribution": "解决 Hamiltonian 视频动力学模型在非保守场景下的时间外推失效问题。",
+        "innovation": "识别出「无约束 action-force 映射的潜变量增长」和「欠分辨积分器的截断误差累积」两个具体失效机制并逐个修复。",
+        "method": "在 HGN 骨架上引入约束的动作-力映射和更细的积分器；分析潜在幅度增长和全局截断误差；给出稳定 rollout 的一套策略。",
+        "results": "在训练时间步以外的更大步长上仍能稳定 rollout（摘要以案例分析为主，未给量化数字）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T15:31:53Z",
+      "categories": [
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "dynamics model"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 9.5,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07763v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07763v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07196",
+      "title": "Validate the Dream Before You Trust Its Verdict: Admissibility for World-Model Simulators",
+      "authors": [
+        "Christian Oefinger",
+        "Finn Rasmus Schäfer",
+        "Korbinian Moller",
+        "Mattia Piccinini",
+        "Johannes Betz"
+      ],
+      "affiliations": [],
+      "summary": "视频世界模型越来越被用来给策略打分说是否成功，但世界模型本身没人认证。作者认为 FVD 那种视觉保真度不能保证动作跟随正确，应该借鉴 VV&A、SOTIF 那套安全关键认证做世界模型的可采纳性等级 L0-L4。以自动驾驶两个 WM 为例，视觉排名和动作跟随排名居然是反的。",
+      "original_abstract": "Across robotics, World Models (WMs) are increasingly used to evaluate action policies by simulating the consequences of actions in an imagined world, and returning a success or safety verdict. Yet a verdict is only as trustworthy as the WM that produced it, and the WM itself needs to be certified. In video-generation WMs, fidelity metrics such as Fréchet Video Distance (FVD) reward visual realism, but ignore whether the world responds correctly to the policy's actions, including those unseen in training. Classical simulation-based validation assumes a trusted simulator evaluating an untrusted policy, whereas generative WMs are themselves unverified learned artifacts. Hence, we argue that any WM used as a test oracle must first be accredited before its verdicts can serve as evidence. Building on credibility practices from safety-critical simulation, including Verification, Validation & Accreditation (VV&A), Safety of the Intended Functionality (SOTIF), and scenario-based testing standards, we define an admissibility ladder (L0-L4) that a WM must climb before its closed-loop verdicts are accepted as assurance evidence. Our framework is embodiment-agnostic, and is instantiated in autonomous driving (AD), where assurance methods for traditional simulation are most mature. Applied to two driving WMs, the lower rungs reveal a reversal: the model that ranks higher on visual generation quality (L0) ranks lower on action-following (L1-L2), so visual fidelity does not predict the action-robustness a closed-loop verdict depends on.",
+      "highlights": {
+        "contribution": "提出把世界模型当作测试预言机之前必须先认证的框架，给出 L0-L4 可采纳性阶梯。",
+        "innovation": "把 VV&A、SOTIF、scenario-based testing 这些安全关键领域的认证思路搬到生成式世界模型上，指出 FVD 类指标不够。",
+        "method": "定义 L0-L4 认证阶梯，从视觉生成质量到动作跟随再到闭环判决；以自动驾驶为具体化实例套两个驾驶 WM。",
+        "results": "两个驾驶 WM 上 L0 视觉排名和 L1-L2 动作跟随排名相反，说明视觉保真度不能预测闭环判决可靠性（无标准 benchmark 数字）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T09:30:31Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.LG",
+        "cs.SE"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 9.5,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 6.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07196v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07196v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.06988",
+      "title": "WAM-TTT: Steering World-Action Models by Watching Human Play at Test Time",
+      "authors": [
+        "Yusen Feng",
+        "Bingchen Han",
+        "Jiangran Lyu",
+        "Kai Liu",
+        "Yixin Zheng",
+        "Yuxuan Wan",
+        "Weiheng Liu",
+        "Sun Han",
+        "Ruiqin Li",
+        "Yulong Zhang",
+        "Fangfu Liu",
+        "Xuesong Shi",
+        "Libin Liu",
+        "Yizhou Wang",
+        "Zhizheng Zhang",
+        "He Wang"
+      ],
+      "affiliations": [],
+      "summary": "想让机器人基础模型 RFM 换个任务或者用户偏好，一般还得再采数据再微调。WAM-TTT 直接用人视频做测试时训练，把人视频吸收成一个轻量自适应记忆塞进冻结的 WAM 里；测试时只要人视频就行，不用机器人动作也不用标注。多种操作任务上比 in-context 人视频条件基线稳定更好。",
+      "original_abstract": "Steering robot foundation models (RFMs) toward new task variants or user-preferred behaviors remains challenging, often requiring additional robot demonstrations, task-specific fine-tuning, or long-context conditioning. We present WAM-TTT, a test-time training framework for steering world action models from raw human videos. Rather than treating human videos as trajectories to imitate, WAM-TTT absorbs them into a lightweight adaptive memory inside a frozen WAM through self-supervised video prediction. To make this memory useful for control, we introduce a meta-training stage that aligns human demonstrations with robot behaviors using paired human-robot data and a key--value memory reconstruction objective. At test time, only unlabeled human videos are required to adapt the memory, while the pretrained WAM remains frozen. This enables efficient and reusable steering without robot actions, human-side annotations, or task-specific fine-tuning, while preserving the generalization ability of the foundation model. Extensive experiments show that WAM-TTT consistently outperforms in-context human-video conditioning baselines across diverse manipulation tasks and generalization settings.",
+      "highlights": {
+        "contribution": "提出用人视频做测试时训练来 steering 世界动作模型的 WAM-TTT 框架。",
+        "innovation": "把人视频当自适应记忆而非模仿轨迹；引入 meta 训练阶段用人-机对数据把人示范映到机器人行为空间。",
+        "method": "预训练 WAM 冻结；meta 阶段用配对人-机数据+key-value 记忆重构目标做对齐；测试时只用未标注人视频做自监督视频预测更新记忆。",
+        "results": "多种操作任务和泛化设置里都超过 in-context 人视频条件基线（摘要未给具体数字）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T04:23:22Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "WAM",
+      "matched_keywords": [
+        "world action model",
+        "wam "
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 9.5,
+        "popularity": 8.0,
+        "quality": 8.0,
+        "recommendation": 8.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.06988v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.06988v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.08436",
+      "title": "EgoWAM: World Action Models Beyond Pixels with In-the-Wild Egocentric Human Data",
+      "authors": [
+        "Baoyu Li",
+        "Xinchen Yin",
+        "Mengying Lin",
+        "Yixin Zhang",
+        "Danfei Xu"
+      ],
+      "affiliations": [],
+      "summary": "第一人称人类视频用来监督机器人操作时，物体场景等可迁移信息会跟人形态、头动、行为风格这些不可迁移的东西缠一起。EgoWAM 把 policy 骨架、动作头、数据配比全固定，只换世界预测目标做对照实验：像素预测迁移弱，DINO 让 OOD 泛化涨到 4 倍，3D motion flow 让 in-domain 涨 20-30%。",
+      "original_abstract": "Egocentric human data offers scalable supervision for robot manipulation. However, behavior cloning entangles transferable content like objects, scenes, and task semantics, with non-transferable factors like human morphology, head motion, and behavioral style. We study whether World Action Models (WAMs) provide a better training signal by requiring policies to predict not only actions, but also how the scene evolves. The central question is what world representation best enables human-to-robot transfer. We hypothesize that an effective world target should abstract appearance, capture agent-invariant physical effects, and separate camera motion from environment change. We introduce EgoWAM, a controlled human-robot co-training framework that fixes the policy backbone, action head, and data mixture while varying only the world prediction target, comparing Pixel, DINO, and 3D motion flow. Across three real-world bimanual tasks, WAM co-training scales more effectively with in-the-wild egocentric human data than behavior cloning. Pixel-based prediction transfers weakly, while DINO and 3D flow yield substantial gains: DINO improves out-of-distribution object and scene generalization by up to 4x, and 3D flow improves in-domain performance by 20-30%. More details: https://gatech-rl2.github.io/egowam.github.io",
+      "highlights": {
+        "contribution": "提出 EgoWAM 受控人-机协训框架，系统比较 WAM 世界预测目标对 human-to-robot 迁移的影响。",
+        "innovation": "只变世界预测目标做严格 ablation，指出「抽象外观、捕捉 agent 无关物理效果、分离相机与环境运动」是好的世界目标。",
+        "method": "固定 policy backbone、动作头、数据混合；世界目标依次换成 Pixel、DINO、3D motion flow；三个真实双臂任务上做人-机 co-training。",
+        "results": "像素预测迁移弱；DINO 让 OOD 物体/场景泛化提升最多 4×；3D flow 让 in-domain 提升 20-30%。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T16:11:37Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "WAM",
+      "matched_keywords": [
+        "world action model",
+        "wam "
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 9.5,
+        "popularity": 7.5,
+        "quality": 8.5,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.08436v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.08436v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07168",
+      "title": "NoDrift3R: Raymap-Guided Coupling for Drift-Robust Unposed Feed-Forward 3D Reconstruction",
+      "authors": [
+        "Xiangyu Sun",
+        "Liu Liu",
+        "Seungkwon Yang",
+        "Jingbing Han",
+        "Seungtae Nam",
+        "Zhizhong Su",
+        "Eunbyung Park"
+      ],
+      "affiliations": [],
+      "summary": "无位姿前馈 3DGS 处理长序列时会因为累积位姿漂移把几何和渲染都拖垮。NoDrift3R 引入 raymap 引导耦合模块把高斯中心锚到 raymap 几何上，联合优化 RGB、raymap 一致性和相机正则；再配合双频视角调度，跨域和长序列上位姿和渲染都更稳。",
+      "original_abstract": "Pose-Free Feed-forward 3D Gaussian Splatting (3DGS) has recently emerged as a powerful paradigm for fast scene reconstruction. However, its performance degrades significantly in long image sequences due to cumulative camera pose estimation drift, which propagates errors into geometric modeling and severely limits rendering fidelity. In this work, we revisit the long-sequence bottleneck and identify pose drift as the primary factor restricting reconstruction quality. Furthermore, while SfM-based pseudo ground-truth poses introduce sensor noise, purely rendering-based supervision often leads to optimization instability and local minima due to the entangled optimization of geometry and pose. To address the challenges, we propose a synergistic pose-free framework that explicitly couples geometry and appearance via a Raymap-Guided Coupling Module (RGC). Concretely, we anchor Gaussian centers to raymap-induced geometry and jointly optimize RGB reconstruction, raymap consistency, and camera regularization under a unified objective, yielding a bidirectional feedback loop: stronger geometry improves rendering, and appearance supervision in turn refines geometry and pose. To further stabilize learning across wide temporal ranges, we introduce a Dual-Frequency Viewpoint Scheduling strategy that combines easy-to-hard interval expansion with replay of short-interval pairs. Extensive experiments across in-domain and cross-domain datasets show consistent gains in both rendering and pose estimation, with notably improved robustness on long sequences. Ablation studies validate our central insight: explicitly designed geometry-appearance synergy is the key to scalable and drift-robust pose-free feed-forward 3D reconstruction.",
+      "highlights": {
+        "contribution": "提出 raymap 引导耦合的无位姿前馈 3DGS 框架 NoDrift3R，专治长序列位姿漂移。",
+        "innovation": "把 raymap 作为几何锚点显式耦合几何和外观；引入双频视角调度（先易后难间隔扩张+短间隔 replay）稳定长序列训练。",
+        "method": "Raymap-Guided Coupling Module 把高斯中心锚到 raymap；统一目标同时优化 RGB 重建、raymap 一致性和相机正则；双频视角调度做课程学习。",
+        "results": "跨 in-domain 和跨域数据集里渲染和位姿都涨，长序列鲁棒性明显提升（摘要以稳定性提升为主）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T09:02:18Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "feed-forward 3d",
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 9.5,
+        "popularity": 7.0,
+        "quality": 8.0,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07168v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07168v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07452",
+      "title": "GeoGS-SLAM: Geometry-Only Gaussian Splatting for Dense Monocular SLAM",
+      "authors": [
+        "Lipu Zhou",
+        "Yaoyun Kang",
+        "Junxiang Pang",
+        "Shengkai Sun",
+        "Tingting Bao",
+        "Kehan Wang"
+      ],
+      "affiliations": [],
+      "summary": "SLAM 里几何比外观重要，可现有 3DGS SLAM 还两个一起建。作者提 GeoGS，只保留 3DGS 的空间参数，每个 primitive 参数减 80% 以上；再配合 local-plane 初始化和 loop closure 时的全局 map 更新，几何重建又快又稳。",
+      "original_abstract": "Dense visual SLAM is a fundamental problem in robotics. Recent advances in 3DGS have demonstrated its potential for dense SLAM. Existing 3DGS frameworks focus on both appearance and geometry modeling. However, scene geometry is typically more critical for SLAM than novel view synthesis because downstream robotic tasks, such as navigation and obstacle avoidance, rely primarily on accurate spatial geometry rather than photorealistic rendering. This observation raises a natural question: Is it feasible for 3DGS to perform 3D reconstruction without scene appearance modeling? Motivated by this, we propose Geometry-only Gaussian Splatting (GeoGS), which directly reconstructs scene geometry, and further present GeoGS-SLAM, a dense visual SLAM system built upon this representation. Specifically, GeoGS retains only spatial parameters to reduce the number of per-primitive parameters by over 80%. In contrast to existing 3DGS methods, GeoGS focuses solely on geometric reconstruction, which significantly reduces the number of Gaussian primitives, accelerates geometric convergence, and enhances robustness to illumination variations. In addition, we present an effective training framework that optimizes the Gaussian primitives via single-view and multi-view geometric and photometric supervision, and speeds up geometry convergence with a local-plane driven initialization that better aligns primitives with local structures. Furthermore, we introduce a map update strategy for loop closure that globally transforms the Gaussian map to align it with the corrected pose estimates, thereby preventing map tearing caused by inconsistent per-viewpoint pose corrections in existing methods. Extensive experiments on synthetic and real-world benchmarks demonstrate that our method outperforms SOTA methods in terms of online mapping efficiency and geometric reconstruction quality.",
+      "highlights": {
+        "contribution": "提出 Geometry-only Gaussian Splatting 及基于它的 GeoGS-SLAM 稠密单目 SLAM 系统。",
+        "innovation": "去掉外观建模只留几何，大幅精简 3DGS，配合 raymap 全局更新解决 loop closure 时的 map tearing。",
+        "method": "只保留空间参数的 primitive；单视图+多视图几何/光度联合监督；local-plane 驱动初始化；loop closure 时全局变换 Gaussian map 对齐修正后的位姿。",
+        "results": "合成和真实 benchmark 上 online 建图效率和几何重建质量超 SOTA（摘要未给具体数字）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T14:22:05Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "novel view synthesis",
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 9.5,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07452v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07452v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07817",
+      "title": "DreamCharacter-1: From 3D Generative Foundation Models to Product-Ready Character Generation",
+      "authors": [
+        "Weizhe Liu",
+        "Yunjie Wu",
+        "Xiangqian Shu",
+        "Guangwei Wang",
+        "Xiangyu Xu",
+        "Peng Li",
+        "Yujie Li",
+        "Hengkai Guo"
+      ],
+      "affiliations": [],
+      "summary": "DreamCharacter-1 在预训练 3D 基础模型上做轻量后适配，让它能直接产出可上生产线的高保真 3D 角色。三件套：几何后训练细节增强、纹理后训练+遮挡区域修补、推理加速。定量和定性都超现有角色生成方法。",
+      "original_abstract": "We present DreamCharacter-1, a lightweight post-adaptation framework that calibrates pretrained 3D foundation models toward high-fidelity, production-ready 3D character generation. Building upon a 3D foundation backbone, our pipeline incorporates three task-oriented components: (1) geometry post-training, which enhances fine-grained surface details through geometric preference optimization; (2) texture post-training, which synthesizes high-resolution textures and refines the appearance of occluded regions; and (3) inference acceleration, which enables scalable deployment. Extensive quantitative and qualitative experiments demonstrate that DreamCharacter-1 produces visually compelling and structurally robust 3D character assets, consistently surpassing state-of-the-art character generation methods.",
+      "highlights": {
+        "contribution": "提出 3D 角色生成的轻量后适配框架 DreamCharacter-1，把 3D 基础模型往生产可用方向对齐。",
+        "innovation": "把 3D 基础模型的通用能力通过任务定向后训练迁到高保真角色资产上，几何和纹理分开优化。",
+        "method": "在 3D 基础 backbone 上加：几何后训练用几何偏好优化；纹理后训练高分辨率合成+遮挡区外观修补；推理加速。",
+        "results": "定量+定性对比稳超 SOTA 角色生成方法（摘要未给具体数字）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T18:02:57Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "3d foundation model"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 9.5,
+        "popularity": 6.5,
+        "quality": 7.0,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07817v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07817v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07320",
+      "title": "SoccerNet 2026 Challenges Results",
+      "authors": [
+        "Anthony Cioppa",
+        "Silvio Giancola",
+        "Håkan Ardö",
+        "Mohamad Dalal",
+        "Jan Held",
+        "Jérémie Ochin",
+        "Jiayuan Rao",
+        "Karen Sanchez",
+        "Renaud Vandeghen",
+        "Artur Xarles",
+        "Olivier Barnich",
+        "Albert Clapés",
+        "Mathieu Delvaux",
+        "Sergio Escalera",
+        "Bernard Ghanem",
+        "Cédric Hons",
+        "Antoine Houet",
+        "Sotiris Manitsaris",
+        "Tom Michel",
+        "Pierre Miralles",
+        "Thomas B. Moeslund",
+        "Mikael Nilsson",
+        "Bogdan Stanciulescu",
+        "Marc Van Droogenbroeck",
+        "Yanfeng Wang",
+        "Weidi Xie",
+        "Faisal Altawijri",
+        "Mohamed Atef",
+        "Semen Budennyy",
+        "Vasiliy Chelpanov",
+        "Puhua Chen",
+        "Yixin Chen",
+        "Lechao Cheng",
+        "Jianling Chu",
+        "Ju-Seong Do",
+        "Oleg Durygin",
+        "Omar Fetouh",
+        "Mirco Fuchs",
+        "Youssef Ghallab",
+        "Falguni Ghosh",
+        "Wonjun Heo",
+        "Yufeng Hu",
+        "Weixuan Huang",
+        "Phuong-Linh Huynh-Ha",
+        "Matvey Isupov",
+        "Yangguang Ji",
+        "Siyuan Jiang",
+        "Zhenxiang Jiang",
+        "Wonyong Jo",
+        "Ho-Young Jung",
+        "SeongHeon Kang",
+        "MinJae Kim",
+        "Youngseon Kim",
+        "Jakub Komosa",
+        "Artem Konshin",
+        "Trung-Hoang Le",
+        "Jongmin Lee",
+        "Lingling Li",
+        "Litao Li",
+        "Vadim Linkov",
+        "Fang Liu",
+        "Haoxuan Ma",
+        "Shun Makino",
+        "Ismail Mathkour",
+        "Konstantin Mitin",
+        "Mikhail Moiseev",
+        "Takumi Nagaya",
+        "Yuki Nakamura",
+        "Thanh-Khoi Nguyen",
+        "Hoang-Phuc Nguyen",
+        "Trong-Thuan Nguyen",
+        "Christian Orduz",
+        "Kwanyong Park",
+        "Fabian Perez",
+        "Parthsarthi Rawat",
+        "SuHyun Rim",
+        "Hoover Rueda-Chacón",
+        "Atom Scott",
+        "Minori Sugimura",
+        "Yuyang Sun",
+        "Shengeng Tang",
+        "Minh-Triet Tran",
+        "Ikuma Uchida",
+        "Juan Vanegas",
+        "Thanh-Nhan Vo",
+        "Jiangtao Wang",
+        "Yaxiong Wang",
+        "Xiaogang Wang",
+        "Ruifeng Wang",
+        "Rio Watanabe",
+        "Jiali Wen",
+        "Yongliang Wu",
+        "Di Yang",
+        "Xu Yang",
+        "Zhuo Yang",
+        "Xinyu Ye",
+        "Yibo Yu",
+        "Zihan Zhai",
+        "Yu Zhang",
+        "Zhenyu Zhao",
+        "Zhun Zhong",
+        "Yixi Zhou",
+        "Xingyu Zhu",
+        "Wenbo Zhu",
+        "Julian Ziegler"
+      ],
+      "affiliations": [],
+      "summary": "SoccerNet 2026 是第六届足球视频理解 benchmark 竞赛，涵盖球动作预测、球员绑定动作 spotting、多视新视角合成、球员定位和多模态问答五个任务。427 队 1129 次提交，28 队交了技术报告，本文汇总榜单和领先方案。",
+      "original_abstract": "The SoccerNet 2026 Challenges constitute the sixth annual edition of the SoccerNet open benchmarking effort, dedicated to advancing computer vision research in sports video understanding. This year's challenges span five vision-based tasks: (1) Ball Action Anticipation, predicting the timing and class of ball-related actions within a short future window from a preceding observation window; (2) Player-Centric Ball Action Spotting, temporally localizing and classifying ball-related actions while assigning each action to the acting player through team affiliation and jersey number; (3) Novel View Synthesis, rendering images from unobserved camera poses in multi-view football scenes; (4) Spiideo SoccerNet Synloc, localizing athletes in real-world pitch coordinates from a single calibrated static-camera image; and (5) Visual Question Answering, answering multiple-choice questions about football broadcasts across text, image, and video inputs. For each task, participants were provided with annotated data, a unified evaluation protocol, and a public baseline. This edition saw broad participation, with 427 teams submitting 1,129 entries across the five tasks and 28 teams contributing reviewed technical reports. This paper describes each task and its evaluation protocol, presents the challenge leaderboards, and summarizes the leading submissions, with the aim of documenting the current state of each task as measured on held-out challenge data.",
+      "highlights": {
+        "contribution": "组织 SoccerNet 2026 五任务足球视频理解竞赛并总结领先方案。",
+        "innovation": "首次把 novel view synthesis、球员级动作绑定、单张定位、VQA 一起纳入同一届 benchmark。",
+        "method": "对每个任务提供标注数据、统一评测协议和公开 baseline；参赛方各自实现方案；汇总排行和技术报告。",
+        "results": "五任务榜单公布：427 队 1129 次提交，28 份技术报告。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T12:06:48Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "novel view synthesis"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 9.5,
+        "popularity": 6.0,
+        "quality": 6.5,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07320v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07320v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07820",
+      "title": "DeepSearch-World: Self-Distillation for Deep Search Agents in a Verifiable Environment",
+      "authors": [
+        "Xinyu Geng",
+        "Xuanhua He",
+        "Sixiang Chen",
+        "Yanjing Xiao",
+        "Fan Zhang",
+        "Shijue Huang",
+        "Haitao Mi",
+        "Zhenwen Liang",
+        "Tianqing Fang",
+        "Yi R. Fung"
+      ],
+      "affiliations": [],
+      "summary": "训 tool-use agent 自我进化难：SFT 靠固定教师轨迹、稀疏奖励 RL 又给不出长程监督。DeepSearch-World 造了一个可验证确定性的搜索/阅读环境和 420K 多跳 QA 任务，配 DeepSearch-Evolve 做轨迹生成-过滤-混合-微调迭代自蒸馏。不靠更强模型蒸馏，9B 就在 BrowseComp 31.2%、GAIA 61.5%、HotpotQA 93.4%。",
+      "original_abstract": "Training tool-use agents to improve from their own experience remains challenging, as supervised fine-tuning relies on fixed teacher-distilled trajectories, while sparse-reward reinforcement learning provides weak supervision for long-horizon interactions. We present DeepSearch-Evolve, a self-distillation framework for web agents built on DeepSearch-World, a deterministic and verifiable environment with reproducible search and page-reading tools. DeepSearch-World contains 420K multi-hop QA tasks constructed from entity-level random walks and supports key agentic cognitive behaviors useful for self-evolving, including progress verification, grounded reflection, and failure recovery. DeepSearch-Evolve iteratively performs trajectory generation, filtering, data mixing, and fine-tuning to train stronger agents. Without distillation from more capable models, DeepSearch-World-9B achieves competitive performance compared with open-source agents, reaching 31.2% on BrowseComp, 61.5% on GAIA, and 93.4% on HotpotQA, showing that verifiable environments enable scalable self-evolution for long-horizon web agents. We will release the environment, 420K training pool, validation set, model, and code to facilitate future research on self-improving deep search agents.",
+      "highlights": {
+        "contribution": "提出 DeepSearch-World 可验证 web agent 环境和自蒸馏训练框架 DeepSearch-Evolve。",
+        "innovation": "环境由实体级随机游走造出 420K 多跳 QA，天然支持 progress verification、grounded reflection、failure recovery 等 agent 认知行为。",
+        "method": "确定性搜索/阅读工具+可验证奖励；agent 迭代生成轨迹→过滤→数据混合→SFT；不依赖更强模型蒸馏。",
+        "results": "DeepSearch-World-9B：BrowseComp 31.2%、GAIA 61.5%、HotpotQA 93.4%，与开源 agent 相当。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T18:03:41Z",
+      "categories": [
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "tool-use agent",
+        "web agent"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 9.5,
+        "popularity": 8.0,
+        "quality": 8.0,
+        "recommendation": 7.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07820v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07820v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07321",
+      "title": "From Atomic Actions to Standard Operating Procedures: Iterative Tool Optimization for Self-Evolving LLM Agents",
+      "authors": [
+        "Haipeng Ding",
+        "Yuexiang Xie",
+        "Zhewei Wei",
+        "Yaliang Li",
+        "Bolin Ding"
+      ],
+      "affiliations": [],
+      "summary": "现有 agent 框架只给一堆原子工具，每次重复的工作流都得从头拼低层逻辑，浪费也易错。EvoSOP 让 agent 从执行轨迹里抽出 SOP 变成可复用的高阶工具，然后通过构建-合并-评估-剪枝的生命周期不断优化工具集。实验显示成功率涨、交互轮数明显降。",
+      "original_abstract": "Tool utilization enables Large Language Model (LLM) agents to interact with the real world and resolve complex tasks. However, existing agent frameworks predominantly rely on static toolsets composed of granular atomic actions (e.g., basic file I/O or single-turn search), which forces agents to reinvent low-level logic for every recurring workflow, leading to increased reasoning overhead and failure rates. In this study, we propose that agents can achieve self-evolution by synthesizing these atomic actions into reusable Standard Operating Procedures (SOPs), which function as callable higher-order tools that encapsulate multi-step logic. We further introduce EvoSOP, a framework that empowers agents to extract SOPs from execution trajectories and iteratively optimize the toolset through a systematic lifecycle of construction, merging, evaluation, and pruning. Extensive experiments demonstrate that EvoSOP significantly boosts task success rates while substantially reducing the number of interaction rounds compared to baselines. Our analysis also reveals that iterative tool optimization fosters reliable and efficient tool-use patterns, providing a scalable pathway for the development of self-evolving agents.",
+      "highlights": {
+        "contribution": "提出 EvoSOP 框架，让 LLM agent 从原子动作里合成 SOP 高阶工具并自我进化工具集。",
+        "innovation": "把 SOP 当可调用工具在 agent 内部沉淀，工具集本身还带完整生命周期（build/merge/eval/prune）。",
+        "method": "Agent 在执行时抽取 SOP，把多步逻辑包成高阶可调用工具；按生命周期做工具构建、合并、评估、剪枝；反复迭代。",
+        "results": "多 benchmark 上任务成功率显著涨、交互轮数明显降（摘要未给具体数字）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T12:09:49Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.MA"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 9.5,
+        "popularity": 7.5,
+        "quality": 7.5,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07321v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07321v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.06990",
+      "title": "A Closed-Loop Multi-Agent Framework for Robust Multi-Robot Manipulation",
+      "authors": [
+        "Yi-Xiang He",
+        "Lan Wei",
+        "Haoming Cen",
+        "Jian-Jian Jiang",
+        "Zhuohao Li",
+        "Guanxing Lu",
+        "Yihan Yang",
+        "Dandan Zhang",
+        "Wei-Shi Zheng"
+      ],
+      "affiliations": [],
+      "summary": "多机器人做长程任务需要 LLM 规划和物理执行紧密结合，但现有方案要么单机契合接触操作却没协调、要么多机规划却把操作理想化。作者上分层闭环三 agent 框架：Planning 分子任务、每个机器人的 Manipulation agent 自适应用工具、Verification agent 监测执行结果做语义纠错。真机实验成功率明显更高。",
+      "original_abstract": "Multi-robot systems provide the parallelism and redundancy necessary for long-horizon tasks, while Large Language Models (LLMs) offer the reasoning capabilities to decompose these objectives into actionable plans. However, effectively grounding this high-level reasoning in physical multi-robot execution remains an open challenge. Existing LLM-based approaches fall mainly into two categories: Single-robot methods achieve robust contact-rich manipulation but lack the coordination mechanisms required for tasks spanning multiple workspaces. Current multi-robot frameworks focus on high-level planning, often treating manipulation as an idealized primitive that fails to account for real-world execution uncertainties. To address this, we propose a hierarchical closed-loop agentic LLM-based framework to ensure robust multi-robot manipulation. Our system consists of three specialized agents: the Planning Agent decomposes instructions into allocated sub-tasks, the Manipulation Agent for each robot executes actions via adaptive tool use, and the Verification Agent closes the loop by monitoring physical outcomes and feeding back semantic corrections. Extensive real-world experiments demonstrate that our framework achieves superior success rates, ensures robust adaptability ranging from single to cross workspace manipulation, and offers a generalizable approach for diverse manipulation tasks.",
+      "highlights": {
+        "contribution": "提出层次化闭环多 agent LLM 框架，端到端解决多机器人跨工位的鲁棒操作。",
+        "innovation": "把 Verification agent 显式加进闭环，用物理执行结果反馈来做语义纠错，而不是把操作当理想原语。",
+        "method": "Planning agent 拆子任务并分配；每台机器人的 Manipulation agent 自适应选工具执行；Verification agent 监测物理结果并反馈修正。",
+        "results": "真机多任务实验成功率超基线，跨单/多工位场景鲁棒（摘要未给具体数字）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T04:23:41Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "agent framework",
+        "planning agent"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 9.5,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.06990v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.06990v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07740",
+      "title": "Jet-Long: Efficient Long-Context Extension with Dynamic Bifocal RoPE",
+      "authors": [
+        "Haozhan Tang",
+        "Zerui Wang",
+        "Yuxian Gu",
+        "Song Han",
+        "Han Cai"
+      ],
+      "affiliations": [],
+      "summary": "LLM 部署到 RAG、代码库、agentic 工作流后，累积推理和工具轨迹动辄超预训练窗口一个量级。Jet-Long 提出无 tune 零样本长上下文：一个本地 RoPE 保真窗口+一个长程窗口，长程 rescaling 随序列长度动态调，短短不变形。Qwen3 上 RULER 涨 2-4.8 分，H100 上 prefill 到 FA2 1.39×。",
+      "original_abstract": "Modern LLMs are increasingly deployed in long-context applications such as retrieval-augmented generation, repository-level coding, and agentic workflows whose accumulated reasoning and tool traces routinely push the input an order of magnitude past the pretraining window, making zero-shot context extension the dominant deployment path for open-weight checkpoints. Most existing zero-shot methods fix a single rescaling factor up front, so an aggressive factor sacrifices short-context fidelity while a conservative one breaks down at long contexts. We propose Jet-Long, a tuning-free zero-shot method that pairs a local RoPE-faithful window with a long-range window whose rescaling factor adapts dynamically to the current sequence length, recovering the base model exactly at short inputs while extrapolating cleanly at long ones. An inclusion-exclusion attention merge and an on-the-fly RoPE correction rotation make the bifocal construction essentially free at inference; fused into a single CuTe kernel, long-context prefill reaches up to $1.39\\times$ FA2 throughput on H100 (approaching the Hopper-only FA4), and single-batch generation incurs $\\le 4\\%$ overhead at every length. On Qwen3-1.7B/4B/8B up to 128K context, Jet-Long leads RULER by $+4.79$/$+2.18$/$+2.03$~pp over the strongest baseline at 1.7B/4B/8B, achieves the best overall accuracy on HELMET-RAG (a benchmark identified by HELMET as the most efficient predictor of downstream long-context performance) and attains the lowest PG-19 perplexity. Jet-Long also generalizes to hybrid attention architectures such as Jet-Nemotron for further long-context improvement without retraining, and remains hyperparameter-resilient for ease of deployment.",
+      "highlights": {
+        "contribution": "提出 tuning-free 零样本长上下文外推方法 Jet-Long，用动态双焦 RoPE 平衡短长上下文。",
+        "innovation": "双焦 RoPE：本地窗口保 RoPE 保真，长程窗口 rescaling 因子按当前序列长度动态调整；配 inclusion-exclusion 融合和 on-the-fly RoPE 校正。",
+        "method": "融合 CuTe 单核实现的双焦 attention，动态长度感知的 rescaling；短输入等价基座；长输入干净外推；免训练。",
+        "results": "Qwen3-1.7B/4B/8B 128K 上 RULER 分别 +4.79/+2.18/+2.03；HELMET-RAG 最优；PG-19 PPL 最低；H100 prefill 达 1.39× FA2，生成 ≤4% 开销。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T06:23:42Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agentic workflow"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 9.5,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07740v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07740v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.06957",
+      "title": "Flow-ERD: Agent-type Aware Flow Matching with Entropy-Regularized Distillation for Diverse Traffic Simulation",
+      "authors": [
+        "Seulbin Hwang",
+        "Kiyoung Om",
+        "Daejung Kim",
+        "Jinhan Lee"
+      ],
+      "affiliations": [],
+      "summary": "现有交通仿真基线只奖励逼真度，多样性被忽略。Flow-ERD 分两步：Agent-Type Aware Flow Matching 做类型感知多模态生成，接一个 Entropy-Regularized Distillation 用逆 KL 目标微调闭环 rollout 避免坍缩。WOSAC 测试榜第一，同时占据逼真-多样性 Pareto 前沿。",
+      "original_abstract": "Realistic and diverse traffic simulation is essential to autonomous driving development. Yet prevailing benchmarks predominantly reward realism, and recent methods have optimized accordingly, leaving diversity underexplored. We introduce \\textbf{Flow-ERD}, a multi-agent simulator that pursues realism and diversity jointly. Its backbone, \\textbf{Agent-Type Aware Flow Matching} (AFM), couples flow matching's multi-modal expressiveness with type-specific kinematic execution. It preserves fine-grained diversity while keeping motions consistent with each agent type. A second stage, \\textbf{Entropy-Regularized Distillation} (ERD), fine-tunes the closed-loop rollout distribution with an entropy-regularized reverse-KL objective. This mitigates covariate shift while explicitly preventing collapse onto high-density modes. We evaluate Flow-ERD with a log-free diversity metric alongside standard realism scores. Flow-ERD ranks first on the WOSAC test benchmark and dominates the realism--diversity Pareto front among reproducible baselines. Our project page is available \\href{https://seulbinhwang.github.io/flow-erd-project-page/}{here}.",
+      "highlights": {
+        "contribution": "提出多智能体交通仿真器 Flow-ERD，把逼真度和多样性同时抓。",
+        "innovation": "在流匹配上做 agent-type aware 分支保运动一致性；再用熵正则化蒸馏防止闭环时坍缩到高密度模式。",
+        "method": "Agent-Type Aware Flow Matching 提供多模态生成 backbone；ERD 用熵正则化反向 KL 目标 fine-tune 闭环 rollout；配 log-free 多样性指标评测。",
+        "results": "WOSAC 测试 benchmark 上排第一，在逼真-多样性 Pareto 前沿上主导可复现基线。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T03:32:36Z",
+      "categories": [
+        "cs.RO",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 9.5,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.06957v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.06957v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07397",
+      "title": "Agentic Data Environments",
+      "authors": [
+        "Elaine Ang",
+        "Chenxi Huang",
+        "Georgios Liargkovas",
+        "Jerry Liu",
+        "Jinhui Liu",
+        "Nikos Pagonas",
+        "Charlie Summers",
+        "Haonan Wang",
+        "Jiakai Xu",
+        "Tianle Zhou",
+        "Yusen Zhang",
+        "Zhou Yu",
+        "Zhuo Zhang",
+        "Tianyi Peng",
+        "Kostis Kaffes",
+        "Eugene Wu"
+      ],
+      "affiliations": [],
+      "summary": "作者提「Agentic Data Environments」概念：把数据系统从被动状态存储升级为能同时放大 agent 能力、又强制执行安全保证的主动执行 substrate。属于愿景论文（早期工作说明）不是纯 benchmark。",
+      "original_abstract": "Autonomous agents promise substantial gains in speed, scale, and labor efficiency, but their failures can impose abrupt and often irreversible costs. The central challenge for agentic automation is therefore to increase the benefits of automation while bounding the consequences of failure.   While databases remain central to modern computing, agents operate over a broader data environment spanning files, APIs, applications, and system state. In this talk, I will outline early work on Agentic Data Environments -- the execution substrate in which agents operate -- that both amplify agent capabilities and enforce safety guarantees. This perspective reframes data systems from passive stores of state into active substrates for safe, reliable execution.",
+      "highlights": {
+        "contribution": "提出 Agentic Data Environments 概念，把数据系统重新定位为 agent 执行的主动 substrate。",
+        "innovation": "把「放大能力」和「限制失败后果」这一对对立目标写进数据环境本身，而不是外挂 guardrail。",
+        "method": "以文件、API、应用、系统状态构成的执行环境为核心；给出早期设计原则并展望方向（属 talk/vision 性质）。",
+        "results": "属愿景描述，暂无量化 benchmark 结果。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T13:32:38Z",
+      "categories": [
+        "cs.AI",
+        "cs.DB"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 9.5,
+        "popularity": 6.5,
+        "quality": 6.5,
+        "recommendation": 6.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07397v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07397v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07467",
+      "title": "SpaCellAgent: A Self-Evolving LLM-Based Multi-Agent Framework for Trajectory Analysis",
+      "authors": [
+        "Songhan Wang",
+        "Haoang Chi",
+        "He Li",
+        "Zhiheng Zhang",
+        "Jiayan Yuan",
+        "Cheems Wang",
+        "Hao Peng",
+        "Xinwang Liu",
+        "Wenjing Yang"
+      ],
+      "affiliations": [],
+      "summary": "空间/单细胞转录组的轨迹推断要人肉调很多算法。SpaCellAgent 用 LLM 多 agent：策略工作流规划、动态工具编排选算法、自演化模块看反馈迭代改。6 个异质数据集上分析效率提升 40%+，还保持专家一致的结果。",
+      "original_abstract": "Spatial and Single-cell transcriptomics are transformative in deciphering cellular dynamics. As the fundamental paradigm for reconstructing cell developmental paths, trajectory inference (TI) is critical. However, existing methods require extensive manual intervention and proficiency in heterogeneous tools, posing a significant barrier to efficient TI analysis. To bridge this gap, we propose SpaCellAgent, an autonomous large language model (LLM) multi-agent framework that automates end-to-end spatiotemporal analysis and narrative generation. SpaCellAgent utilizes a multi-agent architecture for strategic workflow planning, a dynamic tool-orchestration engine for adaptive algorithm selection, and a self-evolution module that iteratively refines performance through feedback. We evaluate SpaCellAgent on six heterogeneous datasets encompassing complex temporal developmental trajectories, diverse sequencing platforms, and spatially-resolved tissue architectures. SpaCellAgent consistently demonstrates over 40\\% improvement in analytical efficiency while maintaining expert-aligned performance. By converting natural language specifications into optimized analytical workflows and fully automating the pipeline, SpaCellAgent democratizes advanced spatiotemporal modeling and establishes a scalable, agent-driven paradigm for computational biology. The code and materials are available at https://github.com/LittleXH-shw/SpaCellAgent.",
+      "highlights": {
+        "contribution": "提出 SpaCellAgent 自演化多 agent 框架，全自动化时空转录组轨迹分析。",
+        "innovation": "把工作流规划、动态工具编排和自演化反馈闭环塞进一个 LLM 多 agent 框架，专门瞄准计算生物学 TI 场景。",
+        "method": "多 agent 拆规划/工具编排/评审角色；动态选算法组合成管线；自演化模块从反馈迭代改工作流；自然语言输入生成分析报告。",
+        "results": "6 个异质数据集上分析效率提升超 40%，性能与专家一致。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T14:31:46Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 9.5,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07467v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07467v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07029",
+      "title": "Gimitest: A Comprehensive Tool for Testing Reinforcement Learning Policies",
+      "authors": [
+        "Dennis Gross",
+        "Quentin Mazouni",
+        "Helge Spieker",
+        "Arnaud Gotlieb"
+      ],
+      "affiliations": [],
+      "summary": "RL 策略不安全易被攻击，现有自动化测试工具只覆盖部分环境和算法。Gimitest 是开源工具，支持多种 gym 框架和单/多 agent RL 策略，允许修改集成组件。文章介绍框架架构并在 Gymnasium、PettingZoo 里演示效果。",
+      "original_abstract": "Reinforcement learning (RL) policies can be unsafe and vulnerable to attacks. Ensuring their reliability is often a pain point as existing automated testing methods target only selected environments, testing scenarios, and RL algorithms. To address this, we propose a comprehensive framework for testing single- and multi-agent RL policies under varying conditions. Our implementation of this framework, Gimitest, is an open-source tool that supports various gym frameworks and allows for modifications of their integrated components. This article describes the framework and details Gimitest's functionality and architecture. It showcases its effectiveness in testing multiple RL policies in environments such as the official Farama Gymnasium and PettingZoo.",
+      "highlights": {
+        "contribution": "提出并开源 Gimitest 通用 RL 策略测试工具，支持单/多 agent 场景。",
+        "innovation": "跨多种 gym 框架统一接口，允许修改集成组件做灵活测试，覆盖不同 RL 算法。",
+        "method": "在通用 RL 测试框架上实现工具；对接 Farama Gymnasium、PettingZoo 等；支持单/多 agent 策略、多种测试条件。",
+        "results": "在多种环境和策略上演示了工具的有效性（工具型论文，无 SOTA 对比）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T06:00:40Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.SE"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 9.5,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 5.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07029v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07029v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07824",
+      "title": "From Triggers to Emotions: A CPM-Grounded Appraisal Multi-Agent for Dynamic Emotional Evolution in Persona-Based Dialogue",
+      "authors": [
+        "Jingyao Cai",
+        "Shuaijun Liu",
+        "Abdul Rehman",
+        "Yutong Guo",
+        "Qin Tian",
+        "Thomas Dolby",
+        "Sue Green",
+        "Chantel Cox",
+        "Xiaosong Yang"
+      ],
+      "affiliations": [],
+      "summary": "persona 对话里 LLM 一般把情感当静态特征或表面风格，很少建 agent 自己随情节变化的情绪。作者引 Component Process Model 心理学理论，把角色情感做成会被对话触发不断重塑的潜在状态；三段式：触发抽取→CPM 协同评估→情绪更新。基线对比、消融、人评、案例都验证有效。",
+      "original_abstract": "Large Language Models (LLMs) have substantially advanced persona-based dialogue agents for emotion-sensitive role simulation in healthcare, education, counseling, customer service, and interactive storytelling. However, two related lines of work leave a key gap. Persona-based dialogue systems often encode emotions as static traits or surface-level stylistic cues, and affective dialogue research has largely focused on empathetic response generation toward users rather than modeling the agent persona's own evolving emotional state. As a result, trigger-driven emotional evolution within a character remains underexplored. To address this limitation, we draw inspiration from the Component Process Model (CPM), a psychological theory that views emotion as a dynamic process shaped by the appraisal of external events. We propose CPM-MultiAgent, a CPM-grounded emotion evolution multi-agent framework for supporting emotional changes in persona-based dialogue. Instead of treating a character's emotion as a fixed attribute, CPM-MultiAgent represents it as a latent state that is continuously reshaped by dialogue triggers. Through affective trigger extraction, CPM-based collaborative appraisal, and emotion state updating, the framework enables more emotionally consistent role simulation in multi-turn interactions.Experiments with baseline comparisons, ablation studies, human evaluation, and case analyses demonstrate that CPM-MultiAgent effectively models dynamic emotional evolution in emotionally sensitive role-simulation settings.",
+      "highlights": {
+        "contribution": "提出 CPM-MultiAgent，用组件过程模型给 persona 对话 agent 建动态情绪演化。",
+        "innovation": "首次把 CPM 心理学理论落地为多 agent 结构，把 agent 情感当触发驱动的潜在状态而非静态属性。",
+        "method": "多 agent 分别负责触发抽取、CPM 协同评估、情绪状态更新；接入 LLM persona 对话系统里做多轮交互。",
+        "results": "基线对比、消融、人评、案例分析都显示能更好建情绪演化（摘要未给具体数字）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T18:06:03Z",
+      "categories": [
+        "cs.MA",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 9.5,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 5.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07824v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07824v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.07858",
+      "title": "Agentic AI and Retrieval-Augmented Models in Straight-Through Underwriting",
+      "authors": [
+        "Robert Richardson",
+        "Josh Meyers",
+        "Brian Hartman",
+        "David Sandberg"
+      ],
+      "affiliations": [],
+      "summary": "小企业主保单直通承保场景里，作者比三条 pipeline：单 LLM 基线、朴素 RAG、多 agent Agentic RAG（定向检索+第三方数据核对+多步规则评估）。多步和信息缺失场景下 agentic RAG 效果最好，能避免不受支持的直通决策。",
+      "original_abstract": "Artificial intelligence (AI) is beginning to reshape actuarial practice, particularly in domains that require reasoning over unstructured documents, heterogeneous data sources, and regulated decision workflows. Actuaries now face a design space that ranges from traditional rule-based automation to large language models (LLMs), retrieval-augmented generation (RAG), and multi-agent ``agentic'' systems that plan, retrieve, call tools, and reflect. This paper examines how these emerging architectures can support actuarial priorities such as transparency, auditability, and human-in-the-loop governance, with a focus on straight-through decision processes. To make these ideas concrete, we develop and analyze an agentic AI framework for straight-through underwriting of small commercial Business Owner Policies (BOPs). We construct a synthetic but realistic experimental environment and compare three underwriting pipelines: (i) a single-LLM baseline, (ii) a naive RAG system, and (iii) a multi-agent ``Agentic RAG'' pipeline that combines targeted retrieval, third-party data checks, and explicit multi-step rule evaluation. The agentic system performs best overall, with the largest gains in multi-step and missing-information scenarios, where structured retrieval and reflection help the model avoid unsupported straight-through decisions.",
+      "highlights": {
+        "contribution": "在保险直通承保这一实际场景下系统对比 LLM/RAG/多 agent 三种 pipeline 的可审计性和准确性。",
+        "innovation": "把 agentic RAG 应用到 BOP 直通承保，关注 actuarial 领域看重的透明性、可审计性和 human-in-the-loop 治理。",
+        "method": "在合成但真实的实验环境里比较单 LLM、朴素 RAG、多 agent Agentic RAG（含定向检索、第三方核对、多步规则评估）三种 pipeline。",
+        "results": "Agentic 系统整体最好，多步和信息缺失场景下优势最大（摘要未给数字）。"
+      },
+      "images": [],
+      "published_date": "2026-07-08T18:43:34Z",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 9.5,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.07858v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.07858v1",
+      "venue": null
+    }
+  ],
+  "total": 25
+}

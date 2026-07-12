@@ -1,0 +1,1058 @@
+{
+  "date": "2026-06-29",
+  "papers": [
+    {
+      "arxiv_id": "2606.30318",
+      "title": "Chronos: A Physics-Informed Full-History Framework for Non-Markovian Long-Horizon Manipulation",
+      "authors": [
+        "Yulin Zhou",
+        "Yimeng Wang",
+        "Nengyu Wang",
+        "Shaojia Xing",
+        "Shiyun Tu",
+        "Xiang Li",
+        "Jingkai Zhang",
+        "Ningbo Jiang",
+        "Yuankai Lin",
+        "Hua Yang",
+        "Xiangrui Zeng",
+        "Zhouping Yin"
+      ],
+      "affiliations": [],
+      "summary": "现在的 VLA 基本都是马尔科夫式的：只看当前几帧观察就决策，遇到需要记忆的长程任务就抓瞎。Chronos 把观察历史直接当成 policy 的隐状态，用 SSM 传播因果历史，然后接一个二阶薛定谔桥去细化动作轨迹。结果 RMBench 上 73.6% 成功率，比 π0.5 高 62.4 个点、参数还少 10 倍；真机双臂记忆任务里 π0.5 拿 0%，它拿 72%。",
+      "original_abstract": "General-purpose robot policies should be modeled as dynamical systems, yet many VLA and generative imitation policies still rely on present observations or short windows. This Markovian shortcut fails in memory-dependent manipulation: identical observations can demand different actions after different histories. We present Chronos, a physics-informed full-history framework for non-Markovian long-horizon manipulation. The key idea is to elevate observation history from auxiliary context to the latent state of the policy dynamics. At each physical control step, Chronos forms one state-representative token by fusing observation and proprioception, so the token sequence is aligned one-to-one with physical time. A selective state space model propagates this causal historical state, which conditions a multimodal coarse action prior through implicit maximum likelihood estimation (IMLE). This prior is then refined by a second-order Schrodinger-inspired bridge that predicts acceleration fields, yielding smoother and more physically grounded robot motion. Across 16 simulated tasks and 4 real-world experiments, Chronos is evaluated on precision insertion, general manipulation, and memory-dependent long-horizon control. On RMBench, where success requires remembering task phase, Chronos achieves 73.6% average success, outperforming Markovian VLA baseline pi0.5 by +62.4 percentage points, a 6.6x relative gain, while using 10x fewer parameters. It also surpasses the memory VLA Mem-0 by 22.8 points while using over 30x fewer parameters. In real-world dual-arm experiments using a single RGB camera, Chronos achieves 78% average success over four tasks, including 72% on the three memory-dependent tasks, whereas pi0.5 achieves 7% overall and 0% on the memory-dependent subset. These results suggest that history should not be treated as auxiliary context, but as the latent state of the manipulation policy.",
+      "highlights": {
+        "contribution": "提出把观察历史提升为 policy 潜状态的非马尔科夫 VLA 框架 Chronos，专门解决长时程记忆依赖任务。",
+        "innovation": "state-representative token + 选择性 SSM 做因果历史传播，再叠一个二阶薛定谔桥预测加速度场，让动作既有记忆也更物理平滑。",
+        "method": "每个控制步把观察和本体感觉融成一个 token，与物理时间一一对齐；SSM 传播隐状态，条件化 IMLE 出多模态粗动作先验，再用薛定谔桥细化到加速度场。",
+        "results": "RMBench 平均 73.6%，比 π0.5 高 62.4pp（6.6× 相对提升），参数少 10×；比 Mem-0 高 22.8pp、参数少 30×；真机四任务平均 78%，记忆任务 72% vs π0.5 的 0%。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T14:00:17Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "manipulation policy",
+        "pi0"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 8.0,
+        "popularity": 8.0,
+        "quality": 8.8,
+        "recommendation": 8.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30318v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30318v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30988",
+      "title": "Multisensory Continual Learning: Adapting Pretrained Visuomotor Policies to Force",
+      "authors": [
+        "Jaden Clark",
+        "Changhao Wang",
+        "Yihuai Gao",
+        "Seongheon Hong",
+        "Hojung Choi",
+        "Mark Cutkosky",
+        "Yifan Hou",
+        "Shuran Song"
+      ],
+      "affiliations": [],
+      "summary": "预训练视觉策略只见过图像，很多接触密集的任务要靠力 / 触觉 / 音频才能做好，但每个传感器都各干各的，没法预训练包全。MuSe 把有限的多模态数据接进现成 vision-only policy，用多阶段融合 + 多模态未来预测 + 经验回放来做 continual finetune。在真实机器人接触任务上力扭传感器加进来后成绩提升，同时不忘原任务甚至反而更好。",
+      "original_abstract": "Robot manipulation often relies on sensory feedback beyond vision, particularly in contact-rich settings where force, tactile, or audio signals reveal interaction states that are not directly observable from images. However, these modalities are often hardware- and task-specific, and large-scale multisensory robot datasets remain scarce. As a result, it is impractical to pretrain policies with every sensor they may encounter. We study multisensory continual learning: adapting a pretrained robot policy to new tasks with newly introduced modalities while preserving performance under the original sensor suite. We propose MultiSensory World Model (MuSe), which incorporates limited multisensory data into pretrained vision-only policies through multi-stage fusion, multisensory future prediction, and experience replay over pretraining data. We instantiate MuSe by augmenting a pretrained vision-only policy with force-torque sensing and evaluate it on real-world manipulation tasks. Our experiments show that MuSe performs strongly on contact-rich finetuning tasks while preserving, and in some cases improving, performance on the original pretraining tasks. These results suggest that a modest multisensory dataset can improve general robot capabilities beyond the finetuning distribution. Project website: https://jadenvc.github.io/multisensory-continual-learning/",
+      "highlights": {
+        "contribution": "提出多模态持续学习框架 MuSe，把新传感器接到已预训练的 vision-only 机器人策略上，不遗忘还能提升原任务。",
+        "innovation": "把多模态未来预测（世界模型式监督）和经验回放结合，用少量新模态数据就把 vision-only policy 适配到接触密集任务。",
+        "method": "输入图像 + 新增模态（如 F/T）；多阶段融合模块把新模态接入原策略，训练时同时做多感知未来预测和 pretraining 数据的经验回放。",
+        "results": "在真实接触密集任务上 finetune 表现强劲，同时在原 pretraining 任务上性能保持甚至更好，证明少量多模态数据就足以扩展通用能力。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T23:58:07Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robot policy"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 8.0,
+        "popularity": 7.0,
+        "quality": 7.8,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30988v3",
+      "arxiv_url": "https://arxiv.org/abs/2606.30988v3",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30613",
+      "title": "Sequential Planning via Anchored Robotic Keypoints",
+      "authors": [
+        "Bryce Grant",
+        "Aryeh Rothenberg",
+        "Logan Senning",
+        "Zonghe Chua",
+        "Zach Patterson",
+        "Peng Wang"
+      ],
+      "affiliations": [],
+      "summary": "SPARK 是个训练自由的神经符号操作系统，观点是 VLA 和 code agent 主要挂在感知这一层，所以把算力全砸在感知上。用一次 Gemini 调用编 typed behavior tree，另一次 Gemini 生成三个 alternative prompts 让 SAM3 挑最自信的检测，然后失败时循环 retry。LIBERO-PRO 六个格 43.7%，是 CaP-Agent0 和 VLA baseline 的两倍多；三个机器人平台九任务平均 68%。",
+      "original_abstract": "We present Sequential Planning via Anchored Robotic Keypoints, SPARK, a training-free neurosymbolic manipulation system that reaches 43.7% on six LIBERO-PRO position \\& task cells, more than doubling CaP-Agent0 and Vision-Language-Action (VLA) baselines. CaP-Agent0, a multi-turn code-generation agent, achieves 18.2% by re-querying an LLM at every turn, but its restart-from-scratch solution proves costly against minor policy failures. Perception is the layer that fails most under position and task changes so SPARK spends its computation there. A single Gemini call composes the plan as a typed behavior tree (BT) of composable primitives, each already containing the low-level control (motion, grasping, depth geometry) a code-generation agent would otherwise regenerate on every trial. The rest of the budget goes to perception: a second Gemini call proposes three alternative text prompts per object, SAM3 evaluates each, and we keep the prompt$\\to$label pair with the most confident detection and a recovery loop then retries a failed primitive against freshly detected objects, with no new LLM call. The alternative prompts add +27.7 points on the spatial suite and +10.0 on the object suite, with the recovery loop adding +5.0 overall. SPARK runs the same primitives on three robot families (UR10e, Franka FR3, bimanual Franka) across nine unique tasks at twenty trials each, averaging 68%. Since the detector, planner, and controller modules sit behind the typed plan, they swap independently without training, and each primitive's checkable post-condition traces a failure to the corresponding module or a kinematic limit. Every trial logs a verified, labeled trajectory, so a training-free planner that already beats VLAs can supply the data those policies need without teleoperation. Project page: https://cwru-aism.github.io/spark-page/",
+      "highlights": {
+        "contribution": "证明感知层的自适应 prompt + recovery 循环，能让训练自由的神经符号系统超过 VLA 基线两倍以上。",
+        "innovation": "把 code-gen agent 的运行时代码写死成 typed BT primitives，然后把算力全部转到感知端的多 prompt 假设与 recovery。",
+        "method": "输入 RGB-D + 任务描述；Gemini 出 typed BT 计划，另一 Gemini 生成三候选 text prompts 交给 SAM3 打分，选最优 prompt→label，失败时 primitive 层 recovery 复检目标。",
+        "results": "LIBERO-PRO 六格 43.7%（VLA / CaP-Agent0 一半左右）；alternative prompts +27.7pp 空间套 / +10.0pp 物体套；recovery loop +5.0pp；三平台九任务 20 trials 平均 68%。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T17:48:01Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 8.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30613v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30613v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30456",
+      "title": "Vision-Language-Action Models: Experimental Insights from a Real-World UR5 Platform",
+      "authors": [
+        "Mathilde Hochedel",
+        "Marc Lalonde"
+      ],
+      "affiliations": [],
+      "summary": "作者把 OpenVLA / OpenVLA-OFT 从 benchmark 搬到真实 UR5e 机械臂上跑，想看看这些 VLA 在实机里到底靠不靠谱。他们搭了一套完整的数据采集、RLDS 转换、微调和部署管线。结论比较扎心：离线指标漂亮但闭环经常翻车，问题不在模型本身，而在动作语义、坐标系、时间对齐、图像预处理一致性这些系统细节上。",
+      "original_abstract": "This project investigates whether recent Vision-Language-Action (VLA) models can be transferred from controlled research benchmarks to a real-world robotic platform, specifically a UR5e manipulator, in a reproducible and operationally meaningful manner. The work integrates real-robot data acquisition, dataset engineering (compatible with the RLDS format), and the fine-tuning and deployment of OpenVLA and OpenVLA-OFT models, with systematic validation of action representations and control interfaces. The project resulted in several foundational assets: (i) a complete real-robot data acquisition pipeline, (ii) a dataset conversion workflow aligned with RLDS standards, (iii) an initial fine-tuning and inference infrastructure for VLA models, and (iv) a structured set of experimental observations grounded in real-robot trials. These elements collectively establish a reproducible framework for evaluating learning-based manipulation systems beyond simulation. Empirically, the experiments reveal a consistent gap between promising offline indicators and unstable closed-loop behavior on the physical system: this gap cannot be attributed solely to model limitations, it is strongly influenced by action semantics, coordinate frame conventions, temporal alignment between modalities, image preprocessing consistency, and dataset coverage and quality. These observations lead to a key interpretation: the successful deployment of VLA systems in real-world settings depends less on incremental improvements in model capacity and more on precise control of the entire data-model-control pipeline. The project reframes VLA-based robotics from a primarily model-centric challenge to a system-level problem; it highlights the difficulty of running robust task execution on the real robot and provides a clear, experimentally grounded understanding of the conditions required for reliable deployment.",
+      "highlights": {
+        "contribution": "把 VLA 实机部署从「模型问题」重新定义为「系统级 pipeline 问题」，并给出一套可复现的真实机器人评估框架。",
+        "innovation": "系统性地把动作表达、坐标系约定、时间同步、预处理一致性等常被忽视的因素列成 VLA 部署失效的主因清单。",
+        "method": "输入 UR5e 上采到的真实演示数据，转成 RLDS 后微调 OpenVLA / OpenVLA-OFT；然后系统性扫描不同动作表征和控制接口，在真机上做闭环实验对比。",
+        "results": "离线指标不错但闭环不稳定，具体成功率未强调；核心发现是失效根因集中在 pipeline 一致性而非模型容量。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T15:23:34Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model",
+        "openvla"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 8.0,
+        "popularity": 5.5,
+        "quality": 6.0,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30456v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30456v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30900",
+      "title": "The Quadruped Soft Tail: Compliant Grasping and Swabbing for Contamination Surveys in Harsh Environments",
+      "authors": [
+        "Harald Minde Hansen",
+        "Nandita Gallacher",
+        "Kristin Y. Pettersen",
+        "Jan Tommy Gravdahl",
+        "Mario di Castro"
+      ],
+      "affiliations": [],
+      "summary": "CERN 需要在放射性区域做铍污染巡检，四足加常规硬臂太笨拙。作者给四足装了一根 tendon 驱动的软尾巴带柔性夹爪，可以捡棉签、擦拭表面、投放到指定收集点。做了闭式运动学模型和一个奇异点鲁棒的任务空间控制器，实验显示夹爪动作不太影响机身姿态，共模驱动可以调刚度。",
+      "original_abstract": "Beryllium contamination surveys in radioactive areas are challenging for robots in environments cluttered with cables and electronics. To address this problem, we have developed a novel quadruped system augmentation: A lightweight, soft, and compliant tendon-actuated robotic tail mounted on a quadruped robot. The tail features a hollow, flexible backbone and a tendon-actuated soft gripper that enables the robot to pick up sampling tissues, swab contaminated surfaces, and release the tissues at designated collection locations for subsequent beryllium analysis. To enable intuitive teleoperation, a closed-form kinematic model and a singularity-robust task-space controller are developed. Experimental results demonstrate that gripper actuation has a negligible effect on robot shape, while common-mode tendon actuation provides an effective mechanism for stiffness modulation and preload control. Furthermore, experimental validation indicates that the proposed kinematic model provides a suitable basis for real-time task-space control. The proposed system combines the agility of legged locomotion with the compliance of soft robotic manipulation, enabling the complete contamination-survey procedure to be performed without human exposure. While motivated by beryllium contamination surveys at CERN, the proposed quadruped soft-tail concept is broadly applicable to legged robots operating in cluttered, confined, or hazardous environments where conventional rigid-link manipulators are undesirable.",
+      "highlights": {
+        "contribution": "把四足机器人扩展成能做柔性抓取和擦拭采样的巡检平台，用软尾+柔性夹爪替代传统刚性机械臂。",
+        "innovation": "腱驱动软尾配合柔性夹爪的一体化设计，同时用共模驱动实现刚度调节和预加载控制。",
+        "method": "腱驱动柔性骨架 + 软夹爪硬件设计；推导闭式运动学，构造奇异点鲁棒的任务空间控制器用于遥操作。",
+        "results": "夹爪驱动对整机形态几乎不影响；共模腱驱动能有效调节刚度；运动学模型在实时任务空间控制中可用；面向 CERN 场景做了完整巡检演示。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T20:41:44Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 8.0,
+        "popularity": 4.5,
+        "quality": 6.0,
+        "recommendation": 5.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30900v2",
+      "arxiv_url": "https://arxiv.org/abs/2606.30900v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30639",
+      "title": "Self-Evolving World Models for LLM Agent Planning",
+      "authors": [
+        "Xuan Zhang",
+        "Wenxuan Zhang",
+        "See-Kiong Ng",
+        "Yang Deng"
+      ],
+      "affiliations": [],
+      "summary": "长时程 LLM agent 需要预见动作后果，但不靠谱的世界模型反而会拖累决策。WorldEvolver 冻住 agent 和世界模型参数，只在部署时改上下文来自我进化：情景记忆做检索式模拟，语义记忆从预测-观察不一致里抽启发式规则，选择性 foresight 过滤低置信度预测。ALFWorld / ScienceWorld 上世界模型预测精度和 agent 成功率都领先。",
+      "original_abstract": "World models offer a principled way to equip long-horizon LLM agents with foresight: predictions of action consequences before execution. However, unreliable foresight can be ignored, misused, or even degrade downstream decision-making. In this paper, we introduce WorldEvolver, a self-evolving world model framework that revises its deployment-time context while keeping the downstream agent and all model parameters frozen. WorldEvolver integrates three modules: (i) Episodic Memory, which exploits real action transitions through retrieval-based simulation; (ii) Semantic Memory, which extracts persistent heuristic rules from prediction-observation mismatches; and (iii) Selective Foresight, which filters low-confidence predictions before integrating them into agent reasoning context. We evaluate WorldEvolver on ALFWorld and ScienceWorld, measuring world model prediction accuracy on Word2World and downstream agent success rate on AgentBoard. Extensive experiments show that WorldEvolver achieves the highest prediction accuracy across three backbones and leads other world model baselines on downstream agent success rate, demonstrating that test-time memory revision enhances both predictive fidelity and planning performance.",
+      "highlights": {
+        "contribution": "提出参数冻结、部署时上下文自进化的世界模型框架 WorldEvolver，能同时提升世界模型预测精度和下游 agent 成功率。",
+        "innovation": "把世界模型的自我改进放在部署时的上下文层，用情景 + 语义两级记忆加选择性 foresight 三件套解决 unreliable foresight 问题。",
+        "method": "输入 agent 交互轨迹；情景记忆用真实转移做检索式模拟，语义记忆从预测-观察 mismatch 抽启发式规则，选择性 foresight 过滤低置信预测再喂给 agent。",
+        "results": "在 ALFWorld 和 ScienceWorld 三个 backbone 上，Word2World 上的预测精度最高，AgentBoard 下游成功率也领先其它世界模型 baseline。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T17:58:43Z",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 8.2,
+        "recency": 8.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30639v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30639v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30421",
+      "title": "OWMDrive: Causality-Aware End-to-End Autonomous Driving via 4D Occupancy World Model",
+      "authors": [
+        "Junjie Cheng",
+        "Ruiqi Song",
+        "Ye Wu",
+        "Nanxing Zeng",
+        "Ximiao Li",
+        "Yunfeng Ai"
+      ],
+      "affiliations": [],
+      "summary": "端到端自动驾驶大都从当前静态场景直接出决策，遇到遮挡和突发容易保守翻车。OWMDrive 用一个占据世界模型做多步 3D occupancy 预测，把预测结果当条件先验喂给扩散规划器，让轨迹候选在当前 + 未来上下文下迭代精炼。实验表明尤其在部分可观测场景下规划更可靠更安全。",
+      "original_abstract": "Autonomous driving systems are steadily moving toward end-to-end paradigms to mitigate the limited adaptability of rule-based pipelines in complex traffic environments. However, most existing learning-based methods still make decisions from static representations of the current scene, without explicit future rollouts or modeling of the temporal causal dynamics in traffic interactions. This limitation often results in unstable or overly conservative planning under high-uncertainty conditions, such as occlusions and unexpected events. To overcome these challenges, we introduce OWMDrive, a generative end-to-end driving framework built upon an Occupancy World Model for multi-step 3D occupancy forecasting, which serves as a conditional prior to guide diffusion-based planning. Conditioned on both current observations and predicted future states, the planner iteratively refines trajectory candidates to generate a reinforced driving trajectory. By explicitly modeling scene evolution over future horizons, OWMDrive captures key spatiotemporal causal dependencies, which leads to more foresighted and robust trajectory generation. Extensive experiments demonstrate that OWMDrive significantly improves planning reliability and safety, especially in challenging and partially observable driving scenarios.",
+      "highlights": {
+        "contribution": "提出用 4D occupancy 世界模型做未来滚动预测的因果感知端到端驾驶框架 OWMDrive。",
+        "innovation": "把 occupancy world model 的多步预测显式当成扩散规划的条件先验，把时空因果依赖注入 planner。",
+        "method": "输入当前多视相机；先用 occupancy world model 预测多步 3D 占据未来；把当前观察 + 预测拼起来条件化扩散 planner，迭代精炼轨迹候选。",
+        "results": "在挑战性和部分可观测驾驶场景下，规划可靠性和安全性显著提升，长程 trajectory 生成更 foresighted（具体数字未在摘要给出）。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T15:05:41Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 7.8,
+        "recency": 8.0,
+        "popularity": 7.0,
+        "quality": 7.2,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30421v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30421v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30292",
+      "title": "DreamForge-World 0.1 Preview: A Low-Compute Real-Time Controllable World Model",
+      "authors": [
+        "Daniyel Ayupov",
+        "Artur Markov-Tsoy"
+      ],
+      "affiliations": [],
+      "summary": "DreamForge-World 0.1 Preview 想做能在消费级 GPU 上跑的实时可控世界模型。它复用 LongLive 1 的自回归视频栈（Wan2.1-T2V-1.3B 衍生），加了一条 Matrix-Game 风格的残差动作分支。支持键鼠实时操控、多模态初始化、中途改 prompt、双视角，RTX 4090 上 480p 原生 14-15 FPS 做分钟级 rollout，作者也很实在地说这不是 frontier 质量。",
+      "original_abstract": "We present DreamForge-World 0.1 Preview, a preview foundational world model for real-time interactive world simulation. The system adapts the LongLive 1 autoregressive video stack, itself derived from Wan2.1-T2V-1.3B, with a residual action pathway inspired by the Matrix-Game family. DreamForge-World 0.1 Preview focuses on a complementary axis to frontier-scale world simulators: low-compute adaptation, consumer-GPU runtime, and broad interactive capability coverage. It supports live keyboard and mouse control, multimodal initialization, mid-stream reprompting, dual-view operation, and minute-scale interactive rollouts at native 480p resolution, reaching up to 14 to 15 FPS FPS on a single RTX 4090 with a low memory footprint. By leveraging open video backbones and applying targeted adaptation runs, we build the preview system with high cost-efficiency. DF-World 0.1 Preview is not yet a memory-complete or frontier-quality world simulator, but demonstrates a practical low-compute route toward real-time controllable world-model previews on consumer GPUs.",
+      "highlights": {
+        "contribution": "把开源视频 backbone 改造成可在单张 4090 上实时交互的低算力世界模型预览版。",
+        "innovation": "在自回归视频栈上叠一条残差动作路径实现键鼠交互；坚持消费级 GPU + 广覆盖交互能力这条低算力路线。",
+        "method": "以 LongLive 1（Wan2.1-T2V-1.3B）为主干做自回归 480p 视频生成，加 Matrix-Game 风格残差动作分支处理键鼠 / 双视角 / 中途 reprompt 等控制。",
+        "results": "RTX 4090 单卡跑 480p 达到 14-15 FPS，支持分钟级交互 rollout，内存占用低；作者强调只是 preview，尚未达到 frontier 世界模拟器的记忆和质量。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T13:35:44Z",
+      "categories": [
+        "cs.LG",
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 8.0,
+        "popularity": 7.0,
+        "quality": 6.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30292v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30292v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30645",
+      "title": "VLK: Learning Humanoid Loco-Manipulation from Synthetic Interactions in Reconstructed Scenes",
+      "authors": [
+        "Yen-Jen Wang",
+        "Jiaman Li",
+        "Sirui Chen",
+        "Takara E. Truong",
+        "Pei Xu",
+        "Pieter Abbeel",
+        "Rocky Duan",
+        "Koushil Sreenath",
+        "Angjoo Kanazawa",
+        "Carmelo Sferrazza",
+        "Guanya Shi",
+        "Karen Liu"
+      ],
+      "affiliations": [],
+      "summary": "人形 loco-manipulation 缺同步的第一视角图像 + 语言 + 机器人兼容的运动轨迹三件套数据。VLK 用 3DGS 把室内场景重建成米制尺度，然后在场景里合成导航和物体交互轨迹，事后再渲染出对应第一视角画面。零人力生出 4.8 万对轨迹，训练一个 VLK policy 预测短时全身运动，再由 whole-body tracker 转成动作，Unitree G1 真机上能做导航和物体搬运。",
+      "original_abstract": "Perception-based humanoid loco-manipulation requires connecting egocentric observations and task instructions to whole-body motion. Learning this mapping requires synchronized egocentric images, language commands, and robot-compatible kinematic trajectories, yet no existing data source provides this complete tuple at scale. We address this bottleneck by generating vision-language-kinematics (VLK) supervision synthetically in reconstructed scenes. Our pipeline leverages 3D Gaussian Splatting to reconstruct metric-scale indoor environments, synthesizes navigation and object-interaction trajectories using privileged scene information, and renders paired egocentric observations after the fact. We produce 48,000 paired trajectories with no human intervention and train a VLK policy that predicts short-horizon whole-body kinematic trajectories. A whole-body tracker converts these predictions into actions on the physical humanoid. We evaluate on the physical Unitree G1 performing navigation and single-object transport, demonstrating that synthesized interactions in reconstructed scenes provide effective supervision for sim-to-real perception-based humanoid loco-manipulation. Project Website: https://vision-language-kinematics.github.io/",
+      "highlights": {
+        "contribution": "提出用 3DGS 重建场景 + 合成 VLK 三元组数据，训练端到端第一视角人形 loco-manipulation 策略。",
+        "innovation": "把 3DGS 重建场景当作合成 VLK 监督的物理容器，先在特权信息里合成轨迹再事后渲染 egocentric 图像，实现零人力大规模数据。",
+        "method": "输入重建的 3DGS 场景；特权信息合成导航 / 交互 kinematic 轨迹，事后渲染对应第一视角图像；训练 VLK policy 由图像+语言预测短程全身轨迹，whole-body tracker 转成机器人指令。",
+        "results": "无人工介入生成 48000 对轨迹；在真机 Unitree G1 上完成导航和单物体搬运任务，验证了合成 VLK 数据能支持 sim-to-real 人形操作。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T17:59:55Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.GR",
+        "eess.SY"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 8.0,
+        "popularity": 8.0,
+        "quality": 8.3,
+        "recommendation": 8.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30645v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30645v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30809",
+      "title": "GaussLite: Online Task-Conditioned 3D Gaussian Splatting for Real-Time Robotic Mapping",
+      "authors": [
+        "Annika Thomas",
+        "Mason Peterson",
+        "Jonathan P. How"
+      ],
+      "affiliations": [],
+      "summary": "现有 3DGS 系统把重建预算均分给整个场景，但机器人往往只关心其中一小块。GaussLite 用一句自然语言任务描述来条件化 3DGS 的密度分配：LLM 一次调用抽出目标和锚点物体，open-vocab 检测器逐帧定位，per-pixel relevance mask 引导 seeding、梯度、缩放。相同高斯预算下 ROI PSNR 平均比 baseline 涨 2.72 dB，还能把两个任务专门 agent 的地图按体素投票融合。",
+      "original_abstract": "Existing 3D Gaussian Splatting (3DGS) systems distribute representation capacity uniformly across a scene, ignoring the fact that many downstream robotic tasks engage only a fraction of the reconstructed geometry. This causes valuable onboard compute to be allocated towards optimizing irrelevant parts of the scene, either limiting online capacity or under-optimizing the most relevant parts of the scene. We introduce GaussLite, a task-driven 3DGS mapping system that conditions its representation density on a natural-language task specification. Given a posed RGB-D stream and a task such as \"prepare to pick up the object on the desk,\" GaussLite uses a one-shot LLM parser to extract target and anchor objects, which are grounded per-frame by an open-vocabulary detector and segmented to produce per-pixel relevance masks in real time. The mapper allocates seeding density, gradient flow and scaling by task relevance. At matched Gaussian budget and real-time mapping at 4 Hz on resource-constrained hardware, GaussLite outperforms baselines on ROI PSNR on the Replica Dataset by an average +2.72 dB and on a real-hardware demonstration in indoor and outdoor settings by +2.23 dB. We further show that two task-specialized agents' maps can be fused into a single shared map via per-voxel voting on active-optimization counts in real time, outperforming concatenation by +3.42 dB while only sharing an average 7.08% of the map.",
+      "highlights": {
+        "contribution": "提出任务条件化的在线 3DGS 机器人建图系统 GaussLite，把有限算力集中到任务相关区域。",
+        "innovation": "把自然语言任务描述通过 LLM 解析 + 开集检测 + per-pixel relevance mask，动态引导 3DGS 的 seed density、gradient flow 和 scaling。",
+        "method": "输入 posed RGB-D 流 + 自然语言任务；LLM parser 一次调用抽 target 和 anchor 物体，开集检测器 + 分割每帧生 relevance mask；mapper 依此调节 seeding / 梯度 / scaling；多 agent 地图按 per-voxel active-optimization count 投票融合。",
+        "results": "在低算力硬件上 4 Hz 实时建图，同高斯预算下 Replica 数据集 ROI PSNR 平均 +2.72 dB，真机室内外 +2.23 dB；两 agent 地图投票融合比拼接 +3.42 dB，只共享平均 7.08% 地图。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T18:34:08Z",
+      "categories": [
+        "cs.CV",
+        "cs.RO"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 8.0,
+        "popularity": 6.8,
+        "quality": 7.5,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30809v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30809v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30436",
+      "title": "Robust and Efficient Monocular 3D Gaussian SLAM for Kilometer-Scale Outdoor Scenes",
+      "authors": [
+        "Sicheng Yu",
+        "Dongxu Shen",
+        "Beizhen Zhao",
+        "Guanzhi Ding",
+        "Hao Wang"
+      ],
+      "affiliations": [],
+      "summary": "单目 3DGS SLAM 想上千米级户外场景，就两个大坑：长时间跟踪飘、地图内存爆。KiloGS-SLAM 用运动自适应混合跟踪：本质矩阵 / PnP 按需切换，实在漂了再上 foundation model 救；地图这边用概率初始化 + chunk 化多视致密化和剪枝做全生命周期管理。跟踪精度和渲染都 SOTA，单卡撑住上万帧。",
+      "original_abstract": "Scaling monocular 3D Gaussian Splatting (3DGS) SLAM to kilometer-level outdoor environments poses two tightly coupled challenges: fragile long-term pose tracking and excessive memory overhead during large-scale mapping. In this paper, we propose KiloGS-SLAM, a highly efficient and robust monocular 3DGS-SLAM system that jointly addresses both bottlenecks. Since high-fidelity scene reconstruction fundamentally relies on drift-free camera poses, we first introduce a motion-adaptive hybrid tracking module. This module features a condition-triggered three-tier solving pipeline. It dynamically switches between Essential matrix and PnP models to handle geometric degeneracies. An on-demand foundation model can also be activated to rescue the trajectory from catastrophic drift. To ensure the system can sustain these long trajectories without memory exhaustion, we subsequently design a lifecycle-managed Gaussian mapping strategy. By integrating probabilistic initialization with chunk-based multi-view densification and pruning, this full-pipeline optimization effectively reduces primitive redundancy while preserving high-frequency details. Together, the robust tracking guarantees the geometric foundation required for accurate mapping, while the memory-efficient lifecycle-managed mapping enables large-scale operation. Extensive experiments across three challenging outdoor datasets demonstrate that our approach achieves state-of-the-art tracking accuracy and rendering quality, successfully scaling to sequences of over 10,000 frames on a single GPU.",
+      "highlights": {
+        "contribution": "提出面向公里级户外场景的单目 3DGS SLAM 系统 KiloGS-SLAM，同时解决长时程跟踪鲁棒性和大规模地图内存开销。",
+        "innovation": "condition-triggered 的三层跟踪切换（Essential/PnP/foundation model 救援）+ chunk 分块的生命周期管理式高斯地图。",
+        "method": "跟踪：动态在本质矩阵和 PnP 间切换应对几何退化，飘时激活 foundation model 拉回轨迹；建图：概率化初始化 + 分块多视致密化 / 剪枝，保留细节的同时降冗余。",
+        "results": "三个户外数据集上跟踪精度和渲染质量双 SOTA，成功在单卡上跑通超过 10000 帧的长序列。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T15:12:18Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.8,
+        "recency": 8.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30436v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30436v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30352",
+      "title": "FastPano3D: Feed-Forward Indoor Panoramic 3D Reconstruction from a Single Image",
+      "authors": [
+        "Jianqiang Li",
+        "Liumei Zhang",
+        "Wenjia Guo",
+        "Tianlong Feng",
+        "Yongzhi Liao",
+        "Di Lu",
+        "Hanchi Ren",
+        "Jingjing Deng"
+      ],
+      "affiliations": [],
+      "summary": "从单张全景图快速重建 3D 室内场景，作者想避开多视监督和 per-scene 优化。FastPano3D 端到端从全景图直接输出可渲染的 3D Gaussian：轻量特征编码 + 自适应 Gaussian 采样 + 点云引导 refine 处理等距投影畸变。几秒内完成，比 Pano2Room 快 156 倍，参数只用一半，质量接近 NeRF / 3DGS。",
+      "original_abstract": "Recent advances in 3D scene reconstruction have highlighted the intricate trade-offs among rendering quality, inference efficiency, and data dependency. To address the challenge of rapidly reconstructing detailed 3D indoor scenes from minimal input, we introduce FastPano3D, an end-to-end framework that directly generates renderable 3D Gaussian representations from a single panoramic image. Unlike perspective-based methods, panoramic images inherently suffer from equirectangular projection distortions and spatially non-uniform feature distributions, making direct feed-forward Gaussian generation particularly challenging. In contrast to existing Gaussian Splatting based methods that rely on multi-view supervision or per-scene optimization, FastPano3D employs a lightweight feature encoder, adaptive Gaussian sampling, and a point-cloud-guided refinement strategy to achieve efficient and accurate scene generation without any test-time optimization. Our approach reconstructs high-fidelity 3D scenes within seconds, achieving up to 156 times faster inference than prior state-of-the-art methods such as Pano2Room, while using only half the parameters. Extensive experiments demonstrate that FastPano3D delivers rendering quality comparable to NeRF- and 3DGS-based reconstructions, establishing a new benchmark for rapid, single-view 3D scene inference.",
+      "highlights": {
+        "contribution": "提出无需测试时优化、直接从单张全景图前馈生成 3D Gaussian 的 FastPano3D 框架。",
+        "innovation": "针对 equirectangular 畸变和空间非均匀分布，用轻量特征编码 + 自适应 Gaussian 采样 + 点云引导 refine 的组合。",
+        "method": "输入单张全景 RGB；轻量 encoder 抽特征，adaptive Gaussian sampling 生成初始高斯，点云引导 refinement 修正几何，全流程前馈无 test-time optimization。",
+        "results": "秒级完成室内 3D 重建，推理速度比 Pano2Room 等 SOTA 快 156×，参数量仅一半，渲染质量与 NeRF / 3DGS baseline 相当。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T14:23:12Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting",
+        "3d scene reconstruction"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 8.0,
+        "popularity": 6.5,
+        "quality": 7.2,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30352v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30352v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30638",
+      "title": "Open-Vocabulary and Referring Segmentation for 3D Gaussians Using 2D Detectors",
+      "authors": [
+        "Jameel Hassan",
+        "Yasiru Ranasinghe",
+        "Vishal Patel"
+      ],
+      "affiliations": [],
+      "summary": "3DGS 想搞 open-vocab 场景理解，主流是蒸馏 CLIP，但要求预设实例数量或者依赖噪声大的自底向上分组，也只能懂名词短语。GaussDet 换成用 open-vocab 2D 检测器 + referring 能力，先给每个高斯学 instance feature 分组，再用多视 2D 检测投票聚合成 View-Aggregated Semantic Label Distribution。零样本 open-vocab 分割和 referring 定位都涨，Ref-LeRF 上 mIoU 涨了 16.7 个点。",
+      "original_abstract": "3D Gaussian Splatting (3DGS) has emerged at the forefront of 3D scene reconstruction. Extending 3DGS with language-driven, open-vocabulary understanding has gained significant attention for real-world applications such as embodied AI. Recent methods achieve this by learning an instance feature attribute and assigning semantics by distilling high-dimensional Contrastive Language-Image Pretraining (CLIP) features directly into the scene representation. However, the instance grouping mechanisms of these methods either require a predefined number of instances or suffer from noise in their bottom-up grouping strategies. Furthermore, the reliance on CLIP restricts semantic understanding to simple noun phrases, preventing complex spatial reasoning and referential expression grounding. We present GaussDet, a method that circumvents the need for dense CLIP features by leveraging discrete, open-vocabulary 2D object detectors with referring expression capabilities. We learn instance features for individual Gaussians to decompose the scene into 3D instance groups. By rendering these groups and aggregating semantic votes from multi-view 2D detections, we generate a robust View-Aggregated Semantic Label Distribution (VASD) for each 3D instance. This view-aggregation strategy acts as a strong regularizer, attenuating spurious labels caused by low-quality instance grouping. Our approach enables a straightforward, zero-shot extension from simple language queries to complex referential grounding. Extensive evaluations across two key tasks -- open-vocabulary segmentation (LeRF-OVS, ScanNet) and referring expression grounding (Ref-LeRF) -- demonstrate that GaussDet achieves consistent improvements over existing methods. Most notably, we achieve a substantial 16.7% mIoU improvement in referential grounding within a strict zero-shot setting.",
+      "highlights": {
+        "contribution": "提出 GaussDet，用离散 open-vocab 2D 检测器替代 CLIP 特征蒸馏，实现 3DGS 的 open-vocab 分割和 referring 定位。",
+        "innovation": "多视 2D 检测语义投票聚合出 VASD，作为对低质量 instance grouping 的强正则；零样本从简单查询扩展到复杂 referring。",
+        "method": "输入 3DGS 场景；给每个高斯学 instance feature 做 3D 实例分组，再把 3D 实例投回多视，用 2D open-vocab 检测器投票聚合成 View-Aggregated Semantic Label Distribution。",
+        "results": "在 LeRF-OVS、ScanNet 上 open-vocab 分割一致提升；Ref-LeRF referring grounding 在严格零样本下 mIoU 提升 16.7 pp。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T17:58:41Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting",
+        "3d scene reconstruction"
+      ],
+      "scores": {
+        "relevance": 6.8,
+        "recency": 8.0,
+        "popularity": 6.5,
+        "quality": 7.2,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30638v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30638v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30545",
+      "title": "StereoGS: Sparse-View 3D Gaussian Splatting via Stereo Priors",
+      "authors": [
+        "Wenhao Yuan",
+        "Yiyuan Ge",
+        "Deli Cai"
+      ],
+      "affiliations": [],
+      "summary": "稀疏视角下 3DGS 严重过拟合，用单目深度先验又有尺度歧义。StereoGS 干脆构造虚拟立体对，用 foundation stereo 模型强约束绝对尺度和双目一致性；再加一个梯度感知的 opacity 衰减策略去掉冗余高斯，并用零样本多视深度做一致初始化。在 LLFF / DTU / Mip-NeRF360 / Blender 上刷到 SOTA，推理没额外开销。",
+      "original_abstract": "3D Gaussian Splatting (3DGS) has achieved remarkable success in real-time novel view synthesis, yet it suffers from severe overfitting under sparse-view settings due to insufficient geometric constraints. While recent methods introduce monocular depth priors to mitigate this, they inherently struggle with scale ambiguity and cross-view inconsistency, leading to defective geometry. In this paper, we propose StereoGS, a novel sparse-view 3DGS framework that integrates stereo priors to establish reliable binocular consistency. Unlike scale-agnostic monocular constraints, StereoGS introduces a Stereo Depth Regularization by constructing virtual stereo pairs during optimization and leveraging a foundation stereo model to enforce absolute scale and binocular-consistent structures. To further suppress overfitting and eliminate redundant primitives, we design a Gradient-Aware Opacity Decay strategy that dynamically penalizes Gaussians based on their relative opacity gradient magnitudes. Combined with a Consistency-Aware Dense Initialization using zero-shot multi-view depth estimation, StereoGS effectively anchors primitives to accurate scene surfaces. Extensive experiments on LLFF, DTU, Mip-NeRF360, and Blender datasets demonstrate that StereoGS achieves state-of-the-art performance in sparse-view settings without incurring any additional inference overhead. Project Page: https://stringerywh00.github.io/StereoGS_project_page/",
+      "highlights": {
+        "contribution": "提出用立体先验替代单目深度先验的稀疏视角 3DGS 框架 StereoGS，解决尺度歧义和跨视图不一致。",
+        "innovation": "在优化过程中构造虚拟 stereo pairs 拿 foundation stereo 模型做绝对尺度约束；配合梯度感知 opacity decay 抑制冗余高斯。",
+        "method": "输入稀疏视角图；一致性感知的密集初始化用零样本多视深度锚定；训练时构造虚拟 stereo pair 做 stereo depth regularization；gradient-aware opacity decay 动态惩罚冗余 Gaussian。",
+        "results": "在 LLFF / DTU / Mip-NeRF360 / Blender 稀疏视角 setting 下达到 SOTA 渲染质量，且推理阶段无额外开销。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T16:45:57Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "novel view synthesis",
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 8.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30545v2",
+      "arxiv_url": "https://arxiv.org/abs/2606.30545v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30576",
+      "title": "Beyond 2D Matching: A Unified Single-Stage Framework for Geometry-Aware Cross-View Object Geo-Localization",
+      "authors": [
+        "Liyao Wang",
+        "Ruipu Wu",
+        "Haojun Xu",
+        "Lei Shi",
+        "Linjiang Huang",
+        "Si Liu"
+      ],
+      "affiliations": [],
+      "summary": "跨视角物体地理定位（地面 / 无人机 → 卫星）以前主要靠 2D 外观匹配，缺几何信息也缺数据。作者出了个 22 万对 building 数据集，带多模态 prompt 和相机位姿，然后在 3D foundation model π³ 上搭 GAGeo，单阶段一次前馈同时预测 bbox / mask / 相机位姿。还用卫星视为通用锚做对比学习，实现地面到无人机零样本泛化。",
+      "original_abstract": "Cross-view object geo-localization (CVOGL) aims to locate a target object from a query view (e.g., ground or drone) within a geo-tagged reference image (e.g., satellite). Existing approaches heavily rely on 2D appearance matching and are constrained by limited datasets lacking geometric metadata, diverse prompts, and standard field-of-view imagery. To address these intertwined challenges, we first introduce \\dataset, a large-scale, high-fidelity building dataset comprising over 220,000 ground-satellite and drone-satellite pairs. It provides multi-modal prompts (points, boxes, masks) and camera poses to enable flexible target referring and explicit spatial modeling. Furthermore, we propose a novel single-stage Geometry-Aware Geo-localization framework (GAGeo), built upon the permutation-equivariant 3D foundation model $π^3$. By seamlessly integrating visual features, referring prompts, and learnable task tokens, our model adapts the inherited 3D prior to jointly predict bounding boxes, segmentation masks, and camera poses in a single forward pass. Additionally, we introduce a contrastive loss that utilizes the satellite view as a universal anchor, implicitly aligning ground and drone representations to enable zero-shot ground-to-drone localization without requiring triplet training data. Extensive experiments demonstrate that our approach significantly outperforms state-of-the-art methods, exhibiting exceptional generalization ability in unseen scenes and novel cross-view setups.",
+      "highlights": {
+        "contribution": "提出面向 CVOGL 的几何感知单阶段框架 GAGeo，并配套一个 22 万对的多模态大数据集。",
+        "innovation": "把置换等变的 π³ 3D 基础模型引入跨视地理定位，单次前馈联合出 bbox / mask / 相机位姿；用卫星做通用锚实现零样本地面到无人机迁移。",
+        "method": "输入 query（地面 / 无人机 + 点 / 框 / 掩码 prompt）和参考卫星图；π³ 抽视觉特征，融合 referring prompt 和可学 task token，单前馈联合预测 bbox / mask / 姿态；对比损失用卫星视为 anchor。",
+        "results": "显著超越 SOTA，在未见场景和新颖跨视配置下泛化能力优秀（具体数字摘要未给）。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T17:19:49Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "3d foundation model"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 8.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30576v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30576v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30616",
+      "title": "Scaling the Horizon, Not the Parameters: Reaching Trillion-Parameter Performance with a 35B Agent",
+      "authors": [
+        "Lei Bai",
+        "Zongsheng Cao",
+        "Yang Chen",
+        "Zhiyao Cui",
+        "Shangheng Du",
+        "Yue Fan",
+        "Shiyang Feng",
+        "Zijie Guo",
+        "Haonan He",
+        "Liang He",
+        "Xiaohan He",
+        "Shuyue Hu",
+        "Yusong Hu",
+        "Songtao Huang",
+        "Yichen Jiang",
+        "Hao Li",
+        "Xin Li",
+        "Dahua Lin",
+        "Weihao Lin",
+        "Fenghua Ling",
+        "Dongrui Liu",
+        "Zhuo Liu",
+        "Runmin Ma",
+        "Chunjiang Mu",
+        "Haoyang Peng",
+        "Tianshuo Peng",
+        "Jinxin Shi",
+        "Luohe Shi",
+        "Boyuan Sun",
+        "Zelin Tan",
+        "Shengji Tang",
+        "Qianyi Wang",
+        "Yiming Wu",
+        "Yi Xie",
+        "Xiangchao Yan",
+        "Jingqi Ye",
+        "Peng Ye",
+        "Fangchen Yu",
+        "Jiakang Yuan",
+        "Bihao Zhan",
+        "Bo Zhang",
+        "Chen Zhang",
+        "Shufei Zhang",
+        "Shuaiyu Zhang",
+        "Wenlong Zhang",
+        "Yiqun Zhang",
+        "Junpeng Zhao",
+        "Zhijie Zhong",
+        "Bowen Zhou",
+        "Yuhao Zhou"
+      ],
+      "affiliations": [],
+      "summary": "作者不去堆参数，而是「堆 horizon」：35B MoE 的 Agents-A1 靠拉长 agent 轨迹和把六个领域能力融进一个 student 模型，追上万亿参模型。三阶段训练：全域 SFT、领域专门 teacher、多 teacher 领域路由的 on-policy 蒸馏加显著 vocab 对齐。SEAL-0 56.4、IFBench 80.6、HiPhO 46.4、FS-Olympiad 79.0、MolBench-Bind 56.8 领先，SciCode / HLE / BrowseComp 也不虚 Kimi-K2.6 和 DeepSeek-V4-pro。",
+      "original_abstract": "We introduce Agents-A1, a 35B Mixture-of-Experts Agentic Model that reaches trillion-parameter-level performance by scaling the agent horizon. We investigate agent-horizon scaling from two perspectives: scaling long-horizon trajectories and scaling heterogeneous agent abilities. To support this goal, we build a long-horizon knowledge-action infrastructure that connects external knowledge, actions, observations, and verifier outcomes, producing agentic trajectories with an average length of 45K tokens. Based on this, we train Agents-A1 with a three-stage recipe. First, we perform full-domain supervised fine-tuning to align the base model with broad agentic behaviors. Second, we train domain-level teacher models to capture specialized expertise in each domain. Third, we propose a multi-teacher domain-routed on-policy distillation with salient vocabulary alignment to improve knowledge transfer efficiency across different domains, unifying six heterogeneous domains into one deployable student model. Agents-A1 achieves strong and broad performance for long-horizon agent benchmarks. Compared with 1T-parameter model such as Kimi-K2.6 and DeepSeek-V4-pro, Agents-A1 achieves leading results on SEAL-0 (56.4), IFBench (80.6), HiPhO (46.4), FrontierScience-Olympiad (79.0), and MolBench-Bind (56.8), and remains highly competitive on SciCode (44.3), HLE (47.6) and BrowseComp (75.5). We hope this work provides the community with a practical path for scaling the horizon using a 35B agent that can reach or match the performance of 1T models on long-horizon tasks.",
+      "highlights": {
+        "contribution": "证明 35B MoE 通过 agent-horizon scaling 可以匹配甚至超过 1T 级 Kimi-K2.6 / DeepSeek-V4-pro 在长时程 agent 任务上的表现。",
+        "innovation": "长程知识-动作基础设施把外部知识 / 动作 / 观察 / verifier 结果串起来产 45K token 平均轨迹；多 teacher 领域路由 on-policy 蒸馏加 salient vocab 对齐把 6 个异构领域压进一个 student。",
+        "method": "先做全域 SFT，让基座模型对齐广泛 agentic 行为；再训各领域 teacher；最后用多 teacher 领域路由的 on-policy 蒸馏，把六个异构领域 unify 到一个 student，同时做显著词表对齐。",
+        "results": "SEAL-0 56.4 / IFBench 80.6 / HiPhO 46.4 / FrontierScience-Olympiad 79.0 / MolBench-Bind 56.8 领先；SciCode 44.3 / HLE 47.6 / BrowseComp 75.5 与 1T 级模型持平或接近。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T17:50:54Z",
+      "categories": [
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agent benchmark"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 8.0,
+        "popularity": 8.5,
+        "quality": 8.2,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30616v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30616v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30383",
+      "title": "Whose Side Is Your Agent On? Multi-Party Principal Loyalty in LLM Agents",
+      "authors": [
+        "Bojie Li",
+        "Noah Shi"
+      ],
+      "affiliations": [],
+      "summary": "越来越多 LLM agent 同时对两方说话：一个是给它下指令的 principal，一个是利益可能相反的 counterparty。这时候「你在跟谁说话就帮谁」是错的。PrincipalBench 是 75 题多轮 benchmark 带泄露探针、双 judge 和完整性审计门。13 个前沿模型分裂成两簇：选择性簇（<=20% 有害）和过度拒绝簇（53.6-75.3% 有害）。作者的 prompt-time 忠诚脚手架把 Claude-Sonnet 压到 19.4%；蒸馏方案是最强 open-weight 配方。",
+      "original_abstract": "A rapidly growing class of LLM agents is multi-party: the agent acts for a principal (who briefs it, sends follow-ups, and receives results) while also conversing in a separate channel with a counterparty whose interests may diverge (negotiating with a vendor, screening inbound requests, or mediating between employees). Here \"help whoever you are talking to\" is the wrong objective. The agent must stay loyal to the principal it represents without over-refusing the principal's own cooperative asks. We study this multi-party loyalty problem and contribute a measurement instrument, two mechanisms, and a structural lesson. PrincipalBench is a 75-item multi-turn benchmark with leak probes, dual judges, and an integrity-audit gate. Across 13 frontier subjects it exposes a sharp split (<=20% vs. 53.6-75.3% harm) invisible to single-turn safety evaluations: a selective cluster that declines adversarial probes while still following the principal's legitimate requests, and an over-refusing cluster that refuses broadly. (M1) A prompt-time loyalty scaffold (a fixed system prompt of seven prioritized rules, open-coded from 50+ failure trajectories) holds Claude-Sonnet to 19.4% harm and all nine selective subjects to <=20%. (M2) A per-token-KL distillation recipe transfers a prompted Qwen3-32B teacher into 8B Qwen3 and Llama-3.1 students, the strongest open-weight recipe we measure. (Lesson) Both mechanisms only move along a common leak/over-refusal trade-off rather than crossing it: improving one axis costs the other, and the jointly favorable outcome stays out of reach.",
+      "highlights": {
+        "contribution": "首次系统研究多方 principal 忠诚问题，给出 benchmark PrincipalBench 和两种可复现的缓解机制。",
+        "innovation": "同时刻画 loyalty leak 与 over-refusal 两个正交轴，证明现有 prompt 和蒸馏方案只能沿共同 tradeoff 移动，无法两全。",
+        "method": "输入 principal 与 counterparty 两个通道；(M1) 七条优先规则的忠诚 system prompt；(M2) per-token KL 蒸馏，把 prompt 强化过的 Qwen3-32B teacher 蒸到 8B Qwen3 / Llama-3.1 student；再用 PrincipalBench 多轮泄露探针 + 双 judge + integrity audit 评估。",
+        "results": "选择性簇 <=20% 有害 vs 过度拒绝簇 53.6-75.3%；M1 把 Claude-Sonnet 压到 19.4%、9 个选择性模型全 <=20%；M2 是所测 open-weight 中最强；两种机制都只在同一 tradeoff 曲线上移动。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T14:39:38Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 8.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30383v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30383v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30571",
+      "title": "Attractor States Emerge in Multi-Turn LLM Conversations",
+      "authors": [
+        "Ting-Wen Ko",
+        "Jonas Geiping"
+      ],
+      "affiliations": [],
+      "summary": "两个 LLM 长时间聊下去会不会形成「吸引子」——不管什么话题都会收敛到某种稳定风格？作者跨 7 个模型 20 个争议话题做 self-play 和 mixed-play 辩论，跟踪表征空间轨迹、话语特征和立场。发现 self-play 轨迹确实是模型专属的吸引子，会不对称地把对手拉过去，比如 Claude Haiku 是强吸引子，GPT-4.1 nano 特别容易被塑形。",
+      "original_abstract": "Large language models (LLMs) are increasingly used in open-ended multi-agent settings, but the long-run dynamics of model--model interaction remain poorly understood. We study whether open-ended LLM discussions exhibit attractor-like behavior, i.e. topic-independent stable sets of behaviors which conversations settle into. Across 7 LLMs and 20 controversial topics, we compare self-play and mixed-play dyadic debates, tracking trajectories in representation space, discourse traits, and stances. We find self-play trajectories to be model-specific attractors that draw their conversation partners asymmetrically in mixed-play debates, influencing the other models' stylistic choices and behavior. For example, Claude Haiku is a strong attractor of other models in latent space, corresponding to other models taking on its traits like metacommentary, and models like GPT-4.1 nano are especially malleable. Our results suggest that open-ended LLM interactions are partially predictable from model-specific attractors, but shaped by structured and asymmetric partner influence. Overall, our analysis sheds some light on the complex behavior of open-ended multi-agent interaction, which we hope is helpful in designing, predicting, and monitoring autonomous agentic systems in the real world.",
+      "highlights": {
+        "contribution": "在多模型对话动力学层面实证 LLM 之间存在模型专属的吸引子行为，并揭示这种影响是不对称的。",
+        "innovation": "把开放式 LLM 对话当动力系统研究，把表征空间轨迹 + 话语特征 + 立场三类信号联合追踪吸引子。",
+        "method": "输入 7 个 LLM × 20 个争议话题的两两对话；分 self-play 和 mixed-play 两种设置，跑长期辩论后跟踪表征、话语特征、立场随时间的演化。",
+        "results": "self-play 轨迹表现为模型专属吸引子；mixed-play 中会不对称地吸引其他模型的风格（如 Claude Haiku 强吸引 metacommentary），GPT-4.1 nano 特别容易被改变。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T17:14:29Z",
+      "categories": [
+        "cs.LG",
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 8.0,
+        "popularity": 6.5,
+        "quality": 7.0,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30571v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30571v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30949",
+      "title": "AgRefactor: Self-Evolving Agentic Workflow for HLS Compatibility and Performance",
+      "authors": [
+        "Yang Zou",
+        "Zijian Ding",
+        "Yizhou Sun",
+        "Jason Cong"
+      ],
+      "affiliations": [],
+      "summary": "把真实软件重构成能过 HLS 综合的代码一直很难，现有 LLM 方案又贵又不 scale。AgRefactor 是个 LLM 多 agent 工作流：带一个自演化记忆库累积事实和策略知识，还整合了自动化重构工具，让 agent 在 LLM 改写和工具变换之间权衡。11 个真实 benchmark（比之前的用例长 5-10 倍）里赢 / 平 9 个，几何平均比 SOTA pragma 调优工具快 6.51×，比开源优化设计快 1.20×。",
+      "original_abstract": "High-Level Synthesis (HLS) provides a fast path from concepts to silicon, but converting real-world software into synthesizable HLS code remains challenging due to restrictive language support and the gap between software and hardware programming practices. Existing automated and LLM-based refactoring approaches partially address this problem, yet they often lack flexibility, struggle to scale, and incur high computational costs. We introduce AgRefactor, an LLM-based multi-agent workflow for refactoring software into HLS-compatible programs. AgRefactor incorporates a self-evolving memory system that accumulates and retrieves factual and strategic knowledge across tasks, improving robustness and efficiency on unseen programs. To reduce cost and enhance scalability, it integrates automated refactoring tools, enabling agents to balance LLM-driven rewrites with efficient tool-based transformations. On 9 out of 11 challenging real-world benchmarks, which are 5-10x longer than the most complex cases studied in prior work, AgRefactor outperforms or matches the state-of-the-art automated refactoring tool and a strong LLM-based baseline built on the same framework backbone. Further agentic performance optimization yields a 6.51x geometric mean speedup over the SoTA pragma tuning tool and a 1.20x speedup over optimized open-source designs with less than 20% extra resources. AgRefactor is fully-automated and open-sourced.",
+      "highlights": {
+        "contribution": "提出用于 HLS 重构的自演化多 agent 工作流 AgRefactor，能在长得多的真实 benchmark 上打赢 SOTA。",
+        "innovation": "自演化记忆系统跨任务累积 factual + strategic 知识；把 LLM 改写与自动化工具变换结合以降成本、提 scalability。",
+        "method": "多 LLM agent 分工做软件到 HLS 兼容代码的重构；每一步查记忆库取相关经验；agent 决定用 LLM 改写还是调用重构工具；再迭代做性能优化。",
+        "results": "11 个真实基准（5-10× 长于以往）里 9 个赢或平 SOTA；agent 化性能优化比 SOTA pragma 调优工具几何均值快 6.51×，比优化过的开源设计快 1.20×，资源开销 <20%。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T22:02:34Z",
+      "categories": [
+        "cs.AI",
+        "cs.AR"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "agentic workflow"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 8.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 6.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30949v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30949v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30840",
+      "title": "Contrastive Reflection for Iterative Prompt Optimization",
+      "authors": [
+        "Derek Koh",
+        "Jinghui Mo",
+        "Benjamin H. Le",
+        "Jiening Zhan",
+        "Baofen Zheng",
+        "Kevin Bevis",
+        "Nathaniel C. Owen",
+        "Lauren Elizabeth Charney",
+        "Wenqiong Liu",
+        "Jingwei Wu"
+      ],
+      "affiliations": [],
+      "summary": "LLM agent 在信息检索场景里越用越多，写 prompt 更像调 bug 而不是盲搜。Contrastive Reflection 框架从 QA agent 和评分 agent 暴露的结构化 trace 里找出错误锚定的行为切片，再拉附近同区域的成功例子，让 Teacher LLM 提针对性的 prompt 编辑，只有 validation 表现真变好才接受。HotpotQA 上一次修补把 EM 从 51.4% 提到 60.4%，接近 MIPROv2 / GEPA。",
+      "original_abstract": "LLM agents are becoming central to information retrieval: they issue retrieval queries, synthesize answers, and increasingly serve as judges for IR evaluation. Improving the prompts that control these agents is an optimization problem, but in applied IR settings it often looks less like blind search and more like debugging. Engineers need to know which behavior failed, which nearby behavior still worked, what distinguishes the two, and whether a prompt edit improves held-out quality without introducing regressions.   We present Contrastive Reflection, an iterative prompt-optimization framework for agentic IR workflows. The framework starts from a task-centric quality definition: QA agents expose retrieval or reasoning traces, and grading agents expose dimension-level scores and rationales. These structured traces are used to identify error-anchored behavioral slices, add nearby successful examples from the same region, and ask a Teacher LLM to propose a targeted prompt edit. Candidate edits are accepted only when validation performance improves, optionally subject to regression checks. We instantiate the framework with a tree-based slice selector, but the contribution is the contrastive reflection loop rather than the tree itself.   On a public HotpotQA retrieval-augmented QA setup, one tree-selected contrastive repair improves held-out exact-match accuracy from 51.4% to 60.4%. Failure-only and random-evidence variants improve less and break more previously correct examples. A light instruction-only comparison places the method near modern prompt optimizers: MIPROv2 reaches 59.4% and GEPA 57.0%. The result is an interpretable optimization loop for IR agents, aimed at making prompt repair more inspectable and validation-driven.",
+      "highlights": {
+        "contribution": "提出面向 agentic IR 的 contrastive reflection 迭代 prompt 优化框架，用可解释的错误锚定切片替代盲搜。",
+        "innovation": "把 QA agent 和 grading agent 的 trace 结构化成错误锚定行为切片，再拉附近成功例做对比，让 Teacher LLM 出定向 prompt 编辑并做 regression check。",
+        "method": "输入 agent 的检索 / 推理 trace 和评分 rationale；tree-based slice selector 定位错误锚定切片，加同区域成功例；Teacher LLM 出候选 prompt edit；validation 提升且不 regression 才接受。",
+        "results": "HotpotQA 上一次 tree-selected contrastive repair 把 held-out EM 从 51.4% 提到 60.4%；同 setting 下 MIPROv2 59.4%、GEPA 57.0%；failure-only 和随机版本提升更少、破坏更多。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T19:16:07Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 8.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30840v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30840v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30266",
+      "title": "Towards Continual Motion-Language Agents: LoRA Variants for Incremental Motion Understanding and Generation",
+      "authors": [
+        "Bertram Taetz",
+        "Hugo Albuquerque Cosme da Silva",
+        "Gabriele Bleser-Taetz"
+      ],
+      "affiliations": [],
+      "summary": "motion-language agent 想要既能看懂动作也能按语言生成动作，还要在新动作陆续加入时不忘老技能。作者在冻结的 LLM 上加 LoRA 变体，重点提了个 MoE 版：autoencoder 路由器推理时选任务专家，不用任务标签。他们从 HumanML3D 语义聚类出五任务 benchmark，实验里 M2T 和 T2M 双向都近乎零遗忘，硬路由比 soft blending 明显好。",
+      "original_abstract": "Motion-language agents must possess the bidirectional capability to both understand human movement (motion-to-text, M2T) and generate it from natural language (text-to-motion, T2M). While foundational models have achieved strong performance in static settings, autonomous agents operating in dynamic environments must continuously incorporate new motion concepts -- such as novel athletic styles or specialized gestures -- without catastrophic forgetting of previously acquired skills. We investigate the stability-plasticity trade-off in bidirectional motion-language learning under sequential task exposure. Building on a frozen large language model backbone, we introduce low-rank adaptation (LoRA) variants designed to mitigate inter-task interference. We specifically propose mixture-of-experts architectures that utilize an autoencoder-based router to select task-specific experts at inference time, so that no task-label is needed. To evaluate these methods, we establish a reproducible five-task benchmark derived from HumanML3D through semantic clustering of motion descriptions. Our experimental results demonstrate near-zero forgetting across both M2T and T2M directions while maintaining high generation and captioning quality. Furthermore, we show that hard expert selection via routing significantly outperforms soft expert blending in quality metrics, indicating that preserving expert isolation is critical for maintaining performance in our continual learning setting. Finally, we observe that a divergence between token-level accuracy and downstream generation quality may occur, highlighting the need for more comprehensive evaluation protocols in future research on lifelong motion-language agents.",
+      "highlights": {
+        "contribution": "把 LoRA-MoE 用在双向 motion-language continual learning 上，实现近零遗忘且不用任务标签。",
+        "innovation": "autoencoder-based router 在推理时硬选任务专家；实证硬路由（专家隔离）明显优于 soft blending。",
+        "method": "冻结 LLM backbone 上叠 LoRA 变体，特别是 mixture-of-experts + autoencoder router；HumanML3D 语义聚类构造 5 任务顺序训练；无需任务标签推理时路由选专家。",
+        "results": "M2T 和 T2M 双向序列训练中近乎零灾难遗忘，生成和 captioning 质量维持高水平；硬专家选择在质量指标上显著优于 soft blending。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T13:14:57Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "language agent",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 8.0,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30266v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30266v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30294",
+      "title": "Rehearsed Multi-Agent Live Product Demonstrations with Real-Time Voice Question Answering",
+      "authors": [
+        "Rahul Khedar",
+        "Mayank Malhotra",
+        "Avinash Karn",
+        "Mouli V",
+        "Prakhar Mehrotra"
+      ],
+      "affiliations": [],
+      "summary": "真人演示产品既贵又难。Rhetor 把跑起来的 web 应用加它的源码 repo 作为输入，产出一份带段落同步旁白、能实时语音 QA 的现场演示。多 agent 里跨模态特征把 UI 探索和源码分析融成带 focus tier 的 feature，grounded scripter 严格用探索时看到的 UI 元素调用多策略语义定位，还有预演循环处理界面漂移。六轮演示 147 个动作 sigma-bar 覆盖 0.31-1.00，重工况约 0.92，Excalidraw 上第二轮收敛到 1.00。",
+      "original_abstract": "Live product demonstrations are a recurring, high-cost activity in software organizations: a human presenter must select features, dispatch the corresponding interactions on a running application, narrate them coherently, and answer questions in real time. Existing automation addresses only fragments -- generalist browser agents target instruction-conditioned task completion, and demo-video tools produce fixed MP4 artifacts that cannot be questioned and silently break under interface drift. We propose Rhetor, a multi-agent system that takes a running web application and its source-code repository as input and produces a rehearsed live demonstration with segment-synchronized narration and real-time voice question answering. The architectural contributions are a cross-modal feature representation that merges UI exploration with source-code analysis into features tagged with discrete focus tiers, a grounded scripter constrained to UI elements observed during exploration and dispatched through multi-strategy semantic locators, a pre-presentation rehearsal loop with explicit convergence and graceful degradation to narration-only segments, and a runtime synchronization invariant that ties each browser action to the audio-end event of its narration segment. Across six pipeline sessions on four deployed applications -- including the public-domain whiteboard application Excalidraw -- the rehearser's internal locator-firing rate (sigma-bar) spans 0.31-1.00 over 147 scripted actions; on the substantial workload (53 actions, full tier differentiation), sigma-bar is approximately 0.92, and on the public-domain reference point the locator-repair step drives convergence to sigma-bar = 1.00 at iteration 2. We additionally define a benchmark protocol of ten metrics across six application categories that would establish, beyond the case study, whether each design choice contributes positively.",
+      "highlights": {
+        "contribution": "提出把 web app + 源码转成可实时提问的排练式产品演示的多 agent 系统 Rhetor，替代静态 MP4 演示。",
+        "innovation": "跨模态特征把 UI 探索 + 源码分析融成 focus-tier 特征；预演阶段循环收敛 locator，运行时用音频结束事件同步浏览器动作。",
+        "method": "多 agent：UI 探索抓组件 + 源码分析抓语义 → 融合 feature；grounded scripter 按 feature 生成动作脚本并用多策略语义 locator 执行；预演循环反复修复 locator；实时时用旁白音频结束事件同步下一步动作。",
+        "results": "六轮 pipeline / 4 个部署应用共 147 个 scripted 动作，locator-firing 率 sigma-bar 覆盖 0.31-1.00；重负载场景 53 动作下约 0.92；Excalidraw 上 locator-repair 在第二轮收敛到 1.00。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T13:36:51Z",
+      "categories": [
+        "cs.AI",
+        "cs.HC",
+        "cs.SE"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 8.0,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30294v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30294v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30906",
+      "title": "Investigating Multi-Agent Deliberation in Law",
+      "authors": [
+        "Cor Steging",
+        "Ludi van Leeuwen",
+        "Tadeusz Zbiegień"
+      ],
+      "affiliations": [],
+      "summary": "作者想看看多智能体 deliberation 用在法律推理上到底行不行。他们在 MAD 基础上提出两个受法庭程序和法律论证启发的多 agent 框架，跟单模型 baseline 在法律和非法律 benchmark 上比。总体准确率差不多，但答对的题不完全重合——多 agent 能解掉一些 baseline 搞不定的案子，反之亦然，尤其在需要多角度批判性思考的问题上更强。",
+      "original_abstract": "Artificial Intelligence is increasingly applied to the field of law, and has the potential to increase access to justice. One particular movement that is gaining traction is that of agentic AI, wherein AI agents, based on Large Language Models (LLMs) can take autonomous actions. In particular, multi-agent approaches in the legal domain remain largely unexplored. In this paper, we investigate multi-agent deliberation methods for legal reasoning tasks using LLMs. We explore multi-agent deliberation (MAD) and introduce two novel multi-agent frameworks inspired by courtroom procedures and legal argumentation. Our experiments on both legal and non-legal benchmarks reveal that multi-agent frameworks achieve comparable overall performance to baseline large language models, but produce significantly distinct answers. Notably, these approaches can successfully solve cases that the baseline fails to address, and vice versa. We conduct a qualitative evaluation and highlight scenarios where multi-agent frameworks outperform monolithic approaches. For example, multi-agent approaches appear better suited for answering questions that require critical thinking from multiple perspectives. Our work positions multi-agent systems as a promising direction for AI in the legal domain, while demonstrating the potential of law-inspired multi-agent approaches for deliberation.",
+      "highlights": {
+        "contribution": "把法庭程序和法律论证结构编成两种 MAD 框架，实证多 agent deliberation 在法律推理任务上的独特价值。",
+        "innovation": "引入受法律程序启发的多 agent 交互结构，而不是通用式的 debate；并给出与单模型高度互补的行为分析。",
+        "method": "构造两个 courtroom-inspired 多 agent 框架，让 LLM agent 按法律程序角色分别论证；在法律和非法律 benchmark 上和单模型 baseline 对比性能和答题重叠度。",
+        "results": "MAD 整体准确率与单 LLM baseline 相当，但答题分布显著不同，能解 baseline 解不掉的案子，在需要多视角批判性思考的题上表现更好。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T20:56:37Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 8.0,
+        "popularity": 5.0,
+        "quality": 6.0,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30906v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30906v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30259",
+      "title": "Multi-Agentic System Leveraging Open-Source LLMs to Mitigate Disinformation Threats",
+      "authors": [
+        "Sebastian Kula",
+        "Martin Tamajka"
+      ],
+      "affiliations": [],
+      "summary": "面对海量假信息人工核查根本忙不过来，作者想用开源 LLM 组多 agent 系统来自动查。他们模拟人类标注员的决策：加共识机制、认知和知识多样性、层级结构；跑 LLaMA / Kimi / Qwen / Deepseek / LLaMA-Nemotron 等开源模型，在英语、波兰语、斯洛伐克语、保加利亚语的假信息检测和事实主张识别上超过单模 GPT-4 / GPT-3.5。",
+      "original_abstract": "In contemporary societies, the threat of disinformation has reached alarming levels, exacerbated by the proliferation of electronic communication, social media, and advancements in artificial intelligence. As a result, there is an urgent need to develop effective countermeasures to mitigate this menace. However, the sheer scale of the problem renders manual fact-checking and human-based verification inadequate, underscoring the necessity for automated methods to detect and debunk disinformation. This article proposes a novel approach based on a multi-agent system that emulates the decision-making processes of human annotators engaged in disinformation detection tasks. By incorporating a consensus mechanism, diversity in cognition and diversity in knowledge, and also hierarchical structure, inspired by human annotators' behavior, the proposed method achieves superior results compared to individual Large Language Models (LLMs), including GPT 4 and GPT 3.5. The system leverages open models (e.g., LLaMA, Kimi, Qwen, Deepseek and LLaMA-Nemotron) to ensure greater transparency. The evaluation of the proposed method encompasses datasets in languages with varying resource availability, including English (high-resource), Polish (medium-resource), Slovak (low-resource) and Bulgarian (low-resource). Experiments were conducted on tasks such as direct disinformation detection, identification of texts worthy of verification, and detection of texts containing verifiable factual claims.",
+      "highlights": {
+        "contribution": "用开源 LLM 组多 agent 系统做假信息检测，超越 GPT-4 / GPT-3.5 单模基线并保证可复现和透明。",
+        "innovation": "把人类标注员的共识 + 认知 / 知识多样性 + 层级结构显式建模到多 agent 决策里，专门服务 disinformation 场景。",
+        "method": "多个开源 LLM 各自作为 agent 阅读文本；通过共识机制和层级结构做合议式决策，覆盖直接判定 / 是否值得核查 / 是否包含可验证主张三类任务。",
+        "results": "在英语（高资源）、波兰语（中资源）、斯洛伐克语和保加利亚语（低资源）的多语数据集上，多任务检测表现全面优于 GPT-4 和 GPT-3.5 单模基线。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T13:07:41Z",
+      "categories": [
+        "cs.CL"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 4.0,
+        "recency": 8.0,
+        "popularity": 5.0,
+        "quality": 6.0,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30259v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30259v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30441",
+      "title": "Translating Natural Language to Strategic Temporal Specifications via LLMs",
+      "authors": [
+        "Marco Aruta",
+        "Francesco Improta",
+        "Vadim Malvone",
+        "Aniello Murano",
+        "Vladana Perlić"
+      ],
+      "affiliations": [],
+      "summary": "多 agent 系统要形式化验证就得写 ATL / ATL* 时序规范，可这活极其易错还费专家。作者做了一份专家标注的自然语言到 ATL / ATL* 数据集，然后微调 3-7B 开源模型，配合最贴近专家判断的 LLM judge。in-domain 微调后小模型能追上强 few-shot 的闭源 API baseline，最好模型 semantic accuracy 0.84 vs 闭源 0.86 打平。他们还发现 judge 可靠性和 generator 能力反相关。",
+      "original_abstract": "A rigorous formalization of system requirements is a fundamental prerequisite for the verification of Multi-Agent Systems (MAS). However, writing correct formal specifications is well known as an error-prone, time-consuming, and expertise-intensive task. This difficulty is further accentuated in MAS, where requirements must capture strategic abilities and temporal objectives. At present, there is no established methodology for deriving MAS specifications from natural language. We present a framework for translating Natural Language descriptions of strategic requirements into well-formed ATL/ATL* formulas using Large Language Models (LLMs). Since no available dataset supports supervised learning for the NL-to-ATL/ATL* translation task, we create and curate a novel expert-validated dataset, employed for training and evaluating fine-tuned models. On a held-out test set, evaluated under the LLM judge that best agrees with expert annotations, in-domain fine-tuning of small open-weight models (3 - 7B parameters) matches strong few-shot proprietary API baselines. Our best fine-tuned system reaches 0.84 semantic accuracy, statistically on par with 0.86 for the strongest few-shot proprietary baseline, while keeping requirements on-premises. We further find that judge reliability is inverse to generator strength. The open-weight Llama-3.3-70B tracks human verdicts most closely, whereas the strongest proprietary models are the least reliable judges, over-rejecting faithful paraphrases of the reference. To assess the practical applicability of the generated specifications, we embed our tool to an existing strategic logics model checker, enabling non-expert users to specify strategic properties in natural language.",
+      "highlights": {
+        "contribution": "首个把自然语言翻成 ATL / ATL* 战略时序规范的框架和专家验证数据集，让非专家能用自然语言写 MAS 规范。",
+        "innovation": "指出 LLM judge 可靠性和 generator 强度反向相关这一反直觉发现，同时把生成的规范嵌进现成 model checker 打通端到端。",
+        "method": "构造专家标注的 NL→ATL/ATL* 数据集；用它微调 3-7B 开源 LLM，同时挑选与专家判断最一致的 LLM 作 judge；再把生成的规范喂给现有战略逻辑 model checker。",
+        "results": "在 held-out 上 in-domain 微调的小模型 semantic accuracy 达 0.84，与最强 few-shot 闭源 baseline 的 0.86 统计上打平；发现 open-weight Llama-3.3-70B 是最贴合人类判断的 judge，闭源大模型反而爱过度拒绝忠实改写。"
+      },
+      "images": [],
+      "published_date": "2026-06-29T15:15:40Z",
+      "categories": [
+        "cs.MA",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 8.0,
+        "popularity": 5.0,
+        "quality": 6.2,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30441v2",
+      "arxiv_url": "https://arxiv.org/abs/2606.30441v2",
+      "venue": null
+    }
+  ],
+  "total": 25
+}

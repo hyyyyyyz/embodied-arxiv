@@ -209,6 +209,42 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.28383",
+      "title": "Zero-Label Driving Scenario Complexity Detection via Joint Embedding Predictive Architecture",
+      "authors": [
+        "Santosh Jaiswal"
+      ],
+      "affiliations": [],
+      "summary": "找难开的自动驾驶场景通常得靠人标或写规则，作者干脆让模型自己发现。用 nuPlan mini 的结构化 agent 状态训一个极简 JEPA，把时序预测误差当作零标签的场景复杂度分。无保护左转、斑马线交互、行人接近这些场景分数明显更高，直路和静止交通更低，下游异常检测 AP 0.512（随机基线 0.436）。",
+      "original_abstract": "Identifying complex and safety-critical driving scenarios in large unlabelled datasets is an important but expensive problem. Existing approaches rely on human annotators, supervised classifiers, or carefully engineered rule sets, all of which require substantial prior knowledge about what constitutes a difficult scenario. We ask whether a model can discover scenario complexity on its own, with no labels at any stage. We train a minimal Joint Embedding Predictive Architecture (JEPA) on structured agent state data from the nuPlan mini dataset and use the temporal prediction error as a zero-shot complexity score. Without access to any ground-truth labels during training or evaluation setup, the model assigns significantly higher scores to scenarios involving unprotected turns, crosswalk interactions, and pedestrian proximity, and significantly lower scores to lane-following and stationary-traffic scenarios. We validate this finding through four ablation experiments that isolate the source of the signal, and through a downstream anomaly detection evaluation that achieves Average Precision of 0.512 against a 0.436 chance baseline. The results show that temporal prediction error in a self-supervised latent world model is a practical proxy for driving scenario complexity.",
+      "highlights": {
+        "contribution": "提出一种完全无标签的驾驶场景复杂度评估方法，把自监督世界模型的预测误差直接当做难度信号。",
+        "innovation": "首次把 JEPA 潜空间的时序预测误差作为「场景复杂度」的代理指标，训练和评测都不需要任何 ground-truth 标签。",
+        "method": "输入是 nuPlan mini 的结构化 agent 状态序列；用一个极简 JEPA 预测未来潜表示；训练完把预测误差直接当复杂度分数，做四个消融隔离信号来源，并在异常检测任务上下游验证。",
+        "results": "在下游异常检测上取得 AP 0.512，明显高于随机基线 0.436；定性上无保护转弯、斑马线、行人相关场景分数显著高于直路和静止交通。"
+      },
+      "images": [],
+      "published_date": "2026-06-21T05:26:58Z",
+      "categories": [
+        "cs.CV",
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 6.8,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28383v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28383v1",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.22509",
       "title": "Imagine to Ensure Safety in Hierarchical Reinforcement Learning",
       "authors": [
@@ -536,6 +572,52 @@
       "venue": null
     },
     {
+      "arxiv_id": "2606.23743",
+      "title": "Sol Video Inference Engine: Agent-Native Full-Stack Acceleration Framework for Efficient Video Generation",
+      "authors": [
+        "Yitong Li",
+        "Junsong Chen",
+        "Haopeng Li",
+        "Haozhe Liu",
+        "Jincheng Yu",
+        "Ligeng Zhu",
+        "Ping Luo",
+        "Song Han",
+        "Enze Xie"
+      ],
+      "affiliations": [],
+      "summary": "视频扩散模型的推理加速非常吃「组合」——同一招在不同模型 / 硬件 / 分辨率上效果差很多，手工调很累。作者搞了个 agent 化的免训练加速栈 Sol，把 cache、稀疏 attention、token 剪枝、量化、kernel fusion 五个技能各交给一个并行 agent 优化，再由 integrator 拼成整套方案，人只做质检。在 64B Cosmos3-Super、22B LTX-2.3、2B SANA-Video 上端到端加速 2x 以上，VBench 质量几乎无损。",
+      "original_abstract": "Modern video diffusion models achieve higher generation quality through scaling, but this also increases inference cost. Although many acceleration methods have been proposed, a central challenge is that the most effective acceleration strategy is highly instance-specific: a recipe that works well for one combination of model, hardware, and inference configuration often does not transfer to another. Different models vary in architecture, numerical sensitivity, and attention concentration patterns. Inference settings differ in spatial and temporal resolution and video duration, while hardware platforms differ in memory hierarchy, supported numerical formats, and kernel throughput. These factors create a large tuning space, making manual performance engineering costly. We present Sol Video Inference Engine, an agentic, native, training-free acceleration framework for video diffusion models. It organizes five broadly applicable techniques, cache, sparse attention, token pruning, quantization, and kernel fusion, into an agentic acceleration stack for instance-specific optimization. For a concrete deployment target defined by a model, hardware platform, and serving configuration, parallel skill agents optimize the implementation of each technique, an agent integrator composes them into a global acceleration stack, and a human validator provides feedback on generation quality. We instantiate this workflow on three video models with different sizes and architectures: 64B Cosmos3-Super, 22B LTX-2.3, and 2B SANA-Video. With little human effort, the full stack achieves more than 2x end-to-end acceleration while maintaining near-lossless VBench quality, demonstrating the effectiveness of the agent framework for video diffusion acceleration.",
+      "highlights": {
+        "contribution": "把视频扩散推理加速做成一个 agent-native 全栈框架，让 agent 自动为具体「模型+硬件+服务配置」拼出最优加速组合。",
+        "innovation": "首次用并行技能 agent + 集成 agent + 人类质检的组合来做 instance-specific 的推理加速调参，避开了手工 tuning。",
+        "method": "输入是目标模型、硬件、服务配置；五个并行 skill agent 分别优化 cache/稀疏 attn/token pruning/量化/kernel fusion 的实现，integrator agent 组合成全局栈，人类打分做反馈；训练无关，纯推理侧优化。",
+        "results": "在 64B Cosmos3-Super、22B LTX-2.3、2B SANA-Video 三个不同规模模型上端到端 >2x 加速，VBench 分数近乎无损。"
+      },
+      "images": [],
+      "published_date": "2026-06-21T17:23:20Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 7.0,
+        "popularity": 7.5,
+        "quality": 7.8,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.23743v2",
+      "arxiv_url": "https://arxiv.org/abs/2606.23743v2",
+      "venue": null
+    },
+    {
       "arxiv_id": "2606.22330",
       "title": "Hypothesis-Driven Skill Optimization for LLM Agents",
       "authors": [
@@ -570,88 +652,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.22330v1",
       "arxiv_url": "https://arxiv.org/abs/2606.22330v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.22647",
-      "title": "RAVEN: Agentic RAG for Automated Vulnerability Repair",
-      "authors": [
-        "Varun Gadey",
-        "Zijie Liu",
-        "Alexandra Dmitrienko"
-      ],
-      "affiliations": [],
-      "summary": "RAVEN 把 agentic RAG 用进自动漏洞修复：本地小模型 + 多路检索历史修复 + Curator Agent 拉跨文件依赖。在 160 个真实 CVE 上 83.13% 修复成功率，超过现有 SOTA，泛化到未见 CWE 和 OOD 仍稳。",
-      "original_abstract": "Automated vulnerability repair has emerged as a promising direction to mitigate the growing number of software vulnerabilities. Recent advances in Large Language Models (LLMs) have further accelerated research in automated repair. However, existing frameworks remain largely restricted to memory-related vulnerabilities and locally repairable vulnerability settings, leaving generalization to unseen vulnerability types underexplored. Their evaluations are often limited to a single programming language, and largely rely on proprietary models. In this paper, we propose RAVEN, a scalable, efficient and autonomous framework that integrates an agentic retrieval-augmented generation (RAG) pipeline with controlled iterative repair in a unified framework. The framework utilizes open-source LLMs in a fully locally deployable setting with limited GPU requirements, while building a multi-faceted retrieval pipeline to retrieve historically relevant vulnerability fixes and guide the patch generation. In addition, RAVEN introduces a dedicated Curator Agent that retrieves cross-file dependencies from the target repository, to fix complex vulnerabilities that cannot be addressed using local vulnerable code alone. We evaluate RAVEN on 160 real-world CVE vulnerabilities across diverse vulnerability types, two programming languages, unseen CWE categories, and out-of-distribution settings. RAVEN achieves an overall repair success rate of 83.13%, outperforming all existing state-of-the-art repair frameworks, while also demonstrating strong generalization capabilities and maintaining the repair cost negligible.",
-      "highlights": {
-        "contribution": "给出可本地部署、跨文件依赖感知、跨 CWE 类型泛化的自动漏洞修复 agent。",
-        "innovation": "Curator Agent 显式抓取跨文件依赖，配合多面检索历史 fix。",
-        "method": "开源 LLM + agentic RAG pipeline：多路检索历史 CVE + Curator 抓跨文件依赖 + 受控迭代修复。",
-        "results": "160 个真实 CVE：总体修复 83.13% 超 SOTA；跨语言、未见 CWE、OOD 设定泛化良好，成本低。"
-      },
-      "images": [],
-      "published_date": "2026-06-21T19:18:06Z",
-      "categories": [
-        "cs.CR",
-        "cs.LG",
-        "cs.SE"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 7.0,
-        "recency": 9.5,
-        "popularity": 7.2,
-        "quality": 7.8,
-        "recommendation": 7.4
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.22647v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.22647v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.22673",
-      "title": "AgentLens: Interpretable Safety Steering via Mechanistic Subspaces for Multi-Turn Coding Agent",
-      "authors": [
-        "Weidi Luo",
-        "Qiming Zhang",
-        "Yihao Quan",
-        "Mingyu Jin",
-        "Jie Cai",
-        "Chaowei Xiao",
-        "Jingcheng Niu",
-        "Zhen Xiang"
-      ],
-      "affiliations": [],
-      "summary": "Coding agent 多轮交互的安全风险用外护栏不够细。AgentLens 走白盒：从隐藏表征里检测危险执行状态，并在单层 10 维子空间里干预把行为拉回来。配了 MAS 基准，多个模型上检测准、有害动作显著减少。",
-      "original_abstract": "Coding agents based on large language models (LLMs) demonstrate remarkable autonomous capabilities, but they also introduce significant safety and misuse risks during multi-turn interactions with external environments. Existing safety mechanisms mainly rely on external guardrails, which have a limited ability to perform fine-grained behavioral control during execution. Meanwhile, recent mechanistic interpretability methods for LLM safety are mostly confined to single-turn or jailbreak-style QA settings, limiting their ability to capture the evolving risk dynamics of multi-turn agent execution. In this paper, we investigate the safety of multi-turn coding agents from an internal perspective. We propose AgentLens (Mechanistic Subspace Intervention and Steering), a white-box defense framework that performs runtime safety detection and representation-level mitigation for coding agents. Unlike conventional agent guardrails, AgentLens detect harmful execution states from step-level hidden representations and mitigate unsafe behavior by intervening in a 10-dimensional subspace within a single layer. To support this research, we introduce the Mechanistic Agent Safety (MAS) benchmark, comprising comprehensively annotated multi-turn execution trajectories across 194 tasks using LLaMA-3.1-8B, Qwen-2.5-7B, and Gemma-2-9B. Extensive experiments show that AgentLens achieves strong safety detection performance, provides preliminary evidence for lookahead risk anticipation, and substantially reduces harmful actions of the coding agent, establishing a foundation for applying mechanistic interpretability to dynamic LLM agent safety. The code is available at: https://github.com/EddyLuo1232/AgentLens",
-      "highlights": {
-        "contribution": "首个针对多轮 coding agent 的机械可解释性级安全干预框架。",
-        "innovation": "在 step 级隐藏表征里检测有害状态，并在单层 10 维子空间做表征级 steering。",
-        "method": "训练 / 探针出 10 维安全子空间，对多轮 coding agent 每步做表征干预；附 MAS 基准 194 任务多模型。",
-        "results": "在 LLaMA-3.1-8B / Qwen-2.5-7B / Gemma-2-9B 上检测准确，多轮有害动作显著减少，并显示 lookahead 风险预判迹象。"
-      },
-      "images": [],
-      "published_date": "2026-06-21T21:13:55Z",
-      "categories": [
-        "cs.AI",
-        "cs.SE"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "llm agent"
-      ],
-      "scores": {
-        "relevance": 6.8,
-        "recency": 9.5,
-        "popularity": 7.0,
-        "quality": 7.6,
-        "recommendation": 7.2
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.22673v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.22673v1",
       "venue": null
     },
     {
@@ -728,43 +728,6 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.22417v1",
       "arxiv_url": "https://arxiv.org/abs/2606.22417v1",
-      "venue": null
-    },
-    {
-      "arxiv_id": "2606.22678",
-      "title": "RigorBench: Benchmarking Engineering Process Discipline in Autonomous AI Coding Agents",
-      "authors": [
-        "Meher Bhaskar Madiraju",
-        "Meher Sai Preetam Madiraju"
-      ],
-      "affiliations": [],
-      "summary": "现有 coding agent benchmark 只看「最后能不能 pass」，不管过程乱不乱。RigorBench 给出 5 个过程纪律维度 + RigorScore，30 个任务测各种 harness。结果：结构化过程纪律平均把过程分提 41%、下游 outcome 也 +17%。",
-      "original_abstract": "Agentic coding harnesses - such as Agent-Skills, Superpowers, and Agent-Rigor - are increasingly deployed to augment underlying LLMs for real-world software engineering tasks. Existing benchmarks evaluate these agents almost exclusively on outcome correctness: whether generated code passes tests or resolves issues. We argue that this outcome-only lens is insufficient: an agent that arrives at a correct solution through reckless trial-and-error, without planning, verification, or graceful recovery, is fundamentally less reliable than one that follows sound engineering discipline. We introduce RigorBench, the first benchmark designed to measure process discipline in AI coding agents. RigorBench evaluates these harnesses across five pillars: Planning Fidelity, Verification Coverage, Recovery Efficiency, Abstention Quality, and Atomic Transition Integrity. A composite RigorScore aggregates these dimensions into a single metric via a weighted sum. We curate a suite of 30 tasks spanning five categories - Plan-Then-Build, Verify-Or-Die, Doom Loop Gauntlet, Know When to Fold, and Don't Break the Build-and evaluate leading harnesses in a controlled with/without experimental design against baseline coding assistants. Our results show that structured process discipline not only improves process quality scores by an average of 41% but also raises downstream outcome correctness by 17%, providing the first quantitative evidence that how agents code matters as much as what they produce. We release the full benchmark, scoring rubrics, and trajectory analysis tools as open-source artifacts.",
-      "highlights": {
-        "contribution": "首个测「过程纪律」的 coding agent benchmark，挑战 outcome-only 评测惯例。",
-        "innovation": "5 维过程指标 + RigorScore + 5 大任务类别强制 agent 在过程上犯错。",
-        "method": "30 个任务覆盖 Plan-Then-Build / Verify-Or-Die 等；with/without harness 对照对若干 agent 进行评测。",
-        "results": "结构化过程纪律让过程质量平均 +41%，下游 outcome correctness +17%。"
-      },
-      "images": [],
-      "published_date": "2026-06-21T21:41:34Z",
-      "categories": [
-        "cs.SE",
-        "cs.AI"
-      ],
-      "matched_domain": "Agent",
-      "matched_keywords": [
-        "agentic"
-      ],
-      "scores": {
-        "relevance": 6.6,
-        "recency": 9.5,
-        "popularity": 7.0,
-        "quality": 7.4,
-        "recommendation": 6.8
-      },
-      "pdf_url": "https://arxiv.org/pdf/2606.22678v1",
-      "arxiv_url": "https://arxiv.org/abs/2606.22678v1",
       "venue": null
     },
     {
@@ -879,6 +842,47 @@
       },
       "pdf_url": "https://arxiv.org/pdf/2606.22419v1",
       "arxiv_url": "https://arxiv.org/abs/2606.22419v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.30668",
+      "title": "Emergent Culture in Minimal LLM Systems",
+      "authors": [
+        "Simon Jones",
+        "Sabine Hauert"
+      ],
+      "affiliations": [],
+      "summary": "把三个 LLM agent 丢进一个「消息+共享文本储存」的极简环境，储存还会主动衰减，看它们会不会自发合作。结果 agent 们真的自发发明了存储管理策略，还生成了不断演化的文化产物，动力系统分析显示这些行为在衰减熵界之上仍有长程结构，作者把这解读为 Sperber 意义下的涌现文化。",
+      "original_abstract": "What happens when LLM agents operate with no context outside a turn, minimal prompting, and simple tools? Inspired by swarm engineering, we give collectives of three agents the ability to send messages and manipulate a shared actively decaying text store, introducing evolutionary pressure. The agents spontaneously cooperate, develop storage management strategies, and generate complex evolving cultural artifacts, with no top-down engineering. Using tools from dynamical systems analysis, we show that these behaviours exhibit structured long-range coherence beyond the entropy horizon of the decaying store, consistent with emergent culture in the Sperberian sense.",
+      "highlights": {
+        "contribution": "在最小化提示、无跨轮上下文的设置下展示了 LLM 群体可以自发涌现出协作和文化产物。",
+        "innovation": "借鉴 swarm engineering 的思路，用「主动衰减的共享文本存储 + 消息工具」作为进化压力，构造了一个极简的多 agent 文化涌现测试床。",
+        "method": "三个 LLM agent 每轮无外部上下文，仅能发消息和读写一个会衰减的共享文本；无自上而下设计；用动力系统工具分析行为的长程相关性并与衰减熵界比较。",
+        "results": "定性上观察到自发合作、存储管理策略、演化中的文化产物；定量上行为的结构化长程一致性超过衰减存储的熵界，未给出标准 benchmark 数字。"
+      },
+      "images": [],
+      "published_date": "2026-06-21T15:56:36Z",
+      "categories": [
+        "cs.NE",
+        "cs.AI",
+        "cs.CL",
+        "cs.MA",
+        "nlin.AO",
+        "q-bio.PE"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 7.0,
+        "popularity": 5.5,
+        "quality": 6.2,
+        "recommendation": 6.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.30668v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.30668v1",
       "venue": null
     },
     {

@@ -1,0 +1,1033 @@
+{
+  "date": "2026-06-26",
+  "papers": [
+    {
+      "arxiv_id": "2606.27755",
+      "title": "Drop-Then-Recovery: How Redundant Are Vision-Language-Action Models?",
+      "authors": [
+        "Guoheng Sun",
+        "Kaixi Feng",
+        "Shwai He",
+        "Xiaochuan Gong",
+        "Yexiao He",
+        "Ziyao Wang",
+        "Zheyu Shen",
+        "Wanghao Ye",
+        "Ramana Rao Kompella",
+        "Gaowen Liu",
+        "Ang Li"
+      ],
+      "affiliations": [],
+      "summary": "作者想搞清楚 VLA 里那么大的语言主干是不是真有用。他们提出 Drop-Then-Recovery：先用一个 GateProbe 敏感度分数排序 transformer 块，然后砍掉再微调看恢复情况。结果发现语言主干冗余度很高，视觉和动作通路则不能乱砍。在 LIBERO 上砍掉一半 LLM 块，OpenVLA-OFT 反而从 95.0% 升到 98.3%。",
+      "original_abstract": "Vision-Language-Action (VLA) models enable instruction-driven robotic manipulation, but they inherit oversized language backbones from pretrained VLMs whose capacity far exceeds what is needed for short robotic instructions. This raises a basic question: how much of a VLA model is actually necessary for closed-loop control? In this work, we study architectural redundancy in VLA models by using transformer block removal as a controlled intervention. We introduce \\textbf{Drop-Then-Recovery (DTR)}, an analysis protocol that removes selected blocks from a pretrained VLA model and then fine-tunes the resulting model to measure whether the removed capacity was necessary for downstream control. To make this intervention reliable, we propose \\textbf{GateProbe}, a one-shot virtual-gate sensitivity metric that ranks blocks by their contribution to the downstream action loss. Across multiple VLA architectures, manipulation benchmarks and even real-robot industrial scenarios, we find a strong asymmetry in post-removal recoverability: \\ul{\\textit{language backbones are highly redundant for standard robotic manipulation tasks, whereas vision and action pathways are substantially less tolerant to removal}}. On LIBERO, removing half of the LLM blocks even improves OpenVLA-OFT from 95.0% to 98.3% under the same downstream fine-tuning budget, and retaining only two language blocks still recovers baseline-level performance. These results suggest that current VLA benchmarks may exert limited pressure on deep language grounding and compositional instruction understanding, and that future VLA architectures should allocate capacity more deliberately across language, vision, and action components. The code is available at https://github.com/s1ghhh/VLADrop.",
+      "highlights": {
+        "contribution": "系统揭示 VLA 里语言主干严重冗余，视觉/动作通路才是关键容量。",
+        "innovation": "提出 DTR 分析协议和 GateProbe 一次性敏感度指标，把「块删除+再微调」变成可靠工具。",
+        "method": "输入是预训练 VLA 模型；用 GateProbe 计算每个 transformer 块对下游 action loss 的敏感度并排序；按序删除后在目标任务上做统一预算微调；跨多个 VLA 架构和 LIBERO、真机工业场景对比。",
+        "results": "LIBERO 上删掉一半 LLM 块让 OpenVLA-OFT 从 95.0% 升到 98.3%；只留两个语言块也能恢复基线水平。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T06:22:17Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model",
+        "robotic manipulation",
+        "openvla"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 8.0,
+        "popularity": 7.8,
+        "quality": 8.5,
+        "recommendation": 8.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.27755v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.27755v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28128",
+      "title": "PhysisForcing: Physics Reinforced World Simulator for Robotic Manipulation",
+      "authors": [
+        "Peiwen Zhang",
+        "Yufan Deng",
+        "Shangkun Sun",
+        "Juncheng Ma",
+        "Duomin Wang",
+        "Jonas Du",
+        "Zilin Pan",
+        "Ye Huang",
+        "Hao Liang",
+        "Songyan Huang",
+        "Ruihua Zhang",
+        "Enze Xie",
+        "Ming-Yu Liu",
+        "Daquan Zhou"
+      ],
+      "affiliations": [],
+      "summary": "视频生成模型作为世界模拟器常出现动作不连续和接触物理不合理。作者发现主要问题在运动物体形变和交互实体的时空相关性。PhysisForcing 用像素级轨迹对齐和语义级关系对齐两个损失联合监督物理关键区域。在 R-Bench 上把 Wan2.2 和 Cosmos3-Nano 分别提升 22.3% 和 9.2%，作为世界模型闭环成功率从 16% 升到 24%。",
+      "original_abstract": "Video generation models have emerged as a promising paradigm for embodied world simulation. However, both general-domain video generators and robot-specific data fine-tuned models can still produce physically implausible manipulations, including discontinuous motion trajectories and inconsistent robot-object interactions, which limits their reliability as world simulators. Through extensive experiments, we find that such physical instability mainly arises from two factors: deformation of moving objects and implausible spatio-temporal correlations among interacting entities, particularly during contact. Building on this observation, we propose PhysisForcing, a scalable training framework that strengthens physical consistency by focusing supervision on physics-informative regions through joint optimization of pixel-level and semantic-level features. The framework consists of a pixel-level trajectory alignment loss, which supervises DiT features using reference point trajectories, and a semantic-level relational alignment loss, which aligns DiT features with inter-region relations extracted from a frozen video understanding encoder. Extensive experiments on R-Bench, PAI-Bench, and EZS-Bench show that PhysisForcing consistently improves embodied video generation over strong baselines, improving the Wan2.2-I2V-A14B and Cosmos3-Nano base models on R-Bench by 22.3\\% and 9.2\\% (7.1\\% and 3.7\\% over vanilla finetuning), with the Cosmos3-Nano variant attaining the best overall score. Beyond generation, as a world model under the WorldArena action-planner protocol it raises the closed-loop success rate from 16.0\\% to 24.0\\% and further improves downstream policy success, indicating that physically aligned video models yield stronger representations for robotic manipulation.",
+      "highlights": {
+        "contribution": "把物理一致性显式塞进视频世界模型训练，兼顾生成质量和作为闭环 WM 的可用性。",
+        "innovation": "像素轨迹对齐+语义关系对齐两个损失协同，把监督集中在「物理信息丰富」的区域。",
+        "method": "输入机器人操作视频；DiT 视频生成主干；轨迹对齐 loss 用参考点轨迹监督特征，关系对齐 loss 用冻结视频理解 encoder 抽取区域间关系；在 R-Bench/PAI-Bench/EZS-Bench 上评测；WorldArena 协议下测闭环成功率。",
+        "results": "R-Bench 上 Wan2.2-I2V-A14B +22.3%、Cosmos3-Nano +9.2%（比 vanilla finetune 分别多 7.1% 和 3.7%）；闭环成功率 16%→24%。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T14:30:18Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI",
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 8.0,
+        "popularity": 8.0,
+        "quality": 8.3,
+        "recommendation": 8.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28128v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28128v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28133",
+      "title": "Translation as a Bridging Action: Transferring Manipulation Skills from Humans to Robots",
+      "authors": [
+        "Sijin Chen",
+        "Kaixuan Jiang",
+        "Haixin Shi",
+        "Yanhui Wang",
+        "Weiheng Zhong",
+        "Haosheng Li",
+        "Bo Jiang",
+        "Yuxiao Liu",
+        "Xihui Liu"
+      ],
+      "affiliations": [],
+      "summary": "把人手动作直接当成 6DoF 机器人动作训 VLA 效果差，因为姿态噪声大且平行夹爪的接触模式和人手不一样。作者提出一个「桥接动作」：人和机器人共享的相对手腕平移。基于 π₀ 类 VLA 做交错动作 token 和注意力掩码。在双臂新任务上比 6DoF 迁移好很多且随人数据量扩展。",
+      "original_abstract": "We study whether we can learn novel manipulation skills from human actions to a bi-manual robot with parallel grippers. Human action data is cheap, abundant, and diverse, making it one of the most promising resources for scaling up robot learning. Yet transferring skills from humans to robots remains hard: most prior work treats humans as just another bi-manual 6DoF embodiment, where hand-pose estimates are noisy and the contact patterns of human fingers differ fundamentally from those of a parallel gripper. We argue that learning rotation-inclusive action signals from human data is therefore sub-optimal, and instead propose a bridging action representation: the relative wrist translation within the initial head-camera frame, an action space shared by humans and robots. To handle the potential absence of certain action components in different embodiments, we build a $π_0$-like vision-language-action model with interleaved action tokens and attention masking. On a suite of novel bi-manual manipulation tasks, our bridging action transfers human manipulation knowledge to robots far more effectively than noisy 6DoF human actions and scales with the amount of human data.",
+      "highlights": {
+        "contribution": "用共享动作空间「相对手腕平移」桥接人手到平行夹爪机器人，避开旋转和接触模式差异。",
+        "innovation": "抛弃 6DoF 的姿态迁移思路，用初始头部相机坐标系里的相对腕部平移作为跨体桥梁；π₀ 风格 VLA 加交错动作 token 与注意力掩码。",
+        "method": "输入人手/机器人视频；提取头相机初始帧下的相对手腕平移作为共享动作；π₀ 风格 VLA 主干，动作 token 交错、掩码控制哪些通道在训哪些 embodiment；双臂机器人任务集评估。",
+        "results": "在多项新双臂操作任务上桥接动作显著优于 6DoF 人手动作迁移，且性能随人数据量增加持续提升。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T14:34:04Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 8.0,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 8.1
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28133v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28133v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.27872",
+      "title": "S$^2$-VLA: State-Space Guided Vision-Language-Action Models for Long-Horizon Manipulation",
+      "authors": [
+        "Zhipeng Xie",
+        "Zongyi Han",
+        "Xiangyi Wei",
+        "Shiliang Sun",
+        "Yang Li",
+        "Jing Zhao"
+      ],
+      "affiliations": [],
+      "summary": "长程操作里 VLA 常因固定权重融合视觉/语言/动作特征而累计误差。作者提出 S²-VLA，用状态空间引导的自适应注意力 SSGAA 维护一个信念状态跟踪任务阶段，动态调门控权重。2B 参数在 LIBERO 和 SimplerEnv 上超过 7B 模型。",
+      "original_abstract": "Vision-Language-Action (VLA) models have demonstrated strong capabilities in robotic manipulation, but their performance degrades significantly in long-horizon tasks due to cumulative error propagation. This limitation largely arises from static feature fusion mechanisms that rely on fixed weights to combine visual, language, and action representations, preventing the model from adapting to different phases of task execution. To address this limitation, we propose S$^2$-VLA, a framework that introduces a State-Space Guided Adaptive Attention (SSGAA) mechanism. SSGAA maintains a belief state that tracks task progression and generates dynamic gating weights to adaptively fuse information from three complementary sources visual features for spatial perception, task intents for high-level task planning, and temporal action sequences for execution consistency. This adaptive fusion allows the model to shift its focus throughout task execution, aligning with the evolving requirements of different task stages. Despite its compact 2B parameter size, S$^2$-VLA consistently outperforms larger 7B-scale models and achieves state-of-the-art performance on long-horizon manipulation benchmarks, including LIBERO and SimplerEnv. highlighting the importance of adaptive feature fusion for long-horizon robotic manipulation.",
+      "highlights": {
+        "contribution": "把「任务阶段感知」引入 VLA 特征融合，缓解长程操作误差累积。",
+        "innovation": "SSGAA 用状态空间信念跟踪任务进度，让视觉、意图、动作序列的融合权重随阶段变化。",
+        "method": "输入多模态观测；架构在 VLA 主干上加 SSGAA 门控层，用 SSM 维护 belief state 生成动态融合权重；训练用标准 imitation loss；对比 7B 规模 VLA。",
+        "results": "2B 参数在 LIBERO 和 SimplerEnv 长程任务上取得 SOTA，超过 7B 规模模型。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T09:13:16Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 8.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.27872v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.27872v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.27807",
+      "title": "SpikeVLA: Vision-Language-Action Models with Spiking Neural Networks",
+      "authors": [
+        "Ruiqi Song",
+        "Dujun Nie",
+        "Siyu Teng",
+        "Baiyong Ding",
+        "Xiaotong Zhang",
+        "Dong Li",
+        "Chenming Zhang",
+        "Yuchen Li",
+        "Hangbin Wu",
+        "Long Chen"
+      ],
+      "affiliations": [],
+      "summary": "现有 VLA 基于大 transformer，能耗和延迟都很高，不好部署到低功耗场景。作者提出 SpikeVLA，全脉冲神经网络的 VLA，包含脉冲视觉编码器 Spike-V、多模态脉冲 LLM Spike-L 和脉冲动作策略 Spike-A。在导航和控制任务上大幅降能耗，同时保持竞争力性能。",
+      "original_abstract": "Vision-Language-Action (VLA) models have become a dominant paradigm for embodied intelligence. However, most existing approaches are built on large-scale transformers, resulting in substantial inference latency and energy consumption that limit their practical deployment in low-power, real-time scenarios. We propose SpikeVLA, a spiking VLA architecture for embodied navigation with energy-efficient inference, consisting of three key components. (i) A spiking vision encoder, Spike-V, that replaces dense continuous layers with event-driven spiking layers to reduce the energy consumption of visual representation learning. (ii) A multi-modal spiking large language model, Spike-L, that reformulates cross-modal reasoning with spiking dynamics and token-level event-driven sparsity to further lower computational cost. (iii) A spiking action policy network, Spike-A employs Laplacian-kernel population coding with a multi-layer fully connected SNN, and decodes spiking activities into stable and robust continuous control with energy-efficient inference under low-power constraints. Experiments on navigation and robotic control tasks show that SpikeVLA significantly reduces energy consumption and computational cost while maintaining competitive performance, highlighting its potential for low-power, real-time embodied intelligence.",
+      "highlights": {
+        "contribution": "首个纯 SNN 结构的 VLA，为低功耗实时具身智能开路。",
+        "innovation": "把事件驱动 SNN 从视觉一路贯彻到语言和动作解码，用 Laplacian 核 population coding 保证连续控制稳定。",
+        "method": "Spike-V 换掉 CNN 用脉冲层做视觉编码；Spike-L 用 token 级事件稀疏做跨模态推理；Spike-A 多层全连接 SNN 加 Laplacian 核 population coding 解码连续控制；在导航和机器人控制任务上评测。",
+        "results": "能耗和计算成本显著下降，性能与传统 VLA 持平（具体数字未列）。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T07:45:45Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action"
+      ],
+      "scores": {
+        "relevance": 8.2,
+        "recency": 8.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.27807v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.27807v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28555",
+      "title": "Robotic Arm-Based Spectral Sensing for Strawberry Positioning and Non-Destructive Sweetness Measurement",
+      "authors": [
+        "Yi Yang",
+        "Mark Cardamis",
+        "Wen Hu"
+      ],
+      "affiliations": [],
+      "summary": "作者搭了一套机械臂+光谱传感系统对草莓做无损甜度检测。用 YOLOv11s 检测，RGB-ToF 标定对齐点云，手眼标定后闭环靠近目标。42 次实验端到端 88.1% 成功，检测 95.24%。",
+      "original_abstract": "Accurate assessment of sweetness is essential for quality control in agriculture, yet conventional methods rely on destructive sampling and are difficult to scale. This thesis presents a robotic arm-based spectral sensing system for strawberry detection, localization, approach, and non-destructive sweetness estimation.   The system integrates perception, calibration, and robotic control in a closed-loop pipeline. A YOLOv11s detector is adopted for real-time strawberry detection, while RGB-ToF calibration and mask-to-depth alignment are used to obtain geometrically consistent target localization. A custom eye-in-hand hand-eye calibration workflow is developed to estimate the rigid transform between gripper_link and cam_front, enabling reliable transformation of fruit targets into the robot base frame. Based on these estimates, the robot executes a waypoint-based search and an incremental closed-loop approach strategy to position the sensor at optimal working distance for sweetness sensing.   Experimental results show strong end-to-end performance (88.10% success over 42 trials), with robust detection (95.24%) and successful approach execution once a target is detected (100% conditional success). Hand-eye calibration comparisons indicate that although Andreff yields the smallest translation norm in single-run results, the Park method provides better cross-sample consistency and therefore more stable downstream robot behavior. The residual failures are concentrated in the sensing stage, especially valid-region extraction for sweetness estimation under difficult depth/reflectance conditions.   Overall, this work demonstrates the feasibility of integrating RGB-ToF perception, robotic manipulation, and non-destructive sensing for practical strawberry quality assessment, and provides a scalable baseline for future integration of learning-based policies such as Vision-Language-Action models.",
+      "highlights": {
+        "contribution": "把感知、标定、机械臂控制整合成闭环流水线做非破坏性水果甜度评估。",
+        "innovation": "定制 eye-in-hand 手眼标定+增量闭环靠近策略，让传感器停在最佳工作距离。",
+        "method": "输入 RGB-ToF 图像；YOLOv11s 检测草莓，mask-to-depth 对齐+手眼标定 (对比 Andreff/Park) 变换到机器人基坐标；waypoint 搜索加增量闭环靠近，光谱传感做甜度估计。",
+        "results": "42 次试验总体成功率 88.10%，检测 95.24%，检测后靠近条件成功率 100%；失败集中在传感阶段。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T19:15:17Z",
+      "categories": [
+        "cs.RO",
+        "eess.SP"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 8.0,
+        "popularity": 5.5,
+        "quality": 6.5,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28555v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28555v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28476",
+      "title": "FADA: Few-Shot Domain Adaptation via Dynamics Alignment for Humanoid Control",
+      "authors": [
+        "Angchen Xie",
+        "Nikhil Sobanbabu",
+        "Ishayu Shikhare",
+        "Alan Wang",
+        "Max Simchowitz",
+        "Guanya Shi"
+      ],
+      "affiliations": [],
+      "summary": "人形机器人的高精度控制常被目标域动力学不匹配拖后腿。FADA 用规划器+逆动力学模型三阶段架构：先在特权信息下训 oracle 策略，用 DAgger 蒸馏到学生 Planner-IDM，部署时冻结 planner 只用 2 分钟目标域数据微调 IDM。真实人形机器人上能做多种高精度全身任务。",
+      "original_abstract": "High-precision humanoid control is limited by target-domain dynamics mismatch, where the same control objective can induce different realized motions under changes in terrain, payload, or actuator response. Existing methods either pursue zero-shot transfer through domain randomization or in-context adaptation without target-domain specialization, or require heavy adaptation pipelines that leverage target-domain data, such as model calibration, residual learning, or policy retraining. In this paper, we present FADA (Few-Shot Domain Adaptation via Dynamics Alignment), a three-stage Planner-Inverse Dynamics Model (Planner-IDM) framework for few-shot adaptation in humanoid control. FADA first trains an oracle policy with privileged information and then distills the oracle behavior into a deployable Planner-IDM student through DAgger. At deployment, FADA freezes the planner and finetunes only the IDM using approximately 2 minutes of target-domain rollouts with standard supervised learning. Rather than requiring optimal demonstrations or rewards, FADA uses the paired actions and observations that are observed during these rollouts as supervision, aligning the IDM's action generation with target-domain dynamics. Experiments show that FADA outperforms both in-context and end-to-end adaptation baselines, improving task performance under dynamics shifts and enabling real humanoid robots to execute diverse high-precision whole-body tasks. Implementation details and qualitative hardware rollout videos are available at https://lecar-lab.github.io/FADA-humanoid/.",
+      "highlights": {
+        "contribution": "用少样本域适配解决人形机器人动力学漂移，2 分钟目标数据就能上真机。",
+        "innovation": "Planner-IDM 拆分让适配集中在 IDM，用观察到的成对动作观测做监督，不需要最优演示或奖励。",
+        "method": "三阶段：oracle 特权策略训练；DAgger 蒸馏到 Planner-IDM 学生；部署时用约 2 分钟目标域 rollout 做标准监督微调 IDM；对比 in-context 和端到端适配基线。",
+        "results": "在动力学漂移下优于 in-context 和端到端基线；真实人形机器人执行多样高精度全身任务。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T16:05:10Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "dynamics model"
+      ],
+      "scores": {
+        "relevance": 8.2,
+        "recency": 8.0,
+        "popularity": 7.8,
+        "quality": 8.2,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28476v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28476v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.27806",
+      "title": "Agent vs. Parametric World Models: Hybrid Planning for Reliable Language Agents",
+      "authors": [
+        "Xinyuan Song",
+        "Zekun Cai"
+      ],
+      "affiliations": [],
+      "summary": "语言 agent 规划时会想象状态变化，但幻觉状态一旦写进上下文就会一路传下去。参数化世界模型误差可测但语义弱。作者提出 Hybrid-WM：LLM 当规划器，小参数模型预测动作有效性、状态增量、风险和价值；一致性门发现分歧时才触发修改。GPT-4o-mini 幻觉率 0.176→0.035。",
+      "original_abstract": "Language agents plan by generating not only actions but also implicit predictions of how the world will change. These imagined state updates make agents flexible, but they also create a distinct failure mode: hallucinated state claims can be written into context and propagated across subsequent decisions. In contrast, parametric world models provide measurable transition errors but are often weaker semantic planners. We study this tradeoff in graph-structured planning environments and introduce metrics for agent-world-model error, including hallucinated-state rate, propagation depth, and long-horizon error growth. We then propose Hybrid World-Model Planning (Hybrid-WM), which keeps the language model as the planner while using a small parametric transition model to predict action validity, state deltas, risk, and value. A consistency gate compares the agent's imagined delta with the parametric prediction and triggers targeted revision only under disagreement. Across four graph-structured planning benchmarks, Hybrid-WM improves success while reducing hallucinated state propagation. In live GPT-4o-mini evaluations, it reduces hallucinated-state rate from 0.176 to 0.035; in calibrated simulator ablations, it improves success from 0.668 to 0.838 with modest additional inference. These results suggest that lightweight parametric transition models can serve as effective grounding mechanisms for language-agent planning without replacing semantic reasoning.",
+      "highlights": {
+        "contribution": "混合语义 LLM 规划器和轻量参数化转移模型，专治 agent 幻觉状态传播。",
+        "innovation": "一致性门只在 LLM 想象增量和参数模型预测分歧时触发定向修订，兼顾成本和质量。",
+        "method": "LLM 保持为规划器；小参数模型预测 action validity、状态增量、风险、价值；对比一致性触发目标修订；四个图结构规划 benchmark；GPT-4o-mini 在线评测。",
+        "results": "GPT-4o-mini 幻觉状态率从 0.176 降到 0.035；模拟消融里成功率 0.668→0.838。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T07:45:15Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 8.0,
+        "popularity": 7.5,
+        "quality": 7.8,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.27806v3",
+      "arxiv_url": "https://arxiv.org/abs/2606.27806v3",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.27681",
+      "title": "Textual Belief States for World Models: Identifiable Representation Learning Under Strict Mediation",
+      "authors": [
+        "Xiang Gao",
+        "Kaiwen Dong",
+        "Yuguang Yao",
+        "Padmaja Jonnalagedda",
+        "Kamalika Das"
+      ],
+      "affiliations": [],
+      "summary": "LLM 做世界模型时预测好不代表表示好，因为「历史绕过」让隐状态不可辨识。作者用「严格中介」原则解决这个问题：预测只能依赖隐状态和动作。他们提出文本隐状态和 factorized GRPO 强化学习。TextWorld 和 ScienceWorld 上表示质量最多提升 57%，rollout 最多 +98%。",
+      "original_abstract": "World models in partially observed environments rely on latent representations that summarize interaction history, but in many modern LLM-based architectures predictive performance fails to reflect representation quality due to history bypass, rendering the latent state unidentifiable. Strict latent state mediation, requiring predictions to depend only on the latent state and action, is a classical principle that resolves this, but enforcing it in text-based settings is an open challenge: textual latent states are discrete and non-differentiable, precluding variational training, and expressive LLM decoders readily ignore the bottleneck. We show how to make strict mediation work in the text domain. We formalize why it is necessary, showing that strict mediation makes representation quality empirically testable while history-leaky architectures break this connection. We then introduce textual latent states, which are discrete, interpretable, and variable-length, and factorized GRPO (fGRPO), a tree-structured reinforcement learning method that enforces strict mediation during training. Experiments on TextWorld and ScienceWorld show preserved one-step prediction accuracy alongside up to 57\\% gains in representation quality and 98\\% improvements in rollout performance, increasing with task complexity and horizon.",
+      "highlights": {
+        "contribution": "把「严格中介」这一经典可辨识性条件搬到文本世界模型上，让表示质量真的可测。",
+        "innovation": "离散、可解释、变长的文本 latent 状态加 fGRPO 树状 RL 训练在文本域强制严格中介。",
+        "method": "输入交互历史；把 latent 压缩成变长文本；用 fGRPO 树状 RL 训练，让 decoder 只能看 latent+action；TextWorld/ScienceWorld 评测一步预测和长程 rollout。",
+        "results": "一步预测精度不掉，表示质量最多 +57%，rollout 性能最多 +98%，随任务复杂度和视界增长提升更明显。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T03:26:02Z",
+      "categories": [
+        "cs.LG",
+        "cs.CL"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 8.0,
+        "popularity": 7.0,
+        "quality": 7.8,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.27681v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.27681v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.27964",
+      "title": "Directing the World: Fast Autoregressive Video Generation with Compositional Human-Camera Control",
+      "authors": [
+        "Haoyuan Wang",
+        "Yabo Chen",
+        "Haibin Huang",
+        "Chi Zhang",
+        "Xuelong Li"
+      ],
+      "affiliations": [],
+      "summary": "构建交互式世界模型需要长时间可控视频生成，但自回归会累积误差，同时人动作和相机轨迹这种异质控制常常打架。Directing the World 用 Fast-Slow Memory 稳定长视界 rollout，t-guided 动态投影和 Motion-CFG 做人体动作控制，再叠相机轨迹模块。支持多人和长程连贯生成。",
+      "original_abstract": "Building interactive world models requires generating realistic videos while maintaining controllable dynamics over long horizons. Autoregressive video generation offers a scalable foundation, but suffers from error accumulation and temporal degradation during extended rollouts. This issue is further amplified under heterogeneous controls such as human motion and camera trajectories, which may interfere and destabilize a pretrained video prior, while existing methods often trade off controllability and visual quality. We propose \"Directing the World\", a fast autoregressive framework for controllable world-model video generation with compositional human-motion and camera-trajectory control. Our key idea is to decouple control learning while preserving a unified autoregressive video prior. We introduce a Fast-Slow Memory training strategy to stabilize long-horizon rollout learning and improve convergence. For human motion control, we design a t-guided Dynamic Projection mechanism and a refined Motion-CFG strategy, enabling temporally smooth and accurate motion alignment without degrading visual fidelity, and supporting multi-person control.After learning a robust motion prior, we introduce a second-stage camera-trajectory control module to compose human dynamics with viewpoint changes for coherent world exploration. We further construct a large-scale dataset with synchronized video, text, human-motion, and camera-trajectory annotations, organized into motion-centric and camera-centric subsets for decoupled training. Extensive experiments show stable long-horizon generation with precise controllability and high visual quality. See more at https://whydahuzi.github.io/Directing-the-World.github.io/.",
+      "highlights": {
+        "contribution": "自回归可控世界视频生成框架，把人体动作和相机轨迹解耦但共享同一视频先验。",
+        "innovation": "Fast-Slow Memory 训练策略稳定长 rollout，t-guided 动态投影+精化 Motion-CFG 做多人动作控制。",
+        "method": "输入文本+人体动作+相机轨迹；两阶段训练先学动作先验再学相机模块；构造大规模同步标注数据，运动为中心和相机为中心两个子集；对比现有可控生成方法。",
+        "results": "长时长生成稳定，运动对齐精确不牺牲画质，支持多人和世界探索式相机运动（未给单一定量数字）。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T11:08:09Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.8,
+        "recency": 8.0,
+        "popularity": 7.5,
+        "quality": 7.5,
+        "recommendation": 7.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.27964v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.27964v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.27766",
+      "title": "RS-Diffuser: Risk-Sensitive Diffusion Planning with Distributional Value Guidance",
+      "authors": [
+        "Shiqiang Gong"
+      ],
+      "affiliations": [],
+      "summary": "离线 RL 里扩散规划器大多是风险中性，容易漏掉罕见但灾难性的结果。RS-Diffuser 把扩散规划和分布式价值 critic 结合，训一个扩散状态轨迹规划器、逆动力学模型和分布式 critic；采样时把 CVaR 类风险敏感目标当引导信号。单个模型改推理参数就能切换风险偏好，在 D4RL 和风险机器人导航上都拿 SOTA。",
+      "original_abstract": "Offline reinforcement learning enables policy learning from fixed datasets without additional environment interaction, making it appealing for safety-critical applications where online exploration is costly or unsafe. Diffusion-based decision-making methods have recently achieved strong performance in offline RL by modeling rich, multimodal trajectory distributions. However, existing diffusion planners are typically risk-neutral and therefore may overlook rare but catastrophic outcomes that are crucial in real-world deployment. In this work, we propose RS-Diffuser, a risk-sensitive offline diffusion planning framework that combines diffusion-based trajectory generation with distributional value critics. RS-Diffuser learns a diffusion planner over future state trajectories, a separate inverse dynamics model for action decoding, and a Monte Carlo distributional critic that estimates the full return distribution of candidate plans through quantile regression. At sampling time, we incorporate a risk-sensitive guidance signal into the denoising process, using gradients computed from tail-aware objectives such as Conditional Value at Risk to steer generation toward desired risk profiles. As a result, a single trained model can flexibly produce risk-averse, risk-neutral, or risk-seeking behaviors by changing only the inference-time risk parameter. Extensive experiments on risk-sensitive D4RL and risky robot navigation benchmarks demonstrate that RS-Diffuser achieves state-of-the-art performance, improving both overall return and worst-case robustness while reducing safety violations.",
+      "highlights": {
+        "contribution": "把风险敏感目标直接塞进扩散规划的采样过程，兼顾回报和最坏情况。",
+        "innovation": "分布式蒙特卡洛 critic 用 quantile regression 估计完整回报分布，再把 CVaR 梯度当扩散去噪引导。",
+        "method": "训扩散状态轨迹规划器 + 逆动力学模型解码动作 + 分布式 critic；采样时按 CVaR 类目标梯度做 guidance；D4RL 风险敏感任务和风险机器人导航评测。",
+        "results": "回报和最坏情况鲁棒性都更好，安全违规减少；单模型可产生 risk-averse/neutral/seeking 行为。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T06:51:16Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "dynamics model"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 8.0,
+        "popularity": 6.5,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.27766v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.27766v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.27780",
+      "title": "Understanding Rollout Error in Graph World Models",
+      "authors": [
+        "Xinyuan Song",
+        "Zekun Cai"
+      ],
+      "affiliations": [],
+      "summary": "很多规划环境天然是图结构（agent、工具、技能、路径），但世界模型误差分析大多假设向量态。作者研究图世界模型 GWM 里 rollout 误差怎么累积，导出拓扑感知的误差界并提出 Error-Aware GWM 训练目标。实验证长程稳定性变好，一步精度不掉。",
+      "original_abstract": "World models are increasingly used for planning, yet most analyses of rollout error assume vector-valued states and scalar error amplification. Many planning environments, however, are naturally graph-structured: agents, tools, skills, routes, and dependencies interact through evolving relations. In this work, we study how prediction errors accumulate in Graph World Models (GWMs). We formulate fixed-edge and dynamic-edge GWM rollouts under a unified state-action transition framework and derive topology-aware error bounds. For fixed-edge rollouts, we show that long-horizon node error separates into a topology factor, governed by the graph spectral radius, and a model factor, governed by layer spectral norms. For dynamic-edge rollouts, we introduce a joint node-edge error operator that captures feedback between feature prediction and structure prediction, revealing when edge errors amplify future message passing. Motivated by these bounds, we propose Error-Aware GWM, a training objective that combines spectral regularization, rollout consistency, and critical-node weighting. Across synthetic graph topologies and heterogeneous agent-graph testbeds, we find that rollout error and planning regret grow with horizon, that dynamic-edge training is necessary when structure evolves, and that Error-Aware GWM improves long-horizon stability without sacrificing one-step accuracy. Our results characterize when graph world models remain reliable under autoregressive planning and when topology makes them fail.",
+      "highlights": {
+        "contribution": "给图结构世界模型建了一套显式的长程误差理论并落到实用的训练目标。",
+        "innovation": "把 rollout 误差分解成拓扑因子（图谱半径）和模型因子（层谱范数），并引入节点边联合误差算子处理动态边。",
+        "method": "统一状态-动作转移下推导固定边和动态边 GWM 误差界；训练目标 Error-Aware GWM 结合谱正则、rollout 一致性、关键节点加权；合成拓扑和异构 agent-graph 测试床评测。",
+        "results": "rollout 误差和规划遗憾随视界增长；Error-Aware GWM 在多种拓扑上提升长程稳定性且不掉一步精度。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T07:11:29Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 8.0,
+        "popularity": 6.0,
+        "quality": 7.2,
+        "recommendation": 6.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.27780v2",
+      "arxiv_url": "https://arxiv.org/abs/2606.27780v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28455",
+      "title": "Event-Conditioned Diagnostics of Kinematic, Contact, and Object-Permanence Fields in Passive Object-State World Models",
+      "authors": [
+        "Yang Liu",
+        "Yuming Chen"
+      ],
+      "affiliations": [],
+      "summary": "作者不满足于只看预测误差，想搞清楚世界模型的隐状态里到底装了什么物理结构。他们提出事件条件的诊断协议：在自由运动、碰撞、遮挡三种事件下评估隐状态里是否有运动学、接触、物体永存的场分量。发现三种事件确实会重新加权这些场，抑制这些方向会削弱预测。",
+      "original_abstract": "World models can predict future physical states, but prediction accuracy alone does not explain how physical information is organized and used inside their latent dynamics. We introduce a controlled diagnostic protocol for studying event-conditioned latent physical structure in passive object-state world models. The protocol tests whether hidden representations encode event-regime information, whether event contexts reweight non-exclusive physical field readouts, and whether field-aligned representational components have functional consequences for prediction. Using a balanced controlled-generator dataset with free-motion, collision, and occlusion events, we evaluate recurrent, attention-based, and latent state-space transition models under a fixed-horizon forecasting setup. The models learn useful predictive dynamics and their hidden states support reliable event-regime readout. Event contexts systematically reweight kinematic, contact, and object-permanence field readouts: free motion is kinematic-dominant, collision combines kinematic and contact structure, and occlusion combines motion-related and object-permanence structure. Time-aligned and directional-consistency analyses further show phase-related shifts in field emphasis. Finally, fixed-horizon projection causal field effect (CFE) shows that suppressing field-aligned directions can degrade event-relevant prediction, with strongest evidence for contact-aligned structure in collision-contact windows and more qualified evidence for object-permanence-aligned structure in hard-occlusion hidden windows. These results support event-conditioned organization and fixed-horizon functional sensitivity of latent physical fields, while not implying explicit physical modules, isolated causal circuits, or context-invariant sliding-window generalization.",
+      "highlights": {
+        "contribution": "给被动物体状态世界模型的隐动力学做了个物理结构诊断协议。",
+        "innovation": "把物理知识拆成 kinematic/contact/object-permanence 三个「场」并做事件条件下的读出与因果消融。",
+        "method": "输入受控生成器数据（自由运动、碰撞、遮挡三种事件）；用 RNN、注意力、latent SSM 三种转移模型固定视界预测；测事件识别、场读出、时间对齐和固定视界投影 CFE 因果场效应。",
+        "results": "自由运动是运动学主导，碰撞混合运动学和接触，遮挡混合运动和物体永存；抑制场方向会削弱事件相关预测。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T10:11:59Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 8.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28455v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28455v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28228",
+      "title": "Disentangling Continuous-Time Latent Dynamics: Identifiability of Latent SDEs via Diffusion Shifts",
+      "authors": [
+        "Yuanyuan Wang",
+        "Wenjie Wang",
+        "Haoxuan Li",
+        "Mingming Gong",
+        "Kun Zhang"
+      ],
+      "affiliations": [],
+      "summary": "时序因果表示学习在离散时间隐变量模型上已有成熟可辨识性结论，但连续时间隐 SDE 模型基本还是开放的。作者用「环境导致的扩散协方差变化」填这个坑：证明两种成对逐坐标方差比不同的对角扩散就能把隐坐标辨识到置换和缩放，无需 drift 稀疏假设。",
+      "original_abstract": "Causal representation learning for time series has developed strong identifiability results in discrete-time latent causal models, but identifiability in continuous-time latent stochastic differential equation (SDE) models remains largely open. We address this gap using environment-induced shifts in diffusion covariance. We study additive-noise latent SDEs observed through an unknown nonlinear diffeomorphism, with shared drift but environment-specific diffusion covariance. We show that two diagonal diffusion regimes with pairwise distinct coordinate-wise variance ratios identify the latent coordinates up to permutation and scaling, without any sparsity assumption on the drift. We first prove this result for linear Ornstein--Uhlenbeck systems and then extend it to general additive-noise latent SDEs. Under mild smoothness, the instantaneous drift-Jacobian causal graph is identifiable up to the same permutation. We propose a two-stage estimator for latent disentanglement and optional graph recovery; experiments on synthetic systems confirm the predicted identifiability boundary, and an application to Hardanger Bridge monitoring data illustrates the approach on real sensor trajectories.",
+      "highlights": {
+        "contribution": "在无 drift 稀疏假设下给连续时间隐 SDE 拿到坐标可辨识性结果。",
+        "innovation": "用环境相关的扩散协方差变化当作可辨识信号，先在线性 OU 系统证明再推广到一般加性噪声隐 SDE。",
+        "method": "假设加性噪声隐 SDE 通过未知非线性微分同胚被观测；两个诊断扩散环境；两阶段估计器做解耦和图恢复；合成系统+Hardanger 桥监测数据实证。",
+        "results": "合成系统上验证可辨识性边界；桥梁传感数据展示实际可用性。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T16:18:28Z",
+      "categories": [
+        "cs.LG",
+        "stat.ML"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "latent dynamics"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 8.0,
+        "popularity": 6.0,
+        "quality": 7.5,
+        "recommendation": 6.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28228v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28228v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28127",
+      "title": "From Tokens to States: LLMs as a Special Case of World Models and the Continuous Path Beyond",
+      "authors": [
+        "Paul Dubois"
+      ],
+      "affiliations": [],
+      "summary": "一篇立场文章。作者反驳 LeCun「LLM 必须被 JEPA 替代」的二分观点，主张 LLM 是世界模型的一个退化特例：状态空间是 token 序列，动作只有「追加一个 token」。作者认为从 NTP 到 JEPA 存在自然连续谱，中间站是多 token 预测、future-summary 预测、next-latent 预测。",
+      "original_abstract": "The AI community has framed the relationship between large language models (LLMs) and world models as a dichotomy: LLMs predict tokens; world models simulate reality. Yann LeCun argues in 2022 that reaching general intelligence requires abandoning autoregressive token prediction in favour of latent-space architectures. This framing is unnecessarily binary. Two claims will be defended. First, LLMs are a degenerate special case of world models: the state space is the set of all token sequences, the only action is appending one token, and world models are therefore a strict generalisation of LLMs, not a replacement. Second, there is a natural continuous spectrum from NTP to JEPA, with multi-token prediction, future-summary prediction, and next-latent prediction as intermediate stations already populated by current research. Moving along this spectrum relaxes the LLM constraints one by one. It also progressively surrenders the two practical advantages that make LLMs trainable at scale: internet-scale self-supervised data, and a transformer architecture co-designed for discrete token prediction. Both are examined as open research questions: the data question (the cliff from self-supervised text to instrumented action-labelled environments) and the architecture question (whether the transformer generalises to continuous-state prediction, or whether a new primitive is needed).",
+      "highlights": {
+        "contribution": "在概念层面把 LLM 和 JEPA 类世界模型放到同一个连续谱系上讨论。",
+        "innovation": "把 NTP → 多 token → future-summary → next-latent → JEPA 视为逐步放松 LLM 约束的路径，同时点出数据和架构两个开放问题。",
+        "method": "立场论文；无实验，围绕 state/action/data/architecture 四个维度做论证。",
+        "results": "无实验结果，属观点性/综述性讨论。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T14:27:50Z",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 8.0,
+        "popularity": 7.0,
+        "quality": 6.5,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28127v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28127v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28321",
+      "title": "StructSplat: Generalizable 3D Gaussian Splatting from Uncalibrated Sparse Views",
+      "authors": [
+        "Jia-Chen Zhao",
+        "Beiqi Chen",
+        "Xinyang Chen",
+        "Guangcong Wang",
+        "Liqiang Nie"
+      ],
+      "affiliations": [],
+      "summary": "从无标定稀疏视角做 3D 高斯重建很难，现有方法要么每场景优化要么需要相机参数。StructSplat 直接吃无标定图像做前馈可泛化重建，用像素对齐特征注入学纹理，语义先验保全局一致，相机对齐防信息泄漏。DL3DV 上 PSNR 28.045 比 AnySplat 高 5.67 dB。",
+      "original_abstract": "We present StructSplat, a feed-forward and generalizable 3D Gaussian reconstruction framework that operates directly on uncalibrated images without requiring camera parameters. Existing methods either rely on per-scene optimization or assume known camera poses, and often entangle geometry and appearance within a unified backbone, limiting reconstruction fidelity and generalization. Our key idea is to adopt a structured representation that organizes geometry, semantic, and texture cues with explicit roles in the reconstruction process. Specifically, we introduce a pixel-aligned feature injection mechanism to enable accurate texture modeling from 2D observations, incorporate semantic-aware priors to improve global consistency, and design a camera alignment strategy to prevent information leakage and improve generalization. Experiments show that our method significantly outperforms prior approaches on challenging benchmarks. On DL3DV, our method achieves 28.045 PSNR, surpassing AnySplat (22.377) by +5.67 dB. In cross-dataset evaluation, our method achieves +1.94 dB over AnySplat on ACID and +1.72 dB on RealEstate10K. Project page: https://structsplat.github.io Code: https://github.com/J-C-Zhao/StructSplat",
+      "highlights": {
+        "contribution": "无相机参数的稀疏视角前馈 GS 重建，把几何、语义、纹理三块显式解耦。",
+        "innovation": "结构化表示 + 像素对齐特征注入 + 语义先验 + 相机对齐防泄漏。",
+        "method": "输入无标定稀疏视图；结构化表示分几何、语义、纹理三条支路；像素对齐特征注入学纹理；语义先验保全局一致；相机对齐策略避免信息泄漏；DL3DV/ACID/RealEstate10K 评测。",
+        "results": "DL3DV PSNR 28.045 vs AnySplat 22.377 (+5.67 dB)；跨数据集 ACID +1.94 dB、RealEstate10K +1.72 dB。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T17:59:06Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 8.0,
+        "popularity": 7.8,
+        "quality": 8.0,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28321v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28321v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.27720",
+      "title": "Scene and Human in One World: Reconstruction in a Feedforward Pass",
+      "authors": [
+        "Boao Shi",
+        "Qiao Feng",
+        "Yiming Huang",
+        "Lingjie Liu"
+      ],
+      "affiliations": [],
+      "summary": "从移动单目相机重建动态场景中的人物一直有尺度歧义、人-场景对齐、遮挡三大难题。SHOW 把参数化人体和前馈 3D 场景重建耦合到统一度量空间：人体先验注入归一化点图预测得到度量尺度场景，场景几何反过来约束人体估计。还支持 mask prompt 应对多人和杂乱背景。",
+      "original_abstract": "Reconstructing humans in dynamic scenes from moving monocular cameras remains challenging due to scale ambiguity, human-scene misalignment, and occlusion interference. Rather than treating human mesh recovery and scene reconstruction as separate tasks, we believe that accurate human-scene reconstruction requires the two tasks to mutually inform each other: parametric human models offer semantic structure and metric-scale priors, while scene geometry provides spatial context for human localization and alignment. Built on this insight, we introduce SHOW, a mask-promptable human mesh recovery framework that couples feed-forward 3D scene reconstruction with Human Mesh Recovery in a unified metric space. SHOW injects human semantics and scale priors from parametric human models into normalized point-map prediction, enabling metric-scale scene reconstruction from inherently scale-ambiguous monocular input. In turn, the recovered scene geometry constrains human mesh estimation, encouraging spatially consistent human placement and improved human-scene alignment. To handle complex multi-person and cluttered scenes, SHOW further incorporates a promptable masking mechanism that enables flexible target-human selection while suppressing background distractions and occlusion interference. Through joint training, the model learns both human-aware geometric features and geometry-constrained human features, producing aligned metric-scale reconstructions from monocular human-centric videos. Extensive experiments demonstrate that SHOW improves metric-scale consistency, human-scene alignment, and reconstruction accuracy under challenging camera motion, occlusion, and cluttered backgrounds.",
+      "highlights": {
+        "contribution": "把人体 mesh 恢复和前馈 3D 场景重建放到共享度量坐标系里协同优化。",
+        "innovation": "用参数化人体的语义结构和度量尺度先验注入到归一化点图预测；再用几何反过来约束人体，一次前馈完成。",
+        "method": "输入单目视频；mask-prompt 分支选择目标人；参数化人体注入尺度先验到点图；联合训练学人体感知几何特征和几何约束人体特征；对比动态场景重建和 mesh 恢复方法。",
+        "results": "在相机运动、遮挡、杂乱背景下度量尺度一致性、人-场景对齐和重建精度都更好（未给单一定量指标）。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T05:08:55Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "feed-forward 3d",
+        "3d scene reconstruction"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 8.0,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.1
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.27720v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.27720v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28622",
+      "title": "Meshtryoshka: Differentiable Rendering of Real-World Scenes via Mesh Rasterization",
+      "authors": [
+        "David Charatan",
+        "Daniel Xu",
+        "Richard Szeliski",
+        "George Kopanas",
+        "Vincent Sitzmann"
+      ],
+      "affiliations": [],
+      "summary": "可微渲染大多用专用渲染器，但下游图形学任务要 mesh。之前的可微 mesh 渲染只能做以物体为中心的场景。Meshtryoshka 把嵌套 mesh 壳（像俄罗斯套娃）和 SDF 组合起来，每次前向从 SDF 抽表面，用不透明度做 alpha 合成，只用现成三角光栅化。首次让 mesh 可微渲染扩展到无界真实场景。",
+      "original_abstract": "Differentiable rendering has emerged as a powerful approach for 3D reconstruction and novel view synthesis. State-of-the-art differentiable rendering methods combine a variety of custom representations of 3D geometry and appearance with specialized renderers. However, most downstream tasks in computer graphics rely on 3D meshes. While prior work has attempted differentiable rendering with mesh representations, these approaches are limited to object-centric scenes and fail to reconstruct large-scale, unbounded scenes. In this work, we introduce Meshtryoshka, a novel mesh differentiable rendering framework that combines an off-the-shelf triangle rasterizer with a 3D representation that consists of nested mesh shells which resemble a matryoshka doll. In every forward pass, the mesh shells are extracted anew from a 3D signed distance function via iso-surface extraction, and the opacities for each vertex are computed as a function of signed distance. Each mesh shell is then rasterized independently, and the final image is created via alpha compositing. Crucially, mesh vertex positions are updated only indirectly via gradients that flow through the opacity values into the signed distance function, and hence, our method is compatible with off-the-shelf mesh renderers that need not be differentiable with respect to vertex positions. On object-centric scenes, our method performs competitively with surface-based differentiable rendering techniques. Our differentiable mesh rendering method scales to unbounded, real-world 3D scenes, where it yields high-quality novel view synthesis results approaching those of state-of-the-art, non-mesh methods. Our method suggests that it may be possible to solve the differentiable rendering problem without relying on specialized renderers, only using conventional tools from the computer graphics toolbox.",
+      "highlights": {
+        "contribution": "让 mesh 可微渲染真正扩展到无界真实世界场景，且不需要专用可微渲染器。",
+        "innovation": "嵌套 mesh 壳 + SDF 抽表面 + 不透明度间接更新顶点位置的机制。",
+        "method": "3D 表示为 SDF；每次前向从 SDF 等值面抽多层 mesh 壳；顶点不透明度按 SDF 值算；各壳用现成三角光栅化独立渲染再 alpha 合成；对比 surface-based 可微渲染方法。",
+        "results": "物体级场景性能接近 SOTA 表面法；扩展到无界场景时新视角合成接近顶级非 mesh 方法。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T21:44:36Z",
+      "categories": [
+        "cs.CV",
+        "cs.GR"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "novel view synthesis"
+      ],
+      "scores": {
+        "relevance": 6.0,
+        "recency": 8.0,
+        "popularity": 7.2,
+        "quality": 7.8,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28622v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28622v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28635",
+      "title": "AEGIR: Modeling Area Emitters for Indoor Inverse Rendering using Gaussian Splatting",
+      "authors": [
+        "Mohamed Shawky Sabae",
+        "Philipp Langsteiner",
+        "Jan-Niklas Dihlmann",
+        "Hendrik Lensch"
+      ],
+      "affiliations": [],
+      "summary": "室内逆渲染分光照和材质本来就有歧义，现有可重光照 Gaussian Splatting 用点光源或环境贴图近似真实光源，忽略了物理体积导致光衰减和阴影不对。AEGIR 显式用面光源和差异化延迟渲染管线联合优化 emitter、材质和几何。改进了新视角、重光照和虚拟物体插入。",
+      "original_abstract": "Inverse rendering requires separating illumination from surface materials, which is highly ambiguous due to their tight coupling in observed images. While Gaussian Splatting is efficient for novel view synthesis, existing relightable methods approximate scene lighting using discrete point lights, global environment maps, or implicit representations. By ignoring the physical spatial extent of real-world emitters, these approaches produce incorrect light attenuation and unrealistic shadows. We present AEGIR (Area Emitters for Gaussian Inverse Rendering), a framework that explicitly models local area emitters within a relightable Gaussian Splatting representation. Joint optimization of emitters, materials, and geometry is challenging due to flexible emitter parameterization, which increases both the number of parameters and the ambiguity between illumination and materials. We address this by introducing a differentiable deferred rendering pipeline that integrates multiple importance sampling with targeted regularization. As a result, AEGIR accurately simulates local light transport and achieves more consistent decomposition. Experiments show that explicit area emitters improve illumination reconstruction and enhance downstream tasks, including novel view synthesis, controlled relighting, and virtual object insertion, particularly in scenes with complex local lighting.",
+      "highlights": {
+        "contribution": "首个在 Gaussian Splatting 逆渲染里显式建局部面光源的框架。",
+        "innovation": "可微延迟渲染 + 多重要性采样 + 针对性正则化解决灵活 emitter 参数化带来的歧义。",
+        "method": "输入室内多视图；GS 表示几何和材质，面光源参数化为可优化 emitter；可微延迟渲染管线联合优化几何、材质、光源；多重要性采样+正则化稳定分解。",
+        "results": "光照重建更准确，下游新视角合成、可控重光照、虚拟物体插入都提升，尤其局部光照复杂场景更明显。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T22:34:23Z",
+      "categories": [
+        "cs.CV",
+        "cs.GR"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "novel view synthesis",
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 8.0,
+        "popularity": 6.5,
+        "quality": 7.2,
+        "recommendation": 6.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28635v2",
+      "arxiv_url": "https://arxiv.org/abs/2606.28635v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28581",
+      "title": "SatSplat: Geometrically-Accurate Gaussian Splatting for Satellite Imagery",
+      "authors": [
+        "Shuang Song",
+        "Jiyong Kim",
+        "Rongjun Qin"
+      ],
+      "affiliations": [],
+      "summary": "把 GS 用到卫星影像有速度但多日拍摄光照差异大导致几何不准。SatSplat 首次把 2DGS 用到卫星摄影测量，用仿射相机模型加最小 delta 在线校准相机，加阴影映射和逐相机颜色矫正。DFC2019 上平均绝对误差减 11.93%，峰值显存降 31%。",
+      "original_abstract": "High-resolution satellite imagery demands 3D reconstruction methods that deliver both speed and geometric accuracy. Recent adaptations of 3D Gaussian Splatting (3DGS) to satellite imagery demonstrate strong efficiency, but reconstruction quality often degrades under diverse illumination across multi-date, high-altitude acquisitions (with small intersection angles), limiting applicability to remote sensing and vision tasks. We present SatSplat, the first framework to adapt 2D Gaussian Splatting (2DGS) to satellite photogrammetry, with online camera adjustment. We approximate satellite cameras with an affine model and learn a minimal delta parameterization for in-splat camera refinement from dense observations. The formulation is implemented with a 2DGS scene representation. To handle time-varying shadows and illumination changes, we integrate geometric shadow mapping and per-camera color correction during training. Across the evaluated DFC2019 and IARPA2016 benchmark sites, SatSplat achieves strong geometric accuracy while significantly outperforming prior 3DGS-based baselines. On our processed DFC2019 benchmark, SatSplat reduces mean absolute error by 11.93% and peak video memory by 31% relative to the previous state of the art. Our approach enables large-scale digital surface modeling with practical computational efficiency. The project page is available at https://gdaosu.github.io/satsplat/.",
+      "highlights": {
+        "contribution": "第一次把 2D Gaussian Splatting 适配到卫星摄影测量，兼顾几何精度和大规模效率。",
+        "innovation": "in-splat 相机 delta 精化 + 几何阴影映射 + 逐相机颜色矫正处理多时相光照差。",
+        "method": "输入多日卫星影像；仿射相机模型近似卫星传感器，学最小 delta 做相机在线调整；2DGS 表示场景，训练中集成阴影映射和逐相机颜色矫正；DFC2019、IARPA2016 评测。",
+        "results": "DFC2019 平均绝对误差降 11.93%，峰值显存降 31%，超过之前 3DGS 类基线。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T20:14:19Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 8.0,
+        "popularity": 6.5,
+        "quality": 7.2,
+        "recommendation": 6.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28581v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28581v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28182",
+      "title": "LLawCo: Learning Laws of Cooperation for Modeling Embodied Multi-Agent Behavior",
+      "authors": [
+        "Qinhong Zhou",
+        "Chuang Gan",
+        "Anoop Cherian"
+      ],
+      "affiliations": [],
+      "summary": "LLM 具身多 agent 常和队友或环境状态错位导致协作低效。LLawCo 让 agent 反思失败提取错位模式，抽成「必要时才说话」「等队友」这类高级行为律，再通过监督微调塞进思维链。作者还提了 PARTNR-Dialog 大规模多 agent 通讯协作基准。四种 LLM 主干上平均成功率 +4.5%（PARTNR-Dialog）、+6.8%（TDW-MAT）。",
+      "original_abstract": "Embodied agents operating in decentralized and partially observable environments have attracted growing attention in recent years. However, existing large language model (LLM)-based agents often exhibit behaviors that are misaligned with their partners or inconsistent with the environment state, leading to inefficient cooperation and poor task success. To address this challenge, we propose a novel framework, Learning Laws of Cooperation (LLawCo), that enables embodied agents to autonomously align with both their partners and task objectives. Our framework allows agents to reflect on past failures to extract misaligned behavioral patterns, which are used to derive high-level behavioral laws, such as \"Talk when necessary\" and \"Wait for partner.\" These laws are explicitly incorporated into the agents' chains of thought via supervised fine-tuning, aligning their reasoning with task requirements and the behavior of other agents. To evaluate our approach, we introduce PARTNR-Dialog, a large-scale multi-agent communicative and cooperative planning benchmark built on the PARTNR environment. Experiments on existing tasks and our new benchmark demonstrate significant improvements in cooperative efficiency and task success rates. Across four backbone LLMs, our method achieves average success rate improvements of 4.5% on the PARTNR-Dialog benchmark and 6.8% on the TDW-MAT benchmark over state-of-the-art open-source communicative agent frameworks. See the LLawCo project page for details: https://www.merl.com/research/highlights/LLawCo",
+      "highlights": {
+        "contribution": "让 embodied 多 agent 自主习得「合作律」并通过 CoT 微调对齐队友和任务。",
+        "innovation": "反思失败→抽律→SFT 到思维链，把行为准则显式塞进推理过程。",
+        "method": "反思失败 rollout 抽取错位模式；抽象成高级行为律；SFT 到 agent 的 CoT；在 PARTNR-Dialog 和 TDW-MAT 上评测；四个 LLM 主干对比。",
+        "results": "PARTNR-Dialog 平均成功率 +4.5%，TDW-MAT +6.8%，超过 SOTA 开源通讯 agent 框架。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T15:26:12Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CV",
+        "cs.RO"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "embodied agent",
+        "multi-agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 8.0,
+        "popularity": 7.5,
+        "quality": 7.8,
+        "recommendation": 7.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28182v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28182v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.27929",
+      "title": "When Multi-Robot Systems Meet Agentic AI:Towards Embodied Collective Intelligence",
+      "authors": [
+        "Yuxuan Yan",
+        "Yuanyuan Jia",
+        "Qianqian Yang"
+      ],
+      "affiliations": [],
+      "summary": "作者提出「具身集体智能 ECI」的观点：机器人从单体自主向多体协作演化时，团队应共享具身 agent loop 产生的状态（世界上下文、任务进度、技能经验），而不只是共享地图和数据集。文章综述这两条路径再给出 Co-Perception/Co-Action/Co-Evolution 框架，最后用一个导航案例演示共享世界记忆。",
+      "original_abstract": "Embodied AI is increasingly becoming agentic, shifting robots from perception--control pipelines towards closed-loop systems that can retrieve context, deliberate during execution, monitor feedback, and refine future behavior. In parallel, robotics research has also moved from single-robot autonomy towards multi-robot systems, driven by the need for wider sensing, distributed action, heterogeneous capabilities, and fault tolerance. As AI agents move from single-agent use towards multi-agent collaboration, robotics faces a parallel challenge: robot teams must move beyond sharing maps, task assignments, and datasets towards sharing the state produced by embodied agent loops. This article explores Embodied Collective Intelligence (ECI), a future multi-robot paradigm in which a robot team accumulates and uses world context, task progress, and skill experience as shared resources. Specifically, we first review how embodied AI is becoming agentic and how multi-robot cooperation has evolved. We then present Embodied Collective Intelligence through Co-Perception, Co-Action, and Co-Evolution. Finally, we use an illustrative navigation study to examine one concrete component of the concept: shared world-memory inheritance. The study shows that a newly added robot can benefit from merged team memory, but it is not intended as a full evaluation of the ECI framework. Taken together, the review and conceptual framework motivate Embodied Collective Intelligence as a direction for embodied multi-agent intelligence, while the case study grounds one measurable part of the concept.",
+      "highlights": {
+        "contribution": "把 agentic AI 潮流和多机器人协作接起来，提出「具身集体智能」概念框架。",
+        "innovation": "强调共享的不再是数据集/地图而是具身 agent 循环内部状态，并拆成共感知、共行动、共进化三层。",
+        "method": "综述+概念论文；用一个导航案例演示共享世界记忆继承带来的收益，非完整框架验证。",
+        "results": "案例研究显示新加入机器人可从团队合并记忆中受益（未给完整定量评测）。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T10:21:52Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "embodied agent",
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 8.0,
+        "popularity": 6.5,
+        "quality": 6.5,
+        "recommendation": 6.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.27929v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.27929v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28011",
+      "title": "From Detection to Action: Using LLM Agents for Fault-Tolerant Control",
+      "authors": [
+        "Javal Vyas",
+        "Milapji Singh Gill",
+        "Artan Markaj",
+        "Felix Gehlhoff",
+        "Mehmet Mercangöz"
+      ],
+      "affiliations": [],
+      "summary": "作者把 LLM agent 用到工业过程的容错控制里：把故障检测输出转成受约束的恢复动作。整个框架有多 agent 工作流、数字过程双胞胎做预执行仿真、CPSMod 本体上的图 RAG 提供多跳知识检索。在 Mixing Module 和 CSTR 两个基准上，GPT-4o-mini 类小模型也能拿到有效恢复决策。",
+      "original_abstract": "We propose an agentic Large Language Model (LLM) framework for active Fault-Tolerant Control (FTC) that transforms fault detection outputs into constraint-aware recovery actions grounded in plant-specific knowledge. The approach couples (i) a multi-agent workflow that decomposes operator duties into monitoring, planning, action synthesis, simulation, validation, and reprompting; (ii) a Digital Process Plant Twin (DPPT) that exposes plant data, models, and a simulation service for pre-execution testing; and (iii) a Graph Retrieval-Augmented Generation (Graph RAG) layer built on the CPSMod ontology, which organizes plant knowledge (structure, function, hybrid dynamics, control context, and fault semantics) into a graph that supports relation-aware, multi-hop retrieval for the agents. Corrective actions are generated as minimal-risk state-machine recovery paths and corresponding discrete commands or continuous setpoint adaptations, then validated deterministically against interlocks, envelopes, and dynamic feasibility before any actuation. If no acceptable plan is found within a bounded time window, control is handed to a safety fallback. The framework is evaluated in simulation on two representative benchmarks: a discrete batch Mixing Module and a Continuous Stirred-Tank Reactor (CSTR) under closed-loop PID regulation. Results with lightweight LLMs (GPT-4o-mini and GPT-4.1-mini) show that semantically grounded agents can derive valid recovery decisions within latency budgets compatible with the respective process dynamics, demonstrating a practical pathway from detection to validated corrective action across both discrete and continuous FTC tasks.",
+      "highlights": {
+        "contribution": "把 agentic LLM 落地到工业过程容错控制，从检测直接接到经过验证的执行动作。",
+        "innovation": "多 agent + Digital Process Plant Twin + CPSMod 本体图 RAG，恢复动作要经过双胞胎确定性验证才执行。",
+        "method": "输入故障检测报告；多 agent 拆解成监控/规划/动作合成/仿真/验证/重提示；DPPT 提供仿真服务；图 RAG 检索本体知识；恢复方案先验证再下发；失败则回退到安全策略；Mixing Module 和 CSTR 上评测。",
+        "results": "GPT-4o-mini 和 GPT-4.1-mini 都能在过程动力学允许的延迟内产出可行恢复决策。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T12:13:58Z",
+      "categories": [
+        "eess.SY",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "multi-agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 8.0,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28011v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28011v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28456",
+      "title": "Is Lying an Emergent Behaviour in LLMs? Evidence from Gaslighting AI agents in a Sustainability Game",
+      "authors": [
+        "Subhendu Bhandary",
+        "Federico Carucci",
+        "Christos Charalambous",
+        "Francesca Dilisante",
+        "Ksenia Dvorkina",
+        "Anna Garbo",
+        "Jiaqi Liang",
+        "Riccardo Vasellini",
+        "Francesco Bertolotti"
+      ],
+      "affiliations": [],
+      "summary": "LLM agent 会不会自发学会撒谎？作者搭了个可持续性博弈：agent 管工业、军事、生态资源，被告知资源可再生但其实不会。给一些 agent 邻居信息、允许其宣战/说谎/看声誉。发现即使不允许说谎欺骗也会自发出现；显式允许说谎主要增加虚张声势和分散注意；声誉记忆能减少生态崩溃。",
+      "original_abstract": "LLMs agents are increasingly used in multi-agent settings, yet their behaviour in sustainability games remains largely unexplored. This work investigates whether lying can emerge among LLM agents in a competitive sustainability game in which agents are informed that common resources can regenerate, although regeneration does not actually occur. We develop an agent-based model of a sustainability game in which agents manage industrial, military, and ecological resources, and interact through a network. LLM agents can observe neighbours' status, declare future attacks, receive permission to lie, and access reputation information, while rule-based agents provide an interpretable behavioural baseline. The results show that neighbour information strongly changes system dynamics, increasing attacks while improving biosphere retention and coexistence. Also, the presence of future declarations reduce extinction risk without suppressing conflict. Behaviourally, deception emerges even when agents are not explicitly allowed to lie, and explicit permission mainly increases bluffing and diversion rather than direct backstabbing. Finally, the presence of reputation memory and information about the current biosphere level reduces system ecological depletion. These findings suggest that deception can arise as an emergent behaviour in LLM-agent systems and that communication between LLM-agents could support sustainability while dealing with risk.",
+      "highlights": {
+        "contribution": "系统测量 LLM agent 在多 agent 可持续性博弈里的欺骗涌现行为。",
+        "innovation": "把「可持续性博弈+错误信念+网络交互」组合成 agent-based 测试床，加规则 agent 做基线。",
+        "method": "构造 agent-based sustainability game；LLM agent 管三类资源、看邻居状态、宣战、可选说谎、看声誉；规则 agent 做基线；扫描信息可见性、允许说谎、声誉记忆等变量。",
+        "results": "欺骗即使无显式许可也会涌现；显式许可主要增加虚张；声誉记忆和生态可视度减少崩溃。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T10:32:47Z",
+      "categories": [
+        "cs.MA",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm agent",
+        "multi-agent"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 8.0,
+        "popularity": 6.5,
+        "quality": 6.5,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28456v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28456v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.28270",
+      "title": "Agent-Native Immune System: Architecture, Taxonomy, and Engineering",
+      "authors": [
+        "Bo Shen",
+        "Lifeng Chang",
+        "Tianyuan Wei",
+        "Yunpeng Li",
+        "Feng Shi",
+        "Yichen Han",
+        "Peijie Gao",
+        "Shiyi Kuang",
+        "Xin Chang",
+        "Dehui Li"
+      ],
+      "affiliations": [],
+      "summary": "作者提出 ANIS，一个内嵌到 agent 认知回路的仿生免疫系统架构，用来对抗记忆污染、工具链操纵、多 agent 协议攻击这类运行时劫持。设计了六层 Immune Tower、Agent Virus/Vaccine 分类、Meta-Self-Auto 三元 harness，明确 alignment 是训练时静态基础、ANIS 是运行时动态执法。",
+      "original_abstract": "The transition from static chat bots to autonomous agents--equipped with persistent memory, tool-use protocols, and multi-agent collaboration--has fundamentally expanded the AI threat landscape. Current defense mechanisms, such as perimeter security and training-time alignment, remain external to the agent's active reasoning loop. Consequently, they fall short: a fully aligned agent remains highly vulnerable to runtime hijacking via memory poisoning, tool-chain manipulation, or multi-agent protocol attacks. To address this critical gap, we introduce the Agent-Native Immune System (ANIS), the first biologically inspired, endogenous defense architecture embedded directly within the agent's cognitive loop. Our framework presents four primary contributions. First, we design a six-layer Immune Tower (L0-L5), distinctly incorporating Barrier Immunity (L1) as a non-cognitive, physical-and-logical isolation layer. Second, we establish a unified taxonomy of Agent Viruses and Agent Vaccines, formalizing the critical distinction between superficial non-parametric defenses and robust parametric vaccines. Third, we conceptualize the Harness Triad--Meta, Self, and Auto--a self-monitoring, meta-cognitive automation backbone that drives Continual Immune Learning (CIL), enabling vaccines to dynamically adapt to novel threats. Finally, we establish a rigorous theoretical demarcation between model alignment and agent immunity: while alignment provides a static \"constitutional\" value foundation during training, ANIS serves as the dynamic \"law enforcement\" mechanism during runtime. We conclude by framing open challenges for the field, including immune protocol standardization, novel evaluation metrics such as the Autoimmunity Rate (false-positive intervention rate), and the co-evolutionary dynamics between pathogens and vaccines within collective intelligence ecosystems.",
+      "highlights": {
+        "contribution": "提出「Agent-Native 免疫系统」概念架构，把内生防御和传统 alignment 明确分开。",
+        "innovation": "六层 Immune Tower（含物理逻辑隔离 L1）+ Agent Virus/Vaccine 分类 + Meta/Self/Auto 三元 harness + 连续免疫学习。",
+        "method": "概念性框架论文；给出分类、架构、评估指标（如 Autoimmunity Rate）建议，未做实证评测。",
+        "results": "无实验，属架构与研究议程性提案。"
+      },
+      "images": [],
+      "published_date": "2026-06-26T17:08:06Z",
+      "categories": [
+        "cs.AI",
+        "cs.MA"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "autonomous agent"
+      ],
+      "scores": {
+        "relevance": 5.0,
+        "recency": 8.0,
+        "popularity": 6.0,
+        "quality": 5.8,
+        "recommendation": 5.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.28270v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.28270v1",
+      "venue": null
+    }
+  ],
+  "total": 25
+}

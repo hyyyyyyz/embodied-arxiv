@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.27144",
+    "summary": "多阶段操作里，flow-matching VLA 用一个共享 action expert 兜底，很难把不同阶段的控制模式都学好。作者提出 PAMAE，把 action expert 换成稀疏 MoE，根据执行阶段动态路由到不同专家。在多阶段仿真任务上任务成功率相对强 baseline 最多提升 9.2%。",
+    "highlights": {
+      "contribution": "首个把「阶段感知」路由引入 flow-matching VLA 动作专家的即插即用模块。",
+      "innovation": "phase-aware router 结合 phase 预测头和路由对齐损失，让不同阶段自动分配到不同专家，避免单一策略被平均化。",
+      "method": "冻结 VLA 主干，替换动作专家为稀疏 MoE，两段式训练：先按 flow-matching 热身，再引入阶段监督做路由对齐。",
+      "results": "多阶段操作仿真任务成功率相对强 VLA baseline 最多 +9.2%，ablation 证明路由和分段训练缺一不可。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27146",
+    "summary": "长程操作里，VLA 直接前馈出动作、不检查物理可行性，出错也不会自我修正。作者提 PhysReflect-VLA，用可行性算子筛动作、解释算子看状态转移是否合理，LLM 反射模块在跑偏时给下一步纠错。真实多阶段接触密集任务上平均成功率 +5.4%。",
+    "highlights": {
+      "contribution": "把物理可行性检查 + 自我反射插进 VLA 闭环控制，让长程操作更稳。",
+      "innovation": "三个协同模块：Feasibility Operator + Action Explanation Operator + LLM Reflection，形成执行时可靠性框架。",
+      "method": "VLA 生成候选动作 → 可行性算子评估状态转移 → 解释算子核对一致性 → LLM 反射分析偏差生成纠正指令；两阶段训练稳定可行性建模并把反射嵌入控制回路。",
+      "results": "真实多阶段接触密集操作平均成功率 +5.4%，两模块各自有贡献。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.3,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27268",
+    "summary": "现有具身 TTS 要么只放大推理、要么忽略历史上下文。E-TTS 把推理与动作联合采样打分，用历史缓冲配合 VLM verifier 做闭环迭代 refine。跨 4 个 benchmark、6 个环境、3 种本体、4 个 VLA 基模型上仿真最高 +33.14%、真机 +26.62%。",
+    "highlights": {
+      "contribution": "首个统一推理和动作的具身 test-time scaling 框架，且带历史感知和闭环反馈。",
+      "innovation": "reasoning-action 联合采样 + pairwise 评分 + history buffer 供 verifier 使用，形成闭环迭代 refine，每个模块可插拔。",
+      "method": "输入 VLA 候选动作与推理，VLM verifier 结合历史缓冲对 (reasoning, action) 对打分，反馈用于下一轮采样，无需额外数据或重训。",
+      "results": "仿真最高 +33.14%，真机 +26.62%；跨 4 benchmark / 6 env / 3 embodiment / 4 base VLA 均稳定提升。"
+    },
+    "scores": {
+      "relevance": 9.2,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27295",
+    "summary": "VLA 训练时视觉信号太密、语言-动作信号太稀，容易走视觉捷径。作者提出 LA4VLA：把示教切成原子动作片段配上低层动作描述，构造 33K episode 的 LA-33K 数据集，做无视觉的语言-动作预训练。混合 LA+VLA 预训练把 1B 模型仿真平均成功率抬高 17.8pp、真机 45.0pp。",
+    "highlights": {
+      "contribution": "提出无视觉的语言-动作预训练范式，用来抵消视觉捷径、增强 VLA 语言条件化能力。",
+      "innovation": "把已有示教拆解为原子片段+低层描述、无需新采集数据；系统对比 LA-only / 顺序 LA→VLA / 混合三种预训练。",
+      "method": "输入语言描述预测原子动作段 → 得到 LA-33K 数据集 → 训练 1B VLA (LA4VLA-1B)，三种范式融入 VLA 训练。",
+      "results": "混合 LA+VLA 预训练相较无预训练基线，仿真 +17.8pp、真机 +45.0pp 平均成功率。"
+    },
+    "scores": {
+      "relevance": 9.3,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27036",
+    "summary": "开放世界铰接操作里，数据驱动策略用孤立接触点或潜 affordance embedding，缺少刚体运动学约束。RelAfford6D 用「关系式 6D affordance 图」把语义拓扑升为 SE(3) pose，把执行写成运动学约束满足问题，闭环追踪修正扰动。仿真和真机上零样本成功率超过数据驱动 baseline。",
+    "highlights": {
+      "contribution": "免训练的关系式 6D affordance 图框架，把语义拓扑显式绑到运动学约束上。",
+      "innovation": "首次把「主交互部件-物理锚点」拓扑节点升到 SE(3) pose，用旋转/平移流形约束轨迹生成。",
+      "method": "自由文本指令 → 语义拓扑 → 通过视觉基础模型抬升为 SE(3) → 沿约束流形合成连续轨迹 + 闭环重规划应对扰动。",
+      "results": "仿真和真机零样本成功率、跨类别泛化、执行鲁棒性均优于数据驱动 baseline (未给具体数字)。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.2,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27079",
+    "summary": "VLA 的安全边界还没人认真评过。ForesightSafety-VLA 把安全当作一等评估目标，定义 13 类安全分类、三种控制维度、cumulative safety cost / risk exposure time 等过程级指标。在 RoboTwin 上跑 66 个场景 × 5 种本体 × 代表性 VLA，发现最强策略也存在显著安全代价。",
+    "highlights": {
+      "contribution": "首个把 embodied safety 做为主评估目标的 VLA 诊断 benchmark。",
+      "innovation": "13 类安全分类 (Safe-Core / Safe-Lang / Safe-Vis) + 三控制维度 + 过程级 CC/RET 指标 + 安全成功/失败四象限分解。",
+      "method": "在 RoboTwin 上构造 66 个安全增强场景，覆盖 5 embodiment，测试多个代表性 VLA baseline。",
+      "results": "最强策略仍有非平凡安全代价；结构和视觉变化诱发的安全退化远大于语言变化。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27163",
+    "summary": "作者用一份 VLA + RL 方案参赛 LeHome 2026 双手叠衣挑战，62 队仿真第 1、真机第 2。核心是让策略同时充当自己的 value function，预测动作、成功率、进度和未来量。技术栈组合了 AWR + RECAP、Thompson 采样调超参、sim-to-real 数据增广和 HIL 采集。",
+    "highlights": {
+      "contribution": "把 VLA + RL 一整套工程 recipe 打包成叠衣挑战冠军方案。",
+      "innovation": "同一网络既是策略也是 value function，预测成功、进度、未来量用于优势估计、失败检测和候选选择。",
+      "method": "flow-matching VLA + AWR/RECAP + HuggingFace Hub 异步分布训练 rollout + Thompson 推理超参搜索 + 相机对齐/增广/DAgger HIL 采集。",
+      "results": "LeHome 2026 (ICRA) 双手叠衣：62 队仿真第 1，真机第 2。"
+    },
+    "scores": {
+      "relevance": 7.2,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 6.8,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27353",
+    "summary": "机器人部署时环境经常变（风、载荷、电量、接触），但控制器都是一次训完就丢部署。作者用「解析物理先验+神经残差」学条件感知动力学，用循环编码器在线推断隐藏条件驱动策略。真机四旋翼在变风下约 1 秒恢复，比在线残差重拟合快约 5 倍，扰动误差降 65.7%/53.3%。",
+    "highlights": {
+      "contribution": "针对复现性动力学的持续学习框架，让机器人在飞行中「识别」条件而非重新拟合。",
+      "innovation": "条件感知动力学 = 解析物理先验 + 神经残差，配循环编码器；策略在可微仿真里对采样条件学策略，部署时用推断出的真实条件驱动。",
+      "method": "输入：真机状态-动作轨迹；模型：解析物理+残差网络+循环 encoder；训练：可微仿真 rollout 学策略；部署：在线推断条件条件化策略与残差。",
+      "results": "真机四旋翼变风下 ~1s 恢复，比在线残差重拟合快 ~5×；大扰动 hover/tracking 误差分别降 65.7% / 53.3%。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.8,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27355",
+    "summary": "多个候选 VLA 部署前会跑烟测然后压成一个全局赢家，作者问：能不能反过来用这些烟测记录做策略选择监督？RouterVLA 用 outcome-disjoint 交叉拟合避免 leakage，在 34,752 条 LIBERO-Plus rollout 上，一个透明的 probe-success 规则把 held-out 成功率从 46.86% 提到 61.49% (+14.64pp)。",
+    "highlights": {
+      "contribution": "把烟测记录变成 VLA 路由监督信号，证明「commissioning-aware routing」比 scaling scorer 更值。",
+      "innovation": "outcome-disjoint 交叉拟合 + 透明 probe-success 规则；发现在 scalar-only profile 下 learned scorer 与规则统计不可分。",
+      "method": "记录 probe 结果 → 为每个冻结 VLA 构 profile → 独立试验对选中的专家打分（不进 profile）→ 34,752 rollout 数据训评估。",
+      "results": "LIBERO-Plus held-out 成功率 0.4686 → 0.6149，+14.64pp；未做 outcome 分离会虚增 1.87 倍。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27375",
+    "summary": "Abbeel、Kanazawa、Isola、Malik 等联手推出 ABC：3500 小时、13 万+ 段、195 任务的 teleoperation 大数据集 ABC-130K，加上开源硬件、训练基建、仿真管线和 400 小时 sim-teleop 数据。系统对比 DiT 和 VLA 架构，能做叠盒、从钱包抽卡这类灵巧任务。",
+    "highlights": {
+      "contribution": "迄今最大开源 teleoperation 数据集 + 全栈 BC 训练与评估工具箱。",
+      "innovation": "ABC-130K 规模 + sim 与 real 强相关的 co-training recipe，让模型设计选择先在仿真里 ablate。",
+      "method": "开源采集硬件 + 3500 小时 130K episode 遥操数据 + 400 小时 sim-teleop + DiT/VLA 系列训练配方 + 真机评估。",
+      "results": "策略能完成叠盒、从钱包抽信用卡等灵巧任务；系统比较 DiT vs VLA 架构选择 (未列具体数字)。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8,
+      "popularity": 8.5,
+      "quality": 8.5,
+      "recommendation": 8.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27475",
+    "summary": "真机数据训出的策略慢又脆，直接真机 RL 又贵，仿真里 unconstrained RL 又会薅仿真漏洞。SCORE 提「support-constrained」real-to-sim-to-real：把 RL 限制在生成式基策略能产的动作 support 内，用 flow steering 实现。8 个真机灵巧多指操作任务，平均成功率从 37.8% 提到 89.9%，还比 base 快 36.8%。",
+    "highlights": {
+      "contribution": "一套 real→sim→real 的策略改进范式，只在生成基策略 support 内做 RL，避免 sim 漏洞与过度正则化。",
+      "innovation": "flow steering 把 RL 动作限制在预训 flow-matching 策略能生成的分布支撑内；用稀疏奖励，不做 distillation，不修改基策略。",
+      "method": "先在真数据训 flow-matching 基策略 → 在仿真里做 RL，但用 flow steering 只允许 base 能生成的动作 → 保留 base 不变。",
+      "results": "8 个真机灵巧多指任务：平均成功率 37.8% → 89.9%，最佳 baseline 只到 59.5%；到达成功所需步数比 base 少 36.8%。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 8,
+      "popularity": 7.5,
+      "quality": 8.2,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27325",
+    "summary": "现有 action-conditioned world model 把整段动作压成一个表示，低自由度还行，但高自由度灵巧手动作跨度大，训出来会顾大失小。DexAC-WM 把动作 tokenize 保留维度语义，用局部 refine + 全局 modulation 与视觉对齐；再加语义分支注入物体场景先验。EgoDex/EgoVerse 上 FID、FVD、PCK 都提升。",
+    "highlights": {
+      "contribution": "针对高自由度灵巧动作条件化，重新设计动作 conditioning 而非只堆视觉表征。",
+      "innovation": "action tokenization 保留每维语义 + 局部 refine + 全局 modulation；额外语义分支给 WM 高层物体场景先验。",
+      "method": "输入高 DoF 动作序列 tokenize → 局部 refine 对每维动作精调 → 全局 modulation 与视觉动力对齐 → 语义分支提供物体场景先验，做动作条件视频预测。",
+      "results": "EgoDex/EgoVerse 上 FID/FVD/PCK 均显著提升；DexAC 换到其他 backbone 仍有效。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27364",
+    "summary": "视频 world model 都在视图像素空间跑，PhysiFormer 直接在世界坐标里对 3D 网格顶点轨迹做扩散预测。给初始位置速度和刚/弹材质，采样未来轨迹，训练时不加显式刚性或因果先验。10 万+ 仿真轨迹训完能泛化到未见几何和多物体，轨迹精度、刚性保持、动量一致性全面超自回归 baseline。",
+    "highlights": {
+      "contribution": "把 world model 从像素/latent 拉回世界坐标，用扩散 transformer 直接学 3D 顶点轨迹。",
+      "innovation": "无归纳偏置的坐标空间扩散做力学预测，attention 分解在时间/空间/物体，天然置换不变支持多物体。",
+      "method": "输入：网格顶点初始位置+速度+材质类型；模型：diffusion transformer 分解 attention；训练：>10 万仿真轨迹去噪。",
+      "results": "多物体、混材质、未见几何均能泛化；轨迹准确度、刚体保持、动量一致性明显超自回归。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26964",
+    "summary": "动态 3D 故事世界里，具身相机得先决定「看什么」再动。作者提 Look-Before-Move：先把导演意图变成语义观测契约、再蒙卡搜可行视点、最后语义轨迹接续做连续可行相机运动。发布基于 StoryBlender 的 3D Story World Benchmark（50 故事 / 457 场 / 1585 镜），主体感知、意图一致性和轨迹质量都胜 baseline。",
+    "highlights": {
+      "contribution": "把「叙事驱动的具身视觉注意力」形式化为 camera planning 问题，并分离观测规格与运动执行。",
+      "innovation": "Semantic Observation Contract + Monte Carlo Viewpoint Search + Semantic Trajectory Grounding 三段式。",
+      "method": "输入叙事意图 → 生成语义观测契约 → 蒙卡搜叙事+几何可行视点 → 语义轨迹接续为连续避障可行的相机轨迹。",
+      "results": "在自建 3D Story World Benchmark 上主体感知、意图一致性、轨迹质量均超代表性 baseline。"
+    },
+    "scores": {
+      "relevance": 6.8,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26969",
+    "summary": "作者问：LLM 能否通过「可视化反事实」补语言推理的短板？他们提 Einstein World Models 蓝图：LLM 在推理链里调用外部 world-module 得到短视觉时序 rollout，作为可检视假设参与后续推理，把 tool calling 扩展到「视觉思想实验」域。这是概念蓝图论文，没跑具体数字。",
+    "highlights": {
+      "contribution": "提出把可视化时序 rollout 作为 LLM 推理链可检视工具的框架蓝图。",
+      "innovation": "把 world-module 视为一种和 web search / code exec 并列的 LLM tool call，产生的 rollout 是假设不是答案。",
+      "method": "LLM 推理时 tool-call 外部 world-module → 得到短视觉时序 rollout → LLM 把它当假设继续推理。",
+      "results": "偏概念蓝图型论文，无具体量化指标。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 6.2,
+      "recommendation": 6.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27014",
+    "summary": "JEPA-based world model 经验成功，但没人给出泛化理论。作者把 JEPA 预训练形式化为条件谱图学习，证明 JEPA 目标等价于 action-conditioned 共现矩阵的低秩分解，进而把预训练误差和下游规划 regret 连起来，给出有限样本泛化界，暴露 latent 维度对 approximation/sample error 的权衡。",
+    "highlights": {
+      "contribution": "首个 JEPA-based world model 的泛化理论，把预训练误差桥到下游规划 regret。",
+      "innovation": "把 JEPA 预训练重表述为条件谱图学习 + action-conditioned 共现矩阵低秩分解。",
+      "method": "理论工作：JEPA 目标 → 谱图学习 → 共现矩阵低秩分解 → 有限样本泛化界。",
+      "results": "给出泛化界；揭示 latent 维度在 approximation vs sample error 上的固有权衡。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 8.0,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27326",
+    "summary": "Nicklas Hansen 和 Xiaolong Wang 说：world model 幻觉不是玄学，是数据覆盖问题。他们发 MMBench2（427 小时、210 任务、含真仿真器和真值 action/reward），训 350M WM，识别出感知型、动作边缘化型、场景发散型三种幻觉，并给出 3 个信号能预测在哪出错。信号还能当 curiosity 奖励做数据高效 finetune，只需 50 条真轨迹就能适配新环境。",
+    "highlights": {
+      "contribution": "提出「world model 幻觉是数据覆盖问题」，配套预测信号和数据高效缓解方法。",
+      "innovation": "识别三种幻觉模式并各配一个数据侧信号，既能诊断也能做 curiosity 奖励驱动主动采集。",
+      "method": "构建 MMBench2 (427h/210 任务，含仿真器真值)；训 350M WM；设计 3 个幻觉预测信号；训时做 coverage-aware 采样，在线用信号驱动数据收集。",
+      "results": "只用 ~50 条真环境轨迹就能把预训练 WM 适配到全新环境；信号能准确预测失败。"
+    },
+    "scores": {
+      "relevance": 8.8,
+      "recency": 8,
+      "popularity": 8.5,
+      "quality": 8.5,
+      "recommendation": 8.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27504",
+    "summary": "自动驾驶 World Action Model (WAM) 大多在拼架构，中间表征没人管。ReWorld 把中间表征当直接优化目标：Video DiT 上加未来预测监督、Action DiT 上做跨模态对齐 + 安全边界 hard negative。nuScenes/NAVSIM 上微调后 FVD 从 81.3 降到 61.9，闭环 PDMS 89.1→90.4，从零训收敛快 ~2×。",
+    "highlights": {
+      "contribution": "首个针对自驾 WAM 的中间表征学习框架，把中间表征作直接优化对象。",
+      "innovation": "Video DiT 用未来预测监督、Action DiT 与视觉世界表征跨模态对齐 + 安全边界 hard-negative 监督。",
+      "method": "在 Video DiT 中间层加 future-predictive loss；在 Action DiT 与 Video 表征对齐并对安全边界做 hard negative；nuScenes/NAVSIM 训练。",
+      "results": "微调后 FVD 81.3 → 61.9 (-23.9%)；闭环 PDMS 89.1 → 90.4；从零训收敛快 ~2×。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.26922",
+    "summary": "自动驾驶座舱驾驶员监控需要低延时且不出错，大 VLM 又太慢。作者提 cost-aware 选择性推理框架：轻量 RGB+生理信号学生模型 + 学习门控决定「快答」还是「弃权求安全接管」，再加驾驶员状态 WM 做未来错误和 counterfactual 成本估计。11.39M 参数、3.08ms 延时下 Macro-F1 0.7440，unsafe FN 从 17.37% 压到 ~5%。",
+    "highlights": {
+      "contribution": "为智能座舱驾驶员监控设计低延时+安全选择性推理框架。",
+      "innovation": "RGB+生理信号双流 + 学习门控决定接受快答或弃权；加驾驶员状态 world modeling 预测未来错误与 counterfactual 成本。",
+      "method": "轻量 RGB-physiological 学生模型 + window 级 HR/EDA + 学习门控 + 隐 latent driver-state rollout 预测。",
+      "results": "11.39M / 3.08ms 延时下 Macro-F1 0.7440、balanced acc 0.9099；unsafe FN 从 17.37% → ~5%。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 8,
+      "popularity": 4.5,
+      "quality": 6.5,
+      "recommendation": 5.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27537",
+    "summary": "现有视频/世界模型 memory benchmark 大多目标一直在画面里，就算 out-of-view 也是静态场景。MemoBench 用「消失-再出现」范式：目标经历物理过程、离开视线再回来时状态得对。策展 360 段合成+真世界 clip，用 VQA + 自动指标从四方面诊断 8 个 SOTA 模型的记忆一致性，发现明显短板。",
+    "highlights": {
+      "contribution": "首个针对动态环境「消失-再现」记忆一致性的 world model 诊断 benchmark。",
+      "innovation": "把 disappear-and-reappear + 遮挡期间状态发生变化作为核心测试范式，暴露过往 benchmark 忽视的短板。",
+      "method": "策展 360 段真+合成 clip；四诊断支柱 + 自动指标 + VQA 评估；覆盖 8 个 SOTA 视频/世界模型。",
+      "results": "SOTA 模型在动态消失-再现范式下记忆一致性明显不足，暴露多项 open challenge。"
+    },
+    "scores": {
+      "relevance": 7.2,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27539",
+    "summary": "社交媒体流行度预测领域数据集、模态、评估各自为政。作者建 MMG-Pop benchmark 整合 Bluesky/Reddit 四数据集下的多模态和时序交互信号，并提 MMG-PopNet 联合建模文本、视觉、时间、图交互。跨平台泛化、多任务收益、模态贡献和 LLM 局限性给出系统分析。与具身/机器人关系不大。",
+    "highlights": {
+      "contribution": "统一多模态图流行度预测的 benchmark 与联合建模基线。",
+      "innovation": "把多模态内容与图结构社交交互统一在一个 benchmark 下评估，涵盖跨平台四数据集。",
+      "method": "MMG-PopNet 联合文本+图像+时序+图；在 MMG-Pop 上评测多任务与跨平台。",
+      "results": "MMG-PopNet 在 Bluesky/Reddit 四数据集上超基线；同时给出跨平台、多任务、多模态、LLM 局限的系统结论。"
+    },
+    "scores": {
+      "relevance": 2.5,
+      "recency": 8,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 3.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27575",
+    "summary": "真实场景 3D 变换预测不像理想仿真那样能拿到完整 3D 与动力学，只能靠部分观测和局部动作。P3Sim 由学习式物理 world model + 几何条件模块 + 持久场景记忆三部分组成：把感知视为多模态概率推断、注入部分 3D transform、时间上聚合更新。同一套系统能做新视角合成、物体操作、动态场景预测。",
+    "highlights": {
+      "contribution": "在部分观测+不完整 3D 变换信号下做物理世界建模的通用感知式仿真系统。",
+      "innovation": "把感知形式化为多模态概率推断 + 几何条件模块提供部分 3D 变换 + 持久场景记忆做时间聚合。",
+      "method": "learned physical world model + geometric conditioning + persistent scene memory 三模块协同；输入部分观测和部分 3D 变换。",
+      "results": "同一系统覆盖新视角合成、物体操作、动态场景预测，展示跨任务通用性 (未给统一数字)。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27374",
+    "summary": "WAM 除了预测动作还能生成未来观测。REGEN 利用这点做持续模仿学习：在学新任务时不存旧示教，由 WAM 生成伪回放轨迹用于 rehearsal。仿真和真机操作里相对顺序 finetune 减少 50% 灾难性遗忘，逼近有真回放数据的 privileged baseline，也分析出长时视觉退化和动作-观测不一致是瓶颈。",
+    "highlights": {
+      "contribution": "用 WAM 的生成能力做持续模仿学习伪回放，摆脱对旧示教数据的存储依赖。",
+      "innovation": "递归调用 WAM 合成 pseudo-replay 轨迹，仅以旧任务指令和当前观测为条件，无需真回放数据。",
+      "method": "对每个新任务：以旧任务 instruction + 当前观测为条件递归查询 WAM 生成伪轨迹 → 与新任务示教一起训策略。",
+      "results": "灾难性遗忘相对顺序 finetune 减 50%，接近 privileged replay；瓶颈是长时视觉退化 + 动作观测不一致。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27071",
+    "summary": "全景相机 FOV 大但转多平少，稀疏全景做 SfM/SLAM 初始化经常挂。PanoImager 走 SfM-free 路线：把全景切成局部透视图，用前馈 pose/depth 先验 + 几何条件扩散补视图 + depth 引导 3DGS 优化，稀疏下更稳，可作 SLAM 挂掉时的离线 map refine 组件。",
+    "highlights": {
+      "contribution": "针对稀疏全景弱视差 SfM 失效场景的免 SfM 3D 重建框架。",
+      "innovation": "把全景分解成局部透视 + 几何条件扩散补视 + depth 引导 3DGS，联合稳定 Gaussian 优化。",
+      "method": "输入少量全景 → 拆成局部透视视图 → 前馈得 pose/depth 先验 → 扩散生成辅助视图 → depth 引导 3DGS 优化。",
+      "results": "在多个 benchmark 极稀疏输入下稳定性提升，可作 SLAM 失败时的离线补救组件 (未给统一定量数字)。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 8,
+      "popularity": 5.5,
+      "quality": 6.8,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.27223",
+    "summary": "卫星影像视角过顶、建筑立面监督不足，直接跑 Gaussian Splatting 立面会破洞；生成式 refine 又会独立视图幻觉破坏光度一致。SatSplatDiff 用摄影测量 DSM 初始化、单目 depth 监督 + 多尺度几何 refine 建稳几何面，再用阴影引导的生成 refine 保几何一致。IARPA2016/DFC2019 上几何 MAE 降 18%、FID-CLIP 提升 28-45%。",
+    "highlights": {
+      "contribution": "针对卫星 3DGS 立面缺监督问题，用阴影引导的生成 refine 提视觉保真同时压几何退化。",
+      "innovation": "photogrammetric DSM 初始化 + 单目 depth + 多尺度几何 refine + 几何阴影图引导生成式 refine。",
+      "method": "2DGS + 阴影 casting 建立几何 → 单目 depth 监督 + 多尺度 refine → 阴影图引导扩散生成 refine 更新监督图像。",
+      "results": "IARPA2016/DFC2019 几何 MAE -18%，FID-CLIP +28-45%，最高 5× 分辨率增强且跨 tile 一致。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.2,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  }
+]

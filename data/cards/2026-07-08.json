@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2607.07491",
+    "summary": "遥操作数据质量直接卡死 VLA 和视频动作模型的上限。作者不用梯度法而是用采样式重定向 SBR 做人手到机械手的实时映射，避开局部最优带来的抖动。18 人真实用户实验里成功率 54.1%、NASA-TLX 认知负荷 36.4，都是同类最好。",
+    "highlights": {
+      "contribution": "提出无梯度、基于采样的手部运动重定向算法 SBR，用于低抖动实时遥操作。",
+      "innovation": "跳出主流梯度优化范式，改用采样式控制思路做重定向，抖动明显更低。",
+      "method": "输入是人手关键点，用采样式规划器生成多候选目标关节角并挑最优，无需梯度回传；在仿真和实机遥操作管线里直接部署。",
+      "results": "18 人 3 个复杂操作任务：SBR 平均成功率 54.1%（最高），NASA-TLX 负荷 36.4（最低）。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07608",
+    "summary": "现在的 VLA 基本还是马尔可夫地看当前帧做决策，长程任务里就吃亏。LaMem-VLA 把历史经验重构成潜在记忆 token，直接和当前观测一起塞进 VLA 的连续 embedding 序列里参与推理。SimplerEnv 和 LIBERO 上都刷出更好效果。",
+    "highlights": {
+      "contribution": "提出潜在记忆原生的 VLA 框架 LaMem-VLA，把长短期历史直接编成 token 融入 VLA 推理链。",
+      "innovation": "不是外挂检索或者拉长上下文，而是把记忆做成 VLA 原生潜在空间里的连续 token，让记忆真正参与推理。",
+      "method": "四件套：curator 分短长期记忆库，seeker 检索相关证据，condenser 压缩成记忆 token，weaver 把记忆和当前观测/指令交织成一个连续 embedding 序列喂给 VLA。",
+      "results": "在 SimplerEnv 和 LIBERO 两个 VLA 通用 benchmark 上均超过现有记忆增强 VLA 基线（摘要未给具体数字）。"
+    },
+    "scores": {
+      "relevance": 9.5,
+      "recency": 9.5,
+      "popularity": 8.0,
+      "quality": 8.5,
+      "recommendation": 8.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07076",
+    "summary": "扩散/流策略学操作动作很强，但常常只是学表面动作相关性，不理解意图。PriGo 在测试时插一个轻量原语预测网络 PANet，用可微原语引导去校正生成的动作轨迹。LIBERO、CALVIN、SIMPLER 和真机上都稳定提升长时任务和泛化。",
+    "highlights": {
+      "contribution": "提出测试时原语引导框架 PriGo，无需重新训练就能给扩散和流策略加语义一致性约束。",
+      "innovation": "把原语条件从训练期挪到测试期，任何预训练扩散/流策略都能即插即用地引导。",
+      "method": "PANet 从观测推原语分布；然后构造可微原语引导项，在扩散/流策略的推理去噪过程中直接把动作往语义一致的方向拉。",
+      "results": "LIBERO、CALVIN、SIMPLER、真机四类任务上稳定提升长程执行和 OOD 泛化（摘要未给具体数字）。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07101",
+    "summary": "机器人本体状态一般被当独立向量塞进策略，跟视觉 token 没有对齐，结果有的时候还不如纯视觉。GeoProp 直接把机械臂关键点投影到图像平面采样视觉特征，再用 FiLM 反向调制视觉。67 个任务里给 Diffusion Policy 平均涨 8.7%，真机涨 10.6%，只增 2-3% 参数。",
+    "highlights": {
+      "contribution": "提出即插即用适配器 GeoProp，用几何投影把机器人状态显式对齐到视觉特征。",
+      "innovation": "不再把 proprioception 当孤立向量，而是通过 raymap 投影+采样让 3D 关节和 2D 视觉 token 直接对齐，还带前瞻位置提取运动意图。",
+      "method": "将机器人状态投影到图像平面采样局部视觉特征形成 grounded state token；用 FiLM 把状态先验注入视觉；再采样一个短程预测坐标位置的特征作为 look-ahead 上下文。",
+      "results": "63 个仿真任务给 Diffusion Policy 涨 8.7%，RoboTwin 上给 pi_0 涨 4.0%，真机平均涨 10.6%，只加 2-3% 参数。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.1
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07287",
+    "summary": "灵巧操作既要预测接触怎么演化又要快速反应打滑抓不稳。TouchWorld 用一个分层策略：VLM 顶层规划，触觉世界模型预测接触目标，视觉-触觉策略生成粗动作，再用高频触觉残差网络在线纠错。6 个长程接触任务上比最强基线在干净和扰动设置下分别高 15.7 和 18.5 个点。",
+    "highlights": {
+      "contribution": "提出触觉基础模型 TouchWorld，把触觉同时用作预测参考和高频反馈信号。",
+      "innovation": "分层解耦「慢的语义规划」「触觉世界模型预测」「视觉-触觉动作生成」「高频触觉残差修正」四层，触觉不再只是被压进单一策略。",
+      "method": "顶层 VLM 规划子任务并预测触觉子目标；中层 visuo-tactile 策略生成动作段；底层触觉残差策略基于最近触觉/本体反馈做在线修正。",
+      "results": "6 个长程接触任务：干净设置成功率 65.0%，人为扰动下 53.7%，分别比最强基线高 15.7 和 18.5 个点。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9.5,
+      "popularity": 8.0,
+      "quality": 8.5,
+      "recommendation": 8.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07459",
+    "summary": "sim-ready 3D 资产生成进步很快，但把资产拼成能跑闭环的策略环境还是靠人。EmbodiedGen V2 打通资产、affordance、任务世界到多房间大场景的整条生成链，还支持 vibe coding。资产接受度 96.5%、任务世界 83.3% 直接可用；在线 RL 让仿真成功率从 9.7% 涨到 79.8%，迁到真机 21.7% 变 75.0%。",
+    "highlights": {
+      "contribution": "提出生成式 3D 世界引擎 EmbodiedGen V2，一口气搞定 sim-ready 环境的资产、任务和大场景生成。",
+      "innovation": "把跨仿真器资产、交互 affordance、任务世界、多房间大场景和 stateful vibe coding 统一到一个可复用的生成管线里。",
+      "method": "统一 sim-ready 表示；资产/任务/场景各自的生成模块串起来；生成环境接入操作、导航、移动操作等下游策略训练；配合在线 RL 训练具身策略。",
+      "results": "资产人评接受度 96.5%，碰撞成功率 98.6%，83.3% 任务世界零改直接可用；在线 RL 让仿真成功率 9.7%→79.8%，真机 21.7%→75.0%。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9.5,
+      "popularity": 8.5,
+      "quality": 8.5,
+      "recommendation": 8.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07763",
+    "summary": "现有世界模型时间步长写死，做分层规划或 sim2real 时用不同分辨率查询就不行。作者盯上 Hamiltonian Generative Network，指出在有耗散、有外力时它长步长外推会崩，找到潜变量幅度爆炸和积分器截断误差两个原因，给出针对性修复，成功外推到训练分辨率以外的时间尺度。",
+    "highlights": {
+      "contribution": "解决 Hamiltonian 视频动力学模型在非保守场景下的时间外推失效问题。",
+      "innovation": "识别出「无约束 action-force 映射的潜变量增长」和「欠分辨积分器的截断误差累积」两个具体失效机制并逐个修复。",
+      "method": "在 HGN 骨架上引入约束的动作-力映射和更细的积分器；分析潜在幅度增长和全局截断误差；给出稳定 rollout 的一套策略。",
+      "results": "在训练时间步以外的更大步长上仍能稳定 rollout（摘要以案例分析为主，未给量化数字）。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07196",
+    "summary": "视频世界模型越来越被用来给策略打分说是否成功，但世界模型本身没人认证。作者认为 FVD 那种视觉保真度不能保证动作跟随正确，应该借鉴 VV&A、SOTIF 那套安全关键认证做世界模型的可采纳性等级 L0-L4。以自动驾驶两个 WM 为例，视觉排名和动作跟随排名居然是反的。",
+    "highlights": {
+      "contribution": "提出把世界模型当作测试预言机之前必须先认证的框架，给出 L0-L4 可采纳性阶梯。",
+      "innovation": "把 VV&A、SOTIF、scenario-based testing 这些安全关键领域的认证思路搬到生成式世界模型上，指出 FVD 类指标不够。",
+      "method": "定义 L0-L4 认证阶梯，从视觉生成质量到动作跟随再到闭环判决；以自动驾驶为具体化实例套两个驾驶 WM。",
+      "results": "两个驾驶 WM 上 L0 视觉排名和 L1-L2 动作跟随排名相反，说明视觉保真度不能预测闭环判决可靠性（无标准 benchmark 数字）。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 6.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07534",
+    "summary": "LingBot-World 2.0（也叫 LingBot-World-Infinity）在游戏世界模拟上做四件事升级：无界交互 horizon、720p 60fps 实时生成、更丰富的动作/事件、以及塞进 pilot+director 两个 agentic 角色。主力 14B 模型配 1.3B 蒸馏版，可以单卡部署。",
+    "highlights": {
+      "contribution": "推出 LingBot-World 2.0 无界交互游戏世界模型，配合 agentic 双 agent harness。",
+      "innovation": "在世界模型里首次系统集成 agentic harness：pilot 角色规划角色行为，director 生成新环境元素。",
+      "method": "因果预训练支持无界 horizon；蒸馏出实时 1.3B 版本；扩充攻击/射箭/施法等交互动作；配合两个 agent 交互；14B 主力+1.3B 轻量。",
+      "results": "支持 720p 60fps 实时流；1.3B 版可单卡部署；文本驱动事件更丰富（摘要偏产品能力，未给量化对比）。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.06988",
+    "summary": "想让机器人基础模型 RFM 换个任务或者用户偏好，一般还得再采数据再微调。WAM-TTT 直接用人视频做测试时训练，把人视频吸收成一个轻量自适应记忆塞进冻结的 WAM 里；测试时只要人视频就行，不用机器人动作也不用标注。多种操作任务上比 in-context 人视频条件基线稳定更好。",
+    "highlights": {
+      "contribution": "提出用人视频做测试时训练来 steering 世界动作模型的 WAM-TTT 框架。",
+      "innovation": "把人视频当自适应记忆而非模仿轨迹；引入 meta 训练阶段用人-机对数据把人示范映到机器人行为空间。",
+      "method": "预训练 WAM 冻结；meta 阶段用配对人-机数据+key-value 记忆重构目标做对齐；测试时只用未标注人视频做自监督视频预测更新记忆。",
+      "results": "多种操作任务和泛化设置里都超过 in-context 人视频条件基线（摘要未给具体数字）。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9.5,
+      "popularity": 8.0,
+      "quality": 8.0,
+      "recommendation": 8.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.08436",
+    "summary": "第一人称人类视频用来监督机器人操作时，物体场景等可迁移信息会跟人形态、头动、行为风格这些不可迁移的东西缠一起。EgoWAM 把 policy 骨架、动作头、数据配比全固定，只换世界预测目标做对照实验：像素预测迁移弱，DINO 让 OOD 泛化涨到 4 倍，3D motion flow 让 in-domain 涨 20-30%。",
+    "highlights": {
+      "contribution": "提出 EgoWAM 受控人-机协训框架，系统比较 WAM 世界预测目标对 human-to-robot 迁移的影响。",
+      "innovation": "只变世界预测目标做严格 ablation，指出「抽象外观、捕捉 agent 无关物理效果、分离相机与环境运动」是好的世界目标。",
+      "method": "固定 policy backbone、动作头、数据混合；世界目标依次换成 Pixel、DINO、3D motion flow；三个真实双臂任务上做人-机 co-training。",
+      "results": "像素预测迁移弱；DINO 让 OOD 物体/场景泛化提升最多 4×；3D flow 让 in-domain 提升 20-30%。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.5,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07168",
+    "summary": "无位姿前馈 3DGS 处理长序列时会因为累积位姿漂移把几何和渲染都拖垮。NoDrift3R 引入 raymap 引导耦合模块把高斯中心锚到 raymap 几何上，联合优化 RGB、raymap 一致性和相机正则；再配合双频视角调度，跨域和长序列上位姿和渲染都更稳。",
+    "highlights": {
+      "contribution": "提出 raymap 引导耦合的无位姿前馈 3DGS 框架 NoDrift3R，专治长序列位姿漂移。",
+      "innovation": "把 raymap 作为几何锚点显式耦合几何和外观；引入双频视角调度（先易后难间隔扩张+短间隔 replay）稳定长序列训练。",
+      "method": "Raymap-Guided Coupling Module 把高斯中心锚到 raymap；统一目标同时优化 RGB 重建、raymap 一致性和相机正则；双频视角调度做课程学习。",
+      "results": "跨 in-domain 和跨域数据集里渲染和位姿都涨，长序列鲁棒性明显提升（摘要以稳定性提升为主）。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07452",
+    "summary": "SLAM 里几何比外观重要，可现有 3DGS SLAM 还两个一起建。作者提 GeoGS，只保留 3DGS 的空间参数，每个 primitive 参数减 80% 以上；再配合 local-plane 初始化和 loop closure 时的全局 map 更新，几何重建又快又稳。",
+    "highlights": {
+      "contribution": "提出 Geometry-only Gaussian Splatting 及基于它的 GeoGS-SLAM 稠密单目 SLAM 系统。",
+      "innovation": "去掉外观建模只留几何，大幅精简 3DGS，配合 raymap 全局更新解决 loop closure 时的 map tearing。",
+      "method": "只保留空间参数的 primitive；单视图+多视图几何/光度联合监督；local-plane 驱动初始化；loop closure 时全局变换 Gaussian map 对齐修正后的位姿。",
+      "results": "合成和真实 benchmark 上 online 建图效率和几何重建质量超 SOTA（摘要未给具体数字）。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07320",
+    "summary": "SoccerNet 2026 是第六届足球视频理解 benchmark 竞赛，涵盖球动作预测、球员绑定动作 spotting、多视新视角合成、球员定位和多模态问答五个任务。427 队 1129 次提交，28 队交了技术报告，本文汇总榜单和领先方案。",
+    "highlights": {
+      "contribution": "组织 SoccerNet 2026 五任务足球视频理解竞赛并总结领先方案。",
+      "innovation": "首次把 novel view synthesis、球员级动作绑定、单张定位、VQA 一起纳入同一届 benchmark。",
+      "method": "对每个任务提供标注数据、统一评测协议和公开 baseline；参赛方各自实现方案；汇总排行和技术报告。",
+      "results": "五任务榜单公布：427 队 1129 次提交，28 份技术报告。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 6.5,
+      "recommendation": 5.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07817",
+    "summary": "DreamCharacter-1 在预训练 3D 基础模型上做轻量后适配，让它能直接产出可上生产线的高保真 3D 角色。三件套：几何后训练细节增强、纹理后训练+遮挡区域修补、推理加速。定量和定性都超现有角色生成方法。",
+    "highlights": {
+      "contribution": "提出 3D 角色生成的轻量后适配框架 DreamCharacter-1，把 3D 基础模型往生产可用方向对齐。",
+      "innovation": "把 3D 基础模型的通用能力通过任务定向后训练迁到高保真角色资产上，几何和纹理分开优化。",
+      "method": "在 3D 基础 backbone 上加：几何后训练用几何偏好优化；纹理后训练高分辨率合成+遮挡区外观修补；推理加速。",
+      "results": "定量+定性对比稳超 SOTA 角色生成方法（摘要未给具体数字）。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.06990",
+    "summary": "多机器人做长程任务需要 LLM 规划和物理执行紧密结合，但现有方案要么单机契合接触操作却没协调、要么多机规划却把操作理想化。作者上分层闭环三 agent 框架：Planning 分子任务、每个机器人的 Manipulation agent 自适应用工具、Verification agent 监测执行结果做语义纠错。真机实验成功率明显更高。",
+    "highlights": {
+      "contribution": "提出层次化闭环多 agent LLM 框架，端到端解决多机器人跨工位的鲁棒操作。",
+      "innovation": "把 Verification agent 显式加进闭环，用物理执行结果反馈来做语义纠错，而不是把操作当理想原语。",
+      "method": "Planning agent 拆子任务并分配；每台机器人的 Manipulation agent 自适应选工具执行；Verification agent 监测物理结果并反馈修正。",
+      "results": "真机多任务实验成功率超基线，跨单/多工位场景鲁棒（摘要未给具体数字）。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9.5,
+      "popularity": 7.0,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07820",
+    "summary": "训 tool-use agent 自我进化难：SFT 靠固定教师轨迹、稀疏奖励 RL 又给不出长程监督。DeepSearch-World 造了一个可验证确定性的搜索/阅读环境和 420K 多跳 QA 任务，配 DeepSearch-Evolve 做轨迹生成-过滤-混合-微调迭代自蒸馏。不靠更强模型蒸馏，9B 就在 BrowseComp 31.2%、GAIA 61.5%、HotpotQA 93.4%。",
+    "highlights": {
+      "contribution": "提出 DeepSearch-World 可验证 web agent 环境和自蒸馏训练框架 DeepSearch-Evolve。",
+      "innovation": "环境由实体级随机游走造出 420K 多跳 QA，天然支持 progress verification、grounded reflection、failure recovery 等 agent 认知行为。",
+      "method": "确定性搜索/阅读工具+可验证奖励；agent 迭代生成轨迹→过滤→数据混合→SFT；不依赖更强模型蒸馏。",
+      "results": "DeepSearch-World-9B：BrowseComp 31.2%、GAIA 61.5%、HotpotQA 93.4%，与开源 agent 相当。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 9.5,
+      "popularity": 8.0,
+      "quality": 8.0,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07740",
+    "summary": "LLM 部署到 RAG、代码库、agentic 工作流后，累积推理和工具轨迹动辄超预训练窗口一个量级。Jet-Long 提出无 tune 零样本长上下文：一个本地 RoPE 保真窗口+一个长程窗口，长程 rescaling 随序列长度动态调，短短不变形。Qwen3 上 RULER 涨 2-4.8 分，H100 上 prefill 到 FA2 1.39×。",
+    "highlights": {
+      "contribution": "提出 tuning-free 零样本长上下文外推方法 Jet-Long，用动态双焦 RoPE 平衡短长上下文。",
+      "innovation": "双焦 RoPE：本地窗口保 RoPE 保真，长程窗口 rescaling 因子按当前序列长度动态调整；配 inclusion-exclusion 融合和 on-the-fly RoPE 校正。",
+      "method": "融合 CuTe 单核实现的双焦 attention，动态长度感知的 rescaling；短输入等价基座；长输入干净外推；免训练。",
+      "results": "Qwen3-1.7B/4B/8B 128K 上 RULER 分别 +4.79/+2.18/+2.03；HELMET-RAG 最优；PG-19 PPL 最低；H100 prefill 达 1.39× FA2，生成 ≤4% 开销。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.3
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07321",
+    "summary": "现有 agent 框架只给一堆原子工具，每次重复的工作流都得从头拼低层逻辑，浪费也易错。EvoSOP 让 agent 从执行轨迹里抽出 SOP 变成可复用的高阶工具，然后通过构建-合并-评估-剪枝的生命周期不断优化工具集。实验显示成功率涨、交互轮数明显降。",
+    "highlights": {
+      "contribution": "提出 EvoSOP 框架，让 LLM agent 从原子动作里合成 SOP 高阶工具并自我进化工具集。",
+      "innovation": "把 SOP 当可调用工具在 agent 内部沉淀，工具集本身还带完整生命周期（build/merge/eval/prune）。",
+      "method": "Agent 在执行时抽取 SOP，把多步逻辑包成高阶可调用工具；按生命周期做工具构建、合并、评估、剪枝；反复迭代。",
+      "results": "多 benchmark 上任务成功率显著涨、交互轮数明显降（摘要未给具体数字）。"
+    },
+    "scores": {
+      "relevance": 7.5,
+      "recency": 9.5,
+      "popularity": 7.5,
+      "quality": 7.5,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07397",
+    "summary": "作者提「Agentic Data Environments」概念：把数据系统从被动状态存储升级为能同时放大 agent 能力、又强制执行安全保证的主动执行 substrate。属于愿景论文（早期工作说明）不是纯 benchmark。",
+    "highlights": {
+      "contribution": "提出 Agentic Data Environments 概念，把数据系统重新定位为 agent 执行的主动 substrate。",
+      "innovation": "把「放大能力」和「限制失败后果」这一对对立目标写进数据环境本身，而不是外挂 guardrail。",
+      "method": "以文件、API、应用、系统状态构成的执行环境为核心；给出早期设计原则并展望方向（属 talk/vision 性质）。",
+      "results": "属愿景描述，暂无量化 benchmark 结果。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 6.5,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07467",
+    "summary": "空间/单细胞转录组的轨迹推断要人肉调很多算法。SpaCellAgent 用 LLM 多 agent：策略工作流规划、动态工具编排选算法、自演化模块看反馈迭代改。6 个异质数据集上分析效率提升 40%+，还保持专家一致的结果。",
+    "highlights": {
+      "contribution": "提出 SpaCellAgent 自演化多 agent 框架，全自动化时空转录组轨迹分析。",
+      "innovation": "把工作流规划、动态工具编排和自演化反馈闭环塞进一个 LLM 多 agent 框架，专门瞄准计算生物学 TI 场景。",
+      "method": "多 agent 拆规划/工具编排/评审角色；动态选算法组合成管线；自演化模块从反馈迭代改工作流；自然语言输入生成分析报告。",
+      "results": "6 个异质数据集上分析效率提升超 40%，性能与专家一致。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 9.5,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07824",
+    "summary": "persona 对话里 LLM 一般把情感当静态特征或表面风格，很少建 agent 自己随情节变化的情绪。作者引 Component Process Model 心理学理论，把角色情感做成会被对话触发不断重塑的潜在状态；三段式：触发抽取→CPM 协同评估→情绪更新。基线对比、消融、人评、案例都验证有效。",
+    "highlights": {
+      "contribution": "提出 CPM-MultiAgent，用组件过程模型给 persona 对话 agent 建动态情绪演化。",
+      "innovation": "首次把 CPM 心理学理论落地为多 agent 结构，把 agent 情感当触发驱动的潜在状态而非静态属性。",
+      "method": "多 agent 分别负责触发抽取、CPM 协同评估、情绪状态更新；接入 LLM persona 对话系统里做多轮交互。",
+      "results": "基线对比、消融、人评、案例分析都显示能更好建情绪演化（摘要未给具体数字）。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 9.5,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 5.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07858",
+    "summary": "小企业主保单直通承保场景里，作者比三条 pipeline：单 LLM 基线、朴素 RAG、多 agent Agentic RAG（定向检索+第三方数据核对+多步规则评估）。多步和信息缺失场景下 agentic RAG 效果最好，能避免不受支持的直通决策。",
+    "highlights": {
+      "contribution": "在保险直通承保这一实际场景下系统对比 LLM/RAG/多 agent 三种 pipeline 的可审计性和准确性。",
+      "innovation": "把 agentic RAG 应用到 BOP 直通承保，关注 actuarial 领域看重的透明性、可审计性和 human-in-the-loop 治理。",
+      "method": "在合成但真实的实验环境里比较单 LLM、朴素 RAG、多 agent Agentic RAG（含定向检索、第三方核对、多步规则评估）三种 pipeline。",
+      "results": "Agentic 系统整体最好，多步和信息缺失场景下优势最大（摘要未给数字）。"
+    },
+    "scores": {
+      "relevance": 4.0,
+      "recency": 9.5,
+      "popularity": 5.0,
+      "quality": 6.5,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.06957",
+    "summary": "现有交通仿真基线只奖励逼真度，多样性被忽略。Flow-ERD 分两步：Agent-Type Aware Flow Matching 做类型感知多模态生成，接一个 Entropy-Regularized Distillation 用逆 KL 目标微调闭环 rollout 避免坍缩。WOSAC 测试榜第一，同时占据逼真-多样性 Pareto 前沿。",
+    "highlights": {
+      "contribution": "提出多智能体交通仿真器 Flow-ERD，把逼真度和多样性同时抓。",
+      "innovation": "在流匹配上做 agent-type aware 分支保运动一致性；再用熵正则化蒸馏防止闭环时坍缩到高密度模式。",
+      "method": "Agent-Type Aware Flow Matching 提供多模态生成 backbone；ERD 用熵正则化反向 KL 目标 fine-tune 闭环 rollout；配 log-free 多样性指标评测。",
+      "results": "WOSAC 测试 benchmark 上排第一，在逼真-多样性 Pareto 前沿上主导可复现基线。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 9.5,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.8
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2607.07029",
+    "summary": "RL 策略不安全易被攻击，现有自动化测试工具只覆盖部分环境和算法。Gimitest 是开源工具，支持多种 gym 框架和单/多 agent RL 策略，允许修改集成组件。文章介绍框架架构并在 Gymnasium、PettingZoo 里演示效果。",
+    "highlights": {
+      "contribution": "提出并开源 Gimitest 通用 RL 策略测试工具，支持单/多 agent 场景。",
+      "innovation": "跨多种 gym 框架统一接口，允许修改集成组件做灵活测试，覆盖不同 RL 算法。",
+      "method": "在通用 RL 测试框架上实现工具；对接 Farama Gymnasium、PettingZoo 等；支持单/多 agent 策略、多种测试条件。",
+      "results": "在多种环境和策略上演示了工具的有效性（工具型论文，无 SOTA 对比）。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 9.5,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 5.9
+    },
+    "affiliations": []
+  }
+]

@@ -1,0 +1,1072 @@
+{
+  "date": "2026-06-30",
+  "papers": [
+    {
+      "arxiv_id": "2606.31846",
+      "title": "Z-1: Efficient Reinforcement Learning for Vision-Language-Action Models",
+      "authors": [
+        "Lang Cao",
+        "Renhong Chen",
+        "Luyi Li",
+        "Peng Wang",
+        "Mofan Peng",
+        "Yitong Li"
+      ],
+      "affiliations": [],
+      "summary": "现有 VLA 多是行为克隆或 SFT，没法从自己的失败中学。作者基于 π0.5 提出 Z-1，用 GRPO 对 flow-based VLA 做在线 RL 后训练。只用 RoboCasa 公开示范做 SFT，然后跨 24 个任务用共享前缀 rollout、树状轨迹分支、完成度感知奖励和 VLM 与 Action Expert 的选择性联合训练。最终 24 任务平均成功率 80.6%，比 SFT 起点提升 13.2 个百分点，超过已发表 SOTA。",
+      "original_abstract": "Vision-Language-Action (VLA) models offer a promising framework for robotic manipulation by connecting language instructions, visual observations, and continuous control. However, most existing policies remain limited by behavior cloning or supervised fine-tuning (SFT) from fixed demonstrations, which provides limited opportunity to improve from the policy's own failures. In this paper, we present Z-1, a reinforcement learning (RL) post-training framework for flow-based VLA models. Built on top of $π_{0.5}$, Z-1 uses only publicly released RoboCasa demonstrations for SFT and then applies a task-wise Group Relative Policy Optimization (GRPO) strategy across $24$ standard RoboCasa tasks. To improve the efficiency and stability of online optimization, Z-1 combines shared-prefix rollout construction, tree-structured trajectory branching, completion-aware reward calibration, and selective joint training of VLM and Action Expert. Across all $24$ RoboCasa tasks, Z-1 achieves an average success rate of $80.6\\%$, improving over its SFT initialization by $13.2\\%$ points and outperforms the published sota models. These results show that systematic GRPO post-training can substantially improve flow-based VLA policies without additional private demonstrations.",
+      "highlights": {
+        "contribution": "系统化的 GRPO 后训练配方能在不加私有数据的情况下大幅提升 flow-based VLA。",
+        "innovation": "共享前缀 rollout + 树状轨迹分支 + 完成度感知奖励校准，专门为 flow VLA 稳定 RL 而设计。",
+        "method": "输入 RGB+语言，π0.5 骨架经 SFT 初始化；task-wise GRPO 做在线 RL，选择性联合训练 VLM 与 Action Expert，奖励按完成度校准。",
+        "results": "RoboCasa 24 任务平均成功率 80.6%，比 SFT 起点提升 13.2 个百分点，超过已发表 SOTA。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T15:46:57Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.5,
+        "recency": 8.5,
+        "popularity": 8.0,
+        "quality": 8.5,
+        "recommendation": 8.5
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31846v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31846v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.32009",
+      "title": "Human-as-Humanoid: Enabling Zero-Shot Humanoid Learning from Ego-Exo Human Videos with Human-Aligned Embodiments",
+      "authors": [
+        "Xiaopeng Lin",
+        "Ruoqi Yang",
+        "Shijie Lian",
+        "Zhaolong Shen",
+        "Bin Yu",
+        "Changti Wu",
+        "Haibao Liu",
+        "Yuxiang Zhang",
+        "Hong Li",
+        "Qiyuan Su",
+        "Haochen Liu",
+        "Xuguo He",
+        "Yukun Shi",
+        "Cong Huang",
+        "Zhirui Zhang",
+        "Bojun Cheng",
+        "Kai Chen"
+      ],
+      "affiliations": [],
+      "summary": "高自由度人形机器人的示范数据太贵，遥操速度慢；纯人类第一视角视频虽然多但没有可执行动作。作者提出 Human-as-Humanoid，让人做示范就能直接给人形 VLA 用。他们基于一个人形对齐的 60 自由度上半身机器人 PrimeU，用同步的第一/第三人称视频恢复动作，再用分阶段 IK 重定向到 60-DoF 控制空间，训练时加 FK 感知监督保护手腕和指尖任务几何。数据采集吞吐比遥操高 4.8-7.2 倍，只用转换出的人类标签做后训练就能零示范部署下游任务。",
+      "original_abstract": "Vision-language-action (VLA) models across robot embodiments require high-quality observation--action supervision to learn deployable action distributions, yet scaling such robot data remains difficult, especially for high-DoF humanoids. Teleoperation provides controller-aligned supervision, while human egocentric videos capture diverse bimanual manipulation but do not directly provide executable robot actions. We introduce Human-as-Humanoid, a human-to-humanoid supervision framework that enables near-real-time human-centric action generation, making human demonstrations usable for high-DoF humanoid VLA training by jointly aligning the robot embodiment, the sensing setup, and the action-label interface. Built on PrimeU, a human-aligned 60-DoF upper-body humanoid, Human-as-Humanoid uses synchronized ego-exo videos to pair deployment-aligned egocentric observations with exocentric motion recovery, retargets the recovered human motion through staged Inverse Kinematics (IK) into controller-aligned 60-DoF action chunks, and trains the VLA model with Forward Kinematics (FK)-aware supervision to preserve wrist and fingertip task-space geometry. This converts large-scale human demonstrations from visual observations into executable observation--action supervision for the target humanoid. Experiments validate the conversion chain at the motion-recovery, robot-action-space, and real-robot deployment levels. Human-as-Humanoid yields a 4.8--7.2x raw demonstration-throughput gain over humanoid teleoperation in our data-collection analysis, and on several downstream tasks, policies post-trained only with the converted human labels generalize to real-robot deployment without target-task robot demonstrations. The official project website is available at https://zgc-embodyai.github.io/Human-as-Humanoid.",
+      "highlights": {
+        "contribution": "把大规模人类视频真正变成人形 VLA 可执行的观察-动作监督数据。",
+        "innovation": "机器人本体、感知装置与动作标签三方面同时对齐人体的软硬件协同设计 + FK 感知监督。",
+        "method": "输入同步 ego-exo 视频；exo 恢复人体动作，通过分阶段 IK 重定向到 60-DoF chunk；VLA 训练加 FK 感知损失，保留任务空间几何。",
+        "results": "数据吞吐相较遥操提升 4.8-7.2 倍；仅用转换后的人类标签，多个下游任务无需目标任务机器人示范即可真机泛化部署。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T17:44:16Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vla model"
+      ],
+      "scores": {
+        "relevance": 9.3,
+        "recency": 8.5,
+        "popularity": 7.8,
+        "quality": 8.2,
+        "recommendation": 8.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.32009v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.32009v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.32027",
+      "title": "Freeform Preference Learning for Robotic Manipulation",
+      "authors": [
+        "Marcel Torne",
+        "Anubha Mahajan",
+        "Abhijnya Bhat",
+        "Chelsea Finn"
+      ],
+      "affiliations": [],
+      "summary": "长程操作里稀疏成功标签信息太少、二值偏好又把不同好坏维度混成一锅。作者提出 FPL：让标注者自己用自然语言定「速度」「安全」「摆放质量」等偏好轴，然后按每个轴给成对偏好，再学一个语言条件的奖励模型，训 reward-conditioned 策略。四个真机 + 两个仿真长程任务上比稀疏奖励和二值偏好方法平均高 38 个百分点，并能在测试时通过语言直接引导策略行为。",
+      "original_abstract": "Reward design remains a central bottleneck for autonomous robot policy improvement, especially in long-horizon manipulation tasks where sparse success labels provide too little signal and binary preferences collapse many competing notions of quality into one ambiguous signal. We introduce Freeform Preference Learning (FPL), a method for learning robot policies from freeform human preferences. Rather than asking annotators which of two trajectories is better overall, FPL lets them define natural-language preference axes, such as speed, safety, quality of placement, or carefulness, and provide pairwise preferences along each axis. These annotations are used to learn a language-conditioned reward model that maps a trajectory and preference label to an axis-specific reward. We use this model to train a reward-conditioned policy that optimizes across the multiple human-specified dimensions. Across four real-world and two simulated long-horizon manipulation tasks, FPL improves over sparse-reward and binary-preference methods by 38 percentage points. Beyond improved performance, FPL learns dense progress signals without explicit subtask segmentation, shows compositionality of behavior not present in the data, and allows users to steer the policy towards different behaviors at test time without retraining. Blog post with videos available at https://freeform-pl.github.io/fpl.website/",
+      "highlights": {
+        "contribution": "让人类用自由文本描述偏好轴来监督长程操作策略，超越单一二值偏好。",
+        "innovation": "多轴自由文本偏好 + 语言条件奖励 + reward-conditioned 策略，测试时可组合指定行为。",
+        "method": "输入轨迹+语言偏好轴+成对比较；训练语言条件奖励模型输出轴特定 reward；再训练多轴条件策略。",
+        "results": "四实机+两仿真长程任务上比 sparse reward 和 binary preference 基线平均高 38 个百分点，能学出无显式分段的密集进度信号并支持测试时行为组合。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T17:54:02Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robot policy",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 8.5,
+        "popularity": 7.5,
+        "quality": 8.0,
+        "recommendation": 7.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.32027v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.32027v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31723",
+      "title": "UniTacVLA: Unified Tactile Understanding and Prediction in Vision Language Action Models",
+      "authors": [
+        "Xidong Zhang",
+        "Yichi Zhang",
+        "Jiaxin Shi",
+        "Fucai Zhu",
+        "Siyu Zhu",
+        "Michael Yu Wang",
+        "Xiaojun Wu",
+        "Weihao Yuan"
+      ],
+      "affiliations": [],
+      "summary": "针对 VLA 在接触密集操作上翻车的问题，作者把触觉从被动输入升级成会推理会预测的动态信号。他们建了一个统一触觉隐空间，同时学当前触觉状态和未来接触变化，并用触觉思维链加粗到细的未来触觉预测形成先验，再用高频触觉反馈去修正低频动作块。四类接触密集任务（调整、插入、擦拭、装配）在干净和扰动下都比现有方法成功率更高、更抗干扰。",
+      "original_abstract": "Vision-language-action (VLA) models have achieved strong performance in many robotic manipulation tasks, yet remain limited in contact-rich dexterous manipulation. To overcome this limitation, recent vision-tactile-language-action (VTLA) methods incorporate tactile sensing into VLA models to provide direct contact information. However, they typically treat tactile signals as passive auxiliary inputs, making it difficult to model tactile semantics and future physical interactions. To this end, we propose a unified tactile learning framework for contact-rich manipulation that models tactile signals as dynamic interaction cues for both contact understanding and prediction. Specifically, we construct a unified tactile latent space and jointly model current tactile states and future contact changes through tactile chain-of-thought reasoning and coarse-to-fine future tactile prediction, thereby forming a state-aware and dynamics-aware tactile prior. Based on this prior, we introduce a tactile-action mixed controller that combines real-time and predicted tactile feedback to refine low-frequency action chunks with high-frequency corrections. Real-world experiments on four categories of contact-rich tasks, including adjustment, insertion, wiping, and assembly, under both clean and externally perturbed settings, show that our method improves success rate, manipulation accuracy, and contact robustness over existing methods, demonstrating its effectiveness in dexterous physical interaction.",
+      "highlights": {
+        "contribution": "第一个把触觉当作可预测的动态交互线索纳入 VLA 的统一框架。",
+        "innovation": "触觉思维链 + 粗到细未来触觉预测 + 高频触觉修正的混合控制器。",
+        "method": "输入多视角图像、语言、触觉；构建统一触觉隐空间联合建模现在与未来接触；用触觉先验驱动 tactile-action 混合控制器，用高频触觉信号修正低频动作 chunk。",
+        "results": "四类接触密集任务在干净与外部扰动下均超越现有 VTLA 方法，成功率、精度和抗扰能力都更好。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T14:24:00Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision-language-action",
+        "vision language action",
+        "vla model",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 8.5,
+        "popularity": 6.8,
+        "quality": 7.8,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31723v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31723v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31993",
+      "title": "OopsieVerse: A Safety Benchmark with Damage-Aware Simulation for Robot Manipulation",
+      "authors": [
+        "Arnav Balaji",
+        "Arpit Bahety",
+        "Sriniket Ambatipudi",
+        "Daniel Lam",
+        "Junhong Xu",
+        "Roberto Martín-Martín"
+      ],
+      "affiliations": [],
+      "summary": "家用机器人不能只看成功率——把自己或环境撞坏就不算完事。作者做了 OOPSIEVERSE，一个能显式建模伤害的仿真基准，把接触力、温度变化和液体交互都转成机械、热、流体伤害信号。核心组件 DAMAGESIM 可以套在 OmniGibson 和 RoboCasa 上，配套一批家务任务专门测常见伤害模式。用它可以指导更安全的数据采集、训练伤害条件的 IL/RL 策略、评测 VLA 安全性，还能改善 sim-to-real 的真实安全性。",
+      "original_abstract": "While robotic manipulation capabilities have advanced rapidly, physical safety remains a major barrier to deploying household robots: task success is insufficient if the robot damages itself or its surroundings. Simulation offers a harm-free alternative to costly and dangerous real-world training and evaluation, yet existing simulators lack general mechanisms to detect, quantify, and represent damage. To address this gap, we introduce OOPSIEVERSE, a unified simulation framework and benchmark for damage-aware household manipulation. OOPSIEVERSE provides damage as an explicit, physically-grounded, and taskagnostic signal by converting sources such as contact forces, temperature changes, and liquid interactions into corresponding mechanical, thermal or fluid damage. OOPSIEVERSE comprises two core elements: (1) DAMAGESIM, a simulator-agnostic framework for detecting and quantifying damage during navigation and manipulation, and (2) a suite of household tasks designed to evaluate common damage modes and distinguish between task completion and safe execution. We demonstrate the generality of our framework by instantiating DAMAGESIM in two simulators with different physics backends, OmniGibson (Nvidia Omniverse) and RoboCasa (MuJoCo). We further showcase the utility of OOPSIEVERSE across multiple use cases, including (1) guiding safer demonstration collection via real-time damage feedback, (2) learning safer manipulation policies through damage-conditioned imitation learning and reinforcement learning, (3) benchmarking the safety of state-of-the-art Vision Language Action policies, and (4) improving real-world safety of sim-to-real transferred policies. Together, our results highlight the potential of OOPSIEVERSE as an open-source foundation for systematic, scalable research on safe robot manipulation. For code and more information, please refer to https://robin-lab.cs.utexas.edu/oopsieverse/",
+      "highlights": {
+        "contribution": "首个仿真无关、任务无关的家用操作损伤感知基准与框架。",
+        "innovation": "将机械力、温度、液体统一转化为显式的物理伤害信号，与仿真器解耦。",
+        "method": "DAMAGESIM 抽象层挂载到 OmniGibson 和 RoboCasa 两个物理后端；配套家务任务覆盖典型伤害模式；应用于数据采集反馈、伤害条件 IL/RL、VLA 安全评测。",
+        "results": "在两个物理后端上都能落地，实证展示可提高示范安全性、训练更安全策略，并揭示 SOTA VLA 的安全短板。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T17:30:05Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "vision language action",
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 8.2,
+        "recency": 8.5,
+        "popularity": 7.2,
+        "quality": 7.8,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31993v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31993v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31836",
+      "title": "RoboTacDex: A Dexterous Visual-Tactile-Action Dataset for Humanoid Manipulation",
+      "authors": [
+        "Xinyi Wang",
+        "Donghan Li",
+        "Zi'Ang Chen",
+        "Chong Yu",
+        "Chen Xin",
+        "Peng Ye",
+        "Yingkai Sun",
+        "Tao Chen"
+      ],
+      "affiliations": [],
+      "summary": "作者放出 RoboTacDex，一个基于宇树 G1 的大规模灵巧操作多模态数据集：6k 轨迹、19 个任务、23 项技能、22 种物体，覆盖必须双臂灵巧手才能完成的任务。包含多视 RGB-D、触觉反馈和语义标注，用改进的多相机同步系统做到毫秒级对齐。用三个代表性模仿学习模型跑基线，展示了数据集的有效性与泛化能力。",
+      "original_abstract": "In the field of robot learning, large-scale and diverse demonstration trajectories provide the fundamental basis for enhancing robotic manipulation ability. We introduce RoboTacDex, a large, multi-modal, and diverse dataset of dexterous manipulation behaviors performed with a humanoid robot. Built on the publicly accessible humanoid robot Unitree G1, RoboTacDex consists of 6k trajectories covering 19 tasks, 23 skills, and interactions with 22 objects. RoboTacDex provides comprehensive records including multi-view RGB and depth information, tactile feedback, and detailed semantic annotations. Furthermore, the dataset features a variety of relatively challenging tasks that can only be completed by dual arms and dexterous hands, aiming to mimic human-like operational logic and simulate real-world manipulation complexity. To ensure data collection quality, we develop an improved multi-camera synchronization system to enable millisecond data synchronization and recording of modalities. In our experiments, we evaluate three representative imitation learning models on our dataset,   analyzing their performance as well as their respective strengths and limitations across different task categories. Successful trial results and a moderate level of generalization capabilities across a suite of tasks indicate the effectiveness and diversity of the collected dataset. Our dataset will be open-sourced soon.",
+      "highlights": {
+        "contribution": "面向 Unitree G1 平台的大规模视觉-触觉-动作双臂灵巧操作数据集。",
+        "innovation": "毫秒级同步的多模态记录 + 触觉加多视深度的双臂灵巧任务覆盖。",
+        "method": "输入多视 RGB-D + 触觉 + 语义标注；6k 轨迹 / 19 任务 / 23 技能 / 22 物体；用三种主流 IL 模型基准评测。",
+        "results": "多类任务上呈现合理成功率与中等泛化能力，验证数据集有效性；数据集将开源。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T15:39:29Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "VLA",
+      "matched_keywords": [
+        "robotic manipulation"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 8.5,
+        "popularity": 7.2,
+        "quality": 7.4,
+        "recommendation": 7.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31836v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31836v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.32026",
+      "title": "AdaJEPA: An Adaptive Latent World Model",
+      "authors": [
+        "Ying Wang",
+        "Oumayma Bounou",
+        "Yann LeCun",
+        "Mengye Ren"
+      ],
+      "affiliations": [],
+      "summary": "隐空间世界模型训完后一般在测试时冻结，一遇到分布漂移就规划失败。AdaJEPA 让世界模型在 MPC 闭环里做自监督测试时适应：执行第一个动作块后，用观察到的下一状态转移当适应信号更新模型，再重规划。多个 goal-reaching 任务上每次 replan 只做一步梯度就能大幅提升成功率。",
+      "original_abstract": "Latent world models enable planning from high-dimensional observations by predicting future states in a compact latent space. However, these models are typically kept frozen at test time: when their predictions become inaccurate, planning can fail, especially under test-time distribution shift. To address this, we propose AdaJEPA, an adaptive latent world model that performs test-time adaptation within the closed loop of model predictive control (MPC). After training, AdaJEPA plans and executes the first action chunk, uses the observed next-state transition as a self-supervised adaptation signal, and replans with the updated model. This closed-loop update continuously recalibrates the world model without additional expert demonstrations. Across a range of goal-reaching tasks, AdaJEPA substantially improves planning success with as few as one gradient step per MPC replanning step.",
+      "highlights": {
+        "contribution": "在 MPC 闭环内自监督适应的隐空间世界模型，稳健应对测试分布漂移。",
+        "innovation": "把观察到的下一状态转移当作 self-supervised 信号，在 MPC 内在线更新世界模型。",
+        "method": "输入观察；训练时按 JEPA 学隐空间预测；测试时在 MPC 每步执行第一个 action chunk 后用观察到的转移做梯度更新再 replan。",
+        "results": "多个 goal-reaching 任务上，每步 MPC 只需一次梯度更新即可显著改善规划成功率。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T17:53:48Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 9.0,
+        "recency": 8.5,
+        "popularity": 7.8,
+        "quality": 8.0,
+        "recommendation": 8.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.32026v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.32026v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.00148",
+      "title": "3D Point World Models: Point Completion Enables More Accurate Dynamics Learning",
+      "authors": [
+        "Skand Peri",
+        "Hung Nguyen",
+        "Chanho Kim",
+        "Li Fuxin",
+        "Stefan Lee"
+      ],
+      "affiliations": [],
+      "summary": "视频动力学模型没有 3D 结构，长程 rollout 一堆几何漂移；直接用部分点云的 3D 动力学又抗不住遮挡。3DPWM 先做点云补全再学动作条件动力学，让规划直接在完整 3D 场景里进行。这样支持 100-300+ 步的可靠长程 rollout，开环闭环规划都能用，还能 sim-to-real 迁移。",
+      "original_abstract": "Learning predictive models of the world enables robotic control through planning, potentially allowing robots to improvise solutions on new tasks. However, large video-based dynamics models lack explicit 3D spatial structure and suffer from geometrically inconsistent long-term rollouts with compounding errors. Emerging 3D dynamics models based on partial point clouds improve geometric consistency but remain sensitive to occlusions and accumulated prediction drift. To address these challenges, we present 3D Point World Models (3DPWM) - a task-agnostic world model that operates entirely in 3D space by first completing partial point clouds and then learning action-conditioned dynamics in this completed 3D scene. By operating on completed geometry, 3DPWM enables reliable long-horizon rollouts and more accurate cost evaluation for model-based planning while supporting adaptation to new tasks. Experiments across different robotic embodiments and tabletop manipulation benchmarks demonstrate that 3DPWM achieves significantly more reliable long-horizon rollouts (100-300+ steps), supports both open-loop and closed-loop planning, and enables successful sim-to-real transfer.",
+      "highlights": {
+        "contribution": "先补全点云再学动力学，让 3D 世界模型具备可靠长程 rollout 与规划能力。",
+        "innovation": "把点云补全作为动力学学习的前置步骤，从根子上解决遮挡与几何漂移。",
+        "method": "输入部分点云+动作；先做点云补全形成完整 3D 场景，再学动作条件的 3D 动力学；用作 model-based 规划的 cost 评估。",
+        "results": "多个机器人本体和桌面操作 benchmark 上支持 100-300+ 步可靠 rollout，开环闭环规划均可用，能成功 sim-to-real。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T20:27:22Z",
+      "categories": [
+        "cs.RO",
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "dynamics model"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 8.5,
+        "popularity": 7.4,
+        "quality": 8.0,
+        "recommendation": 7.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.00148v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.00148v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31672",
+      "title": "WorldRoamBench: An Open-World Benchmark for Long-Horizon Stability of Interactive World Models",
+      "authors": [
+        "Ting-Bing Xu",
+        "Jiacheng Sui",
+        "Zhe Gao",
+        "Kewei Shi",
+        "Wenjin Yang",
+        "Zhicheng Liu",
+        "Zhaoxu Sun",
+        "Mingchao Sun",
+        "Hongyu Pan",
+        "Fan Jiang",
+        "Mu Xu",
+        "Qi Fan",
+        "Yang Gao",
+        "Yong Li",
+        "Baoquan Chen"
+      ],
+      "affiliations": [],
+      "summary": "现有交互世界模型 benchmark 只看轨迹级动作跟随，忽略记忆和交互物理。WorldRoamBench 从动作、视觉、物理、记忆四个维度都设计了针对性指标：每帧动作误差、分段视觉漂移、控性门控物理评价、动作解耦的记忆协议。600+ 测试跨自然、城市、室内三类场景，WASD 交互 10-60 秒。评了 10+ 开源闭源模型，没一个能全维过关，最好也只是中等水平。",
+      "original_abstract": "Despite rapid progress in interactive world models (IWMs), existing benchmarks evaluate action following only at trajectory level and ignore memory and interaction physics. We introduce WorldRoamBench, an open-world benchmark for long-horizon stability across four dimensions, each with tailored innovations: (i) Action: per-frame action metric bypassing cross-model semantic scale disparity and exposing failures hidden by trajectory; (ii) Vision: segment-based drift metric capturing non-monotonic mid-sequence collapse missed by start-vs-end comparisons; (iii) Physics: controllability-gated evaluation over mechanics, optics, and 3D consistency, scoring plausibility under faithful action execution; (iv) Memory: action-decoupled protocol evaluating scene memory via transition-localized 3D point-cloud reconstruction and subject memory via tracking-plus-VLM reasoning. The benchmark comprises 600+ test cases across Nature, Urban, and Indoor scenes in first/third-person views with WASD 10-60s continuous interaction. Evaluating 10+ open/closed-source models reveals none reliably satisfies all dimensions; even the best achieves only moderate scores. Advances on WorldRoamBench are steps toward IWMs that are stable, physically grounded, memory-faithful, and deployable in real-world applications.",
+      "highlights": {
+        "contribution": "首个覆盖动作、视觉、物理、记忆四维长程稳定性的交互世界模型开放基准。",
+        "innovation": "每帧动作指标、分段漂移指标、可控性门控物理评估、动作解耦记忆协议四项针对性设计。",
+        "method": "600+ 测试样例覆盖三类场景与两种视角；用 WASD 做 10-60 秒连续交互；用 3D 点云重建和跟踪+VLM 推理评估场景与主体记忆。",
+        "results": "10+ 开源/闭源模型均未能在四维全部达标，最强者也只处于中等水平，凸显长程稳定性差距。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T13:51:44Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 8.5,
+        "recency": 8.5,
+        "popularity": 7.6,
+        "quality": 8.0,
+        "recommendation": 7.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31672v3",
+      "arxiv_url": "https://arxiv.org/abs/2606.31672v3",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.32028",
+      "title": "DVG-WM: Disentangled Video Generation Enables Efficient Embodied World Model for Robotic Manipulation",
+      "authors": [
+        "Ziyu Shan",
+        "Zhenyu Wu",
+        "Xiaofeng Wang",
+        "Zheng Zhu",
+        "Ziwei Wang"
+      ],
+      "affiliations": [],
+      "summary": "视频类具身世界模型有个纠缠：建动力学要低层时序推理，出高清帧要高层语义合成，一起做就慢或粗。DVG-WM 把两件事拆开：先预生成一串中间视觉状态预览物理交互，再细化成高保真视频；用 flow matching 直接映射动力学到 latent，还引入 latent 退化机制补回接触细节。LIBERO 和真机上视频质量更好，且推理最高快 3.97 倍。",
+      "original_abstract": "Video-based embodied world models provide an appealing substrate for robotic manipulation by predicting future states, yet current approaches remain limited by a fundamental entanglement: accurately modeling dynamics typically requires low-level temporal reasoning, while producing high-resolution frames demands expansive visual synthesis according to high-level semantics. This entanglement results in slow inference speed for iterative planning or too coarse predictions to retain contact-rich details. To solve this dilemma, we present Disentangled Video Generation World Model (DVG-WM), an efficient framework that explicitly decomposes world modeling into dynamics learning and visual synthesis. Conditioned on an initial observation and a language instruction, our model first generates a plausible sequence of intermediate visual states to preview the physical interaction and refines them to obtain high-fidelity videos. Furthermore, an efficient cascading mechanism is proposed, where DVG-WM uses flow matching to directly map the dynamics to video latents, and introduces a latent degradation mechanism to regenerate contact-rich details. Experiments on LIBERO and real-world platforms demonstrate improved video quality with up to 3.97 times acceleration, validating that disentangled video generation can be an efficient embodied world model for robotic manipulation.",
+      "highlights": {
+        "contribution": "把动力学建模与视觉合成解耦，形成高效的具身视频世界模型。",
+        "innovation": "解耦式两阶段生成 + flow matching 级联 + latent 退化再生接触细节。",
+        "method": "输入初始观察+语言指令；先生成中间视觉状态序列做动力学预览，再细化成高保真视频；flow matching 做级联，latent 退化用于恢复接触细节。",
+        "results": "LIBERO 和真机上视频质量提升同时推理最高 3.97 倍加速。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T17:54:32Z",
+      "categories": [
+        "cs.RO"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 8.8,
+        "recency": 8.5,
+        "popularity": 7.5,
+        "quality": 7.8,
+        "recommendation": 7.8
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.32028v2",
+      "arxiv_url": "https://arxiv.org/abs/2606.32028v2",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31734",
+      "title": "MemLearner: Learning to Query Context memory for Video World Models",
+      "authors": [
+        "Jiwen Yu",
+        "Jianxiong Gao",
+        "Jianhong Bai",
+        "Yiran Qin",
+        "Kaiyi Huang",
+        "Quande Liu",
+        "Xintao Wang",
+        "Pengfei Wan",
+        "Kun Gai",
+        "Xihui Liu"
+      ],
+      "affiliations": [],
+      "summary": "视频世界模型没有稳定记忆，长时间生成场景就漂了。作者提出 MemLearner，用可学习 query token 把上下文与预测 token 桥接起来，让世界模型自己去检索上下文，避免规则式检索在遮挡和动态物体下失效。同时收集了带相机位姿的长视频（含遮挡和动态物体），采用带注释渲染视频和无注释真实视频的多数据集训练策略。在遮挡和动态场景下场景一致性显著优于此前视频世界模型。",
+      "original_abstract": "Video World Models are interactive video generation models that predict future world states based on user actions and history video frames. A critical challenge in video world models is the lack of memory, causing inconsistent generated scenes over extended durations. Previous methods explored rule-based context frame retrieval as memory, but they fail to generalize in scenarios with scene occlusions and dynamic objects. We propose MemLearner, a learning-based adaptive context query method using query tokens to bridge context and predicted tokens. By leveraging the video generation model itself for context querying, MemLearner exploits pre-trained visual priors without training additional modules from scratch, and incorporates efficient strategies for training and inference. We collect a dataset of long videos with scene occlusions and dynamic objects, paired with camera pose annotations, and propose a multi-dataset training strategy leveraging both annotated rendered and unannotated real-world videos. Extensive experiments demonstrate that MemLearner significantly outperforms prior video world models in terms of scene consistency and memory, particularly under challenging occlusion and dynamic scenarios.",
+      "highlights": {
+        "contribution": "把上下文查询变成可学习的过程，让视频世界模型具备可泛化的长时记忆。",
+        "innovation": "复用视频生成模型自身做 context 查询，无需从头训额外模块。",
+        "method": "输入历史视频帧+动作+查询 token；用生成模型自身的注意力做自适应上下文选择；训练时混合带位姿注释的渲染数据与真实视频。",
+        "results": "在带遮挡与动态物体的长视频场景一致性和记忆保持上显著优于先前视频世界模型。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T14:31:32Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models",
+        "video world model"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 8.5,
+        "popularity": 7.4,
+        "quality": 7.6,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31734v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31734v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.00189",
+      "title": "VOCA: Visual Odometry with Codec Awareness",
+      "authors": [
+        "Nouri Alexander Hilscher",
+        "Mateo de Mayo",
+        "Dominik Muhle",
+        "Christoph Otten genannt Hermes",
+        "Daniel Cremers"
+      ],
+      "affiliations": [],
+      "summary": "现实系统里视频都是压缩过的，但视觉里程计几乎都在假设未压缩输入，压缩伪影一进来就掉点。VOCA 是一个因果双目 VO 方法，直接利用视频编解码信息辅助追踪。在压缩视频流上把相对轨迹误差、效率、绝对轨迹误差都做到 SOTA。",
+      "original_abstract": "Camera pose estimation from image streams is a critical component of spatial world models that integrate perception into planning and decision-making. Nearly all Visual Odometry (VO) and Simultaneous Localization and Mapping (V-SLAM) systems have focused on datasets containing raw, uncompressed videos. Many working systems instead use ubiquitous hardware units to efficiently compress and decode video streams, saving orders of magnitude in storage and bandwidth. However, this lossy compression introduces visual artifacts that hinder the performance of traditional tracking systems. We present VOCA, a causal stereo visual-odometry method that exploits codec information to improve tracking performance. We achieve state-of-the-art performance on causal VO for relative trajectory error, efficiency, and absolute trajectory error on compressed streams. This work highlights the potential of leveraging widely available video codec information for vision tasks.",
+      "highlights": {
+        "contribution": "首次系统性地利用视频编解码信息改进压缩视频上的视觉里程计。",
+        "innovation": "把编解码 metadata 当作 VO 系统的显式先验，让感知与视频压缩链路对齐。",
+        "method": "输入压缩双目视频流；利用 codec 提供的运动/块信息辅助特征匹配与位姿估计；因果推理保证在线可用。",
+        "results": "在压缩视频流上因果 VO 的相对轨迹误差、绝对轨迹误差与效率均达 SOTA。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T21:11:07Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "World Model",
+      "matched_keywords": [
+        "world model",
+        "world models"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 8.5,
+        "popularity": 6.5,
+        "quality": 7.3,
+        "recommendation": 6.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.00189v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.00189v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31919",
+      "title": "MVP-Nav: Multi-layer Value Map Planner Navigator",
+      "authors": [
+        "Wenyuan Xie",
+        "Shaokai Wu",
+        "Yijin Zhou",
+        "Yanbiao Ji",
+        "Guodong Zhang",
+        "Bayram Bayramli",
+        "Qiuchang Li",
+        "Xunchu Zhou",
+        "Yue Ding",
+        "Hongtao Lu"
+      ],
+      "affiliations": [],
+      "summary": "纯 RGB 的零样本物体目标导航因为没深度信息又易产生「语义合理但物理不安全」的动作。MVP-Nav 用 3D 基础模型把 2D 语义实例投成 3D 定向包围盒重建显式占用，再用多层 value map 把语义优先级和几何约束统到同一 cost 空间做规划。在零样本物体导航 benchmark 上显著超越现有 depth-free 方法达到 SOTA。",
+      "original_abstract": "Zero-shot Object Goal Navigation (ZSON) with RGB-only perception poses a fundamental challenge for embodied agents, as the absence of explicit depth information introduces severe physical uncertainty and semantic-physical misalignment. Existing approaches either rely on high-level semantic reasoning without geometric grounding or learn end-to-end policies that lack explicit physical constraints, often resulting in semantically plausible but physically unsafe behaviors. In this paper, we propose MVP-Nav, a physical-aware RGB-only navigation framework that aligns perception, planning, and control with the real 3D world. MVP-Nav reconstructs explicit physical occupancy from monocular observations by leveraging 3D foundation models to project 2D semantic instances into 3D oriented bounding boxes, forming a global spatial semantic representation. To unify high-level semantic reasoning and low-level physical constraints, we introduce a Multi-layer Value Map (MVM) that integrates semantic priorities and reconstructed geometry into a shared cost space, enabling physically grounded geometric planning. Extensive experiments on zero-shot object navigation benchmarks demonstrate that MVP-Nav significantly outperforms existing depth-free methods, achieving state-of-the-art performance and validating that structured physical priors can effectively compensate for the absence of active depth sensors.",
+      "highlights": {
+        "contribution": "无深度传感器下依然物理感知的 RGB-only 零样本物体目标导航框架。",
+        "innovation": "3D 基础模型给的 3D OBB 语义占用 + 多层 value map 统一语义与几何 cost。",
+        "method": "输入 RGB；用 3D 基础模型把 2D 语义实例升维成 3D OBB；构建 MVM 把语义优先级和几何约束融进 cost；做规划与低层控制。",
+        "results": "零样本物体导航基准上显著优于 depth-free 方法，达 SOTA。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T16:25:47Z",
+      "categories": [
+        "cs.RO",
+        "cs.AI",
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "3d foundation model"
+      ],
+      "scores": {
+        "relevance": 8.0,
+        "recency": 8.5,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31919v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31919v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31585",
+      "title": "DPPE: Rethinking Camera-Based Positional Encoding for Scaling Multi-View Transformers",
+      "authors": [
+        "Shun Kenney",
+        "Teppei Suzuki"
+      ],
+      "affiliations": [],
+      "summary": "把相机参数做相对位置编码送进多视 Transformer 是新视角合成的常规做法，但作者发现放大训练规模后性能后期就停滞了。原因是旋转与平移共用 value 向量的同一维度导致独立性丧失。他们提出 DPPE 把旋转和平移显式解耦编码，扩大训练下也能稳定训练，还在外推场景（更多视角、放大）里泛化更好。",
+      "original_abstract": "The remarkable scalability of Transformers has expanded their application to 3D computer vision, where camera-aware positional encoding is crucial for providing spatial cues in multi-view geometry. Recent advancements have established the practice of using camera parameters -- such as extrinsics or projection matrices -- as relative positional encoding into the query, key, and value vectors of the attention mechanism. However, when scaling up the training recipe of novel view synthesis (NVS) models with the camera-based positional encoding, we observe a significant issue: model performance stagnates in the late stages of training.   In this paper, we investigate the cause of the performance bottleneck when scaling up and demonstrate that storing rotation and translation given by the positional encoding in the same dimensions of the value vector causes indeterminacy in their independent identification, hindering training scalability. To address this, we propose Decoupled Pose Positional Encoding (DPPE), a novel camera-based positional encoding that explicitly decouples rotation and translation. Extensive evaluations on NVS tasks demonstrate that DPPE enables stable long-term training even in scaled-up training setup. Furthermore, it exhibits superior generalization performance in extrapolation settings, such as handling an increased number of viewpoints and zoom-in scenarios.",
+      "highlights": {
+        "contribution": "定位并解决相机位置编码在扩大训练时的性能瓶颈。",
+        "innovation": "把旋转与平移显式解耦到不同 value 维度的位置编码方案。",
+        "method": "对多视 Transformer 的 attention query/key/value 加入解耦式相机 pose 位置编码，训练 NVS 任务。",
+        "results": "在扩大训练规模下保持稳定训练，视角外推和放大场景的泛化性能更好。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T12:38:58Z",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "novel view synthesis"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 8.5,
+        "popularity": 6.5,
+        "quality": 7.3,
+        "recommendation": 6.9
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31585v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31585v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.32036",
+      "title": "PointSplat: Compact Gaussian Splatting via Human-Centric Prediction",
+      "authors": [
+        "Yujie Guo",
+        "Yudong Jin",
+        "Lingteng Qiu",
+        "Zehong Shen",
+        "Zhen Xu",
+        "Jing Zhang",
+        "Xianchao Shen",
+        "Hujun Bao",
+        "Sida Peng",
+        "Xiaowei Zhou"
+      ],
+      "affiliations": [],
+      "summary": "在实时直播里需要即刻把多视输入变成 3D 人体表示，还要紧凑省带宽。之前的前馈方法都是以视角为中心，跨视角冗余大。PointSplat 直接在 3D 空间预测：先估一个粗略几何代理做 ray casting 去冗余点并建 2D-3D 对应，再用 Point-Image Transformer 融合外观和几何一次前向就出 Gaussian 属性。多个数据集上更省更好，对视角数和分辨率变化也很稳。",
+      "original_abstract": "Producing 3D human representations from input views on the fly is essential for immersive live streaming systems, where representation compactness is as critical as high fidelity given limited computational power and transmission bandwidth. Although recent feed-forward reconstruction methods achieve impressive quality through the view-centric prediction of 3D representations, they repeatedly encode the same subject content across multiple views, leading to significant inter-view redundancy. Our key insight is to perform predictions directly in 3D space, enabling the network to learn and produce a highly compact representation. To this end, we propose PointSplat, a novel human-centric approach that directly infers Gaussian primitives from an input point set. The proposed method first estimates a coarse geometric proxy and performs ray casting to prune redundant points and establish explicit 2D--3D correspondences. Subsequently, it employs a Point-Image Transformer to fuse appearance and geometry features, predicting Gaussian attributes in a single forward pass. This design restricts predictions to foreground regions of interest, substantially reducing the total number of Gaussians while improving novel-view rendering quality. Extensive experiments demonstrate that PointSplat achieves higher efficiency and quality while exhibiting strong robustness to variations in view count and image resolution across multiple datasets.",
+      "highlights": {
+        "contribution": "以人体为中心、直接在 3D 空间前馈预测 Gaussian，大幅减少视角间冗余。",
+        "innovation": "几何代理 + ray casting 剪枝 + Point-Image Transformer 融合外观与几何的紧凑表示。",
+        "method": "输入多视 + 点集；估计粗几何代理，做 ray casting 剪枝并建 2D-3D 对应；Point-Image Transformer 融合特征，一次前向预测 Gaussian 属性。",
+        "results": "多数据集上效率和新视角渲染质量同步提升，对视角数与分辨率变化鲁棒。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T17:59:05Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 8.5,
+        "popularity": 6.5,
+        "quality": 7.3,
+        "recommendation": 6.7
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.32036v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.32036v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31556",
+      "title": "AugSplat: Radiance Field-Informed Gaussian Splatting for Sparse-View Settings",
+      "authors": [
+        "Lorenzo Lazzaroni",
+        "Riccardo Bollati",
+        "Daniel Barath",
+        "Michael Niemeyer",
+        "Keisuke Tateno"
+      ],
+      "affiliations": [],
+      "summary": "稀疏视角下 3D Gaussian Splatting 高度依赖初始几何，点云缺失时就糊。AugSplat 用一个先在稀疏视角上训好的辐射场合成额外的邻近新视角图像，再把它们当辅助监督喂给 GS 优化。两种变体：Staged 先合成视角优化后切真图，Dual 边训边加带衰减权的合成视角。稀疏 mip-NeRF 360 场景上重建质量优于标准 GS，且仍保持实时渲染。",
+      "original_abstract": "Generating high-quality novel views at real-time frame rates remains a central challenge in 3D vision, particularly in sparse-view scenarios. Neural radiance fields have demonstrated robust reconstruction from limited observations, but their reliance on volumetric rendering leads to high computational cost and slow inference. In contrast, Gaussian Splatting methods achieve real-time rendering through rasterization, but their optimization is highly sensitive to the quality of the initial geometry. This sensitivity becomes especially problematic in sparse-view settings, where limited observations often lead to incomplete or noisy point-cloud reconstructions. In this work, we present AugSplat, a simple framework for improving Gaussian Splatting in sparse-view regimes using radiance-field-based view augmentation. We first train a radiance field on the sparse input views and use it to synthesize additional images from nearby novel viewpoints, increasing the effective view-space coverage available for supervision. These synthetic views are then used as auxiliary supervision during Gaussian Splatting optimization. We study two variants: Staged AugSplat, which uses synthetic views for an initial optimization phase before switching to real images, and Dual AugSplat, which jointly trains on real and synthetic views with a decaying synthetic loss weight. Experiments on sparse-view mip-NeRF 360 scenes show that AugSplat improves reconstruction quality over standard Gaussian Splatting. Staged AugSplat achieves the strongest average performance, while Dual AugSplat provides a closely performing formulation that keeps real-image supervision active throughout training, and both variants preserve real-time rendering at inference.",
+      "highlights": {
+        "contribution": "用辐射场合成新视角做 GS 优化的辅助监督，缓解稀疏视角初始化困难。",
+        "innovation": "简单但有效的 radiance-field 辅助 GS 监督框架，两种训练策略。",
+        "method": "输入稀疏视角；先训 NeRF 合成附近新视角图像；再用真实+合成视角做 GS 优化，含 Staged 与 Dual 两种调度。",
+        "results": "稀疏 mip-NeRF 360 上重建质量优于标准 GS，Staged 变体平均最强，推理仍实时。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T12:12:21Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "neural radiance",
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 8.5,
+        "popularity": 6.5,
+        "quality": 7.0,
+        "recommendation": 6.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31556v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31556v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2607.00157",
+      "title": "Progressive Pose-Guided 4D Animal Reconstruction from Monocular Video",
+      "authors": [
+        "Siyuan Li",
+        "Weiying Chen",
+        "Yilin Wang",
+        "Xinxin Zuo",
+        "Xingyu Li",
+        "Li Cheng"
+      ],
+      "affiliations": [],
+      "summary": "单目视频重建动物 4D 一直被物种差异、复杂关节和缺模板卡住。作者用 3D Gaussian Splatting 做渐进式 test-time 优化：只用粗形状先验+分阶段策略把关节 pose 和非刚性形变解耦；引入对称感知的时间编码消化相机漂移，用部件锚点和可学习 skinning field 做部件条件形变。跨物种在几何精度、时间一致性和视觉保真度上都优于基线，甚至先验不匹配时也稳。",
+      "original_abstract": "Reconstructing 4D animals from monocular videos is challenging due to large inter-species variation, complex articulations, and the lack of reliable templates. Existing approaches typically rely on either strict category-specific priors that restrict generalization, or unconstrained generative models that sacrifice input fidelity. To bridge this gap, we present a progressive test-time optimization framework built on 3D Gaussian Splatting for high-fidelity 4D animal reconstruction from a single video. Our key insight is that a coarse shape prior suffices when coupled with a progressive strategy that disentangles articulated pose from non-rigid deformation. Specifically, we employ a symmetry-aware temporal encoding that exploits bilateral cues while absorbing camera estimation drift and a part-conditioned deformation mechanism guided by learnable part anchors and a learnable skinning field. Extensive experiments demonstrate that our approach generalizes robustly across diverse species, achieving superior geometric accuracy, temporal consistency, and visual fidelity compared to existing baselines, even under severe prior mismatch.",
+      "highlights": {
+        "contribution": "跨物种单目 4D 动物重建的渐进式测试时优化框架。",
+        "innovation": "对称感知时间编码 + 部件锚点 + 可学习 skinning 场，把 pose 与非刚性形变解耦。",
+        "method": "输入单目视频；基于 3DGS，渐进式 test-time 优化，分阶段处理关节 pose 与非刚性形变；引入对称感知时间编码与 part-conditioned 形变。",
+        "results": "多物种上几何精度、时间一致性、视觉保真都优于现有基线，先验严重不匹配时依然稳定。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T20:32:29Z",
+      "categories": [
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 8.5,
+        "popularity": 6.0,
+        "quality": 7.2,
+        "recommendation": 6.3
+      },
+      "pdf_url": "https://arxiv.org/pdf/2607.00157v1",
+      "arxiv_url": "https://arxiv.org/abs/2607.00157v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31637",
+      "title": "Intrinsic decomposition and editing of 3D Gaussian splats",
+      "authors": [
+        "Alexandre Lanvin",
+        "Jeffrey Hu",
+        "Simon Lucas",
+        "Adrien Bousseau",
+        "George Drettakis"
+      ],
+      "affiliations": [],
+      "summary": "作者把内在分解扩展到 3D Gaussian Splatting：颜色 = 漫反射反照率乘以阴影，并可加视角相关残差。核心做法是把内在分解建成多组独立的 Gaussian 图元、用数据驱动的预测引导多视优化解耦、再提供只在一张图上改反照率就能重光照渲染的编辑流程。",
+      "original_abstract": "Intrinsic decomposition which expresses image colors as the product of diffuse albedo and shading, possibly augmented with view-dependent residuals has a long history in image editing as it enables the modification of object colors and textures without altering lighting. We extend intrinsic decomposition to radiance fields represented with Gaussian splatting by proposing solutions to three key aspects of such decomposition. First, we describe how to model the intrinsic decomposition as independent sets of Gaussian primitives, which allows each set to adapt to the characteristics of the layer it represents. Second, we present an optimization procedure guided by data-driven predictions to disentangle multi-view photographs of a scene into the aforementioned intrinsic sets. Finally, we provide an editing workflow where users modify the texture of planar surfaces simply by modifying the albedo of that surface in one image. Capturing this edit within the intrinsic radiance field allows re-rendering of the edited scene with plausible lighting under arbitrary viewpoints.",
+      "highlights": {
+        "contribution": "把经典 intrinsic decomposition 引入 Gaussian Splatting 辐射场用于纹理编辑。",
+        "innovation": "每层用独立 Gaussian 图元集合 + 数据驱动预测引导的多视解耦 + 单图编辑传递到 3D。",
+        "method": "输入多视图；分别学漫反射、阴影、视角残差三组 Gaussian；优化中借助数据驱动内在预测；用户在一张图改反照率即可 3D 编辑并重光照渲染。",
+        "results": "在多视场景中呈现可编辑的内在分解并支持任意视角下的合理重光照渲染。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T13:20:44Z",
+      "categories": [
+        "cs.GR",
+        "cs.AI"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 5.8,
+        "recency": 8.5,
+        "popularity": 6.0,
+        "quality": 7.0,
+        "recommendation": 6.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31637v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31637v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31679",
+      "title": "Practical High-Fidelity Novel-View Synthesis of Mounted Lepidoptera",
+      "authors": [
+        "Kristof Overdulve",
+        "Lode Jorissen",
+        "Nick Michiels"
+      ],
+      "affiliations": [],
+      "summary": "标本蝴蝶又小又脆，用宏观镜头景深超浅，钉在标本盒里也没法拍到腹面。作者做了个端到端流水线：手持焦点堆叠拍全清宏观图 + 非接触一面镜系统曝光腹面 + 无分割感知镜面的 3D Gaussian Splatting 扩展。四个不同标本上验证了重建效果。",
+      "original_abstract": "Mounted butterflies are among the most striking objects in natural history collections. However, their beauty is notoriously hard to digitize in 3D: they are small and fragile, with microscopic hairs and vein structures. Capturing them in sufficient detail, therefore, requires a macro lens, which has a very limited Depth of Field (DoF). Moreover, a camera body cannot be maneuvered beneath a pinned specimen to photograph its ventral surface (the underside of the wings). We introduce an end-to-end pipeline that resolves these challenges to turn such specimens into photo-realistic 3D models viewable from every direction. It combines three ingredients: handheld focus stacking for all-in-focus macro capture without a tripod, a non-contact first-surface mirror system that exposes the ventral surface without touching the specimen, and a segmentation-free, mirror-aware 3D Gaussian Splatting extension. We validate the reconstructions on four diverse specimens.",
+      "highlights": {
+        "contribution": "针对博物馆蝴蝶标本数字化的端到端全向 3D 重建管线。",
+        "innovation": "焦点堆叠 + 首面镜面装置 + 镜面感知的 GS 扩展三件套结合。",
+        "method": "手持宏观焦点堆叠拍照；用一面镜露出腹面；对镜像做 mirror-aware 的 3D Gaussian Splatting，不需前景分割。",
+        "results": "在四个多样标本上产出可从任意方向观察的写实 3D 模型。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T13:56:26Z",
+      "categories": [
+        "cs.GR",
+        "cs.CV"
+      ],
+      "matched_domain": "VGGT",
+      "matched_keywords": [
+        "gaussian splatting"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 8.5,
+        "popularity": 5.0,
+        "quality": 6.5,
+        "recommendation": 5.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31679v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31679v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31650",
+      "title": "ECHO: Prune to act, trace to learn with selective turn memory in agentic RL",
+      "authors": [
+        "Zijun Xie",
+        "Binbin Zheng",
+        "Enlei Gong",
+        "Jihua Liu",
+        "Yuyang You",
+        "Lingfeng Liu",
+        "Jiayao Tang",
+        "Guanqun Zhao",
+        "Aoqi Hu",
+        "Zeyu Chen"
+      ],
+      "affiliations": [],
+      "summary": "长程语言 agent 一直被上下文管理夹在两个坑之间：轮次越多历史被越压越丢，细粒度证据没法复用；一旦原始 turn 不可寻址，outcome-based RL 也没法把 credit 分回到真正支持答案的证据。ECHO 用可寻址的分步记忆：每完成一个环境 turn 压成紧凑记录，重构上下文时从中选择，训练时再用被选中的源索引把 outcome credit 分回到证据 turn。BrowseComp-Plus 上 43.4% held-out 准确率，比 GRPO 28.9%、SUPO 36.1% 高，并用更少 turn 和轨迹量。",
+      "original_abstract": "Long-horizon language agents must repeatedly interact with tools, accumulate evidence, and make decisions under bounded context windows. Existing context-management methods make such rollouts feasible by truncating distant history, folding past turns into summaries, or selecting compact memory states. However, these breakthroughs introduce two coupled limitations. First, as the number of turns grows, historical observations are progressively removed or collapsed into compressed states, making it harder for the policy to reuse fine-grained evidence. Second, once the original turns are no longer source-addressable, outcome-based RL loses an explicit path for aligning policy updates with the evidence that supported a successful final answer. To this end, we propose ECHO, a selective turn-memory framework that jointly addresses history collapse and traceable learning through source-indexed reconstruction. Specifically, ECHO compresses each completed environment turn into a compact memory record, reconstructs bounded policy contexts by selecting from these records, and reuses the selected source indices to route positive outcome credit to the evidence and selection actions that support successful answers. On BrowseComp-Plus, ECHO reaches 43.4% held-out accuracy, outperforming GRPO (28.9%) and the rolling-summary baseline SUPO (36.1%), while using fewer turns and lower trajectory volume than SUPO (Figure 1). Additionally, the trained policy improves zero-shot generalization across multi-objective QA, code generation, and deep information-seeking benchmarks on both dense and MoE backbones.",
+      "highlights": {
+        "contribution": "解决 agentic RL 中历史坍缩与 credit 追溯之间的耦合问题。",
+        "innovation": "源索引可寻址的选择性 turn 记忆 + 用同一索引路由 outcome credit。",
+        "method": "每步 turn 压成紧凑记录并保留源索引；重构上下文时选择性拼接；outcome-based RL 用被选源索引把奖励分配到证据 turn 与选择动作。",
+        "results": "BrowseComp-Plus 上 43.4% 优于 GRPO 28.9% 和 SUPO 36.1%，用更少 turn 与轨迹量；训完的策略在多目标 QA、代码生成、深度信息检索多个基准上零样本泛化。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T13:29:58Z",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "language agent"
+      ],
+      "scores": {
+        "relevance": 7.5,
+        "recency": 8.5,
+        "popularity": 7.5,
+        "quality": 7.8,
+        "recommendation": 7.6
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31650v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31650v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31564",
+      "title": "ACE: Pluggable Adaptive Context Elasticizer across Agents",
+      "authors": [
+        "Ning Liao",
+        "Zihao Long",
+        "Xiaoxing Wang",
+        "Xue Yang",
+        "Yaoming Wang",
+        "Ziyuan Zhuang",
+        "Xunliang Cai",
+        "Rongxiang Weng",
+        "Junchi Yan"
+      ],
+      "affiliations": [],
+      "summary": "长程 agentic 轨迹越来越长，固定上下文窗口下截断和摘要都是有损且不可逆的。ACE 是一个即插即用模块，每步决策弹性地把历史步信息排到上下文里：无损维护每步的原始消息与压缩摘要，orchestration 层根据当前任务状态给每步分配 raw/abstract/drop 三种弹性类型。不需要训练或改架构，接到 ReAct、DeepAgent、WebThinker、MiroFlow 四个 agent 框架都持续增益。",
+      "original_abstract": "The increasing complexity of agentic tasks has led to rapidly growing trajectory lengths, which poses significant challenges for large language model (LLM) based agents with fixed context windows. Existing context management techniques, such as truncation and summarization, suffer from inherent inflexibility and irreversibility: once information is discarded or compressed, it cannot be recovered even when it becomes critically relevant in later decision steps. To address these limitations, we propose the Adaptive Context Elasticizer (ACE), a plug-and-play module that elastically orchestrates historical step information into the agent's context at each decision step. ACE maintains a lossless message maintenance layer that stores both raw messages and compressed abstractions for each historical step, while a context orchestration layer adaptively assigns each step an elastic type as raw, abstract, or drop, at every decision step based on the current task state. This reversible design ensures that the main LLM always receives a compact yet information-rich context. We adapt ACE to four diverse agent frameworks, including ReAct, DeepAgent, WebThinker, and MiroFlow, without training or architectural modifications. Experiments show that ACE consistently outperforms truncation and summarization baselines, and brings consistent performance gains across all four agent frameworks.",
+      "highlights": {
+        "contribution": "为 LLM agent 提供可逆的弹性上下文编排，缓解不可逆截断/摘要问题。",
+        "innovation": "无损保留原始+摘要 + 每步弹性类型分配的可逆式 context orchestration。",
+        "method": "维护无损消息层同时存原始与压缩；orchestration 层按任务状态每步为历史步选 raw/abstract/drop；接入四种 agent 框架，无需训练。",
+        "results": "在 ReAct、DeepAgent、WebThinker、MiroFlow 上均一致超越截断和摘要基线。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T12:20:45Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 7.0,
+        "recency": 8.5,
+        "popularity": 7.2,
+        "quality": 7.5,
+        "recommendation": 7.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31564v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31564v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31537",
+      "title": "DataEvolver: Self-Evolving Multi-Agent Data Construction for Text-Rich Image Generation",
+      "authors": [
+        "Siyu Yan",
+        "Yizhen Gao",
+        "Yilin Wang",
+        "Dongxing Mao",
+        "Alex Jinpeng Wang"
+      ],
+      "affiliations": [],
+      "summary": "文本丰富图像生成的数据管线一直是「爬-过滤-冻结」，拒掉的样本直接丢，同样错反复犯。DataEvolver 把数据构建当作反馈驱动的策略进化：Retriever 收样、Verifier 打分并标拒因、Critic 总结轮级反馈、Generator 有针对性补空缺。0.75M 规模在 PixArt-alpha 上把 OCR-F1 相对最强基线在 TextScenesHQ 提升 85.3%、LongTextBench 提升 35.3%，迁移到 Show-o2 也照样有效。",
+      "original_abstract": "Text-rich image generation is one of the most challenging settings in image generation, since models must simultaneously produce visually realistic images and render legible, semantically aligned, and layout-consistent text. Existing data pipelines usually follow a static crawl-filter-freeze paradigm. They collect candidate samples, filter them once, and freeze the accepted data for training. However, rejected samples are usually discarded, although they often contain useful failure signals such as OCR errors and semantic mismatches. As a result, later construction rounds may repeat the same failure modes. To address these limitations, we propose DataEvolver, a self-evolving multi-agent framework for text-rich image data construction. DataEvolver treats data construction as feedback-driven construction policy evolution. A Retriever collects candidate samples, a Verifier assigns quality scores and rejection causes, a Critic summarizes round-level feedback into semantic feedback, and a Generator completes under-covered regions through targeted synthesis. The updated feedback memory then guides the next construction round. Experiments on text-rich image generation benchmarks show that DataEvolver produces more useful training data than fixed-dataset baselines under matched data budgets. At the 0.75M scale on PixArt-alpha, DataEvolver improves OCR-F1 over the strongest baseline by 85.3 percent on TextScenesHQ and 35.3 percent on LongTextBench. The improvements are consistent across both evaluated benchmarks and also transfer to Show-o2, indicating that the benefit of DataEvolver is not tied to a single downstream generator. These results suggest that rejected samples can provide actionable feedback for improving text-rich image data construction.",
+      "highlights": {
+        "contribution": "把被拒样本变成可用反馈的自进化多 agent 数据构建框架。",
+        "innovation": "四 agent 分工 + 反馈记忆迭代驱动数据构建策略进化。",
+        "method": "Retriever/Verifier/Critic/Generator 四 agent；Verifier 给拒因，Critic 转成语义反馈，Generator 定向补覆盖；反馈记忆指导下一轮。",
+        "results": "0.75M 规模在 PixArt-alpha 上 OCR-F1 相对最强基线在 TextScenesHQ +85.3%、LongTextBench +35.3%，且迁移到 Show-o2 有效。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T11:52:22Z",
+      "categories": [
+        "cs.CV",
+        "cs.MA"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 6.5,
+        "recency": 8.5,
+        "popularity": 7.0,
+        "quality": 7.5,
+        "recommendation": 7.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31537v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31537v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31648",
+      "title": "Think in English, Answer in Korean: Efficient Adaptation of Multilingual Tool-Using Agents",
+      "authors": [
+        "Utsav Garg",
+        "Sungjin Hong",
+        "Jason Jung",
+        "Justin Lee",
+        "Shaan Desai",
+        "Joon Hee Kim",
+        "Anirudh Shrinivason",
+        "Edmond Wen",
+        "Susie Park"
+      ],
+      "affiliations": [],
+      "summary": "Cohere 和 LG CNS 合作的 LuckyStar 111B 是从 Command A 后训过来的韩英企业级 agent 模型。他们研究了四点：多语 SFT、可验证奖励 RL、韩语一致性奖励、4-bit 量化单卡部署。适配后数学推理、function calling、agentic NL2SQL 都涨，同时保留韩英通用指令跟随质量。给一个把已后训多语模型改造成可验证 agentic 工作流的实用配方。",
+      "original_abstract": "We present LuckyStar 111B, a 111B-parameter hybrid reasoning model developed through a collaboration between Cohere and LG CNS for Korean-English enterprise agents under practical memory and serving constraints. The model trains from Cohere's fully post-trained Command A model rather than a new pretraining run, and uses preamble conditioning to switch between concise non-reasoning behavior and longer tool-oriented reasoning. We study four choices for scaling tool-using agents efficiently: multilingual supervised fine-tuning, reinforcement learning with verifiable rewards for multi-step tool-use tasks, language-consistency rewards for Korean user-facing responses, and 4-bit quantization for single-GPU serving. The adapted model improves mathematical reasoning, function calling, and agentic natural-language-to-SQL (NL2SQL) performance while preserving general Korean and English instruction-following quality. These results provide a practical recipe and failure-mode analysis for adapting post-trained multilingual models to verifiable agentic workflows under memory-constrained deployment.",
+      "highlights": {
+        "contribution": "把已后训多语大模型高效适配成企业级 agent 的实用配方与失败模式分析。",
+        "innovation": "preamble 条件切换推理/非推理 + 多语 SFT + 可验证奖励 RL + 语言一致性 + 4-bit 量化协同。",
+        "method": "输入韩英对话；从 Command A 起步做多语 SFT 与 verifiable-reward RL；加韩语一致性奖励；4-bit 量化单 GPU 服务。",
+        "results": "在数学、function calling、agentic NL2SQL 上提升同时保留通用指令跟随质量，达成单卡部署。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T13:29:16Z",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "agentic",
+        "agentic workflow"
+      ],
+      "scores": {
+        "relevance": 5.8,
+        "recency": 8.5,
+        "popularity": 6.5,
+        "quality": 6.8,
+        "recommendation": 6.4
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31648v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31648v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31976",
+      "title": "TreeAgent: A Generalizable Multi-Agent Framework for Automated Bias Labeling in Forestry via Compiled Expert Rules and Vision-Language Models",
+      "authors": [
+        "Shiyi Chen",
+        "Nicholas Saban",
+        "Collin Hargreaves",
+        "Huiqi Wang"
+      ],
+      "affiliations": [],
+      "summary": "林业遥感里判断树高偏差全靠专家一步步跑规则，慢又不一致。TreeAgent 把专家决策树当结构先验，让 VLM 在树的每个节点做局部语义感知，再多 agent 投票压制 VLM 随机性。他们抽象出一个 Decoupled Declarative Decision 框架，零改动泛化到不同专家决策结构。在树偏分类基准上超过监督 ML 基线，还减少了专家标注量。",
+      "original_abstract": "Human-labeled data are widely used as reference annotations in ML, despite known variability across annotators in many expert-driven domains. In addition, expert annotation is slow, inconsistent, and remains a major bottleneck for scaling tasks like tree height bias classification in forestry remote sensing. We propose a multi-agent system (MAS) that orchestrates expert decision trees with Vision-Language Models (VLMs), treating the decision tree as a structural prior while VLMs perform localized semantic perception at individual nodes, with multi-agent voting to mitigate VLM stochasticity. We formalize a Decoupled Declarative Decision (D3) Framework that enables zero-modification generalization across diverse expert-defined decision structures. On a tree bias classification testbed, our framework outperforms supervised ML baselines and reduces the amount of expert labeling effort required. These results suggest that agentic orchestration of VLMs with expert priors can reproduce expert-defined labeling procedures at substantially lower annotation cost while maintaining interpretability.",
+      "highlights": {
+        "contribution": "把专家决策树与 VLM 感知解耦并可泛化的多 agent 自动化标注框架。",
+        "innovation": "D3 框架把结构先验与语义感知解耦，多 agent 投票缓解 VLM 随机性。",
+        "method": "输入遥感图像；VLM 在专家决策树的每个节点做节点级语义判断；多 agent 投票聚合；结构可无需改代码替换。",
+        "results": "树高偏差分类上超过监督 ML 基线，同时显著降低专家标注成本。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T17:16:59Z",
+      "categories": [
+        "cs.AI",
+        "cs.MA"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "multi-agent",
+        "agentic",
+        "agent framework"
+      ],
+      "scores": {
+        "relevance": 5.5,
+        "recency": 8.5,
+        "popularity": 5.5,
+        "quality": 6.8,
+        "recommendation": 6.0
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31976v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31976v1",
+      "venue": null
+    },
+    {
+      "arxiv_id": "2606.31518",
+      "title": "Design and Implementation of Agentic Orchestrations and Orchestration of Agents",
+      "authors": [
+        "Stefanie Rinderle-Ma",
+        "Juergen Mangler",
+        "Johannes Loebbecke",
+        "Dominik Voigt",
+        "Nataliia Klievtsova",
+        "Matthias Ehrendorfer"
+      ],
+      "affiliations": [],
+      "summary": "作者给 agentic 业务流程管理提了个分类框架，用任务专属性、可追踪性、自主性、正确性保证这些属性来评估各种 agentic orchestration 方案，并配套定性决策准则与定量指标。用一个预测式光照传感场景的多种实现来演示这些指标。",
+      "original_abstract": "Agentic Business Process Management has gained momentum recently. The prospect is that the autonomy of AI agents, i.e., predominantly LLM-based agents, can be balanced with a certain level of robustness, tractability, and traceability through a combination with process technology. In this paper, we provide a classification framework for agentic orchestration options along properties such as task specificity, traceability and tractability, autonomy and reactivity, and correctness assurance and present qualitative decision criteria for realizations of different scenarios. We also provide metrics for the quantitative assessment of realization properties and show them through different agentic implementations of a predictive light sensing scenario. Altogether, this work aims at providing properties, criteria, and metrics for the design and implementation of agentic orchestrations and orchestration of agents.",
+      "highlights": {
+        "contribution": "为 agentic orchestration 与 orchestration of agents 的设计与实现提供属性、准则和指标。",
+        "innovation": "把 agent 编排与进程技术结合并系统性提出可衡量的设计维度。",
+        "method": "定性梳理任务特异性、可追踪性、自主性、正确性保证维度；给定量指标；用预测光照场景做多种实现示范。",
+        "results": "在光照场景多种实现上定量比较不同 orchestration 方案的属性差异。"
+      },
+      "images": [],
+      "published_date": "2026-06-30T11:31:49Z",
+      "categories": [
+        "cs.AI"
+      ],
+      "matched_domain": "Agent",
+      "matched_keywords": [
+        "llm-based agent",
+        "agentic"
+      ],
+      "scores": {
+        "relevance": 4.5,
+        "recency": 8.5,
+        "popularity": 5.0,
+        "quality": 6.0,
+        "recommendation": 5.2
+      },
+      "pdf_url": "https://arxiv.org/pdf/2606.31518v1",
+      "arxiv_url": "https://arxiv.org/abs/2606.31518v1",
+      "venue": null
+    }
+  ],
+  "total": 25
+}

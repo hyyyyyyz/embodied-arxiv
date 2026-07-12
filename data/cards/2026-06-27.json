@@ -1,0 +1,452 @@
+[
+  {
+    "arxiv_id": "2606.28758",
+    "summary": "现有 VLA 在自动驾驶里只做反应式感知-动作，缺乏预测。X-Mind 把预测世界模型直接嵌进 VLA 的视觉思维链，让模型在给动作前先「想象」未来演化。它不 rollout 稠密未来帧，而是压出 BEV+驾驶先验的抽象草图，12 帧未来只用 96 token；还配了循环块扩散把去噪塞进主干一次前向。结果在真实驾驶数据上端到端性能有竞争力，且延迟低到能上车。",
+    "highlights": {
+      "contribution": "把预测世界模型内化为 VLA 的视觉思维链，实现有前瞻的端到端驾驶策略。",
+      "innovation": "抽象草图代替稠密未来帧 + 循环块扩散折叠去噪步骤，两招砍长上下文与生成延迟。",
+      "method": "BEV+驾驶先验草图作为「心里画布」，DC-AE 压缩到 96 token 表示 12 帧未来；主干各层承担一次去噪；先想再动，训练在大规模真实驾驶数据。",
+      "results": "12 帧未来仅 96 token；端到端驾驶性能与 SOTA 相当且低延迟可部署车端。"
+    },
+    "scores": {
+      "relevance": 9.2,
+      "recency": 8,
+      "popularity": 7.5,
+      "quality": 8.2,
+      "recommendation": 8.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.29089",
+    "summary": "VLA 看不到接触力，但接触力对抓取放置很关键。TAP-VLA 不改结构、也不加新模态，而是把触觉传感器的剪切场画成箭头叠回到多视 RGB 图上，让 VLA 在自己熟悉的视觉空间里就能「看见」触觉。结果 4 个接触密集任务成功率 78%，纯视觉微调不到 50%。",
+    "highlights": {
+      "contribution": "以视觉标注的形式把触觉塞进 VLA，避开重训与分布偏移。",
+      "innovation": "把剪切场作为空间对齐的可视化提示叠加到原 RGB 输入，架构零改动。",
+      "method": "视觉触觉传感器抽剪切场→按接触位置投影成 2D 向量→叠到多视 RGB→常规 VLA 微调。",
+      "results": "4 个接触密集任务 78% 成功率，纯视觉与其它触觉融合基线 <50%。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 8.1
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28899",
+    "summary": "视觉在遮挡、反光、透明物体上估位姿容易失败。YOTO 只用一次触觉、两个接触点就恢复 6-DoF 位姿。做法是把每次触觉视作局部 3D 点云，用粗到细网络先定位到物体表面，再用法向感知的闭式 SVD 一步出位姿。虚拟触觉预训练+少量真实数据微调，能用手机扫的物体模型也能跑。",
+    "highlights": {
+      "contribution": "用一对同时接触实现无历史的 6-DoF 触觉位姿估计。",
+      "innovation": "粗到细触觉点云定位 + 法向感知闭式 SVD 求解，一步出位姿。",
+      "method": "GelSight 触觉→局部点云→coarse-to-fine 定位到 mesh 表面→两点 + 传感器位姿代入法向 SVD；虚拟触觉预训练 + 真实微调。",
+      "results": "4 种几何多样物体上位姿精度超过视觉与几何基线，遮挡场景优势更明显。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.8,
+      "recommendation": 7.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28712",
+    "summary": "SLAM 给几何图但没法规划，动作条件世界模型给规划却漂移。J-LAW 用一张耦合因子图把度量位姿、潜在世界状态、潜在地标嵌入联合优化，位姿越准世界模型越准，反之亦然。PushT 和 WildGS 上潜在预测 RMSE 和终点漂移大幅下降。",
+    "highlights": {
+      "contribution": "把定位与可行动世界模型统一成一个联合 MAP 因子图问题。",
+      "innovation": "位姿条件潜在编码器 + 位姿-潜在耦合因子，桥接度量 SLAM 与潜在动力学。",
+      "method": "观测、动作条件预测、里程计、位姿-潜耦合、潜在回环、潜在地标观测都作为概率因子加入 MAP 目标；联合优化。",
+      "results": "PushT 与 WildGS 上耦合校正显著降低潜在预测 RMSE 与开环 rollout 终点漂移；潜在回环改善轨迹一致性。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28751",
+    "summary": "作者提出把世界模型不看成一串一步条件分布，而看成对未来轨迹的路径测度。局部马尔可夫下这个测度呈 Onsager-Machlup 形式，预测、规划、不确定性都变成一个作用泛函上的运算。作者还把潜在动力学拆成可逆与不可逆部分，发现注意力不对称度会跟数据不可逆性一起被训练出来。",
+    "highlights": {
+      "contribution": "为世界模型提出路径空间理论视角，把预测/规划/涨落统一。",
+      "innovation": "引入熵产生的可操作量，识别 attention 不对称与数据不可逆性的关联。",
+      "method": "把潜在轨迹套上 Onsager-Machlup 作用；训练小规模 attention 模型，度量 rollout 熵产生；对称化 attention 观察长程预测退化。",
+      "results": "对称化 attention 抑制熵产生，选择性地退化不可逆长程预测但保留松弛型预测。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 6.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28757",
+    "summary": "生成式世界模型作为自动驾驶模拟器，光看图像质量看不出物理错误。CrashTwin 是一个物理测评框架，含 2.5 万合成+1.2 万真实碰撞视频，配无标定重建管线，能从 rollout 里恢复 3D 度量运动学，从时空一致性、动量能量守恒、动力学完整性三方面打分。发现视觉高分并不等于物理对。",
+    "highlights": {
+      "contribution": "首个专门测世界模型物理可信度的多智能体碰撞基准。",
+      "innovation": "无需标定的重建管线从生成视频恢复度量 3D 运动学，让物理量可算。",
+      "method": "构建 25K 合成+12K 真实碰撞数据；rollout 重建 3D 轨迹；测试时空一致性 / 动量与动能守恒 / 动力学完整性。",
+      "results": "系统评估 SOTA 世界模型，揭示高感知质量常掩盖严重物理违反。"
+    },
+    "scores": {
+      "relevance": 8.2,
+      "recency": 8,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 7.9
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28804",
+    "summary": "具身世界模型作评测器时，动作维度低而视频维度高，长 rollout 会漂移。ViPSim 让视觉空间和参数空间协作：前者提供末端位姿、相机、深度几何、机器人形态掩膜等几何锚定；后者注入原始动作和相机矩阵作数值驱动。两者一起管，就得到跨长时长一致的生成。",
+    "highlights": {
+      "contribution": "视觉先验+参数注入协同做长时序一致的具身世界模型。",
+      "innovation": "同时用像素对齐的几何锚定和原始动作/相机矩阵驱动生成，与骨干无关。",
+      "method": "视觉空间投影末端位姿、深度、morphology mask；参数空间注入动作序列与相机内外参；联合条件生成视频。",
+      "results": "长时段轨迹一致性显著提升；能生成布料折叠等可形变交互；OOD 与跨本体表现稳。"
+    },
+    "scores": {
+      "relevance": 9.0,
+      "recency": 8,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.29059",
+    "summary": "视觉世界模型要既能建模多模态未来又要留下感知有用的信息，之前 VAE 潜空间太小、确定性预测又爱模糊平均。FlowWM 直接在 DINOv3 这种预训练特征空间做流匹配，配可微单步投影让时间一致性和任务目标能一起训。",
+    "highlights": {
+      "contribution": "首个在高维预训练视觉特征空间里做流匹配的随机世界模型。",
+      "innovation": "针对高维特征改造扩散/流匹配的设计选择 + 可微单步投影模块。",
+      "method": "以 DINOv3 特征为潜空间，flow matching 学未来特征分布；单步投影提供任务级监督与时间一致性。",
+      "results": "在合成基准与 FuturePerception 真实基准上感知精度、模态覆盖、时域鲁棒性均提升。"
+    },
+    "scores": {
+      "relevance": 8.5,
+      "recency": 8,
+      "popularity": 7.5,
+      "quality": 8.0,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28710",
+    "summary": "这是一篇用演化博弈论分析「减害策略」代理能否在市场中挤掉 RLHF 代理的理论论文，用 Lean 4 机器验证核心代数，结论是审计代理并不足以防止社区危害，结果与对齐时间尺度有关。跟具身/VLA 距离较远。",
+    "highlights": {
+      "contribution": "以 Moran-Fermi 演化博弈刻画审计式 AI 治理的采纳与福利条件。",
+      "innovation": "把关键代数在 Lean 4 里机器验证，附上明确假设的定理陈述。",
+      "method": "有限种群 Moran-Fermi 两两比较；引入 harm ledger 与优先分布假设；分析吸收态与临界采纳率。",
+      "results": "证明审计代理超过临界采纳率即可吸收；对齐失误下反而锁定长期危害。"
+    },
+    "scores": {
+      "relevance": 3.0,
+      "recency": 8,
+      "popularity": 4.0,
+      "quality": 6.5,
+      "recommendation": 4.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28939",
+    "summary": "扩散行为克隆策略容易漂移。ReGuide 把测试时引导得到的恢复轨迹当作可复用的 on-policy 数据回收进训练。它只在「已漂移但可救」的阶段用相位条件引导 PCG 拉回，然后用 ReGuide-FT 微调或 ReGuide-FS 重训。Robomimic 上 base 成功率提升 1.3–7.7 倍。",
+    "highlights": {
+      "contribution": "把 test-time guidance 变成自我改进的循环，而不是丢掉引导轨迹。",
+      "innovation": "相位条件引导 PCG 只在可救区域介入，并通过 clean action 与动力学模型对齐。",
+      "method": "PCG 生成相位专属潜在目标做纠偏 rollout；成功轨迹回喂扩散策略；FT 微调 or FS 从头训，两者可组合迭代。",
+      "results": "Robomimic Can/Square/Transport/Tool Hang 基线成功率 ×1.3–7.7；测试时设置超 LPB。"
+    },
+    "scores": {
+      "relevance": 8.0,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28828",
+    "summary": "单目视频重建 4D 场景常常几何不一致或渲染不真。Ground4D 先用 VGGT 训练-free 恢复多视一致 3D 几何和相机，然后把动态高斯放到这个几何初始化上做一致性感知的可微渲染优化。",
+    "highlights": {
+      "contribution": "把 3D 基础模型的几何先验注入动态 3DGS 做鲁棒 4D 重建。",
+      "innovation": "训练-free VGGT 初始化几何 + 观测/合成视点上的多视几何一致性约束。",
+      "method": "阶段一：VGGT 恢复几何与相机做初始化；阶段二：动态 3DGS 可微渲染 + 一致性正则；支持任意时间戳渲染。",
+      "results": "重建保真与新视合成质量优于纯 3DGS 基线，尤其在动态场景。"
+    },
+    "scores": {
+      "relevance": 7.8,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 7.8,
+      "recommendation": 7.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28826",
+    "summary": "无人机拍反射玻璃幕墙的数字化很难：几何畸变、反射逼真度差、缺语义。RefGlass-GS 端到端解决：MAP 分割单块玻璃、优化 UAV 视点覆盖、加了反射 MLP 与延迟着色的 GS 建模，再把结果组织成对象化模型上数字孪生。",
+    "highlights": {
+      "contribution": "首个 UAV 端到端的反射玻璃幕墙数字化与语义化框架。",
+      "innovation": "MAP 结构规则化玻璃分割 + 反射 MLP + 延迟着色 GS，专治高频近场反射。",
+      "method": "MAP 玻璃分割→UAV 视点规划最大化覆盖→带反射 MLP 与延迟着色的 GS 优化→对象化数据组织。",
+      "results": "玻璃分割 mIoU +0.1927；UAV 视点比商用 nap-of-object 新视合成 PSNR +13.15 dB；反射场景 GS 建模平均 PSNR +5.08 dB。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.5,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28656",
+    "summary": "动态 3DGS 缺物体级建模，形变常在物体内部乱跳还相互耦合。SemDynReg 用 SAM 抽 mask 加语义特征做物体 ID map，然后对每个物体的 top-k 贡献高斯的位置、尺度、旋转做一致性正则。",
+    "highlights": {
+      "contribution": "为动态 3DGS 引入语义引导的物体级形变一致性正则。",
+      "innovation": "利用 SAM+语义特征对物体的 top-k 关键高斯的形变参数做一致性约束。",
+      "method": "SAM 分割 + 语义特征匹配对象字典生成 ID map；每对象 top-k 高斯的形变参数一致性正则；标准动态 3DGS 训练。",
+      "results": "动态 3DGS 渲染 PSNR、SSIM 提升，LPIPS 下降，优于基线。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28720",
+    "summary": "机器人做终身建图，物体位置变了老图残影不散。CubifyGS 把可移动物体当成可复用高斯资产，检测到出现/消失就直接检索、刚体变换、显式剪枝；再配事件触发的自适应优化只更新受影响区域。",
+    "highlights": {
+      "contribution": "从被动重优化转向主动资产管理的物体级 3DGS 终身建图。",
+      "innovation": "把物体当高斯资产做增删移改 + 事件触发局部自适应优化。",
+      "method": "物体检测→资产检索/刚体变换/剪枝→局部事件触发的光度和几何再优化；发布高保真动态基准。",
+      "results": "在新构动态基准上显著抑制残影，维护效率优于代表基线。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.5,
+      "recommendation": 6.7
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28820",
+    "summary": "单目视频里人与物交互难重建，前景后景老纠缠。CoGS 分成人、刚体物体、静态场景三支各管一摊：人从规范先验初始化，物体走估计轨迹，场景弱平面约束；六阶段联合优化融合。",
+    "highlights": {
+      "contribution": "单目人-物-场景组合式 3DGS 重建，各支解耦而后融合。",
+      "innovation": "六阶段优化 + 可见性感知的人体锚定与物体轮廓/运动约束。",
+      "method": "人 GS 从规范先验+骨架驱动；物体 GS 由轨迹刚体驱动；场景 GS 弱平面正则；六阶段独立稳定→组合优化。",
+      "results": "HOSNeRF 与 NeuMan 上人-物交互与人-场景渲染保真度和感知质量均提升。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.2,
+      "recommendation": 6.2
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28840",
+    "summary": "语言嵌入 3DGS 做自由视角视频，FVV 要低帧大小高 FPS，直接把 CLIP 特征塞进去会崩。DLGStream 用双不透明度分开颜色和语言特征优化，再加插值形变场压掉时序冗余，还能把 30fps 视频插到高 FPS。",
+    "highlights": {
+      "contribution": "支持开放词汇查询与场景编辑的流式语言嵌入 FVV。",
+      "innovation": "双不透明度动态语言高斯 + 插值型形变场兼作 4D 帧插值。",
+      "method": "每高斯维持颜色/语言两套不透明度分别优化；插值形变场压时序；与 CLIP 蒸馏对齐语言。",
+      "results": "开放词汇分割与重建质量优于基线，平均帧大小仅 43 KB。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28841",
+    "summary": "LLM 会数学但生成的 Lean 证明常常挂。LAMP 是多智能体框架，用 MCP 挂一个专门为 Combinatorics on Words 造的 Lean 4 本体库，让 Planner/Builder/Verifier 分工协作。90 个 CoW 定理里 96.7% 生成了核验通过的证明。",
+    "highlights": {
+      "contribution": "把领域本体作为 MCP 工具挂给 Lean 定理证明多智能体。",
+      "innovation": "不微调 prover，而在推理时通过结构化本体+MCP 提供领域知识。",
+      "method": "Lean 4 里形式化 CoW 8 个模块 93 条声明；Planner/Builder/Verifier 三代理经 MCP 访问本体；生成核验证明。",
+      "results": "90 个 CoW 定理 96.7% 生成 kernel 校验通过；砍工具或角色分离各掉约 12 个百分点。"
+    },
+    "scores": {
+      "relevance": 6.5,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.8,
+      "recommendation": 7.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.29116",
+    "summary": "大规模研究 n8n 生态里 6000+ 个公开 LLM 工作流长啥样。作者从任务分布、结构工具使用、可靠性机制、自主等级四个维度分析，发现 LLM 常嵌进控制逻辑与外部工具中间，但结构化 fallback、修复循环、失败告警、人审门这些可靠性机制却很少。",
+    "highlights": {
+      "contribution": "首个大规模低代码平台上 LLM 智能体工作流的实证研究。",
+      "innovation": "从设计四维度对 6000+ 真实公开工作流做系统分析。",
+      "method": "抓取 n8n 6000+ 公开工作流→按任务、结构、可靠性、自主性四维统计分析。",
+      "results": "十条实证发现指出实际工作流大量缺乏可靠性与治理机制，与实际部署速度不匹配。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.0,
+      "recommendation": 6.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28666",
+    "summary": "把 AI TRiSM 框架套到医疗报告生成智能体上，看能不能同时提高安全和准确。评了 5 个 LLM、800 次生成、500 次攻击场景。TRiSM 版让 RAG 投毒攻击成功率从 31% 降到 10%，字段注入从 42% 降到 25%，网络注入完全阻断，报告准确率还从 72.5% 涨到 86.5%。",
+    "highlights": {
+      "contribution": "示范 TRiSM 治理框架在医疗智能体上真的能同时提安全与准确。",
+      "innovation": "服务器侧 prompt 构造、最小权限、纵深防御分层贴到 agentic 医疗流水线。",
+      "method": "两种工作流对比；5 个 LLM 共 800 次生成、500 次攻击（RAG 投毒/字段注入/客户端注入）；对比安全与准确指标。",
+      "results": "RAG 投毒 31%→10%；字段注入 42%→25%；网络注入清零；准确率 72.5%→86.5%。"
+    },
+    "scores": {
+      "relevance": 5.0,
+      "recency": 8,
+      "popularity": 6.0,
+      "quality": 7.0,
+      "recommendation": 6.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28679",
+    "summary": "工具型 LLM 智能体常常把工具暴露与授权混为一谈。作者审计了 LangChain/LlamaIndex/Stripe Agent Toolkit，发现默认都不重新逐参授权。他们提出 ScopeGate，做作用域、授权、金额、幂等、默认拒绝五级 PDP/PEP。",
+    "highlights": {
+      "contribution": "指出 agent 框架的「confused deputy」缺口并给出可部署的授权门。",
+      "innovation": "五阶段 PDP/PEP：作用域→授权→金额上限→幂等→默认拒绝。",
+      "method": "审计三个主流框架默认行为；实现 ScopeGate 中间层；用静态与 40 轮自适应攻击测试。",
+      "results": "同一未授权支付调用默认能执行但被 ScopeGate 拦下；0/48 静态绕过，0/29 自适应攻击成功，误拒 0/10。"
+    },
+    "scores": {
+      "relevance": 5.5,
+      "recency": 8,
+      "popularity": 6.5,
+      "quality": 7.2,
+      "recommendation": 6.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28733",
+    "summary": "Agent 有时候该早点停手承认不行，但很多都愣着乱调用工具。作者定义了 Agentic Abstention 任务，测了 13 个 Agent、2 个 scaffold、超 2.8 万任务，发现关键不是能不能弃权而是什么时候弃权，模型越大反而不一定弃得更及时。他们提出 CONVOLVE 把完整交互蒸馏成停机规则，Llama-3.3-70B 及时召回率 26.7→57.4。",
+    "highlights": {
+      "contribution": "把 agent 的「何时停止」形式化为顺序决策问题并建大规模基准。",
+      "innovation": "CONVOLVE 通过蒸馏完整交互轨迹为可复用停机规则，不动参数即可改进弃权时机。",
+      "method": "在 WebShop、终端、QA 三类环境评 13 个 LLM 代理 + 2 scaffold；提出 CONVOLVE 上下文工程方法。",
+      "results": "28k+ 任务基准；WebShop 上 Llama-3.3-70B 及时召回率 26.7→57.4，无需微调。"
+    },
+    "scores": {
+      "relevance": 7.0,
+      "recency": 8,
+      "popularity": 7.0,
+      "quality": 8.0,
+      "recommendation": 7.6
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28896",
+    "summary": "SAR 数据增广老受制于格式混乱、验证弱。SAGA 是 schema 驱动的智能体框架：从自然语言请求出发，抽事实、校验 schema、按可行性规划增广策略、编成可审计工作流，再让质量/分布/伪影/去重/泄漏检测把关。",
+    "highlights": {
+      "contribution": "schema 化 + 收益感知的 SAR 增广多智能体自动化框架。",
+      "innovation": "把语义 proposal 与确定性验证/执行分开，让增广决策可复现可审计。",
+      "method": "抽取观测事实→schema 校验→受约束规划选择增广→编译成工作流→多评价器把关。",
+      "results": "在受控 agent 基准与下游 SAR 任务上，schema 落地、无效样本剔除、下游效用优于规则/LLM-only/ReAct/固定增广基线。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 8,
+      "popularity": 5.5,
+      "quality": 7.0,
+      "recommendation": 5.5
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.29030",
+    "summary": "研究 LLM 智能体的外部记忆有没有攻击面。作者搭了一个能存/取任务信息的 agent，然后往记忆里塞入误导内容看多选题回答会不会歪。结论是简单的记忆污染就能让干净问题选到错选项。",
+    "highlights": {
+      "contribution": "揭示 agent 外部记忆是新的攻击面，且当前设计相当脆弱。",
+      "innovation": "针对多选 QA 场景系统评估记忆注入对 agent 决策的影响。",
+      "method": "实现带外部记忆的 LLM agent；对比污染前后多选正确率、攻击成功率、误导选项被选率。",
+      "results": "即便当下 query 干净，简单记忆注入就能明显改变最终答案。"
+    },
+    "scores": {
+      "relevance": 4.5,
+      "recency": 8,
+      "popularity": 5.5,
+      "quality": 6.5,
+      "recommendation": 5.4
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28673",
+    "summary": "手语生成的评价指标很粗糙，跟人评对不上。BackTranslation2.0 采用 agentic 流程编排若干工具，从语法、音位、动作流畅、生成保真四维打分，再用 LLM 做工具间交叉比对。他们还发布了 BSL 人评数据集做验证。",
+    "highlights": {
+      "contribution": "语言学理论支撑的手语生成评价指标，与人评强相关。",
+      "innovation": "工具间 LLM 交叉比对做结构化推理，避免各评价器孤立打分。",
+      "method": "确定性 pipeline 编排语法/音位/动作/保真四类工具；LLM 交叉比对模块；确定性加权公式合成分数；BSL 人评数据集验证。",
+      "results": "四维打分均与人评强相关，优于 6 个基线指标。"
+    },
+    "scores": {
+      "relevance": 3.5,
+      "recency": 8,
+      "popularity": 5.0,
+      "quality": 7.0,
+      "recommendation": 5.0
+    },
+    "affiliations": []
+  },
+  {
+    "arxiv_id": "2606.28692",
+    "summary": "临床治疗决策要多轮权衡多种约束还得看证据。ATHENA-R1 用 RL 在 212 个生物医学工具上训练，每步识别缺什么信息、调用工具、吸收证据。作者搭了双层自学习框架：多智能体自造工具/任务/轨迹做 SFT，再 RL 用科学反馈奖励。5 个基准 3168 药物任务 + 456 病例上都赢，开放药物推理 94.7%、治疗推理 82.9%，比 GPT-5 高 17.8/10.7 分。",
+    "highlights": {
+      "contribution": "把治疗决策形式化为可学习的迭代证据检索过程并端到端 RL 训练。",
+      "innovation": "多智能体自造训练数据 + 科学反馈 RL，212 个生物医学工具的大规模工具宇宙。",
+      "method": "多智能体系统合成工具/任务/轨迹→SFT→科学反馈 RL（奖励证据、工具接地、逻辑非冗余）；覆盖 1939 年以来 FDA 批准药物。",
+      "results": "5 基准 3168 药物任务 + 456 病例：药物推理 94.7%、治疗推理 82.9%，各高于 GPT-5 17.8/10.7；540 万 EHR 上不良事件假设 aOR 1.48–1.84。"
+    },
+    "scores": {
+      "relevance": 6.0,
+      "recency": 8,
+      "popularity": 8.5,
+      "quality": 8.8,
+      "recommendation": 8.0
+    },
+    "affiliations": []
+  }
+]
